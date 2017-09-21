@@ -1,0 +1,30 @@
+
+A vérifier:
+- GND sur le booster input = GND output?
+- La taille des trous pour le gros MOS
+- Mettre deux kickers?
+- Taille des capas
+
+MOS to kick IRFPE30
+http://fr.farnell.com/infineon/irfp4242pbf/transistor-mosfet-n-300v-to-247/dp/1298480
+
+NPN SOT-23 BC817 Transistors
+http://fr.farnell.com/nxp/bc817-215/transistor-npn-boitier-sot-23/dp/1081223
+
+
+TRACOPOWER TSR 1-2450 5V/1A Switching
+http://fr.farnell.com/tracopower/tsr-1-2450/convertisseur-dc-dc5v1asip/dp/1696320
+
+TRACOPOWER TSR 1-2433 3.3V/1A Switching
+http://fr.farnell.com/tracopower/tsr-1-2433/converter-dc-to-dc-3-3v-1a-sip/dp/1696319
+
+Capacitor 160V 3300uF (30x50mm)
+
+Centrale GY-85
+Maple Mini
+
+
+Resistors 0805
+- 
+- 
+- 
