@@ -1,10 +1,21 @@
-Les trous de fixation sont sur un rectangle de 116 de coté
 
+A ajouter:
+- Les contrôleurs moteurs
+- Connecteurs moteurs?
+- Un peu plus de découplage
+- Décodeur de quadrature ls7366r
+  + quartz
+- Barrière infrarouge
+- Condensateur sur la board?
+- Modules de COM
 
 A vérifier:
 - La taille des trous pour le gros MOS
 - Mettre deux kickers?
 - Taille des capas
+
+Notes
+Les trous de fixation sont sur un rectangle de 116 de coté
 
 MOS to kick IRFPE30
 http://fr.farnell.com/infineon/irfp4242pbf/transistor-mosfet-n-300v-to-247/dp/1298480
