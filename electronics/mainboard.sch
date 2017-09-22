@@ -890,6 +890,126 @@ grid 3.5 mm, diameter 8 mm</description>
 <vertex x="-2.15" y="2.1"/>
 </polygon>
 </package>
+<package name="XT60">
+<wire x1="0" y1="0" x2="13" y2="0" width="0.127" layer="21"/>
+<wire x1="13" y1="0" x2="16" y2="1.75" width="0.127" layer="21"/>
+<wire x1="16" y1="1.75" x2="16" y2="6.25" width="0.127" layer="21"/>
+<wire x1="16" y1="6.25" x2="13" y2="8" width="0.127" layer="21"/>
+<wire x1="0" y1="0" x2="0" y2="8" width="0.127" layer="21"/>
+<wire x1="0" y1="8" x2="13" y2="8" width="0.127" layer="21"/>
+<pad name="GND" x="11.5" y="4" drill="4.8" shape="square"/>
+<pad name="V+" x="4.5" y="4" drill="4.8" shape="square"/>
+<text x="9" y="-1.5" size="1.27" layer="21">GND</text>
+<text x="3" y="-1.5" size="1.27" layer="21">V+</text>
+<text x="4" y="8" size="1.27" layer="21">&gt;NAME</text>
+</package>
+<package name="BOOSTER_390V">
+<wire x1="0" y1="0" x2="60" y2="0" width="0.127" layer="21"/>
+<wire x1="60" y1="0" x2="60" y2="45.5" width="0.127" layer="21"/>
+<wire x1="0" y1="0" x2="0" y2="45.5" width="0.127" layer="21"/>
+<wire x1="0" y1="45.5" x2="60" y2="45.5" width="0.127" layer="21"/>
+<hole x="57" y="3" drill="3"/>
+<hole x="57" y="42.5" drill="3"/>
+<hole x="3" y="42.5" drill="3"/>
+<hole x="3" y="12" drill="3"/>
+<wire x1="7" y1="50" x2="7" y2="39" width="0.127" layer="21"/>
+<wire x1="7" y1="39" x2="9" y2="39" width="0.127" layer="21"/>
+<wire x1="9" y1="50" x2="7" y2="50" width="0.127" layer="21"/>
+<wire x1="9" y1="50" x2="9" y2="39" width="0.127" layer="21"/>
+<wire x1="9" y1="39" x2="11" y2="39" width="0.127" layer="21"/>
+<wire x1="11" y1="50" x2="9" y2="50" width="0.127" layer="21"/>
+<wire x1="11" y1="50" x2="11" y2="39" width="0.127" layer="21"/>
+<wire x1="11" y1="39" x2="13" y2="39" width="0.127" layer="21"/>
+<wire x1="13" y1="50" x2="11" y2="50" width="0.127" layer="21"/>
+<wire x1="13" y1="50" x2="13" y2="39" width="0.127" layer="21"/>
+<wire x1="13" y1="39" x2="15" y2="39" width="0.127" layer="21"/>
+<wire x1="15" y1="50" x2="13" y2="50" width="0.127" layer="21"/>
+<wire x1="15" y1="50" x2="15" y2="39" width="0.127" layer="21"/>
+<wire x1="15" y1="39" x2="17" y2="39" width="0.127" layer="21"/>
+<wire x1="17" y1="50" x2="15" y2="50" width="0.127" layer="21"/>
+<wire x1="17" y1="50" x2="17" y2="39" width="0.127" layer="21"/>
+<wire x1="17" y1="39" x2="19" y2="39" width="0.127" layer="21"/>
+<wire x1="19" y1="50" x2="17" y2="50" width="0.127" layer="21"/>
+<wire x1="19" y1="50" x2="19" y2="39" width="0.127" layer="21"/>
+<wire x1="19" y1="39" x2="21" y2="39" width="0.127" layer="21"/>
+<wire x1="21" y1="50" x2="19" y2="50" width="0.127" layer="21"/>
+<wire x1="21" y1="50" x2="21" y2="39" width="0.127" layer="21"/>
+<wire x1="21" y1="39" x2="23" y2="39" width="0.127" layer="21"/>
+<wire x1="23" y1="50" x2="21" y2="50" width="0.127" layer="21"/>
+<wire x1="23" y1="50" x2="23" y2="39" width="0.127" layer="21"/>
+<wire x1="23" y1="39" x2="25" y2="39" width="0.127" layer="21"/>
+<wire x1="25" y1="50" x2="23" y2="50" width="0.127" layer="21"/>
+<wire x1="25" y1="50" x2="25" y2="39" width="0.127" layer="21"/>
+<wire x1="25" y1="39" x2="27" y2="39" width="0.127" layer="21"/>
+<wire x1="27" y1="50" x2="25" y2="50" width="0.127" layer="21"/>
+<wire x1="27" y1="50" x2="27" y2="39" width="0.127" layer="21"/>
+<wire x1="27" y1="39" x2="29" y2="39" width="0.127" layer="21"/>
+<wire x1="29" y1="50" x2="27" y2="50" width="0.127" layer="21"/>
+<wire x1="29" y1="50" x2="29" y2="39" width="0.127" layer="21"/>
+<wire x1="29" y1="39" x2="31" y2="39" width="0.127" layer="21"/>
+<wire x1="31" y1="50" x2="29" y2="50" width="0.127" layer="21"/>
+<wire x1="31" y1="50" x2="31" y2="39" width="0.127" layer="21"/>
+<wire x1="31" y1="39" x2="33" y2="39" width="0.127" layer="21"/>
+<wire x1="33" y1="50" x2="31" y2="50" width="0.127" layer="21"/>
+<wire x1="33" y1="50" x2="33" y2="39" width="0.127" layer="21"/>
+<wire x1="33" y1="39" x2="35" y2="39" width="0.127" layer="21"/>
+<wire x1="35" y1="50" x2="33" y2="50" width="0.127" layer="21"/>
+<wire x1="35" y1="50" x2="35" y2="39" width="0.127" layer="21"/>
+<wire x1="35" y1="39" x2="37" y2="39" width="0.127" layer="21"/>
+<wire x1="37" y1="50" x2="35" y2="50" width="0.127" layer="21"/>
+<wire x1="37" y1="50" x2="37" y2="39" width="0.127" layer="21"/>
+<wire x1="37" y1="39" x2="39" y2="39" width="0.127" layer="21"/>
+<wire x1="39" y1="50" x2="37" y2="50" width="0.127" layer="21"/>
+<wire x1="39" y1="50" x2="39" y2="39" width="0.127" layer="21"/>
+<wire x1="39" y1="39" x2="41" y2="39" width="0.127" layer="21"/>
+<wire x1="41" y1="50" x2="39" y2="50" width="0.127" layer="21"/>
+<wire x1="41" y1="50" x2="41" y2="39" width="0.127" layer="21"/>
+<wire x1="41" y1="39" x2="43" y2="39" width="0.127" layer="21"/>
+<wire x1="43" y1="50" x2="41" y2="50" width="0.127" layer="21"/>
+<wire x1="43" y1="50" x2="43" y2="39" width="0.127" layer="21"/>
+<wire x1="43" y1="39" x2="45" y2="39" width="0.127" layer="21"/>
+<wire x1="45" y1="50" x2="43" y2="50" width="0.127" layer="21"/>
+<wire x1="45" y1="50" x2="45" y2="39" width="0.127" layer="21"/>
+<wire x1="45" y1="39" x2="47" y2="39" width="0.127" layer="21"/>
+<wire x1="47" y1="39" x2="47" y2="50" width="0.127" layer="21"/>
+<wire x1="47" y1="50" x2="45" y2="50" width="0.127" layer="21"/>
+<wire x1="47" y1="39" x2="49" y2="39" width="0.127" layer="21"/>
+<wire x1="49" y1="50" x2="47" y2="50" width="0.127" layer="21"/>
+<wire x1="49" y1="50" x2="49" y2="39" width="0.127" layer="21"/>
+<wire x1="49" y1="39" x2="51" y2="39" width="0.127" layer="21"/>
+<wire x1="51" y1="50" x2="49" y2="50" width="0.127" layer="21"/>
+<wire x1="51" y1="50" x2="51" y2="39" width="0.127" layer="21"/>
+<wire x1="51" y1="39" x2="53" y2="39" width="0.127" layer="21"/>
+<wire x1="53" y1="39" x2="53" y2="50" width="0.127" layer="21"/>
+<wire x1="53" y1="50" x2="51" y2="50" width="0.127" layer="21"/>
+<pad name="VIN" x="5" y="-3" drill="3" shape="square"/>
+<pad name="IN-" x="11" y="-3" drill="3" shape="square"/>
+<pad name="OUT+" x="31" y="-3" drill="3" shape="square"/>
+<pad name="OUT-" x="37" y="-3" drill="3" shape="square"/>
+<text x="6" y="0" size="3" layer="21" rot="R90">IN+</text>
+<text x="12" y="0" size="3" layer="21" rot="R90">IN-</text>
+<text x="33" y="0" size="3" layer="21" rot="R90">OUT+</text>
+<text x="39" y="0" size="3" layer="21" rot="R90">GND</text>
+<wire x1="31" y1="36" x2="31" y2="17" width="0.127" layer="21"/>
+<wire x1="31" y1="17" x2="53" y2="17" width="0.127" layer="21"/>
+<wire x1="53" y1="17" x2="53" y2="36" width="0.127" layer="21"/>
+<wire x1="53" y1="36" x2="31" y2="36" width="0.127" layer="21"/>
+<wire x1="42" y1="32" x2="40" y2="26" width="0.127" layer="21"/>
+<wire x1="40" y1="26" x2="44" y2="28" width="0.127" layer="21"/>
+<wire x1="44" y1="28" x2="41" y2="21" width="0.127" layer="21"/>
+<wire x1="41" y1="21" x2="44" y2="23" width="0.127" layer="21"/>
+<wire x1="41" y1="21" x2="40" y2="23" width="0.127" layer="21"/>
+<circle x="24" y="5" radius="4.242640625" width="0.127" layer="21"/>
+<circle x="12" y="15" radius="4.242640625" width="0.127" layer="21"/>
+<rectangle x1="1" y1="10" x2="5" y2="14" layer="41"/>
+<rectangle x1="1" y1="10" x2="5" y2="14" layer="42"/>
+<rectangle x1="1" y1="40.5" x2="5" y2="44.5" layer="41"/>
+<rectangle x1="1" y1="40.5" x2="5" y2="44.5" layer="42"/>
+<rectangle x1="55" y1="40.5" x2="59" y2="44.5" layer="41"/>
+<rectangle x1="55" y1="40.5" x2="59" y2="44.5" layer="42"/>
+<rectangle x1="55" y1="1" x2="59" y2="5" layer="41"/>
+<rectangle x1="55" y1="1" x2="59" y2="5" layer="42"/>
+</package>
 </packages>
 <symbols>
 <symbol name="NPN">
@@ -1026,6 +1146,24 @@ grid 3.5 mm, diameter 8 mm</description>
 <rectangle x1="-1.651" y1="0" x2="1.651" y2="0.889" layer="94"/>
 <pin name="-" x="0" y="-2.54" visible="off" length="short" direction="pas" rot="R90"/>
 <pin name="+" x="0" y="5.08" visible="off" length="short" direction="pas" rot="R270"/>
+</symbol>
+<symbol name="CONNEC_ALIM">
+<wire x1="0" y1="0" x2="0" y2="15.24" width="0.254" layer="94"/>
+<wire x1="0" y1="15.24" x2="10.16" y2="15.24" width="0.254" layer="94"/>
+<wire x1="10.16" y1="15.24" x2="10.16" y2="0" width="0.254" layer="94"/>
+<wire x1="10.16" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<pin name="V+" x="-5.08" y="10.16" length="middle"/>
+<pin name="GND" x="-5.08" y="5.08" length="middle"/>
+</symbol>
+<symbol name="BOOSTER">
+<wire x1="0" y1="2.54" x2="20.32" y2="2.54" width="0.254" layer="94"/>
+<wire x1="20.32" y1="2.54" x2="20.32" y2="20.32" width="0.254" layer="94"/>
+<wire x1="20.32" y1="20.32" x2="0" y2="20.32" width="0.254" layer="94"/>
+<wire x1="0" y1="20.32" x2="0" y2="2.54" width="0.254" layer="94"/>
+<pin name="IN+" x="-5.08" y="15.24" length="middle"/>
+<pin name="IN-" x="-5.08" y="7.62" length="middle"/>
+<pin name="OUT+" x="25.4" y="15.24" length="middle" rot="R180"/>
+<pin name="OUT-" x="25.4" y="7.62" length="middle" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -1396,6 +1534,40 @@ grid 3.5 mm, diameter 8 mm</description>
 <connects>
 <connect gate="G$1" pin="+" pad="+"/>
 <connect gate="G$1" pin="-" pad="-"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="CONNEC_ALIM">
+<gates>
+<gate name="G$1" symbol="CONNEC_ALIM" x="-5.08" y="-7.62"/>
+</gates>
+<devices>
+<device name="" package="XT60">
+<connects>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="V+" pad="V+"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="BOOSTER">
+<gates>
+<gate name="G$1" symbol="BOOSTER" x="-10.16" y="-10.16"/>
+</gates>
+<devices>
+<device name="" package="BOOSTER_390V">
+<connects>
+<connect gate="G$1" pin="IN+" pad="VIN"/>
+<connect gate="G$1" pin="IN-" pad="IN-"/>
+<connect gate="G$1" pin="OUT+" pad="OUT+"/>
+<connect gate="G$1" pin="OUT-" pad="OUT-"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -5087,6 +5259,8 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <part name="REG3.3V" library="rhoban" deviceset="REG_5V" device=""/>
 <part name="U$3" library="rhoban" deviceset="CPOL_EU" device="PANASONIC_D" value="47uF"/>
 <part name="U$4" library="rhoban" deviceset="CPOL_EU" device="PANASONIC_D" value="47uF"/>
+<part name="XT60" library="rhoban" deviceset="CONNEC_ALIM" device=""/>
+<part name="U$5" library="rhoban" deviceset="BOOSTER" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -5112,6 +5286,8 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <instance part="REG3.3V" gate="G$1" x="-137.16" y="50.8"/>
 <instance part="U$3" gate="G$1" x="-190.5" y="73.66"/>
 <instance part="U$4" gate="G$1" x="-190.5" y="53.34"/>
+<instance part="XT60" gate="G$1" x="-165.1" y="99.06"/>
+<instance part="U$5" gate="G$1" x="-129.54" y="96.52"/>
 </instances>
 <busses>
 </busses>
@@ -5225,6 +5401,21 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <wire x1="-190.5" y1="50.8" x2="-190.5" y2="48.26" width="0.1524" layer="91"/>
 <label x="-190.5" y="48.26" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="XT60" gate="G$1" pin="GND"/>
+<wire x1="-170.18" y1="104.14" x2="-177.8" y2="104.14" width="0.1524" layer="91"/>
+<label x="-182.88" y="104.14" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$5" gate="G$1" pin="OUT-"/>
+<wire x1="-104.14" y1="104.14" x2="-99.06" y2="104.14" width="0.1524" layer="91"/>
+<label x="-99.06" y="104.14" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$5" gate="G$1" pin="IN-"/>
+<wire x1="-134.62" y1="104.14" x2="-139.7" y2="104.14" width="0.1524" layer="91"/>
+<label x="-147.32" y="104.14" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="N$4" class="0">
 <segment>
@@ -5256,6 +5447,16 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <wire x1="-160.02" y1="58.42" x2="-165.1" y2="58.42" width="0.1524" layer="91"/>
 <label x="-170.18" y="58.42" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="XT60" gate="G$1" pin="V+"/>
+<wire x1="-170.18" y1="109.22" x2="-177.8" y2="109.22" width="0.1524" layer="91"/>
+<label x="-182.88" y="109.22" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$5" gate="G$1" pin="IN+"/>
+<wire x1="-134.62" y1="111.76" x2="-139.7" y2="111.76" width="0.1524" layer="91"/>
+<label x="-147.32" y="111.76" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="N$2" class="0">
 <segment>
@@ -5280,6 +5481,11 @@ Source: http://www.murata.com .. GRM43DR72E224KW01.pdf</description>
 <wire x1="45.72" y1="78.74" x2="38.1" y2="78.74" width="0.1524" layer="91"/>
 <junction x="38.1" y="88.9"/>
 <junction x="38.1" y="78.74"/>
+</segment>
+<segment>
+<pinref part="U$5" gate="G$1" pin="OUT+"/>
+<wire x1="-104.14" y1="111.76" x2="-99.06" y2="111.76" width="0.1524" layer="91"/>
+<label x="-99.06" y="111.76" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="BUZZER" class="0">

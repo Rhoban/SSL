@@ -1,6 +1,7 @@
+Les trous de fixation sont sur un rectangle de 116 de coté
+
 
 A vérifier:
-- GND sur le booster input = GND output?
 - La taille des trous pour le gros MOS
 - Mettre deux kickers?
 - Taille des capas
