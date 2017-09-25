@@ -30,6 +30,10 @@ http://fr.farnell.com/tracopower/tsr-1-2450/convertisseur-dc-dc5v1asip/dp/169632
 TRACOPOWER TSR 1-2433 3.3V/1A Switching
 http://fr.farnell.com/tracopower/tsr-1-2433/converter-dc-to-dc-3-3v-1a-sip/dp/1696319
 
+Barrière infrarouge, avec émetteurs et récepteurs de 5mm (100mA d'émission):
+- http://fr.farnell.com/vishay/tsal6200/emetteur-ir-940nm-5mm-traversant/dp/3152856
+- http://fr.farnell.com/osram/sfh213-fa/photodiode-ir-filtree/dp/1212763
+
 Capacitor 160V 3300uF (30x50mm)
 
 Centrale GY-85
