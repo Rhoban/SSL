@@ -1,3 +1,50 @@
+Pins count
+1- M1 PWM
+2- M1 DIR
+3- M2 PWM
+4- M2 DIR
+5- M3 PWM
+6- M3 DIR
+7- M4 PWM
+8- M4 DIR
+9- M5 PWM
+
+10- SCK
+11- MISO
+12- MOSI
+
+13- IR Emit
+14- IR Receive
+
+15- Buzzer
+16- Solenoid
+17- IMU SDA
+18- IMU SCL
+
+19- CS COM 1
+20- CS COM 2
+21- CS COM 3
+
+22- CS ENC 1
+23- CS ENC 2
+24- CS ENC 3
+25- CS ENC 4
+
+26- INDEX
+
+
+Pour chaque moteur:
+- W1
+- W2
+- W3
+- GND
+- +
+- H1
+- H2
+- H3
+- A
+- B
+
 
 A ajouter:
 - Les contrôleurs moteurs
