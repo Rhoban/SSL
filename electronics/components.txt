@@ -21,16 +21,13 @@ Pins count
 17- IMU SDA
 18- IMU SCL
 
-19- CS COM 1
-20- CS COM 2
-21- CS COM 3
+19- CSA1
+20- CSA2
+21- CSA3
 
-22- CS ENC 1
-23- CS ENC 2
-24- CS ENC 3
-25- CS ENC 4
-
-26- INDEX
+22 - IRQ1
+23 - IRQ2
+24 - IRQ3
 
 
 Pour chaque moteur:
