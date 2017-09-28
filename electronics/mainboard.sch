@@ -5853,7 +5853,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <classes>
 <class number="0" name="default" width="0.254" drill="0">
 </class>
-<class number="2" name="alim_big" width="1.27" drill="0">
+<class number="2" name="alim_big" width="1.524" drill="0">
 </class>
 <class number="3" name="alim_very_big" width="0.762" drill="0">
 </class>
