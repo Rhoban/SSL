@@ -5882,7 +5882,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="RECEIVE" library="rhoban" deviceset="CONNEC_1X02" device="JST-ZH"/>
 <part name="T2" library="rhoban" deviceset="NPN" device="_BC817,215"/>
 <part name="R4" library="rhoban" deviceset="RESISTANCE" device="-R0805" value="1K"/>
-<part name="R5" library="rhoban" deviceset="RESISTANCE" device="-R0805" value="60"/>
+<part name="R5" library="rhoban" deviceset="RESISTANCE" device="-R0805" value="62"/>
 <part name="R6" library="rhoban" deviceset="RESISTANCE" device="-R0805" value="10K"/>
 <part name="ENC1" library="rhoban" deviceset="LS7366R" device="SO14"/>
 <part name="COM1" library="rhoban" deviceset="NRF24L01" device=""/>
