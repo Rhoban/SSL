@@ -61,6 +61,10 @@ IRFPE30 (deprecated)
 
 - http://fr.farnell.com/samtec/ssw-104-02-g-d-ra/embase-2-54mm-coudee-double-8voies/dp/1668343
 
+Or, for "on the table" version
+
+- http://fr.farnell.com/multicomp/2214s-08sg-85/fiche-femelle-ci-2-rangee-vert/dp/1593489
+
 ### 0.1" Header 1x8 + 0.1" Header 2x9 (maxon)
 
 - http://fr.farnell.com/multicomp/2212s-08sg-85/fiche-femelle-ci-1-rangee-8voies/dp/1593463
