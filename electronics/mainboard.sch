@@ -5853,8 +5853,6 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <classes>
 <class number="0" name="default" width="0.254" drill="0">
 </class>
-<class number="1" name="alime" width="0.254" drill="0">
-</class>
 <class number="2" name="alim_big" width="1.524" drill="0">
 </class>
 <class number="3" name="alim_very_big" width="0.762" drill="0">
@@ -5963,12 +5961,13 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="CA6" library="rhoban" deviceset="C_EU" device="-100NF"/>
 <part name="GND9" library="supply1" deviceset="GND" device=""/>
 <part name="CA7" library="rhoban" deviceset="C_EU" device="-100NF"/>
+<part name="XT1" library="rhoban" deviceset="CONNEC_ALIM" device=""/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 <text x="-63.5" y="20.32" size="7.62" layer="104">IMU</text>
-<text x="-160.02" y="114.3" size="6.4516" layer="95">POWER</text>
+<text x="-160.02" y="132.08" size="6.4516" layer="95">POWER</text>
 <text x="-55.88" y="111.76" size="6.4516" layer="95">MCU</text>
 <text x="-157.48" y="20.32" size="6.4516" layer="95">BUZZER</text>
 <text x="30.48" y="106.68" size="6.4516" layer="95">KICKER</text>
@@ -6125,6 +6124,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <instance part="CA6" gate="G$1" x="104.14" y="2.54"/>
 <instance part="GND9" gate="1" x="104.14" y="-50.8"/>
 <instance part="CA7" gate="G$1" x="104.14" y="-43.18"/>
+<instance part="XT1" gate="G$1" x="-162.56" y="111.76"/>
 </instances>
 <busses>
 </busses>
@@ -6591,6 +6591,11 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <pinref part="CA7" gate="G$1" pin="2"/>
 <wire x1="104.14" y1="-48.26" x2="104.14" y2="-45.72" width="0.1524" layer="91"/>
 </segment>
+<segment>
+<pinref part="XT1" gate="G$1" pin="GND"/>
+<wire x1="-167.64" y1="116.84" x2="-175.26" y2="116.84" width="0.1524" layer="91"/>
+<label x="-180.34" y="116.84" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="N$4" class="0">
 <segment>
@@ -6661,6 +6666,11 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <pinref part="R33" gate="G$1" pin="2"/>
 <wire x1="35.56" y1="-10.16" x2="35.56" y2="-7.62" width="0.1524" layer="91"/>
 <label x="35.56" y="-7.62" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="XT1" gate="G$1" pin="V+"/>
+<wire x1="-167.64" y1="121.92" x2="-175.26" y2="121.92" width="0.1524" layer="91"/>
+<label x="-180.34" y="121.92" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$2" class="2">
