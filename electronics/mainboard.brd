@@ -2570,7 +2570,7 @@ design rules under a new name.</description>
 <element name="RECEIVE" library="rhoban" package="JST_ZH_2P" value="CONNEC_1X02JST-ZH" x="-37.465" y="67.945"/>
 <element name="T2" library="rhoban" package="SOT-23" value="NPN_BC817,215" x="39.37" y="62.865"/>
 <element name="R4" library="rhoban" package="R0805" value="1K" x="38.1" y="58.42" rot="R90"/>
-<element name="R5" library="rhoban" package="R0805" value="62" x="43.815" y="62.865" rot="R90"/>
+<element name="R5" library="rhoban" package="R0805" value="110" x="43.815" y="62.865" rot="R90"/>
 <element name="R6" library="rhoban" package="R0805" value="10K" x="-36.83" y="64.135"/>
 <element name="ENC1" library="rhoban" package="SO14" value="LS7366RSO14" x="-47.625" y="-20.32"/>
 <element name="COM1" library="rhoban" package="NRF24L01" value="NRF24L01" x="-57.785" y="-1.27" rot="R90"/>
