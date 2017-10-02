@@ -1,5 +1,13 @@
 # SSL Board
 
+## XXX: To check!!!
+
+- 5V tolerance for SPI
+- 0-5V for maxon from 3.3??
+  Add OD pullups?!
+- Pull down on motors enable (or pull up?) to disable normally
+- Maxon enable pin?
+
 ## Mechanics
 
 Fixation holes are on a 126x82 rectangle, 3mm standoff
@@ -44,8 +52,8 @@ IRFPE30 (deprecated)
 ## Passives
 
 - 0603 15pF capacitors
-    - http://fr.farnell.com/yageo-phycomp/cc0603jrnpo9bn150/condensateur-mlcc-c0g-np0-15pf/dp/721980RL
-- 0805 62 ohms resistor
+    - http://fr.farnell.com/multicomp/mcwr08x3300ftl/res-couche-epaisse-330r-1-0-125w/dp/2446955
+- 0805 100 ohms resistor (stacked x3)
     -  http://fr.farnell.com/vishay/crcw080562r0fkea/res-couche-epaisse-62r-1-0-125w/dp/2138819
 - 47uF decoupling capacitor
     - http://fr.farnell.com/panasonic-electronic-components/eee1ca470sp/condensateur-elec-alu-47uf-16v/dp/9696946
@@ -61,7 +69,7 @@ IRFPE30 (deprecated)
 
 - http://fr.farnell.com/samtec/ssw-104-02-g-d-ra/embase-2-54mm-coudee-double-8voies/dp/1668343
 
-Or, for "on the table" version
+Or, for "on the table" version    
 
 - http://fr.farnell.com/multicomp/2214s-08sg-85/fiche-femelle-ci-2-rangee-vert/dp/1593489
 
@@ -73,6 +81,10 @@ Or, for "on the table" version
 ### 0.1" Header 1x8 (IMU)
 
 - http://fr.farnell.com/multicomp/2212s-08sg-85/fiche-femelle-ci-1-rangee-8voies/dp/1593463
+
+### 0.1" Header 1x20 (Maple mini)
+
+- http://fr.farnell.com/multicomp/2212s-20sg-85/fiche-femelle-ci-1-rangee-20voies/dp/1593469
 
 ### JST-XH 10 pins (2.54mm pitch)
 
