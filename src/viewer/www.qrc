@@ -1,0 +1,24 @@
+<RCC>
+    <qresource prefix="/">
+        <file>www/index.html</file>
+        <file>www/jquery.js</file>
+        <file>www/robocup.js</file>
+        <file>www/style.css</file>
+        <file>www/dist/css/bootstrap-theme.css</file>
+        <file>www/dist/css/bootstrap-theme.css.map</file>
+        <file>www/dist/css/bootstrap-theme.min.css</file>
+        <file>www/dist/css/bootstrap-theme.min.css.map</file>
+        <file>www/dist/css/bootstrap.css</file>
+        <file>www/dist/css/bootstrap.css.map</file>
+        <file>www/dist/css/bootstrap.min.css</file>
+        <file>www/dist/css/bootstrap.min.css.map</file>
+        <file>www/dist/fonts/glyphicons-halflings-regular.eot</file>
+        <file>www/dist/fonts/glyphicons-halflings-regular.svg</file>
+        <file>www/dist/fonts/glyphicons-halflings-regular.ttf</file>
+        <file>www/dist/fonts/glyphicons-halflings-regular.woff</file>
+        <file>www/dist/fonts/glyphicons-halflings-regular.woff2</file>
+        <file>www/dist/js/bootstrap.js</file>
+        <file>www/dist/js/bootstrap.min.js</file>
+        <file>www/dist/js/npm.js</file>
+    </qresource>
+</RCC>
