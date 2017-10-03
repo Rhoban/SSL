@@ -1,0 +1,4 @@
+.catkin_tools
+src/*
+!src/referee/
+**_release
