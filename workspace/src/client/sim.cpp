@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 #include <sstream>
 #include <unistd.h>
 #include <signal.h>
@@ -16,8 +17,9 @@ int main()
     signal(SIGINT, stop);
     RhobanSSL::SimClient client;
 
-    std::cout << "Stopping robot yellow..." << std::endl;
-    client.send(1, 3, 0, 0, 0, 0, 0, false);
+    std::cout << "Putting ball on the middle..." << std::endl;
+    client.moveBall(0, 0, 0, 0);
+    client.moveRobot(1, 3, 0.5, 0, 180, 1);
 
     usleep(2000000);
 
