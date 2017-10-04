@@ -11,4 +11,7 @@
     <buildtool_depend>catkin</buildtool_depend>
 
     <build_depend>ssl_refbox</build_depend> <!-- rhobandeps/ssl-refbox -->
+    <build_depend>RhobanUtils</build_depend> <!-- rhobanproject/rhobanutils -->
+
+    <run_depend>RhobanUtils</run_depend> 
 </package>
