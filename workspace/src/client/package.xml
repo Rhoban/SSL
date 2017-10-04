@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-    <name>ssl_referee</name>
+    <name>ssl_client</name>
     <version>0.0.0</version>
-    <description>Rhoban referee for SSL</description>
+    <description>Rhoban client for SSL</description>
 
     <maintainer email="g.passault@gmail.com">Grégoire Passault</maintainer>
 
@@ -10,8 +10,6 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
-    <build_depend>ssl_refbox</build_depend> <!-- rhobandeps/ssl-refbox -->
     <build_depend>RhobanUtils</build_depend> <!-- rhobanproject/rhobanutils -->
-
-    <run_depend>RhobanUtils</run_depend> 
+    <run_depend>RhobanUtils</run_depend>
 </package>

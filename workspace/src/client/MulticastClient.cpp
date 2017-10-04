@@ -1,4 +1,7 @@
+#include <string.h>
+#include <unistd.h>
 #include <chrono>
+#include <map>
 #include <ifaddrs.h>
 #include <netdb.h>
 #include <arpa/inet.h>
@@ -9,17 +12,15 @@
 #include <sys/types.h>
 
 #include <iostream>
-#include "RefereeClient.h"
+#include "MulticastClient.h"
 
 using namespace Utils::Timing;
-
-#define SSL_BROADCAST_PORT "10003"
-#define SSL_BROADCAST_ADDR "224.5.23.1"
 
 namespace RhobanSSL
 {
 
-    RefereeClient::RefereeClient() :
+    MulticastClient::MulticastClient(std::string addr, std::string port) :
+    addr(addr), port(port),
     receivedData(false)
     {
         // Listing interfaces
@@ -61,7 +62,7 @@ namespace RhobanSSL
         }
     }
 
-    RefereeClient::~RefereeClient()
+    MulticastClient::~MulticastClient()
     {
         running = false;
 
@@ -71,7 +72,7 @@ namespace RhobanSSL
         }
     }
 
-    void RefereeClient::run(int family, int ifindex)
+    void MulticastClient::run(int family, int ifindex)
     {
         // This is mainly from ssl-refbox/client example
 
@@ -84,7 +85,7 @@ namespace RhobanSSL
         hints.ai_flags = AI_PASSIVE | AI_NUMERICSERV;
         addrinfo *ai = 0;
         int gai_err;
-        if ((gai_err = getaddrinfo(0, SSL_BROADCAST_PORT, &hints, &ai)) != 0) {
+        if ((gai_err = getaddrinfo(0, port.c_str(), &hints, &ai)) != 0) {
             std::cerr << gai_strerror(gai_err);
             return;
         }
@@ -102,7 +103,7 @@ namespace RhobanSSL
 
         // Join the multicast group.
         ip_mreqn mcreq;
-        mcreq.imr_multiaddr.s_addr = inet_addr(SSL_BROADCAST_ADDR);
+        mcreq.imr_multiaddr.s_addr = inet_addr(addr.c_str());
         mcreq.imr_address.s_addr = INADDR_ANY;
         mcreq.imr_ifindex = ifindex;
         if (setsockopt(sock, IPPROTO_IP, IP_ADD_MEMBERSHIP, &mcreq, sizeof(mcreq)) < 0) {
@@ -120,25 +121,24 @@ namespace RhobanSSL
                     sizeof(timeout));
 
         while (running) {
-            uint8_t buffer[65536];
+            char buffer[65536];
             ssize_t len = recv(sock, buffer, sizeof(buffer), 0);
 
             if (len > 0) {
-                SSL_Referee packet;
-                if (packet.ParseFromArray(buffer, len)) {
-                    mutex.lock();
+                mutex.lock();
+                if (process(buffer, len)) {
+                    hasPacket();
                     receivedData = true;
                     lastData = TimeStamp::now();
-                    data = packet;
-                    mutex.unlock();
                 }
+                mutex.unlock();
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
         }
     }
 
-    bool RefereeClient::hasData()
+    bool MulticastClient::hasData()
     {
         if (receivedData) {
             auto delta = diffMs(lastData, TimeStamp::now());
@@ -148,15 +148,7 @@ namespace RhobanSSL
         return false;
     }
 
-    SSL_Referee RefereeClient::getData()
+    void MulticastClient::hasPacket()
     {
-        SSL_Referee tmp;
-
-        mutex.lock();
-        tmp = data;
-        mutex.unlock();
-
-        return tmp;
     }
-
 }

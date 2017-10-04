@@ -53,7 +53,7 @@ int main()
             ss << "*no data*" << std::endl;
         }
 
-        system("clear");
+        (void)system("clear");
         std::cout << ss.str();
         std::cout << std::flush;
         usleep(30000);

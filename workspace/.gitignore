@@ -3,5 +3,5 @@
 **.pch
 
 src/*
-!src/referee/
+!src/client/
 !src/viewer/

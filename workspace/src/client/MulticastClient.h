@@ -1,31 +1,31 @@
 #pragma once
 
+#include <vector>
 #include <mutex>
 #include <thread>
 #include <timing/TimeStamp.hpp>
-#include <referee.pb.h>
 
 namespace RhobanSSL
 {
-class RefereeClient
+class MulticastClient
 {
 public:
-
     struct Interface {
         std::string name;
         int family;
         int index;
     };
 
-    RefereeClient();
-    virtual ~RefereeClient();
+    MulticastClient(std::string addr, std::string port);
+    virtual ~MulticastClient();
 
     void run(int family, int ifindex);
-    SSL_Referee getData();
+    virtual bool process(char *buffer, size_t len)=0;
+    virtual void hasPacket();
     bool hasData();
 
 protected:
-    SSL_Referee data;
+    std::string addr, port;
     std::vector<std::thread*> threads;
     std::mutex mutex;
     bool receivedData;
