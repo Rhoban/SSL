@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package>
+    <name>ssl_viewer</name>
+    <version>0.0.0</version>
+    <description>Rhoban viewer for SSL</description>
+
+    <maintainer email="g.passault@gmail.com">Grégoire Passault</maintainer>
+
+    <license>GPL</license>
+
+    <buildtool_depend>catkin</buildtool_depend>
+
+    <build_depend>ssl_referee</build_depend>
+    <build_depend>RhobanUtils</build_depend> <!-- rhobanproject/rhobanutils -->
+
+    <run_depend>RhobanUtils</run_depend>
+</package>

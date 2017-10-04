@@ -2,8 +2,15 @@ cmake_minimum_required(VERSION 2.8)
 project(ssl_referee)
 
 find_package(catkin REQUIRED COMPONENTS
-  ssl_refbox RhobanUtils
+  ssl_refbox
+  RhobanUtils
   )
+
+catkin_package(
+    INCLUDE_DIRS .
+    LIBRARIES ssl_referee
+    CATKIN_DEPENDS RhobanUtils
+)
 
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
@@ -20,5 +27,8 @@ set (SOURCES
     ${PROTO_HDRS}
 )
 
+add_library(ssl_referee ${SOURCES})
+target_link_libraries (ssl_referee ${PROTOBUF_LIBRARIES} ${catkin_LIBRARIES})
+
 add_executable (referee ${SOURCES})
-target_link_libraries (referee ${PROTOBUF_LIBRARIES} ${catkin_LIBRARIES})
+target_link_libraries (referee ssl_referee)

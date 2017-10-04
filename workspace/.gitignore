@@ -1,4 +1,7 @@
 .catkin_tools
+**_release
+**.pch
+
 src/*
 !src/referee/
-**_release
+!src/viewer/

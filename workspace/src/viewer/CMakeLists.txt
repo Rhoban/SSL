@@ -1,5 +1,11 @@
-cmake_minimum_required(VERSION 2.8.11)
+cmake_minimum_required(VERSION 3.0)
 project(viewer)
+
+find_package(catkin REQUIRED COMPONENTS
+  ssl_referee RhobanUtils
+  )
+
+include_directories(${catkin_INCLUDES})
 
 # Find the QtWidgets library
 find_package(Qt5Widgets)
@@ -34,3 +40,5 @@ qt5_use_modules(viewer
     WebKitWidgets
     Widgets
 )
+
+target_link_libraries(viewer ${catkin_LIBRARIES})
