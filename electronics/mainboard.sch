@@ -1315,6 +1315,21 @@ grid 3.5 mm, diameter 8 mm</description>
 <text x="-3.81" y="2.54" size="1.27" layer="25">&gt;NAME</text>
 <pad name="P$3" x="7.62" y="0" drill="2.8" shape="square"/>
 </package>
+<package name="CONNEC_1X01">
+<wire x1="-0.635" y1="1.27" x2="0.635" y2="1.27" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="1.27" x2="1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="1.27" y1="-0.635" x2="0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="0.635" x2="-1.27" y2="-0.635" width="0.1524" layer="21"/>
+<wire x1="-0.635" y1="1.27" x2="-1.27" y2="0.635" width="0.1524" layer="21"/>
+<wire x1="-1.27" y1="-0.635" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
+<wire x1="0.635" y1="-1.27" x2="-0.635" y2="-1.27" width="0.1524" layer="21"/>
+<pad name="1" x="0" y="0" drill="1" diameter="1.778" rot="R90"/>
+<rectangle x1="-0.254" y1="-0.254" x2="0.254" y2="0.254" layer="51"/>
+<wire x1="1.27" y1="0.635" x2="1.27" y2="-0.635" width="0.1524" layer="21"/>
+</package>
+<package name="SHAFT2">
+<pad name="P$1" x="0" y="0" drill="2.2" diameter="5" shape="square"/>
+</package>
 </packages>
 <symbols>
 <symbol name="NPN">
@@ -1576,6 +1591,14 @@ grid 3.5 mm, diameter 8 mm</description>
 <pin name="1" x="2.54" y="5.08" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="2" x="2.54" y="2.54" visible="pad" length="short" direction="pas" function="dot"/>
 <pin name="3" x="2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
+</symbol>
+<symbol name="CONNEC_1X01">
+<wire x1="-1.27" y1="-2.54" x2="6.35" y2="-2.54" width="0.4064" layer="94"/>
+<wire x1="6.35" y1="-2.54" x2="6.35" y2="2.54" width="0.4064" layer="94"/>
+<wire x1="6.35" y1="2.54" x2="-1.27" y2="2.54" width="0.4064" layer="94"/>
+<wire x1="-1.27" y1="2.54" x2="-1.27" y2="-2.54" width="0.4064" layer="94"/>
+<text x="-1.27" y="3.175" size="1.778" layer="95">&gt;NAME</text>
+<pin name="1" x="2.54" y="0" visible="pad" length="short" direction="pas" function="dot"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -2187,6 +2210,29 @@ grid 3.5 mm, diameter 8 mm</description>
 <connect gate="G$1" pin="1" pad="P$1"/>
 <connect gate="G$1" pin="2" pad="P$2"/>
 <connect gate="G$1" pin="3" pad="P$3"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="CONNEC_1X01">
+<gates>
+<gate name="G$1" symbol="CONNEC_1X01" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="CONNEC_1X01">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="SHAFT" package="SHAFT2">
+<connects>
+<connect gate="G$1" pin="1" pad="P$1"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -6043,7 +6089,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="POWERCAP2" library="rhoban" deviceset="CONNEC_1X02" device="BIG"/>
 <part name="POWERCAP1" library="rhoban" deviceset="CONNEC_1X02" device="BIG"/>
 <part name="U$12" library="rhoban" deviceset="NPN" device="_BC817,215"/>
-<part name="R8" library="rcl" deviceset="R-EU_" device="R0805" value="2K"/>
+<part name="R8" library="rcl" deviceset="R-EU_" device="R0805" value="3K"/>
 <part name="U$13" library="rhoban" deviceset="BUZZER" device="66"/>
 <part name="U$2" library="rhoban" deviceset="GY-85" device=""/>
 <part name="REG5V" library="rhoban" deviceset="REG_5V" device=""/>
@@ -6141,12 +6187,17 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="PWM3" library="rhoban" deviceset="CONNEC_1X03" device=""/>
 <part name="PWM4" library="rhoban" deviceset="CONNEC_1X03" device=""/>
 <part name="PWM5" library="rhoban" deviceset="CONNEC_1X03" device=""/>
+<part name="BOOST_EN" library="rhoban" deviceset="CONNEC_1X01" device=""/>
+<part name="R34" library="rhoban" deviceset="RESISTANCE" device="-R0805" value="2M"/>
+<part name="R35" library="rhoban" deviceset="RESISTANCE" device="-R0805" value="10K"/>
+<part name="U$15" library="rhoban" deviceset="NPN" device="_BC817,215"/>
+<part name="R36" library="rhoban" deviceset="RESISTANCE" device="-R0805" value="3K"/>
 </parts>
 <sheets>
 <sheet>
 <plain>
 <text x="-58.42" y="40.64" size="7.62" layer="104">IMU</text>
-<text x="-160.02" y="132.08" size="6.4516" layer="95">POWER</text>
+<text x="-167.64" y="132.08" size="6.4516" layer="95">POWER</text>
 <text x="-50.8" y="132.08" size="6.4516" layer="95">MCU</text>
 <text x="-162.56" y="15.24" size="6.4516" layer="95">BUZZER</text>
 <text x="33.02" y="127" size="6.4516" layer="95">KICKER</text>
@@ -6309,6 +6360,11 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <instance part="PWM3" gate="G$1" x="381" y="7.62"/>
 <instance part="PWM4" gate="G$1" x="381" y="-35.56"/>
 <instance part="PWM5" gate="G$1" x="312.42" y="-88.9"/>
+<instance part="BOOST_EN" gate="G$1" x="-114.3" y="134.62"/>
+<instance part="R34" gate="G$1" x="27.94" y="106.68" rot="R90"/>
+<instance part="R35" gate="G$1" x="27.94" y="91.44" rot="R90"/>
+<instance part="U$15" gate="G$1" x="-114.3" y="121.92"/>
+<instance part="R36" gate="G$1" x="-124.46" y="121.92" rot="R180"/>
 </instances>
 <busses>
 </busses>
@@ -6322,16 +6378,16 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </net>
 <net name="KICK2" class="0">
 <segment>
-<pinref part="MAPLE" gate="G$1" pin="6"/>
-<wire x1="-27.94" y1="93.98" x2="-22.86" y2="93.98" width="0.1524" layer="91"/>
-<label x="-22.86" y="93.98" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="R31" gate="G$1" pin="1"/>
 <pinref part="R32" gate="G$1" pin="1"/>
 <wire x1="20.32" y1="-7.62" x2="17.78" y2="-7.62" width="0.1524" layer="91"/>
 <wire x1="17.78" y1="-7.62" x2="10.16" y2="-7.62" width="0.1524" layer="91"/>
 <label x="2.54" y="-7.62" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="MAPLE" gate="G$1" pin="1"/>
+<wire x1="-27.94" y1="81.28" x2="-22.86" y2="81.28" width="0.1524" layer="91"/>
+<label x="-22.86" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="3.3" class="0">
@@ -6805,6 +6861,17 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <wire x1="314.96" y1="-83.82" x2="307.34" y2="-83.82" width="0.1524" layer="91"/>
 <label x="302.26" y="-83.82" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R35" gate="G$1" pin="1"/>
+<wire x1="27.94" y1="86.36" x2="27.94" y2="83.82" width="0.1524" layer="91"/>
+<wire x1="27.94" y1="81.28" x2="27.94" y2="83.82" width="0.1524" layer="91"/>
+<label x="27.94" y="81.28" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$15" gate="G$1" pin="E"/>
+<wire x1="-111.76" y1="116.84" x2="-111.76" y2="114.3" width="0.1524" layer="91"/>
+<label x="-111.76" y="114.3" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="N$4" class="0">
 <segment>
@@ -6915,6 +6982,11 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <wire x1="60.96" y1="22.86" x2="53.34" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="22.86" x2="53.34" y2="30.48" width="0.1524" layer="91"/>
 <label x="53.34" y="30.48" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R34" gate="G$1" pin="2"/>
+<wire x1="27.94" y1="111.76" x2="27.94" y2="114.3" width="0.1524" layer="91"/>
+<label x="27.94" y="114.3" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="BUZZER" class="0">
@@ -8400,9 +8472,48 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="5.08" y="48.26" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="MAPLE" gate="G$1" pin="7"/>
-<wire x1="-27.94" y1="96.52" x2="-22.86" y2="96.52" width="0.1524" layer="91"/>
-<label x="-22.86" y="96.52" size="1.778" layer="95"/>
+<pinref part="MAPLE" gate="G$1" pin="0"/>
+<wire x1="-27.94" y1="78.74" x2="-22.86" y2="78.74" width="0.1524" layer="91"/>
+<label x="-22.86" y="78.74" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="BOOST_EN" class="0">
+<segment>
+<pinref part="MAPLE" gate="G$1" pin="27"/>
+<wire x1="-53.34" y1="86.36" x2="-58.42" y2="86.36" width="0.1524" layer="91"/>
+<label x="-73.66" y="86.36" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R36" gate="G$1" pin="2"/>
+<wire x1="-129.54" y1="121.92" x2="-132.08" y2="121.92" width="0.1524" layer="91"/>
+<label x="-144.78" y="121.92" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="CAP" class="0">
+<segment>
+<pinref part="MAPLE" gate="G$1" pin="6"/>
+<wire x1="-27.94" y1="93.98" x2="-22.86" y2="93.98" width="0.1524" layer="91"/>
+<label x="-22.86" y="93.98" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R34" gate="G$1" pin="1"/>
+<pinref part="R35" gate="G$1" pin="2"/>
+<wire x1="27.94" y1="101.6" x2="27.94" y2="96.52" width="0.1524" layer="91"/>
+<label x="27.94" y="99.06" size="1.778" layer="95"/>
+</segment>
+</net>
+<net name="N$38" class="0">
+<segment>
+<pinref part="U$15" gate="G$1" pin="B"/>
+<pinref part="R36" gate="G$1" pin="1"/>
+<wire x1="-119.38" y1="121.92" x2="-116.84" y2="121.92" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="N$37" class="0">
+<segment>
+<pinref part="U$15" gate="G$1" pin="C"/>
+<pinref part="BOOST_EN" gate="G$1" pin="1"/>
+<wire x1="-111.76" y1="127" x2="-111.76" y2="134.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 </nets>
