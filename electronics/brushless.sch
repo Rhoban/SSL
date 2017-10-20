@@ -2957,9 +2957,9 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="GND" library="rhoban" deviceset="CONNEC_1X03" device=""/>
 <part name="U$5" library="rhoban" deviceset="CONNEC_1X08" device=""/>
 <part name="X1" library="Rembrandt Electronics - JST XH Connectors v1-0" deviceset="JST-XH-10-PIN" device="-LONG-PAD"/>
-<part name="R23" library="SparkFun-Resistors" deviceset="RESISTOR" device="0805" value="15K"/>
-<part name="R24" library="SparkFun-Resistors" deviceset="RESISTOR" device="0805" value="15K"/>
-<part name="R25" library="SparkFun-Resistors" deviceset="RESISTOR" device="0805" value="15K"/>
+<part name="R23" library="SparkFun-Resistors" deviceset="RESISTOR" device="0805" value="10K"/>
+<part name="R24" library="SparkFun-Resistors" deviceset="RESISTOR" device="0805" value="10K"/>
+<part name="R25" library="SparkFun-Resistors" deviceset="RESISTOR" device="0805" value="10K"/>
 <part name="Q1" library="transistor-power" deviceset="BUK7Y12-40E" device=""/>
 <part name="Q3" library="transistor-power" deviceset="BUK7Y12-40E" device=""/>
 <part name="Q5" library="transistor-power" deviceset="BUK7Y12-40E" device=""/>
