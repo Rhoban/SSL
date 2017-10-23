@@ -3156,7 +3156,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="OSC1" library="SparkFun2" deviceset="CRYSTAL" device="5X3" value="40Mhz">
 <attribute name="FARNELL" value="1842013"/>
 </part>
-<part name="U$7" library="rhoban" deviceset="ACS712" device="">
+<part name="SENSE" library="rhoban" deviceset="ACS712" device="">
 <attribute name="FARNELL" value="1329624"/>
 </part>
 <part name="C4" library="SparkFun-Passives" deviceset="CAP" device="0805" value="1000pF">
@@ -3175,7 +3175,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="REG1" library="rhoban" deviceset="TS2940CW-3.3RP" device="">
 <attribute name="FARNELL" value="7261403"/>
 </part>
-<part name="U$6" library="rhoban" deviceset="CPOL_EU" device="_3.5-8" value="100uF">
+<part name="C10" library="rhoban" deviceset="CPOL_EU" device="_3.5-8" value="100uF">
 <attribute name="FARNELL" value="1144713"/>
 </part>
 </parts>
@@ -4058,7 +4058,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <instance part="Q6" gate="G$1" x="109.22" y="20.32">
 <attribute name="FARNELL" x="109.22" y="20.32" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="U$7" gate="G$1" x="78.74" y="73.66">
+<instance part="SENSE" gate="G$1" x="78.74" y="73.66">
 <attribute name="FARNELL" x="78.74" y="73.66" size="1.778" layer="96" display="off"/>
 </instance>
 <instance part="C4" gate="G$1" x="119.38" y="78.74" rot="R90">
@@ -4136,7 +4136,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="10.16" y="33.02" size="1.27" layer="95" rot="R90" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$7" gate="G$1" pin="GND"/>
+<pinref part="SENSE" gate="G$1" pin="GND"/>
 <wire x1="104.14" y1="76.2" x2="106.68" y2="76.2" width="0.1524" layer="91"/>
 <label x="106.68" y="76.2" size="1.27" layer="95" xref="yes"/>
 </segment>
@@ -4272,7 +4272,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <segment>
 <wire x1="71.12" y1="83.82" x2="71.12" y2="88.9" width="0.1524" layer="91"/>
 <label x="71.12" y="88.9" size="1.27" layer="95" rot="R90" xref="yes"/>
-<pinref part="U$7" gate="G$1" pin="IN-"/>
+<pinref part="SENSE" gate="G$1" pin="IN-"/>
 <wire x1="73.66" y1="78.74" x2="71.12" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
@@ -4288,27 +4288,27 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <pinref part="Q3" gate="G$1" pin="D"/>
 <pinref part="Q5" gate="G$1" pin="D"/>
 <wire x1="71.12" y1="60.96" x2="71.12" y2="78.74" width="0.1524" layer="91"/>
-<pinref part="U$7" gate="G$1" pin="IN+"/>
+<pinref part="SENSE" gate="G$1" pin="IN+"/>
 <wire x1="71.12" y1="78.74" x2="73.66" y2="83.82" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="VCC" class="0">
 <segment>
-<pinref part="U$7" gate="G$1" pin="VCC"/>
+<pinref part="SENSE" gate="G$1" pin="VCC"/>
 <wire x1="104.14" y1="86.36" x2="106.68" y2="86.36" width="0.1524" layer="91"/>
 <label x="106.68" y="86.36" size="1.27" layer="95" rot="R90" xref="yes"/>
 </segment>
 </net>
 <net name="N$24" class="0">
 <segment>
-<pinref part="U$7" gate="G$1" pin="VIOUT"/>
+<pinref part="SENSE" gate="G$1" pin="VIOUT"/>
 <wire x1="104.14" y1="83.82" x2="106.68" y2="83.82" width="0.1524" layer="91"/>
 <pinref part="R20" gate="G$1" pin="1"/>
 </segment>
 </net>
 <net name="N$27" class="0">
 <segment>
-<pinref part="U$7" gate="G$1" pin="FILTER"/>
+<pinref part="SENSE" gate="G$1" pin="FILTER"/>
 <wire x1="104.14" y1="78.74" x2="114.3" y2="78.74" width="0.1524" layer="91"/>
 <pinref part="C4" gate="G$1" pin="1"/>
 </segment>
@@ -4362,7 +4362,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <instance part="REG1" gate="G$1" x="2.54" y="-25.4">
 <attribute name="FARNELL" x="2.54" y="-25.4" size="1.778" layer="96" display="off"/>
 </instance>
-<instance part="U$6" gate="G$1" x="33.02" y="-30.48">
+<instance part="C10" gate="G$1" x="33.02" y="-30.48">
 <attribute name="FARNELL" x="33.02" y="-30.48" size="1.778" layer="96" display="off"/>
 </instance>
 </instances>
@@ -4421,7 +4421,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="2.54" y="-35.56" size="1.27" layer="95" xref="yes"/>
 </segment>
 <segment>
-<pinref part="U$6" gate="G$1" pin="-"/>
+<pinref part="C10" gate="G$1" pin="-"/>
 <wire x1="33.02" y1="-33.02" x2="33.02" y2="-38.1" width="0.1524" layer="91"/>
 <label x="33.02" y="-38.1" size="1.27" layer="95" xref="yes"/>
 </segment>
@@ -4496,7 +4496,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <junction x="60.96" y="15.24"/>
 </segment>
 <segment>
-<pinref part="U$6" gate="G$1" pin="+"/>
+<pinref part="C10" gate="G$1" pin="+"/>
 <wire x1="33.02" y1="-25.4" x2="33.02" y2="-20.32" width="0.1524" layer="91"/>
 <label x="33.02" y="-20.32" size="1.27" layer="95" xref="yes"/>
 </segment>
