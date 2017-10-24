@@ -2290,100 +2290,6 @@ Standard schematic elements and footprints for 5mm, 3mm, 1206, and 0603 sized LE
 </deviceset>
 </devicesets>
 </library>
-<library name="SparkFun-Connectors">
-<description>&lt;h3&gt;SparkFun Electronics' preferred foot prints&lt;/h3&gt;
-In this library you'll find connectors and sockets- basically anything that can be plugged into or onto.&lt;br&gt;&lt;br&gt;
-We've spent an enormous amount of time creating and checking these footprints and parts, but it is the end user's responsibility to ensure correctness and suitablity for a given componet or application. If you enjoy using this library, please buy one of our products at www.sparkfun.com.
-&lt;br&gt;&lt;br&gt;
-&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
-&lt;br&gt;&lt;br&gt;
-You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
-<packages>
-<package name="USB-MINIB">
-<description>&lt;h3&gt;USB Type Mini-B Surface Mounted&lt;/h3&gt;
-&lt;p&gt;Specifications:
-&lt;ul&gt;&lt;li&gt;Pin count: 5 main, 4 shield pins&lt;/li&gt;
-&lt;/ul&gt;&lt;/p&gt;
-&lt;p&gt;&lt;a href=”https://www.sparkfun.com/datasheets/Prototyping/miniUSB-Dimensional.pdf”&gt;Datasheet referenced for footprint&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Example device(s):
-&lt;ul&gt;&lt;li&gt;USB_Mini-B&lt;/li&gt;
-&lt;/ul&gt;&lt;/p&gt;</description>
-<wire x1="-1.3" y1="3.8" x2="0.8" y2="3.8" width="0.2032" layer="21"/>
-<wire x1="3.3" y1="3.1" x2="3.3" y2="2.2" width="0.2032" layer="21"/>
-<wire x1="3.3" y1="-2.2" x2="3.3" y2="-3.1" width="0.2032" layer="21"/>
-<wire x1="0.8" y1="-3.8" x2="-1.3" y2="-3.8" width="0.2032" layer="21"/>
-<wire x1="-5.9" y1="3.8" x2="-5.9" y2="-3.8" width="0.2032" layer="51"/>
-<wire x1="-5.9" y1="-3.8" x2="-4.5" y2="-3.8" width="0.2032" layer="51"/>
-<wire x1="-5.9" y1="3.8" x2="-4.5" y2="3.8" width="0.2032" layer="51"/>
-<smd name="D+" x="2.5" y="0" dx="2.5" dy="0.5" layer="1"/>
-<smd name="D-" x="2.5" y="0.8" dx="2.5" dy="0.5" layer="1"/>
-<smd name="GND" x="2.5" y="-1.6" dx="2.5" dy="0.5" layer="1"/>
-<smd name="ID" x="2.5" y="-0.8" dx="2.5" dy="0.5" layer="1"/>
-<smd name="S3" x="-3" y="-4.5" dx="2.5" dy="2" layer="1"/>
-<smd name="S1" x="-3" y="4.5" dx="2.5" dy="2" layer="1"/>
-<smd name="S4" x="2.5" y="-4.5" dx="2.5" dy="2" layer="1"/>
-<smd name="S2" x="2.5" y="4.5" dx="2.5" dy="2" layer="1"/>
-<smd name="VBUS" x="2.5" y="1.6" dx="2.5" dy="0.5" layer="1"/>
-<text x="-3.81" y="6.35" size="0.8128" layer="25" font="vector" ratio="20">&gt;NAME</text>
-<text x="-3.81" y="-6.35" size="0.8128" layer="27" font="vector" ratio="20" align="top-left">&gt;VALUE</text>
-<hole x="0" y="2.2" drill="0.9"/>
-<hole x="0" y="-2.2" drill="0.9"/>
-</package>
-</packages>
-<symbols>
-<symbol name="USB-5PIN">
-<description>&lt;h3&gt;USB - 5 pin&lt;/h3&gt;
-&lt;p&gt;5 pin USB connector: VBUS, GND, D+, D-, ID &lt;/p&gt;
-&lt;p&gt;Includes 4 pins for shield connections &lt;/p&gt;</description>
-<wire x1="5.08" y1="7.62" x2="-2.54" y2="7.62" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="7.62" x2="-2.54" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="-2.54" y1="-7.62" x2="5.08" y2="-7.62" width="0.254" layer="94"/>
-<text x="2.794" y="-3.302" size="2.54" layer="94" rot="R90">USB</text>
-<pin name="D+" x="-5.08" y="0" visible="pad" length="short"/>
-<pin name="D-" x="-5.08" y="2.54" visible="pad" length="short"/>
-<pin name="VBUS" x="-5.08" y="5.08" visible="pad" length="short" direction="pwr"/>
-<pin name="GND" x="-5.08" y="-5.08" visible="pad" length="short" direction="pwr"/>
-<pin name="ID" x="-5.08" y="-2.54" visible="pad" length="short"/>
-<pin name="SHIELD" x="7.62" y="0" visible="pad" length="short" rot="R180"/>
-<text x="-2.54" y="-7.874" size="1.778" layer="96" font="vector" align="top-left">&gt;VALUE</text>
-<wire x1="5.08" y1="7.62" x2="5.08" y2="-7.62" width="0.254" layer="94"/>
-<text x="-2.54" y="7.62" size="1.778" layer="95" font="vector">&gt;NAME</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="USB_MINI-B" prefix="J">
-<description>&lt;h3&gt;USB type Mini-B Connector&lt;/h3&gt;
-&lt;p&gt;Breaks out 5th pin, and includes shield pins if needed.&lt;/p&gt;
-&lt;p&gt;SparkFun Products:
-&lt;ul&gt;&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/9716”&gt;SparkFun FTDI Basic Breakout&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/11812”&gt;SparkFun XBee Explorer USB&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=”https://www.sparkfun.com/products/12757”&gt;SparkFun Redboard&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;&lt;/p&gt;</description>
-<gates>
-<gate name="G$1" symbol="USB-5PIN" x="0" y="0"/>
-</gates>
-<devices>
-<device name="_SMT" package="USB-MINIB">
-<connects>
-<connect gate="G$1" pin="D+" pad="D+"/>
-<connect gate="G$1" pin="D-" pad="D-"/>
-<connect gate="G$1" pin="GND" pad="GND"/>
-<connect gate="G$1" pin="ID" pad="ID"/>
-<connect gate="G$1" pin="SHIELD" pad="S1 S2 S3 S4"/>
-<connect gate="G$1" pin="VBUS" pad="VBUS"/>
-</connects>
-<technologies>
-<technology name="">
-<attribute name="PROD_ID" value="CONN-08193"/>
-<attribute name="SF_ID" value="PRT-00587" constant="no"/>
-</technology>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="SparkFun-Resistors">
 <description>&lt;h3&gt;SparkFun Resistors&lt;/h3&gt;
 This library contains resistors. Reference designator:R. 
@@ -2951,6 +2857,171 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="Wurth_Input-Output_Connectors_rev15d">
+<description>&lt;BR&gt;Wurth Elektronik - Input/Output Connectors &lt;br&gt;&lt;Hr&gt;
+&lt;BR&gt;&lt;BR&gt; 
+&lt;TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0&gt;
+&lt;TR&gt;   
+&lt;TD BGCOLOR="#cccccc" ALIGN=CENTER&gt;&lt;FONT FACE=ARIAL SIZE=3&gt;&lt;BR&gt;&lt;br&gt;
+      &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;&lt;BR&gt;
+       &lt;BR&gt;
+       &lt;BR&gt;
+       &lt;BR&gt;&lt;BR&gt;&lt;/FONT&gt;
+    &lt;/TD&gt;
+&lt;TD BGCOLOR="#cccccc" ALIGN=CENTER&gt;&lt;FONT FACE=ARIAL SIZE=3&gt;&lt;br&gt;
+      -----&lt;BR&gt;
+      -----&lt;BR&gt;
+      -----&lt;BR&gt;
+      -----&lt;BR&gt;
+      -----&lt;BR&gt;&lt;BR&gt;&lt;/FONT&gt;
+    &lt;/TD&gt;
+    &lt;TD BGCOLOR="#cccccc" ALIGN=CENTER&gt; &lt;FONT FACE=ARIAL SIZE=3&gt;&lt;br&gt;
+      ---------------------------&lt;BR&gt;
+&lt;B&gt;&lt;I&gt;&lt;span style='font-size:26pt;
+  color:#FF6600;'&gt;WE &lt;/span&gt;&lt;/i&gt;&lt;/b&gt;
+&lt;BR&gt;
+      ---------------------------&lt;BR&gt;&lt;b&gt;Würth Elektronik&lt;/b&gt;&lt;/FONT&gt;
+    &lt;/TD&gt;
+    &lt;TD BGCOLOR="#cccccc" ALIGN=CENTER&gt;&lt;FONT FACE=ARIAL SIZE=3&gt;&lt;br&gt;
+      ---------O---&lt;BR&gt;
+      ----O--------&lt;BR&gt;
+      ---------O---&lt;BR&gt;
+      ----O--------&lt;BR&gt;
+      ---------O---&lt;BR&gt;&lt;BR&gt;&lt;/FONT&gt;
+    &lt;/TD&gt;
+   
+&lt;TD BGCOLOR="#cccccc" ALIGN=CENTER&gt;&lt;FONT FACE=ARIAL SIZE=3&gt;&lt;BR&gt;
+      &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; &amp;nbsp;&lt;BR&gt;
+       &lt;BR&gt;
+       &lt;BR&gt;
+       &lt;BR&gt;
+       &lt;BR&gt;&lt;BR&gt;&lt;/FONT&gt;
+    &lt;/TD&gt;
+  &lt;/TR&gt;
+
+  &lt;TR&gt;
+    &lt;TD COLSPAN=7&gt;&amp;nbsp;
+    &lt;/TD&gt;
+  &lt;/TR&gt;
+  
+&lt;/TABLE&gt;
+&lt;B&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;More than you expect&lt;BR&gt;&lt;BR&gt;&lt;BR&gt;&lt;/B&gt;
+
+&lt;HR&gt;&lt;BR&gt;
+&lt;b&gt;Würth Elektronik eiSos GmbH &amp; Co. KG&lt;/b&gt;&lt;br&gt;
+EMC &amp; Inductive Solutions&lt;br&gt;
+
+Max-Eyth-Str.1&lt;br&gt;
+D-74638 Waldenburg&lt;br&gt;
+&lt;br&gt;
+Tel: +49 (0)7942-945-0&lt;br&gt;
+Fax:+49 (0)7942-945-405&lt;br&gt;
+&lt;br&gt;
+&lt;a href="http://www.we-online.com/eagle"&gt;http://www.we-online.com/eagle&lt;/a&gt;&lt;br&gt;
+&lt;a href="mailto:libraries@we-online.com"&gt;libraries@we-online.com&lt;/a&gt; &lt;BR&gt;&lt;BR&gt;
+&lt;br&gt;&lt;HR&gt;&lt;BR&gt;
+Neither CadSoft nor WE-eiSos does warrant that this library is error-free or &lt;br&gt;
+that it meets your specific requirements.&lt;br&gt;&lt;BR&gt;
+Please contact us for more information.&lt;br&gt;&lt;BR&gt;&lt;br&gt;
+&lt;hr&gt;
+Eagle Version 6, Library Revision 2015c, 2015-06-02&lt;br&gt;
+&lt;HR&gt;
+Copyright: Würth Elektronik</description>
+<packages>
+<package name="614105150721">
+<description>&lt;b&gt;614105150721&lt;/b&gt;&lt;p&gt;
+WR-COM_USB_Micro Type B_Vertical_THT Micro Type B Vertical THT- Tape &amp; Reel not for Pick &amp; Place machine</description>
+<wire x1="-0.125" y1="-0.28" x2="-0.125" y2="1.27" width="0.127" layer="51"/>
+<wire x1="6.475" y1="-1.08" x2="7.275" y2="-0.28" width="0.127" layer="51"/>
+<wire x1="-0.125" y1="-0.28" x2="0.675" y2="-1.08" width="0.127" layer="51"/>
+<wire x1="-0.125" y1="1.27" x2="7.275" y2="1.27" width="0.127" layer="21"/>
+<wire x1="7.275" y1="-0.28" x2="7.275" y2="1.27" width="0.127" layer="51"/>
+<wire x1="0.675" y1="-1.08" x2="6.475" y2="-1.08" width="0.127" layer="21"/>
+<pad name="1" x="2.275" y="0.22" drill="0.44" diameter="0.94" shape="square" rot="R270"/>
+<pad name="2" x="2.925" y="-0.78" drill="0.44" diameter="0.94" rot="R90"/>
+<pad name="3" x="3.575" y="0.22" drill="0.44" diameter="0.94" rot="R270"/>
+<pad name="4" x="4.225" y="-0.78" drill="0.44" diameter="0.94" rot="R90"/>
+<pad name="5" x="4.875" y="0.22" drill="0.44" diameter="0.94" rot="R270"/>
+<pad name="Z1" x="0" y="0" drill="0.35" diameter="0.97" shape="long" rot="R90"/>
+<pad name="Z2" x="7.15" y="0" drill="0.35" diameter="0.97" shape="long" rot="R90"/>
+<text x="-0.4266" y="2.26271875" size="2.032" layer="25" font="vector" ratio="13" rot="SR0">&gt;NAME</text>
+<text x="-0.5266" y="-5" size="2.032" layer="27" font="vector" ratio="13" rot="SR0">&gt;VALUE</text>
+<wire x1="-0.175" y1="0.575" x2="-0.175" y2="-0.575" width="0.127" layer="46"/>
+<wire x1="0.175" y1="0.575" x2="0.175" y2="-0.575" width="0.127" layer="46"/>
+<wire x1="-0.175" y1="0.575" x2="0.175" y2="0.575" width="0.127" layer="46" curve="-180"/>
+<wire x1="-0.175" y1="-0.575" x2="0.175" y2="-0.575" width="0.127" layer="46" curve="180"/>
+<wire x1="6.975" y1="0.575" x2="6.975" y2="-0.575" width="0.127" layer="46"/>
+<wire x1="7.325" y1="0.575" x2="7.325" y2="-0.575" width="0.127" layer="46"/>
+<wire x1="6.975" y1="0.575" x2="7.325" y2="0.575" width="0.127" layer="46" curve="-180"/>
+<wire x1="6.975" y1="-0.575" x2="7.325" y2="-0.575" width="0.127" layer="46" curve="180"/>
+<wire x1="-0.675" y1="1.795" x2="7.825" y2="1.795" width="0.127" layer="39"/>
+<wire x1="7.825" y1="1.795" x2="7.825" y2="-1.6" width="0.127" layer="39"/>
+<wire x1="7.825" y1="-1.6" x2="-0.675" y2="-1.6" width="0.127" layer="39"/>
+<wire x1="-0.675" y1="-1.6" x2="-0.675" y2="1.795" width="0.127" layer="39"/>
+</package>
+</packages>
+<symbols>
+<symbol name="5_USB">
+<wire x1="-2.54" y1="-7.62" x2="-2.54" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="7.62" x2="3.81" y2="7.62" width="0.254" layer="94"/>
+<wire x1="3.81" y1="-7.62" x2="-2.54" y2="-7.62" width="0.254" layer="94"/>
+<text x="-5.08" y="8.89" size="1.778" layer="95">&gt;NAME</text>
+<text x="-5.08" y="-20.32" size="1.778" layer="96">&gt;VALUE</text>
+<pin name="5GND" x="-7.62" y="-5.08" length="middle" direction="pas"/>
+<pin name="4ID" x="-7.62" y="-2.54" length="middle" direction="pas"/>
+<pin name="3D+" x="-7.62" y="0" length="middle" direction="pas"/>
+<pin name="2D-" x="-7.62" y="2.54" length="middle" direction="pas"/>
+<pin name="1VCC" x="-7.62" y="5.08" length="middle" direction="pas"/>
+<wire x1="5.08" y1="8.89" x2="5.08" y2="-8.89" width="0.254" layer="94" style="shortdash"/>
+<wire x1="5.08" y1="-8.89" x2="1.27" y2="-8.89" width="0.254" layer="94" style="shortdash"/>
+<wire x1="1.27" y1="-8.89" x2="1.27" y2="-10.16" width="0.254" layer="94" style="shortdash"/>
+<pin name="GND@1" x="-5.08" y="-10.16" length="middle"/>
+<pin name="GND@2" x="-5.08" y="-12.7" length="middle"/>
+<wire x1="1.27" y1="-10.16" x2="1.27" y2="-12.7" width="0.254" layer="94" style="shortdash"/>
+<wire x1="0" y1="-10.16" x2="1.27" y2="-10.16" width="0.254" layer="94" style="shortdash"/>
+<wire x1="0" y1="-12.7" x2="1.27" y2="-12.7" width="0.254" layer="94" style="shortdash"/>
+<wire x1="1.27" y1="8.89" x2="5.08" y2="8.89" width="0.254" layer="94" style="shortdash"/>
+<text x="4.445" y="-2.2225" size="1.778" layer="94" rot="R90">USB</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="614105150721" prefix="K" uservalue="yes">
+<description>&lt;b&gt;WR-COM_USB_Micro Type B_Vertical_THT;&lt;BR&gt;
+&lt;/b&gt;Micro Type B Vertical THT- Tape &amp; Reel not for Pick &amp; Place machine
+&lt;/b&gt;&lt;br&gt;Code : Con_I-O_COM_USB_2.0_B_614105150721_614105150721
+
+
+
+
+&lt;p&gt;&lt;a href="http://katalog.we-online.de/media/images/eican/Con_I-O_COM_USB_2.0_B_614105150721_pf2.jpg"&gt;
+
+&lt;img src="http://katalog.we-online.de/media/images/eican/Con_I-O_COM_USB_2.0_B_614105150721_pf2.jpg" width="320"&gt;&lt;/a&gt;&lt;p&gt;
+
+&lt;p&gt;Details see: &lt;a href="http://katalog.we-online.de/em/datasheet/614105150721.pdf"&gt;http://katalog.we-online.de/em/datasheet/614105150721.pdf&lt;/a&gt;
+&lt;p&gt;Created 12/08/2014, Dan Xu
+&lt;p&gt;2014 (C) Wurth Elektronik</description>
+<gates>
+<gate name="G$1" symbol="5_USB" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="614105150721">
+<connects>
+<connect gate="G$1" pin="1VCC" pad="1"/>
+<connect gate="G$1" pin="2D-" pad="2"/>
+<connect gate="G$1" pin="3D+" pad="3"/>
+<connect gate="G$1" pin="4ID" pad="4"/>
+<connect gate="G$1" pin="5GND" pad="5"/>
+<connect gate="G$1" pin="GND@1" pad="Z1"/>
+<connect gate="G$1" pin="GND@2" pad="Z2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -2958,6 +3029,8 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </variantdefs>
 <classes>
 <class number="0" name="default" width="0" drill="0">
+</class>
+<class number="1" name="vdriver" width="0.254" drill="0">
 </class>
 <class number="2" name="power" width="0" drill="0">
 </class>
@@ -3016,9 +3089,6 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </part>
 <part name="C7" library="SparkFun-Passives" deviceset="CAP" device="0805" value="1uF">
 <attribute name="FARNELL" value="2496946"/>
-</part>
-<part name="J1" library="SparkFun-Connectors" deviceset="USB_MINI-B" device="_SMT">
-<attribute name="FARNELL" value="1753807"/>
 </part>
 <part name="DRV1" library="rhoban" deviceset="OPEN-BLDC_IR2101" device="">
 <attribute name="FARNELL" value="2296000"/>
@@ -3178,6 +3248,9 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <part name="C10" library="rhoban" deviceset="CPOL_EU" device="_3.5-8" value="100uF">
 <attribute name="FARNELL" value="1144713"/>
 </part>
+<part name="K1" library="Wurth_Input-Output_Connectors_rev15d" deviceset="614105150721" device="">
+<attribute name="FARNELL" value="2470830"/>
+</part>
 </parts>
 <sheets>
 <sheet>
@@ -3247,8 +3320,8 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <instance part="C7" gate="G$1" x="66.04" y="43.18" rot="R180">
 <attribute name="FARNELL" x="66.04" y="43.18" size="1.778" layer="96" rot="R180" display="off"/>
 </instance>
-<instance part="J1" gate="G$1" x="-48.26" y="-48.26" rot="R180">
-<attribute name="FARNELL" x="-48.26" y="-48.26" size="1.778" layer="96" rot="R180" display="off"/>
+<instance part="K1" gate="G$1" x="-50.8" y="-48.26" rot="R180">
+<attribute name="FARNELL" x="-50.8" y="-48.26" size="1.778" layer="96" rot="R180" display="off"/>
 </instance>
 </instances>
 <busses>
@@ -3286,8 +3359,8 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 </segment>
 <segment>
 <label x="-40.64" y="-43.18" size="1.27" layer="95" xref="yes"/>
-<pinref part="J1" gate="G$1" pin="GND"/>
 <wire x1="-40.64" y1="-43.18" x2="-43.18" y2="-43.18" width="0.1524" layer="91"/>
+<pinref part="K1" gate="G$1" pin="5GND"/>
 </segment>
 <segment>
 <wire x1="-40.64" y1="17.78" x2="-40.64" y2="15.24" width="0.1524" layer="91"/>
@@ -3320,9 +3393,14 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="-35.56" y="-30.48" size="1.27" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="J1" gate="G$1" pin="SHIELD"/>
-<wire x1="-55.88" y1="-48.26" x2="-60.96" y2="-48.26" width="0.1524" layer="91"/>
-<label x="-60.96" y="-48.26" size="1.27" layer="95" rot="R180" xref="yes"/>
+<pinref part="K1" gate="G$1" pin="GND@2"/>
+<wire x1="-45.72" y1="-35.56" x2="-40.64" y2="-35.56" width="0.1524" layer="91"/>
+<pinref part="K1" gate="G$1" pin="GND@1"/>
+<wire x1="-45.72" y1="-38.1" x2="-40.64" y2="-38.1" width="0.1524" layer="91"/>
+<wire x1="-40.64" y1="-38.1" x2="-40.64" y2="-35.56" width="0.1524" layer="91"/>
+<wire x1="-40.64" y1="-35.56" x2="-38.1" y2="-35.56" width="0.1524" layer="91"/>
+<label x="-38.1" y="-35.56" size="1.27" layer="95" xref="yes"/>
+<junction x="-40.64" y="-35.56"/>
 </segment>
 </net>
 <net name="U_LOW" class="0">
@@ -3414,8 +3492,8 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <net name="VUSB" class="0">
 <segment>
 <label x="-40.64" y="-53.34" size="1.27" layer="95" xref="yes"/>
-<pinref part="J1" gate="G$1" pin="VBUS"/>
 <wire x1="-43.18" y1="-53.34" x2="-40.64" y2="-53.34" width="0.1524" layer="91"/>
+<pinref part="K1" gate="G$1" pin="1VCC"/>
 </segment>
 </net>
 <net name="RX1" class="0">
@@ -3435,15 +3513,15 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <net name="N$59" class="0">
 <segment>
 <pinref part="R29" gate="G$1" pin="1"/>
-<pinref part="J1" gate="G$1" pin="D-"/>
 <wire x1="-43.18" y1="-50.8" x2="-27.94" y2="-50.8" width="0.1524" layer="91"/>
+<pinref part="K1" gate="G$1" pin="2D-"/>
 </segment>
 </net>
 <net name="N$60" class="0">
 <segment>
 <wire x1="-43.18" y1="-48.26" x2="-35.56" y2="-48.26" width="0.1524" layer="91"/>
 <pinref part="R35" gate="G$1" pin="1"/>
-<pinref part="J1" gate="G$1" pin="D+"/>
+<pinref part="K1" gate="G$1" pin="3D+"/>
 </segment>
 </net>
 <net name="DISC" class="0">
@@ -3824,7 +3902,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="66.04" y="22.86" size="1.27" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="VDRIVER" class="0">
+<net name="VDRIVER" class="1">
 <segment>
 <pinref part="DRV1" gate="G$1" pin="VCC"/>
 <wire x1="38.1" y1="83.82" x2="38.1" y2="91.44" width="0.1524" layer="91"/>
@@ -4501,7 +4579,7 @@ Number of pins: &lt;b&gt;10&lt;/b&gt;&lt;b&gt;&lt;P&gt;
 <label x="33.02" y="-20.32" size="1.27" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="VDRIVER" class="0">
+<net name="VDRIVER" class="1">
 <segment>
 <wire x1="71.12" y1="-22.86" x2="63.5" y2="-22.86" width="0.1524" layer="91"/>
 <label x="63.5" y="-22.86" size="1.27" layer="95" rot="R180" xref="yes"/>
