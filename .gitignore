@@ -1,2 +1,9 @@
-electronics/*#*
 **.swp
+
+.catkin_tools
+**_release
+**.pch
+
+src/*
+!src/client/
+!src/viewer/
