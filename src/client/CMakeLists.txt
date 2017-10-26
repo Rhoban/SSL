@@ -11,6 +11,10 @@ catkin_package(
     CATKIN_DEPENDS RhobanUtils
 )
 
+# This is not really clean but will produce the binaries in the workspace
+# directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
+
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
 include_directories(${catkin_INCLUDE_DIRS})
