@@ -7,11 +7,11 @@
 You will need these apt repositories:
 
     apt-get install g++ cmake libprotobuf-dev \
-            protobuf-compiler php php-xml
+            protobuf-compiler php php-cli php-xml
 
 ### Catkin
 
-To install cakin (via pip):
+Now install catkin:
 
     sudo apt-get install python-pip python-empy
     sudo pip install -U catkin_tools
@@ -30,3 +30,12 @@ This will install all the dependencies
 To build, run:
 
     ./workspace build
+
+## Packages
+
+Here are the packages:
+
+* ``client``: the package to communicate with the SSL official software (vision, referee and simulator)
+    * Note that this provides test binaries in `bin/` directory 
+* ``viewer``: the viewer to interract with the strategies
+* TODO!
