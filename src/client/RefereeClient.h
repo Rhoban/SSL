@@ -11,12 +11,6 @@ namespace RhobanSSL
 class RefereeClient : public MulticastClient
 {
 public:
-    struct Interface {
-        std::string name;
-        int family;
-        int index;
-    };
-
     RefereeClient();
     bool process(char *buffer, size_t len);
     SSL_Referee getData();

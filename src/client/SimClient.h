@@ -8,17 +8,47 @@
 
 namespace RhobanSSL
 {
+
+/**
+ * A client that can communicate with the simulator to send orders or to
+ * control robot
+ */
 class SimClient
 {
 public:
     SimClient();
 
-    void moveBall(double x, double y, double vx, double vy);
+    /**
+     * Move the ball the the desired x,y position with desired vx,vy speed
+     */
+    void moveBall(double x, double y, double vx=0, double vy=0);
 
+    /**
+     * Moves a robot to a position
+     *
+     * @param yellow Is the robot yellow team?
+     * @param id     The robot id
+     * @param x      Robot position (Y, [m])
+     * @param y      Robot position (Y, [m])
+     * @param theta  Robot orientation [deg]
+     * @param turnon Is the robot on ?
+     */
     void moveRobot(bool yellow, int id,
         double x, double y, double theta,
         bool turnon);
 
+    /**
+     * Controls a robot
+     *
+     * @param yellow Is the robot yellow ?
+     * @param id     The robot id
+     * @param x      Robot position (X, [m])
+     * @param y      Robot position (Y, [m])
+     * @param theta  Robot orientation [deg]
+     * @param kickX  Kick X [m/s]
+     * @param kickZ  Kick Y [m/s]
+     * @param spin   Is the dribbler spinning ?
+     */
     void send(
         // Robot id
         bool yellow, int id,

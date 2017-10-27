@@ -1,8 +1,5 @@
 #include <chrono>
 
-#define SSL_BROADCAST_PORT "10003"
-#define SSL_BROADCAST_ADDR "224.5.23.1"
-
 #include <iostream>
 #include "VisionClient.h"
 #include "client_config.h"

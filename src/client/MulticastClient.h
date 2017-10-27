@@ -7,6 +7,11 @@
 
 namespace RhobanSSL
 {
+
+/**
+ * This is a generic multicast client that listens on all possible interfaces
+ * (running one thread per interface) for incoming packets
+ */
 class MulticastClient
 {
 public:
@@ -16,12 +21,28 @@ public:
         int index;
     };
 
+    /**
+     * At instanciation, provide the address and the port to listen to for the
+     * multicast client to listen to
+     *
+     * @param addr Multicast address to listen
+     * @param port Multicast port to listen
+     */
     MulticastClient(std::string addr, std::string port);
     virtual ~MulticastClient();
 
-    void run(int family, int ifindex);
+    /**
+     * Process an incoming packet
+     *
+     * @param  buffer  A buffer containing received bytes
+     * @param  len     Number of bytes in the buffer
+     * @return         Returns true if the contents is a valid packet
+     */
     virtual bool process(char *buffer, size_t len)=0;
-    virtual void hasPacket();
+
+    /**
+     * Is there valid received packet ?
+     */
     bool hasData();
 
 protected:
@@ -31,5 +52,19 @@ protected:
     bool receivedData;
     volatile bool running;
     Utils::Timing::TimeStamp lastData;
+
+    /**
+     * Each thread runs this process
+     *
+     * @param family  Interface family
+     * @param ifindex Interface index
+     */
+    void run(int family, int ifindex);
+
+    /**
+     * Called when a valid packet incomes, can be overloaded in sub classes
+     * to trigger events when a packet is received
+     */
+    virtual void packetReceived();
 };
 }

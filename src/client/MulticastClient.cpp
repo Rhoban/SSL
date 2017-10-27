@@ -127,7 +127,7 @@ namespace RhobanSSL
             if (len > 0) {
                 mutex.lock();
                 if (process(buffer, len)) {
-                    hasPacket();
+                    packetReceived();
                     receivedData = true;
                     lastData = TimeStamp::now();
                 }
@@ -148,7 +148,8 @@ namespace RhobanSSL
         return false;
     }
 
-    void MulticastClient::hasPacket()
+    void MulticastClient::packetReceived()
     {
+        // Default behaviors does nothing
     }
 }
