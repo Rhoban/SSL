@@ -31,11 +31,17 @@ To build, run:
 
     ./workspace build
 
+You can then use the following debugging binaries:
+
+* ``./bin/vision``, to display informations from the vision (see ``client/vision.cpp``)
+* ``./bin/referee``, to display inforamtions from the referee (see ``client/referee.cpp``)
+* ``./bin/sim``, to send commands to the simulator (see ``client/sim.cpp``)
+
 ## Packages
 
 Here are the packages:
 
 * ``client``: the package to communicate with the SSL official software (vision, referee and simulator)
-    * Note that this provides test binaries in `bin/` directory 
+    * Note that this provides test binaries in `bin/` directory
 * ``viewer``: the viewer to interract with the strategies
 * TODO!
