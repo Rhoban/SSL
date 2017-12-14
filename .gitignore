@@ -8,3 +8,4 @@ bin
 src/*
 !src/client/
 !src/viewer/
+!src/ai/

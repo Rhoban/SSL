@@ -9,7 +9,6 @@ using namespace Utils::Timing;
 
 namespace RhobanSSL
 {
-
     VisionClient::VisionClient() :
     MulticastClient(SSL_VISION_ADDRESS, SSL_VISION_PORT)
     {

@@ -6,8 +6,8 @@ find_package(catkin REQUIRED COMPONENTS
   )
 
 catkin_package(
-    INCLUDE_DIRS .
-    LIBRARIES ssl_referee
+    INCLUDE_DIRS . ${CMAKE_CURRENT_BINARY_DIR}
+    LIBRARIES ssl_client
     CATKIN_DEPENDS RhobanUtils
 )
 
