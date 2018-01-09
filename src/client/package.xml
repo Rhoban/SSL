@@ -11,5 +11,8 @@
     <buildtool_depend>catkin</buildtool_depend>
 
     <build_depend>RhobanUtils</build_depend> <!-- rhobanproject/rhobanutils -->
+    <build_depend>serial</build_depend> <!-- rhobandeps/serial -->
+
     <run_depend>RhobanUtils</run_depend>
+    <run_depend>serial</run_depend>
 </package>

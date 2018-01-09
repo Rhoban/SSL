@@ -8,7 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
     INCLUDE_DIRS . ${CMAKE_CURRENT_BINARY_DIR}
     LIBRARIES ssl_client
-    CATKIN_DEPENDS RhobanUtils
+    CATKIN_DEPENDS RhobanUtils serial
 )
 
 # This is not really clean but will produce the binaries in the workspace
@@ -35,6 +35,7 @@ set (SOURCES
     RefereeClient.cpp
     VisionClient.cpp
     SimClient.cpp
+    Kinematic.cpp
     ${PROTO_SRCS}
     ${PROTO_HDRS}
 )
@@ -50,3 +51,6 @@ target_link_libraries (vision ssl_client)
 
 add_executable (sim sim.cpp ${SOURCES})
 target_link_libraries (sim ssl_client)
+
+add_executable (kinematic kinematic.cpp ${SOURCES})
+target_link_libraries (kinematic ssl_client)
