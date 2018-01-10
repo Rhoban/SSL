@@ -82,7 +82,6 @@ namespace RhobanSSL
                     } else {
                         if (c == 0xff) {
                             // Received message from USB
-                            std::cout << std::endl;
                             mutex.lock();
                             memcpy((void *)statuses, (void *)temp, sizeof(statuses));
                             mutex.unlock();

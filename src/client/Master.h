@@ -20,6 +20,7 @@ public:
     // Stop the master
     void stop();
 
+    // Send the packet
     void send();
 
     volatile struct packet_master robots[6];
