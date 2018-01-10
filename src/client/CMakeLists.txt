@@ -3,6 +3,7 @@ project(ssl_client)
 
 find_package(catkin REQUIRED COMPONENTS
   RhobanUtils
+  serial
   )
 
 catkin_package(
@@ -36,6 +37,7 @@ set (SOURCES
     VisionClient.cpp
     SimClient.cpp
     Kinematic.cpp
+    Master.cpp
     ${PROTO_SRCS}
     ${PROTO_HDRS}
 )
@@ -54,3 +56,6 @@ target_link_libraries (sim ssl_client)
 
 add_executable (kinematic kinematic.cpp ${SOURCES})
 target_link_libraries (kinematic ssl_client)
+
+add_executable (master master.cpp ${SOURCES})
+target_link_libraries (master ssl_client)
