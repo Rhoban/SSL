@@ -38,6 +38,7 @@ set (SOURCES
     SimClient.cpp
     Kinematic.cpp
     Master.cpp
+    joystick/Joystick.cpp
     ${PROTO_SRCS}
     ${PROTO_HDRS}
 )

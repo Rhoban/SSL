@@ -6,7 +6,7 @@ int main()
 {
     RhobanSSL::Kinematic kinematic;
 
-    auto wheels = kinematic.compute(1, 0, 0);
+    auto wheels = kinematic.compute(4, 0, 0);
     std::cout << "wheels: " << std::endl;
     std::cout << "- front left: " << wheels.frontLeft << std::endl;
     std::cout << "- front right: " << wheels.frontRight << std::endl;
