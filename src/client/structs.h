@@ -20,6 +20,8 @@
      float wheel4;
      float wheel3;
 
+     float kp, ki, kd;               // Servo parameter
+
      uint16_t kickPower;             // Kick power (this is a duration in uS)
  } __attribute__((packed));
 

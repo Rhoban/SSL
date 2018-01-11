@@ -8,8 +8,8 @@ namespace RhobanSSL
     {
         angleRear = deg2rad(45);
         angleFront = deg2rad(120);
-        wheelRadius = 0.06;     // XXX: To measure
-        robotRadius = 0.17;    // XXX: To measure
+        wheelRadius = 0.06/2.0;     // XXX: To measure
+        robotRadius = 0.17/2.0;    // XXX: To measure
 
         frontLeftVector = makeWheelVector(angleFront);
         frontRightVector = makeWheelVector(-angleFront);
@@ -45,7 +45,7 @@ namespace RhobanSSL
 
     Point Kinematic::makeWheelVector(double angle)
     {
-        Point vector(0, -1);
+        Point vector(0, 1);
 
         vector = vector.rotation(Angle(rad2deg(angle)));
 
