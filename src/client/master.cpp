@@ -54,11 +54,11 @@ int main()
             }
             if (event.type == JS_EVENT_AXIS && event.number < 20) {
                 if (event.number == 0) {        // Y
-                    ySpeed = event.getValue()*5;
+                    ySpeed = event.getValue()*3;
                 } else if (event.number == 1) { // X
-                    xSpeed = -event.getValue()*5;
+                    xSpeed = -event.getValue()*3;
                 } else if (event.number == 2) { // Rotation
-                    thetaSpeed = -event.getValue()*2;
+                    thetaSpeed = -event.getValue()*3;
                 }
                 std::cout << "Axis [" << (int)event.number << "] " <<
                  event.getValue() << std::endl;

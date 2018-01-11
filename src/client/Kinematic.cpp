@@ -15,6 +15,9 @@ namespace RhobanSSL
         frontRightVector = makeWheelVector(-angleFront);
         backLeftVector = makeWheelVector(angleRear);
         backRightVector = makeWheelVector(-angleRear);
+
+        std::cout << frontLeftVector.getX() << ", " << frontLeftVector.getY() << std::endl;
+        std::cout << backLeftVector.getX() << ", " << backLeftVector.getY() << std::endl;
     }
 
     Kinematic::WheelsSpeed Kinematic::compute(double xSpeed, double ySpeed, double thetaSpeed)
