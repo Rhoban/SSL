@@ -14,7 +14,7 @@ int main()
 
     if (!joystick.open()) {
         std::cerr << "Can't open joystick" << std::endl;
-        return 1;
+        // return 1;
     }
 
     // Openning connection with robot
@@ -26,12 +26,13 @@ int main()
     double thetaSpeed = 0;
     Kinematic kinematic;
 
-    master.robots[0].kp = 650;
-    master.robots[0].ki = 4;
-    master.robots[0].kd = 0;
+    // Pre-setting the power of the kick
     master.robots[0].kickPower = 10000;
+    master.setParams(250, 3, 1);
 
     while (true) {
+        // Setting parms
+
         master.send();
 
         while (joystick.getEvent(&event)) {
