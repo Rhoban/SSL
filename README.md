@@ -13,7 +13,9 @@ You will need these apt repositories:
 
 Now install catkin:
 
-    sudo apt-get install python-pip python-empy
+    sudo apt-get install python-pip python-empy 
+    # Eventually, if necessary, install python3-trollius
+    sudo apt-get install python3-trollius
     sudo pip install -U catkin_tools
 
 ## Dependencies
