@@ -10,7 +10,7 @@ public:
         Yellow, Blue
     } Team;
 
-    AIVisionClient(Team myTeam);
+    AIVisionClient(Team myTeam, bool simulation = false);
     GameState &getGameState();
 
 protected:

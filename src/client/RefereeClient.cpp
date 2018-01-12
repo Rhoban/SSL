@@ -13,6 +13,7 @@ namespace RhobanSSL
     RefereeClient::RefereeClient() :
     MulticastClient(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT)
     {
+        init();
     }
 
     SSL_Referee RefereeClient::getData()

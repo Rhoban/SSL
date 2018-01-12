@@ -54,6 +54,11 @@ protected:
     Utils::Timing::TimeStamp lastData;
 
     /**
+     * Initializes the multicast client
+     */
+    void init();
+
+    /**
      * Each thread runs this process
      *
      * @param family  Interface family

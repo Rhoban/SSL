@@ -3,12 +3,12 @@ project(ssl_ai)
 set (CMAKE_CXX_STANDARD 11)
 
 find_package(catkin REQUIRED COMPONENTS
-  ssl_client
+  ssl_client tclap RhobanUtils
 )
 
 catkin_package(
     INCLUDE_DIRS .
-    CATKIN_DEPENDS ssl_client RhobanUtils
+    CATKIN_DEPENDS ssl_client RhobanUtils tclap
 )
 
 include_directories(${catkin_INCLUDE_DIRS})
@@ -21,5 +21,5 @@ set (SOURCES
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
-add_executable(ai test.cpp ${SOURCES})
+add_executable(ai ai.cpp ${SOURCES})
 target_link_libraries(ai ${catkin_LIBRARIES})

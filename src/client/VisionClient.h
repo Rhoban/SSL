@@ -11,7 +11,7 @@ namespace RhobanSSL
 class VisionClient : public MulticastClient
 {
 public:
-    VisionClient();
+    VisionClient(bool simulation = false);
     bool process(char *buffer, size_t len);
     SSL_WrapperPacket getData();
 

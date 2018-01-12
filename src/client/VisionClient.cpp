@@ -6,12 +6,16 @@
 
 using namespace Utils::Timing;
 
-
 namespace RhobanSSL
 {
-    VisionClient::VisionClient() :
+    VisionClient::VisionClient(bool simulation) :
     MulticastClient(SSL_VISION_ADDRESS, SSL_VISION_PORT)
     {
+        if (simulation) {
+            port = SSL_SIMULATION_VISION_PORT;
+        }
+
+        init();
     }
 
     SSL_WrapperPacket VisionClient::getData()

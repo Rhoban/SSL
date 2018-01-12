@@ -3,8 +3,8 @@
 
 namespace RhobanSSL
 {
-AIVisionClient::AIVisionClient(AIVisionClient::Team myTeam)
-: myTeam(myTeam), VisionClient()
+AIVisionClient::AIVisionClient(AIVisionClient::Team myTeam, bool simulation)
+: myTeam(myTeam), VisionClient(simulation)
 {
 }
 
