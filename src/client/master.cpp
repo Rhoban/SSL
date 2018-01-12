@@ -28,7 +28,7 @@ int main()
 
     // Pre-setting the power of the kick
     master.robots[0].kickPower = 10000;
-    master.setParams(250, 3, 1);
+    master.setParams(400, 3, 0);
 
     while (true) {
         // Setting parms
@@ -55,9 +55,9 @@ int main()
             }
             if (event.type == JS_EVENT_AXIS && event.number < 20) {
                 if (event.number == 0) {        // Y
-                    ySpeed = event.getValue()*3;
+                    ySpeed = event.getValue()*1.5;
                 } else if (event.number == 1) { // X
-                    xSpeed = -event.getValue()*3;
+                    xSpeed = -event.getValue()*1.5;
                 } else if (event.number == 2) { // Rotation
                     thetaSpeed = -event.getValue()*3;
                 }
