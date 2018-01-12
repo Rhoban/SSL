@@ -15,6 +15,7 @@ catkin_package(
 # This is not really clean but will produce the binaries in the workspace
 # directory
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
+set (CMAKE_CXX_STANDARD 11)
 
 find_package(Protobuf REQUIRED)
 include_directories(${PROTOBUF_INCLUDE_DIRS})
