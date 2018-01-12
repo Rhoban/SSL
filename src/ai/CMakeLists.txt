@@ -11,15 +11,20 @@ catkin_package(
     CATKIN_DEPENDS ssl_client RhobanUtils tclap
 )
 
+find_package(Protobuf REQUIRED)
+
 include_directories(${catkin_INCLUDE_DIRS})
-message("TEST: ${catkin_INCLUDE_DIRS}")
 
 set (SOURCES
+    AI.cpp
     AIVisionClient.cpp
+    AICommander.cpp
+    AICommanderSimulation.cpp
+    AICommanderReal.cpp
     GameState.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
 add_executable(ai ai.cpp ${SOURCES})
-target_link_libraries(ai ${catkin_LIBRARIES})
+target_link_libraries(ai ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})

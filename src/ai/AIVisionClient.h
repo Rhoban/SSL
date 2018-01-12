@@ -1,3 +1,5 @@
+#pragma once
+
 #include <VisionClient.h>
 #include "GameState.h"
 
@@ -18,5 +20,7 @@ protected:
 
     Team myTeam;
     GameState gameState;
+
+    void updateRobotInformation(SSL_DetectionRobot &robot, bool ally);
 };
 }
