@@ -58,9 +58,10 @@ public:
         double kickX, double kickZ, bool spin
     );
 
+    void sendPacket(grSim_Packet &packet);
+    
 protected:
     Rhoban::UDPBroadcast broadcast;
 
-    void sendPacket(grSim_Packet &packet);
 };
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <VisionClient.h>
 #include "GameState.h"
 
@@ -10,7 +12,7 @@ public:
         Yellow, Blue
     } Team;
 
-    AIVisionClient(Team myTeam);
+    AIVisionClient(Team myTeam, bool simulation = false);
     GameState &getGameState();
 
 protected:
@@ -18,5 +20,7 @@ protected:
 
     Team myTeam;
     GameState gameState;
+
+    void updateRobotInformation(SSL_DetectionRobot &robot, bool ally);
 };
 }

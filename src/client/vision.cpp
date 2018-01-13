@@ -14,7 +14,7 @@ void stop(int s)
 int main()
 {
     signal(SIGINT, stop);
-    RhobanSSL::VisionClient client;
+    RhobanSSL::VisionClient client(true);
 
     while (running) {
         std::stringstream ss;

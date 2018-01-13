@@ -9,7 +9,7 @@ namespace RhobanSSL
         angleRear = deg2rad(45);
         angleFront = deg2rad(120);
         wheelRadius = 0.06/2.0;     // XXX: To measure
-        robotRadius = 0.17/2.0;    // XXX: To measure
+        robotRadius = 0.17/2.0;     // XXX: To measure
 
         frontLeftVector = makeWheelVector(angleFront);
         frontRightVector = makeWheelVector(-angleFront);

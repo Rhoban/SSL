@@ -10,6 +10,7 @@ namespace RhobanSSL
         em();
 
         shouldSend = false;
+        shouldSendParams = false;
         running = true;
         thread = new std::thread([this]() {
             this->execute();
@@ -46,6 +47,28 @@ namespace RhobanSSL
     void Master::send()
     {
         shouldSend = true;
+    }
+
+    void Master::setParams(float kp, float ki, float kd)
+    {
+        params.kp = kp;
+        params.ki = ki;
+        params.kd = kd;
+        shouldSendParams = true;
+    }
+
+    void Master::sendPacket(uint8_t instruction, uint8_t *payload, size_t size)
+    {
+        uint8_t data[size + 4];
+        data[0] = 0xaa;
+        data[1] = 0x55;
+        data[2] = instruction;
+
+        data[size + 3] = 0xff;
+        memcpy((void *)(data + 3), payload, size);
+        mutex.unlock();
+
+        serial.write(data, sizeof(data));
     }
 
     void Master::execute()
@@ -94,14 +117,21 @@ namespace RhobanSSL
             mutex.lock();
             if (shouldSend) {
                 shouldSend = false;
-                uint8_t data[sizeof(robots) + 3];
-                data[0] = 0xaa;
-                data[1] = 0x55;
-                data[sizeof(robots) + 2] = 0xff;
-                memcpy((void *)(data + 2), (void *)robots, sizeof(robots));
-                mutex.unlock();
 
-                serial.write(data, sizeof(data));
+                sendPacket(
+                    INSTRUCTION_MASTER,
+                    (uint8_t *)robots,
+                    sizeof(robots)
+                );
+
+            } else if (shouldSendParams) {
+                shouldSendParams = false;
+
+                sendPacket(
+                    INSTRUCTION_PARAMS,
+                    (uint8_t *)&params,
+                    sizeof(params)
+                );
             } else {
                 mutex.unlock();
             }

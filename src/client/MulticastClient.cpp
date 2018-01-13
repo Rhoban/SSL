@@ -23,6 +23,10 @@ namespace RhobanSSL
     addr(addr), port(port),
     receivedData(false)
     {
+    }
+
+    void MulticastClient::init()
+    {
         // Listing interfaces
         std::map<int, Interface> interfaces;
         ifaddrs *ifs = 0;
@@ -92,6 +96,13 @@ namespace RhobanSSL
 
         // Create and bind a socket.
         int sock = socket(ai->ai_family, ai->ai_socktype, ai->ai_protocol);
+
+        int enable = 1;
+        if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &enable, sizeof(int)) < 0) {
+            std::cerr << "Can't REUSEADDR" << '\n';
+            return;
+        }
+
         if (sock < 0) {
             std::cerr << strerror(errno) << '\n';
             return;

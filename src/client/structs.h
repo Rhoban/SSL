@@ -7,6 +7,7 @@
  * in the mainboard firmware (see SSL-Electronics/mainboard/firmware)
  */
 
+ #define INSTRUCTION_MASTER          0x00
  struct packet_master {
      #define ACTION_ON      (1<<0)   // The robot should be on (else everything is stopped)
      #define ACTION_KICK1   (1<<1)   // Kick on kicker 1 (transition from 0 to 1 trigger kick)
@@ -20,11 +21,15 @@
      float wheel4;
      float wheel3;
 
-     float kp, ki, kd;               // Servo parameter
-
      uint16_t kickPower;             // Kick power (this is a duration in uS)
  } __attribute__((packed));
 
+ #define INSTRUCTION_PARAMS          0x01
+ struct packet_params {
+     float kp, ki, kd;               // Servo parameter
+ } __attribute__((packed));
+
+ // Robot status packet
  struct packet_robot {
      uint8_t id;
 
