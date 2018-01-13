@@ -43,6 +43,12 @@ Curve2d::Curve2d(
     init();
 };
 
+Curve2d::Curve2d( const Curve2d & curve ):
+    curve(curve.curve), step_time(curve.step_time)
+{
+    init();
+};
+
 Eigen::Vector2d Curve2d::operator()(double u) const {
     return this->curve(u);
 }
@@ -96,6 +102,13 @@ RenormalizedCurve::RenormalizedCurve(
     init();
 };
 
+RenormalizedCurve::RenormalizedCurve(
+    const Curve2d & curve,
+    const std::function<double (double t)> & velocity_consign
+):Curve2d(curve), velocity_consign(velocity_consign){
+    init();
+};
+
 double RenormalizedCurve::max_time() const {
     return this->time_max;
 }
@@ -143,4 +156,116 @@ double RenormalizedCurve::time( double length ) const {
 Eigen::Vector2d RenormalizedCurve::operator()(double t) const {
     return original_curve( this->inverse_of_arc_length( position_consign(t) ) );
 }
+
+
+
+
+
+
+CurveForRobot::CurveForRobot(
+    const std::function<Eigen::Vector2d (double u)> & translation,
+    double angular_acceleration, double translation_acceleration,
+    const std::function<double (double u)> & rotation,
+    double angular_velocity, double translation_velocity,
+    double calculus_step
+):
+    translation_curve( translation, calculus_step ),
+    angular_curve(
+        [&](double u){ return Eigen::Vector2d(rotation(u),0); },
+        calculus_step
+    ),
+    tranlsation_consign(
+        translation_curve.size(),
+        translation_acceleration, translation_velocity
+    ),
+    angular_consign(
+        angular_curve.size(), angular_acceleration, angular_velocity
+    ),
+    translation_movment(translation_curve, tranlsation_consign),
+    rotation_movment(angular_curve, angular_consign)
+{ };
+
+Eigen::Vector2d CurveForRobot::translation(double t){
+    return translation_movment(t);
+}
+double CurveForRobot::rotation(double t){
+    return rotation_movment(t)[0];
+}
+
+
+
+
+
+RobotControl::RobotControl(
+    const std::function<Eigen::Vector2d (double u)> & translation,
+    double angular_acceleration, double translation_acceleration,
+    const std::function<double (double u)> & rotation,
+    double angular_velocity, double translation_velocity,
+    double calculus_step
+):
+    curve(
+        translation,
+        angular_acceleration, translation_acceleration,
+        rotation,
+        angular_velocity, translation_velocity,
+        calculus_step
+    )
+{ }
+
+void RobotControl::set_orientation_pid( double kp, double ki=0.0, double kd=0.0 ){
+    this->kp_o = kp;
+    this->ki_o = ki;
+    this->kd_o = kd;
+}
+
+void RobotControl::set_tranlsation_pid( double kp, double ki=0.0, double kd=0.0 ){
+    this->kp_t = kp;
+    this->ki_t = ki;
+    this->kd_t = kd;
+}
+
+void RobotControl::set_pid( double kp, double ki=0.0, double kd=0.0 ){
+    set_orientation_pid( kp, ki, kd );
+    set_tranlsation_pid( kp, ki, kd );
+}
+
+Eigen::Vector2d RobotControl::translation_command(
+    double t, double dt,
+    const Eigen::Vector2d & robot_position, 
+    double robot_orientation
+){
+    Eigen::Vector2d xt = curve.translation(t);
+    Eigen::Vector2d xt_dt = curve.translation(t+dt);
+    Eigen::Vector2d velocity = (xt_dt - xt )/dt;
+    Eigen::Vector2d error = robot_position - xt;
+
+    Eigen::Vector2d absolute_command = (
+        dt*velocity - kp_t*error - ki_t*error*dt - kd_t*error/dt 
+        + robot_position
+    );
+
+    Eigen::Matrix2d rotation_matrix;
+    rotation_matrix << 
+          std::cos(robot_orientation), std::sin(robot_orientation),
+        - std::sin(robot_orientation), std::cos(robot_orientation)
+    ;
+
+    return rotation_matrix * absolute_command; 
+}
+
+double RobotControl::rotation_command(
+    double t, double dt,
+    const Eigen::Vector2d & robot_position, 
+    double robot_orientation
+){
+    double theta_t = curve.rotation(t);
+    double theta_t_dt = curve.rotation(t+dt);
+    double velocity = (theta_t_dt - theta_t )/dt;
+    double error = robot_orientation - theta_t;
+    return (
+        dt*velocity - kp_o*error - ki_o*error*dt - kd_o*error/dt 
+        + robot_orientation
+    );
+}
+
 

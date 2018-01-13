@@ -36,6 +36,7 @@ class Curve2d {
             const std::function<Eigen::Vector2d (double u)> & curve,
             double step_time
         );
+        Curve2d( const Curve2d& curve );
 
         Eigen::Vector2d operator()(double u) const;
 
@@ -58,6 +59,10 @@ class RenormalizedCurve : public Curve2d {
             const std::function<double (double t)> & velocity_consign,
             double step_time
         );
+        RenormalizedCurve(
+            const Curve2d & curve,
+            const std::function<double (double t)> & velocity_consign
+        );
 
         void set_step_time( double dt );
 
@@ -70,5 +75,60 @@ class RenormalizedCurve : public Curve2d {
         double error_position_consign() const;
         double get_step_time() const;
 };
+
+class CurveForRobot {
+    protected:
+        Curve2d translation_curve;
+        Curve2d angular_curve;
+
+        VelocityConsign tranlsation_consign;
+        VelocityConsign angular_consign;
+
+        RenormalizedCurve translation_movment;
+        RenormalizedCurve rotation_movment;
+
+    public:
+        CurveForRobot(
+            const std::function<Eigen::Vector2d (double u)> & translation,
+            double angular_acceleration, double translation_acceleration,
+            const std::function<double (double u)> & rotation,
+            double angular_velocity, double translation_velocity,
+            double calculus_step
+        );
+        Eigen::Vector2d translation(double t);
+        double rotation(double t);
+};
+
+class RobotControl {
+    protected:
+        CurveForRobot curve;
+
+        double kp_t,ki_t,kd_t;
+        double kp_o,ki_o,kd_o;
+
+    public:
+        RobotControl(
+            const std::function<Eigen::Vector2d (double u)> & translation,
+            double angular_acceleration, double translation_acceleration,
+            const std::function<double (double u)> & rotation,
+            double angular_velocity, double translation_velocity,
+            double calculus_step
+        );
+
+        Eigen::Vector2d translation_command(
+            double t, double dt,
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        );
+        double rotation_command(
+            double t, double dt,
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        );
+        void set_pid( double kp, double ki, double kd );
+        void set_orientation_pid( double kp, double ki, double kd );
+        void set_tranlsation_pid( double kp, double ki, double kd );
+};
+
 
 #endif
