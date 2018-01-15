@@ -75,6 +75,8 @@ void test_curves(){
                 )
             );
         }
+        assert( curve(curve.max_time()+dt) == curve( curve.max_time() ) );
+        assert( curve(curve.max_time()+3*dt) == curve( curve.max_time() ) );
     }
 
     {
@@ -98,7 +100,11 @@ void test_curves(){
                 )
             );
         }
+        assert( curve(curve.max_time()+dt) == curve( curve.max_time() ) );
+        assert( curve(curve.max_time()+3*dt) == curve( curve.max_time() ) );
     }
+
+
 }
 
 void test_velocityconsign(){
@@ -149,7 +155,128 @@ void test_velocityconsign(){
     }
 }
 
+void test_empty_curves(){
+    {
+        double dt = 0.01;
+        double dt_micro = dt/100;
+
+        Eigen::Vector2d position(3.0,7.0);
+        RenormalizedCurve curve(
+            [&](double u){ return position; }, 
+            [](double t){ return 1.0; },
+            dt_micro        
+        );
+
+        assert( 0.0 == curve.size() );
+        assert( 0.0 == curve.max_time() );
+        assert( position == curve(0.0) );
+        assert( position == curve(0.4) );
+    }
+}
+
+struct Rotation {
+    double orientation;
+
+    double operator()(double u) const {
+        return  90.0*u + orientation;
+    };
+};
+
+struct Translation {
+    Eigen::Vector2d position;
+    
+    Eigen::Vector2d operator()(double u) const {
+        return  position + Eigen::Vector2d(u, u*u); 
+    };
+};
+
+void test_use_cases(){
+/*
+    {
+        Rotation rot;
+        rot.orientation = 90.0;
+        fct_wrapper fct(rot);
+        Curve2d curve(fct, 0.0001);
+        assert( curve.size() == 90 );
+    }
+
+    {
+        double dt = 0.01;
+        double dt_micro = dt/100;
+
+        RenormalizedCurve curve(
+            [](double u){ return Eigen::Vector2d(90.0*u,0.0); }, 
+            [](double t){ return 10.0; },
+            dt_micro        
+        );
+        assert( eq( curve.max_time(), 9, 0.01 ) );
+    }
+
+    {
+        double dt = 0.01;
+        double dt_micro = dt/100;
+            
+        Curve2d crv(
+            [](double u){ return Eigen::Vector2d(90.0*u,0.0); }, 
+            dt_micro
+        );
+        assert( crv.size() == 90 );
+        double max_acceleration = 300.0;
+        double max_velocity = 90.0;
+        VelocityConsign consign(crv.size(), max_acceleration, max_velocity);
+        DEBUG( "TIME : " << consign.time_of_deplacement() );
+
+        RenormalizedCurve curve(
+            crv,
+            consign,
+            dt_micro        
+        );
+        DEBUG( "TIME : " << curve.max_time() );
+    }
+*/
+    {
+        double dt = 0.001;
+        double dt_micro = 0.0001;
+
+        Translation trans;
+        Curve2d crv( trans, dt_micro );
+        double max_acceleration = 20.0;
+        double max_velocity = 1.0;
+        VelocityConsign consign(crv.size(), max_acceleration, max_velocity);
+
+        RenormalizedCurve curve(
+            crv,
+            consign,
+            dt_micro        
+        );
+/*
+        Eigen::Vector2d xt = curve(curve.max_time()-dt);
+        Eigen::Vector2d xdt = curve(curve.max_time()-dt+dt);
+
+        std::cout << xt.transpose() << std::endl;
+        std::cout << xdt.transpose() << std::endl;
+        assert( xdt[0] >= xt[0] );
+        assert( xdt[1] >= xt[1] );
+*/
+        std::cout << curve(curve.max_time()-dt).transpose() << std::endl;
+        std::cout << curve(curve.max_time()).transpose() << std::endl;
+        std::cout << curve(curve.max_time()+dt).transpose() << std::endl;
+
+
+/*
+        for( double t = curve.max_time()-3*dt; t<= curve.max_time()-dt; t+= dt ){
+            Eigen::Vector2d xt = curve(t);
+            Eigen::Vector2d xdt = curve(t+dt);
+            assert( xdt[0] >= xt[0] );
+            assert( xdt[1] >= xt[1] );
+        }
+*/        
+    }
+}
+
 int main(){
+    test_use_cases();
+//    test_empty_curves();
 //    test_curves();
-    test_velocityconsign();
+//    test_velocityconsign();
 }

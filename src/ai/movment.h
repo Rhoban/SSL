@@ -22,7 +22,8 @@ struct VelocityConsign {
 };
 
 class Curve2d {
-    protected:
+//    protected:
+    public:
         std::function<Eigen::Vector2d (double u)> curve;
         
         double step_time;
@@ -47,7 +48,8 @@ class Curve2d {
 };
 
 class RenormalizedCurve : public Curve2d {
-    protected:
+//    protected:
+    public:
         std::function<double (double t)> velocity_consign;
         double time_max;
 
@@ -76,8 +78,23 @@ class RenormalizedCurve : public Curve2d {
         double get_step_time() const;
 };
 
+struct fct_wrapper {
+    std::function<double (double u)> rotation;
+
+    fct_wrapper(
+        const std::function<double (double u)> & rotation
+    ):rotation(rotation){ };
+
+    Eigen::Vector2d operator()(double t){
+        return Eigen::Vector2d( rotation(t), 0.0 );
+    };
+};
+
 class CurveForRobot {
-    protected:
+//    protected:
+      public:
+        fct_wrapper rotation_fct;
+
         Curve2d translation_curve;
         Curve2d angular_curve;
 
@@ -97,37 +114,73 @@ class CurveForRobot {
         );
         Eigen::Vector2d translation(double t);
         double rotation(double t);
+
+        void print_translation_curve( double dt ) const;
+        void print_translation_movment( double dt ) const;
+       
+        void print_rotation_curve( double dt ) const;
+        void print_rotation_movment( double dt ) const;
+};
+
+struct Control {
+    Eigen::Vector2d velocity_translation;
+    double velocity_rotation;
 };
 
 class RobotControl {
-    protected:
+//    protected:
+    public:
         CurveForRobot curve;
 
         double kp_t,ki_t,kd_t;
         double kp_o,ki_o,kd_o;
-
+        bool static_robot;
     public:
+        double start_time;
+        double time;
+        double dt;
+    public:
+        RobotControl();
+        RobotControl( double p, double i, double d );
         RobotControl(
+            double p_t, double i_t, double d_t, 
+            double p_o, double i_o, double d_o 
+        );
+        void update(double current_time);
+        void set_static();
+        bool is_static() const ;
+        void set_movment(
             const std::function<Eigen::Vector2d (double u)> & translation,
             double angular_acceleration, double translation_acceleration,
             const std::function<double (double u)> & rotation,
             double angular_velocity, double translation_velocity,
-            double calculus_step
+            double calculus_step, double current_time
         );
 
-        Eigen::Vector2d translation_command(
-            double t, double dt,
+        Eigen::Vector2d translation_control_in_absolute_frame(
             const Eigen::Vector2d & robot_position, 
             double robot_orientation
         );
-        double rotation_command(
-            double t, double dt,
+        double rotation_control_in_absolute_frame(
             const Eigen::Vector2d & robot_position, 
             double robot_orientation
         );
+
+        Control relative_control_in_robot_frame(
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        );
+
+        Control absolute_control_in_robot_frame(
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        );
+
+        double relative_command();
+
         void set_pid( double kp, double ki, double kd );
         void set_orientation_pid( double kp, double ki, double kd );
-        void set_tranlsation_pid( double kp, double ki, double kd );
+        void set_translation_pid( double kp, double ki, double kd );
 };
 
 

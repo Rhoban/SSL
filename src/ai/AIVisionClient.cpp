@@ -72,7 +72,7 @@ namespace RhobanSSL
 
         robot.position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
         if (robotFrame.has_orientation()) {
-            robot.orientation = Angle(rad2deg(robotFrame.orientation()));
+            robot.orientation = Angle(robotFrame.orientation());
         }
 
         robot.present = true;

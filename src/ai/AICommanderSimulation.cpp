@@ -1,4 +1,5 @@
 #include "AICommanderSimulation.h"
+#include <geometry/Angle.hpp>
 
 namespace RhobanSSL
 {
@@ -23,7 +24,7 @@ namespace RhobanSSL
             simCommand->set_wheelsspeed(false);
             simCommand->set_veltangent(command.xSpeed*factor);
             simCommand->set_velnormal(command.ySpeed*factor);
-            simCommand->set_velangular(command.thetaSpeed*factor);
+            simCommand->set_velangular( command.thetaSpeed*factor );
             simCommand->set_kickspeedx(0);
             simCommand->set_kickspeedz(0);
             simCommand->set_spinner(false);
