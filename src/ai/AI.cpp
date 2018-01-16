@@ -29,11 +29,15 @@ namespace RhobanSSL
                     robot.position.getX(), robot.position.getY()
                 );
                 control.set_translation_pid( 0.01, .00, .0);
-                control.set_orientation_pid( 0.1, .00, .0);
-                //control.set_translation_pid( 0.01, .00, .0);
-                //control.set_orientation_pid( 0.001, .00, .0);
+                control.set_orientation_pid( 0.02, .00, .0);
+                //control.set_translation_pid( 0.0, .00, .0);
+                //control.set_orientation_pid( 0.0, .00, .0);
                 robot_translation.position = robot_position;
                 robot_rotation.orientation = robot.orientation.getSignedValue();
+
+                std::cout << "Initial position " << robot_position << std::endl;
+                std::cout << "Initial orientation " << robot_rotation.orientation << std::endl;
+
                 double translation_velocity = 1.0;
                 double translation_acceleration = 20.0;
 
