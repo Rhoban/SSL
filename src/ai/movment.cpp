@@ -198,10 +198,10 @@ CurveForRobot::CurveForRobot(
     rotation_movment(angular_curve, angular_consign)
 { };
 
-Eigen::Vector2d CurveForRobot::translation(double t){
+Eigen::Vector2d CurveForRobot::translation(double t) const {
     return translation_movment(t);
 }
-double CurveForRobot::rotation(double t){
+double CurveForRobot::rotation(double t) const {
     return rotation_movment(t)[0];
 }
 
@@ -245,16 +245,30 @@ void CurveForRobot::print_rotation_curve( double dt ) const {
     }
 }
 
-
-
-
-RobotControl::RobotControl(): RobotControl( 1.0, 0.0, 0.0) { }
-
-RobotControl::RobotControl( double p, double i=0.0, double d=0.0 ):
-    RobotControl( p, i, d, p, i, d )
+PidControl::PidControl():
+    PidControl(1.0, 0.0, 0.0)
+{ }
+PidControl::PidControl( double p, double i=0.0, double d=0.0 ):
+    PidControl(p, i, d, p, i, d)
+{ }
+PidControl::PidControl(
+    double p_t, double i_t, double d_t, 
+    double p_o, double i_o, double d_o 
+):
+    kp_t(p_t), ki_t(i_t), kd_t(d_t),
+    kp_o(p_o), ki_o(i_o), kd_o(d_o),
+    static_robot(true),
+    start_time(0.0), time(0.0), dt(0.0)
 { }
 
-RobotControl::RobotControl(
+
+RobotControlWithCurve::RobotControlWithCurve(): RobotControlWithCurve( 1.0, 0.0, 0.0) { }
+
+RobotControlWithCurve::RobotControlWithCurve( double p, double i=0.0, double d=0.0 ):
+    RobotControlWithCurve( p, i, d, p, i, d )
+{ }
+
+RobotControlWithCurve::RobotControlWithCurve(
     double p_t, double i_t, double d_t, 
     double p_o, double i_o, double d_o 
 ):
@@ -265,21 +279,18 @@ RobotControl::RobotControl(
         0.0, 1.0, 
         0.001
     ),
-    kp_t(p_t), ki_t(i_t), kd_t(d_t),
-    kp_o(p_o), ki_o(i_o), kd_o(d_o),
-    static_robot(true),
-    time(0)
+    PidControl( p_t, i_t, d_t, p_o, i_o, d_o )
 { }
 
-void RobotControl::set_static(){
-    static_robot = false;
+void PidControl::set_static(bool value = true){
+    static_robot = value;
 }
-bool RobotControl::is_static() const {
+bool PidControl::is_static() const {
     return static_robot;
 }
 
 
-void RobotControl::set_movment(
+void RobotControlWithCurve::set_movment(
     const std::function<Eigen::Vector2d (double u)> & translation,
     double translation_velocity, double translation_acceleration,
     const std::function<double (double u)> & rotation,
@@ -295,42 +306,55 @@ void RobotControl::set_movment(
         angular_acceleration, 
         calculus_step
     );
-    start_time = current_time;
-    time = 0.0;
-    dt = 0.0;
-    static_robot = false;
+    init_time(current_time);
+    set_static(false);
 }
 
-void RobotControl::set_orientation_pid( double kp, double ki=0.0, double kd=0.0 ){
+double RobotControlWithCurve::goal_orientation( double t ) const {
+    return curve.rotation(t);
+}
+
+Eigen::Vector2d RobotControlWithCurve::goal_position( double t ) const {
+    return curve.translation(t);
+}
+
+
+void PidControl::init_time(double start_time){
+    this->start_time = start_time;
+    this->dt = 0.0;
+    this->time = 0.0;
+}
+
+void PidControl::set_orientation_pid( double kp, double ki=0.0, double kd=0.0 ){
     this->kp_o = kp;
     this->ki_o = ki;
     this->kd_o = kd;
 }
 
-void RobotControl::set_translation_pid( double kp, double ki=0.0, double kd=0.0 ){
+void PidControl::set_translation_pid( double kp, double ki=0.0, double kd=0.0 ){
     this->kp_t = kp;
     this->ki_t = ki;
     this->kd_t = kd;
 }
 
-void RobotControl::set_pid( double kp, double ki=0.0, double kd=0.0 ){
+void PidControl::set_pid( double kp, double ki=0.0, double kd=0.0 ){
     set_orientation_pid( kp, ki, kd );
     set_translation_pid( kp, ki, kd );
 }
 
-void RobotControl::update(double current_time){
+void PidControl::update(double current_time){
     this->dt = (current_time - start_time) - this->time;
     this->time = (current_time - start_time);
 }
 
-Eigen::Vector2d RobotControl::translation_control_in_absolute_frame(
+Eigen::Vector2d PidControl::translation_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
 ){
     assert(dt>0);
     if( is_static() ) return Eigen::Vector2d(0.0, 0.0);
-    Eigen::Vector2d xt = curve.translation(time);
-    Eigen::Vector2d xt_dt = curve.translation(time+dt);
+    Eigen::Vector2d xt = goal_position(time);
+    Eigen::Vector2d xt_dt = goal_position(time+dt);
     Eigen::Vector2d velocity = (xt_dt - xt )/dt;
 
     Eigen::Vector2d error = robot_position - xt;
@@ -349,13 +373,13 @@ Eigen::Vector2d RobotControl::translation_control_in_absolute_frame(
     return  absolute_command; 
 }
 
-double RobotControl::rotation_control_in_absolute_frame(
+double PidControl::rotation_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
 ){
     if( is_static() ) return 0.0;
-    double theta_t = curve.rotation(time);
-    double theta_t_dt = curve.rotation(time+dt);
+    double theta_t = goal_orientation(time);
+    double theta_t_dt = goal_orientation(time+dt);
     double velocity = (theta_t_dt - theta_t )/dt;
     double error = (
         std::fmod( robot_orientation - theta_t, M_PI )
@@ -369,7 +393,7 @@ double RobotControl::rotation_control_in_absolute_frame(
     );
 }
 
-Control RobotControl::absolute_control_in_robot_frame(
+Control PidControl::absolute_control_in_robot_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
 ){
@@ -394,7 +418,7 @@ Control RobotControl::absolute_control_in_robot_frame(
     return res;
 }
 
-Control RobotControl::relative_control_in_robot_frame(
+Control PidControl::relative_control_in_robot_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
 ){
@@ -427,3 +451,34 @@ Control RobotControl::relative_control_in_robot_frame(
     res.velocity_rotation = a_r;
     return res;
 }
+
+void RobotControlWithPositionFollowing::set_goal(
+    const Eigen::Vector2d & position, double orientation
+){
+    this->position = position;
+    this->orientation = orientation;
+    set_static(false);
+}
+
+
+double RobotControlWithPositionFollowing::goal_orientation( double t ) const {
+    return orientation;
+}
+
+Eigen::Vector2d RobotControlWithPositionFollowing::goal_position( double t ) const {
+    return position;
+}
+
+/*
+void Control::limits_the_contol(
+    double rotation_velocity_limit, // 0.0 means no limit
+    double translation_velocity_limit // 0.0 means no limit
+){
+    if( rotation_velocity_limit > 0.0 ){
+        this->velocity_rotation = rotation_velocity_limit;
+    }
+    if( translation_velocity_limit > 0.0 ){
+        this->velocity_translation /= translation_velocity_limit;
+    }
+}
+*/

@@ -8,7 +8,6 @@ using namespace Utils::Timing;
 namespace RhobanSSL
 {
 
-
     AI::AI(AIVisionClient *vision, AICommander *commander)
     : vision(vision), commander(commander)
     {
@@ -35,9 +34,10 @@ namespace RhobanSSL
                 robot_translation.position = robot_position;
                 robot_rotation.orientation = robot.orientation.getSignedValue();
 
-                std::cout << "Initial position " << robot_position << std::endl;
-                std::cout << "Initial orientation " << robot_rotation.orientation << std::endl;
+                // std::cout << "Initial position " << robot_position << std::endl;
+                // std::cout << "Initial orientation " << robot_rotation.orientation << std::endl;
 
+#ifdef CURVE_FOLLLOWING
                 double translation_velocity = 1.0;
                 double translation_acceleration = 20.0;
 
@@ -46,6 +46,7 @@ namespace RhobanSSL
 
                 double calculus_step = 0.0001;
                 double time = TimeStamp::now().getTimeMS()/1000.0;
+
                 control.set_movment(
                     robot_translation,
                     translation_velocity,
@@ -55,7 +56,11 @@ namespace RhobanSSL
                     angular_acceleration,
                     calculus_step, time 
                 );
-
+#else
+                control.set_goal( 
+                    Eigen::Vector2d(0.0, 0.0), M_PI/2.0
+                );
+#endif
 
 
 //                DEBUG(
@@ -82,8 +87,6 @@ namespace RhobanSSL
 //                    "t mov length : " << 
 //                    control.curve.translation_movment.size() 
 //                );
-
-
 
                 //control.curve.print_translation_curve(.01);
                 //control.curve.print_translation_movment(.001);
@@ -121,8 +124,8 @@ namespace RhobanSSL
 //                "t : " << 
 //                control.curve.translation_movment( time - control.start_time ) 
 //            );
-             
-            
+
+ 
             commander->set(
                 0, true, ctrl.velocity_translation[0], ctrl.velocity_translation[1], ctrl.velocity_rotation
             );

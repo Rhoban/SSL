@@ -4,6 +4,9 @@
 #include "AIVisionClient.h"
 #include "movment.h"
 
+// Comment to use COntrol with fixed goal
+//#define CURVE_FOLLLOWING
+
 namespace RhobanSSL
 {
 
@@ -38,7 +41,11 @@ namespace RhobanSSL
         bool running;
         AICommander *commander;
         AIVisionClient *vision;
-        RobotControl control;
+        #ifdef CURVE_FOLLLOWING
+        RobotControlWithCurve control;
+        #else
+        RobotControlWithPositionFollowing control;
+        #endif
         Translation robot_translation;
         Rotation robot_rotation;
     };
