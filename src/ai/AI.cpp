@@ -38,11 +38,14 @@ namespace RhobanSSL
                 // std::cout << "Initial orientation " << robot_rotation.orientation << std::endl;
 
 #ifdef CURVE_FOLLLOWING
-                double translation_velocity = 1.0;
-                double translation_acceleration = 20.0;
 
-                double angular_velocity = 2*3.15;  
-                double angular_acceleration = 60.0;
+                // BUG : SI vous obtenez une boucle infini, vous devez bidoulliez les paramètre (en baissant l'acceleration).
+                //  Le bug sera résolu plus tard.
+                double translation_velocity = 0.8;
+                double translation_acceleration = 10.0;
+
+                double angular_velocity = 1.5;  
+                double angular_acceleration = 20.0;
 
                 double calculus_step = 0.0001;
                 double time = TimeStamp::now().getTimeMS()/1000.0;
@@ -125,7 +128,19 @@ namespace RhobanSSL
 //                control.curve.translation_movment( time - control.start_time ) 
 //            );
 
- 
+            if( ctrl.velocity_translation.norm() > TRANSLATION_VELOCITY_LIMIT ){
+                ctrl.velocity_translation = Eigen::Vector2d(0.0, 0.0);
+                std::cerr << "WARNING : we reached the "
+                    "limit translation velocity !" << std::endl;
+            }
+
+            if( std::abs( ctrl.velocity_rotation ) > ROTATION_VELOCITY_LIMIT ){
+                ctrl.velocity_rotation = 0.0;
+                std::cerr << "WARNING : we reached the "
+                    "limit rotation velocity !" << std::endl;
+            }
+
+
             commander->set(
                 0, true, ctrl.velocity_translation[0], ctrl.velocity_translation[1], ctrl.velocity_rotation
             );

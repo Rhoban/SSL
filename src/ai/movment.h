@@ -6,6 +6,9 @@
 #include <Eigen/Dense>
 #include <vector>
 
+#define ROTATION_VELOCITY_LIMIT 2.0
+#define TRANSLATION_VELOCITY_LIMIT 1.0
+
 struct VelocityConsign {
     double distance;
     double max_velocity;

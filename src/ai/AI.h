@@ -5,7 +5,7 @@
 #include "movment.h"
 
 // Comment to use COntrol with fixed goal
-//#define CURVE_FOLLLOWING
+#define CURVE_FOLLLOWING
 
 namespace RhobanSSL
 {

@@ -370,6 +370,11 @@ Eigen::Vector2d PidControl::translation_control_in_absolute_frame(
         velocity - kp_t*error/dt - ki_t*error - kd_t*error/(dt*dt) 
     );
 
+    if( absolute_command.norm() >= TRANSLATION_VELOCITY_LIMIT ){
+        absolute_command *= (  TRANSLATION_VELOCITY_LIMIT / (2*absolute_command.norm()) );
+        std::cerr << "Translation velocity limit !" << std::endl;
+    }
+
     return  absolute_command; 
 }
 
@@ -388,9 +393,18 @@ double PidControl::rotation_control_in_absolute_frame(
     if( std::abs( error ) <= CALCULUS_ERROR ){
         error = 0.0;
     }
-    return (
+    double absolute_command = (
         velocity - kp_o*error/dt - ki_o*error - kd_o*error/(dt*dt) 
     );
+
+    if( std::abs( absolute_command ) >= ROTATION_VELOCITY_LIMIT ){
+        absolute_command *= (
+            ROTATION_VELOCITY_LIMIT / std::abs(absolute_command) 
+        );
+        std::cerr << "Rotation velocity limit !" << std::endl;
+    }
+
+    return absolute_command;
 }
 
 Control PidControl::absolute_control_in_robot_frame(
