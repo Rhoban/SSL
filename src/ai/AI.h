@@ -11,7 +11,7 @@ namespace RhobanSSL
         Eigen::Vector2d position;
         
         Eigen::Vector2d operator()(double u) const {
-            return  position + Eigen::Vector2d(u, u*u); 
+            return  position + Eigen::Vector2d(u, 0); 
             //return  position + Eigen::Vector2d(u,0.0); 
         };
     };

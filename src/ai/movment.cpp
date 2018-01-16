@@ -1,15 +1,25 @@
 #include <assert.h>
 #include "movment.h"
 
-#define CALCULUS_ERROR 0.0001
+#define CALCULUS_ERROR 0.000
 
 VelocityConsign::VelocityConsign(
-    double distance, double max_acceleration, 
-    double max_velocity
+    double distance, 
+    double max_velocity,
+    double max_acceleration 
 ):
-    distance(distance), max_acceleration(max_acceleration),
-    max_velocity(max_velocity)
-{ }
+    distance(distance), max_velocity(max_velocity),
+    max_acceleration(max_acceleration)
+{ 
+    assert(max_acceleration > 0.0); //Acceleration should be Greater than 0.
+    if( not ( distance >= (2*max_velocity*max_velocity/max_acceleration) ) ){
+        std::cerr << "Warning : Distance curve is too short for given maximal velocity and acceleration." << std::endl;
+        std::cerr << "Warning :    we should have : distance > 2*max_velocity*max_velocity/max_acceleration" << std::endl;
+        double old_velocity = max_velocity;
+        max_velocity = std::sqrt( distance*max_acceleration/2.0 );
+        std::cerr << "Warning :    we reduce the velocity from " << old_velocity << " to " << max_velocity << std::endl;
+    }
+}
 
 double VelocityConsign::operator()(double t){
     double x = time_of_acceleration();
@@ -166,9 +176,9 @@ Eigen::Vector2d RenormalizedCurve::operator()(double t) const {
 
 CurveForRobot::CurveForRobot(
     const std::function<Eigen::Vector2d (double u)> & translation,
-    double angular_acceleration, double translation_acceleration,
+    double translation_velocity, double translation_acceleration,
     const std::function<double (double u)> & rotation,
-    double angular_velocity, double translation_velocity,
+    double angular_velocity, double angular_acceleration, 
     double calculus_step
 ):
     rotation_fct(rotation),
@@ -178,10 +188,11 @@ CurveForRobot::CurveForRobot(
     ),
     tranlsation_consign(
         translation_curve.size(),
-        translation_acceleration, translation_velocity
+        translation_velocity, translation_acceleration 
     ),
     angular_consign(
-        angular_curve.size(), angular_acceleration, angular_velocity
+        angular_curve.size(), 
+        angular_velocity, angular_acceleration 
     ),
     translation_movment(translation_curve, tranlsation_consign),
     rotation_movment(angular_curve, angular_consign)
@@ -249,9 +260,9 @@ RobotControl::RobotControl(
 ):
     curve(
         [](double t){ return Eigen::Vector2d(1.0,0.0); },
-        1.0, 1.0, 
+        0.0, 1.0, 
         [](double t){ return 1.0; },
-        1.0, 1.0, 
+        0.0, 1.0, 
         0.001
     ),
     kp_t(p_t), ki_t(i_t), kd_t(d_t),
@@ -270,16 +281,18 @@ bool RobotControl::is_static() const {
 
 void RobotControl::set_movment(
     const std::function<Eigen::Vector2d (double u)> & translation,
-    double angular_acceleration, double translation_acceleration,
+    double translation_velocity, double translation_acceleration,
     const std::function<double (double u)> & rotation,
-    double angular_velocity, double translation_velocity,
+    double angular_velocity, double angular_acceleration, 
     double calculus_step, double current_time
 ){
     curve = CurveForRobot(
         translation,
-        angular_acceleration, translation_acceleration,
+        translation_velocity,
+        translation_acceleration,
         rotation,
-        angular_velocity, translation_velocity,
+        angular_velocity, 
+        angular_acceleration, 
         calculus_step
     );
     start_time = current_time;

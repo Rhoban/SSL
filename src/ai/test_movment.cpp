@@ -113,7 +113,7 @@ void test_velocityconsign(){
         double distance = 4.0;
         double max_acceleration = 3.0;
         double max_velocity = 2.0;
-        VelocityConsign consign(distance, max_acceleration, max_velocity);
+        VelocityConsign consign(distance, max_velocity, max_acceleration);
         assert( consign(-0.1) == 0.0 );
         assert( consign(0) == 0.0 );
         assert(
@@ -191,7 +191,6 @@ struct Translation {
 };
 
 void test_use_cases(){
-/*
     {
         Rotation rot;
         rot.orientation = 90.0;
@@ -223,17 +222,14 @@ void test_use_cases(){
         assert( crv.size() == 90 );
         double max_acceleration = 300.0;
         double max_velocity = 90.0;
-        VelocityConsign consign(crv.size(), max_acceleration, max_velocity);
-        DEBUG( "TIME : " << consign.time_of_deplacement() );
+        VelocityConsign consign(crv.size(), max_velocity, max_acceleration);
 
         RenormalizedCurve curve(
             crv,
             consign,
             dt_micro        
         );
-        DEBUG( "TIME : " << curve.max_time() );
     }
-*/
     {
         double dt = 0.001;
         double dt_micro = 0.0001;
@@ -242,41 +238,25 @@ void test_use_cases(){
         Curve2d crv( trans, dt_micro );
         double max_acceleration = 20.0;
         double max_velocity = 1.0;
-        VelocityConsign consign(crv.size(), max_acceleration, max_velocity);
+        VelocityConsign consign(crv.size(), max_velocity, max_acceleration);
 
         RenormalizedCurve curve(
             crv,
             consign,
             dt_micro        
         );
-/*
-        Eigen::Vector2d xt = curve(curve.max_time()-dt);
-        Eigen::Vector2d xdt = curve(curve.max_time()-dt+dt);
-
-        std::cout << xt.transpose() << std::endl;
-        std::cout << xdt.transpose() << std::endl;
-        assert( xdt[0] >= xt[0] );
-        assert( xdt[1] >= xt[1] );
-*/
-        std::cout << curve(curve.max_time()-dt).transpose() << std::endl;
-        std::cout << curve(curve.max_time()).transpose() << std::endl;
-        std::cout << curve(curve.max_time()+dt).transpose() << std::endl;
-
-
-/*
-        for( double t = curve.max_time()-3*dt; t<= curve.max_time()-dt; t+= dt ){
+        for( double t = 0; t< curve.max_time()-dt; t+= dt ){
             Eigen::Vector2d xt = curve(t);
             Eigen::Vector2d xdt = curve(t+dt);
             assert( xdt[0] >= xt[0] );
             assert( xdt[1] >= xt[1] );
         }
-*/        
     }
 }
 
 int main(){
     test_use_cases();
-//    test_empty_curves();
-//    test_curves();
-//    test_velocityconsign();
+    test_empty_curves();
+    test_curves();
+    test_velocityconsign();
 }

@@ -8,12 +8,13 @@
 
 struct VelocityConsign {
     double distance;
-    double max_acceleration; 
     double max_velocity;
+    double max_acceleration; 
 
     VelocityConsign(
-        double distance, double max_acceleration, 
-        double max_velocity
+        double distance, 
+        double max_velocity,
+        double max_acceleration 
     );
 
     double operator()(double t);
@@ -107,9 +108,9 @@ class CurveForRobot {
     public:
         CurveForRobot(
             const std::function<Eigen::Vector2d (double u)> & translation,
-            double angular_acceleration, double translation_acceleration,
+            double translation_velocity, double translation_acceleration,
             const std::function<double (double u)> & rotation,
-            double angular_velocity, double translation_velocity,
+            double angular_velocity, double angular_acceleration, 
             double calculus_step
         );
         Eigen::Vector2d translation(double t);
@@ -151,9 +152,9 @@ class RobotControl {
         bool is_static() const ;
         void set_movment(
             const std::function<Eigen::Vector2d (double u)> & translation,
-            double angular_acceleration, double translation_acceleration,
+            double translation_velocity, double translation_acceleration,
             const std::function<double (double u)> & rotation,
-            double angular_velocity, double translation_velocity,
+            double angular_velocity, double angular_acceleration, 
             double calculus_step, double current_time
         );
 

@@ -36,46 +36,48 @@ namespace RhobanSSL
                 robot_rotation.orientation = robot.orientation.getSignedValue();
                 double translation_velocity = 1.0;
                 double translation_acceleration = 20.0;
-                double angular_velocity = 3*3.15;  
+
+                double angular_velocity = 2*3.15;  
                 double angular_acceleration = 60.0;
+
                 double calculus_step = 0.0001;
                 double time = TimeStamp::now().getTimeMS()/1000.0;
                 control.set_movment(
                     robot_translation,
-                    angular_acceleration,
+                    translation_velocity,
                     translation_acceleration,
                     robot_rotation,
                     angular_velocity,
-                    translation_velocity,
+                    angular_acceleration,
                     calculus_step, time 
                 );
 
 
 
-                DEBUG(
-                    "r con time : " << 
-                    control.curve.angular_consign.time_of_deplacement() 
-                );
-                DEBUG(
-                    "r mov time : " << 
-                    control.curve.rotation_movment.max_time() 
-                );
-                DEBUG(
-                    "r mov length : " << 
-                    control.curve.rotation_movment.size() 
-                );
-                DEBUG(
-                    "t con time : " << 
-                    control.curve.tranlsation_consign.time_of_deplacement() 
-                );
-                DEBUG(
-                    "t mov time : " << 
-                    control.curve.translation_movment.max_time() 
-                );
-                DEBUG(
-                    "t mov length : " << 
-                    control.curve.translation_movment.size() 
-                );
+//                DEBUG(
+//                    "r con time : " << 
+//                    control.curve.angular_consign.time_of_deplacement() 
+//                );
+//                DEBUG(
+//                    "r mov time : " << 
+//                    control.curve.rotation_movment.max_time() 
+//                );
+//                DEBUG(
+//                    "r mov length : " << 
+//                    control.curve.rotation_movment.size() 
+//                );
+//                DEBUG(
+//                    "t con time : " << 
+//                    control.curve.tranlsation_consign.time_of_deplacement() 
+//                );
+//                DEBUG(
+//                    "t mov time : " << 
+//                    control.curve.translation_movment.max_time() 
+//                );
+//                DEBUG(
+//                    "t mov length : " << 
+//                    control.curve.translation_movment.size() 
+//                );
 
 
 
@@ -89,7 +91,6 @@ namespace RhobanSSL
                 robot.position.getX(), robot.position.getY()
             );
             double robot_orientation = robot.orientation.getSignedValue();
-            std::cout << robot_orientation <<  std::endl;
             double time = TimeStamp::now().getTimeMS()/1000.0;
             
 
