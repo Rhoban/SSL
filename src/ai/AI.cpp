@@ -39,7 +39,7 @@ namespace RhobanSSL
 
 #ifdef CURVE_FOLLLOWING
 
-                // BUG : SI vous obtenez une boucle infini, vous devez bidoulliez les paramètre (en baissant l'acceleration).
+                // BUG : SI vous obtenez une boucle infini, vous devez bidoullier les paramètres (en baissant l'acceleration).
                 //  Le bug sera résolu plus tard.
                 double translation_velocity = 0.8;
                 double translation_acceleration = 10.0;
