@@ -8,6 +8,34 @@ using namespace Utils::Timing;
 namespace RhobanSSL
 {
 
+    Eigen::Vector2d calculate_goal_position(
+        const Eigen::Vector2d & ball_position,
+        const Eigen::Vector2d & poteau_droit,
+        const Eigen::Vector2d & poteau_gauche,
+        double goal_rayon
+    ){
+        Eigen::Vector2d R = poteau_droit - ball_position;
+        R /= R.norm();
+        Eigen::Vector2d L = poteau_gauche - ball_position;
+        L /= L.norm();
+        Eigen::Matrix2d m;
+        m << 
+            -R[1], R[0],
+             L[1], -L[0];
+        return ball_position + m.inverse() * Eigen::Vector2d(goal_rayon, goal_rayon);
+
+    }
+
+
+    double angle( Eigen::Vector2d direction ){
+        double norm = direction.norm();
+        if( norm == 0.0 ) return 0.0;
+        direction /= norm;
+        double angle = std::acos( direction[0] );
+        if( direction[1] <= 0 ) return -angle;
+        return angle;
+    }
+
     AI::AI(AIVisionClient *vision, AICommander *commander)
     : vision(vision), commander(commander)
     {
@@ -23,14 +51,16 @@ namespace RhobanSSL
         auto robot = gameState.robots[GameState::Ally][0];
         if (robot.isOk()) {
 
+            control.set_translation_pid( 0.01, .00, .0);
+            control.set_orientation_pid( 0.02, .00, .0);
+            //control.set_translation_pid( 0.04, .00, .0);
+            //control.set_orientation_pid( 0.04, .00, .0);
+            //control.set_translation_pid( 0.0, .00, .0);
+            //control.set_orientation_pid( 0.0, .00, .0);
             if( control.is_static() ){
                 Eigen::Vector2d robot_position( 
                     robot.position.getX(), robot.position.getY()
                 );
-                control.set_translation_pid( 0.01, .00, .0);
-                control.set_orientation_pid( 0.02, .00, .0);
-                //control.set_translation_pid( 0.0, .00, .0);
-                //control.set_orientation_pid( 0.0, .00, .0);
                 robot_translation.position = robot_position;
                 robot_rotation.orientation = robot.orientation.getSignedValue();
 
@@ -60,9 +90,6 @@ namespace RhobanSSL
                     calculus_step, time 
                 );
 #else
-                control.set_goal( 
-                    Eigen::Vector2d(0.0, 0.0), M_PI/2.0
-                );
 #endif
 
 
@@ -102,6 +129,41 @@ namespace RhobanSSL
             );
             double robot_orientation = robot.orientation.getSignedValue();
             double time = TimeStamp::now().getTimeMS()/1000.0;
+
+
+#ifndef CURVE_FOLLLOWING
+
+            // Moving the robot 0 to the center of the field
+            auto ball = gameState.ball;
+            
+            Eigen::Vector2d ball_position = Eigen::Vector2d(
+                ball.position.getX(), ball.position.getY()
+            );
+
+            Eigen::Vector2d left_goal_position( -4.485, -0.53 );
+            Eigen::Vector2d right_goal_position( -4.485, 0.53 );
+            Eigen::Vector2d goal_center = ( left_goal_position + right_goal_position)/2.0;
+
+            double goal_rotation = angle(ball_position - robot_position);
+
+            double goal_rayon = .1;
+
+            Eigen::Vector2d defender_pos = calculate_goal_position(
+                ball_position, right_goal_position, left_goal_position,
+                goal_rayon
+            );
+            
+            double rayon_surface_reparation = 1.22;
+            if( (defender_pos - goal_center).norm() > rayon_surface_reparation ){
+                defender_pos = goal_center;
+            }
+            
+            control.set_goal(
+                defender_pos, goal_rotation
+            );
+#endif
+
+
             
 
             control.update( time );
