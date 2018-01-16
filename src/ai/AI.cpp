@@ -47,8 +47,15 @@ namespace RhobanSSL
     {
         auto gameState = vision->getGameState();
 
+
         // Moving the robot 0 to the center of the field
-        auto robot = gameState.robots[GameState::Ally][0];
+        auto robot = gameState.robots[GameState::Ally][5];
+        // Moving the robot 0 to the center of the field
+        auto ball = gameState.ball;
+
+         std::cout << "position robot " << robot.position.getX() << ", " << robot.position.getY() << std::endl;
+         std::cout << "position ball " << ball.position.getX() << ", " << ball.position.getY() << std::endl;
+
         if (robot.isOk()) {
 
             control.set_translation_pid( 0.01, .00, .0);
@@ -133,15 +140,13 @@ namespace RhobanSSL
 
 #ifndef CURVE_FOLLLOWING
 
-            // Moving the robot 0 to the center of the field
-            auto ball = gameState.ball;
             
             Eigen::Vector2d ball_position = Eigen::Vector2d(
                 ball.position.getX(), ball.position.getY()
             );
 
-            Eigen::Vector2d left_goal_position( -4.485, -0.53 );
-            Eigen::Vector2d right_goal_position( -4.485, 0.53 );
+            Eigen::Vector2d left_goal_position( -2.8, -0.31 );
+            Eigen::Vector2d right_goal_position( -2.80, 0.29 );
             Eigen::Vector2d goal_center = ( left_goal_position + right_goal_position)/2.0;
 
             double goal_rotation = angle(ball_position - robot_position);
@@ -153,9 +158,9 @@ namespace RhobanSSL
                 goal_rayon
             );
             
-            double rayon_surface_reparation = 1.22;
+            double rayon_surface_reparation = 0.75;
             if( (defender_pos - goal_center).norm() > rayon_surface_reparation ){
-                defender_pos = goal_center;
+                defender_pos = goal_center + Eigen::Vector2d(0.3, 0.0);
             }
             
             control.set_goal(
@@ -202,10 +207,15 @@ namespace RhobanSSL
                     "limit rotation velocity !" << std::endl;
             }
 
-
+#if 0
             commander->set(
-                0, true, ctrl.velocity_translation[0], ctrl.velocity_translation[1], ctrl.velocity_rotation
+                0, false, 0.0, 0.0, 0.0
             );
+#else
+            commander->set(
+                0, true, ctrl.velocity_translation[0], -ctrl.velocity_translation[1], ctrl.velocity_rotation
+            );
+#endif
             commander->flush();
         }
     }

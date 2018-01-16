@@ -1,5 +1,6 @@
 #include <iostream>
 #include "AIVisionClient.h"
+#include "debug.h"
 
 using namespace Utils::Timing;
 
@@ -31,6 +32,7 @@ namespace RhobanSSL
                 double x = detection.balls().Get(0).x()/1000.0;
                 double y = detection.balls().Get(0).y()/1000.0;
                 gameState.ball.position = Point(x, y);
+                gameState.ball.present = true;
             } else {
                 // Else, we accept the ball which is the nearest from the previous one
                 // we already had
