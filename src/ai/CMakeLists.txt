@@ -28,6 +28,7 @@ set (SOURCES
     AICommanderReal.cpp
     GameState.cpp
     robot_control.cpp
+    robot_behavior.cpp
     pid.cpp
     curve.cpp
 )

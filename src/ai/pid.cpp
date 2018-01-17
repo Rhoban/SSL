@@ -2,6 +2,13 @@
 
 #define CALCULUS_ERROR 0.000
 
+Control::Control():
+    velocity_translation(0.0, 0.0),
+    velocity_rotation(0.0),
+    kick(false)
+{ };
+
+
 
 PidControl::PidControl():
     PidControl(1.0, 0.0, 0.0)
@@ -58,7 +65,7 @@ void PidControl::update(double current_time){
 Eigen::Vector2d PidControl::translation_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
-){
+) const {
     assert(dt>0);
     if( is_static() ) return Eigen::Vector2d(0.0, 0.0);
     Eigen::Vector2d xt = goal_position(time);
@@ -89,7 +96,7 @@ Eigen::Vector2d PidControl::translation_control_in_absolute_frame(
 double PidControl::rotation_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
-){
+) const {
     if( is_static() ) return 0.0;
     double theta_t = goal_orientation(time);
     double theta_t_dt = goal_orientation(time+dt);
@@ -118,7 +125,7 @@ double PidControl::rotation_control_in_absolute_frame(
 Control PidControl::absolute_control_in_robot_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
-){
+) const {
     Control res;
 
     Eigen::Matrix2d rotation_matrix;
@@ -143,7 +150,7 @@ Control PidControl::absolute_control_in_robot_frame(
 Control PidControl::relative_control_in_robot_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
-){
+) const {
 
     Control res;
     Eigen::Matrix2d rotation_matrix;

@@ -13,13 +13,9 @@
 struct Control {
     Eigen::Vector2d velocity_translation;
     double velocity_rotation;
+    bool kick;
 
-/*
-    void limits_the_contol(
-        double rotation_velocity_limit, // 0.0 means no limit
-        double translation_velocity_limit // 0.0 means no limit
-    );
-*/
+    Control();
 };
 
 struct PidControl {
@@ -56,21 +52,21 @@ struct PidControl {
     Eigen::Vector2d translation_control_in_absolute_frame(
         const Eigen::Vector2d & robot_position, 
         double robot_orientation
-    );
+    ) const;
     double rotation_control_in_absolute_frame(
         const Eigen::Vector2d & robot_position, 
         double robot_orientation
-    );
+    ) const;
 
     Control relative_control_in_robot_frame(
         const Eigen::Vector2d & robot_position, 
         double robot_orientation
-    );
+    ) const;
 
     Control absolute_control_in_robot_frame(
         const Eigen::Vector2d & robot_position, 
         double robot_orientation
-    );
+    ) const;
 };
 
 #endif
