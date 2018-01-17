@@ -13,8 +13,10 @@ public:
     AICommanderReal(bool yellow);
 
     virtual void flush();
+    virtual void kick();
 
 protected:
+    bool kicking;
     Master master;
     Kinematic kinematic;
 };

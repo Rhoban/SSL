@@ -37,6 +37,7 @@ public:
      * Call this method to flush the commands
      */
     virtual void flush()=0;
+    virtual void kick(){};
 
 protected:
     std::vector<struct Command> commands;
