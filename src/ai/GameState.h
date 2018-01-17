@@ -10,7 +10,7 @@ namespace RhobanSSL
 class GameState
 {
 public:
-    static const int Robots = 6;
+    static const int Robots = 9;
 
     typedef enum {
         Ally,
