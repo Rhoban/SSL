@@ -46,11 +46,27 @@ namespace RhobanSSL
     void AI::tick()
     {
         auto gameState = vision->getGameState();
+        
+        #define SSL_SIMU
 
+        #ifdef SSL_SIMU
+            // SSL SIMUL
+            Eigen::Vector2d left_goal_position( -4.5, -0.5 );
+            Eigen::Vector2d right_goal_position( -4.50, 0.5 );
+            Eigen::Vector2d goal_center = ( left_goal_position + right_goal_position)/2.0;
+        #else
+            // SSL QUALIF
+            Eigen::Vector2d left_goal_position( -2.8, -0.31 );
+            Eigen::Vector2d right_goal_position( -2.80, 0.29 );
+            Eigen::Vector2d goal_center = ( left_goal_position + right_goal_position)/2.0;
+        #endif
 
-        // Moving the robot 0 to the center of the field
-        auto robot = gameState.robots[GameState::Ally][5];
-        // Moving the robot 0 to the center of the field
+        #ifdef SSL_SIMU
+            auto robot = gameState.robots[GameState::Ally][0];
+        #else
+            auto robot = gameState.robots[GameState::Ally][5];
+        #endif
+        
         auto ball = gameState.ball;
 
          std::cout << "position robot " << robot.position.getX() << ", " << robot.position.getY() << std::endl;
@@ -60,19 +76,12 @@ namespace RhobanSSL
 
             control.set_translation_pid( 0.01, .00, .0);
             control.set_orientation_pid( 0.02, .00, .0);
-            //control.set_translation_pid( 0.04, .00, .0);
-            //control.set_orientation_pid( 0.04, .00, .0);
-            //control.set_translation_pid( 0.0, .00, .0);
-            //control.set_orientation_pid( 0.0, .00, .0);
             if( control.is_static() ){
                 Eigen::Vector2d robot_position( 
                     robot.position.getX(), robot.position.getY()
                 );
                 robot_translation.position = robot_position;
                 robot_rotation.orientation = robot.orientation.getSignedValue();
-
-                // std::cout << "Initial position " << robot_position << std::endl;
-                // std::cout << "Initial orientation " << robot_rotation.orientation << std::endl;
 
 #ifdef CURVE_FOLLLOWING
 
@@ -96,39 +105,8 @@ namespace RhobanSSL
                     angular_acceleration,
                     calculus_step, time 
                 );
-#else
 #endif
 
-
-//                DEBUG(
-//                    "r con time : " << 
-//                    control.curve.angular_consign.time_of_deplacement() 
-//                );
-//                DEBUG(
-//                    "r mov time : " << 
-//                    control.curve.rotation_movment.max_time() 
-//                );
-//                DEBUG(
-//                    "r mov length : " << 
-//                    control.curve.rotation_movment.size() 
-//                );
-//                DEBUG(
-//                    "t con time : " << 
-//                    control.curve.tranlsation_consign.time_of_deplacement() 
-//                );
-//                DEBUG(
-//                    "t mov time : " << 
-//                    control.curve.translation_movment.max_time() 
-//                );
-//                DEBUG(
-//                    "t mov length : " << 
-//                    control.curve.translation_movment.size() 
-//                );
-
-                //control.curve.print_translation_curve(.01);
-                //control.curve.print_translation_movment(.001);
-                //control.curve.print_rotation_curve(.1);
-                //control.curve.print_rotation_movment(.1);
             }
 
             Eigen::Vector2d robot_position( 
@@ -139,15 +117,9 @@ namespace RhobanSSL
 
 
 #ifndef CURVE_FOLLLOWING
-
-            
             Eigen::Vector2d ball_position = Eigen::Vector2d(
                 ball.position.getX(), ball.position.getY()
             );
-
-            Eigen::Vector2d left_goal_position( -2.8, -0.31 );
-            Eigen::Vector2d right_goal_position( -2.80, 0.29 );
-            Eigen::Vector2d goal_center = ( left_goal_position + right_goal_position)/2.0;
 
             double goal_rotation = angle(ball_position - robot_position);
 
@@ -168,32 +140,11 @@ namespace RhobanSSL
             );
 #endif
 
-
-            
-
             control.update( time );
 
-#if 0
-            Control ctrl = control.absolute_control_in_robot_frame(
-                robot_position, robot_orientation
-            );
-#else
             Control ctrl = control.relative_control_in_robot_frame(
                 robot_position, robot_orientation
             );
-#endif
-
-//            DEBUG("vel trans : " << ctrl.velocity_translation);
-//              std::cout << ctrl.velocity_translation.transpose() << std::endl;
-//            DEBUG("vel rot : " << ctrl.velocity_rotation);
-//            DEBUG(
-//                "r : " << 
-//                control.curve.rotation_movment( time - control.start_time ) 
-//            );
-//            DEBUG(
-//                "t : " << 
-//                control.curve.translation_movment( time - control.start_time ) 
-//            );
 
             if( ctrl.velocity_translation.norm() > TRANSLATION_VELOCITY_LIMIT ){
                 ctrl.velocity_translation = Eigen::Vector2d(0.0, 0.0);
@@ -207,15 +158,16 @@ namespace RhobanSSL
                     "limit rotation velocity !" << std::endl;
             }
 
-#if 0
+        #ifdef SSL_SIMU
             commander->set(
-                0, false, 0.0, 0.0, 0.0
+                0, true, ctrl.velocity_translation[0], ctrl.velocity_translation[1], ctrl.velocity_rotation
             );
-#else
+        #else
             commander->set(
                 0, true, ctrl.velocity_translation[0], -ctrl.velocity_translation[1], ctrl.velocity_rotation
             );
-#endif
+        #endif
+
             commander->flush();
         }
     }

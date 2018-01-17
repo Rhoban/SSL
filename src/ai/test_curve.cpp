@@ -1,5 +1,5 @@
 #include "debug.h"
-#include "movment.h"
+#include "curve.h"
 
 #include <iostream>
 #include <Eigen/Dense>
@@ -187,6 +187,19 @@ struct Translation {
     
     Eigen::Vector2d operator()(double u) const {
         return  position + Eigen::Vector2d(u, u*u); 
+    };
+};
+
+
+struct fct_wrapper {
+    std::function<double (double u)> rotation;
+
+    fct_wrapper(
+        const std::function<double (double u)> & rotation
+    ):rotation(rotation){ };
+
+    Eigen::Vector2d operator()(double t){
+        return Eigen::Vector2d( rotation(t), 0.0 );
     };
 };
 

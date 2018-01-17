@@ -27,7 +27,9 @@ set (SOURCES
     AICommanderSimulation.cpp
     AICommanderReal.cpp
     GameState.cpp
-    movment.cpp
+    robot_control.cpp
+    pid.cpp
+    curve.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
@@ -35,5 +37,5 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 add_executable(ai ai.cpp ${SOURCES})
 target_link_libraries(ai ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
-add_executable(test_movment test_movment.cpp movment.cpp)
-add_test(NAME test_movment COMMAND ./test_movment)
+add_executable(test_curve test_curve.cpp curve.cpp)
+add_test(NAME test_curve COMMAND ./test_curve)
