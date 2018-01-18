@@ -74,6 +74,7 @@ Control AI::update_goalie(
 Control AI::update_shooter(
     double time, GameState::Robot & robot, GameState::Ball & ball
 ){
+
     Eigen::Vector2d robot_position( 
         robot.position.getX(), robot.position.getY()
     );
@@ -85,7 +86,10 @@ Control AI::update_shooter(
     if (robot.isOk()) {
         if( shooter.is_static() ){
             shooter.go_to_shoot( 
-                robot_position, ball_position, robot_orientation, time
+                ball_position, 
+                robot_position, 
+                robot_orientation, 
+                time
             );
             return Control();
         }
@@ -111,21 +115,22 @@ void AI::tick()
     auto gameState = vision->getGameState();
    
     #ifdef SSL_SIMU
-        int goalie_id = 0; 
-        int shooter_id = 1;
+        int goalie_id = 1; 
+        int shooter_id = 0;
     #else
         int goalie_id = 5; 
         int shooter_id = 8;
     #endif
 
-    auto goalie_robot = gameState.robots[GameState::Ally][goalie_id];
-    auto shooter_robot = gameState.robots[GameState::Ally][shooter_id];
-    
     auto ball = gameState.ball;
 
-    Control ctrl_goalie = update_goalie( time, goalie_robot, ball );
-    prepare_to_send_control( goalie_id, ctrl_goalie );
+    //auto goalie_robot = gameState.robots[GameState::Ally][goalie_id];
+//    Control ctrl_goalie = update_goalie( time, goalie_robot, ball );
+//    prepare_to_send_control( goalie_id, ctrl_goalie );
 
+    auto shooter_robot = gameState.robots[GameState::Ally][shooter_id];
+    //std::cout << "position : " << shooter_robot.position << std::endl;
+    //std::cout << "orientation : " << shooter_robot.orientation << std::endl;
     Control ctrl_shooter = update_shooter( time, shooter_robot, ball );
     prepare_to_send_control( shooter_id, ctrl_shooter );
 
@@ -150,13 +155,19 @@ void AI::run()
             goal_center + Eigen::Vector2d(0.3, 0.0)
         );
         // PID for translation
-        double p_translation = 0.2; 
+        double p_translation = 0.005; 
         double i_translation = .00;
         double d_translation = .0;
         // PID for orientation
-        double p_orientation = 0.4;
+        double p_orientation = 0.2;
         double i_orientation = 0.0;
         double d_orientation = 0.0;
+
+        double translation_velocity = 1.0;
+        double translation_acceleration = 0.3;
+        double angular_velocity = 1.0;  
+        double angular_acceleration = 0.3;
+        double calculus_step = 0.0001;
     #else
         // SSL QUALIF
         Eigen::Vector2d left_post_position( -2.8, -0.31 );
@@ -175,6 +186,12 @@ void AI::run()
         double p_orientation = 0.02;
         double i_orientation = 0.0;
         double d_orientation = 0.0;
+
+        double translation_velocity = 1.0;
+        double translation_acceleration = 0.3;
+        double angular_velocity = 1.0;  
+        double angular_acceleration = 0.3;
+        double calculus_step = 0.0001;
     #endif
     goalie.init(   
         left_post_position, right_post_position, 
@@ -187,11 +204,18 @@ void AI::run()
         p_orientation, i_orientation, d_orientation
     );
     
-    shooter.init(goal_center, robot_radius);
-    goalie.set_translation_pid(
+    shooter.init(
+        goal_center, robot_radius,
+        translation_velocity,
+        translation_acceleration,
+        angular_velocity,
+        angular_acceleration,
+        calculus_step
+    );
+    shooter.set_translation_pid(
         p_translation, i_translation, d_translation
     );
-    goalie.set_orientation_pid(
+    shooter.set_orientation_pid(
         p_orientation, i_orientation, d_orientation
     );
 

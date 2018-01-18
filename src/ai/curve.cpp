@@ -1,7 +1,7 @@
 #include <assert.h>
 #include "curve.h"
 
-VelocityConsign::VelocityConsign(
+DifferentiableVelocityConsign::DifferentiableVelocityConsign(
     double distance, 
     double max_velocity,
     double max_acceleration 
@@ -19,7 +19,7 @@ VelocityConsign::VelocityConsign(
     }
 }
 
-double VelocityConsign::operator()(double t){
+double DifferentiableVelocityConsign::operator()(double t){
     double x = time_of_acceleration();
     double a = max_acceleration;
     double tm = time_of_deplacement(); 
@@ -31,14 +31,65 @@ double VelocityConsign::operator()(double t){
     if( t<= tm ) return a*(t-tm)*(t-tm)/x;
     return 0.0;
 }
-double VelocityConsign::time_of_deplacement(){
+double DifferentiableVelocityConsign::time_of_deplacement(){
     double x = time_of_acceleration();
     double a = max_acceleration;
     return 2*distance/(a*x)+x;
 }
-double VelocityConsign::time_of_acceleration(){
+double DifferentiableVelocityConsign::time_of_acceleration(){
     return 2*max_velocity/max_acceleration;
 }
+
+
+
+
+
+ContinuousVelocityConsign::ContinuousVelocityConsign(
+    double distance, 
+    double max_velocity,
+    double max_acceleration 
+):
+    distance(distance), max_velocity(max_velocity),
+    max_acceleration(max_acceleration)
+{ 
+    assert(max_acceleration > 0.0); //Acceleration should be Greater than 0.
+}
+
+double ContinuousVelocityConsign::operator()(double t){
+    double x = time_of_acceleration();
+    double a = max_acceleration;
+    double tm = time_of_deplacement(); 
+    if( t <= 0 ) return 0;
+    if( t <= x ) return a*t;
+    if( t <= tm-x ) return a*x;
+    if( t <= tm ) return -a*(t-tm);
+    return 0.0;
+}
+double ContinuousVelocityConsign::time_of_deplacement(){
+    double x = time_of_acceleration();
+    double a = max_acceleration;
+    return distance/(a*x) + x;
+}
+double ContinuousVelocityConsign::time_of_acceleration(){
+    return max_velocity/max_acceleration;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 void Curve2d::init(){

@@ -1,4 +1,5 @@
 #include "pid.h"
+#include <geometry/Angle.hpp>
 
 #define CALCULUS_ERROR 0.000
 
@@ -101,10 +102,12 @@ double PidControl::rotation_control_in_absolute_frame(
     double theta_t = goal_orientation(time);
     double theta_t_dt = goal_orientation(time+dt);
     double velocity = (theta_t_dt - theta_t )/dt;
-    double error = (
-        std::fmod( robot_orientation - theta_t, M_PI )
-    );
-
+    Angle a( rad2deg(robot_orientation - theta_t) );
+    double error = deg2rad( a.getSignedValue() );
+    if( error >0.1 ){
+        std::cout << "ERROR " << error << std::endl;
+    }
+ 
     if( std::abs( error ) <= CALCULUS_ERROR ){
         error = 0.0;
     }

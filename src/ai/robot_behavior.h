@@ -81,17 +81,17 @@ struct Rotation_for_home {
 
 
 class Shooter {
-    private:
+    public:
 
         // BUG : SI vous obtenez une boucle infini, vous devez bidoullier les paramètres (en baissant l'acceleration).
         //  Le bug sera résolu plus tard.
-        double translation_velocity = 0.8;
-        double translation_acceleration = 0.4;
+        double translation_velocity;
+        double translation_acceleration;
 
-        double angular_velocity = 1.5;  
-        double angular_acceleration = 0.7;
+        double angular_velocity;
+        double angular_acceleration;
 
-        double calculus_step = 0.0001;
+        double calculus_step;
 
         Eigen::Vector2d goal_center;
 
@@ -116,7 +116,12 @@ class Shooter {
         void set_orientation_pid( double kp, double ki, double kd );
 
         void init(
-            const Eigen::Vector2d & goal_center, double robot_radius
+            const Eigen::Vector2d & goal_center, double robot_radius,
+            double translation_velocity,
+            double translation_acceleration,
+            double angular_velocity,
+            double angular_acceleration,
+            double calculus_step
         );
 
         void update(

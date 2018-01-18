@@ -13,9 +13,7 @@ CurveForRobot::CurveForRobot(
 ):
     rotation_fct(rotation),
     translation_curve( translation, calculus_step ),
-    angular_curve(
-        rotation_fct, calculus_step 
-    ),
+    angular_curve( rotation_fct, calculus_step ),
     tranlsation_consign(
         translation_curve.size(),
         translation_velocity, translation_acceleration 

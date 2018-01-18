@@ -113,7 +113,7 @@ void test_velocityconsign(){
         double distance = 4.0;
         double max_acceleration = 3.0;
         double max_velocity = 2.0;
-        VelocityConsign consign(distance, max_velocity, max_acceleration);
+        ContinuousVelocityConsign consign(distance, max_velocity, max_acceleration);
         assert( consign(-0.1) == 0.0 );
         assert( consign(0) == 0.0 );
         assert(
@@ -235,7 +235,7 @@ void test_use_cases(){
         assert( crv.size() == 90 );
         double max_acceleration = 300.0;
         double max_velocity = 90.0;
-        VelocityConsign consign(crv.size(), max_velocity, max_acceleration);
+        ContinuousVelocityConsign consign(crv.size(), max_velocity, max_acceleration);
 
         RenormalizedCurve curve(
             crv,
@@ -251,7 +251,7 @@ void test_use_cases(){
         Curve2d crv( trans, dt_micro );
         double max_acceleration = 20.0;
         double max_velocity = 1.0;
-        VelocityConsign consign(crv.size(), max_velocity, max_acceleration);
+        ContinuousVelocityConsign consign(crv.size(), max_velocity, max_acceleration);
 
         RenormalizedCurve curve(
             crv,

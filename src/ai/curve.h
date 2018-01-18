@@ -5,12 +5,29 @@
 #include <Eigen/Dense>
 #include <vector>
 
-struct VelocityConsign {
+struct ContinuousVelocityConsign {
     double distance;
     double max_velocity;
     double max_acceleration; 
 
-    VelocityConsign(
+    ContinuousVelocityConsign(
+        double distance, 
+        double max_velocity,
+        double max_acceleration 
+    );
+
+    double operator()(double t);
+    double time_of_deplacement();
+    double time_of_acceleration();
+};
+
+
+struct DifferentiableVelocityConsign {
+    double distance;
+    double max_velocity;
+    double max_acceleration; 
+
+    DifferentiableVelocityConsign(
         double distance, 
         double max_velocity,
         double max_acceleration 
