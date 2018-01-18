@@ -159,20 +159,20 @@ void AI::run()
             goal_center + Eigen::Vector2d(0.3, 0.0)
         );
         // PID for translation
-        double p_translation = 0.01; 
-        double i_translation = .00;
+        double p_translation = 0.05; 
+        double i_translation = .0;
         double d_translation = .0;
         // PID for orientation
-        double p_orientation = 0.01;
+        double p_orientation = 0.1;
         double i_orientation = 0.0;
         double d_orientation = 0.0;
 
-        double translation_velocity = 0.8;
-        double translation_acceleration = 10.0;
+        double translation_velocity = 1.8;
+        double translation_acceleration = 4.0;
         double angular_velocity = 1.0*M_PI;  
-        double angular_acceleration = 4*M_PI;
+        double angular_acceleration = 2.0*M_PI;
 
-        double calculus_step = 0.001;
+        double calculus_step = 0.0001;
         enable_kicking = false;
     #else
         DEBUG("ROBOT");
@@ -187,10 +187,10 @@ void AI::run()
         );
         // PID for translation
         double p_translation = 0.01; 
-        double i_translation = .00;
+        double i_translation = .002;
         double d_translation = .0;
         // PID for orientation
-        double p_orientation = 0.02;
+        double p_orientation = 0.01;
         double i_orientation = 0.0;
         double d_orientation = 0.0;
 
@@ -199,6 +199,7 @@ void AI::run()
         double angular_velocity = 1.0;  
         double angular_acceleration = 0.3;
         double calculus_step = 0.0001;
+        enable_kicking = false;
     #endif
     goalie.init(   
         left_post_position, right_post_position, 

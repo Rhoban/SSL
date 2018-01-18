@@ -207,15 +207,22 @@ Control Shooter::control() const {
 
 
 Eigen::Vector2d Translation_for_shooting::operator()(double u) const {
+    if( u <= 0.0 ){
+        u = 0.0;
+    }
+    if( u >= 1.0 ){
+        u = 1.0;
+    }
     Eigen::Vector2d v = goal_center - position_ball;
     double distance = v.norm();
     v /= distance;
     Eigen::Vector2d res = position_ball - (v * (size_avant + radius_ball));
     
-    Eigen::Vector2d decalage(distance/2.0, 0.0);
+    Eigen::Vector2d decalage(- (position_ball - position_robot).norm() /2.0, 0.0);
+    
     //SHOOT
     return  position_robot * (1.0-u) + res * u + (
-        ( u<0.5 ) ? decalage*u : decalage*(1-u)
+        decalage * ( (2*u-1.0)*(2*u-1.0) - 1 )
     );
     //return  position_robot + Eigen::Vector2d(u,u); 
 //    
@@ -227,6 +234,12 @@ Eigen::Vector2d Translation_for_shooting::operator()(double u) const {
 };
 
 double Rotation_for_shooting::operator()(double u) const {
+    if( u <= 0.0 ){
+        u = 0.0;
+    }
+    if( u >= 1.0 ){
+        u = 1.0;
+    }
     Angle a(rad2deg(orientation));
     Angle b(rad2deg(end));
     //return  deg2rad(Angle::weightedAverage(a,1-u,b,u).getSignedValue());
@@ -235,10 +248,22 @@ double Rotation_for_shooting::operator()(double u) const {
 };
 
 Eigen::Vector2d Translation_for_home::operator()(double u) const {
+    if( u <= 0.0 ){
+        u = 0.0;
+    }
+    if( u >= 1.0 ){
+        u = 1.0;
+    }
     return  position_robot * (1.0-u) + position_home * u;
 };
 
 double Rotation_for_home::operator()(double u) const {
+    if( u <= 0.0 ){
+        u = 0.0;
+    }
+    if( u >= 1.0 ){
+        u = 1.0;
+    }
     double target = angle( position_ball - position_robot );
     //return  0.0*u + orientation;
     return  (1-u)*orientation + u*target;

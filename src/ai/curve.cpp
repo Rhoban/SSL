@@ -58,7 +58,10 @@ ContinuousVelocityConsign::ContinuousVelocityConsign(
 double ContinuousVelocityConsign::operator()(double t){
     double x = time_of_acceleration();
     double a = max_acceleration;
-    double tm = time_of_deplacement(); 
+    double tm = time_of_deplacement();
+    assert( a > 0 );
+    assert( tm > 0 );
+    assert( x > 0 );
     if( t <= 0 ) return 0;
     if( t <= x ) return a*t;
     if( t <= tm-x ) return a*x;
@@ -68,6 +71,8 @@ double ContinuousVelocityConsign::operator()(double t){
 double ContinuousVelocityConsign::time_of_deplacement(){
     double x = time_of_acceleration();
     double a = max_acceleration;
+    assert( a > 0 );
+    assert( x > 0 );
     return distance/(a*x) + x;
 }
 double ContinuousVelocityConsign::time_of_acceleration(){
@@ -208,7 +213,12 @@ double RenormalizedCurve::time( double length ) const {
     double res = 0.0;
     double t;
     
-    for( t=0.0; res < length; t+=this->step_time ){
+    for( t=0.0; res < length-0.001; t+=this->step_time ){
+        assert( velocity_consign(t) >= 0.0 );
+//        DEBUG( "res : " << res );
+//        DEBUG( "length : " << length );
+//        DEBUG( "t : " << t << ", step_time" << this->step_time );
+//        DEBUG( "velocity_consign(t) : " << velocity_consign(t) << " -  " << (velocity_consign(t)==0.0) );
         res += this->step_time * velocity_consign(t);
     } 
     return t;
