@@ -62,7 +62,7 @@ void Goalie::update(
         goalie_radius
     );
     
-    double rayon_surface_reparation = 0.75;
+    double rayon_surface_reparation = 10.5;
     if( (defender_pos - goal_center).norm() > rayon_surface_reparation ){
         defender_pos = waiting_goal_position;
     }
@@ -242,8 +242,8 @@ double Rotation_for_shooting::operator()(double u) const {
     }
     Angle a(rad2deg(orientation));
     Angle b(rad2deg(end));
-    //return  deg2rad(Angle::weightedAverage(a,1-u,b,u).getSignedValue());
-    return  orientation*(1.0-u)+end*u;
+    
+    return  orientation + u * deg2rad( (b-a).getSignedValue() );
     //return  (M_PI/2.0)*u + orientation;
 };
 

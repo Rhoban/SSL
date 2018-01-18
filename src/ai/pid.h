@@ -14,6 +14,7 @@ struct Control {
     Eigen::Vector2d velocity_translation;
     double velocity_rotation;
     bool kick;
+    bool active;
 
     Control();
 };

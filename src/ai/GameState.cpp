@@ -1,11 +1,13 @@
 #include "GameState.h"
 
+
+
 namespace RhobanSSL
 {
     double GameState::Ball::age()
     {
-        Utils::Timing::TimeStamp now;
-        return diffSec(lastUpdate, now);
+        Utils::Timing::TimeStamp now ;
+        return diffSec(lastUpdate, now.now());
     }
 
     bool GameState::Ball::isOk()
@@ -16,12 +18,12 @@ namespace RhobanSSL
     double GameState::Robot::age()
     {
         Utils::Timing::TimeStamp now;
-        return diffSec(lastUpdate, now);
+        return diffSec(lastUpdate, now.now());
     }
 
     bool GameState::Robot::isOk()
     {
-        return present && age() < 1;
+        return present && age() < .2;
     }
 
     GameState::GameState()

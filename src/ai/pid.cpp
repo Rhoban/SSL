@@ -6,7 +6,8 @@
 Control::Control():
     velocity_translation(0.0, 0.0),
     velocity_rotation(0.0),
-    kick(false)
+    kick(false),
+    active(true)
 { };
 
 
@@ -82,6 +83,28 @@ Eigen::Vector2d PidControl::translation_control_in_absolute_frame(
         error = Eigen::Vector2d(0.0,0.0);
     }
 
+    #if 0
+    Eigen::Matrix2d rotation_matrix;
+    double a_r = rotation_control_in_absolute_frame(
+        robot_position, robot_orientation
+    );
+    if( a_r != 0 ){
+        rotation_matrix << 
+            std::sin(a_r*dt+robot_orientation) - std::sin(robot_orientation), 
+            std::cos(a_r*dt+robot_orientation) - std::cos(robot_orientation),
+          - std::cos(a_r*dt+robot_orientation) + std::cos(robot_orientation), 
+            std::sin(a_r*dt+robot_orientation) - std::sin(robot_orientation)
+        ;
+        rotation_matrix = (a_r*dt)*( rotation_matrix.inverse() );
+    }else{
+        rotation_matrix << 
+            std::cos(robot_orientation), std::sin(robot_orientation),
+          - std::sin(robot_orientation), std::cos(robot_orientation)
+        ;
+    }
+    error /= std::abs( rotation_matrix.determinant() );
+    #endif
+    
     Eigen::Vector2d absolute_command = (
         velocity - kp_t*error/dt - ki_t*error - kd_t*error/(dt*dt) 
     );
@@ -111,6 +134,7 @@ double PidControl::rotation_control_in_absolute_frame(
     if( std::abs( error ) <= CALCULUS_ERROR ){
         error = 0.0;
     }
+
     double absolute_command = (
         velocity - kp_o*error/dt - ki_o*error - kd_o*error/(dt*dt) 
     );

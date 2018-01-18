@@ -3,10 +3,10 @@
 #include <cmath>
 #include <unistd.h>
 
-
+#define TRACKING_ROBOT_SECURITY_TIME .2
 // Comment the following line if you are working with the real robot.
 // If you are working with the grSim simulator, don't comment.
-#define SSL_SIMU
+//#define SSL_SIMU
 
 using namespace Utils::Timing;
 
@@ -43,17 +43,38 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
     }
     #endif
 
-    commander->set(
-        robot_id, true, 
-        ctrl.velocity_translation[0], sign_y*ctrl.velocity_translation[1], 
-        ctrl.velocity_rotation
-    );
+    #ifdef SSL_SIMU
+        int map_id;
+        map_id = robot_id;
+    #else
+        int map_id;
+        if( robot_id == 8 ){
+            map_id = 1;
+        }else{
+            map_id = 0;
+        }
+    #endif
+
+    if( ! ctrl.active ){
+        DEBUG("STOP !! ");
+        commander->set(
+            map_id, true, 0.0, 0.0, 0.0 
+        );
+    }else{
+        commander->set(
+            map_id, true, 
+            ctrl.velocity_translation[0], sign_y*ctrl.velocity_translation[1], 
+            ctrl.velocity_rotation
+        );
+    }
 }
 
 Control AI::update_goalie(
     double time, GameState::Robot & robot, GameState::Ball & ball
 ){
     if (robot.isOk()) {
+
+        last_view_goalie = time;
         Eigen::Vector2d robot_position( 
             robot.position.getX(), robot.position.getY()
         );
@@ -66,6 +87,10 @@ Control AI::update_goalie(
             ball_position, robot_position, robot_orientation, time
         );
         return goalie.control();
+    }else{
+        Control control;
+        control.active  = false;
+        return control;
     }
     return Control();
 }
@@ -84,6 +109,7 @@ Control AI::update_shooter(
     );
 
     if (robot.isOk()) {
+        last_view_shooter = time;
         if( shooter.is_static() ){
             shooter.go_to_shoot( 
                 ball_position, 
@@ -97,6 +123,10 @@ Control AI::update_shooter(
             ball_position, robot_position, robot_orientation, time
         );
         return shooter.control();
+    }else{
+        Control control;
+        control.active  = false;
+        return control;
     }
 }
 
@@ -124,9 +154,11 @@ void AI::tick()
 
     auto ball = gameState.ball;
 
-    //auto goalie_robot = gameState.robots[GameState::Ally][goalie_id];
-//    Control ctrl_goalie = update_goalie( time, goalie_robot, ball );
-//    prepare_to_send_control( goalie_id, ctrl_goalie );
+    #ifndef SSL_SIMU
+    auto goalie_robot = gameState.robots[GameState::Ally][goalie_id];
+    Control ctrl_goalie = update_goalie( time, goalie_robot, ball );
+    prepare_to_send_control( goalie_id, ctrl_goalie );
+    #endif
 
     auto shooter_robot = gameState.robots[GameState::Ally][shooter_id];
     //std::cout << "position : " << shooter_robot.position << std::endl;
@@ -144,7 +176,7 @@ void AI::run()
 
 
     double robot_radius = 0.1;
-    double size_avant = .115 - 0.04275;
+    double size_avant = .115 - 2*0.04275 ;
     double radius_ball = 0.04275/2.0;
 
     #ifdef SSL_SIMU
@@ -167,8 +199,8 @@ void AI::run()
         double i_orientation = 0.0;
         double d_orientation = 0.0;
 
-        double translation_velocity = 1.8;
-        double translation_acceleration = 4.0;
+        double translation_velocity = 1.;
+        double translation_acceleration = 3.0;
         double angular_velocity = 1.0*M_PI;  
         double angular_acceleration = 2.0*M_PI;
 
@@ -186,18 +218,18 @@ void AI::run()
             goal_center + Eigen::Vector2d(0.3, 0.0)
         );
         // PID for translation
-        double p_translation = 0.01; 
-        double i_translation = .002;
+        double p_translation = 0.015; 
+        double i_translation = .000;
         double d_translation = .0;
         // PID for orientation
-        double p_orientation = 0.01;
+        double p_orientation = 0.015;
         double i_orientation = 0.0;
         double d_orientation = 0.0;
 
         double translation_velocity = 1.0;
-        double translation_acceleration = 0.3;
+        double translation_acceleration = 5.;
         double angular_velocity = 1.0;  
-        double angular_acceleration = 0.3;
+        double angular_acceleration = 5.;
         double calculus_step = 0.0001;
         enable_kicking = false;
     #endif
@@ -227,6 +259,10 @@ void AI::run()
     shooter.set_orientation_pid(
         p_orientation, i_orientation, d_orientation
     );
+
+
+    last_view_goalie = -1;
+    last_view_shooter = -1;
 
     while (running) {
         auto now = TimeStamp::now();
