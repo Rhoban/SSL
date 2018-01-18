@@ -52,7 +52,10 @@ struct Translation_for_shooting {
     Eigen::Vector2d position_robot;
     Eigen::Vector2d position_ball;
     Eigen::Vector2d goal_center;
-    
+   
+    double size_avant;
+    double radius_ball;
+ 
     Eigen::Vector2d operator()(double u) const;
 };
 
@@ -94,6 +97,8 @@ class Shooter {
         double calculus_step;
 
         Eigen::Vector2d goal_center;
+        double size_avant;
+        double radius_ball;
 
         Eigen::Vector2d robot_position;
         double robot_orientation;
@@ -117,6 +122,7 @@ class Shooter {
 
         void init(
             const Eigen::Vector2d & goal_center, double robot_radius,
+            double size_avant, double radius_ball,
             double translation_velocity,
             double translation_acceleration,
             double angular_velocity,

@@ -30,6 +30,8 @@ class CurveForRobot {
         Curve2d translation_curve;
         Curve2d angular_curve;
 
+        //DifferentiableVelocityConsign tranlsation_consign;
+        //DifferentiableVelocityConsign angular_consign;
         ContinuousVelocityConsign tranlsation_consign;
         ContinuousVelocityConsign angular_consign;
 

@@ -105,6 +105,7 @@ void Shooter::set_orientation_pid( double kp, double ki, double kd ){
 
 void Shooter::init(
     const Eigen::Vector2d & goal_center, double robot_radius,
+    double size_avant, double radius_ball,
     double translation_velocity,
     double translation_acceleration,
     double angular_velocity,
@@ -118,6 +119,8 @@ void Shooter::init(
     this->angular_velocity = angular_velocity;
     this->angular_acceleration = angular_acceleration;
     this->calculus_step = calculus_step;
+    this->size_avant = size_avant;
+    this->radius_ball = radius_ball;
 }
 
 void Shooter::go_to_shoot(
@@ -129,6 +132,8 @@ void Shooter::go_to_shoot(
     shooting_translation.position_robot = robot_position;
     shooting_translation.position_ball = ball_position;
     shooting_translation.goal_center = goal_center;
+    shooting_translation.size_avant = size_avant;
+    shooting_translation.radius_ball = radius_ball;
 
     shooting_rotation.orientation = robot_orientation;
     shooting_rotation.end = angle( goal_center - ball_position  );    
@@ -202,37 +207,31 @@ Control Shooter::control() const {
 
 
 Eigen::Vector2d Translation_for_shooting::operator()(double u) const {
-//    Eigen::Vector2d v = goal_center - position_ball;
-//    v /= v.norm();
-//    Eigen::Vector2d n( -v[1], v[0] );
-//    double al;
-//    double z = 0.0;
-//    if( n[0] >= 0){
-//        al=z;
-//    }else{
-//        al=-z;
-//    }
-//    Eigen::Vector2d res = position_ball - (v * 0.03);
-//    
-//    //SHOOT
-//    return  position_robot * (1.0-u) + res * u + 
-//        ( ( u < .5 ) ?  n*(al*u) : n*( (1.0-u)*al*u) )
-//        ; //res * (1.0-u);
-//    //return  position_robot + Eigen::Vector2d(u,u); 
+    Eigen::Vector2d v = goal_center - position_ball;
+    double distance = v.norm();
+    v /= distance;
+    Eigen::Vector2d res = position_ball - (v * (size_avant + radius_ball));
+    
+    Eigen::Vector2d decalage(distance/2.0, 0.0);
+    //SHOOT
+    return  position_robot * (1.0-u) + res * u + (
+        ( u<0.5 ) ? decalage*u : decalage*(1-u)
+    );
+    //return  position_robot + Eigen::Vector2d(u,u); 
 //    
 //    //RETOUR
 //    //return  position_robot * (1.0-u) + Eigen::Vector2d(-1.0, -1.0) * u 
 //    //    ; //res * (1.0-u);
-    return  position_robot + Eigen::Vector2d(u,0.0); 
+    //return  position_robot + Eigen::Vector2d(u,0.0); 
     //return  position_robot; // + Eigen::Vector2d(u,0.0); 
 };
 
 double Rotation_for_shooting::operator()(double u) const {
-    //Angle a(rad2deg(orientation));
-    //Angle b(rad2deg(end));
+    Angle a(rad2deg(orientation));
+    Angle b(rad2deg(end));
     //return  deg2rad(Angle::weightedAverage(a,1-u,b,u).getSignedValue());
+    return  orientation*(1.0-u)+end*u;
     //return  (M_PI/2.0)*u + orientation;
-    return  (M_PI/2.0)*u + orientation;
 };
 
 Eigen::Vector2d Translation_for_home::operator()(double u) const {

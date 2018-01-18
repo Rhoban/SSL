@@ -38,7 +38,7 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
 
     #ifdef SSL_SIMU
     #else
-    if( ctrl.kick ){
+    if( ctrl.kick and enable_kicking ){
         commander->kick();
     }
     #endif
@@ -144,7 +144,11 @@ void AI::run()
 
 
     double robot_radius = 0.1;
+    double size_avant = .115 - 0.04275;
+    double radius_ball = 0.04275/2.0;
+
     #ifdef SSL_SIMU
+        DEBUG("SIMULATION");
         // SSL SIMUL
         Eigen::Vector2d left_post_position( -4.5, -0.5 );
         Eigen::Vector2d right_post_position( -4.50, 0.5 );
@@ -155,20 +159,23 @@ void AI::run()
             goal_center + Eigen::Vector2d(0.3, 0.0)
         );
         // PID for translation
-        double p_translation = 0.005; 
+        double p_translation = 0.01; 
         double i_translation = .00;
         double d_translation = .0;
         // PID for orientation
-        double p_orientation = 0.2;
+        double p_orientation = 0.01;
         double i_orientation = 0.0;
         double d_orientation = 0.0;
 
-        double translation_velocity = 1.0;
-        double translation_acceleration = 0.3;
-        double angular_velocity = 1.0;  
-        double angular_acceleration = 0.3;
-        double calculus_step = 0.0001;
+        double translation_velocity = 0.8;
+        double translation_acceleration = 10.0;
+        double angular_velocity = 1.0*M_PI;  
+        double angular_acceleration = 4*M_PI;
+
+        double calculus_step = 0.001;
+        enable_kicking = false;
     #else
+        DEBUG("ROBOT");
         // SSL QUALIF
         Eigen::Vector2d left_post_position( -2.8, -0.31 );
         Eigen::Vector2d right_post_position( -2.80, 0.29 );
@@ -206,6 +213,7 @@ void AI::run()
     
     shooter.init(
         goal_center, robot_radius,
+        size_avant, radius_ball,
         translation_velocity,
         translation_acceleration,
         angular_velocity,

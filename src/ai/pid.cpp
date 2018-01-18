@@ -104,9 +104,9 @@ double PidControl::rotation_control_in_absolute_frame(
     double velocity = (theta_t_dt - theta_t )/dt;
     Angle a( rad2deg(robot_orientation - theta_t) );
     double error = deg2rad( a.getSignedValue() );
-    if( error >0.1 ){
-        std::cout << "ERROR " << error << std::endl;
-    }
+    //if( error >0.1 ){
+    //    DEBUG( "pid error : " << error );
+    //}
  
     if( std::abs( error ) <= CALCULUS_ERROR ){
         error = 0.0;

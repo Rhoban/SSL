@@ -18,6 +18,9 @@ namespace RhobanSSL
 
     protected:
         bool running;
+
+        bool enable_kicking;
+
         AICommander *commander;
         AIVisionClient *vision;
         Goalie goalie;
