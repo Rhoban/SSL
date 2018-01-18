@@ -74,19 +74,25 @@ Control AI::update_goalie(
 ){
     if (robot.isOk()) {
 
-        last_view_goalie = time;
-        Eigen::Vector2d robot_position( 
-            robot.position.getX(), robot.position.getY()
-        );
-        Eigen::Vector2d ball_position(
-            ball.position.getX(), ball.position.getY()
-        );
-        double robot_orientation = robot.orientation.getSignedValue();
+        if( last_update_goalie == -1 ){
+            last_update_goalie = robot.lastUpdate.getTimeMS();
+        };
 
-        goalie.update(
-            ball_position, robot_position, robot_orientation, time
-        );
-        return goalie.control();
+        if( last_update_goalie > robot.lastUpdate.getTimeMS() ){
+            last_update_goalie = robot.lastUpdate.getTimeMS();
+            Eigen::Vector2d robot_position( 
+                robot.position.getX(), robot.position.getY()
+            );
+            Eigen::Vector2d ball_position(
+                ball.position.getX(), ball.position.getY()
+            );
+            double robot_orientation = robot.orientation.getSignedValue();
+
+            goalie.update(
+                ball_position, robot_position, robot_orientation, time
+            );
+            return goalie.control();
+        }
     }else{
         Control control;
         control.active  = false;
@@ -109,7 +115,10 @@ Control AI::update_shooter(
     );
 
     if (robot.isOk()) {
-        last_view_shooter = time;
+        if( last_update_shooter == -1 ){
+            last_update_shooter = robot.lastUpdate.getTimeMS();
+        };
+
         if( shooter.is_static() ){
             shooter.go_to_shoot( 
                 ball_position, 
@@ -119,10 +128,14 @@ Control AI::update_shooter(
             );
             return Control();
         }
-        shooter.update(
-            ball_position, robot_position, robot_orientation, time
-        );
-        return shooter.control();
+
+        if( last_update_shooter != robot.lastUpdate.getTimeMS() ){
+            last_update_shooter = robot.lastUpdate.getTimeMS();
+            shooter.update(
+                ball_position, robot_position, robot_orientation, time
+            );
+            return shooter.control();
+        }
     }else{
         Control control;
         control.active  = false;
@@ -218,12 +231,12 @@ void AI::run()
             goal_center + Eigen::Vector2d(0.3, 0.0)
         );
         // PID for translation
-        double p_translation = 0.015; 
-        double i_translation = .000;
+        double p_translation = 0.02; 
+        double i_translation = .0001;
         double d_translation = .0;
         // PID for orientation
-        double p_orientation = 0.015;
-        double i_orientation = 0.0;
+        double p_orientation = 0.02;
+        double i_orientation = 0.001;
         double d_orientation = 0.0;
 
         double translation_velocity = 1.0;
@@ -231,7 +244,7 @@ void AI::run()
         double angular_velocity = 1.0;  
         double angular_acceleration = 5.;
         double calculus_step = 0.0001;
-        enable_kicking = false;
+        enable_kicking = true;
     #endif
     goalie.init(   
         left_post_position, right_post_position, 
@@ -261,8 +274,8 @@ void AI::run()
     );
 
 
-    last_view_goalie = -1;
-    last_view_shooter = -1;
+    last_update_goalie = -1;
+    last_update_shooter = -1;
 
     while (running) {
         auto now = TimeStamp::now();

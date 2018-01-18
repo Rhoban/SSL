@@ -18,8 +18,8 @@ namespace RhobanSSL
 
     protected:
         bool running;
-        double last_view_goalie;
-        double last_view_shooter;
+        double last_update_goalie;
+        double last_update_shooter;
 
         bool enable_kicking;
 
