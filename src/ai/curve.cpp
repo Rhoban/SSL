@@ -162,15 +162,22 @@ void RenormalizedCurve::init(){
 RenormalizedCurve::RenormalizedCurve(
     const std::function<Eigen::Vector2d (double u)> & curve,
     const std::function<double (double t)> & velocity_consign,
-    double step_time
-):Curve2d(curve, step_time), velocity_consign(velocity_consign){
+    double step_time, double length_tolerance
+):
+    Curve2d(curve, step_time), velocity_consign(velocity_consign), 
+    length_tolerance(length_tolerance)
+{
     init();
 };
 
 RenormalizedCurve::RenormalizedCurve(
     const Curve2d & curve,
-    const std::function<double (double t)> & velocity_consign
-):Curve2d(curve), velocity_consign(velocity_consign){
+    const std::function<double (double t)> & velocity_consign,
+    double length_tolerance
+):
+    Curve2d(curve), velocity_consign(velocity_consign), 
+    length_tolerance(length_tolerance)
+{
     init();
 };
 
@@ -213,12 +220,8 @@ double RenormalizedCurve::time( double length ) const {
     double res = 0.0;
     double t;
     
-    for( t=0.0; res < length-0.001; t+=this->step_time ){
+    for( t=0.0; res < length-length_tolerance; t+=this->step_time ){
         assert( velocity_consign(t) >= 0.0 );
-//        DEBUG( "res : " << res );
-//        DEBUG( "length : " << length );
-//        DEBUG( "t : " << t << ", step_time" << this->step_time );
-//        DEBUG( "velocity_consign(t) : " << velocity_consign(t) << " -  " << (velocity_consign(t)==0.0) );
         res += this->step_time * velocity_consign(t);
     } 
     return t;

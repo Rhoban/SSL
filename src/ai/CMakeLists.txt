@@ -36,7 +36,7 @@ set (SOURCES
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
 add_executable(ai ai.cpp ${SOURCES})
-target_link_libraries(ai ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+target_link_libraries(ai stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
 add_executable(test_curve test_curve.cpp curve.cpp)
 add_test(NAME test_curve COMMAND ./test_curve)

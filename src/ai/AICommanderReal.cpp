@@ -6,7 +6,7 @@ namespace RhobanSSL
     : AICommander(yellow), master("/dev/ttyACM0", 1000000), kicking(false)
     {
         for (int k=0; k<6; k++) {
-            master.robots[k].kickPower = 10000;
+            master.robots[k].kickPower = 1800;
         }
     }
 

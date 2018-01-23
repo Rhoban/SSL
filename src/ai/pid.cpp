@@ -3,22 +3,26 @@
 
 #define CALCULUS_ERROR 0.000
 
-Control::Control():
-    velocity_translation(0.0, 0.0),
-    velocity_rotation(0.0),
-    kick(false),
-    active(true)
+PidControl::PidControl():
+    velocity_translation(0.0, 0.0), velocity_rotation(0.0)
+{ };
+
+PidControl::PidControl(
+    const Eigen::Vector2d & velocity_translation,
+    double velocity_rotation
+):
+    velocity_translation(velocity_translation),
+    velocity_rotation(velocity_rotation)
 { };
 
 
-
-PidControl::PidControl():
-    PidControl(1.0, 0.0, 0.0)
+PidController::PidController():
+    PidController(1.0, 0.0, 0.0)
 { }
-PidControl::PidControl( double p, double i=0.0, double d=0.0 ):
-    PidControl(p, i, d, p, i, d)
+PidController::PidController( double p, double i=0.0, double d=0.0 ):
+    PidController(p, i, d, p, i, d)
 { }
-PidControl::PidControl(
+PidController::PidController(
     double p_t, double i_t, double d_t, 
     double p_o, double i_o, double d_o 
 ):
@@ -29,42 +33,46 @@ PidControl::PidControl(
 { }
 
 
-void PidControl::set_static(bool value = true){
+void PidController::set_static(bool value = true){
     static_robot = value;
 }
-bool PidControl::is_static() const {
+bool PidController::is_static() const {
     return static_robot;
 }
 
-void PidControl::init_time(double start_time){
+double PidController::get_dt() const {
+    return dt;
+}
+
+void PidController::init_time(double start_time){
     this->start_time = start_time;
     this->dt = 0.0;
     this->time = 0.0;
 }
 
-void PidControl::set_orientation_pid( double kp, double ki=0.0, double kd=0.0 ){
+void PidController::set_orientation_pid( double kp, double ki=0.0, double kd=0.0 ){
     this->kp_o = kp;
     this->ki_o = ki;
     this->kd_o = kd;
 }
 
-void PidControl::set_translation_pid( double kp, double ki=0.0, double kd=0.0 ){
+void PidController::set_translation_pid( double kp, double ki=0.0, double kd=0.0 ){
     this->kp_t = kp;
     this->ki_t = ki;
     this->kd_t = kd;
 }
 
-void PidControl::set_pid( double kp, double ki=0.0, double kd=0.0 ){
+void PidController::set_pid( double kp, double ki=0.0, double kd=0.0 ){
     set_orientation_pid( kp, ki, kd );
     set_translation_pid( kp, ki, kd );
 }
 
-void PidControl::update(double current_time){
+void PidController::update(double current_time){
     this->dt = (current_time - start_time) - this->time;
     this->time = (current_time - start_time);
 }
 
-Eigen::Vector2d PidControl::translation_control_in_absolute_frame(
+Eigen::Vector2d PidController::translation_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
 ) const {
@@ -109,15 +117,11 @@ Eigen::Vector2d PidControl::translation_control_in_absolute_frame(
         velocity - kp_t*error/dt - ki_t*error - kd_t*error/(dt*dt) 
     );
 
-    if( absolute_command.norm() >= TRANSLATION_VELOCITY_LIMIT ){
-        absolute_command *= (  TRANSLATION_VELOCITY_LIMIT / (2*absolute_command.norm()) );
-        std::cerr << "Translation velocity limit !" << std::endl;
-    }
 
     return  absolute_command; 
 }
 
-double PidControl::rotation_control_in_absolute_frame(
+double PidController::rotation_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
 ) const {
@@ -127,9 +131,6 @@ double PidControl::rotation_control_in_absolute_frame(
     double velocity = (theta_t_dt - theta_t )/dt;
     Angle a( rad2deg(robot_orientation - theta_t) );
     double error = deg2rad( a.getSignedValue() );
-    //if( error >0.1 ){
-    //    DEBUG( "pid error : " << error );
-    //}
  
     if( std::abs( error ) <= CALCULUS_ERROR ){
         error = 0.0;
@@ -139,71 +140,19 @@ double PidControl::rotation_control_in_absolute_frame(
         velocity - kp_o*error/dt - ki_o*error - kd_o*error/(dt*dt) 
     );
 
-    if( std::abs( absolute_command ) >= ROTATION_VELOCITY_LIMIT ){
-        absolute_command *= (
-            ROTATION_VELOCITY_LIMIT / std::abs(absolute_command) 
-        );
-        std::cerr << "Rotation velocity limit !" << std::endl;
-    }
-
     return absolute_command;
 }
 
-Control PidControl::absolute_control_in_robot_frame(
+PidControl PidController::absolute_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
     double robot_orientation
 ) const {
-    Control res;
-
-    Eigen::Matrix2d rotation_matrix;
-    rotation_matrix << 
-          std::cos(robot_orientation), std::sin(robot_orientation),
-        - std::sin(robot_orientation), std::cos(robot_orientation)
-    ;
-
-    Eigen::Vector2d absolute_translation = translation_control_in_absolute_frame(
-        robot_position, robot_orientation
+    return PidControl(
+        translation_control_in_absolute_frame(
+            robot_position, robot_orientation
+        ),
+        rotation_control_in_absolute_frame(
+            robot_position, robot_orientation
+        )
     );
-    double absolute_rotation = rotation_control_in_absolute_frame(
-        robot_position, robot_orientation
-    );
-
-    res.velocity_translation = rotation_matrix * absolute_translation;
-    res.velocity_rotation = absolute_rotation;
-
-    return res;
-}
-
-Control PidControl::relative_control_in_robot_frame(
-    const Eigen::Vector2d & robot_position, 
-    double robot_orientation
-) const {
-
-    Control res;
-    Eigen::Matrix2d rotation_matrix;
-
-    Eigen::Vector2d a_t = translation_control_in_absolute_frame(
-        robot_position, robot_orientation
-    );
-    double a_r = rotation_control_in_absolute_frame(
-        robot_position, robot_orientation
-    );
-
-    if( a_r != 0 ){
-        rotation_matrix << 
-            std::sin(a_r*dt+robot_orientation) - std::sin(robot_orientation), 
-            std::cos(a_r*dt+robot_orientation) - std::cos(robot_orientation),
-          - std::cos(a_r*dt+robot_orientation) + std::cos(robot_orientation), 
-            std::sin(a_r*dt+robot_orientation) - std::sin(robot_orientation)
-        ;
-        rotation_matrix = (a_r*dt)*( rotation_matrix.inverse() );
-    }else{
-        rotation_matrix << 
-            std::cos(robot_orientation), std::sin(robot_orientation),
-          - std::sin(robot_orientation), std::cos(robot_orientation)
-        ;
-    }
-    res.velocity_translation = rotation_matrix * a_t;
-    res.velocity_rotation = a_r;
-    return res;
 }

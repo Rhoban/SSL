@@ -6,8 +6,7 @@ namespace RhobanSSL
 {
     double GameState::Ball::age()
     {
-        Utils::Timing::TimeStamp now ;
-        return diffSec(lastUpdate, now.now());
+        return diffSec(lastUpdate, Utils::Timing::TimeStamp::now());
     }
 
     bool GameState::Ball::isOk()
@@ -17,8 +16,7 @@ namespace RhobanSSL
 
     double GameState::Robot::age()
     {
-        Utils::Timing::TimeStamp now;
-        return diffSec(lastUpdate, now.now());
+        return diffSec(lastUpdate, Utils::Timing::TimeStamp::now());
     }
 
     bool GameState::Robot::isOk()

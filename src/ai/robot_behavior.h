@@ -1,20 +1,63 @@
 #include "robot_control.h"
 #include <geometry/Angle.hpp>
+#include "GameState.h"
 
-class Goalie {
+
+namespace RhobanSSL
+{
+
+struct Control : PidControl {
+    bool kick;
+    bool active;
+    bool ignore;
+
+    Control();
+    Control(bool kick, bool active, bool ignore);
+    Control(const PidControl& c);
+
+    static Control make_desactived();
+    static Control make_ignored();
+    static Control make_null();
+};
+
+
+
+class RobotBehavior {
+    protected:
+    
+        double birthday;
+        double lastUpdate; 
+
+        Eigen::Vector2d robot_position;
+        double robot_orientation;
+        Eigen::Vector2d ball_position;
+
+    public:
+        RobotBehavior();
+        
+        double age() const;
+        bool is_born() const;
+        double set_birthday( double birthday );
+
+        virtual void update(
+            double time, 
+            const GameState::Robot & robot, const GameState::Ball & ball
+        );
+        virtual Control control() const = 0;
+};
+
+
+class Goalie : public RobotBehavior {
     private:
         Eigen::Vector2d left_post_position; 
         Eigen::Vector2d right_post_position;
         Eigen::Vector2d goal_center;
         Eigen::Vector2d waiting_goal_position;
 
-        Eigen::Vector2d robot_position;
-        double robot_orientation;
-
         RobotControlWithPositionFollowing robot_control;
  
-        double goalie_radius = .1;
-
+        double goalie_radius;
+        double penalty_rayon;
 
         static Eigen::Vector2d calculate_goal_position(
             const Eigen::Vector2d & ball_position,
@@ -29,18 +72,22 @@ class Goalie {
         void set_translation_pid( double kp, double ki, double kd );
         void set_orientation_pid( double kp, double ki, double kd );
 
+        void set_limits(
+            double translation_velocity_limit,
+            double rotation_velocity_limit
+        );
+
         void init(
             const Eigen::Vector2d & left_post_position,
             const Eigen::Vector2d & right_post_position,
             const Eigen::Vector2d & waiting_goal_position,
+            double penalty_rayon,
             double goalie_radius
         );
 
         void update(
-            const Eigen::Vector2d & ball_position, 
-            const Eigen::Vector2d & robot_position,
-            double robot_orientation,
-            double time
+            double time, 
+            const GameState::Robot & robot, const GameState::Ball & ball
         );
 
         Control control() const;
@@ -53,7 +100,7 @@ struct Translation_for_shooting {
     Eigen::Vector2d position_ball;
     Eigen::Vector2d goal_center;
    
-    double size_avant;
+    double front_size;
     double radius_ball;
  
     Eigen::Vector2d operator()(double u) const;
@@ -83,11 +130,9 @@ struct Rotation_for_home {
 
 
 
-class Shooter {
+class Shooter : public RobotBehavior {
     public:
 
-        // BUG : SI vous obtenez une boucle infini, vous devez bidoullier les paramètres (en baissant l'acceleration).
-        //  Le bug sera résolu plus tard.
         double translation_velocity;
         double translation_acceleration;
 
@@ -97,12 +142,8 @@ class Shooter {
         double calculus_step;
 
         Eigen::Vector2d goal_center;
-        double size_avant;
+        double front_size;
         double radius_ball;
-
-        Eigen::Vector2d robot_position;
-        double robot_orientation;
-        Eigen::Vector2d ball_position;
 
         double robot_radius;
 
@@ -120,9 +161,14 @@ class Shooter {
         void set_translation_pid( double kp, double ki, double kd );
         void set_orientation_pid( double kp, double ki, double kd );
 
+        void set_limits(
+            double translation_velocity_limit,
+            double rotation_velocity_limit
+        );
+
         void init(
             const Eigen::Vector2d & goal_center, double robot_radius,
-            double size_avant, double radius_ball,
+            double front_size, double radius_ball,
             double translation_velocity,
             double translation_acceleration,
             double angular_velocity,
@@ -131,10 +177,8 @@ class Shooter {
         );
 
         void update(
-            const Eigen::Vector2d & ball_position, 
-            const Eigen::Vector2d & robot_position,
-            double robot_orientation,
-            double time
+            double time,
+            const GameState::Robot & robot, const GameState::Ball & ball
         );
 
         void go_to_shoot(
@@ -153,6 +197,8 @@ class Shooter {
         bool is_static() const;
 
         Control control() const;
+
+
 };
 
-
+}; //Namespace Rhoban

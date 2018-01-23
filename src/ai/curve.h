@@ -68,17 +68,20 @@ class RenormalizedCurve : public Curve2d {
         std::function<double (double t)> velocity_consign;
         double time_max;
 
+        double length_tolerance;
+
         void init();
 
     public:
         RenormalizedCurve(
             const std::function<Eigen::Vector2d (double u)> & curve,
             const std::function<double (double t)> & velocity_consign,
-            double step_time
+            double step_time, double length_tolerance
         );
         RenormalizedCurve(
             const Curve2d & curve,
-            const std::function<double (double t)> & velocity_consign
+            const std::function<double (double t)> & velocity_consign,
+            double length_tolerance
         );
 
         void set_step_time( double dt );

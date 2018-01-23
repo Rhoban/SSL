@@ -65,6 +65,8 @@ namespace RhobanSSL
         for (auto robot : detection.robots_yellow()) {
             updateRobotInformation(robot, myTeam == Yellow);
         }
+
+
     }
 
     void AIVisionClient::updateRobotInformation(SSL_DetectionRobot &robotFrame, bool ally)
@@ -73,6 +75,7 @@ namespace RhobanSSL
         GameState::Robot &robot = gameState.robots[team][robotFrame.robot_id()];
 
         robot.position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
+
         if (robotFrame.has_orientation()) {
             robot.orientation = Angle(robotFrame.orientation());
         }

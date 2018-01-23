@@ -35,7 +35,10 @@ int main(int argc, char **argv)
     cmd.parse(argc, argv);
 
     // Instantiationg the vision
-    AIVisionClient vision(yellow.getValue() ? AIVisionClient::Yellow : AIVisionClient::Blue, simulation.getValue());
+    AIVisionClient vision(
+        yellow.getValue() ? AIVisionClient::Yellow : AIVisionClient::Blue,
+        simulation.getValue()
+    );
 
     // AI Commander to control the robots
     AICommander *commander;

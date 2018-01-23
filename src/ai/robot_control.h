@@ -9,6 +9,7 @@
 #include "curve.h"
 #include "pid.h"
 
+
 namespace tools {
     struct fct_wrapper {
         std::function<double (double u)> rotation;
@@ -35,6 +36,9 @@ class CurveForRobot {
         ContinuousVelocityConsign tranlsation_consign;
         ContinuousVelocityConsign angular_consign;
 
+        double calculus_error_for_translation;
+        double calculus_error_for_rotation;
+
         RenormalizedCurve translation_movment;
         RenormalizedCurve rotation_movment;
 
@@ -57,16 +61,62 @@ class CurveForRobot {
 };
 
 
-class RobotControlWithCurve : public PidControl {
+class RobotControl {
+    private:
+        double translation_velocity_limit;
+        double rotation_velocity_limit;
+
+        PidControl limited_control(
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        ) const;
+
+    public:
+        RobotControl(): 
+            translation_velocity_limit(-1),
+            rotation_velocity_limit(-1)
+        { };
+
+        void set_limits(
+            double translation_velocity_limit,
+            double rotation_velocity_limit
+        );
+
+        virtual PidControl absolute_control_in_absolute_frame(
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        ) const = 0;
+
+        virtual double get_dt() const = 0;
+
+        PidControl absolute_control_in_robot_frame(
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        ) const;
+
+        PidControl relative_control_in_robot_frame(
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        ) const;
+
+};
+
+class RobotControlWithPid : public RobotControl, public PidController {
+    public:
+        PidControl absolute_control_in_absolute_frame(
+            const Eigen::Vector2d & robot_position, 
+            double robot_orientation
+        ) const;
+
+        double get_dt() const;
+};
+
+
+class RobotControlWithCurve : public RobotControlWithPid {
     public:
         CurveForRobot curve;
 
         RobotControlWithCurve();
-        RobotControlWithCurve( double p, double i, double d );
-        RobotControlWithCurve(
-            double p_t, double i_t, double d_t, 
-            double p_o, double i_o, double d_o 
-        );
 
         void set_movment(
             const std::function<Eigen::Vector2d (double u)> & translation,
@@ -80,7 +130,7 @@ class RobotControlWithCurve : public PidControl {
         Eigen::Vector2d goal_position( double t ) const;
 };
 
-class RobotControlWithPositionFollowing : public PidControl{
+class RobotControlWithPositionFollowing : public RobotControlWithPid {
     protected:
         Eigen::Vector2d position;
         double orientation;

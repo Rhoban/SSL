@@ -10,7 +10,7 @@ bool eq( double u, double v, double err ){
 }
 
 double error_renormalisation(
-    double u, const RenormalizedCurve & curve, 
+    double u, const RenormalizedCurve & curve,
     std::function<double (double)> & error_curve,
     double dt
 ){
@@ -32,15 +32,15 @@ void test_curves(){
 
         double length = 2.0;
         RenormalizedCurve curve(
-            [&](double u){ return Eigen::Vector2d(length*u,0.0); }, 
+            [&](double u){ return Eigen::Vector2d(length*u,0.0); },
             [](double t){ return 1.0; },
-            dt_micro        
+            dt_micro, dt_micro/100
         );
         for( double u=0.0; u<=1.0; u = u+ dt ){
             assert( curve.original_curve(u) == Eigen::Vector2d(2*u,0));
-        }    
+        }
 
-        assert( 
+        assert(
             eq( length, curve.size(),  erreur)
         );
 
@@ -49,19 +49,19 @@ void test_curves(){
 
         for( double d=0.0; d<=length; d = d + dt ){
             assert( eq(d, curve.time(d), erreur) );
-        }    
+        }
 
         for( double t=0.0; t<2*length; t = t + dt ){
             assert( eq(t, curve.position_consign(t), erreur) );
-        }    
+        }
 
         for( double u=0.0; u<1.0; u = u + dt ){
             assert( eq(length*u, curve.arc_length(u), erreur) );
         }
-        
+
         for( double l=0.0; l<=length; l = l + dt ){
             assert( eq(l/length, curve.inverse_of_arc_length(l), erreur) );
-        }    
+        }
 
         std::function<double(double)> error_curve = [&](double u){
             return 2*dt_micro;
@@ -70,7 +70,7 @@ void test_curves(){
             assert(
                 eq(
                     1.0,
-                    ( curve(t+dt) - curve(t) ).norm()/dt, 
+                    ( curve(t+dt) - curve(t) ).norm()/dt,
                     error_renormalisation(t, curve, error_curve, dt) + dt_micro/10.0
                 )
             );
@@ -84,18 +84,18 @@ void test_curves(){
         double dt_micro = dt/100;
 
         RenormalizedCurve curve(
-            [](double u){ return Eigen::Vector2d(u*u,2*u); }, 
+            [](double u){ return Eigen::Vector2d(u*u,2*u); },
             [](double t){ return t+.1; },
-            dt_micro        
+            dt_micro, dt_micro/100
         );
         std::function<double(double)> error_curve = [&](double u){
             return 2*dt_micro*std::sqrt( std::pow( u+dt_micro/2.0, 2 ) + 1 );
         };
         for( double t=0.0; t<curve.max_time()-dt; t = t + dt ){
             assert(
-                eq( 
-                    t+.1, 
-                    ( curve(t+dt) - curve(t) ).norm()/dt, 
+                eq(
+                    t+.1,
+                    ( curve(t+dt) - curve(t) ).norm()/dt,
                     error_renormalisation(t, curve, error_curve, dt) + dt_micro/10.0
                 )
             );
@@ -129,16 +129,16 @@ void test_velocityconsign(){
             )
         );
         assert(
-            eq( 
-                consign( consign.time_of_deplacement() 
+            eq(
+                consign( consign.time_of_deplacement()
                 - consign.time_of_acceleration()),
                 max_velocity, erreur
             )
         );
-        assert( 
+        assert(
             eq(
-                consign( 
-                    consign.time_of_deplacement() - 
+                consign(
+                    consign.time_of_deplacement() -
                     consign.time_of_acceleration()/2.0
                 ),
                 max_velocity/2.0, erreur
@@ -162,9 +162,9 @@ void test_empty_curves(){
 
         Eigen::Vector2d position(3.0,7.0);
         RenormalizedCurve curve(
-            [&](double u){ return position; }, 
+            [&](double u){ return position; },
             [](double t){ return 1.0; },
-            dt_micro        
+            dt_micro, dt_micro/100
         );
 
         assert( 0.0 == curve.size() );
@@ -184,9 +184,9 @@ struct Rotation {
 
 struct Translation {
     Eigen::Vector2d position;
-    
+
     Eigen::Vector2d operator()(double u) const {
-        return  position + Eigen::Vector2d(u, u*u); 
+        return  position + Eigen::Vector2d(u, u*u);
     };
 };
 
@@ -217,9 +217,9 @@ void test_use_cases(){
         double dt_micro = dt/100;
 
         RenormalizedCurve curve(
-            [](double u){ return Eigen::Vector2d(90.0*u,0.0); }, 
+            [](double u){ return Eigen::Vector2d(90.0*u,0.0); },
             [](double t){ return 10.0; },
-            dt_micro        
+            dt_micro, dt_micro/100
         );
         assert( eq( curve.max_time(), 9, 0.01 ) );
     }
@@ -227,9 +227,9 @@ void test_use_cases(){
     {
         double dt = 0.01;
         double dt_micro = dt/100;
-            
+
         Curve2d crv(
-            [](double u){ return Eigen::Vector2d(90.0*u,0.0); }, 
+            [](double u){ return Eigen::Vector2d(90.0*u,0.0); },
             dt_micro
         );
         assert( crv.size() == 90 );
@@ -240,7 +240,7 @@ void test_use_cases(){
         RenormalizedCurve curve(
             crv,
             consign,
-            dt_micro        
+            dt_micro, dt_micro/100
         );
     }
     {
@@ -256,7 +256,7 @@ void test_use_cases(){
         RenormalizedCurve curve(
             crv,
             consign,
-            dt_micro        
+            dt_micro, dt_micro/100
         );
         for( double t = 0; t< curve.max_time()-dt; t+= dt ){
             Eigen::Vector2d xt = curve(t);
