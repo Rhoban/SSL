@@ -2,7 +2,7 @@
 #define __MOVMENT__H__
 
 
-#include "debug.h"
+#include <tools/debug.h>
 #include <Eigen/Dense>
 #include <vector>
 
@@ -118,7 +118,7 @@ class RobotControlWithCurve : public RobotControlWithPid {
 
         RobotControlWithCurve();
 
-        void set_movment(
+        void set_movement(
             const std::function<Eigen::Vector2d (double u)> & translation,
             double translation_velocity, double translation_acceleration,
             const std::function<double (double u)> & rotation,

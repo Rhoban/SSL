@@ -1,7 +1,7 @@
 #ifndef __pid__H__
 #define __pid__H__
 
-#include "debug.h"
+#include <tools/debug.h>
 #include <Eigen/Dense>
 
 struct PidControl {

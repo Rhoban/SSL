@@ -4,10 +4,11 @@
 #include <signal.h>
 #include <fenv.h>
 #include <tclap/CmdLine.h>
-#include "AIVisionClient.h"
-#include "AICommanderReal.h"
-#include "AICommanderSimulation.h"
-#include "AI.h"
+#include "vision/AIVisionClient.h"
+#include "com/AICommanderReal.h"
+#include "com/AICommanderSimulation.h"
+#include "ai/AI.h"
+#include "Data.h"
 
 static volatile bool running = true;
 
@@ -34,8 +35,11 @@ int main(int argc, char **argv)
     TCLAP::SwitchArg em("e", "em", "Stop all", cmd, false);
     cmd.parse(argc, argv);
 
+    Data data;
+
     // Instantiationg the vision
     AIVisionClient vision(
+        data,
         yellow.getValue() ? AIVisionClient::Yellow : AIVisionClient::Blue,
         simulation.getValue()
     );
@@ -53,7 +57,7 @@ int main(int argc, char **argv)
         commander->stopAll();
         commander->flush();
     } else {
-        ai = new AI(&vision, commander);
+        ai = new AI(data, commander);
         ai->run();
         delete ai;
     }

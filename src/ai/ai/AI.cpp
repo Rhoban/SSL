@@ -95,7 +95,7 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
 
 Control AI::update_robot( 
     RobotBehavior & robot_behavior,
-    double time, GameState::Robot & robot, GameState::Ball & ball
+    double time, Ai::Robot & robot, Ai::Ball & ball
 ){
     if( robot.isOk() ){
         robot_behavior.update(time, robot, ball);
@@ -106,8 +106,8 @@ Control AI::update_robot(
     return Control::make_ignored();
 }
 
-AI::AI(AIVisionClient *vision, AICommander *commander)
-: vision(vision), commander(commander)
+AI::AI(Data& data, AICommander *commander)
+: time_sync(0.0), data(data), commander(commander) 
 {
     running = true;
 }
@@ -115,9 +115,29 @@ AI::AI(AIVisionClient *vision, AICommander *commander)
 
 void AI::tick()
 {
-    double time = TimeStamp::now().getTimeMS()/1000.0;
+    double time = TimeStamp::now().getTimeMS()/1000.0 + time_sync;
+    
+    Vision::VisionData visionData;
+    data >> visionData;
 
-    auto gameState = vision->getGameState();
+/*
+    DEBUG("");
+    visionData.checkAssert(time);
+    DEBUG("");
+
+    if( time_sync == 0 ){
+        if( visionData.older_time() == 0 ){
+            DEBUG("");
+            return;
+        }
+        time_sync = visionData.older_time() - time;
+        DEBUG("time_sync :  " << time_sync);
+        assert( time_sync < 0 ); 
+        return;
+    } 
+*/
+
+    game_state.update( visionData );
    
     #ifdef SSL_SIMU
         int goalie_id = 5; 
@@ -127,68 +147,21 @@ void AI::tick()
         int shooter_id = 5;
     #endif
 
-    auto ball = gameState.ball;
+    auto ball = game_state.ball;
 
-    auto goalie_robot = gameState.robots[GameState::Ally][goalie_id];
+    auto goalie_robot = game_state.robots[Vision::Ally][goalie_id];
     //DEBUG( "goalie position : " << goalie_robot.position );
     //DEBUG( "goalie orientation : " << goalie_robot.orientation );
 
     Control ctrl_goalie = update_robot( goalie, time, goalie_robot, ball );
     prepare_to_send_control( goalie_id, ctrl_goalie );
 
-    auto shooter_robot = gameState.robots[GameState::Ally][shooter_id];
+    auto shooter_robot = game_state.robots[Vision::Ally][shooter_id];
     //DEBUG( "position : " << shooter_robot.position );
     //DEBUG( "orientation : " << shooter_robot.orientation );
     
     Control ctrl_shooter = update_robot( shooter, time, shooter_robot, ball );
     prepare_to_send_control( shooter_id, ctrl_shooter );
-
-    shooter_measure.update(
-        time, point_to_eigen( shooter_robot.position ), 
-        shooter_robot.orientation.getSignedValue()
-    );
-
-    if( shooter_measure.is_valid() ){
-        //DEBUG("#######################################");
-        //DEBUG( "time : " << shooter_measure.time() );
-        //DEBUG( "v t : " << shooter_measure.velocity_translation().norm() );
-        //DEBUG( "a t : " << shooter_measure.acceleration_translation().norm() );
-        //DEBUG( "v r : " << shooter_measure.velocity_rotation() );
-        //DEBUG( "a r : " << shooter_measure.acceleration_rotation() );
-        
-        //PLOT(
-        //    shooter_measure.time() << " " <<
-        //    shooter_measure.dt() << " " <<
-        //    shooter_measure.velocity_translation().norm() << " " << 
-        //    shooter_measure.acceleration_translation().norm() << " " << 
-        //    shooter_measure.velocity_rotation() << " " <<
-        //    shooter_measure.acceleration_rotation()
-        //);
-
-        max_velocity_t = std::max(
-            max_velocity_t, shooter_measure.velocity_translation().norm()
-        );
-        max_velocity_r = std::max(
-            max_velocity_r, shooter_measure.velocity_rotation()
-        );
-        max_acceleration_t = std::max(
-            max_acceleration_t, 
-            shooter_measure.acceleration_translation().norm()
-        );
-        max_acceleration_r = std::max(
-            max_acceleration_r, shooter_measure.acceleration_rotation()
-        );
-    }else{
-        max_velocity_t = 0;
-        max_velocity_r = 0;
-        max_acceleration_t = 0;
-        max_acceleration_r = 0;
-    }
-    //DEBUG("#######################################");
-    //DEBUG( "max v t : " << max_velocity_t );
-    //DEBUG( "max a t : " << max_velocity_r );
-    //DEBUG( "max v r : " << max_acceleration_t );
-    //DEBUG( "max a r : " << max_acceleration_r );
 
     commander->flush();
 }
@@ -315,4 +288,7 @@ void AI::stop()
 {
     running = false;
 }
+
+    
+
 }

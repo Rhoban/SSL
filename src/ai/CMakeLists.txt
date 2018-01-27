@@ -18,25 +18,33 @@ catkin_package(
 
 find_package(Protobuf REQUIRED)
 
-include_directories(${catkin_INCLUDE_DIRS})
+include_directories(${catkin_INCLUDE_DIRS} .)
 
 set (SOURCES
-    AI.cpp
-    AIVisionClient.cpp
-    AICommander.cpp
-    AICommanderSimulation.cpp
-    AICommanderReal.cpp
-    GameState.cpp
-    robot_control.cpp
-    robot_behavior.cpp
-    pid.cpp
-    curve.cpp
+    Data.cpp
+    vision/AIVisionClient.cpp
+    vision/VisionData.cpp
+    com/AICommander.cpp
+    com/AICommanderSimulation.cpp
+    com/AICommanderReal.cpp
+    ai/robot_behavior.cpp
+    ai/AI.cpp
+    ai/AiData.cpp
+    control/robot_control.cpp
+    control/pid.cpp
+    control/curve.cpp
+    tools/Movement.cpp
+    tools/MovementSample.cpp
+    tools/MovementSample.cpp
+    prediction/movement_prediction.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
-add_executable(ai ai.cpp ${SOURCES})
+add_executable(ai main.cpp ${SOURCES})
 target_link_libraries(ai stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
-add_executable(test_curve test_curve.cpp curve.cpp)
+add_executable(test_curve control/test_curve.cpp control/curve.cpp)
 add_test(NAME test_curve COMMAND ./test_curve)
+add_executable(test_circular_vector tools/test_circular_vector.cpp)
+add_test(NAME test_circular_vector COMMAND ./test_circular_vector)

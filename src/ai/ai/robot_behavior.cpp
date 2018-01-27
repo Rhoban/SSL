@@ -49,17 +49,21 @@ double RobotBehavior::set_birthday( double birthday ){
 
 void RobotBehavior::update(
     double time, 
-    const GameState::Robot & robot, const GameState::Ball & ball
+    const Ai::Robot & robot, const Ai::Ball & ball
 ){
     lastUpdate = time;
-
     this->robot_position = Eigen::Vector2d( 
-        robot.position.getX(), robot.position.getY()
+        robot.get_movement().linear_position(time).getX(), 
+        robot.get_movement().linear_position(time).getY()
     );
+    const Movement & mov = robot.get_movement();
     this->ball_position = Eigen::Vector2d(
-        ball.position.getX(), ball.position.getY()
+        ball.get_movement().linear_position(time).getX(),
+        ball.get_movement().linear_position(time).getY()
     );
-    this->robot_orientation = robot.orientation.getSignedValue();
+    this->robot_orientation = robot.get_movement().angular_position(
+        time
+    ).getSignedValue();
 };
 
 
@@ -106,8 +110,8 @@ void Goalie::init(
 
 void Goalie::update(
     double time,
-    const GameState::Robot & robot,
-    const GameState::Ball & ball
+    const Ai::Robot & robot,
+    const Ai::Ball & ball
 ) {
     RobotBehavior::update(time, robot, ball);
 
@@ -208,7 +212,7 @@ void Shooter::go_to_shoot(
     shooting_rotation.orientation = robot_orientation;
     shooting_rotation.end = angle( goal_center - ball_position  );    
 
-    robot_control.set_movment(
+    robot_control.set_movement(
         shooting_translation,
         translation_velocity,
         translation_acceleration,
@@ -232,7 +236,7 @@ void Shooter::go_home(
     home_rotation.position_ball = ball_position;
     home_rotation.position_robot = robot_position;
 
-    robot_control.set_movment(
+    robot_control.set_movement(
         shooting_translation,
         translation_velocity,
         translation_acceleration,
@@ -246,8 +250,8 @@ void Shooter::go_home(
 
 void Shooter::update(
     double time,
-    const GameState::Robot & robot,
-    const GameState::Ball & ball
+    const Ai::Robot & robot,
+    const Ai::Ball & ball
 ){
     RobotBehavior::update(time, robot, ball);
 

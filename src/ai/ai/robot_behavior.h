@@ -1,7 +1,7 @@
-#include "robot_control.h"
+#include <control/robot_control.h>
 #include <geometry/Angle.hpp>
-#include "GameState.h"
-
+#include "Data.h"
+#include "AiData.h"
 
 namespace RhobanSSL
 {
@@ -41,7 +41,7 @@ class RobotBehavior {
 
         virtual void update(
             double time, 
-            const GameState::Robot & robot, const GameState::Ball & ball
+            const Ai::Robot & robot, const Ai::Ball & ball
         );
         virtual Control control() const = 0;
 };
@@ -87,7 +87,7 @@ class Goalie : public RobotBehavior {
 
         void update(
             double time, 
-            const GameState::Robot & robot, const GameState::Ball & ball
+            const Ai::Robot & robot, const Ai::Ball & ball
         );
 
         Control control() const;
@@ -178,7 +178,7 @@ class Shooter : public RobotBehavior {
 
         void update(
             double time,
-            const GameState::Robot & robot, const GameState::Ball & ball
+            const Ai::Robot & robot, const Ai::Ball & ball
         );
 
         void go_to_shoot(

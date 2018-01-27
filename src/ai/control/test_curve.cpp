@@ -1,4 +1,4 @@
-#include "debug.h"
+#include <tools/debug.h>
 #include "curve.h"
 
 #include <iostream>
