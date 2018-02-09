@@ -4,6 +4,7 @@
 #include <vision/AIVisionClient.h>
 #include "robot_behavior.h"
 #include "AiData.h"
+#include <referee/Referee.h>
 
 namespace RhobanSSL
 {
@@ -29,6 +30,8 @@ namespace RhobanSSL
         Data & data;
         Goalie goalie;
         Shooter shooter;
+
+        Referee referee;
         
         double max_velocity_t;
         double max_velocity_r;

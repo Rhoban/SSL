@@ -116,6 +116,8 @@ AI::AI(Data& data, AICommander *commander)
 void AI::tick()
 {
     double time = TimeStamp::now().getTimeMS()/1000.0 + time_sync;
+
+    referee.update(time);
     
     Vision::VisionData visionData;
     data >> visionData;
