@@ -8,21 +8,20 @@
  */
 
  #define INSTRUCTION_MASTER          0x00
- struct packet_master {
-     #define ACTION_ON      (1<<0)   // The robot should be on (else everything is stopped)
-     #define ACTION_KICK1   (1<<1)   // Kick on kicker 1 (transition from 0 to 1 trigger kick)
-     #define ACTION_KICK2   (1<<2)   // Kick on kicker 2 (transition from 0 to 1 trigger kick)
-     #define ACTION_DRIBBLE (1<<3)   // Enable/disable the dribbler
-     #define ACTION_CHARGE  (1<<4)   // Enable/disable the capacitor charge
-     uint8_t actions;
+struct packet_master {
+    #define ACTION_ON      (1<<0)   // The robot should be on (else everything is stopped)
+    #define ACTION_KICK1   (1<<1)   // Kick on kicker 1 (transition from 0 to 1 trigger kick)
+    #define ACTION_KICK2   (1<<2)   // Kick on kicker 2 (transition from 0 to 1 trigger kick)
+    #define ACTION_DRIBBLE (1<<3)   // Enable/disable the dribbler
+    #define ACTION_CHARGE  (1<<4)   // Enable/disable the capacitor charge
+    uint8_t actions;
 
-     float wheel1;                   // Wheel speeds in turn/s
-     float wheel2;
-     float wheel4;
-     float wheel3;
+    float x_speed;                  // Kinematic orders
+    float y_speed;
+    float t_speed;
 
-     uint16_t kickPower;             // Kick power (this is a duration in uS)
- } __attribute__((packed));
+    uint16_t kickPower;             // Kick power (this is a duration in uS)
+} __attribute__((packed));
 
  #define INSTRUCTION_PARAMS          0x01
  struct packet_params {

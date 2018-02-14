@@ -17,7 +17,6 @@ namespace RhobanSSL
     void AICommanderReal::flush()
     {
         for (auto &command : commands) {
-            auto wheels = kinematic.compute(command.xSpeed, command.ySpeed, command.thetaSpeed);
             if (command.enabled) {
                 master.robots[command.robot_id].actions = ACTION_ON |ACTION_CHARGE;
                 if( kicking ){
@@ -26,10 +25,9 @@ namespace RhobanSSL
             } else {
                 master.robots[command.robot_id].actions = 0;
             }
-            master.robots[command.robot_id].wheel1 = wheels.frontLeft;
-            master.robots[command.robot_id].wheel2 = wheels.backLeft;
-            master.robots[command.robot_id].wheel3 = wheels.backRight;
-            master.robots[command.robot_id].wheel4 = wheels.frontRight;
+            master.robots[command.robot_id].x_speed = command.xSpeed;
+            master.robots[command.robot_id].y_speed = command.ySpeed;
+            master.robots[command.robot_id].t_speed = command.thetaSpeed;
         }
 
         master.send();

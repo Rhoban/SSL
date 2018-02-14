@@ -28,10 +28,9 @@ namespace RhobanSSL
         // Resetting the communication structures
         for (int k = 0; k < 6; k++) {
             robots[k].actions = 0;
-            robots[k].wheel1 = 0;
-            robots[k].wheel2 = 0;
-            robots[k].wheel3 = 0;
-            robots[k].wheel4 = 0;
+            robots[k].x_speed = 0;
+            robots[k].y_speed = 0;
+            robots[k].t_speed = 0;
 
             statuses[k].status = 0;
         }

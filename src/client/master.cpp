@@ -1,10 +1,14 @@
 #include <iostream>
+#include <cmath>
 #include <unistd.h>
+#include <geometry/Point.hpp>
 #include "joystick/Joystick.h"
 #include "Kinematic.h"
 #include "Master.h"
 
 using namespace RhobanSSL;
+
+#define ROBOT   1
 
 int main()
 {
@@ -20,15 +24,21 @@ int main()
     // Openning connection with robot
     Master master("/dev/ttyACM0", 1000000);
 
+    double maxAcceleration = 2;
+
     bool charge = false;
-    double xSpeed = 0;
-    double ySpeed = 0;
+    Point targetSpeed(0, 0);
+    Point speed(0, 0);
     double thetaSpeed = 0;
     Kinematic kinematic;
 
     // Pre-setting the power of the kick
-    master.robots[0].kickPower = 10000;
-    master.setParams(400, 3, 0);
+    master.robots[ROBOT].kickPower = 1500;
+#if 0
+    // master.setParams(400, 3, 0);
+#else
+    // master.setParams(10, 0.5, 0.0);
+#endif
 
     while (true) {
         // Setting parms
@@ -37,17 +47,23 @@ int main()
 
         while (joystick.getEvent(&event)) {
             if (event.type == JS_EVENT_BUTTON) {
-                if (event.number == 11) { // Kick
+                if (false && event.number == 11) { // Kick
                     if (event.isPressed()) {
-                        master.robots[0].actions |= ACTION_KICK1;
+                        master.robots[ROBOT].actions |= ACTION_KICK1;
                     } else {
-                        master.robots[0].actions &= ~ACTION_KICK1;
+                        master.robots[ROBOT].actions &= ~ACTION_KICK1;
                     }
-                } else if (event.number == 15) { // Charge
+                } else if (false && event.number == 10) { // Dribble
+                    if (event.isPressed()) {
+                        master.robots[ROBOT].actions |= ACTION_DRIBBLE;
+                    } else {
+                        master.robots[ROBOT].actions &= ~ACTION_DRIBBLE;
+                    }
+                } else if (false && event.number == 15) { // Charge
                     if (event.isPressed()) {
                         charge = !charge;
-                        if (charge) master.robots[0].actions |= ACTION_CHARGE;
-                        else master.robots[0].actions &= ~ACTION_CHARGE;
+                        if (charge) master.robots[ROBOT].actions |= ACTION_CHARGE;
+                        else master.robots[ROBOT].actions &= ~ACTION_CHARGE;
                     }
                 } else {
                     std::cout << "Button [" << (int)event.number << "] " << event.type << std::endl;
@@ -55,9 +71,9 @@ int main()
             }
             if (event.type == JS_EVENT_AXIS && event.number < 20) {
                 if (event.number == 0) {        // Y
-                    ySpeed = event.getValue()*1.5;
+                    targetSpeed.y = event.getValue()*3;
                 } else if (event.number == 1) { // X
-                    xSpeed = -event.getValue()*1.5;
+                    targetSpeed.x = -event.getValue()*3;
                 } else if (event.number == 2) { // Rotation
                     thetaSpeed = -event.getValue()*3;
                 }
@@ -66,20 +82,22 @@ int main()
             }
         }
 
+        if (true) { // fabs(targetSpeed.getLength() - speed.getLength()) < maxAcceleration*0.005) {
+            speed = targetSpeed;
+        } else {
+            speed = speed + (targetSpeed-speed).normalize(maxAcceleration);
+        }
 
-        if (master.statuses[0].status & STATUS_OK) {
-            master.robots[0].actions |= ACTION_ON;
-            float voltage = master.statuses[0].cap_volt/10.0;
-            // std::cout << "Robot OK, capacitor: " << master.statuses[0].cap_volt/10.0 << "V" << std::endl;
 
-            std::cout << "X: " << xSpeed << ", Y: " << ySpeed << ", T: " << thetaSpeed << ", Volts: " << voltage << std::endl;
-            auto wheels = kinematic.compute(xSpeed, ySpeed, thetaSpeed);
-            master.robots[0].wheel1 = wheels.frontLeft;
-            master.robots[0].wheel2 = wheels.backLeft;
-            master.robots[0].wheel3 = wheels.backRight;
-            master.robots[0].wheel4 = wheels.frontRight;
-            std::cout << master.robots[0].wheel1 << std::endl;
-            std::cout << master.robots[0].wheel2 << std::endl;
+        if (master.statuses[ROBOT].status & STATUS_OK) {
+            master.robots[ROBOT].actions |= ACTION_ON;
+            float voltage = master.statuses[ROBOT].cap_volt/10.0;
+            // std::cout << "Robot OK, capacitor: " << master.statuses[ROBOT].cap_volt/10.0 << "V" << std::endl;
+
+            std::cout << "X: " << speed.x << ", Y: " << speed.y << ", T: " << thetaSpeed << ", Volts: " << voltage << std::endl;
+            master.robots[ROBOT].x_speed = speed.x;
+            master.robots[ROBOT].y_speed = speed.y;
+            master.robots[ROBOT].t_speed = thetaSpeed;
             std::cout << "-" << std::endl;
         } else {
             std::cout << "Robot missing!" << std::endl;
