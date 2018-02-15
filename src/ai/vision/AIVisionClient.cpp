@@ -1,6 +1,6 @@
 #include <iostream>
 #include "AIVisionClient.h"
-#include <tools/debug.h>
+#include <debug.h>
 
 using namespace Utils::Timing;
 

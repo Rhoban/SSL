@@ -40,7 +40,7 @@ void limits_velocity( Control & ctrl ){
         }
     }
     if( ROTATION_VELOCITY_LIMIT > 0.0 ){
-        if( std::abs( ctrl.velocity_rotation ) > ROTATION_VELOCITY_LIMIT ){
+        if( std::abs( ctrl.velocity_rotation.value() ) > ROTATION_VELOCITY_LIMIT ){
             ctrl.velocity_rotation = 0.0;
             std::cerr << "WARNING : we reached the "
                 "limit rotation velocity !" << std::endl;
@@ -87,7 +87,7 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
             commander->set(
                 map_id, true, 
                 ctrl.velocity_translation[0], sign_y*ctrl.velocity_translation[1], 
-                ctrl.velocity_rotation
+                ctrl.velocity_rotation.value()
             );
         }
     }
@@ -122,10 +122,14 @@ void AI::tick()
     Vision::VisionData visionData;
     data >> visionData;
 
-/*
-    DEBUG("");
+    //DEBUG("##############################################################");
+    //DEBUG("##############################################################");
+    //DEBUG("##############################################################");
+    //DEBUG( visionData );
+
+    //DEBUG("");
     visionData.checkAssert(time);
-    DEBUG("");
+    //DEBUG("");
 
     if( time_sync == 0 ){
         if( visionData.older_time() == 0 ){
@@ -137,7 +141,6 @@ void AI::tick()
         assert( time_sync < 0 ); 
         return;
     } 
-*/
 
     game_state.update( visionData );
    

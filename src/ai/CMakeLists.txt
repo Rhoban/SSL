@@ -32,20 +32,37 @@ set (SOURCES
     ai/AiData.cpp
     control/robot_control.cpp
     control/pid.cpp
-    control/curve.cpp
-    tools/Movement.cpp
-    tools/MovementSample.cpp
-    tools/MovementSample.cpp
-    prediction/movement_prediction.cpp
+    physic/movement_predicted_by_integration.cpp
+    physic/movement_with_no_prediction.cpp
+    physic/MovementSample.cpp
+    physic/Movement.cpp
+    math/ContinuousAngle.cpp
+    math/curve.cpp
     referee/Referee.cpp
 )
 
+set (TEST_SOURCES
+    math/test_curve.cpp
+    math/test_circular_vector.cpp
+    physic/test_MovementSample.cpp
+    physic/test_movement_with_no_prediction.cpp
+    physic/test_movement_predicted_by_integration.cpp
+    math/test_ContinuousAngle.cpp
+    control/test_pid.cpp
+    control/test_robot_control.cpp
+)
+
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
+set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
 add_executable(ai main.cpp ${SOURCES})
 target_link_libraries(ai stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
-add_executable(test_curve control/test_curve.cpp control/curve.cpp)
-add_test(NAME test_curve COMMAND ./test_curve)
-add_executable(test_circular_vector tools/test_circular_vector.cpp)
-add_test(NAME test_circular_vector COMMAND ./test_circular_vector)
+
+foreach(test_source ${TEST_SOURCES})
+    get_filename_component(name_test ${test_source} NAME_WE)
+
+    add_executable(${name_test} ${test_source} ${SOURCES})
+    add_test(NAME ${name_test} COMMAND ./${name_test} WORKING_DIRECTORY ${TEST_DIRECTORY})
+    target_link_libraries(${name_test} stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+endforeach(test_source)

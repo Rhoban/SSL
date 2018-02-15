@@ -1,7 +1,7 @@
 #ifndef __curve__H__
 #define __curve__H__
 
-#include <tools/debug.h>
+#include <debug.h>
 #include <Eigen/Dense>
 #include <vector>
 

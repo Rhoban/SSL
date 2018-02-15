@@ -1,7 +1,8 @@
 #include "AiData.h"
 #include <assert.h>
-#include <prediction/movement_prediction.h>
-#include <tools/debug.h>
+#include <physic/movement_predicted_by_integration.h>
+#include <physic/movement_with_no_prediction.h>
+#include <debug.h>
 namespace RhobanSSL {
 namespace Ai {
 

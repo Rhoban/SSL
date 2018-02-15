@@ -4,9 +4,9 @@
 #include <map>
 #include <geometry/Angle.hpp>
 #include <timing/TimeStamp.hpp>
-#include <tools/MovementSample.h>
+#include <physic/MovementSample.h>
 #include <vision/VisionData.h>
-#include <tools/Movement.h>
+#include <physic/Movement.h>
 
 namespace RhobanSSL {
 namespace Ai {

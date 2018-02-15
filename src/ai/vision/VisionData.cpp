@@ -1,6 +1,6 @@
 #include "VisionData.h"
 #include <assert.h>
-#include <tools/debug.h>
+#include <debug.h>
 
 namespace RhobanSSL {
 namespace Vision {
@@ -8,27 +8,35 @@ namespace Vision {
 void Object::update(
     double time, const Point & linear_position
 ){
-    if( time <= movement.time(0) ){
-        //TODO
-        return;
-    }
     update( time, linear_position, movement[0].angular_position );
 }
 
+void Object::update(
+    double time, const Point & linear_position, 
+    const Angle & angular_position 
+){
+    ContinuousAngle angle( movement[0].angular_position );
+    angle.set_to_nearest( angular_position );
+    update( time, linear_position, angle );
+}
 
 void Object::update(
-    double time, const Point & linear_position, const Angle & angular_position 
+    double time, const Point & linear_position, 
+    const ContinuousAngle & angular_position 
 ){
     if( time <= movement.time(0) ){
         //TODO
+        //DEBUG("TODO");
         return;
     }
     lastUpdate = Utils::Timing::TimeStamp::now();
     present = true;
+
     movement.insert(
-        PositionSample(time,linear_position,angular_position)
+        PositionSample(time,linear_position, angular_position)
     );
 }
+
 
 double Object::age() const {
     return diffSec(lastUpdate, Utils::Timing::TimeStamp::now());
@@ -51,17 +59,22 @@ VisionData::VisionData(){
     for (auto team : {Ally, Opponent}) {
         for (int k=0; k<Robots; k++) {
             robots[team][k].present = false;
+            robots[team][k].id = k;
         }
     }
 }
 
 void Object::checkAssert( double time ) const {
     assert(
-        not(present) or ( movement.time(0) > movement.time(1) ) 
+        not(present) or ( 
+            movement.time(0) > movement.time(1) 
+            and
+            movement.time(1) > movement.time(2) 
+        ) 
     );
-    assert(
-        not(present) or ( time > movement.time(0) ) 
-    );
+//    assert(
+//        not(present) or ( time > movement.time(0) ) 
+//    );
 }
 
 
@@ -87,5 +100,29 @@ double VisionData::older_time() const {
     return older;
 };
 
+std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::VisionData& vision){
+    for (auto team : {RhobanSSL::Vision::Ally, RhobanSSL::Vision::Opponent}) {
+        out << team << " : " << std::endl;
+        for (int k=0; k<RhobanSSL::Vision::Robots; k++) {
+            out << "robot " << k << std::endl;
+            out << vision.robots.at(team).at(k);
+        }
+    }
+    out << "ball : " << std::endl;
+    out << vision.ball << std::endl;
+    
+    return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::Object& object){
+    out << " id : " << object.id << std::endl;
+    out << " present : " << object.present << std::endl;
+    out << " lastUpdate : " << object.lastUpdate.getTimeMS()/1000.0 << std::endl;
+    out << " movement : " << object.movement << std::endl;
+    return out;
+}
+
 
 } } //Namespace
+
+

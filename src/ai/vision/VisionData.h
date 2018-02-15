@@ -3,9 +3,10 @@
 
 #include <map>
 #include <geometry/Point.hpp>
-#include <geometry/Angle.hpp>
+#include <math/ContinuousAngle.h>
 #include <timing/TimeStamp.hpp>
-#include <tools/MovementSample.h>
+#include <physic/MovementSample.h>
+#include <iostream>
 
 namespace RhobanSSL {
 namespace Vision {
@@ -27,7 +28,12 @@ struct Object {
     Utils::Timing::TimeStamp lastUpdate;
 
     void update(
-        double time, const Point & linear_position, const Angle & angular_position
+        double time, const Point & linear_position,
+        const Angle & angular_position
+    );
+    void update(
+        double time, const Point & linear_position,
+        const ContinuousAngle & angular_position
     );
     void update(
         double time, const Point & linear_position
@@ -39,6 +45,8 @@ struct Object {
     Object();
     void checkAssert( double time ) const;
 };
+
+std::ostream& operator<<(std::ostream& out, const Object& object);
 
 struct Robot : Object { };
 struct Ball : Object { };
@@ -62,8 +70,16 @@ public:
 
     double older_time() const;
     void checkAssert( double time ) const;
+
+    void print() const;
+    
+    friend std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::VisionData& vision);
+
 };
 
+std::ostream& operator<<(std::ostream& out, const VisionData& vision);
+
 } }
+
 
 #endif

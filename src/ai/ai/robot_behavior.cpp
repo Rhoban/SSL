@@ -63,7 +63,7 @@ void RobotBehavior::update(
     );
     this->robot_orientation = robot.get_movement().angular_position(
         time
-    ).getSignedValue();
+    ).value();
 };
 
 
