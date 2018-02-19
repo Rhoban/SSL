@@ -99,34 +99,6 @@ void CurveForRobot::print_rotation_curve( double dt ) const {
 
 
 
-void RobotControlWithCurve::set_movement(
-    const std::function<Eigen::Vector2d (double u)> & translation,
-    double translation_velocity, double translation_acceleration,
-    const std::function<double (double u)> & rotation,
-    double angular_velocity, double angular_acceleration, 
-    double calculus_step, double current_time
-){
-    curve = CurveForRobot(
-        translation,
-        translation_velocity,
-        translation_acceleration,
-        rotation,
-        angular_velocity, 
-        angular_acceleration, 
-        calculus_step
-    );
-    init_time(current_time);
-    set_static(false);
-}
-
-ContinuousAngle RobotControlWithCurve::goal_orientation( double t ) const {
-    return curve.rotation(t);
-}
-
-Eigen::Vector2d RobotControlWithCurve::goal_position( double t ) const {
-    return curve.translation(t);
-}
-
 void RobotControl::set_limits(
     double translation_velocity_limit,
     double rotation_velocity_limit
@@ -137,7 +109,7 @@ void RobotControl::set_limits(
 
 PidControl RobotControl::limited_control(
     const Eigen::Vector2d & robot_position, 
-    ContinuousAngle robot_orientation
+    const ContinuousAngle & robot_orientation
 ) const {
     PidControl res = absolute_control_in_absolute_frame(
         robot_position, robot_orientation
@@ -168,7 +140,7 @@ PidControl RobotControl::limited_control(
 
 PidControl RobotControl::absolute_control_in_robot_frame(
     const Eigen::Vector2d & robot_position, 
-    ContinuousAngle robot_orientation
+    const ContinuousAngle & robot_orientation
 ) const {
     PidControl res;
 
@@ -188,20 +160,23 @@ PidControl RobotControl::absolute_control_in_robot_frame(
     return res;
 }
 
-PidControl RobotControl::relative_control_in_robot_frame(
-    const Eigen::Vector2d & robot_position, 
-    ContinuousAngle robot_orientation
-) const {
 
+
+/*
+ * Calculus are explaine in the document : 
+ * calcul_de_la_commande_en_vitesse_d_un_robot_holonome.org 
+ */
+PidControl RobotControl::absolute_to_relative_control(
+    const PidControl & absolute_control,
+    const Eigen::Vector2d & robot_position, 
+    const ContinuousAngle & robot_orientation,
+    double dt
+){
     PidControl res;
     Eigen::Matrix2d rotation_matrix;
 
-    PidControl absolute_control = limited_control(
-        robot_position, robot_orientation
-    );
-    Eigen::Vector2d & a_t = absolute_control.velocity_translation;
-    ContinuousAngle a_r =  absolute_control.velocity_rotation;
-    double dt = get_dt();
+    const Eigen::Vector2d & a_t = absolute_control.velocity_translation;
+    const ContinuousAngle & a_r =  absolute_control.velocity_rotation;
 
     if( std::abs(a_r.value()) > CALCULUS_ERROR ){
         rotation_matrix << 
@@ -223,11 +198,20 @@ PidControl RobotControl::relative_control_in_robot_frame(
     return res;
 }
 
-
+PidControl RobotControl::relative_control_in_robot_frame(
+    const Eigen::Vector2d & robot_position, 
+    const ContinuousAngle & robot_orientation
+) const {
+    return RobotControl::absolute_to_relative_control(
+        limited_control( robot_position, robot_orientation ),
+        robot_position, robot_orientation,
+        get_dt()
+    );
+}
 
 PidControl RobotControlWithPid::absolute_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
-    ContinuousAngle robot_orientation
+    const ContinuousAngle & robot_orientation
 ) const {
     return PidController::absolute_control_in_absolute_frame(
         robot_position, robot_orientation
@@ -236,37 +220,5 @@ PidControl RobotControlWithPid::absolute_control_in_absolute_frame(
 
 double RobotControlWithPid::get_dt() const {
     return PidController::get_dt();
-}
-
-
-RobotControlWithCurve::RobotControlWithCurve():
-    curve(
-        [](double t){ return Eigen::Vector2d(1.0,0.0); },
-        0.0, 1.0, 
-        [](double t){ return 1.0; },
-        0.0, 1.0, 
-        0.001
-    )
-{ }
-
-
-
-
-
-void RobotControlWithPositionFollowing::set_goal(
-    const Eigen::Vector2d & position, ContinuousAngle orientation
-){
-    this->position = position;
-    this->orientation = orientation;
-    set_static(false);
-}
-
-
-ContinuousAngle RobotControlWithPositionFollowing::goal_orientation( double t ) const {
-    return orientation;
-}
-
-Eigen::Vector2d RobotControlWithPositionFollowing::goal_position( double t ) const {
-    return position;
 }
 

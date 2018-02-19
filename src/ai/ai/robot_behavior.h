@@ -1,4 +1,5 @@
-#include <control/robot_control.h>
+#include <control/robot_control_with_position_following.h>
+#include <control/robot_control_with_curve.h>
 #include <geometry/Angle.hpp>
 #include "Data.h"
 #include "AiData.h"

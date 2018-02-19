@@ -31,6 +31,8 @@ set (SOURCES
     ai/AI.cpp
     ai/AiData.cpp
     control/robot_control.cpp
+    control/robot_control_with_curve.cpp
+    control/robot_control_with_position_following.cpp
     control/pid.cpp
     physic/movement_predicted_by_integration.cpp
     physic/movement_with_no_prediction.cpp
