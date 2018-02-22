@@ -44,6 +44,8 @@ set (SOURCES
 )
 
 set (TEST_SOURCES
+    core/test_machine_state.cpp
+    core/test_print_collection.cpp
     math/test_curve.cpp
     math/test_circular_vector.cpp
     physic/test_MovementSample.cpp
@@ -63,8 +65,22 @@ target_link_libraries(ai stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
 foreach(test_source ${TEST_SOURCES})
     get_filename_component(name_test ${test_source} NAME_WE)
+#    get_filename_component(name_extention_test ${test_source} NAME)
+#    get_filename_component(directory_test ${test_source} DIRECTORY)
+#    string(REPLACE "test_" ${directory_test}/ source_test ${name_extention_test}) 
+#    string(REPLACE ".cpp" ".h" header1_test ${source_test}) 
+#    string(REPLACE ".cpp" ".hpp" header2_test ${source_test}) 
+#
+#    if(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
+#        add_executable(${name_test} ${test_source} ${source_test})
+#    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header1_test})
+#        add_executable(${name_test} ${test_source})
+#    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header2_test})
+#        add_executable(${name_test} ${test_source})
+#    else(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
+        add_executable(${name_test} ${test_source} ${SOURCES})
+#    endif(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
 
-    add_executable(${name_test} ${test_source} ${SOURCES})
     add_test(NAME ${name_test} COMMAND ./${name_test} WORKING_DIRECTORY ${TEST_DIRECTORY})
     target_link_libraries(${name_test} stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 endforeach(test_source)
