@@ -6,6 +6,7 @@
  * WARNING: This not should be edited without re-synchronizing with the struct
  * in the mainboard firmware (see SSL-Electronics/mainboard/firmware)
  */
+#define PACKET_SIZE                 28
 
  #define INSTRUCTION_MASTER          0x00
 struct packet_master {

@@ -4,6 +4,21 @@
 
 namespace RhobanSSL
 {
+    float Master::Robot::age()
+    {
+        return diffSec(lastUpdate, Utils::Timing::TimeStamp::now());
+    }
+
+    bool Master::Robot::isOk()
+    {
+        return present && age() < 0.3 && (status.status & STATUS_OK);
+    }
+
+    Master::Robot::Robot()
+    {
+        present = false;
+    }
+
     Master::Master(std::string port, unsigned int baudrate)
     : serial(port, baudrate, serial::Timeout::simpleTimeout(1000))
     {
@@ -15,6 +30,11 @@ namespace RhobanSSL
         thread = new std::thread([this]() {
             this->execute();
         });
+        tmpPacket = "";
+        tmpNbRobots = 0;
+        packet = "";
+        nbRobots = 0;
+        lastSend = Utils::Timing::TimeStamp::now();
     }
 
     Master::~Master()
@@ -26,16 +46,16 @@ namespace RhobanSSL
     void Master::em()
     {
         // Resetting the communication structures
-        for (int k = 0; k < 6; k++) {
-            robots[k].actions = 0;
-            robots[k].x_speed = 0;
-            robots[k].y_speed = 0;
-            robots[k].t_speed = 0;
+        struct packet_master packet;
+        packet.actions = 0;
+        packet.x_speed = 0;
+        packet.y_speed = 0;
+        packet.t_speed = 0;
 
-            statuses[k].status = 0;
+        for (size_t k=0; k<8; k++) {
+            addRobotPacket(k, packet);
         }
-
-        shouldSend = true;
+        send();
     }
 
     void Master::stop()
@@ -45,28 +65,69 @@ namespace RhobanSSL
 
     void Master::send()
     {
+        // Waiting to either have received an answer from the last send() or reached the
+        // overall cycle timeout
+        bool waiting = true;
+        while (waiting) {
+            mutex.lock();
+            if (receivedAnswer) {
+                waiting = false;
+            }
+            if (diffSec(lastSend, Utils::Timing::TimeStamp::now()) > 0.015) {
+                waiting = false;
+            }
+            mutex.unlock();
+            usleep(100);
+        }
+
+        // XXX: Did we finished the last send cycle?
+        // We should wait either the timeout or the reception is over
+        packet = tmpPacket;
+        nbRobots = tmpNbRobots;
+        tmpPacket.clear();
+        tmpNbRobots = 0;
+        receivedAnswer = false;
         shouldSend = true;
     }
 
-    void Master::setParams(float kp, float ki, float kd)
+    void Master::addPacket(int robot, int instruction, char *packet, size_t len)
     {
-        params.kp = kp;
-        params.ki = ki;
-        params.kd = kd;
-        shouldSendParams = true;
+        std::string data(packet, len);
+        tmpPacket += (char)robot;
+        tmpPacket += (char)instruction;
+        tmpPacket += data;
+
+        // Padding to complete until PACKET_SIZE
+        for (size_t k=0; k<PACKET_SIZE-len-1; k++) {
+            tmpPacket += (char)0;
+        }
+        tmpNbRobots++;
     }
 
-    void Master::sendPacket(uint8_t instruction, uint8_t *payload, size_t size)
+    void Master::addRobotPacket(int robot, struct packet_master robotPacket)
     {
-        uint8_t data[size + 4];
+        addPacket(robot, INSTRUCTION_MASTER, (char*)&robotPacket, sizeof(robotPacket));
+    }
+
+    void Master::addParamPacket(int robot, struct packet_params params)
+    {
+        addPacket(robot, INSTRUCTION_PARAMS, (char*)&params, sizeof(params));
+    }
+
+    void Master::sendPacket()
+    {
+        uint8_t data[packet.size() + 4];
         data[0] = 0xaa;
         data[1] = 0x55;
-        data[2] = instruction;
+        data[2] = nbRobots;
 
-        data[size + 3] = 0xff;
-        memcpy((void *)(data + 3), payload, size);
+        memcpy((void *)(data + 3), packet.c_str(), packet.size());
+        data[sizeof(data) - 1] = 0xff;
+        receivedAnswer = false;
+        lastSend = Utils::Timing::TimeStamp::now();
         mutex.unlock();
 
+        // Sending the data
         serial.write(data, sizeof(data));
     }
 
@@ -74,14 +135,16 @@ namespace RhobanSSL
     {
         int state = 0;
         int pos = 0;
-        uint8_t temp[sizeof(statuses)];
+        size_t nb_robots = 0;
+        uint8_t temp[1024];
 
         serial.write("master\nmaster\nmaster\n");
 
         while (running) {
-            usleep(500);
-
+            // XXX: Maybe we should use something like select() here
+            usleep(100);
             size_t n = serial.available();
+
             if (n) {
                 uint8_t buffer[n];
                 serial.read(buffer, n);
@@ -99,13 +162,38 @@ namespace RhobanSSL
                         } else {
                             state = 0;
                         }
-                    } else if (pos < sizeof(statuses)) {
+                    } else if (state == 2) {
+                        nb_robots = c;
+                        pos = 0;
+                        if (nb_robots > 8) {
+                            state = 0;
+                        } else {
+                            state++;
+                        }
+                    } else if (pos < nb_robots * (1 + sizeof(struct packet_robot))) {
                         temp[pos++] = c;
                     } else {
                         if (c == 0xff) {
-                            // Received message from USB
+                            if (nb_robots > 0) {
+                                static int packets = 0;
+                                packets++;
+                                printf("Packets: %d\n", packets);
+                            } else {
+                                printf("No robots!");
+                            }
+                            // Received message from USB, reading the status of each robot
                             mutex.lock();
-                            memcpy((void *)statuses, (void *)temp, sizeof(statuses));
+                            receivedAnswer = true;
+                            for (size_t k=0; k<nb_robots; k++) {
+                                int robot_id = temp[k*(1 + sizeof(struct packet_robot))];
+                                if (robot_id < 8) {
+                                    memcpy(&robots[robot_id].status,
+                                        &temp[k*(1 + sizeof(struct packet_robot))+1],
+                                        sizeof(struct packet_robot));
+                                    robots[robot_id].present = true;
+                                    robots[robot_id].lastUpdate = Utils::Timing::TimeStamp::now();
+                                }
+                            }
                             mutex.unlock();
                         }
                         state = 0;
@@ -116,21 +204,7 @@ namespace RhobanSSL
             mutex.lock();
             if (shouldSend) {
                 shouldSend = false;
-
-                sendPacket(
-                    INSTRUCTION_MASTER,
-                    (uint8_t *)robots,
-                    sizeof(robots)
-                );
-
-            } else if (shouldSendParams) {
-                shouldSendParams = false;
-
-                sendPacket(
-                    INSTRUCTION_PARAMS,
-                    (uint8_t *)&params,
-                    sizeof(params)
-                );
+                sendPacket();
             } else {
                 mutex.unlock();
             }
