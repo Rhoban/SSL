@@ -3,22 +3,6 @@
 #include <cmath>
 #include <unistd.h>
 
-#define TRACKING_ROBOT_SECURITY_TIME .2
-// Comment the following line if you are working with the real robot.
-// If you are working with the grSim simulator, don't comment.
-#define SSL_SIMU
-
-
-#ifdef SSL_SIMU
-    #define ROTATION_VELOCITY_LIMIT -1.0
-    #define TRANSLATION_VELOCITY_LIMIT -1.0
-#else
-    //#define ROTATION_VELOCITY_LIMIT 3.0
-    //#define TRANSLATION_VELOCITY_LIMIT 2.0
-    #define ROTATION_VELOCITY_LIMIT 20.0
-    #define TRANSLATION_VELOCITY_LIMIT 8.0
-#endif
-
 
 
 using namespace Utils::Timing;
@@ -31,16 +15,22 @@ Eigen::Vector2d point_to_eigen( const Point & point ){
 }
 
 
-void limits_velocity( Control & ctrl ){
-    if( TRANSLATION_VELOCITY_LIMIT > 0.0 ){
-        if( ctrl.velocity_translation.norm() > TRANSLATION_VELOCITY_LIMIT ){
+void AI::limits_velocity( Control & ctrl ) const {
+    if( constants.translation_velocity_limit > 0.0 ){
+        if( 
+            ctrl.velocity_translation.norm() > 
+            constants.translation_velocity_limit 
+        ){
             ctrl.velocity_translation = Eigen::Vector2d(0.0, 0.0);
             std::cerr << "WARNING : we reached the "
                 "limit translation velocity !" << std::endl;
         }
     }
-    if( ROTATION_VELOCITY_LIMIT > 0.0 ){
-        if( std::abs( ctrl.velocity_rotation.value() ) > ROTATION_VELOCITY_LIMIT ){
+    if( constants.rotation_velocity_limit > 0.0 ){
+        if( 
+            std::abs( ctrl.velocity_rotation.value() ) > 
+            constants.rotation_velocity_limit 
+        ){
             ctrl.velocity_rotation = 0.0;
             std::cerr << "WARNING : we reached the "
                 "limit rotation velocity !" << std::endl;
@@ -106,43 +96,173 @@ Control AI::update_robot(
     return Control::make_ignored();
 }
 
-AI::AI(Data& data, AICommander *commander)
-: time_sync(0.0), data(data), commander(commander) 
-{
-    running = true;
+void AI::stop_all_robots(){
+    for( auto team : {Vision::Ally, Vision::Opponent} ){
+        for( int k=0; k<Vision::Robots; k++ ){
+            robot_behaviors[team][k] = std::shared_ptr<
+                RobotBehavior
+            >(
+                new DoNothing()
+            );
+        }
+    }
 }
 
 
-void AI::tick()
-{
-    double time = TimeStamp::now().getTimeMS()/1000.0 + time_sync;
+void AI::try_to_synchronize_time(){
+    if( start_waiting_time_for_synchro < 0 ){
+        start_waiting_time_for_synchro = current_time;
+    }
+    if(
+        current_time - start_waiting_time_for_synchro > 
+        waiting_time_for_synchro
+    ){
+        DEBUG("TIME SYNCHRONIZation");
+        time_synchro = true;
+    }
+}
 
-    referee.update(time);
+bool AI::time_is_synchronized() const {
+    return time_synchro;
+}
+                
+void AI::assign_behavior_to_robots(){
+    DEBUG("ASSIGN BEHAVIOR");
     
-    Vision::VisionData visionData;
-    data >> visionData;
+    goalie.init(
+        constants.left_post_position, constants.right_post_position, 
+        constants.waiting_goal_position, 
+        constants.penalty_rayon, constants.robot_radius
+    );
+    goalie.set_translation_pid( 
+        constants.p_translation*2, 2*constants.i_translation, 
+        constants.d_translation
+    );
+    goalie.set_orientation_pid(
+        constants.p_orientation, constants.i_orientation, 
+        constants.d_orientation
+    );
+    goalie.set_limits(
+        constants.translation_velocity_limit,
+        constants.rotation_velocity_limit
+    );
+    
+    shooter.init(
+        constants.goal_center, constants.robot_radius,
+        constants.front_size, constants.radius_ball,
+        constants.translation_velocity,
+        constants.translation_acceleration,
+        constants.angular_velocity,
+        constants.angular_acceleration,
+        constants.calculus_step
+    );
+    shooter.set_translation_pid(
+        constants.p_translation, constants.i_translation, 
+        constants.d_translation
+    );
+    shooter.set_orientation_pid(
+        constants.p_orientation, constants.i_orientation, 
+        constants.d_orientation
+    );
+    shooter.set_limits(
+        constants.translation_velocity_limit,
+        constants.rotation_velocity_limit
+    );
 
-    //DEBUG("##############################################################");
-    //DEBUG("##############################################################");
-    //DEBUG("##############################################################");
-    //DEBUG( visionData );
+}
 
-    //DEBUG("");
-    visionData.checkAssert(time);
-    //DEBUG("");
 
-    if( time_sync == 0 ){
-        if( visionData.older_time() == 0 ){
-            DEBUG("");
-            return;
-        }
-        time_sync = visionData.older_time() - time;
-        DEBUG("time_sync :  " << time_sync);
-        assert( time_sync < 0 ); 
-        return;
-    } 
+AI::AI(Data& data, AICommander *commander): 
+    data(data), commander(commander),
+    time_synchro(false),
+    waiting_time_for_synchro(4),
+    start_waiting_time_for_synchro(-1),
+    constants(game_state.constants), machine(game_state, game_state)
+{
+    running = true;
+   
+    stop_all_robots();
+ 
+    machine
+        .add_state( "init" )
+        .add_state(
+            "time_synchronisation",
+            [&](
+                Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                this->try_to_synchronize_time();
+            }
+        )
+        .add_state( "time_is_synchronized" )
+        .add_edge(
+            "starting_synchronisation", 
+            "init", "time_synchronisation" 
+        )
+        .add_edge(
+            "synchronisation_finalisation", 
+            "time_synchronisation", "time_is_synchronized",
+            [&](
+                const Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                return this->time_is_synchronized();
+            }
+        )
+        .add_init_state( "init" )
+    ;
+    machine
+        .add_state( "wait_for_time_synchro" )
+        .add_state(
+            "update_robot",
+            [&](
+                Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                this->update_robots( );
+            }
+        )
+        .add_edge(
+            "stop_all_robots",
+            "init", "wait_for_time_synchro",
+            [&](
+                const Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                return true;
+            },
+            [&](
+                Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                this->stop_all_robots();   
+            }
+        )
+        .add_edge(
+            "assign_role_to_robot",
+            "wait_for_time_synchro", "update_robot",
+            [&](
+                const Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                return machine.is_active( "time_is_synchronized" );
+            },
+            [&](
+                Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                this->assign_behavior_to_robots();
+            }
+        )
+    ;
+    machine.start();
 
-    game_state.update( visionData );
+    machine.export_to_file("machine.dot");
+}
+
+
+void AI::update_robots( ){
+    double time =  this->current_time;
    
     #ifdef SSL_SIMU
         int goalie_id = 5; 
@@ -171,111 +291,9 @@ void AI::tick()
     commander->flush();
 }
 
-void AI::run()
-{
+void AI::run(){
     double period = 1/100.0;    // 100 hz
     auto lastTick = TimeStamp::now();
-
-
-    double robot_radius = 0.09;
-    double radius_ball = 0.04275/2.0;
-    double translation_velocity_limit = TRANSLATION_VELOCITY_LIMIT;
-    double rotation_velocity_limit = ROTATION_VELOCITY_LIMIT;
-
-    #ifdef SSL_SIMU
-        //DEBUG("SIMULATION MODE ACTIVATED");
-        // SSL SIMUL
-        
-        double front_size = .06;
-        
-        Eigen::Vector2d left_post_position( -4.5, -0.5 );
-        Eigen::Vector2d right_post_position( -4.50, 0.5 );
-        Eigen::Vector2d goal_center = (
-            left_post_position + right_post_position
-        )/2;
-        Eigen::Vector2d waiting_goal_position(
-            goal_center + Eigen::Vector2d(0.0, 0.0)
-        );
-        // PID for translation
-        double p_translation = 0.01; 
-        double i_translation = .0;
-        double d_translation = .0;
-        // PID for orientation
-        double p_orientation = 0.01;
-        double i_orientation = 0.0;
-        double d_orientation = 0.0;
-
-        double translation_velocity = 3;
-        double translation_acceleration = 12.0;
-        double angular_velocity = 2.0*M_PI;  
-        double angular_acceleration = 8*M_PI;
-
-        double calculus_step = 0.0001;
-        enable_kicking = false;
-
-        double penalty_rayon = 1.0; // penalty rayon for the goalie
-    #else
-        DEBUG("REAL MODE ACTIVATED");
-        // SSL QUALIF
-        Eigen::Vector2d left_post_position( 0., -0.29 );
-        Eigen::Vector2d right_post_position( 0., 0.29 );
-        Eigen::Vector2d goal_center = (
-            left_post_position + right_post_position
-        )/2;
-        Eigen::Vector2d waiting_goal_position(
-            goal_center + Eigen::Vector2d(0.3, 0.0)
-        );
-        // PID for translation
-        double p_translation = 0.02; 
-        double i_translation = .01;
-        double d_translation = .0;
-        // PID for orientation
-        double p_orientation = 0.02;
-        double i_orientation = 0.001;
-        double d_orientation = 0.0;
-
-        double translation_velocity = 0.5;
-        double translation_acceleration = 1.;
-        double angular_velocity = 1.0;  
-        double angular_acceleration = 5.;
-        double calculus_step = 0.0001;
-        enable_kicking = true;
-
-        double penalty_rayon = 10.0; // For the goalie
-    #endif
-    goalie.init(   
-        left_post_position, right_post_position, 
-        waiting_goal_position, 
-        penalty_rayon, robot_radius
-    );
-    goalie.set_translation_pid( 
-        p_translation*2, 2*i_translation, d_translation
-    );
-    goalie.set_orientation_pid(
-        p_orientation, i_orientation, d_orientation
-    );
-    goalie.set_limits(
-        TRANSLATION_VELOCITY_LIMIT, ROTATION_VELOCITY_LIMIT 
-    );
-    
-    shooter.init(
-        goal_center, robot_radius,
-        front_size, radius_ball,
-        translation_velocity,
-        translation_acceleration,
-        angular_velocity,
-        angular_acceleration,
-        calculus_step
-    );
-    shooter.set_translation_pid(
-        p_translation, i_translation, d_translation
-    );
-    shooter.set_orientation_pid(
-        p_orientation, i_orientation, d_orientation
-    );
-    shooter.set_limits(
-        TRANSLATION_VELOCITY_LIMIT, ROTATION_VELOCITY_LIMIT 
-    );
 
     while (running) {
         auto now = TimeStamp::now();
@@ -285,7 +303,22 @@ void AI::run()
             usleep(round(toSleep*1000000));
         }
         lastTick = TimeStamp::now();
-        tick();
+
+        current_time = TimeStamp::now().getTimeMS()/1000.0;
+
+        data >> visionData;
+
+        //DEBUG( visionData );
+
+        //DEBUG("");
+        visionData.checkAssert(current_time);
+        //DEBUG("");
+        
+        game_state.update( visionData );
+        
+        referee.update(current_time);
+
+        machine.run( );
     }
 }
 

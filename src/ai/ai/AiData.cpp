@@ -72,4 +72,75 @@ namespace Ai {
         return vision_data.isOk(); 
     }
 
+    void Constants::init(){
+        robot_radius = 0.09;
+        radius_ball = 0.04275/2.0;
+        translation_velocity_limit = TRANSLATION_VELOCITY_LIMIT;
+        rotation_velocity_limit = ROTATION_VELOCITY_LIMIT;
+        #ifdef SSL_SIMU
+            DEBUG("SIMULATION MODE ACTIVATED");
+            // SSL SIMUL
+            
+            front_size = .06;
+            
+            left_post_position = Eigen::Vector2d( -4.5, -0.5 );
+            right_post_position = Eigen::Vector2d( -4.50, 0.5 );
+            goal_center = (
+                left_post_position + right_post_position
+            )/2;
+            waiting_goal_position = (
+                goal_center + Eigen::Vector2d(0.0, 0.0)
+            );
+            // PID for translation
+            p_translation = 0.01; 
+            i_translation = .0;
+            d_translation = .0;
+            // PID for orientation
+            p_orientation = 0.01;
+            i_orientation = 0.0;
+            d_orientation = 0.0;
+
+            translation_velocity = 3;
+            translation_acceleration = 12.0;
+            angular_velocity = 2.0*M_PI;  
+            angular_acceleration = 8*M_PI;
+
+            calculus_step = 0.0001;
+            enable_kicking = false;
+
+            penalty_rayon = 1.0; // penalty rayon for the goalie
+        #else
+            DEBUG("REAL MODE ACTIVATED");
+            // SSL QUALIF
+
+            front_size = .06;
+
+            left_post_position = Eigen::Vector2d( 0., -0.29 );
+            right_post_position = Eigen::Vector2d( 0., 0.29 );
+            goal_center = (
+                left_post_position + right_post_position
+            )/2;
+            waiting_goal_position = (
+                goal_center + Eigen::Vector2d(0.3, 0.0)
+            );
+            // PID for translation
+            p_translation = 0.02; 
+            i_translation = .01;
+            d_translation = .0;
+            // PID for orientation
+            p_orientation = 0.02;
+            i_orientation = 0.001;
+            d_orientation = 0.0;
+
+            translation_velocity = 0.5;
+            translation_acceleration = 1.;
+            angular_velocity = 1.0;  
+            angular_acceleration = 5.;
+            calculus_step = 0.0001;
+            enable_kicking = true;
+
+            penalty_rayon = 10.0; // For the goalie
+        #endif
+    }
+ 
 } } //Namespace

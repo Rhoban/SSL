@@ -3,7 +3,7 @@
 namespace RhobanSSL {
 
 Control::Control():
-    kick(false), active(true), ignore(false)
+    PidControl(), kick(false), active(true), ignore(false)
 { }
 
 
@@ -276,6 +276,19 @@ Control Shooter::control() const {
 
     return ctrl;
 }
+
+
+DoNothing::DoNothing(){ }
+
+void DoNothing::update(
+    double time, 
+    const Ai::Robot & robot, const Ai::Ball & ball
+){ }
+
+Control DoNothing::control() const {
+    return Control();
+}
+
 
 Eigen::Vector2d Translation_for_shooting::operator()(double u) const {
     if( u <= 0.0 ){

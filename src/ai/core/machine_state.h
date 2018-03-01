@@ -8,6 +8,7 @@
 #include <debug.h>
 #include <memory>
 #include <set>
+#include <fstream>
 
 namespace machine_state {
 
@@ -301,16 +302,17 @@ class MachineState {
         }
 
     public:
-        void add_edge( std::shared_ptr<Edge_t> edge ){
+        MachineState& add_edge( std::shared_ptr<Edge_t> edge ){
             assert( edges.find(edge->name()) == edges.end() );
             assert( states.find(edge->origin()) != states.end() );
             assert( states.find(edge->end()) != states.end() );
             
             adjacence[edge->origin()].push_back( edge->name() );
             edges[edge->name()] = edge;
+            return *this;
         }
 
-        void add_edge(
+        MachineState& add_edge(
             const ID & id, const ID & origin, const ID & end,
             std::function<
                 bool (
@@ -331,7 +333,7 @@ class MachineState {
                 unsigned int run_number, unsigned int atomic_run_number
             ){ return ; }
         ){
-            add_edge(
+            return add_edge(
                 std::shared_ptr< AnonymousEdge<ID, EDGE_DATA> >(
                     new AnonymousEdge<ID, EDGE_DATA>(
                         id, origin, end,
@@ -341,15 +343,16 @@ class MachineState {
             );
         }
 
-        void add_state( std::shared_ptr<State_t> && state ){
+        MachineState& add_state( std::shared_ptr<State_t> && state ){
             assert( states.find(state->name()) == states.end() );
             assert( adjacence.find(state->name()) == adjacence.end() );
 
             adjacence[state->name()] = std::list<ID>();
             states[state->name()] = state;
+            return *this;
         }
 
-        void add_state(
+         MachineState& add_state(
             const ID & id,  
             std::function<
                 void (
@@ -361,17 +364,18 @@ class MachineState {
                 unsigned int run_number, unsigned int atomic_run_number
             ){ return ; }
         ){
-            add_state(
+            return add_state(
                 std::shared_ptr< AnonymousState<ID, STATE_DATA> >(
                     new AnonymousState<ID, STATE_DATA>( id, run_fct )
                 )
             );
         }
 
-        void register_follower(
+        MachineState& register_follower(
             MachineStateFollower<STATE_DATA, EDGE_DATA> & follower
         ){
             followers.push_back( &follower );
+            return *this;
         }
 
         MachineState( STATE_DATA & state_data, EDGE_DATA & edge_data ):
@@ -381,15 +385,17 @@ class MachineState {
             atomic_run_number(CLEAR_ATOMIC_RUN_NUMBER)
         { } 
 
-        void add_init_state( const ID & state_name ){
+        MachineState& add_init_state( const ID & state_name ){
             assert( states.find(state_name) != states.end() );
             init_states_set.insert( state_name );
+            return *this;
         }
 
-        void add_init_state( const std::set<ID> & set_of_state_ids ){
+        MachineState& add_init_state( const std::set<ID> & set_of_state_ids ){
             for( const ID & id : set_of_state_ids ){
                 add_init_state( id );
             }
+            return *this;
         }
 
         unsigned int edge_number() const {
@@ -455,9 +461,9 @@ class MachineState {
                 result << "\n v" << cpt 
                     << " [label=\"" << id << "\"";
                 if( is_initial(id) ){
-                    result << " shape=\"doublecircle\"";
+                    result << " shape=\"doubleoctagon\"";
                 }else{
-                    result << " shape=\"circle\"";
+                    result << " shape=\"oval\"";
                 }
                 if( is_active(id) ){
                     result << "style=\"filled\" fillcolor=\"gold\"";
@@ -476,6 +482,14 @@ class MachineState {
             result << std::endl << "}";
             result << std::endl;
             return std::move(result.str());
+        }
+
+        bool export_to_file( const std::string & path ){
+            std::ofstream file(path);
+            if( ! file.is_open() ) return false;
+            file << to_dot();
+            file.close();
+            return true;    
         }
 
         bool is_active( const ID & state ) const {

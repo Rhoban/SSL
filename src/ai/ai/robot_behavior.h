@@ -48,6 +48,20 @@ class RobotBehavior {
 };
 
 
+class DoNothing : public RobotBehavior {
+    public:
+        DoNothing(); 
+
+        void update(
+            double time, 
+            const Ai::Robot & robot, const Ai::Ball & ball
+        );
+
+        Control control() const;
+};
+
+
+
 class Goalie : public RobotBehavior {
     private:
         Eigen::Vector2d left_post_position; 
