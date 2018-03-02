@@ -15,6 +15,11 @@ Control::Control(const PidControl & c):
     PidControl(c), kick(false), active(true), ignore(ignore)
 { }
 
+std::ostream& operator << ( std::ostream & out, const Control& control  ){
+    out << "{ctrl : " << static_cast<PidControl>(control)
+        << ", kick : " << control.kick << ", acitve : " << control.active << ", ignore : " << control.ignore <<"}";
+    return out;
+}
 
 Control Control::make_null(){
     return Control(false, true, false);
@@ -28,7 +33,7 @@ Control Control::make_ignored(){
     return Control(false, false, true);
 }
 
-double angle( Eigen::Vector2d direction ){
+double vec2angle( Eigen::Vector2d direction ){
     double norm = direction.norm();
     if( norm == 0.0 ) return 0.0;
     direction /= norm;
@@ -63,8 +68,85 @@ void RobotBehavior::update(
     );
     this->robot_orientation = robot.get_movement().angular_position(
         time
-    ).value();
+    );
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PositionFollower::PositionFollower(double time, double dt):
+    position(0.0, 0.0), angle(0.0)
+{
+    robot_control.init_time( time, dt );
+} 
+
+void PositionFollower::set_following_position(
+    const Eigen::Vector2d & position_to_follow,
+    const ContinuousAngle & angle
+){
+    this->position = position_to_follow;
+    this->angle = angle;
+}
+
+void PositionFollower::update(
+    double time,
+    const Ai::Robot & robot,
+    const Ai::Ball & ball
+) {
+    RobotBehavior::update(time, robot, ball);
+
+    robot_control.set_goal( position, angle );
+    robot_control.update( time );
+}
+
+Control PositionFollower::control() const {
+    Control ctrl = robot_control.relative_control_in_robot_frame(
+        robot_position, robot_orientation
+    );
+    return ctrl;
+}
+
+void PositionFollower::set_translation_pid( double kp, double ki, double kd ){
+    robot_control.set_translation_pid( kp, ki, kd );
+}
+
+void PositionFollower::set_orientation_pid( double kp, double ki, double kd ){
+    robot_control.set_orientation_pid( kp, ki, kd );
+}
+
+void PositionFollower::set_limits(
+    double translation_velocity_limit,
+    double rotation_velocity_limit
+){
+    robot_control.set_limits(
+        translation_velocity_limit, rotation_velocity_limit
+    );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -91,15 +173,15 @@ Eigen::Vector2d Goalie::calculate_goal_position(
 
 
 Goalie::Goalie(
-){ } 
-
-void Goalie::init(
     const Eigen::Vector2d & left_post_position,
     const Eigen::Vector2d & right_post_position,
     const Eigen::Vector2d & waiting_goal_position,
     double penalty_rayon,
-    double goalie_radius
-){
+    double goalie_radius,
+    double time, double dt
+):
+    PositionFollower(time, dt)
+{
     this->left_post_position = left_post_position;
     this->right_post_position = right_post_position;
     this->waiting_goal_position = waiting_goal_position;
@@ -112,11 +194,8 @@ void Goalie::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
-) {
-    RobotBehavior::update(time, robot, ball);
-
-    double goal_rotation = angle(ball_position - robot_position);
-
+){
+    double goal_rotation = vec2angle(ball_position - robot_position);
 
     Eigen::Vector2d defender_pos = calculate_goal_position(
         ball_position, right_post_position, left_post_position,
@@ -127,38 +206,38 @@ void Goalie::update(
         defender_pos = waiting_goal_position;
     }
 
-    robot_control.set_goal( defender_pos, goal_rotation );
-    robot_control.update( time );
+    this->set_following_position(defender_pos, goal_rotation );
+
+    PositionFollower::update( time, robot, ball);   
 }
 
-Control Goalie::control() const {
-    Control ctrl = robot_control.relative_control_in_robot_frame(
-        robot_position, robot_orientation
-    );
 
-    return ctrl;
-}
 
-void Goalie::set_translation_pid( double kp, double ki, double kd ){
-    robot_control.set_translation_pid( kp, ki, kd );
-}
 
-void Goalie::set_orientation_pid( double kp, double ki, double kd ){
-    robot_control.set_orientation_pid( kp, ki, kd );
-}
 
-void Goalie::set_limits(
-    double translation_velocity_limit,
-    double rotation_velocity_limit
+
+
+Shooter::Shooter(
+    const Eigen::Vector2d & goal_center, double robot_radius,
+    double front_size, double radius_ball,
+    double translation_velocity,
+    double translation_acceleration,
+    double angular_velocity,
+    double angular_acceleration,
+    double calculus_step,
+    double time, double dt
 ){
-    robot_control.set_limits(
-        translation_velocity_limit, rotation_velocity_limit
-    );
-}
-
-
-
-Shooter::Shooter(){ } 
+    this->goal_center = goal_center;
+    this->robot_radius = robot_radius;
+    this->translation_velocity = translation_velocity;
+    this->translation_acceleration = translation_acceleration;
+    this->angular_velocity = angular_velocity;
+    this->angular_acceleration = angular_acceleration;
+    this->calculus_step = calculus_step;
+    this->front_size = front_size;
+    this->radius_ball = radius_ball;
+    robot_control.init_time( time, dt );
+} 
 
 void Shooter::set_translation_pid( double kp, double ki, double kd ){
     robot_control.set_translation_pid( kp, ki, kd );
@@ -177,31 +256,11 @@ void Shooter::set_limits(
     );
 }
 
-void Shooter::init(
-    const Eigen::Vector2d & goal_center, double robot_radius,
-    double front_size, double radius_ball,
-    double translation_velocity,
-    double translation_acceleration,
-    double angular_velocity,
-    double angular_acceleration,
-    double calculus_step
-){
-    this->goal_center = goal_center;
-    this->robot_radius = robot_radius;
-    this->translation_velocity = translation_velocity;
-    this->translation_acceleration = translation_acceleration;
-    this->angular_velocity = angular_velocity;
-    this->angular_acceleration = angular_acceleration;
-    this->calculus_step = calculus_step;
-    this->front_size = front_size;
-    this->radius_ball = radius_ball;
-}
-
 void Shooter::go_to_shoot(
     const Eigen::Vector2d & ball_position, 
     const Eigen::Vector2d & robot_position,
     double robot_orientation,
-    double time
+    double time, double current_dt
 ){
     shooting_translation.position_robot = robot_position;
     shooting_translation.position_ball = ball_position;
@@ -210,7 +269,7 @@ void Shooter::go_to_shoot(
     shooting_translation.radius_ball = radius_ball;
 
     shooting_rotation.orientation = robot_orientation;
-    shooting_rotation.end = angle( goal_center - ball_position  );    
+    shooting_rotation.end = vec2angle( goal_center - ball_position  );    
 
     robot_control.set_movement(
         shooting_translation,
@@ -219,7 +278,7 @@ void Shooter::go_to_shoot(
         shooting_rotation,
         angular_velocity,
         angular_acceleration,
-        calculus_step, time 
+        calculus_step, time, current_dt
     );
 }
 
@@ -227,7 +286,7 @@ void Shooter::go_home(
     const Eigen::Vector2d & ball_position, 
     const Eigen::Vector2d & robot_position,
     double robot_orientation,
-    double time
+    double time, double current_dt
 ){
     home_translation.position_robot = robot_position;
     home_translation.position_home = ball_position;
@@ -243,7 +302,7 @@ void Shooter::go_home(
         shooting_rotation,
         angular_velocity,
         angular_acceleration,
-        calculus_step, time 
+        calculus_step, time, current_dt
     );
 }
 
@@ -257,7 +316,6 @@ void Shooter::update(
 
     if( birthday < 0 ){
         birthday = lastUpdate;
-        go_to_shoot( ball_position, robot_position, robot_orientation, time );
     }
 
     robot_control.update( time );
@@ -348,7 +406,7 @@ double Rotation_for_home::operator()(double u) const {
     if( u >= 1.0 ){
         u = 1.0;
     }
-    double target = angle( position_ball - position_robot );
+    double target = vec2angle( position_ball - position_robot );
     //return  0.0*u + orientation;
     return  (1-u)*orientation + u*target;
 }

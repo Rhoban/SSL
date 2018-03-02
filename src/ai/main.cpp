@@ -45,21 +45,29 @@ int main(int argc, char **argv)
     );
 
     // AI Commander to control the robots
-    AICommander *commander;
+    AICommander *commander_ally;
+    AICommander *commander_opponent;
     if (simulation.getValue()) {
-        commander = new AICommanderSimulation(yellow.getValue());
+        commander_ally = new AICommanderSimulation(yellow.getValue());
+        commander_opponent = new AICommanderSimulation(! yellow.getValue());
     } else {
         // XXX: To test!!
-        commander = new AICommanderReal(yellow.getValue());
+        commander_ally = new AICommanderReal(yellow.getValue());
+        //commander_oponnent = new AICommanderReal(!yellow.getValue());
     }
 
     if (em.getValue()) {
-        commander->stopAll();
-        commander->flush();
+        commander_ally->stopAll();
+        commander_ally->flush();
+        if (simulation.getValue()) {
+            commander_opponent->stopAll();
+            commander_opponent->flush();
+        }
     } else {
-        ai = new AI(data, commander);
+        ai = new AI(data, commander_ally, commander_opponent);
         ai->run();
         delete ai;
     }
-    delete commander;
+    delete commander_ally;
+    delete commander_opponent;
 }

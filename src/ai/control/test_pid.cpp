@@ -55,7 +55,7 @@ void test_use_cases(){
         controller.set_orientation_pid( 0.0, 0.0, 0.0 );
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
 
         assert( controller.get_dt() == 10.0 );
@@ -77,7 +77,7 @@ void test_is_static(){
         controller.set_orientation_pid( 1.0, 1.0, 1.0 );
         controller.set_translation_pid( 1.0, 1.0, 1.0 );
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
 
         assert( controller.is_static() );
@@ -117,7 +117,7 @@ void test_get_time(){
         controller.set_orientation_pid( 0.0, 0.0, 0.0 );
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         
         controller.update( 20.0 );
         assert( controller.get_time() == 10.0 );
@@ -140,7 +140,7 @@ void test_get_dt(){
         controller.set_orientation_pid( 0.0, 0.0, 0.0 );
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         
         controller.update( 20.0 );
         assert( controller.get_dt() == 10.0 );
@@ -163,7 +163,7 @@ void test_null_pid(){
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
         controller.set_static(false);
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
         PidControl control = controller.absolute_control_in_absolute_frame(
@@ -193,7 +193,7 @@ void test_null_pid(){
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
         controller.set_static(false);
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
         PidControl control = controller.absolute_control_in_absolute_frame(
@@ -233,7 +233,7 @@ void test_pid(){
         controller.set_translation_pid( kp, ki, kd );
         controller.set_static(false);
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
         Eigen::Vector2d current_position(1.0, 2.0);
@@ -289,7 +289,7 @@ void test_pid(){
         controller.set_translation_pid( kp, ki, kd );
         controller.set_static(false);
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
         Eigen::Vector2d current_position(1.0, 2.0);
@@ -345,7 +345,7 @@ void test_pid(){
         controller.set_translation_pid( kp, ki, kd );
         controller.set_static(false);
         
-        controller.init_time( 10.0 );
+        controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
         Eigen::Vector2d current_position(1.0, 2.0);

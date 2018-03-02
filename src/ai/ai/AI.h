@@ -9,11 +9,22 @@
 
 namespace RhobanSSL
 {
+    class TeamId {
+        public:
+        static const int goalie_id; 
+        static const int shooter_id;
+        static const int follower_id; 
+    };
+
     class AI
     {
     public:
 
-        AI(Data & data, AICommander *commander);
+        AI(
+            Data & data, 
+            AICommander *commander_yellow,
+            AICommander *commander_blue
+        );
 
         void run();
         void stop();
@@ -33,7 +44,8 @@ namespace RhobanSSL
 
         bool enable_kicking;
 
-        AICommander *commander;
+        AICommander *commander_yellow;
+        AICommander *commander_blue;
 
 
         std::map<
@@ -52,11 +64,9 @@ namespace RhobanSSL
         void try_to_synchronize_time();
         bool time_is_synchronized() const;
         double current_time;
+        double current_dt;
 
         Data & data;
-        Goalie goalie;
-        Shooter shooter;
-
         Referee referee;
         
         double max_velocity_t;
@@ -69,7 +79,9 @@ namespace RhobanSSL
             double time, Ai::Robot & robot, Ai::Ball & ball
         );
 
-        void prepare_to_send_control( int robot_id, Control control );
+        void prepare_to_send_control( 
+            Vision::Team team, int robot_id, Control control
+        );
 
         void limits_velocity( Control & ctrl ) const ;
 

@@ -14,7 +14,7 @@ class RobotControlWithCurve : public RobotControlWithPid {
             double translation_velocity, double translation_acceleration,
             const std::function<double (double u)> & rotation,
             double angular_velocity, double angular_acceleration, 
-            double calculus_step, double current_time
+            double calculus_step, double current_time, double current_dt
         );
 
         ContinuousAngle goal_orientation( double t ) const;

@@ -21,7 +21,7 @@ struct Control : PidControl {
     static Control make_null();
 };
 
-
+std::ostream& operator << ( std::ostream &, const Control& control  );
 
 class RobotBehavior {
     protected:
@@ -30,7 +30,7 @@ class RobotBehavior {
         double lastUpdate; 
 
         Eigen::Vector2d robot_position;
-        double robot_orientation;
+        ContinuousAngle robot_orientation;
         Eigen::Vector2d ball_position;
 
     public:
@@ -52,25 +52,59 @@ class DoNothing : public RobotBehavior {
     public:
         DoNothing(); 
 
-        void update(
+        virtual void update(
             double time, 
             const Ai::Robot & robot, const Ai::Ball & ball
         );
 
-        Control control() const;
+        virtual Control control() const;
+};
+
+
+class PositionFollower : public RobotBehavior {
+    private:
+        Eigen::Vector2d position;
+        ContinuousAngle angle;
+
+        RobotControlWithPositionFollowing robot_control;
+
+    public:
+        PositionFollower( double time, double dt ); 
+
+        void set_translation_pid( double kp, double ki, double kd );
+        void set_orientation_pid( double kp, double ki, double kd );
+
+        void set_limits(
+            double translation_velocity_limit,
+            double rotation_velocity_limit
+        );
+
+        void set_following_position(
+            const Eigen::Vector2d & position_to_follow,
+            const ContinuousAngle & angle
+        );
+
+        virtual void update(
+            double time, 
+            const Ai::Robot & robot, const Ai::Ball & ball
+        );
+
+        virtual Control control() const;
 };
 
 
 
-class Goalie : public RobotBehavior {
+
+
+class Goalie : public PositionFollower {
     private:
+        PositionFollower follower();
+
         Eigen::Vector2d left_post_position; 
         Eigen::Vector2d right_post_position;
         Eigen::Vector2d goal_center;
         Eigen::Vector2d waiting_goal_position;
 
-        RobotControlWithPositionFollowing robot_control;
- 
         double goalie_radius;
         double penalty_rayon;
 
@@ -82,30 +116,20 @@ class Goalie : public RobotBehavior {
         );
 
     public:
-        Goalie(); 
-
-        void set_translation_pid( double kp, double ki, double kd );
-        void set_orientation_pid( double kp, double ki, double kd );
-
-        void set_limits(
-            double translation_velocity_limit,
-            double rotation_velocity_limit
-        );
-
-        void init(
+        Goalie(
             const Eigen::Vector2d & left_post_position,
             const Eigen::Vector2d & right_post_position,
             const Eigen::Vector2d & waiting_goal_position,
             double penalty_rayon,
-            double goalie_radius
+            double goalie_radius,
+            double time, double dt
         );
 
-        void update(
-            double time, 
-            const Ai::Robot & robot, const Ai::Ball & ball
+        virtual void update(
+            double time,
+            const Ai::Robot & robot,
+            const Ai::Ball & ball
         );
-
-        Control control() const;
 };
 
 
@@ -171,7 +195,16 @@ class Shooter : public RobotBehavior {
         Rotation_for_home home_rotation;
 
     public:
-        Shooter(); 
+        Shooter(
+            const Eigen::Vector2d & goal_center, double robot_radius,
+            double front_size, double radius_ball,
+            double translation_velocity,
+            double translation_acceleration,
+            double angular_velocity,
+            double angular_acceleration,
+            double calculus_step,
+            double time, double dt
+        ); 
 
         void set_translation_pid( double kp, double ki, double kd );
         void set_orientation_pid( double kp, double ki, double kd );
@@ -181,17 +214,7 @@ class Shooter : public RobotBehavior {
             double rotation_velocity_limit
         );
 
-        void init(
-            const Eigen::Vector2d & goal_center, double robot_radius,
-            double front_size, double radius_ball,
-            double translation_velocity,
-            double translation_acceleration,
-            double angular_velocity,
-            double angular_acceleration,
-            double calculus_step
-        );
-
-        void update(
+        virtual void update(
             double time,
             const Ai::Robot & robot, const Ai::Ball & ball
         );
@@ -200,18 +223,18 @@ class Shooter : public RobotBehavior {
             const Eigen::Vector2d & ball_position, 
             const Eigen::Vector2d & robot_position,
             double robot_orientation,
-            double time
+            double time, double current_dt
         );
         void go_home(
             const Eigen::Vector2d & ball_position, 
             const Eigen::Vector2d & robot_position,
             double robot_orientation,
-            double time
+            double time, double current_dt
         );
 
         bool is_static() const;
 
-        Control control() const;
+        virtual Control control() const;
 
 
 };

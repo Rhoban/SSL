@@ -5,7 +5,7 @@ void RobotControlWithCurve::set_movement(
     double translation_velocity, double translation_acceleration,
     const std::function<double (double u)> & rotation,
     double angular_velocity, double angular_acceleration, 
-    double calculus_step, double current_time
+    double calculus_step, double current_time, double current_dt
 ){
     curve = CurveForRobot(
         translation,
@@ -16,7 +16,7 @@ void RobotControlWithCurve::set_movement(
         angular_acceleration, 
         calculus_step
     );
-    init_time(current_time);
+    init_time(current_time, current_dt);
     set_static(false);
 }
 

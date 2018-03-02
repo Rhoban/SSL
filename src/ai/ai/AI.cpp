@@ -10,6 +10,18 @@ using namespace Utils::Timing;
 namespace RhobanSSL
 {
 
+
+#ifdef SSL_SIMU
+const int TeamId::goalie_id = 5; 
+const int TeamId::shooter_id = 0;
+const int TeamId::follower_id = 3;
+#else
+const int TeamId::goalie_id = 8; 
+const int TeamId::shooter_id = 5;
+const int TeamId::follower_id = 3;
+#endif
+
+
 Eigen::Vector2d point_to_eigen( const Point & point ){
     return Eigen::Vector2d( point.getX(), point.getY() );
 }
@@ -38,7 +50,9 @@ void AI::limits_velocity( Control & ctrl ) const {
     }
 }
 
-void AI::prepare_to_send_control( int robot_id, Control ctrl ){
+void AI::prepare_to_send_control(
+    Vision::Team team, int robot_id, Control ctrl 
+){
     limits_velocity(ctrl);
 
     #ifdef SSL_SIMU
@@ -47,10 +61,15 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
         double sign_y = -1.0;
     #endif
 
+    AICommander * commander;
+    if( team == Vision::Ally ){
+        commander = commander_yellow;
+    }else{
+        commander = commander_blue;
+    }
     #ifdef SSL_SIMU
     #else
     if( ctrl.kick and enable_kicking ){
-    
         commander->kick();
     }
     #endif
@@ -89,7 +108,8 @@ Control AI::update_robot(
 ){
     if( robot.isOk() ){
         robot_behavior.update(time, robot, ball);
-        return robot_behavior.control();
+        Control ctrl = robot_behavior.control();
+        return ctrl; 
     }else{
         return Control::make_desactived();
     }
@@ -117,7 +137,7 @@ void AI::try_to_synchronize_time(){
         current_time - start_waiting_time_for_synchro > 
         waiting_time_for_synchro
     ){
-        DEBUG("TIME SYNCHRONIZation");
+        DEBUG("TIME SYNCHRONIZATION");
         time_synchro = true;
     }
 }
@@ -128,55 +148,119 @@ bool AI::time_is_synchronized() const {
                 
 void AI::assign_behavior_to_robots(){
     DEBUG("ASSIGN BEHAVIOR");
-    
-    goalie.init(
-        constants.left_post_position, constants.right_post_position, 
-        constants.waiting_goal_position, 
-        constants.penalty_rayon, constants.robot_radius
+
+
+    PositionFollower* follower = new PositionFollower(
+        current_time, current_dt
     );
-    goalie.set_translation_pid( 
+    Vision::Team follower_team = Vision::Opponent;
+    const Ai::Robot & robot_follower = game_state.robots[
+        follower_team
+    ][TeamId::follower_id];
+    Eigen::Vector2d follower_position(
+        robot_follower.get_movement().linear_position(current_time).getX(),
+        robot_follower.get_movement().linear_position(current_time).getY()
+    );
+    follower->set_following_position(
+        follower_position, ContinuousAngle(M_PI/2.0)
+    );
+    follower->set_translation_pid(
         constants.p_translation*2, 2*constants.i_translation, 
         constants.d_translation
     );
-    goalie.set_orientation_pid(
+    follower->set_orientation_pid(
         constants.p_orientation, constants.i_orientation, 
         constants.d_orientation
     );
-    goalie.set_limits(
+    follower->set_limits(
         constants.translation_velocity_limit,
         constants.rotation_velocity_limit
     );
-    
-    shooter.init(
+    robot_behaviors[follower_team][TeamId::follower_id] = std::shared_ptr<
+        RobotBehavior
+    >( follower ); 
+
+    // We create a goalie :    
+    Goalie* goalie = new Goalie(
+        constants.left_post_position, constants.right_post_position, 
+        constants.waiting_goal_position, 
+        constants.penalty_rayon, constants.robot_radius,
+        current_time, current_dt
+    );
+    goalie->set_translation_pid( 
+        constants.p_translation*2, 2*constants.i_translation, 
+        constants.d_translation
+    );
+    goalie->set_orientation_pid(
+        constants.p_orientation, constants.i_orientation, 
+        constants.d_orientation
+    );
+    goalie->set_limits(
+        constants.translation_velocity_limit,
+        constants.rotation_velocity_limit
+    );
+    robot_behaviors[Vision::Ally][TeamId::goalie_id] = std::shared_ptr<
+        RobotBehavior
+    >( goalie ); 
+
+    // We create a shooter :
+    Shooter* shooter = new Shooter(
         constants.goal_center, constants.robot_radius,
         constants.front_size, constants.radius_ball,
         constants.translation_velocity,
         constants.translation_acceleration,
         constants.angular_velocity,
         constants.angular_acceleration,
-        constants.calculus_step
+        constants.calculus_step,
+        current_time, current_dt
     );
-    shooter.set_translation_pid(
+    shooter->set_translation_pid(
         constants.p_translation, constants.i_translation, 
         constants.d_translation
     );
-    shooter.set_orientation_pid(
+    shooter->set_orientation_pid(
         constants.p_orientation, constants.i_orientation, 
         constants.d_orientation
     );
-    shooter.set_limits(
+    shooter->set_limits(
         constants.translation_velocity_limit,
         constants.rotation_velocity_limit
     );
-
+    const Ai::Ball & ball = game_state.ball;
+    Eigen::Vector2d ball_position(
+        ball.get_movement().linear_position(current_time).getX(),
+        ball.get_movement().linear_position(current_time).getY()
+    );
+    const Ai::Robot & robot = game_state.robots[Vision::Ally][TeamId::shooter_id];
+    Eigen::Vector2d robot_position(
+        robot.get_movement().linear_position(current_time).getX(),
+        robot.get_movement().linear_position(current_time).getY()
+    );
+    double robot_orientation(
+        robot.get_movement().angular_position(current_time).value()
+    );
+    shooter->go_to_shoot( 
+        ball_position, robot_position, robot_orientation, 
+        current_time, current_dt 
+    );
+    robot_behaviors[Vision::Ally][TeamId::shooter_id] = std::shared_ptr<
+        RobotBehavior
+    >( shooter ); 
 }
 
 
-AI::AI(Data& data, AICommander *commander): 
-    data(data), commander(commander),
+AI::AI(
+    Data& data, 
+    AICommander *commander_yellow,
+    AICommander *commander_blue
+): 
+    data(data), 
+    commander_yellow(commander_yellow),
+    commander_blue(commander_blue),
     time_synchro(false),
-    waiting_time_for_synchro(4),
+    waiting_time_for_synchro(1.5),
     start_waiting_time_for_synchro(-1),
+    current_dt(0.0),
     constants(game_state.constants), machine(game_state, game_state)
 {
     running = true;
@@ -263,32 +347,24 @@ AI::AI(Data& data, AICommander *commander):
 
 void AI::update_robots( ){
     double time =  this->current_time;
-   
-    #ifdef SSL_SIMU
-        int goalie_id = 5; 
-        int shooter_id = 0;
-    #else
-        int goalie_id = 8; 
-        int shooter_id = 5;
-    #endif
+    Ai::Ball & ball = game_state.ball;
 
-    auto ball = game_state.ball;
+    for( auto team : {Vision::Ally, Vision::Opponent} ){
+        for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
 
-    auto goalie_robot = game_state.robots[Vision::Ally][goalie_id];
-    //DEBUG( "goalie position : " << goalie_robot.position );
-    //DEBUG( "goalie orientation : " << goalie_robot.orientation );
+            Ai::Robot & robot = game_state.robots[team][robot_id];
 
-    Control ctrl_goalie = update_robot( goalie, time, goalie_robot, ball );
-    prepare_to_send_control( goalie_id, ctrl_goalie );
-
-    auto shooter_robot = game_state.robots[Vision::Ally][shooter_id];
-    //DEBUG( "position : " << shooter_robot.position );
-    //DEBUG( "orientation : " << shooter_robot.orientation );
-    
-    Control ctrl_shooter = update_robot( shooter, time, shooter_robot, ball );
-    prepare_to_send_control( shooter_id, ctrl_shooter );
-
-    commander->flush();
+            RobotBehavior & robot_behavior = *( 
+                robot_behaviors[team][robot_id] 
+            );
+            Control ctrl = update_robot( 
+                robot_behavior, time, robot, ball
+            ); 
+            prepare_to_send_control( team, robot_id, ctrl );
+        }
+    }
+    commander_yellow->flush();
+    commander_blue->flush();
 }
 
 void AI::run(){
@@ -304,8 +380,10 @@ void AI::run(){
         }
         lastTick = TimeStamp::now();
 
+        current_dt = current_time;
         current_time = TimeStamp::now().getTimeMS()/1000.0;
-
+        current_dt = current_time - current_dt;
+        
         data >> visionData;
 
         //DEBUG( visionData );

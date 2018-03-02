@@ -17,6 +17,8 @@ struct PidControl {
 
 };
 
+std::ostream& operator << ( std::ostream &, const PidControl& control );
+
 struct PidController {
     double kp_t,ki_t,kd_t;
     double kp_o,ki_o,kd_o;
@@ -27,7 +29,7 @@ struct PidController {
     double time;
     double dt;
 
-    void init_time(double start_time);
+    void init_time(double start_time, double dt);
 
     void update(double current_time);
    
