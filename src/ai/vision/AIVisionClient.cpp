@@ -1,6 +1,6 @@
 #include <iostream>
 #include "AIVisionClient.h"
-#include <tools/debug.h>
+#include <debug.h>
 
 using namespace Utils::Timing;
 
@@ -78,7 +78,7 @@ namespace RhobanSSL
         Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
         if (robotFrame.has_orientation()) {
-            Angle orientation(robotFrame.orientation());
+            Angle orientation(rad2deg( robotFrame.orientation() ));
             robot.update( detection.t_capture(), position, orientation );
         }else{
             robot.update( detection.t_capture(), position );

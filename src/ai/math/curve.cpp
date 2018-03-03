@@ -1,5 +1,6 @@
 #include <assert.h>
 #include "curve.h"
+#include <debug.h>
 
 DifferentiableVelocityConsign::DifferentiableVelocityConsign(
     double distance, 
@@ -216,7 +217,8 @@ double RenormalizedCurve::error_position_consign() const {
 }
 
 double RenormalizedCurve::time( double length ) const {
-    assert( 0<= length and length <= this->curve_length );
+    assert( 0 <= length );
+    assert( length <= this->curve_length );
     double res = 0.0;
     double t;
     

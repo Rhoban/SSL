@@ -1,0 +1,26 @@
+* Forground Tasks
+
+- Improve curves calculus by adding generators
+- Solve time problem in control calculus. If loop need longer time, then 
+  control fail to send good velocity, and robot go slower. 
+- PID Unit Test
+- Curve Unit test
+- filter packet coming from vision
+- write a README documentation
+- refactor AI
+- Wrtie strategy class
+- refactor thread uses with a design pattern using Queue
+- Make Time Synchronisation
+- Add Continuous integration platfrorm
+- Add kick command for simulation
+- Curve with non null velocity initial vector
+- Add rotation and translation curve
+- Avoiding robot algorithme with graphe and tangents
+- Refactor geometry
+- Add a vector2d class in geometry
+- Add file configuration
+
+* Write documentation
+
+- Ajouter test unitaitre pour pid, avec initilaisation dt à >0
+- Mettre de la documentation pour l'initialisation de dt dans pid

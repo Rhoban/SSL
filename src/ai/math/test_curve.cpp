@@ -1,4 +1,4 @@
-#include <tools/debug.h>
+#include <debug.h>
 #include "curve.h"
 
 #include <iostream>
@@ -188,6 +188,8 @@ struct Translation {
     Eigen::Vector2d operator()(double u) const {
         return  position + Eigen::Vector2d(u, u*u);
     };
+
+    Translation():position(0.0,0.0){};
 };
 
 
@@ -223,7 +225,6 @@ void test_use_cases(){
         );
         assert( eq( curve.max_time(), 9, 0.01 ) );
     }
-
     {
         double dt = 0.01;
         double dt_micro = dt/100;
@@ -252,7 +253,6 @@ void test_use_cases(){
         double max_acceleration = 20.0;
         double max_velocity = 1.0;
         ContinuousVelocityConsign consign(crv.size(), max_velocity, max_acceleration);
-
         RenormalizedCurve curve(
             crv,
             consign,
