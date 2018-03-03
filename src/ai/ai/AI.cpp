@@ -2,7 +2,10 @@
 #include <timing/TimeStamp.hpp>
 #include <cmath>
 #include <unistd.h>
-
+#include "robot_behavior/position_follower.h"
+#include "robot_behavior/goalie.h"
+#include "robot_behavior/shooter.h"
+#include "robot_behavior/do_nothing.h"
 
 
 using namespace Utils::Timing;

@@ -27,7 +27,11 @@ set (SOURCES
     com/AICommander.cpp
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp
-    ai/robot_behavior.cpp
+    ai/robot_behavior/goalie.cpp
+    ai/robot_behavior/position_follower.cpp
+    ai/robot_behavior/shooter.cpp
+    ai/robot_behavior/robot_behavior.cpp
+    ai/robot_behavior/do_nothing.cpp
     ai/AI.cpp
     ai/AiData.cpp
     control/robot_control.cpp

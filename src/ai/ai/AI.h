@@ -2,7 +2,7 @@
 
 #include <com/AICommander.h>
 #include <vision/AIVisionClient.h>
-#include "robot_behavior.h"
+#include "robot_behavior/robot_behavior.h"
 #include "AiData.h"
 #include <referee/Referee.h>
 #include <core/machine_state.h>

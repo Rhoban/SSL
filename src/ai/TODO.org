@@ -1,6 +1,5 @@
 * Forground Tasks
 
-- Refactor goalie
 - PID Unit Test
 - Curve Unit test
 - filter packet coming from vision
