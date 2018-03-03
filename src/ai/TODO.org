@@ -1,5 +1,8 @@
 * Forground Tasks
 
+- Improve curves calculus by adding generators
+- Solve time problem in control calculus. If loop need longer time, then 
+  control fail to send good velocity, and robot go slower. 
 - PID Unit Test
 - Curve Unit test
 - filter packet coming from vision
@@ -11,7 +14,6 @@
 - Add Continuous integration platfrorm
 - Add kick command for simulation
 - Curve with non null velocity initial vector
-- Improve curves
 - Add rotation and translation curve
 - Avoiding robot algorithme with graphe and tangents
 - Refactor geometry
