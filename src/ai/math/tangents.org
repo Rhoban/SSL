@@ -1,0 +1,79 @@
+#+TITLE: Give tangent calculus for some objects
+
+# To generate the html documentation with mathemtics formula, execute the following command :
+# emacs FILE.org -batch -f org-html-export-to-html --kill
+
+#+OPTIONS: tex:dvipng
+
+
+* Tangents of Cirles
+
+** Tangent of two circles 
+
+Let $A$ and $B$ be two centers of two circles $\mathcal{C}_A$ and 
+$\mathcal{C}_B$ such that $\mathcal{C}_A$ do not overlap $\matchal{C}_B$.
+
+Let $r_A$ and $r_B$ be the two radius of $\mathcal{C}_A$ and $\mathcal{C}_B$ such that $\mathcal{C}_A$ do not overlap $\matchal{C}_B$. 
+
+Let $M \in \mathca{C}_A$ and $N \in \mathcal{C}_B$ be two points such that 
+the line $(MN)$ is tangent to the circles $\mathcal{C}_A$ and $\mathcal{C}_B$.
+
+As the line $(MN)$ is tangent to $\mathcal{C}_A$ and $\mathcal{C}_B$, then 
+$\overrightarrow{AM}$ and $\overrightarrow{BN}$ are colinear.
+
+Let $\overrightarrow{u} = \frac{\overrightarrow{MN}}{ \|\overrightarrow{MN}\| }$, then,
+$$
+M  = A + r_A \cdot \overrightarrow{u}
+\text{ and }
+N  = B + \epsilon \cdot r_B \overrightarrow{u}
+$$
+where
+$$
+\epsilon = \left\{\begin{array}{ll}
+    -1 & \text{if $\overrightarrow{AM}$ and $\overrightarrow{BN}$ are opposite,} \\
+    +1 & \text{otherwise}.
+    \end{array}
+\right.
+$$.
+
+We obtain that 
+
+$$
+\overrightarrow{MN} = B - A + (\epsilon \cdot r_B - r_A) \cdot \overrightarrow{u}.
+$$
+
+We know that $\overrightarrow{MN}$ is orthogonal to $\overrightarrow{u}$, so 
+that means $< \overrightarrow{MN} | \overrightarrow{u} > = 0$. 
+
+By definition, $\overrightarrow{u}$ is normal, so we obtain :
+
+$$
+\left\{ \begin{array}{l}
+<B-A | \overrightarrow{u}> + ( \epsilon \cdot r_B - r_A)> = 0, \\
+\|\overrightarrow{u}\| = 1.
+\end{array}
+\right.
+$$
+
+Let $\theta$ be the angle between $\overrightarrow{AB}$ and $\overrightarrow{u}$, so we have 
+$<B-A |u> = \|\overline{AB}\| \cdot \cos{\theta}$, so we deduce that we
+have 4 solutions (4 tangents avalaible) described by :
+
+$$
+\left\{ \begin{array}{ccl}
+\cos{\theta} & = & \frac{r_A - \epsilon \cdot r_B}{ \|\overrightarrow{AB}\| } \\
+\sin{\theta} & = & \pm \sqrt{1 - \cos^2{\theta}}
+\end{array}
+\right.
+$$
+
+If we denote by $\overrightarrow{x}$ the normal vector of $\overrightarrow{AB}$ and by $\overrightarrow{y}$ the orthonormal vector of $\overrightarrow{AB}$ we finally have :
+
+$$
+\overrightarrow{u} = \cos{\theta} \cdot \overrightarrow{x} + \sin{\theta} \cdot \overrightarrow{y} 
+$$
+
+where 
+$\overrightarrow{x} = \frac{ \overrightarrow{AB}}{\|AB\|}$ and 
+$\overrightarrow{y} = \left( -x[1], \atop x[0]\right)$.
+
