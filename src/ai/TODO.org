@@ -4,7 +4,6 @@
 - Solve time problem in control calculus. If loop need longer time, then 
   control fail to send good velocity, and robot go slower. 
 - PID Unit Test
-- Curve Unit test
 - filter packet coming from vision
 - write a README documentation
 - refactor AI

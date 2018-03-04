@@ -44,8 +44,11 @@ void test_curves(){
             eq( length, curve.size(),  erreur)
         );
 
+        // As velocity is 1, then length is equal to time to walk on the 
+        // complete curve.
         assert( eq(length, curve.max_time(), erreur) );
-        assert( eq(length, curve.time(length-erreur), erreur) );
+        // On this example the ration between time en distance is 2.
+        assert( eq(length, curve.time(length-erreur), 2*erreur) );
 
         for( double d=0.0; d<=length; d = d + dt ){
             assert( eq(d, curve.time(d), erreur) );
@@ -75,8 +78,19 @@ void test_curves(){
                 )
             );
         }
-        assert( curve(curve.max_time()+dt) == curve( curve.max_time() ) );
-        assert( curve(curve.max_time()+3*dt) == curve( curve.max_time() ) );
+
+        assert(
+            eq(
+                (
+                    curve(curve.max_time()+dt) -
+                    curve( curve.max_time() )
+                ).norm(),
+                0,
+                erreur
+            ) 
+        );
+        assert( curve(curve.max_time()+dt) == curve( curve.max_time()+2*dt ) );
+        assert( curve(curve.max_time()+3*dt) == curve( curve.max_time()+dt ) );
     }
 
     {
@@ -103,8 +117,6 @@ void test_curves(){
         assert( curve(curve.max_time()+dt) == curve( curve.max_time() ) );
         assert( curve(curve.max_time()+3*dt) == curve( curve.max_time() ) );
     }
-
-
 }
 
 void test_velocityconsign(){
