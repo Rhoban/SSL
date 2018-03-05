@@ -124,33 +124,11 @@ double Curve2d::size() const {
 }
 
 double Curve2d::arc_length( double u ) const {
-    if( u<=0 ) return 0;
-    if( u>1.0 ) return this->curve_length;
-
-    double res = 0;
-    Eigen::Vector2d old = curve( 0.0 );
-    for( double v = 0.0; v <= u; v+=this->step_time ){
-        Eigen::Vector2d current = curve( v );
-        res += ( current - old ).norm();
-        old = current;
-    }
-    Eigen::Vector2d current = curve( u );
-    res += ( current - old ).norm();
-    return res;
+    return Length(*this)(u);
 }
 
 double Curve2d::inverse_of_arc_length( double l ) const {
-    if( l<= 0 ) return 0.0;
-    if( l>= this->curve_length ) return 1.0;
-    double res = 0;
-    Eigen::Vector2d old = curve( 0.0 );
-    double v;
-    for( v = 0.0; res < l; v+=this->step_time ){
-        Eigen::Vector2d current = curve( v );
-        res += ( current - old ).norm();
-        old = current;
-    }
-    return v;
+    return Inverse_of_length( *this )(l);
 }
 
 
@@ -201,11 +179,7 @@ double RenormalizedCurve::get_step_time( ) const {
 }
 
 double RenormalizedCurve::position_consign( double t ) const {
-    double res = 0.0;
-    for(double u=0; u<t; u+=this->step_time){
-        res += this->step_time * velocity_consign(u);
-    } 
-    return res;
+    return PositionConsign(*this)(t);
 }
 
 double RenormalizedCurve::error_position_consign() const {
@@ -230,5 +204,7 @@ double RenormalizedCurve::time( double length ) const {
 }
 
 Eigen::Vector2d RenormalizedCurve::operator()(double t) const {
-    return original_curve( this->inverse_of_arc_length( position_consign(t) ) );
+//    return original_curve( this->inverse_of_arc_length( position_consign(t) ) );
+    return CurveIterator(*this)(t);
+//original_curve( this->inverse_of_arc_length( position_consign(t) ) );
 }

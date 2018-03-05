@@ -38,6 +38,8 @@ struct DifferentiableVelocityConsign {
     double time_of_acceleration();
 };
 
+class Curve2d;
+
 class Curve2d {
     public:
         std::function<Eigen::Vector2d (double u)> curve;
@@ -47,6 +49,59 @@ class Curve2d {
         double time_max;
 
         void init();
+    public:
+        struct Length { 
+            const Curve2d & _this;
+            double v;
+            double length;
+            Eigen::Vector2d old;
+
+            Length( const Curve2d & _this ):
+                _this(_this),
+                v(0),
+                length(0),
+                old( _this.curve( 0.0 ) )
+            { }
+
+            double operator() ( double u ){
+                if( u <= 0 ) return 0.0;
+                if( u > 1.0 ) return _this.curve_length;
+                assert( v <= u ); 
+                for( ; v <= u; v+=_this.step_time ){
+                    Eigen::Vector2d current = _this.curve( v );
+                    length += ( current - old ).norm();
+                    old = current;
+                }
+                return length + ( _this.curve(u) - old ).norm();
+            }
+        };
+
+        struct Inverse_of_length { 
+            const Curve2d & _this;
+            double u;
+            double length;
+            Eigen::Vector2d old;
+
+            Inverse_of_length( const Curve2d & _this ):
+                _this(_this),
+                u(0),
+                length(0),
+                old( _this.curve( 0.0 ) )
+            { }
+
+            double operator() ( double l ){
+                if( l <= 0 ) return 0.0;
+                if( l >= _this.curve_length ) return 1.0;
+                for( ; length < l; u+=_this.step_time ){
+                    Eigen::Vector2d current = _this.curve( u );
+                    length += ( current - old ).norm();
+                    old = current;
+                }
+                return u;
+            }
+        };
+
+
 
     public:
         Curve2d(
@@ -58,10 +113,20 @@ class Curve2d {
         Eigen::Vector2d operator()(double u) const;
 
         double arc_length( double u ) const;
+        Length length_iterator() const {
+            return Length(*this);
+        }
+
         double inverse_of_arc_length( double l ) const;
+        Inverse_of_length Inverse_of_length_iterator() const {
+            return Inverse_of_length( *this );
+        }
+
         double size() const;
         
 };
+
+class RenormalizedCurve;
 
 class RenormalizedCurve : public Curve2d {
     public:
@@ -73,6 +138,25 @@ class RenormalizedCurve : public Curve2d {
         void init();
 
     public:
+        struct PositionConsign { 
+            const RenormalizedCurve & _this;
+            double pos;
+            double u;
+
+            PositionConsign( const RenormalizedCurve & _this ):
+                _this(_this), pos(0.0), u(0.0)
+            { }
+
+            double operator() ( double t ){
+                assert( u<=t );
+                for(; u<t; u+=_this.step_time){
+                    pos += _this.step_time * _this.velocity_consign(u);
+                } 
+                return pos;
+            }
+        };
+
+
         RenormalizedCurve(
             const std::function<Eigen::Vector2d (double u)> & curve,
             const std::function<double (double t)> & velocity_consign,
@@ -90,6 +174,31 @@ class RenormalizedCurve : public Curve2d {
         Eigen::Vector2d original_curve( double u ) const;
         double time( double length ) const;
         double position_consign( double t ) const;
+
+
+        struct CurveIterator {
+            const RenormalizedCurve & _this;
+            Inverse_of_length inverse_length_iterator;
+            PositionConsign position_consign_iterator;
+    
+            CurveIterator( const RenormalizedCurve & _this ):
+                _this(_this),
+                inverse_length_iterator(_this.Inverse_of_length_iterator()),
+                position_consign_iterator( PositionConsign(_this) )
+            { }
+
+            
+            Eigen::Vector2d operator()(double t) {
+                return _this.original_curve( inverse_length_iterator( position_consign_iterator(t) ) );
+            }
+        };
+
+        CurveIterator curve_iterator() const {
+            return CurveIterator(*this);
+        }
+        PositionConsign position_consign_iterator() const {
+            return PositionConsign(*this);
+        }
         Eigen::Vector2d operator()(double t) const;
 
         double error_position_consign() const;

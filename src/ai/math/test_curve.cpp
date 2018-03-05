@@ -54,26 +54,31 @@ void test_curves(){
             assert( eq(d, curve.time(d), erreur) );
         }
 
+        RenormalizedCurve::PositionConsign position_it = curve.position_consign_iterator();
         for( double t=0.0; t<2*length; t = t + dt ){
-            assert( eq(t, curve.position_consign(t), erreur) );
+            assert( eq(t, position_it(t), erreur) );
         }
 
+        Curve2d::Length length_it = curve.length_iterator();
         for( double u=0.0; u<1.0; u = u + dt ){
-            assert( eq(length*u, curve.arc_length(u), erreur) );
+            assert( eq(length*u, length_it(u), erreur) );
         }
 
+        Curve2d::Inverse_of_length inverse_legnth_it = curve.Inverse_of_length_iterator();
         for( double l=0.0; l<=length; l = l + dt ){
-            assert( eq(l/length, curve.inverse_of_arc_length(l), erreur) );
+            assert( eq(l/length, inverse_legnth_it(l), erreur) );
         }
 
         std::function<double(double)> error_curve = [&](double u){
             return 2*dt_micro;
         };
+        RenormalizedCurve::CurveIterator curve_t_it = curve.curve_iterator();
+        RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curve_iterator();
         for( double t=0.0; t<curve.max_time()-dt; t = t + dt ){
             assert(
                 eq(
                     1.0,
-                    ( curve(t+dt) - curve(t) ).norm()/dt,
+                    ( curve_t_dt_it(t+dt) - curve_t_it(t) ).norm()/dt,
                     error_renormalisation(t, curve, error_curve, dt) + dt_micro/10.0
                 )
             );
@@ -105,11 +110,13 @@ void test_curves(){
         std::function<double(double)> error_curve = [&](double u){
             return 2*dt_micro*std::sqrt( std::pow( u+dt_micro/2.0, 2 ) + 1 );
         };
+        RenormalizedCurve::CurveIterator curve_t_it = curve.curve_iterator();
+        RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curve_iterator();
         for( double t=0.0; t<curve.max_time()-dt; t = t + dt ){
             assert(
                 eq(
                     t+.1,
-                    ( curve(t+dt) - curve(t) ).norm()/dt,
+                    ( curve_t_dt_it(t+dt) - curve_t_it(t) ).norm()/dt,
                     error_renormalisation(t, curve, error_curve, dt) + dt_micro/10.0
                 )
             );
@@ -270,12 +277,16 @@ void test_use_cases(){
             consign,
             dt_micro, dt_micro/100
         );
+
+        RenormalizedCurve::CurveIterator curve_t_it = curve.curve_iterator();
+        RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curve_iterator();
         for( double t = 0; t< curve.max_time()-dt; t+= dt ){
-            Eigen::Vector2d xt = curve(t);
-            Eigen::Vector2d xdt = curve(t+dt);
+            Eigen::Vector2d xt = curve_t_it(t);
+            Eigen::Vector2d xdt = curve_t_dt_it(t+dt);
             assert( xdt[0] >= xt[0] );
             assert( xdt[1] >= xt[1] );
         }
+
     }
 }
 
