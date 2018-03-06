@@ -50,8 +50,10 @@ void test_curves(){
         // On this example the ration between time en distance is 2.
         assert( eq(length, curve.time(length-erreur), 2*erreur) );
 
+
+        RenormalizedCurve::TimeCurve time_it = curve.time_iterator();
         for( double d=0.0; d<=length; d = d + dt ){
-            assert( eq(d, curve.time(d), erreur) );
+            assert( eq(d, time_it(d), erreur) );
         }
 
         RenormalizedCurve::PositionConsign position_it = curve.position_consign_iterator();

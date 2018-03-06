@@ -190,7 +190,11 @@ double RenormalizedCurve::error_position_consign() const {
     return this->step_time * max_velocity;
 }
 
+RenormalizedCurve::TimeCurve RenormalizedCurve::time_iterator() const {
+    return TimeCurve( *this );
+} 
 double RenormalizedCurve::time( double length ) const {
+    //return TimeCurve( *this )(length);
     assert( 0 <= length );
     assert( length <= this->curve_length );
     double res = 0.0;

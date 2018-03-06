@@ -156,6 +156,27 @@ class RenormalizedCurve : public Curve2d {
             }
         };
 
+        struct TimeCurve { 
+            const RenormalizedCurve & _this;
+            double res;
+            double t;
+
+            TimeCurve( const RenormalizedCurve & _this ):
+                _this(_this), res(0.0), t(0.0)
+            { }
+
+            double operator() ( double length ){
+                assert( 0 <= length );
+                assert( length <= _this.curve_length );
+                
+                for( ; res < length-_this.length_tolerance; t+=_this.step_time ){
+                    assert( _this.velocity_consign(t) >= 0.0 );
+                    res += _this.step_time * _this.velocity_consign(t);
+                } 
+                return t;
+            }
+        };
+
 
         RenormalizedCurve(
             const std::function<Eigen::Vector2d (double u)> & curve,
@@ -173,6 +194,7 @@ class RenormalizedCurve : public Curve2d {
         double max_time() const;
         Eigen::Vector2d original_curve( double u ) const;
         double time( double length ) const;
+        TimeCurve time_iterator() const;
         double position_consign( double t ) const;
 
 
