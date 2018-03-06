@@ -2,9 +2,9 @@
 #define __VISIONDATA_H__
 
 #include <map>
-#include <geometry/Point.hpp>
+#include <rhoban_geometry/point.h>
 #include <math/ContinuousAngle.h>
-#include <timing/TimeStamp.hpp>
+#include <rhoban_utils/timing/time_stamp.h>
 #include <physic/MovementSample.h>
 #include <iostream>
 
@@ -25,18 +25,18 @@ struct Object {
 
     bool present;
     int id;
-    Utils::Timing::TimeStamp lastUpdate;
+    rhoban_utils::TimeStamp lastUpdate;
 
     void update(
-        double time, const Point & linear_position,
-        const Angle & angular_position
+        double time, const rhoban_geometry::Point & linear_position,
+        const rhoban_utils::Angle & angular_position
     );
     void update(
-        double time, const Point & linear_position,
+        double time, const rhoban_geometry::Point & linear_position,
         const ContinuousAngle & angular_position
     );
     void update(
-        double time, const Point & linear_position
+        double time, const rhoban_geometry::Point & linear_position
     );
 
     double age() const;

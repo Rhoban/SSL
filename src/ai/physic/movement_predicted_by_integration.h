@@ -16,7 +16,7 @@ class Movement_predicted_by_integration : public Movement {
 
         virtual void set_sample( const MovementSample & samples );
 
-        virtual Point linear_position( double time ) const;
+        virtual Vector2d linear_position( double time ) const;
         virtual ContinuousAngle angular_position( double time ) const;
 
         virtual Vector2d linear_velocity( double time ) const;

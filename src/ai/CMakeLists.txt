@@ -8,12 +8,12 @@ include(CTest)
 enable_testing()
 
 find_package(catkin REQUIRED COMPONENTS
-  ssl_client tclap RhobanUtils Eigen
+  ssl_client tclap rhoban_geometry eigen
 )
 
 catkin_package(
     INCLUDE_DIRS .
-    CATKIN_DEPENDS ssl_client RhobanUtils tclap
+    CATKIN_DEPENDS ssl_client rhoban_geometry tclap eigen
 )
 
 find_package(Protobuf REQUIRED)
@@ -64,7 +64,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
 add_executable(ai main.cpp ${SOURCES})
-target_link_libraries(ai stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+target_link_libraries(ai ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
 
 #foreach(test_source ${TEST_SOURCES})

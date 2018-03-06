@@ -3,6 +3,8 @@
 #include <cmath>
 #include <debug.h>
 
+using namespace rhoban_utils;
+
 ContinuousAngle::ContinuousAngle() : angle_value(0.0) {}
 ContinuousAngle::ContinuousAngle(double angle) : angle_value(angle) { }
 ContinuousAngle::ContinuousAngle(const ContinuousAngle & angle) : 

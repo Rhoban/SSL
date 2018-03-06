@@ -2,7 +2,7 @@
 
 #include <mutex>
 #include <thread>
-#include <timing/TimeStamp.hpp>
+#include <rhoban_utils/timing/time_stamp.h>
 #include <referee.pb.h>
 #include "MulticastClient.h"
 

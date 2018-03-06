@@ -111,7 +111,7 @@ class Repository
             }
             OS::run("cd $this->directory; git remote set-branches origin '*'");
             OS::run("cd $this->directory; git fetch");
-            OS::run("cd $this->directory; git checkout -b catkin origin/catkin");
+
             $this->updateRemotes();
             $this->setUpstream('origin');
         }

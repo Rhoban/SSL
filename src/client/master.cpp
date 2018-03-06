@@ -1,12 +1,13 @@
 #include <iostream>
 #include <cmath>
 #include <unistd.h>
-#include <geometry/Point.hpp>
+#include <rhoban_geometry/point.h>
 #include "joystick/Joystick.h"
 #include "Kinematic.h"
 #include "Master.h"
 
 using namespace RhobanSSL;
+using namespace rhoban_geometry;
 
 #define ROBOT   1
 

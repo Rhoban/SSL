@@ -1,6 +1,6 @@
 #pragma once
 
-#include <geometry/Point.hpp>
+#include <rhoban_geometry/point.h>
 
 namespace RhobanSSL
 {
@@ -37,13 +37,13 @@ protected:
     double robotRadius;
 
     // Wheel vectors
-    Point frontLeftVector;
-    Point frontRightVector;
-    Point backLeftVector;
-    Point backRightVector;
+    rhoban_geometry::Point frontLeftVector;
+    rhoban_geometry::Point frontRightVector;
+    rhoban_geometry::Point backLeftVector;
+    rhoban_geometry::Point backRightVector;
 
-    Point makeWheelVector(double angle);
+    rhoban_geometry::Point makeWheelVector(double angle);
 
-    double computeFor(Point vector, double xSpeed, double ySpeed, double thetaSpeed);
+    double computeFor(rhoban_geometry::Point vector, double xSpeed, double ySpeed, double thetaSpeed);
 };
 }

@@ -10,7 +10,7 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
-    <build_depend>RhobanUtils</build_depend> <!-- rhobanproject/rhobanutils -->
+    <build_depend>rhoban_utils</build_depend> <!-- rhoban/utils -->
 
-    <run_depend>RhobanUtils</run_depend>
+    <run_depend>rhoban_utils</run_depend>
 </package>

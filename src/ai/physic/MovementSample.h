@@ -1,7 +1,7 @@
 #ifndef __PHYSICS_H__
 #define __PHYSICS_H__
 
-#include <geometry/Point.hpp>
+#include <rhoban_geometry/point.h>
 #include <math/ContinuousAngle.h>
 #include <math/vector.h>
 #include <math/circular_vector.h>
@@ -9,13 +9,13 @@ namespace RhobanSSL {
 
 struct PositionSample {
     double time;
-    Point linear_position;
+    rhoban_geometry::Point linear_position;
     ContinuousAngle angular_position;
 
     PositionSample();
     PositionSample(
         double time,
-        const Point & linear_position,
+        const rhoban_geometry::Point & linear_position,
         const ContinuousAngle & angular_position
     );
 };
@@ -28,7 +28,7 @@ struct MovementSample : public circular_vector<PositionSample> {
     double time( unsigned int i = 0 ) const;
     double dt( unsigned int i = 0 ) const;
 
-    Point linear_position( unsigned int i = 0 ) const;
+    rhoban_geometry::Point linear_position( unsigned int i = 0 ) const;
     ContinuousAngle angular_position( unsigned int i = 0 ) const;
 
     Vector2d linear_velocity( unsigned int i = 0 ) const;

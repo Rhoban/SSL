@@ -1,7 +1,7 @@
 #ifndef __CONTINUOUS_ANGLE__H__
 #define __CONTINUOUS_ANGLE__H__
 
-#include <geometry/Angle.hpp>
+#include <rhoban_utils/angle.h>
 
 class ContinuousAngle {
 private:
@@ -16,7 +16,7 @@ public:
     ContinuousAngle& operator=( const ContinuousAngle & angle );
 //    ContinuousAngle& operator=( const Angle & angle );
 
-    Angle angle() const;
+    rhoban_utils::Angle angle() const;
     double value() const;
     ContinuousAngle abs() const;
 
@@ -52,7 +52,7 @@ public:
     bool operator>=( const ContinuousAngle& angle ) const;
 
     void set_to_nearest( double angle );
-    void set_to_nearest( const Angle & angle );
+    void set_to_nearest( const rhoban_utils::Angle & angle );
 };
 
 std::ostream& operator<<(std::ostream& out, const ContinuousAngle& a);

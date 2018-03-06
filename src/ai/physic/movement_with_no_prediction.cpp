@@ -15,7 +15,7 @@ Movement_with_no_prediction::set_sample( const MovementSample & samples ) {
     this->samples = samples;
 }
  
-Point
+Vector2d
 Movement_with_no_prediction::linear_position( double time ) const {
     return samples.linear_position(0);
 }
