@@ -1,6 +1,8 @@
 #include "movement_predicted_by_integration.h"
 #include <cmath>
 
+using namespace rhoban_geometry;
+
 double norm( const Point & p ){
     return std::sqrt( p.getX()*p.getX() + p.getY()*p.getY() );
 }

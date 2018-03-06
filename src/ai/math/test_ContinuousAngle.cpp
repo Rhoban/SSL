@@ -3,6 +3,8 @@
 #include <math.h>
 #include <debug.h>
 #include <sstream>
+
+using namespace rhoban_utils;
     
 void test_constructors(){
     {

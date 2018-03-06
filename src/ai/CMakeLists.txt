@@ -2,11 +2,6 @@ cmake_minimum_required(VERSION 2.8)
 project(ssl_ai)
 set (CMAKE_CXX_STANDARD 11)
 
-set(CMAKE_BUILD_TYPE Debug)
-
-include(CTest)
-enable_testing()
-
 find_package(catkin REQUIRED COMPONENTS
   ssl_client tclap rhoban_geometry eigen
 )
@@ -47,7 +42,21 @@ set (SOURCES
     referee/Referee.cpp
 )
 
-set (TEST_SOURCES
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
+set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
+
+set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+
+# Disabled for compatibility
+# set(ALL_LIBS stdc++fs ${ALL_LIBS})
+
+add_executable(ai main.cpp ${SOURCES})
+target_link_libraries(ai ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+
+if(CATKIN_ENABLE_TESTING)
+  #include(CTest)
+
+  set (TEST_SOURCES
     core/test_machine_state.cpp
     core/test_print_collection.cpp
     math/test_curve.cpp
@@ -58,33 +67,27 @@ set (TEST_SOURCES
     math/test_ContinuousAngle.cpp
     control/test_pid.cpp
     control/test_robot_control.cpp
-)
+    )
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
-set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
-
-add_executable(ai main.cpp ${SOURCES})
-target_link_libraries(ai ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
-
-
-#foreach(test_source ${TEST_SOURCES})
-#    get_filename_component(name_test ${test_source} NAME_WE)
-##    get_filename_component(name_extention_test ${test_source} NAME)
-##    get_filename_component(directory_test ${test_source} DIRECTORY)
-##    string(REPLACE "test_" ${directory_test}/ source_test ${name_extention_test}) 
-##    string(REPLACE ".cpp" ".h" header1_test ${source_test}) 
-##    string(REPLACE ".cpp" ".hpp" header2_test ${source_test}) 
-##
-##    if(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-##        add_executable(${name_test} ${test_source} ${source_test})
-##    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header1_test})
-##        add_executable(${name_test} ${test_source})
-##    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header2_test})
-##        add_executable(${name_test} ${test_source})
-##    else(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-#        add_executable(${name_test} ${test_source} ${SOURCES})
-##    endif(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-#
-#    add_test(NAME ${name_test} COMMAND ./${name_test} WORKING_DIRECTORY ${TEST_DIRECTORY})
-#    target_link_libraries(${name_test} stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
-#endforeach(test_source)
+  foreach(test_source ${TEST_SOURCES})
+      get_filename_component(name_test ${test_source} NAME_WE)
+  #    get_filename_component(name_extention_test ${test_source} NAME)
+  #    get_filename_component(directory_test ${test_source} DIRECTORY)
+  #    string(REPLACE "test_" ${directory_test}/ source_test ${name_extention_test}) 
+  #    string(REPLACE ".cpp" ".h" header1_test ${source_test}) 
+  #    string(REPLACE ".cpp" ".hpp" header2_test ${source_test}) 
+  #
+  #    if(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
+  #        add_executable(${name_test} ${test_source} ${source_test})
+  #    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header1_test})
+  #        add_executable(${name_test} ${test_source})
+  #    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header2_test})
+  #        add_executable(${name_test} ${test_source})
+  #    else(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
+          add_executable(${name_test} ${test_source} ${SOURCES})
+  #    endif(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
+  
+      add_test(NAME ${name_test} COMMAND ./${name_test} WORKING_DIRECTORY ${TEST_DIRECTORY})
+      target_link_libraries(${name_test}  ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+  endforeach(test_source)
+endif(CATKIN_ENABLE_TESTING)

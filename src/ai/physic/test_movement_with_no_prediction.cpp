@@ -1,5 +1,6 @@
 #include "movement_with_no_prediction.h"
 
+using namespace rhoban_geometry;
 
 void test_use_cases(){
     {
