@@ -194,17 +194,7 @@ RenormalizedCurve::TimeCurve RenormalizedCurve::time_iterator() const {
     return TimeCurve( *this );
 } 
 double RenormalizedCurve::time( double length ) const {
-    //return TimeCurve( *this )(length);
-    assert( 0 <= length );
-    assert( length <= this->curve_length );
-    double res = 0.0;
-    double t;
-    
-    for( t=0.0; res < length-length_tolerance; t+=this->step_time ){
-        assert( velocity_consign(t) >= 0.0 );
-        res += this->step_time * velocity_consign(t);
-    } 
-    return t;
+    return TimeCurve( *this )(length);
 }
 
 Eigen::Vector2d RenormalizedCurve::operator()(double t) const {
