@@ -1,6 +1,6 @@
 #include "ContinuousAngle.h"
 
-#include <math.h>
+#include <cmath>
 #include <debug.h>
 
 ContinuousAngle::ContinuousAngle() : angle_value(0.0) {}
@@ -35,7 +35,7 @@ double ContinuousAngle::value() const {
 }
 
 ContinuousAngle ContinuousAngle::abs() const {
-    return ContinuousAngle( std::abs(this->angle_value) );
+  return ContinuousAngle( std::fabs(this->angle_value) );
 }
 
 ContinuousAngle ContinuousAngle::operator-() const {
