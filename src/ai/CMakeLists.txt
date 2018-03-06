@@ -47,14 +47,16 @@ set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
 set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
-# Disabled for compatibility
-# set(ALL_LIBS stdc++fs ${ALL_LIBS})
+add_library (ssl_ai ${SOURCES})
+target_link_libraries(ssl_ai ${ALL_LIBS})
 
-add_executable(ai main.cpp ${SOURCES})
-target_link_libraries(ai ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+add_executable(ai main.cpp)
+target_link_libraries(ai ssl_ai ${ALL_LIBS})
+
+message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
 if(CATKIN_ENABLE_TESTING)
-  #include(CTest)
+  include(CTest)
 
   set (TEST_SOURCES
     core/test_machine_state.cpp
@@ -71,23 +73,8 @@ if(CATKIN_ENABLE_TESTING)
 
   foreach(test_source ${TEST_SOURCES})
       get_filename_component(name_test ${test_source} NAME_WE)
-  #    get_filename_component(name_extention_test ${test_source} NAME)
-  #    get_filename_component(directory_test ${test_source} DIRECTORY)
-  #    string(REPLACE "test_" ${directory_test}/ source_test ${name_extention_test}) 
-  #    string(REPLACE ".cpp" ".h" header1_test ${source_test}) 
-  #    string(REPLACE ".cpp" ".hpp" header2_test ${source_test}) 
-  #
-  #    if(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-  #        add_executable(${name_test} ${test_source} ${source_test})
-  #    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header1_test})
-  #        add_executable(${name_test} ${test_source})
-  #    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header2_test})
-  #        add_executable(${name_test} ${test_source})
-  #    else(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-          add_executable(${name_test} ${test_source} ${SOURCES})
-  #    endif(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-  
+      add_executable(${name_test} ${test_source})  
       add_test(NAME ${name_test} COMMAND ./${name_test} WORKING_DIRECTORY ${TEST_DIRECTORY})
-      target_link_libraries(${name_test}  ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+      target_link_libraries(${name_test} ssl_ai ${ALL_LIBS})
   endforeach(test_source)
 endif(CATKIN_ENABLE_TESTING)

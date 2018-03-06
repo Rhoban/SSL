@@ -2,6 +2,7 @@ bin
 **.swp
 
 .catkin_tools
+**_debug
 **_release
 **.pch
 
