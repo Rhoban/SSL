@@ -1,6 +1,7 @@
 * Forground Tasks
 
 - Improve curves calculus by adding generators
+- check calculus_step time in constans defined in AiData.h
 - Solve time problem in control calculus. If loop need longer time, then 
   control fail to send good velocity, and robot go slower.
 - refactor goalie, and robot behavior to remove frome robot_behavior robot position and the need to update robot_behavio to have a good robot position.
