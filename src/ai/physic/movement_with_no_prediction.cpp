@@ -14,7 +14,11 @@ Movement_with_no_prediction::set_sample( const MovementSample & samples ) {
     //assert( samples.is_valid() );
     this->samples = samples;
 }
- 
+
+const MovementSample & Movement_with_no_prediction::get_sample() const {
+    return samples;
+}
+
 Point
 Movement_with_no_prediction::linear_position( double time ) const {
     return samples.linear_position(0);

@@ -23,6 +23,10 @@ Movement_predicted_by_integration::set_sample( const MovementSample & samples ){
     this->samples = samples;
 }
 
+const MovementSample & Movement_predicted_by_integration::get_sample() const {
+    return samples;
+}
+
  
 Point
 Movement_predicted_by_integration::linear_position( double time ) const {

@@ -13,6 +13,7 @@ class Movement_with_no_prediction : public Movement {
         virtual Movement * clone() const;
 
         virtual void set_sample( const MovementSample & samples );
+        virtual const MovementSample & get_sample() const;
 
         virtual Point linear_position( double time ) const;
         virtual ContinuousAngle angular_position( double time ) const;
