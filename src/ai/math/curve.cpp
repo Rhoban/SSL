@@ -99,18 +99,34 @@ double ContinuousVelocityConsign::time_of_acceleration(){
 
 
 void Curve2d::init(){
-    this->curve_length = arc_length( 1.0 );
+    if( curve_length<0 ){
+        this->curve_length = length_iterator().next(1.0);
+    }
 }
 
 Curve2d::Curve2d(
     const std::function<Eigen::Vector2d (double u)> & curve,
-    double step_time
-):curve(curve), step_time(step_time){
+    double step_curve_parameter
+):curve(curve), step_curve_parameter(step_curve_parameter), curve_length(-1.0)
+{
     init();
 };
 
+
+Curve2d::Curve2d(
+    const std::function<Eigen::Vector2d (double u)> & curve,
+    double step_curve_parameter, double curve_length
+):
+    curve(curve), step_curve_parameter(step_curve_parameter), 
+    curve_length(curve_length)
+{
+    init();
+};
+
+
 Curve2d::Curve2d( const Curve2d & curve ):
-    curve(curve.curve), step_time(curve.step_time)
+    curve(curve.curve), step_curve_parameter(curve.step_curve_parameter), 
+    curve_length(curve.curve_length)
 {
     init();
 };
@@ -140,10 +156,12 @@ void RenormalizedCurve::init(){
 
 RenormalizedCurve::RenormalizedCurve(
     const std::function<Eigen::Vector2d (double u)> & curve,
+    double step_curve_parameter,
     const std::function<double (double t)> & velocity_consign,
     double step_time, double length_tolerance
 ):
-    Curve2d(curve, step_time), velocity_consign(velocity_consign), 
+    Curve2d(curve, step_curve_parameter), velocity_consign(velocity_consign), 
+    step_time(step_time), 
     length_tolerance(length_tolerance)
 {
     init();
@@ -152,9 +170,11 @@ RenormalizedCurve::RenormalizedCurve(
 RenormalizedCurve::RenormalizedCurve(
     const Curve2d & curve,
     const std::function<double (double t)> & velocity_consign,
+    double step_time, 
     double length_tolerance
 ):
     Curve2d(curve), velocity_consign(velocity_consign), 
+    step_time(step_time), 
     length_tolerance(length_tolerance)
 {
     init();

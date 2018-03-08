@@ -88,6 +88,7 @@ class RobotControl {
             const ContinuousAngle & robot_orientation
         ) const = 0;
 
+        /* TODO : write a documentation to explaint that function */
         virtual double get_dt() const = 0;
 
         /*

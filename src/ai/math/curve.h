@@ -44,9 +44,8 @@ class Curve2d {
     public:
         std::function<Eigen::Vector2d (double u)> curve;
         
-        double step_time;
+        double step_curve_parameter;
         double curve_length;
-        double time_max;
 
         void init();
     public:
@@ -63,16 +62,21 @@ class Curve2d {
                 old( _this.curve( 0.0 ) )
             { }
 
-            double operator() ( double u ){
-                if( u <= 0 ) return 0.0;
-                if( u > 1.0 ) return _this.curve_length;
+            double next(double u){
                 assert( v <= u ); 
-                for( ; v <= u; v+=_this.step_time ){
+                for( ; v <= u; v+=_this.step_curve_parameter ){
                     Eigen::Vector2d current = _this.curve( v );
                     length += ( current - old ).norm();
                     old = current;
                 }
                 return length + ( _this.curve(u) - old ).norm();
+            }
+
+
+            double operator() ( double u ){
+                if( u <= 0 ) return 0.0;
+                if( u >= 1.0 ) return _this.curve_length;
+                return next(u);
             }
         };
 
@@ -92,7 +96,7 @@ class Curve2d {
             double operator() ( double l ){
                 if( l <= 0 ) return 0.0;
                 if( l >= _this.curve_length ) return 1.0;
-                for( ; length < l; u+=_this.step_time ){
+                for( ; length < l; u+=_this.step_curve_parameter ){
                     Eigen::Vector2d current = _this.curve( u );
                     length += ( current - old ).norm();
                     old = current;
@@ -106,7 +110,11 @@ class Curve2d {
     public:
         Curve2d(
             const std::function<Eigen::Vector2d (double u)> & curve,
-            double step_time
+            double step_curve_parameter
+        );
+        Curve2d(
+            const std::function<Eigen::Vector2d (double u)> & curve,
+            double step_curve_parameter, double curve_length
         );
         Curve2d( const Curve2d& curve );
 
@@ -134,6 +142,7 @@ class RenormalizedCurve : public Curve2d {
         double time_max;
 
         double length_tolerance;
+        double step_time;
 
         void init();
 
@@ -148,9 +157,11 @@ class RenormalizedCurve : public Curve2d {
             { }
 
             double operator() ( double t ){
-                assert( u<=t );
-                for(; u<t; u+=_this.step_time){
-                    pos += _this.step_time * _this.velocity_consign(u);
+                if( u >= t ) return pos;
+                for(; u<t; u+=_this.step_curve_parameter){
+                    pos += (
+                        _this.step_curve_parameter * _this.velocity_consign(u)
+                    );
                 } 
                 return pos;
             }
@@ -180,13 +191,14 @@ class RenormalizedCurve : public Curve2d {
 
         RenormalizedCurve(
             const std::function<Eigen::Vector2d (double u)> & curve,
+            double step_curve_parameter,
             const std::function<double (double t)> & velocity_consign,
             double step_time, double length_tolerance
         );
         RenormalizedCurve(
             const Curve2d & curve,
             const std::function<double (double t)> & velocity_consign,
-            double length_tolerance
+            double step_time, double length_tolerance
         );
 
         void set_step_time( double dt );
@@ -211,6 +223,9 @@ class RenormalizedCurve : public Curve2d {
 
             
             Eigen::Vector2d operator()(double t) {
+                if( _this.time_max <= t ){
+                    return _this.original_curve(1.0);
+                }
                 return _this.original_curve( inverse_length_iterator( position_consign_iterator(t) ) );
             }
         };
@@ -223,6 +238,7 @@ class RenormalizedCurve : public Curve2d {
         }
         Eigen::Vector2d operator()(double t) const;
 
+        double get_time_max() const { return time_max; };
         double error_position_consign() const;
         double get_step_time() const;
 };

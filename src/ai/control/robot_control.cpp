@@ -37,12 +37,15 @@ CurveForRobot::CurveForRobot(
             calculus_step/100
         )
     ),
+    // TODO Calculet un time_step plus précisement
     translation_movment(
         translation_curve, tranlsation_consign,
+        calculus_step,
         calculus_error_for_translation        
     ),
     rotation_movment(
         angular_curve, angular_consign,
+        calculus_step,
         calculus_error_for_rotation
     )
 { };

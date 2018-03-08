@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(ssl_ai)
 set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 set(CMAKE_BUILD_TYPE Debug)
 
@@ -66,6 +67,9 @@ set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 add_executable(ai main.cpp ${SOURCES})
 target_link_libraries(ai stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
+add_executable(test_curve math/test_curve.cpp ${SOURCES})
+add_test(NAME test_curve COMMAND ./test_curve WORKING_DIRECTORY ${TEST_DIRECTORY})
+target_link_libraries(test_curve stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
 
 #foreach(test_source ${TEST_SOURCES})
 #    get_filename_component(name_test ${test_source} NAME_WE)
