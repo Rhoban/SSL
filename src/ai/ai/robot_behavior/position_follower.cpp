@@ -33,7 +33,7 @@ void PositionFollower::update(
     RobotBehavior::update_time_and_position( time, robot, ball );
     // Now 
     //  this->robot_linear_position
-    //  this->ball_position = Eigen::Vector2d(
+    //  this->ball_position
     //  this->robot_angular_position 
     // are all avalaible
 
