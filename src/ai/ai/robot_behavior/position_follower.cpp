@@ -18,20 +18,31 @@ void PositionFollower::set_following_position(
     this->angle = angle;
 }
 
-void PositionFollower::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-) {
-    RobotBehavior::update(time, robot, ball);
-
+void PositionFollower::update_control(double time){
     robot_control.set_goal( position, angle );
     robot_control.update( time );
 }
 
+void PositionFollower::update(
+    double time,
+    const Ai::Robot & robot,
+    const Ai::Ball & ball
+){
+    // At First, we update time and update potition from the abstract class robot_behavior.
+    // DO NOT REMOVE THAT LINE
+    RobotBehavior::update_time_and_position( time, robot, ball );
+    // Now 
+    //  this->robot_linear_position
+    //  this->ball_position = Eigen::Vector2d(
+    //  this->robot_angular_position 
+    // are all avalaible
+
+    update_control(time);
+}
+
 Control PositionFollower::control() const {
     Control ctrl = robot_control.relative_control_in_robot_frame(
-        robot_position, robot_orientation
+        robot_linear_position, robot_angular_position
     );
     return ctrl;
 }

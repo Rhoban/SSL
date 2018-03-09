@@ -30,8 +30,8 @@ class RobotBehavior {
         double birthday;
         double lastUpdate; 
 
-        Eigen::Vector2d robot_position;
-        ContinuousAngle robot_orientation;
+        Eigen::Vector2d robot_linear_position;
+        ContinuousAngle robot_angular_position;
         Eigen::Vector2d ball_position;
 
     public:
@@ -41,10 +41,15 @@ class RobotBehavior {
         bool is_born() const;
         double set_birthday( double birthday );
 
-        virtual void update(
+        void update_time_and_position(
             double time, 
             const Ai::Robot & robot, const Ai::Ball & ball
         );
+
+        virtual void update(
+            double time, 
+            const Ai::Robot & robot, const Ai::Ball & ball
+        ) = 0;
         virtual Control control() const = 0;
 };
 

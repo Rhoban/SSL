@@ -46,7 +46,17 @@ void Goalie::update(
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
-    double goal_rotation = detail::vec2angle(ball_position - robot_position);
+    // At First, we update time and update potition from the abstract class robot_behavior.
+    // DO NOT REMOVE THAT LINE
+    RobotBehavior::update_time_and_position( time, robot, ball );
+    // Now 
+    //  this->robot_linear_position
+    //  this->ball_position = Eigen::Vector2d(
+    //  this->robot_angular_position 
+    // are all avalaible
+    
+
+    double goal_rotation = detail::vec2angle(ball_position - robot_linear_position);
 
     Eigen::Vector2d defender_pos = calculate_goal_position(
         ball_position, right_post_position, left_post_position,
@@ -59,7 +69,7 @@ void Goalie::update(
 
     this->set_following_position(defender_pos, goal_rotation );
 
-    PositionFollower::update( time, robot, ball);   
+    PositionFollower::update_control(time);   
 }
 
 }
