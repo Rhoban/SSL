@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <experimental/filesystem>
+#include <core/export_to_plot.h>
 
 #define DEBUG(message) \
     std::cerr << "# " << message << " -- " << \

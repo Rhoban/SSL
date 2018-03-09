@@ -45,6 +45,7 @@ set (SOURCES
     physic/Movement.cpp
     math/ContinuousAngle.cpp
     math/curve.cpp
+    core/export_to_plot.cpp
     referee/Referee.cpp
 )
 
