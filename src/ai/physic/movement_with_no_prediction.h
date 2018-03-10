@@ -15,7 +15,7 @@ class Movement_with_no_prediction : public Movement {
         virtual void set_sample( const MovementSample & samples );
         virtual const MovementSample & get_sample() const;
 
-        virtual Vector2d linear_position( double time ) const;
+        virtual rhoban_geometry::Point linear_position( double time ) const;
         virtual ContinuousAngle angular_position( double time ) const;
 
         virtual Vector2d linear_velocity( double time ) const;

@@ -19,7 +19,7 @@ const MovementSample & Movement_with_no_prediction::get_sample() const {
     return samples;
 }
 
-Vector2d
+rhoban_geometry::Point
 Movement_with_no_prediction::linear_position( double time ) const {
     return samples.linear_position(0);
 }
