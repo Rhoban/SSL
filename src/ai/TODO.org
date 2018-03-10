@@ -1,5 +1,7 @@
 * Forground Tasks
 
+- Remove another bug in send_command due to the bug solution of commit
+  08beed21d102319a1e37e42c73cd27a3eca7
 - Improve curves calculus by adding generators
 - check calculus_step time in constans defined in AiData.h
 - Solve time problem in control calculus. If loop need longer time, then 
