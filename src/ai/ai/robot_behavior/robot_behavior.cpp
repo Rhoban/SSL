@@ -25,7 +25,7 @@ Control::Control(bool kick, bool active, bool ignore):
 { }
 
 Control::Control(const PidControl & c):
-    PidControl(c), kick(false), active(true), ignore(ignore)
+    PidControl(c), kick(false), active(true), ignore(false)
 { }
 
 std::ostream& operator << ( std::ostream & out, const Control& control  ){
