@@ -1,13 +1,15 @@
 #ifndef __DEBUG__H__
 #define __DEBUG__H__
 
+#include <rhoban_utils/util.h>
+
 #include <iostream>
-#include <experimental/filesystem>
 #include <core/export_to_plot.h>
 
+//TODO: move to rhoban_utils
 #define DEBUG(message) \
     std::cerr << "# " << message << " -- " << \
-    std::experimental::filesystem::path(__FILE__).filename().c_str() << \
+    rhoban_utils::getBaseName(__FILE__) << \
     ":" << __LINE__ << std::endl
 
 #define PLOT(message) \

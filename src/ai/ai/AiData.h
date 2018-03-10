@@ -2,8 +2,8 @@
 #define __AIDATA_H__
 
 #include <map>
-#include <geometry/Angle.hpp>
-#include <timing/TimeStamp.hpp>
+#include <rhoban_utils/angle.h>
+#include <rhoban_utils/timing/time_stamp.h>
 #include <physic/MovementSample.h>
 #include <vision/VisionData.h>
 #include <physic/Movement.h>

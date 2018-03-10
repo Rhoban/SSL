@@ -2,6 +2,8 @@
 #include <assert.h>
 #include <debug.h>
 
+using namespace rhoban_geometry;
+
 namespace RhobanSSL {
 
 PositionSample::PositionSample():

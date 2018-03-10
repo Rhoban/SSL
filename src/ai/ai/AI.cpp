@@ -1,5 +1,5 @@
 #include "AI.h"
-#include <timing/TimeStamp.hpp>
+#include <rhoban_utils/timing/time_stamp.h>
 #include <cmath>
 #include <unistd.h>
 #include "robot_behavior/position_follower.h"
@@ -8,7 +8,8 @@
 #include "robot_behavior/do_nothing.h"
 
 
-using namespace Utils::Timing;
+using namespace rhoban_geometry;
+using namespace rhoban_utils;
 
 namespace RhobanSSL
 {

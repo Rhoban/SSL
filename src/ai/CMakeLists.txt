@@ -3,18 +3,13 @@ project(ssl_ai)
 set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
-set(CMAKE_BUILD_TYPE Debug)
-
-include(CTest)
-enable_testing()
-
 find_package(catkin REQUIRED COMPONENTS
-  ssl_client tclap RhobanUtils Eigen
+  ssl_client tclap rhoban_geometry eigen
 )
 
 catkin_package(
     INCLUDE_DIRS .
-    CATKIN_DEPENDS ssl_client RhobanUtils tclap
+    CATKIN_DEPENDS ssl_client rhoban_geometry tclap eigen
 )
 
 find_package(Protobuf REQUIRED)
@@ -49,7 +44,23 @@ set (SOURCES
     referee/Referee.cpp
 )
 
-set (TEST_SOURCES
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
+set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
+
+set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+
+add_library (ssl_ai ${SOURCES})
+target_link_libraries(ssl_ai ${ALL_LIBS})
+
+add_executable(ai main.cpp)
+target_link_libraries(ai ssl_ai ${ALL_LIBS})
+
+message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
+
+if(CATKIN_ENABLE_TESTING)
+  include(CTest)
+
+  set (TEST_SOURCES
     core/test_machine_state.cpp
     core/test_print_collection.cpp
     math/test_curve.cpp
@@ -60,36 +71,12 @@ set (TEST_SOURCES
     math/test_ContinuousAngle.cpp
     control/test_pid.cpp
     control/test_robot_control.cpp
-)
+    )
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
-set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
-
-add_executable(ai main.cpp ${SOURCES})
-target_link_libraries(ai stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
-
-add_executable(test_curve math/test_curve.cpp ${SOURCES})
-add_test(NAME test_curve COMMAND ./test_curve WORKING_DIRECTORY ${TEST_DIRECTORY})
-target_link_libraries(test_curve stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
-
-#foreach(test_source ${TEST_SOURCES})
-#    get_filename_component(name_test ${test_source} NAME_WE)
-##    get_filename_component(name_extention_test ${test_source} NAME)
-##    get_filename_component(directory_test ${test_source} DIRECTORY)
-##    string(REPLACE "test_" ${directory_test}/ source_test ${name_extention_test}) 
-##    string(REPLACE ".cpp" ".h" header1_test ${source_test}) 
-##    string(REPLACE ".cpp" ".hpp" header2_test ${source_test}) 
-##
-##    if(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-##        add_executable(${name_test} ${test_source} ${source_test})
-##    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header1_test})
-##        add_executable(${name_test} ${test_source})
-##    elseif(EXISTS ${CMAKE_SOURCE_DIR}/${header2_test})
-##        add_executable(${name_test} ${test_source})
-##    else(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-#        add_executable(${name_test} ${test_source} ${SOURCES})
-##    endif(EXISTS ${CMAKE_SOURCE_DIR}/${source_test})
-#
-#    add_test(NAME ${name_test} COMMAND ./${name_test} WORKING_DIRECTORY ${TEST_DIRECTORY})
-#    target_link_libraries(${name_test} stdc++fs ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
-#endforeach(test_source)
+  foreach(test_source ${TEST_SOURCES})
+      get_filename_component(name_test ${test_source} NAME_WE)
+      add_executable(${name_test} ${test_source})  
+      add_test(NAME ${name_test} COMMAND ./${name_test} WORKING_DIRECTORY ${TEST_DIRECTORY})
+      target_link_libraries(${name_test} ssl_ai ${ALL_LIBS})
+  endforeach(test_source)
+endif(CATKIN_ENABLE_TESTING)

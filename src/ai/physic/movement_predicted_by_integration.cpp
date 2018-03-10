@@ -28,7 +28,7 @@ const MovementSample & Movement_predicted_by_integration::get_sample() const {
 }
 
  
-Point
+Vector2d
 Movement_predicted_by_integration::linear_position( double time ) const {
     assert( samples[0].time <= time );
     double dt = time - samples.time(0);

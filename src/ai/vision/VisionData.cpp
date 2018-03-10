@@ -2,6 +2,9 @@
 #include <assert.h>
 #include <debug.h>
 
+using namespace rhoban_geometry;
+using namespace rhoban_utils;
+
 namespace RhobanSSL {
 namespace Vision {
 
@@ -29,7 +32,7 @@ void Object::update(
         //DEBUG("TODO");
         return;
     }
-    lastUpdate = Utils::Timing::TimeStamp::now();
+    lastUpdate = rhoban_utils::TimeStamp::now();
     present = true;
 
     movement.insert(
@@ -39,7 +42,7 @@ void Object::update(
 
 
 double Object::age() const {
-    return diffSec(lastUpdate, Utils::Timing::TimeStamp::now());
+    return diffSec(lastUpdate, rhoban_utils::TimeStamp::now());
 }
 
 bool Object::isOk() const {

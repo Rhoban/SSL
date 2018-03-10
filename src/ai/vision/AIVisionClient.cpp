@@ -2,7 +2,8 @@
 #include "AIVisionClient.h"
 #include <debug.h>
 
-using namespace Utils::Timing;
+using namespace rhoban_geometry;
+using namespace rhoban_utils;
 
 namespace RhobanSSL
 {

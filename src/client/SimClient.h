@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include <sockets/UDPBroadcast.hpp>
+#include <rhoban_utils/sockets/udp_broadcast.h>
 #include "grSim_Packet.pb.h"
 #include "grSim_Commands.pb.h"
 #include "grSim_Replacement.pb.h"
@@ -61,7 +61,7 @@ public:
     void sendPacket(grSim_Packet &packet);
     
 protected:
-    Rhoban::UDPBroadcast broadcast;
+    rhoban_utils::UDPBroadcast broadcast;
 
 };
 }

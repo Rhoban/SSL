@@ -1,5 +1,5 @@
 #include "pid.h"
-#include <geometry/Angle.hpp>
+#include <rhoban_utils/angle.h>
 
 #define CALCULUS_ERROR 0.000
 

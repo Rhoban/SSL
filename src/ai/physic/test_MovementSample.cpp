@@ -2,6 +2,8 @@
 #include "MovementSample.h"
 #include <math.h>
 
+using namespace rhoban_geometry;
+
 void test_position_sample(){
     {
         RhobanSSL::PositionSample pos;

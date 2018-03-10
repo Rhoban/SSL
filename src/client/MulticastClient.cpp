@@ -14,7 +14,7 @@
 #include <iostream>
 #include "MulticastClient.h"
 
-using namespace Utils::Timing;
+using namespace rhoban_utils;
 
 namespace RhobanSSL
 {

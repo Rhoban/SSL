@@ -1,6 +1,9 @@
-#include <geometry/Angle.hpp>
+#include <rhoban_utils/angle.h>
 #include <cmath>
 #include "Kinematic.h"
+
+using namespace rhoban_geometry;
+using namespace rhoban_utils;
 
 namespace RhobanSSL
 {

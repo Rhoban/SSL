@@ -14,7 +14,7 @@ public:
     virtual void set_sample( const MovementSample & samples ) = 0;
     virtual const MovementSample & get_sample() const = 0;
 
-    virtual Point linear_position( double time ) const = 0;
+    virtual rhoban_geometry::Point linear_position( double time ) const = 0;
     virtual ContinuousAngle angular_position( double time ) const = 0;
 
     virtual Vector2d linear_velocity( double time ) const = 0;

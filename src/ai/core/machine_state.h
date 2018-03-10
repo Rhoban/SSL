@@ -8,6 +8,7 @@
 #include <debug.h>
 #include <memory>
 #include <set>
+#include <sstream>
 #include <fstream>
 
 namespace machine_state {
@@ -450,7 +451,7 @@ class MachineState {
 
         std::string to_dot() const {
             std::ostringstream result;
-            result <<   "digraph G {";
+            result << "digraph G {";
             result << std::endl << " graph [ordering=\"out\"]";
             result << std::endl;
             int cpt = 0;

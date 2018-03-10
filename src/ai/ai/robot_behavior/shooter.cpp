@@ -1,5 +1,7 @@
 #include "shooter.h"
 
+using namespace rhoban_utils;
+
 namespace RhobanSSL {
 
 Shooter::Shooter(
