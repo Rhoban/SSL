@@ -27,7 +27,7 @@ void Plot::init(
     this->name = name;
     this->n = value_names.size();
     Plot::create_plot_script(value_names);
-    log_file = std::ofstream(name+".log");
+    log_file.open(name+".log");
     if( !log_file.is_open()){
         std::cerr << "ERROR : It is not possible to write in " << name << ".log" << std::endl;
     }
