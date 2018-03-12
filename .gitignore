@@ -6,6 +6,12 @@ bin
 **_release
 **.pch
 
+build
+devel
+devel_release
+logs
+logs_release
+
 src/*
 !src/client/
 !src/viewer/

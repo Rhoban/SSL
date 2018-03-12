@@ -23,8 +23,12 @@ Movement_predicted_by_integration::set_sample( const MovementSample & samples ){
     this->samples = samples;
 }
 
+const MovementSample & Movement_predicted_by_integration::get_sample() const {
+    return samples;
+}
+
  
-Vector2d
+rhoban_geometry::Point
 Movement_predicted_by_integration::linear_position( double time ) const {
     assert( samples[0].time <= time );
     double dt = time - samples.time(0);

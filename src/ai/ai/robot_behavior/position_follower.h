@@ -29,6 +29,10 @@ class PositionFollower : public RobotBehavior {
             const ContinuousAngle & angle
         );
 
+    protected:
+        void update_control(double time);
+
+    public:
         virtual void update(
             double time, 
             const Ai::Robot & robot, const Ai::Ball & ball

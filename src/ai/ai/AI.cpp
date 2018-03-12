@@ -169,7 +169,7 @@ void AI::assign_behavior_to_robots(){
         follower_position, ContinuousAngle(M_PI/2.0)
     );
     follower->set_translation_pid(
-        constants.p_translation*2, 2*constants.i_translation, 
+        constants.p_translation, constants.i_translation, 
         constants.d_translation
     );
     follower->set_orientation_pid(
@@ -192,7 +192,7 @@ void AI::assign_behavior_to_robots(){
         current_time, current_dt
     );
     goalie->set_translation_pid( 
-        constants.p_translation*2, 2*constants.i_translation, 
+        constants.p_translation, constants.i_translation, 
         constants.d_translation
     );
     goalie->set_orientation_pid(
@@ -207,6 +207,7 @@ void AI::assign_behavior_to_robots(){
         RobotBehavior
     >( goalie ); 
 
+#if 1
     // We create a shooter :
     Shooter* shooter = new Shooter(
         constants.goal_center, constants.robot_radius,
@@ -250,6 +251,8 @@ void AI::assign_behavior_to_robots(){
     robot_behaviors[Vision::Ally][TeamId::shooter_id] = std::shared_ptr<
         RobotBehavior
     >( shooter ); 
+#endif
+
 }
 
 
@@ -364,6 +367,20 @@ void AI::update_robots( ){
             Control ctrl = update_robot( 
                 robot_behavior, time, robot, ball
             ); 
+#if 0 
+            if(team == Vision::Ally && robot_id == TeamId::shooter_id){                
+                DEBUG( "sample : " << robot.get_movement().get_sample() );
+                DEBUG( "derivate : " << robot.get_movement().get_sample() );
+                DEBUG( "linear position : " << robot.get_movement().linear_position(this->current_time) );
+                DEBUG( "angular position : " << robot.get_movement().angular_position(this->current_time) );
+                DEBUG( "linear velocity : " << robot.get_movement().linear_velocity(this->current_time) );
+                DEBUG( "angular velocity : " << robot.get_movement().angular_velocity(this->current_time) );
+                DEBUG( "linear acceleration : " << robot.get_movement().linear_acceleration(this->current_time) );
+                DEBUG( "angular acceleration : " << robot.get_movement().angular_acceleration(this->current_time) );
+                DEBUG( "ctrl : " << ctrl );
+            }
+#endif
+
             prepare_to_send_control( team, robot_id, ctrl );
         }
     }
@@ -372,7 +389,7 @@ void AI::update_robots( ){
 }
 
 void AI::run(){
-    double period = 1/100.0;    // 100 hz
+    double period = 1/60.0;    // 100 hz
     auto lastTick = TimeStamp::now();
 
     while (running) {
@@ -381,9 +398,10 @@ void AI::run(){
         double toSleep = period - elapsed;
         if (toSleep > 0) {
             usleep(round(toSleep*1000000));
+        }else{
+            DEBUG("LAG");
         }
         lastTick = TimeStamp::now();
-
         current_dt = current_time;
         current_time = TimeStamp::now().getTimeMS()/1000.0;
         current_dt = current_time - current_dt;

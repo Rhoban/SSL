@@ -85,5 +85,6 @@ namespace RhobanSSL
 
         void limits_velocity( Control & ctrl ) const ;
 
+        Plot plot;
     };
 };

@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(ssl_ai)
 set (CMAKE_CXX_STANDARD 11)
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 find_package(catkin REQUIRED COMPONENTS
   ssl_client tclap rhoban_geometry eigen
@@ -39,6 +40,7 @@ set (SOURCES
     physic/Movement.cpp
     math/ContinuousAngle.cpp
     math/curve.cpp
+    core/export_to_plot.cpp
     referee/Referee.cpp
 )
 

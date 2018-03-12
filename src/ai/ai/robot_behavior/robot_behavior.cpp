@@ -25,7 +25,7 @@ Control::Control(bool kick, bool active, bool ignore):
 { }
 
 Control::Control(const PidControl & c):
-    PidControl(c), kick(false), active(true), ignore(ignore)
+    PidControl(c), kick(false), active(true), ignore(false)
 { }
 
 std::ostream& operator << ( std::ostream & out, const Control& control  ){
@@ -61,12 +61,12 @@ double RobotBehavior::set_birthday( double birthday ){
     this->birthday = birthday;
 };
 
-void RobotBehavior::update(
+void RobotBehavior::update_time_and_position(
     double time, 
     const Ai::Robot & robot, const Ai::Ball & ball
 ){
     lastUpdate = time;
-    this->robot_position = Eigen::Vector2d( 
+    this->robot_linear_position = Eigen::Vector2d( 
         robot.get_movement().linear_position(time).getX(), 
         robot.get_movement().linear_position(time).getY()
     );
@@ -75,7 +75,7 @@ void RobotBehavior::update(
         ball.get_movement().linear_position(time).getX(),
         ball.get_movement().linear_position(time).getY()
     );
-    this->robot_orientation = robot.get_movement().angular_position(
+    this->robot_angular_position = robot.get_movement().angular_position(
         time
     );
 };

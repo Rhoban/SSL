@@ -100,12 +100,12 @@ namespace Ai {
             i_orientation = 0.0;
             d_orientation = 0.0;
 
-            translation_velocity = 3;
-            translation_acceleration = 12.0;
-            angular_velocity = 2.0*M_PI;  
-            angular_acceleration = 8*M_PI;
+            translation_velocity = 2.0;
+            translation_acceleration = 0.5;
+            angular_velocity = 1.0*M_PI;  
+            angular_acceleration = 1*M_PI;
 
-            calculus_step = 0.0001;
+            calculus_step = 0.001;
             enable_kicking = false;
 
             penalty_rayon = 1.0; // penalty rayon for the goalie
@@ -125,7 +125,7 @@ namespace Ai {
             );
             // PID for translation
             p_translation = 0.02; 
-            i_translation = .01;
+            i_translation = .001;
             d_translation = .0;
             // PID for orientation
             p_orientation = 0.02;
@@ -136,7 +136,7 @@ namespace Ai {
             translation_acceleration = 1.;
             angular_velocity = 1.0;  
             angular_acceleration = 5.;
-            calculus_step = 0.0001;
+            calculus_step = 0.001;
             enable_kicking = true;
 
             penalty_rayon = 10.0; // For the goalie
