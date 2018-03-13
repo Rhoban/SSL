@@ -92,20 +92,22 @@ namespace Ai {
                 goal_center + Eigen::Vector2d(0.0, 0.0)
             );
             // PID for translation
-            p_translation = 0.01; 
-            i_translation = .0;
-            d_translation = .0;
+            p_translation = 0.05; 
+            //p_translation = 0.0; 
+            i_translation = .0001;
+            d_translation = .0005;
             // PID for orientation
-            p_orientation = 0.01;
-            i_orientation = 0.0;
-            d_orientation = 0.0;
+            p_orientation = 0.05;
+            //p_orientation = 0.0;
+            i_orientation = 0.0001;
+            d_orientation = 0.0005;
 
             translation_velocity = 2.0;
-            translation_acceleration = 0.5;
+            translation_acceleration = 1.0;
             angular_velocity = 1.0*M_PI;  
             angular_acceleration = 1*M_PI;
 
-            calculus_step = 0.001;
+            calculus_step = 0.00005;
             enable_kicking = false;
 
             penalty_rayon = 1.0; // penalty rayon for the goalie

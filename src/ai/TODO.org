@@ -1,5 +1,10 @@
+* Bug to Solve
+
+- Improve curve calculus
+
 * Forground Tasks
 
+- Replace double to ContinuousAngle in the ../control/pid.cpp class
 - Remove another bug in send_command due to the bug solution of commit
   08beed21d102319a1e37e42c73cd27a3eca7
 - Improve curves calculus by adding generators

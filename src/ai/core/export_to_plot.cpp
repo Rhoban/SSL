@@ -1,5 +1,6 @@
 #include "export_to_plot.h"
 #include <iostream>
+#include <debug.h>
 
 void Plot::create_plot_script(
     const std::vector<std::string> & value_names
@@ -25,7 +26,12 @@ void Plot::init(
     const std::vector<std::string> & value_names
 ){
     this->name = name;
+    this->value_names = value_names;
     this->n = value_names.size();
+    for( int i=0; i<n; i++ ){
+        current_values[ value_names[i] ] = 0.0;
+        loged_values[ value_names[i] ] = false;
+    }
     Plot::create_plot_script(value_names);
     log_file.open(name+".log");
     if( !log_file.is_open()){
@@ -39,12 +45,35 @@ void Plot::close(){
     }
 }
 
-void Plot::log( std::function< std::vector<double>() > fct ){
+void Plot::log(){
     if( ! log_file.is_open() ) return;
-    for( int i=0; i<n; i++ ){
-        log_file << fct()[i] << " ";
+    if( loged_values[value_names[0]] ){
+        for( int i=0; i<n; i++ ){
+            if( ! loged_values[value_names[i]] ){
+                DEBUG(
+                    "Value missing for " << value_names[i] << " at " << current_values[value_names[0]] 
+                );
+            }
+            log_file << current_values[ value_names[i] ] << " ";
+        }
+        log_file << std::endl;
     }
-    log_file << std::endl;
+    for( int i=0; i<n; i++ ){
+        current_values[ value_names[i] ] = 0.0;
+        loged_values[ value_names[i] ] = false;
+    }
+}
+
+void Plot::save( std::function< std::vector<double>() > fct ){
+    for( int i=0; i<n; i++ ){
+        current_values[ value_names[i] ] = fct()[i];
+        loged_values[ value_names[i] ] = true;
+    }
+}
+
+void Plot::save( const std::string & name_value, double value ){
+    current_values.at( name_value ) = value;
+    loged_values.at( name_value ) = true;
 }
 
 Plot::~Plot(){

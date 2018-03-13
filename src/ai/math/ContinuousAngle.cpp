@@ -95,7 +95,7 @@ ContinuousAngle& ContinuousAngle::operator*=( double scalar ){
     return *this;
 }
 
-float ContinuousAngle::turn() const {
+double ContinuousAngle::turn() const {
     return this->angle_value /(2*M_PI);
 };
 

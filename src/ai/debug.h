@@ -4,7 +4,6 @@
 #include <rhoban_utils/util.h>
 
 #include <iostream>
-#include <core/export_to_plot.h>
 
 //TODO: move to rhoban_utils
 #define DEBUG(message) \

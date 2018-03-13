@@ -302,16 +302,16 @@ AI::AI(
         )
         .add_init_state( "init" )
     ;
+
+    run_number_old = 0;
+
     machine
         .add_state( "wait_for_time_synchro" )
         .add_state(
-            "update_robot",
-            [&](
-                Ai::AiData & data, 
-                unsigned int run_number, unsigned int atomic_run_number
-            ){
-                this->update_robots( );
-            }
+            "wait_for_robot_update"
+        )
+        .add_state(
+            "robot_is_updated"
         )
         .add_edge(
             "stop_all_robots",
@@ -331,7 +331,7 @@ AI::AI(
         )
         .add_edge(
             "assign_role_to_robot",
-            "wait_for_time_synchro", "update_robot",
+            "wait_for_time_synchro", "wait_for_robot_update",
             [&](
                 const Ai::AiData & data, 
                 unsigned int run_number, unsigned int atomic_run_number
@@ -343,6 +343,36 @@ AI::AI(
                 unsigned int run_number, unsigned int atomic_run_number
             ){
                 this->assign_behavior_to_robots();
+            }
+        )
+        .add_edge(
+            "update_robot",
+            "wait_for_robot_update", "robot_is_updated",
+            [&](
+                const Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                return true;
+            },
+            [&](
+                Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                this->update_robots( );
+            }
+        )
+        .add_edge(
+            "robot_waiting_new_run",
+            "robot_is_updated", "wait_for_robot_update", 
+            [&](
+                const Ai::AiData & data, 
+                unsigned int run_number, unsigned int atomic_run_number
+            ){
+                if( run_number > run_number_old ){
+                    run_number_old = run_number;
+                    return true;
+                }
+                return false;
             }
         )
     ;

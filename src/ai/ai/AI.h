@@ -41,6 +41,7 @@ namespace RhobanSSL
         Ai::Constants & constants;
 
         machine_infrastructure::MachineState machine;
+        unsigned int run_number_old;
 
         bool enable_kicking;
 
@@ -84,7 +85,5 @@ namespace RhobanSSL
         );
 
         void limits_velocity( Control & ctrl ) const ;
-
-        Plot plot;
     };
 };

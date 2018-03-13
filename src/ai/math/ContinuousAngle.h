@@ -41,7 +41,7 @@ public:
     ContinuousAngle operator*( double scalar ) const;
     ContinuousAngle& operator*=( double scalar );
 
-    float turn() const;
+    double turn() const;
     int nb_turn() const;
 
     bool operator==( const ContinuousAngle& angle ) const;
