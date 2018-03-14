@@ -26,8 +26,8 @@ set (SOURCES
     ai/robot_behavior/goalie.cpp
     ai/robot_behavior/position_follower.cpp
     ai/robot_behavior/shooter.cpp
-    ai/robot_behavior/robot_behavior.cpp
     ai/robot_behavior/do_nothing.cpp
+    ai/robot_behavior/robot_behavior.cpp
     ai/AI.cpp
     ai/AiData.cpp
     control/robot_control.cpp
@@ -41,6 +41,7 @@ set (SOURCES
     math/ContinuousAngle.cpp
     math/curve.cpp
     core/export_to_plot.cpp
+    core/logger.cpp
     referee/Referee.cpp
 )
 

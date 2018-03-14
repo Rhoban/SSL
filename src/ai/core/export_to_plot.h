@@ -26,9 +26,9 @@ class Plot {
     void init( 
         const std::string & name, const std::vector<std::string> & value_names 
     );
-    void save( std::function< std::vector<double>() > fct );
-    void save( const std::string & name_value, double value );
-    void log();
+    void log( std::function< std::vector<double>() > fct );
+    void log( const std::string & name_value, double value );
+    void store();
     void close(); 
 };
 

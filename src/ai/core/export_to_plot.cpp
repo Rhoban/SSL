@@ -45,14 +45,13 @@ void Plot::close(){
     }
 }
 
-void Plot::log(){
+void Plot::store(){
     if( ! log_file.is_open() ) return;
     if( loged_values[value_names[0]] ){
         for( int i=0; i<n; i++ ){
             if( ! loged_values[value_names[i]] ){
-                DEBUG(
-                    "Value missing for " << value_names[i] << " at " << current_values[value_names[0]] 
-                );
+                std::cerr <<
+                    "Value missing for " << value_names[i] << " at " << current_values[value_names[0]] << std::endl;
             }
             log_file << current_values[ value_names[i] ] << " ";
         }
@@ -64,14 +63,14 @@ void Plot::log(){
     }
 }
 
-void Plot::save( std::function< std::vector<double>() > fct ){
+void Plot::log( std::function< std::vector<double>() > fct ){
     for( int i=0; i<n; i++ ){
         current_values[ value_names[i] ] = fct()[i];
         loged_values[ value_names[i] ] = true;
     }
 }
 
-void Plot::save( const std::string & name_value, double value ){
+void Plot::log( const std::string & name_value, double value ){
     current_values.at( name_value ) = value;
     loged_values.at( name_value ) = true;
 }

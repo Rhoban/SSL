@@ -11,6 +11,8 @@ devel
 devel_release
 logs
 logs_release
+*.log
+*.plot
 
 src/*
 !src/client/
