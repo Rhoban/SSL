@@ -3,29 +3,29 @@
 
 #include <core/export_to_plot.h>
 
-#define LOG(logger, message) \
-    { std::ostringstream & s;\
+#define LOGGER_LOG(logger_ptr, message) \
+    { std::ostringstream s;\
         s << "# " << message << " -- " << \
         rhoban_utils::getBaseName(__FILE__) << \
         ":" << __LINE__ << std::endl; \
-        logger.log( s.str() ); \
+        logger_ptr->log( s.str() ); \
     }
 
-#define PRINT(logger, message) \
-    { std::ostringstream & s;\
+#define LOGGER_PRINT(logger_ptr, message) \
+    { std::ostringstream s;\
         s << "# " << message << " -- " << \
         rhoban_utils::getBaseName(__FILE__) << \
         ":" << __LINE__ << std::endl; \
-        logger.print( s.str() ); \
+        logger_ptr->print( s.str() ); \
     }
 
-#define PRINT_AND_LOG(logger, message) \
-    { std::ostringstream & s;\
+#define LOGGER_PRINT_AND_LOG(logger_ptr, message) \
+    { std::ostringstream s;\
         s << "# " << message << " -- " << \
         rhoban_utils::getBaseName(__FILE__) << \
         ":" << __LINE__ << std::endl; \
-        logger.log( s.str() ); \
-        logger.print( s.str() ); \
+        logger_ptr->log( s.str() ); \
+        logger_ptr->print( s.str() ); \
     }
 
 struct Logger {
