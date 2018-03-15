@@ -1,6 +1,8 @@
 #include "export_to_plot.h"
 #include <iostream>
 #include <debug.h>
+#include <iomanip>
+#include <limits>
 
 void Plot::create_plot_script(
     const std::vector<std::string> & value_names
@@ -37,6 +39,7 @@ void Plot::init(
     if( !log_file.is_open()){
         std::cerr << "ERROR : It is not possible to write in " << name << ".log" << std::endl;
     }
+    log_file << std::setprecision(std::numeric_limits<double>::digits10 + 1); 
 }
 
 void Plot::close(){
