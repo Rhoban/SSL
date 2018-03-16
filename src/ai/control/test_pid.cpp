@@ -60,12 +60,12 @@ TEST(test_pid, use_cases){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
 
-        assert( controller.get_dt() == 10.0 );
+        EXPECT_TRUE( controller.get_dt() == 10.0 );
 
-        assert( controller.is_static() );
+        EXPECT_TRUE( controller.is_static() );
         
         controller.set_static(false);
-        assert( ! controller.is_static() );
+        EXPECT_TRUE( ! controller.is_static() );
     }
  
 }
@@ -82,28 +82,28 @@ TEST(test_pid, is_static){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
 
-        assert( controller.is_static() );
+        EXPECT_TRUE( controller.is_static() );
         
         PidControl control = controller.absolute_control_in_absolute_frame(
             Eigen::Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
-        assert(
+        EXPECT_TRUE(
             control.velocity_translation == Eigen::Vector2d(0.0, 0.0)
         );
-        assert(
+        EXPECT_TRUE(
             control.velocity_rotation == ContinuousAngle(0.0)
         );
 
         controller.set_static(false);
-        assert( ! controller.is_static() );
+        EXPECT_TRUE( ! controller.is_static() );
 
         control = controller.absolute_control_in_absolute_frame(
             Eigen::Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
-        assert(
+        EXPECT_TRUE(
             control.velocity_translation != Eigen::Vector2d(0.0, 0.0)
         );
-        assert(
+        EXPECT_TRUE(
             control.velocity_rotation != ContinuousAngle(0.0)
         );
     }
@@ -122,13 +122,13 @@ TEST(test_pid, get_time){
         controller.init_time( 10.0, 1.0 );
         
         controller.update( 20.0 );
-        assert( controller.get_time() == 10.0 );
+        EXPECT_TRUE( controller.get_time() == 10.0 );
         
         controller.update( 40.0 );
-        assert( controller.get_time() == 30.0 );
+        EXPECT_TRUE( controller.get_time() == 30.0 );
 
         controller.update( 43.0 );
-        assert( controller.get_time() == 33.0 );
+        EXPECT_TRUE( controller.get_time() == 33.0 );
     }
 }
 
@@ -145,13 +145,13 @@ TEST(test_pid, get_dt){
         controller.init_time( 10.0, 1.0 );
         
         controller.update( 20.0 );
-        assert( controller.get_dt() == 10.0 );
+        EXPECT_TRUE( controller.get_dt() == 10.0 );
         
         controller.update( 40.0 );
-        assert( controller.get_dt() == 20.0 );
+        EXPECT_TRUE( controller.get_dt() == 20.0 );
 
         controller.update( 43.0 );
-        assert( controller.get_dt() == 3.0 );
+        EXPECT_TRUE( controller.get_dt() == 3.0 );
     }
 }
 
@@ -172,10 +172,10 @@ TEST(test_pid, null_pid){
             Eigen::Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
 
-        assert(
+        EXPECT_TRUE(
             control.velocity_translation == Eigen::Vector2d(0.0,0.0)
         );
-        assert(
+        EXPECT_TRUE(
             control.velocity_rotation == ContinuousAngle(0.0)
         );
     } 
@@ -202,12 +202,12 @@ TEST(test_pid, null_pid){
             Eigen::Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
 
-        assert(
+        EXPECT_TRUE(
             (
                 control.velocity_translation - Eigen::Vector2d(4.0,5.0)
             ).norm() < 0.00001    
         );
-        assert(
+        EXPECT_TRUE(
             std::abs(
                 ( control.velocity_rotation - ContinuousAngle(6.0) ).value()
             ) < 0.00001
@@ -248,7 +248,7 @@ TEST(test_pid, pid){
             origin_position + linear_velocity * controller.get_time()
         );
         Eigen::Vector2d error_pos = current_position - pos;
-        assert(
+        EXPECT_TRUE(
             (
                 control.velocity_translation - (
                     Eigen::Vector2d(4.0,5.0) - 
@@ -261,7 +261,7 @@ TEST(test_pid, pid){
             origin_orientation + (angular_velocity * controller.get_time())
         );
         ContinuousAngle error_ori = current_orientation - ori;
-        assert(
+        EXPECT_TRUE(
             std::abs(
                 (
                     control.velocity_rotation - (
@@ -304,7 +304,7 @@ TEST(test_pid, pid){
             origin_position + linear_velocity * controller.get_time()
         );
         Eigen::Vector2d error_pos = current_position - pos;
-        assert(
+        EXPECT_TRUE(
             (
                 control.velocity_translation - (
                     Eigen::Vector2d(4.0,5.0) - 
@@ -317,7 +317,7 @@ TEST(test_pid, pid){
             origin_orientation + (angular_velocity * controller.get_time())
         );
         ContinuousAngle error_ori = current_orientation - ori;
-        assert(
+        EXPECT_TRUE(
             std::abs(
                 (
                     control.velocity_rotation - (
@@ -360,7 +360,7 @@ TEST(test_pid, pid){
             origin_position + linear_velocity * controller.get_time()
         );
         Eigen::Vector2d error_pos = current_position - pos;
-        assert(
+        EXPECT_TRUE(
             (
                 control.velocity_translation - (
                     Eigen::Vector2d(4.0,5.0) - 
@@ -373,7 +373,7 @@ TEST(test_pid, pid){
             origin_orientation + (angular_velocity * controller.get_time())
         );
         ContinuousAngle error_ori = current_orientation - ori;
-        assert(
+        EXPECT_TRUE(
             std::abs(
                 (
                     control.velocity_rotation - (

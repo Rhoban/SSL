@@ -20,8 +20,8 @@ TEST(test_robot_control, absolute_to_relative_control){
             absolute_control, robot_position, robot_orientation, dt
         );
 
-        assert(control.velocity_translation == Eigen::Vector2d(0.0,0.0));
-        assert(control.velocity_rotation == ContinuousAngle(0.0) );
+        EXPECT_TRUE(control.velocity_translation == Eigen::Vector2d(0.0,0.0));
+        EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(0.0) );
     }
     {
         // No velocity translation 
@@ -38,8 +38,8 @@ TEST(test_robot_control, absolute_to_relative_control){
             absolute_control, robot_position, robot_orientation, dt
         );
 
-        assert(control.velocity_translation == Eigen::Vector2d(0.0,0.0));
-        assert(control.velocity_rotation == ContinuousAngle(2.0) );
+        EXPECT_TRUE(control.velocity_translation == Eigen::Vector2d(0.0,0.0));
+        EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(2.0) );
     }
     {
         // No velocity rotation
@@ -63,8 +63,8 @@ TEST(test_robot_control, absolute_to_relative_control){
         ;
         Eigen::Vector2d v = rotation_matrix * velocity_translation;
 
-        assert( ( control.velocity_translation - v ).norm() < 0.001 );
-        assert(control.velocity_rotation == ContinuousAngle(0.0) );
+        EXPECT_TRUE( ( control.velocity_translation - v ).norm() < 0.001 );
+        EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(0.0) );
     }
     {
         Eigen::Vector2d velocity_translation(1.0, 2.0);
@@ -101,10 +101,10 @@ TEST(test_robot_control, absolute_to_relative_control){
             ( matrix_t_dt - matrix_t ).inverse() 
         ) * velocity_translation * omega.value() * dt;
 
-        assert(
+        EXPECT_TRUE(
             ( control.velocity_translation - VC ).norm() < 0.001
         );
-        assert(control.velocity_rotation == ContinuousAngle(3.0) );
+        EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(3.0) );
     }
 }
 
@@ -139,8 +139,8 @@ TEST(test_robot_control, limit_control){
             Eigen::Vector2d(0.0, 0.0), ContinuousAngle(0.0)
         );
 
-        assert( limited.velocity_translation == Eigen::Vector2d(3.0, 4.0) );
-        assert( limited.velocity_rotation == ContinuousAngle(3) );
+        EXPECT_TRUE( limited.velocity_translation == Eigen::Vector2d(3.0, 4.0) );
+        EXPECT_TRUE( limited.velocity_rotation == ContinuousAngle(3) );
     }
     {
         TestRobotControl robot_control;
@@ -156,13 +156,13 @@ TEST(test_robot_control, limit_control){
             Eigen::Vector2d(0.0, 0.0), ContinuousAngle(0.0)
         );
 
-        assert( 
+        EXPECT_TRUE( 
             std::abs( 
                 limited.velocity_translation.norm() - 
                 translation_velocity_limit
             ) < 0.0001
         );
-        assert(
+        EXPECT_TRUE(
             std::abs(
                 limited.velocity_rotation.value() - rotation_velocity_limit 
             ) < 0.0001 
