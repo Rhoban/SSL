@@ -1,3 +1,5 @@
+#include <gtest/gtest.h>
+
 #include "machine_state.h"
 
 #include <iostream>
@@ -89,7 +91,7 @@ class TestEdge : public machine_state::Edge<ID, std::ostream> {
     virtual ~TestEdge(){}
 };
 
-void test_simple_case(){
+TEST(test_machine_state, simple_cases){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -134,17 +136,17 @@ void test_simple_case(){
 
         machine.add_init_state("start");
         
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         machine.start();
 
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr start (1, 1), "
             "ec initialisation (1, 1), "
@@ -154,7 +156,7 @@ void test_simple_case(){
             "er next (1, 2), "
             "sr end (1, 3), "
         );
-        assert( 
+        EXPECT_TRUE( 
             data.str() == 
             "sr start (1, 1), "
             "ec initialisation (1, 1), "
@@ -170,11 +172,11 @@ void test_simple_case(){
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr end (2, 1), "
         );
-        assert( 
+        EXPECT_TRUE( 
             data.str() == 
             "sr end (2, 1), "
         );
@@ -185,7 +187,7 @@ void test_simple_case(){
     }
 }
 
-void test_empty_machine(){
+TEST(test_machine_state, empty_machine){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -194,24 +196,24 @@ void test_empty_machine(){
 
         machine.start();
 
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         clear( out );
         clear( data );
 
         machine.run();
 
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
         
         clear( out );
         clear( data );
 
         machine.run();
 
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         clear( out );
         clear( data );
@@ -219,7 +221,7 @@ void test_empty_machine(){
     }
 }
 
-void test_with_no_start(){
+TEST(test_machine_state, with_no_start){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -263,28 +265,28 @@ void test_with_no_start(){
 
         machine.add_init_state("start");
         
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         machine.run();
 
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         clear( out );
         clear( data );
 
         machine.run();
 
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         clear( out );
         clear( data );
     }
 }
 
-void test_state_edge_data(){
+TEST(test_machine_state, state_edge_data){
     {
         std::ostringstream edge_data;
         std::ostringstream state_data;
@@ -329,19 +331,19 @@ void test_state_edge_data(){
 
         machine.add_init_state("start");
         
-        assert( out.str() == "" );
-        assert( state_data.str() == "" );
-        assert( edge_data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( state_data.str() == "" );
+        EXPECT_TRUE( edge_data.str() == "" );
 
         machine.start();
 
-        assert( out.str() == "" );
-        assert( state_data.str() == "" );
-        assert( edge_data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( state_data.str() == "" );
+        EXPECT_TRUE( edge_data.str() == "" );
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr start (1, 1), "
             "ec initialisation (1, 1), "
@@ -351,14 +353,14 @@ void test_state_edge_data(){
             "er next (1, 2), "
             "sr end (1, 3), "
         );
-        assert( 
+        EXPECT_TRUE( 
             edge_data.str() == 
             "ec initialisation (1, 1), "
             "er initialisation (1, 1), "
             "ec next (1, 2), "
             "er next (1, 2), "
         );
-        assert( 
+        EXPECT_TRUE( 
             state_data.str() == 
             "sr start (1, 1), "
             "sr middle (1, 2), "
@@ -371,15 +373,15 @@ void test_state_edge_data(){
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr end (2, 1), "
         );
-        assert( 
+        EXPECT_TRUE( 
             edge_data.str() == 
             ""
         );
-        assert( 
+        EXPECT_TRUE( 
             state_data.str() == 
             "sr end (2, 1), "
         );
@@ -391,15 +393,15 @@ void test_state_edge_data(){
     }
 }
 
-void test_current_and_initial_states_and_is_active(){
+TEST(test_machine_state, current_and_initial_states_and_are_active){
     {
         std::ostringstream data;
         std::ostringstream out;
 
         msi_string::MachineState machine(data, data);
 
-        assert( machine.initial_states().size() == 0 );
-        assert( machine.current_states().size() == 0 );
+        EXPECT_TRUE( machine.initial_states().size() == 0 );
+        EXPECT_TRUE( machine.current_states().size() == 0 );
 
         machine.add_state(
             std::shared_ptr<msi_string::State>(
@@ -437,64 +439,64 @@ void test_current_and_initial_states_and_is_active(){
         );
 
 
-        assert( machine.initial_states().size() == 0 );
-        assert( machine.current_states().size() == 0 );
-        assert( !machine.is_active( "start" ) );
-        assert( !machine.is_active( "middle" ) );
-        assert( !machine.is_active( "end" ) );
+        EXPECT_TRUE( machine.initial_states().size() == 0 );
+        EXPECT_TRUE( machine.current_states().size() == 0 );
+        EXPECT_TRUE( !machine.is_active( "start" ) );
+        EXPECT_TRUE( !machine.is_active( "middle" ) );
+        EXPECT_TRUE( !machine.is_active( "end" ) );
 
-        assert( !machine.is_initial( "start" ) );
-        assert( !machine.is_initial( "middle" ) );
-        assert( !machine.is_initial( "end" ) );
+        EXPECT_TRUE( !machine.is_initial( "start" ) );
+        EXPECT_TRUE( !machine.is_initial( "middle" ) );
+        EXPECT_TRUE( !machine.is_initial( "end" ) );
 
         machine.add_init_state("start");
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states().size() == 0 );
-        assert( !machine.is_active( "start" ) );
-        assert( !machine.is_active( "middle" ) );
-        assert( !machine.is_active( "end" ) );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states().size() == 0 );
+        EXPECT_TRUE( !machine.is_active( "start" ) );
+        EXPECT_TRUE( !machine.is_active( "middle" ) );
+        EXPECT_TRUE( !machine.is_active( "end" ) );
 
-        assert( machine.is_initial( "start" ) );
-        assert( !machine.is_initial( "middle" ) );
-        assert( !machine.is_initial( "end" ) );
+        EXPECT_TRUE( machine.is_initial( "start" ) );
+        EXPECT_TRUE( !machine.is_initial( "middle" ) );
+        EXPECT_TRUE( !machine.is_initial( "end" ) );
         
         machine.start();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( 
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( 
             machine.current_states() == std::set<std::string>({"start"})
         );
-        assert( machine.is_active( "start" ) );
-        assert( !machine.is_active( "middle" ) );
-        assert( !machine.is_active( "end" ) );
+        EXPECT_TRUE( machine.is_active( "start" ) );
+        EXPECT_TRUE( !machine.is_active( "middle" ) );
+        EXPECT_TRUE( !machine.is_active( "end" ) );
 
         std::set<std::string> states;
         states = machine.run();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( 
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( 
             machine.current_states() == std::set<std::string>({"end"})
         );
-        assert( machine.current_states() == states );
-        assert( !machine.is_active( "start" ) );
-        assert( !machine.is_active( "middle" ) );
-        assert( machine.is_active( "end" ) );
+        EXPECT_TRUE( machine.current_states() == states );
+        EXPECT_TRUE( !machine.is_active( "start" ) );
+        EXPECT_TRUE( !machine.is_active( "middle" ) );
+        EXPECT_TRUE( machine.is_active( "end" ) );
 
         states = machine.run();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( 
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( 
             machine.current_states() == std::set<std::string>({"end"})
         );
-        assert( machine.current_states() == states );
-        assert( !machine.is_active( "start" ) );
-        assert( !machine.is_active( "middle" ) );
-        assert( machine.is_active( "end" ) );
+        EXPECT_TRUE( machine.current_states() == states );
+        EXPECT_TRUE( !machine.is_active( "start" ) );
+        EXPECT_TRUE( !machine.is_active( "middle" ) );
+        EXPECT_TRUE( machine.is_active( "end" ) );
     }
 }
 
-void test_complex_case(){
+TEST(test_machine_state, complex_cases){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -508,7 +510,7 @@ void test_complex_case(){
                 )
             );
         }
-        assert( machine.state_number() == 9 );
+        EXPECT_TRUE( machine.state_number() == 9 );
         machine.add_edge(
             std::shared_ptr<msi_int::Edge>(
                 new TestEdge<int>( 1,  1, 2, out )
@@ -554,19 +556,19 @@ void test_complex_case(){
                 new TestEdge<int>( 8,  9, 4, out, [&](){ return button_8__9_4;} )
             )
         );
-        assert( machine.edge_number() == 8 );
+        EXPECT_TRUE( machine.edge_number() == 8 );
 
         machine.add_init_state({ 1, 4 });
        
-        assert(  machine.is_initial( 1 ) );
-        assert( !machine.is_initial( 2 ) );
-        assert( !machine.is_initial( 3 ) );
-        assert(  machine.is_initial( 4 ) );
-        assert( !machine.is_initial( 5 ) );
-        assert( !machine.is_initial( 6 ) );
-        assert( !machine.is_initial( 7 ) );
-        assert( !machine.is_initial( 8 ) );
-        assert( !machine.is_initial( 9 ) );
+        EXPECT_TRUE(  machine.is_initial( 1 ) );
+        EXPECT_TRUE( !machine.is_initial( 2 ) );
+        EXPECT_TRUE( !machine.is_initial( 3 ) );
+        EXPECT_TRUE(  machine.is_initial( 4 ) );
+        EXPECT_TRUE( !machine.is_initial( 5 ) );
+        EXPECT_TRUE( !machine.is_initial( 6 ) );
+        EXPECT_TRUE( !machine.is_initial( 7 ) );
+        EXPECT_TRUE( !machine.is_initial( 8 ) );
+        EXPECT_TRUE( !machine.is_initial( 9 ) );
  
         machine.start();
 
@@ -576,7 +578,7 @@ void test_complex_case(){
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr 1 (1, 1), "
             "sr 4 (1, 1), "
@@ -605,7 +607,7 @@ void test_complex_case(){
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr 2 (2, 1), "
             "sr 8 (2, 1), "
@@ -620,7 +622,7 @@ void test_complex_case(){
         button_3__4_7 = false;
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr 2 (3, 1), "
             "sr 8 (3, 1), "
@@ -651,7 +653,7 @@ void test_complex_case(){
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr 2 (4, 1), "
             "sr 6 (4, 1), "
@@ -661,16 +663,16 @@ void test_complex_case(){
     }
 }
 
-void test_edge_state_number(){
+TEST(test_machine_state, edge_state_number){
     {
         std::ostringstream data;
         std::ostringstream out;
 
         msi_int::MachineState machine(data, data);
 
-        assert( machine.state_number() == 0 );
-        assert( machine.size() == machine.state_number() );
-        assert( machine.edge_number() == 0 );
+        EXPECT_TRUE( machine.state_number() == 0 );
+        EXPECT_TRUE( machine.size() == machine.state_number() );
+        EXPECT_TRUE( machine.edge_number() == 0 );
     }
     {
         std::ostringstream data;
@@ -685,8 +687,8 @@ void test_edge_state_number(){
                 )
             );
         }
-        assert( machine.state_number() == 32 );
-        assert( machine.size() == machine.state_number() );
+        EXPECT_TRUE( machine.state_number() == 32 );
+        EXPECT_TRUE( machine.size() == machine.state_number() );
         for( int i=0; i<12; i++ ){ 
             machine.add_edge(
                 std::shared_ptr<msi_int::Edge>(
@@ -694,12 +696,12 @@ void test_edge_state_number(){
                 )
             );
         }
-        assert( machine.edge_number() == 12 );
+        EXPECT_TRUE( machine.edge_number() == 12 );
     }
 }
 
 
-void test_stream(){
+TEST(test_machine_state, stream){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -747,7 +749,7 @@ void test_stream(){
         std::ostringstream description;
         description << machine;
 
-        assert( 
+        EXPECT_TRUE( 
             description.str()==
             "States : end, middle, start, \n"
             "Edges : \n"
@@ -757,7 +759,7 @@ void test_stream(){
     }
 }
 
-void test_to_dot(){
+TEST(test_machine_state, to_dot){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -804,7 +806,7 @@ void test_to_dot(){
 
         machine.start();
 
-        assert(
+        EXPECT_TRUE(
             machine.to_dot() ==
             "digraph G {\n"
             " graph [ordering=\"out\"]\n"
@@ -820,7 +822,7 @@ void test_to_dot(){
 
         machine.run();
 
-        assert(
+        EXPECT_TRUE(
             machine.to_dot() ==
             "digraph G {\n"
             " graph [ordering=\"out\"]\n"
@@ -836,7 +838,7 @@ void test_to_dot(){
     }
 }
 
-void test_anonymstate_anonymedge(){
+TEST(test_machine_state, anonym_state_anonym_edge){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -852,23 +854,23 @@ void test_anonymstate_anonymedge(){
 
         machine.add_init_state("start");
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>() );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>() );
 
         machine.start();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>({"start"}) );
 
         machine.run();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>({"end"}) );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>({"end"}) );
 
         machine.run();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>({"end"}) );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>({"end"}) );
     }
     {
         std::ostringstream data;
@@ -892,29 +894,29 @@ void test_anonymstate_anonymedge(){
 
         machine.add_init_state("start");
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>() );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>() );
 
         machine.start();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>({"start"}) );
 
         machine.run();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>({"middle"}) );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>({"middle"}) );
 
         machine.run();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>({"middle"}) );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>({"middle"}) );
         
         button_next = true;
         machine.run();
 
-        assert( machine.initial_states() == std::set<std::string>({"start"}) );
-        assert( machine.current_states() == std::set<std::string>({"end"}) );
+        EXPECT_TRUE( machine.initial_states() == std::set<std::string>({"start"}) );
+        EXPECT_TRUE( machine.current_states() == std::set<std::string>({"end"}) );
     }
     {
         std::ostringstream data;
@@ -1025,7 +1027,7 @@ void test_anonymstate_anonymedge(){
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             data.str() == 
             "#sr START (1, 1), "
             "#ec INITIALISATION (1, 1), "
@@ -1042,7 +1044,7 @@ void test_anonymstate_anonymedge(){
         machine.run();
 
 
-        assert( 
+        EXPECT_TRUE( 
             data.str() == 
             "#sr END (2, 1), "
         );
@@ -1089,7 +1091,7 @@ class Follower : public machine_state::MachineStateFollower<std::ostream, std::o
     virtual ~Follower(){ }
 };
 
-void test_register_follower(){
+TEST(test_machine_state, register_follower){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -1139,18 +1141,18 @@ void test_register_follower(){
         machine.register_follower( f1 );
         machine.register_follower( f2 );
         
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         machine.start();
 
-        assert( out.str() == "" );
-        assert( data.str() == "" );
+        EXPECT_TRUE( out.str() == "" );
+        EXPECT_TRUE( data.str() == "" );
 
         machine.run();
 
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr start (1, 1), "
             "ec initialisation (1, 1), "
@@ -1161,7 +1163,7 @@ void test_register_follower(){
             "sr end (1, 3), "
         );
         
-        assert( 
+        EXPECT_TRUE( 
             data.str() == 
             "fu f1 (1, 1), "
             "fu f2 (1, 1), "
@@ -1185,11 +1187,11 @@ void test_register_follower(){
 
         machine.run();
 
-        assert( 
+        EXPECT_TRUE( 
             out.str() == 
             "sr end (2, 1), "
         );
-        assert( 
+        EXPECT_TRUE( 
             data.str() == 
             "fu f1 (2, 1), "
             "fu f2 (2, 1), "
@@ -1204,7 +1206,7 @@ void test_register_follower(){
     }
 }
 
-void test_rising_edge(){
+TEST(test_machine_state, rising_edge){
     {
         std::ostringstream data;
         std::ostringstream out;
@@ -1236,26 +1238,12 @@ void test_rising_edge(){
 
         machine.run();
 
-        assert( machine.current_states() == std::set<int>({3}) );        
+        EXPECT_TRUE( machine.current_states() == std::set<int>({3}) );        
     }
 }
 
 
-int main(){
-
-    test_simple_case();
-    test_empty_machine();
-    test_with_no_start();
-    test_state_edge_data();
-    test_current_and_initial_states_and_is_active();
-    test_complex_case();
-    test_edge_state_number();
-    test_stream();
-    test_to_dot();
-    test_anonymstate_anonymedge();
-    test_register_follower();
-    
-    test_rising_edge();
-
-    return 0;
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

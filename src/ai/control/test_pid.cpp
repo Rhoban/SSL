@@ -1,3 +1,5 @@
+#include <gtest/gtest.h>
+
 #include "pid.h"
 
 class PidStatic : public PidController {
@@ -46,7 +48,7 @@ class PidLinear : public PidController {
     };
 }; 
 
-void test_use_cases(){
+TEST(test_pid, use_cases){
     {
         PidStatic controller(
             ContinuousAngle(321), 
@@ -68,7 +70,7 @@ void test_use_cases(){
  
 }
 
-void test_is_static(){
+TEST(test_pid, is_static){
     {
         PidStatic controller(
             ContinuousAngle(321), 
@@ -108,7 +110,7 @@ void test_is_static(){
  
 }
 
-void test_get_time(){
+TEST(test_pid, get_time){
     {
         PidStatic controller(
             ContinuousAngle(321), 
@@ -131,7 +133,7 @@ void test_get_time(){
 }
 
 
-void test_get_dt(){
+TEST(test_pid, get_dt){
     {
         PidStatic controller(
             ContinuousAngle(321), 
@@ -153,7 +155,7 @@ void test_get_dt(){
     }
 }
 
-void test_null_pid(){
+TEST(test_pid, null_pid){
     {
         PidStatic controller(
             ContinuousAngle(321), 
@@ -213,7 +215,7 @@ void test_null_pid(){
     } 
 }
 
-void test_pid(){
+TEST(test_pid, pid){
     {
         Eigen::Vector2d origin_position(1.0, 2.0);
         ContinuousAngle origin_orientation(3.0); 
@@ -384,14 +386,7 @@ void test_pid(){
     } 
 }
 
-int main(){
-        
-    test_get_dt();
-    test_get_time();    
-    test_is_static();
-
-    test_null_pid();
-    test_pid();
-
-    return 0;
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

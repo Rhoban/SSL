@@ -1,8 +1,9 @@
+#include <gtest/gtest.h>
+
 #include "robot_control.h"
 
 
-void test_absolute_to_relative_control(){
-   
+TEST(test_robot_control, absolute_to_relative_control){
     {
         // No velocity translation 
         // No velocity rotation
@@ -123,7 +124,7 @@ class TestRobotControl : public RobotControl {
     };
 };
 
-void test_limit_control(){
+TEST(test_robot_control, limit_control){
     {
         TestRobotControl robot_control;
 
@@ -169,10 +170,7 @@ void test_limit_control(){
     }
 }
 
-int main(){
-
-    test_absolute_to_relative_control();
-    test_limit_control();
-
-    return 0;
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

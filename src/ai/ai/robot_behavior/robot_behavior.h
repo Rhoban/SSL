@@ -17,7 +17,7 @@ struct Control : PidControl {
     Control(bool kick, bool active, bool ignore);
     Control(const PidControl& c);
 
-    static Control make_desactived();
+    static Control make_desactivated();
     static Control make_ignored();
     static Control make_null();
 };

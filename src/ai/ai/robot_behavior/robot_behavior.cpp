@@ -38,8 +38,8 @@ Control Control::make_null(){
     return Control(false, true, false);
 }
 
-Control Control::make_desactived(){
-    return Control(false, false, true);
+Control Control::make_desactivated(){
+    return Control(false, false, false);
 }
 
 Control Control::make_ignored(){

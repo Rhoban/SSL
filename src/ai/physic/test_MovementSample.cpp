@@ -1,10 +1,12 @@
+#include <gtest/gtest.h>
+
 #include <debug.h>
 #include "MovementSample.h"
 #include <math.h>
 
 using namespace rhoban_geometry;
 
-void test_position_sample(){
+TEST(test_MovementSample, position_sample){
     {
         RhobanSSL::PositionSample pos;
         assert( pos.time == 0 );
@@ -29,7 +31,7 @@ void test_position_sample(){
     }
 }
 
-void test_MovementSample(){
+TEST(test_MovementSample, some_use_cases){
     {
         RhobanSSL::MovementSample mov;
         assert( mov.size() == 0 );
@@ -150,7 +152,7 @@ void test_MovementSample(){
     }
 }
 
-int main(){
-    test_position_sample();
-    test_MovementSample();
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }

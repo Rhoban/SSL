@@ -72,12 +72,12 @@ if(CATKIN_ENABLE_TESTING)
     math/test_ContinuousAngle.cpp
     control/test_pid.cpp
     control/test_robot_control.cpp
-    )
+    ai/robot_behavior/test_robot_behavior.cpp
+  )
 
   foreach(test_source ${TEST_SOURCES})
       get_filename_component(name_test ${test_source} NAME_WE)
-      add_executable(${name_test} ${test_source})  
-      add_test(NAME ${name_test} COMMAND ./${name_test} WORKING_DIRECTORY ${TEST_DIRECTORY})
+      catkin_add_gtest(${name_test} ${test_source})  
       target_link_libraries(${name_test} ssl_ai ${ALL_LIBS})
   endforeach(test_source)
 endif(CATKIN_ENABLE_TESTING)

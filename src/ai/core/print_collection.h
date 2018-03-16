@@ -38,7 +38,7 @@ std::ostream & operator<<(
     for( const std::pair<K,V> & elem : map ){
         out << elem.first << " : " << elem.second << ", ";
     }
-    out << "]";
+    out << "}";
     return out;
 }
 

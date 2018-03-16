@@ -115,7 +115,7 @@ Control AI::update_robot(
         Control ctrl = robot_behavior.control();
         return ctrl; 
     }else{
-        return Control::make_desactived();
+        return Control::make_desactivated();
     }
     return Control::make_ignored();
 }

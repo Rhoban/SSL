@@ -1,3 +1,5 @@
+#include <gtest/gtest.h>
+
 #include <debug.h>
 #include "curve.h"
 
@@ -24,7 +26,7 @@ double error_renormalisation(
     )/dt;
 };
 
-void test_curves(){
+TEST(test_curve, curves){
     {
 
         double length = 2.0;
@@ -44,38 +46,38 @@ void test_curves(){
             dt_micro, dt_micro/100
         );
         for( double u=0.0; u<=1.0; u = u+ dt ){
-            assert( curve.original_curve(u) == Eigen::Vector2d(2*u,0));
+            EXPECT_TRUE( curve.original_curve(u) == Eigen::Vector2d(2*u,0));
         }
 
-        assert(
+        EXPECT_TRUE(
             eq( length, curve.size(),  erreur)
         );
 
         // As velocity is 1, then length is equal to time to walk on the 
         // complete curve.
-        assert( eq(length, curve.max_time(), erreur) );
+        EXPECT_TRUE( eq(length, curve.max_time(), erreur) );
         // On this example the ration between time en distance is 2.
-        assert( eq(length, curve.time(length-erreur), 2*erreur) );
+        EXPECT_TRUE( eq(length, curve.time(length-erreur), 2*erreur) );
 
 
         RenormalizedCurve::TimeCurve time_it = curve.time_iterator();
         for( double d=0.0; d<=length; d = d + dt ){
-            assert( eq(d, time_it(d), erreur) );
+            EXPECT_TRUE( eq(d, time_it(d), erreur) );
         }
 
         RenormalizedCurve::PositionConsign position_it = curve.position_consign_iterator();
         for( double t=0.0; t<2*length; t = t + dt ){
-            assert( eq(t, position_it(t), erreur) );
+            EXPECT_TRUE( eq(t, position_it(t), erreur) );
         }
 
         Curve2d::Length length_it = curve.length_iterator();
         for( double u=0.0; u<1.0; u = u + dt ){
-            assert( eq(length*u, length_it(u), erreur) );
+            EXPECT_TRUE( eq(length*u, length_it(u), erreur) );
         }
 
         Curve2d::Inverse_of_length inverse_legnth_it = curve.Inverse_of_length_iterator();
         for( double l=0.0; l<=length; l = l + dt ){
-            assert( eq(l/length, inverse_legnth_it(l), erreur) );
+            EXPECT_TRUE( eq(l/length, inverse_legnth_it(l), erreur) );
         }
 
         std::function<double(double)> error_curve = [&](double u){
@@ -84,7 +86,7 @@ void test_curves(){
         RenormalizedCurve::CurveIterator curve_t_it = curve.curve_iterator();
         RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curve_iterator();
         for( double t=0.0; t<curve.max_time()-dt; t = t + dt ){
-            assert(
+            EXPECT_TRUE(
                 eq(
                     1.0,
                     ( curve_t_dt_it(t+dt) - curve_t_it(t) ).norm()/dt,
@@ -93,7 +95,7 @@ void test_curves(){
             );
         }
 
-        assert(
+        EXPECT_TRUE(
             eq(
                 (
                     curve(curve.max_time()+dt) -
@@ -103,8 +105,8 @@ void test_curves(){
                 erreur
             ) 
         );
-        assert( curve(curve.max_time()+dt) == curve( curve.max_time()+2*dt ) );
-        assert( curve(curve.max_time()+3*dt) == curve( curve.max_time()+dt ) );
+        EXPECT_TRUE( curve(curve.max_time()+dt) == curve( curve.max_time()+2*dt ) );
+        EXPECT_TRUE( curve(curve.max_time()+3*dt) == curve( curve.max_time()+dt ) );
     }
 
     {
@@ -127,13 +129,13 @@ void test_curves(){
             [](double t){ return t+.1; },
             dt_micro, dt_micro/100
         );
-        assert(
+        EXPECT_TRUE(
             eq(
                 length, curve.size(),
                 erreur
             )
         );
-        assert(
+        EXPECT_TRUE(
             eq(
                 time_max, curve.get_time_max(),
                 erreur
@@ -166,7 +168,7 @@ void test_curves(){
                     error_renormalisation(t, curve, error_curve, dt) + du/10.0
             );
             */
-            assert(
+            EXPECT_TRUE(
                 eq(
                     t+.1,
                     ( curve_t_dt_it(t+dt) - curve_t_it(t) ).norm()/dt,
@@ -175,40 +177,40 @@ void test_curves(){
             );
             //DEBUG("");
         }
-        assert( curve(curve.max_time()+dt) == curve( curve.max_time() ) );
-        assert( curve(curve.max_time()+3*dt) == curve( curve.max_time() ) );
+        EXPECT_TRUE( curve(curve.max_time()+dt) == curve( curve.max_time() ) );
+        EXPECT_TRUE( curve(curve.max_time()+3*dt) == curve( curve.max_time() ) );
     }
 }
 
-void test_velocityconsign(){
+TEST(test_curve, velocityconsign){
     {
         double erreur = 0.0000001;
         double distance = 4.0;
         double max_acceleration = 3.0;
         double max_velocity = 2.0;
         ContinuousVelocityConsign consign(distance, max_velocity, max_acceleration);
-        assert( consign(-0.1) == 0.0 );
-        assert( consign(0) == 0.0 );
-        assert(
+        EXPECT_TRUE( consign(-0.1) == 0.0 );
+        EXPECT_TRUE( consign(0) == 0.0 );
+        EXPECT_TRUE(
             eq(
                 consign(consign.time_of_acceleration()/2.0),
                 max_velocity/2.0, erreur
             )
         );
-        assert(
+        EXPECT_TRUE(
             eq(
                 consign(consign.time_of_acceleration()),
                 max_velocity, erreur
             )
         );
-        assert(
+        EXPECT_TRUE(
             eq(
                 consign( consign.time_of_deplacement()
                 - consign.time_of_acceleration()),
                 max_velocity, erreur
             )
         );
-        assert(
+        EXPECT_TRUE(
             eq(
                 consign(
                     consign.time_of_deplacement() -
@@ -217,18 +219,18 @@ void test_velocityconsign(){
                 max_velocity/2.0, erreur
             )
         );
-        assert( consign(consign.time_of_deplacement()) == 0.0 );
-        assert( consign(consign.time_of_deplacement()+.01) == 0.0 );
+        EXPECT_TRUE( consign(consign.time_of_deplacement()) == 0.0 );
+        EXPECT_TRUE( consign(consign.time_of_deplacement()+.01) == 0.0 );
         double len = 0.0;
         double step = .00001;
         for( double t = 0.0; t<consign.time_of_deplacement(); t+= step ){
             len += consign(t) * step;
         }
-        assert( eq( distance, len, .0001 ) );
+        EXPECT_TRUE( eq( distance, len, .0001 ) );
     }
 }
 
-void test_empty_curves(){
+TEST(test_curve, empty_curves){
     {
         double dt = 0.01;
         double dt_micro = dt/100;
@@ -241,10 +243,10 @@ void test_empty_curves(){
             dt_micro, dt_micro/100
         );
 
-        assert( 0.0 == curve.size() );
-        assert( 0.0 == curve.max_time() );
-        assert( position == curve(0.0) );
-        assert( position == curve(0.4) );
+        EXPECT_TRUE( 0.0 == curve.size() );
+        EXPECT_TRUE( 0.0 == curve.max_time() );
+        EXPECT_TRUE( position == curve(0.0) );
+        EXPECT_TRUE( position == curve(0.4) );
     }
 }
 
@@ -279,13 +281,13 @@ struct fct_wrapper {
     };
 };
 
-void test_use_cases(){
+TEST(test_curve, use_cases){
     {
         Rotation rot;
         rot.orientation = 90.0;
         fct_wrapper fct(rot);
         Curve2d curve(fct, 0.0001);
-        assert( curve.size() == 90 );
+        EXPECT_TRUE( curve.size() == 90 );
     }
 
     {
@@ -298,7 +300,7 @@ void test_use_cases(){
             [](double t){ return 10.0; },
             dt_micro, dt_micro/100
         );
-        assert( eq( curve.max_time(), 9, 0.01 ) );
+        EXPECT_TRUE( eq( curve.max_time(), 9, 0.01 ) );
     }
     {
         double dt = 0.01;
@@ -308,7 +310,7 @@ void test_use_cases(){
             [](double u){ return Eigen::Vector2d(90.0*u,0.0); },
             dt_micro
         );
-        assert( crv.size() == 90 );
+        EXPECT_TRUE( crv.size() == 90 );
         double max_acceleration = 300.0;
         double max_velocity = 90.0;
         ContinuousVelocityConsign consign(crv.size(), max_velocity, max_acceleration);
@@ -339,16 +341,14 @@ void test_use_cases(){
         for( double t = 0; t< curve.max_time()-dt; t+= dt ){
             Eigen::Vector2d xt = curve_t_it(t);
             Eigen::Vector2d xdt = curve_t_dt_it(t+dt);
-            assert( xdt[0] >= xt[0] );
-            assert( xdt[1] >= xt[1] );
+            EXPECT_TRUE( xdt[0] >= xt[0] );
+            EXPECT_TRUE( xdt[1] >= xt[1] );
         }
 
     }
 }
 
-int main(){
-    test_use_cases();
-    test_empty_curves();
-    test_curves();
-    test_velocityconsign();
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
