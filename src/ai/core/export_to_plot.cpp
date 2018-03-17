@@ -39,7 +39,11 @@ void Plot::init(
     if( !log_file.is_open()){
         std::cerr << "ERROR : It is not possible to write in " << name << ".log" << std::endl;
     }
-    log_file << std::setprecision(std::numeric_limits<double>::digits10 + 1); 
+    log_file << std::setprecision(std::numeric_limits<double>::digits10 + 1);
+    for( int j=0; j<n; j++ ){
+        log_file << value_names[j] << " ";
+    }
+    log_file << std::endl; 
 }
 
 void Plot::close(){
@@ -74,8 +78,10 @@ void Plot::log( std::function< std::vector<double>() > fct ){
 }
 
 void Plot::log( const std::string & name_value, double value ){
-    current_values.at( name_value ) = value;
-    loged_values.at( name_value ) = true;
+    if( current_values.find( name_value ) != current_values.end() ){
+        current_values.at( name_value ) = value;
+        loged_values.at( name_value ) = true;
+    }
 }
 
 Plot::~Plot(){
