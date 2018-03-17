@@ -4,12 +4,12 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 find_package(catkin REQUIRED COMPONENTS
-  ssl_client tclap rhoban_geometry eigen
+  ssl_client tclap rhoban_geometry rhoban_utils eigen
 )
 
 catkin_package(
     INCLUDE_DIRS .
-    CATKIN_DEPENDS ssl_client rhoban_geometry tclap eigen
+    CATKIN_DEPENDS ssl_client rhoban_geometry rhoban_utils tclap eigen
 )
 
 find_package(Protobuf REQUIRED)
@@ -57,6 +57,12 @@ add_executable(ai main.cpp)
 target_link_libraries(ai ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
+
+add_executable(json_factory configs/json_factory.cpp)
+target_link_libraries(json_factory ${ALL_LIBS})
+add_executable(json_serialization configs/json_serialization.cpp)
+target_link_libraries(json_serialization ${ALL_LIBS})
+
 
 if(CATKIN_ENABLE_TESTING)
   include(CTest)
