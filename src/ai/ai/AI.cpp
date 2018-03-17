@@ -54,9 +54,7 @@ void AI::limits_velocity( Control & ctrl ) const {
     }
 }
 
-void AI::prepare_to_send_control(
-    Vision::Team team, int robot_id, Control ctrl 
-){
+void AI::prepare_to_send_control( int robot_id, Control ctrl ){
     limits_velocity(ctrl);
 
     #ifdef SSL_SIMU
@@ -65,12 +63,6 @@ void AI::prepare_to_send_control(
         double sign_y = -1.0;
     #endif
 
-    AICommander * commander;
-    if( team == Vision::Ally ){
-        commander = commander_yellow;
-    }else{
-        commander = commander_blue;
-    }
     #ifdef SSL_SIMU
     #else
     if( ctrl.kick and enable_kicking ){
@@ -121,14 +113,12 @@ Control AI::update_robot(
 }
 
 void AI::stop_all_robots(){
-    for( auto team : {Vision::Ally, Vision::Opponent} ){
-        for( int k=0; k<Vision::Robots; k++ ){
-            robot_behaviors[team][k] = std::shared_ptr<
-                RobotBehavior
-            >(
-                new DoNothing()
-            );
-        }
+    for( int k=0; k<Vision::Robots; k++ ){
+        robot_behaviors[k] = std::shared_ptr<
+            RobotBehavior
+        >(
+            new DoNothing()
+        );
     }
 }
 
@@ -157,9 +147,8 @@ void AI::assign_behavior_to_robots(){
     PositionFollower* follower = new PositionFollower(
         current_time, current_dt
     );
-    Vision::Team follower_team = Vision::Opponent;
     const Ai::Robot & robot_follower = game_state.robots[
-        follower_team
+        Vision::Ally
     ][TeamId::follower_id];
     Eigen::Vector2d follower_position(
         robot_follower.get_movement().linear_position(current_time).getX(),
@@ -180,7 +169,7 @@ void AI::assign_behavior_to_robots(){
         constants.translation_velocity_limit,
         constants.rotation_velocity_limit
     );
-    robot_behaviors[follower_team][TeamId::follower_id] = std::shared_ptr<
+    robot_behaviors[TeamId::follower_id] = std::shared_ptr<
         RobotBehavior
     >( follower ); 
 
@@ -203,7 +192,7 @@ void AI::assign_behavior_to_robots(){
         constants.translation_velocity_limit,
         constants.rotation_velocity_limit
     );
-    robot_behaviors[Vision::Ally][TeamId::goalie_id] = std::shared_ptr<
+    robot_behaviors[TeamId::goalie_id] = std::shared_ptr<
         RobotBehavior
     >( goalie ); 
 
@@ -248,7 +237,7 @@ void AI::assign_behavior_to_robots(){
         ball_position, robot_position, robot_orientation, 
         current_time, current_dt 
     );
-    robot_behaviors[Vision::Ally][TeamId::shooter_id] = std::shared_ptr<
+    robot_behaviors[TeamId::shooter_id] = std::shared_ptr<
         RobotBehavior
     >( shooter ); 
 #endif
@@ -258,12 +247,10 @@ void AI::assign_behavior_to_robots(){
 
 AI::AI(
     Data& data, 
-    AICommander *commander_yellow,
-    AICommander *commander_blue
+    AICommander *commander
 ): 
     data(data), 
-    commander_yellow(commander_yellow),
-    commander_blue(commander_blue),
+    commander(commander),
     time_synchro(false),
     waiting_time_for_synchro(1.5),
     start_waiting_time_for_synchro(-1),
@@ -385,37 +372,35 @@ AI::AI(
 void AI::update_robots( ){
     double time =  this->current_time;
     Ai::Ball & ball = game_state.ball;
+    
+    auto team = Vision::Ally;
+    for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
 
-    for( auto team : {Vision::Ally, Vision::Opponent} ){
-        for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
+        Ai::Robot & robot = game_state.robots[team][robot_id];
 
-            Ai::Robot & robot = game_state.robots[team][robot_id];
-
-            RobotBehavior & robot_behavior = *( 
-                robot_behaviors[team][robot_id] 
-            );
-            Control ctrl = update_robot( 
-                robot_behavior, time, robot, ball
-            ); 
+        RobotBehavior & robot_behavior = *( 
+            robot_behaviors[robot_id] 
+        );
+        Control ctrl = update_robot( 
+            robot_behavior, time, robot, ball
+        ); 
 #if 0 
-            if(team == Vision::Ally && robot_id == TeamId::shooter_id){                
-                DEBUG( "sample : " << robot.get_movement().get_sample() );
-                DEBUG( "derivate : " << robot.get_movement().get_sample() );
-                DEBUG( "linear position : " << robot.get_movement().linear_position(this->current_time) );
-                DEBUG( "angular position : " << robot.get_movement().angular_position(this->current_time) );
-                DEBUG( "linear velocity : " << robot.get_movement().linear_velocity(this->current_time) );
-                DEBUG( "angular velocity : " << robot.get_movement().angular_velocity(this->current_time) );
-                DEBUG( "linear acceleration : " << robot.get_movement().linear_acceleration(this->current_time) );
-                DEBUG( "angular acceleration : " << robot.get_movement().angular_acceleration(this->current_time) );
-                DEBUG( "ctrl : " << ctrl );
-            }
+        if(team == Vision::Ally && robot_id == TeamId::shooter_id){                
+            DEBUG( "sample : " << robot.get_movement().get_sample() );
+            DEBUG( "derivate : " << robot.get_movement().get_sample() );
+            DEBUG( "linear position : " << robot.get_movement().linear_position(this->current_time) );
+            DEBUG( "angular position : " << robot.get_movement().angular_position(this->current_time) );
+            DEBUG( "linear velocity : " << robot.get_movement().linear_velocity(this->current_time) );
+            DEBUG( "angular velocity : " << robot.get_movement().angular_velocity(this->current_time) );
+            DEBUG( "linear acceleration : " << robot.get_movement().linear_acceleration(this->current_time) );
+            DEBUG( "angular acceleration : " << robot.get_movement().angular_acceleration(this->current_time) );
+            DEBUG( "ctrl : " << ctrl );
+        }
 #endif
 
-            prepare_to_send_control( team, robot_id, ctrl );
-        }
+        prepare_to_send_control( robot_id, ctrl );
     }
-    commander_yellow->flush();
-    commander_blue->flush();
+    commander->flush();
 }
 
 void AI::run(){

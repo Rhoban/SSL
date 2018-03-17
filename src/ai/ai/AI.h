@@ -22,8 +22,7 @@ namespace RhobanSSL
 
         AI(
             Data & data, 
-            AICommander *commander_yellow,
-            AICommander *commander_blue
+            AICommander *commander
         );
 
         void run();
@@ -45,15 +44,11 @@ namespace RhobanSSL
 
         bool enable_kicking;
 
-        AICommander *commander_yellow;
-        AICommander *commander_blue;
-
+        AICommander *commander;
 
         std::map<
-            Vision::Team, std::map<
-                int, 
-                std::shared_ptr<RobotBehavior>
-            >
+            int, 
+            std::shared_ptr<RobotBehavior>
         > robot_behaviors;
         bool time_synchro;
         double waiting_time_for_synchro;
@@ -80,9 +75,7 @@ namespace RhobanSSL
             double time, Ai::Robot & robot, Ai::Ball & ball
         );
 
-        void prepare_to_send_control( 
-            Vision::Team team, int robot_id, Control control
-        );
+        void prepare_to_send_control( int robot_id, Control control );
 
         void limits_velocity( Control & ctrl ) const ;
     };
