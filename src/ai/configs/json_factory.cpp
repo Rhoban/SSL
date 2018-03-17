@@ -60,6 +60,29 @@ public:
   std::string s_value;
 };
 
+class E3 : public JsonSerializable {
+public:
+  E3() : bolosse("basic_value"){}
+
+  std::string getClassName() const { return "E3";};
+
+  void fromJson(const Json::Value & json_value,
+                const std::string & dir_name) override
+  {
+    (void) dir_name;
+    bolosse = rhoban_utils::read<std::string>(json_value,"bolosse");
+  }
+  
+  Json::Value toJson() const override
+  {
+    Json::Value v(Json::ValueType::objectValue);
+    v["bolosse"] = bolosse;
+    return v;
+  }
+  
+  std::string bolosse;
+};
+
 class Container : public JsonSerializable {
 public:
   Container() {}
@@ -96,6 +119,7 @@ void MyFactory::init()
 {
   registerBuilder("E1",[](){return std::unique_ptr<JsonSerializable>(new E1());});
   registerBuilder("E2",[](){return std::unique_ptr<JsonSerializable>(new E2());});
+  registerBuilder("E3",[](){return std::unique_ptr<JsonSerializable>(new E3());});
   registerBuilder("Container",[](){return std::unique_ptr<JsonSerializable>(new Container());});
 }
 
@@ -108,6 +132,7 @@ int main()
   Container c;
   c.elements.push_back(f.build("E1"));
   c.elements.push_back(f.build("E2"));
+  c.elements.push_back(f.build("E3"));
   c.elements.push_back(f.build("Container"));
   c.saveFile("tmp.json",true);
   
