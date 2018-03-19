@@ -58,11 +58,8 @@ target_link_libraries(ai ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
-add_executable(json_factory configs/json_factory.cpp)
-target_link_libraries(json_factory ${ALL_LIBS})
-add_executable(json_serialization configs/json_serialization.cpp)
-target_link_libraries(json_serialization ${ALL_LIBS})
-
+add_executable(json_config configs/main.cpp)
+target_link_libraries(json_config ${ALL_LIBS})
 
 if(CATKIN_ENABLE_TESTING)
   include(CTest)
