@@ -52,7 +52,7 @@ namespace RhobanSSL
         packet.y_speed = 0;
         packet.t_speed = 0;
 
-        for (size_t k=0; k<8; k++) {
+        for (size_t k=0; k<MAX_ROBOTS; k++) {
             addRobotPacket(k, packet);
         }
         send();
@@ -165,7 +165,7 @@ namespace RhobanSSL
                     } else if (state == 2) {
                         nb_robots = c;
                         pos = 0;
-                        if (nb_robots > 8) {
+                        if (nb_robots > MAX_ROBOTS) {
                             state = 0;
                         } else {
                             state++;
@@ -174,6 +174,7 @@ namespace RhobanSSL
                         temp[pos++] = c;
                     } else {
                         if (c == 0xff) {
+                            /*
                             if (nb_robots > 0) {
                                 static int packets = 0;
                                 packets++;
@@ -181,12 +182,13 @@ namespace RhobanSSL
                             } else {
                                 printf("No robots!");
                             }
+                            */
                             // Received message from USB, reading the status of each robot
                             mutex.lock();
                             receivedAnswer = true;
                             for (size_t k=0; k<nb_robots; k++) {
                                 int robot_id = temp[k*(1 + sizeof(struct packet_robot))];
-                                if (robot_id < 8) {
+                                if (robot_id < MAX_ROBOTS) {
                                     memcpy(&robots[robot_id].status,
                                         &temp[k*(1 + sizeof(struct packet_robot))+1],
                                         sizeof(struct packet_robot));

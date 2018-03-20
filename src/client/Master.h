@@ -37,7 +37,7 @@ public:
     void send();
 
     // Master packets and statuses
-    struct Robot robots[8];
+    struct Robot robots[MAX_ROBOTS];
 
     void addRobotPacket(int robot, struct packet_master robotPacket);
     void addParamPacket(int robot, struct packet_params params);
