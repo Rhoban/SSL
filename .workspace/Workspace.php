@@ -25,6 +25,8 @@ class Workspace
         $this->addCommand(new UpstreamCommand);
         $this->addCommand(new CleanCommand);
         $this->addCommand(new UnshallowCommand);
+        $this->addCommand(new TestCommand);
+        $this->addCommand(new TestsCommand);
 
         $this->updatePackages();
         $this->repositories = array();

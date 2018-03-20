@@ -1,16 +1,16 @@
-#ifndef __MOVMENT__H__
-#define __MOVMENT__H__
+#ifndef __ROBOT_CONTROL__H__
+#define __ROBOT_CONTROL__H__
 
 
-#include <tools/debug.h>
+#include <debug.h>
 #include <Eigen/Dense>
 #include <vector>
 
-#include "curve.h"
+#include <math/curve.h>
 #include "pid.h"
 
 
-namespace tools {
+namespace robot_control_details {
     struct fct_wrapper {
         std::function<double (double u)> rotation;
 
@@ -26,7 +26,7 @@ namespace tools {
 
 class CurveForRobot {
       public:
-        tools::fct_wrapper rotation_fct;
+        robot_control_details::fct_wrapper rotation_fct;
 
         Curve2d translation_curve;
         Curve2d angular_curve;
@@ -64,14 +64,15 @@ class CurveForRobot {
 class RobotControl {
     private:
         double translation_velocity_limit;
-        double rotation_velocity_limit;
-
-        PidControl limited_control(
-            const Eigen::Vector2d & robot_position, 
-            double robot_orientation
-        ) const;
+        ContinuousAngle rotation_velocity_limit;
 
     public:
+        PidControl limited_control(
+            const Eigen::Vector2d & robot_position, 
+            const ContinuousAngle & robot_orientation
+        ) const;
+
+
         RobotControl(): 
             translation_velocity_limit(-1),
             rotation_velocity_limit(-1)
@@ -84,19 +85,31 @@ class RobotControl {
 
         virtual PidControl absolute_control_in_absolute_frame(
             const Eigen::Vector2d & robot_position, 
-            double robot_orientation
+            const ContinuousAngle & robot_orientation
         ) const = 0;
 
+        /* TODO : write a documentation to explaint that function */
         virtual double get_dt() const = 0;
+
+        /*
+         * Calculus are explaine in the document : 
+         * calcul_de_la_commande_en_vitesse_d_un_robot_holonome.org 
+         */
+        static PidControl absolute_to_relative_control(
+            const PidControl & absoluteControl,
+            const Eigen::Vector2d & robot_position, 
+            const ContinuousAngle & robot_orientation,
+            double dt
+        );
 
         PidControl absolute_control_in_robot_frame(
             const Eigen::Vector2d & robot_position, 
-            double robot_orientation
+            const ContinuousAngle & robot_orientation
         ) const;
 
         PidControl relative_control_in_robot_frame(
             const Eigen::Vector2d & robot_position, 
-            double robot_orientation
+            const ContinuousAngle & robot_orientation
         ) const;
 
 };
@@ -105,43 +118,10 @@ class RobotControlWithPid : public RobotControl, public PidController {
     public:
         PidControl absolute_control_in_absolute_frame(
             const Eigen::Vector2d & robot_position, 
-            double robot_orientation
+            const ContinuousAngle & robot_orientation
         ) const;
 
         double get_dt() const;
-};
-
-
-class RobotControlWithCurve : public RobotControlWithPid {
-    public:
-        CurveForRobot curve;
-
-        RobotControlWithCurve();
-
-        void set_movement(
-            const std::function<Eigen::Vector2d (double u)> & translation,
-            double translation_velocity, double translation_acceleration,
-            const std::function<double (double u)> & rotation,
-            double angular_velocity, double angular_acceleration, 
-            double calculus_step, double current_time
-        );
-
-        double goal_orientation( double t ) const;
-        Eigen::Vector2d goal_position( double t ) const;
-};
-
-class RobotControlWithPositionFollowing : public RobotControlWithPid {
-    protected:
-        Eigen::Vector2d position;
-        double orientation;
-
-    public:
-        void set_goal(
-            const Eigen::Vector2d & position, double orientation
-        );
-
-        double goal_orientation( double t ) const;
-        Eigen::Vector2d goal_position( double t ) const;
 };
 
 #endif

@@ -39,6 +39,17 @@ You can then use the following debugging binaries:
 * ``./bin/referee``, to display inforamtions from the referee (see ``client/referee.cpp``)
 * ``./bin/sim``, to send commands to the simulator (see ``client/sim.cpp``)
 
+## Testing
+
+Tests can be built using the command: `./workspace tests`
+
+To run the tests (once built), use the command: `./workspace test`
+
+Access to the test message is controlled by adding the flag `--verbose`.
+
+Example: Building and showing tests, but only for ssl_ai
+`./workspace tests --verbose --no-deps ssl_ai`
+
 ## Packages
 
 Here are the packages:

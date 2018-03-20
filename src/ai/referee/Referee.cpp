@@ -1,5 +1,5 @@
 #include "Referee.h"
-#include <tools/debug.h>
+#include <debug.h>
 
 namespace RhobanSSL {
 

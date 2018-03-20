@@ -2,7 +2,7 @@
 
 #include <mutex>
 #include <thread>
-#include <timing/TimeStamp.hpp>
+#include <rhoban_utils/timing/time_stamp.h>
 #include <messages_robocup_ssl_wrapper.pb.h>
 #include "MulticastClient.h"
 

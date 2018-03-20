@@ -4,7 +4,7 @@
 #include "VisionClient.h"
 #include "client_config.h"
 
-using namespace Utils::Timing;
+using namespace rhoban_utils;
 
 namespace RhobanSSL
 {

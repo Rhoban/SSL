@@ -1,5 +1,5 @@
 #include "AICommanderSimulation.h"
-#include <geometry/Angle.hpp>
+#include <rhoban_utils/angle.h>
 
 namespace RhobanSSL
 {

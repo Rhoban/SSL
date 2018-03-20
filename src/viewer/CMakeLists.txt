@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(viewer)
 
 find_package(catkin REQUIRED COMPONENTS
-  RhobanUtils
+  rhoban_utils
   )
 
 include_directories(${catkin_INCLUDES})

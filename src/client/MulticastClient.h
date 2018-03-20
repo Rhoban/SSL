@@ -3,7 +3,7 @@
 #include <vector>
 #include <mutex>
 #include <thread>
-#include <timing/TimeStamp.hpp>
+#include <rhoban_utils/timing/time_stamp.h>
 
 namespace RhobanSSL
 {
@@ -51,7 +51,7 @@ protected:
     std::mutex mutex;
     bool receivedData;
     volatile bool running;
-    Utils::Timing::TimeStamp lastData;
+    rhoban_utils::TimeStamp lastData;
 
     /**
      * Initializes the multicast client

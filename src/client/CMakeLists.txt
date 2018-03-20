@@ -2,14 +2,14 @@ cmake_minimum_required(VERSION 2.8)
 project(ssl_client)
 
 find_package(catkin REQUIRED COMPONENTS
-  RhobanUtils
+  rhoban_geometry
   serial
   )
 
 catkin_package(
     INCLUDE_DIRS . ${CMAKE_CURRENT_BINARY_DIR}
     LIBRARIES ssl_client
-    CATKIN_DEPENDS RhobanUtils serial
+    CATKIN_DEPENDS rhoban_geometry serial
 )
 
 # This is not really clean but will produce the binaries in the workspace

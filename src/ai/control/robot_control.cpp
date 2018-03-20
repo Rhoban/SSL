@@ -2,7 +2,7 @@
 
 
 #include <assert.h>
-#include "curve.h"
+#include <math/curve.h>
 #include "pid.h"
 
 #define CALCULUS_ERROR 0.00000001
@@ -37,12 +37,15 @@ CurveForRobot::CurveForRobot(
             calculus_step/100
         )
     ),
+    // TODO Calculet un time_step plus précisement
     translation_movment(
         translation_curve, tranlsation_consign,
+        calculus_step,
         calculus_error_for_translation        
     ),
     rotation_movment(
         angular_curve, angular_consign,
+        calculus_step,
         calculus_error_for_rotation
     )
 { };
@@ -99,53 +102,27 @@ void CurveForRobot::print_rotation_curve( double dt ) const {
 
 
 
-void RobotControlWithCurve::set_movement(
-    const std::function<Eigen::Vector2d (double u)> & translation,
-    double translation_velocity, double translation_acceleration,
-    const std::function<double (double u)> & rotation,
-    double angular_velocity, double angular_acceleration, 
-    double calculus_step, double current_time
-){
-    curve = CurveForRobot(
-        translation,
-        translation_velocity,
-        translation_acceleration,
-        rotation,
-        angular_velocity, 
-        angular_acceleration, 
-        calculus_step
-    );
-    init_time(current_time);
-    set_static(false);
-}
-
-double RobotControlWithCurve::goal_orientation( double t ) const {
-    return curve.rotation(t);
-}
-
-Eigen::Vector2d RobotControlWithCurve::goal_position( double t ) const {
-    return curve.translation(t);
-}
-
 void RobotControl::set_limits(
     double translation_velocity_limit,
     double rotation_velocity_limit
 ){
     this->translation_velocity_limit = translation_velocity_limit;
-    this->rotation_velocity_limit = rotation_velocity_limit;
+    this->rotation_velocity_limit = ContinuousAngle(rotation_velocity_limit);
 } 
 
 PidControl RobotControl::limited_control(
     const Eigen::Vector2d & robot_position, 
-    double robot_orientation
+    const ContinuousAngle & robot_orientation
 ) const {
     PidControl res = absolute_control_in_absolute_frame(
         robot_position, robot_orientation
     );
-    if( rotation_velocity_limit > 0.0 ){ 
-        if( std::abs( res.velocity_rotation ) >= rotation_velocity_limit ){
+    if( rotation_velocity_limit > ContinuousAngle(0.0) ){ 
+        if( res.velocity_rotation.abs() >= rotation_velocity_limit ){
             res.velocity_rotation *= (
-                rotation_velocity_limit / std::abs( res.velocity_rotation ) 
+                rotation_velocity_limit.value() / (
+                    std::abs( res.velocity_rotation.value() ) 
+                ) 
             );
             std::cerr << "We limit the rotation velocity to" << 
                 res.velocity_rotation << "!" << std::endl;
@@ -166,14 +143,14 @@ PidControl RobotControl::limited_control(
 
 PidControl RobotControl::absolute_control_in_robot_frame(
     const Eigen::Vector2d & robot_position, 
-    double robot_orientation
+    const ContinuousAngle & robot_orientation
 ) const {
     PidControl res;
 
     Eigen::Matrix2d rotation_matrix;
     rotation_matrix << 
-          std::cos(robot_orientation), std::sin(robot_orientation),
-        - std::sin(robot_orientation), std::cos(robot_orientation)
+      std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
+    - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
     ;
 
     PidControl control = limited_control(
@@ -186,33 +163,36 @@ PidControl RobotControl::absolute_control_in_robot_frame(
     return res;
 }
 
-PidControl RobotControl::relative_control_in_robot_frame(
-    const Eigen::Vector2d & robot_position, 
-    double robot_orientation
-) const {
 
+
+/*
+ * Calculus are explaine in the document : 
+ * calcul_de_la_commande_en_vitesse_d_un_robot_holonome.org 
+ */
+PidControl RobotControl::absolute_to_relative_control(
+    const PidControl & absolute_control,
+    const Eigen::Vector2d & robot_position, 
+    const ContinuousAngle & robot_orientation,
+    double dt
+){
     PidControl res;
     Eigen::Matrix2d rotation_matrix;
 
-    PidControl absolute_control = limited_control(
-        robot_position, robot_orientation
-    );
-    Eigen::Vector2d & a_t = absolute_control.velocity_translation;
-    double a_r =  absolute_control.velocity_rotation;
-    double dt = get_dt();
+    const Eigen::Vector2d & a_t = absolute_control.velocity_translation;
+    const ContinuousAngle & a_r =  absolute_control.velocity_rotation;
 
-    if( std::abs(a_r) > CALCULUS_ERROR ){
+    if( std::abs(a_r.value()) > CALCULUS_ERROR ){
         rotation_matrix << 
-            std::sin(a_r*dt+robot_orientation) - std::sin(robot_orientation), 
-            std::cos(a_r*dt+robot_orientation) - std::cos(robot_orientation),
-          - std::cos(a_r*dt+robot_orientation) + std::cos(robot_orientation), 
-            std::sin(a_r*dt+robot_orientation) - std::sin(robot_orientation)
+            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value()), 
+            std::cos((a_r*dt+robot_orientation).value()) - std::cos(robot_orientation.value()),
+          - std::cos((a_r*dt+robot_orientation).value()) + std::cos(robot_orientation.value()), 
+            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value())
         ;
-        rotation_matrix = (a_r*dt)*( rotation_matrix.inverse() );
+        rotation_matrix = (a_r*dt).value()*( rotation_matrix.inverse() );
     }else{
         rotation_matrix << 
-            std::cos(robot_orientation), std::sin(robot_orientation),
-          - std::sin(robot_orientation), std::cos(robot_orientation)
+            std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
+          - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
         ;
     }
     res.velocity_translation = rotation_matrix * a_t;
@@ -221,11 +201,20 @@ PidControl RobotControl::relative_control_in_robot_frame(
     return res;
 }
 
-
+PidControl RobotControl::relative_control_in_robot_frame(
+    const Eigen::Vector2d & robot_position, 
+    const ContinuousAngle & robot_orientation
+) const {
+    return RobotControl::absolute_to_relative_control(
+        limited_control( robot_position, robot_orientation ),
+        robot_position, robot_orientation,
+        get_dt()
+    );
+}
 
 PidControl RobotControlWithPid::absolute_control_in_absolute_frame(
     const Eigen::Vector2d & robot_position, 
-    double robot_orientation
+    const ContinuousAngle & robot_orientation
 ) const {
     return PidController::absolute_control_in_absolute_frame(
         robot_position, robot_orientation
@@ -234,37 +223,5 @@ PidControl RobotControlWithPid::absolute_control_in_absolute_frame(
 
 double RobotControlWithPid::get_dt() const {
     return PidController::get_dt();
-}
-
-
-RobotControlWithCurve::RobotControlWithCurve():
-    curve(
-        [](double t){ return Eigen::Vector2d(1.0,0.0); },
-        0.0, 1.0, 
-        [](double t){ return 1.0; },
-        0.0, 1.0, 
-        0.001
-    )
-{ }
-
-
-
-
-
-void RobotControlWithPositionFollowing::set_goal(
-    const Eigen::Vector2d & position, double orientation
-){
-    this->position = position;
-    this->orientation = orientation;
-    set_static(false);
-}
-
-
-double RobotControlWithPositionFollowing::goal_orientation( double t ) const {
-    return orientation;
-}
-
-Eigen::Vector2d RobotControlWithPositionFollowing::goal_position( double t ) const {
-    return position;
 }
 

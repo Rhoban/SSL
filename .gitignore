@@ -2,8 +2,17 @@ bin
 **.swp
 
 .catkin_tools
+**_debug
 **_release
 **.pch
+
+build
+devel
+devel_release
+logs
+logs_release
+*.log
+*.plot
 
 src/*
 !src/client/

@@ -10,9 +10,9 @@
 
     <buildtool_depend>catkin</buildtool_depend>
 
-    <build_depend>RhobanUtils</build_depend> <!-- rhobanproject/rhobanutils -->
+    <build_depend>rhoban_geometry</build_depend> <!-- rhoban/geometry -->
     <build_depend>serial</build_depend> <!-- rhobandeps/serial -->
 
-    <run_depend>RhobanUtils</run_depend>
+    <run_depend>rhoban_geometry</run_depend>
     <run_depend>serial</run_depend>
 </package>

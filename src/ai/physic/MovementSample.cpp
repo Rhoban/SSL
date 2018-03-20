@@ -1,17 +1,19 @@
 #include "MovementSample.h"
 #include <assert.h>
+#include <debug.h>
+
+using namespace rhoban_geometry;
 
 namespace RhobanSSL {
 
-
 PositionSample::PositionSample():
-    PositionSample( 0.0, Point(0.0, 0.0), Angle(0.0) )
+    PositionSample( 0.0, Point(0.0, 0.0), ContinuousAngle(0.0) )
 { }
 
 PositionSample::PositionSample(
     double time,
     const Point & linear_position,
-    const Angle & angular_position
+    const ContinuousAngle & angular_position
 ):
     time(time), linear_position(linear_position),
     angular_position(angular_position)
@@ -56,7 +58,7 @@ Point MovementSample::linear_position( unsigned int i ) const {
     return (*this)[i].linear_position;
 }
 
-Angle MovementSample::angular_position( unsigned int i ) const{
+ContinuousAngle MovementSample::angular_position( unsigned int i ) const{
     return (*this)[i].angular_position;
 }
 
@@ -64,7 +66,7 @@ Vector2d MovementSample::linear_velocity( unsigned int i ) const {
     return ( linear_position(i) - linear_position(i+1) )/dt(i);
 }
 
-Angle MovementSample::angular_velocity( unsigned int i ) const{
+ContinuousAngle MovementSample::angular_velocity( unsigned int i ) const{
     return ( angular_position(i) - angular_position(i+1) )/dt(i);
 }
 
@@ -72,7 +74,7 @@ Vector2d MovementSample::linear_acceleration( unsigned int i ) const {
     return ( linear_velocity(i) - linear_velocity(i+1) )/dt(i);
 }
 
-Angle MovementSample::angular_acceleration( unsigned int i ) const {
+ContinuousAngle MovementSample::angular_acceleration( unsigned int i ) const {
     return ( angular_velocity(i) - angular_velocity(i+1) )/dt(i);
 }
 
@@ -81,12 +83,13 @@ Angle MovementSample::angular_acceleration( unsigned int i ) const {
 std::ostream& operator<<(
     std::ostream& stream, const RhobanSSL::PositionSample & pos
 ){
-    stream << "( "
+    stream << "("
         "t=" << pos.time << ", "
         "lin=" << pos.linear_position << ", "
         "ang=" << pos.angular_position << ")";
     return stream;
 }
+
 
 std::ostream& operator<<(
     std::ostream& stream, const RhobanSSL::MovementSample & mov
