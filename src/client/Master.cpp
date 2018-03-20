@@ -6,7 +6,7 @@ namespace RhobanSSL
 {
     float Master::Robot::age()
     {
-        return diffSec(lastUpdate, Utils::Timing::TimeStamp::now());
+        return diffSec(lastUpdate, rhoban_utils::TimeStamp::now());
     }
 
     bool Master::Robot::isOk()
@@ -34,7 +34,7 @@ namespace RhobanSSL
         tmpNbRobots = 0;
         packet = "";
         nbRobots = 0;
-        lastSend = Utils::Timing::TimeStamp::now();
+        lastSend = rhoban_utils::TimeStamp::now();
     }
 
     Master::~Master()
@@ -73,7 +73,7 @@ namespace RhobanSSL
             if (receivedAnswer) {
                 waiting = false;
             }
-            if (diffSec(lastSend, Utils::Timing::TimeStamp::now()) > 0.015) {
+            if (diffSec(lastSend, rhoban_utils::TimeStamp::now()) > 0.015) {
                 waiting = false;
             }
             mutex.unlock();
@@ -124,7 +124,7 @@ namespace RhobanSSL
         memcpy((void *)(data + 3), packet.c_str(), packet.size());
         data[sizeof(data) - 1] = 0xff;
         receivedAnswer = false;
-        lastSend = Utils::Timing::TimeStamp::now();
+        lastSend = rhoban_utils::TimeStamp::now();
         mutex.unlock();
 
         // Sending the data
@@ -193,7 +193,7 @@ namespace RhobanSSL
                                         &temp[k*(1 + sizeof(struct packet_robot))+1],
                                         sizeof(struct packet_robot));
                                     robots[robot_id].present = true;
-                                    robots[robot_id].lastUpdate = Utils::Timing::TimeStamp::now();
+                                    robots[robot_id].lastUpdate = rhoban_utils::TimeStamp::now();
                                 }
                             }
                             mutex.unlock();

@@ -4,7 +4,7 @@
 #include <thread>
 #include <mutex>
 #include <serial/serial.h>
-#include <timing/TimeStamp.hpp>
+#include <rhoban_utils/timing/time_stamp.h>
 #include "structs.h"
 
 namespace RhobanSSL
@@ -17,7 +17,7 @@ public:
         Robot();
 
         bool present;
-        Utils::Timing::TimeStamp lastUpdate;
+        rhoban_utils::TimeStamp lastUpdate;
         struct packet_robot status;
 
         float age();
@@ -33,12 +33,13 @@ public:
     // Stop the master
     void stop();
 
-    // Send the packet
+    // Send the packet(s)
     void send();
 
     // Master packets and statuses
     struct Robot robots[MAX_ROBOTS];
 
+    // Add packet in the list of commands to send
     void addRobotPacket(int robot, struct packet_master robotPacket);
     void addParamPacket(int robot, struct packet_params params);
 
@@ -47,7 +48,7 @@ protected:
     bool shouldSend;
     bool shouldSendParams;
     bool receivedAnswer;
-    Utils::Timing::TimeStamp lastSend;
+    rhoban_utils::TimeStamp lastSend;
 
     serial::Serial serial;
     std::thread *thread;

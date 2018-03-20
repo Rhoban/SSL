@@ -3,7 +3,7 @@
 #include <string>
 #include <stdio.h>
 
-#define JOYSTICK_DEVNAME "/dev/input/js0"
+#define JOYSTICK_DEVNAME "/dev/input/js1"
 
 #define JS_EVENT_BUTTON         0x01    /* button pressed/released */
 #define JS_EVENT_AXIS           0x02    /* joystick moved */
