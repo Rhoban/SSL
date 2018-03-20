@@ -13,10 +13,11 @@ namespace RhobanSSL
 
     void AICommanderReal::flush()
     {
+        // Transferring abstract commands to the master implementation
         for (auto &command : commands) {
             struct packet_master packet;
             if (command.enabled) {
-                packet.actions = ACTION_ON |ACTION_CHARGE;
+                packet.actions = ACTION_ON | ACTION_CHARGE;
                 if( kicking ){
                     packet.actions |= ACTION_KICK1;
                 }
