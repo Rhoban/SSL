@@ -1,25 +1,32 @@
 #include <iostream>
-#include <set>
-#include "ConfigModule.hpp"
+#include <vector>
+#include <memory>
+#include "ConfigModule.cpp"
 
 class ConfigManager
 {
   private:
-    static std::set<ConfigModule> modules;
+    static std::vector <ConfigModule> modules;
+    static int hello;
 
-    ConfigManager();
-    ~ConfigManager();
+    ConfigManager() = default;
+
+    ConfigManager(const ConfigManager&) = delete;
+    ConfigManager& operator=(const ConfigManager&) = delete;
+    ConfigManager(ConfigManager&&) = delete;
+    ConfigManager& operator=(ConfigManager&&) = delete;
 
   public:
-
-    static ConfigManager& getInstance() {
-        static ConfigManager S;
-        return S;
-    }
+    static ConfigManager& getInstance();
 
     void loadModule(std::string file) {
       ConfigModule * module = new ConfigModule(file);
-      this->modules.insert(module);
+      this->modules.push_back(*module);
+    };
+
+    void oui() {
+      this->hello = 1;
+      std::cout << this->hello << '\n';
     };
 
     std::string get(std::string module, std::string attribute) {
@@ -45,3 +52,8 @@ class ConfigManager
       }
     };
 };
+
+ConfigManager& ConfigManager::getInstance() {
+    static ConfigManager instance;
+    return instance;
+}

@@ -1,9 +1,7 @@
 #include <iostream>
 #include <map>
 #include <fstream>
-#include "json.hpp"
-
-using json = nlohmann::json;
+#include "rhoban_utils/serialization/json_serializable.h"
 
 class ConfigModule
 {
@@ -19,13 +17,9 @@ public:
   ~ConfigModule() {};
 
   void loadFromFile(std::string file) {
-    std::ifstream json_file("config.json");
-    json j;
-    json_file >> j;
+    Json::Value json = rhoban_utils::file2Json(file);
 
-    for (auto& element : j) {
-      std::cout << element << '\n';
-    }
+    std::cout << "oui" << std::endl;
 
     this->name = file;
   };
