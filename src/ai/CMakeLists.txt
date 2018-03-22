@@ -43,6 +43,8 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/Referee.cpp
+    makers/avoid_obstacle.cpp
+    makers/algo1.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
@@ -73,6 +75,8 @@ if(CATKIN_ENABLE_TESTING)
     control/test_pid.cpp
     control/test_robot_control.cpp
     ai/robot_behavior/test_robot_behavior.cpp
+    makers/test_avoid_obstacle.cpp
+    makers/test_algo1.cpp
   )
 
   foreach(test_source ${TEST_SOURCES})
