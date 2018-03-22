@@ -7,7 +7,8 @@
 You will need these apt repositories:
 
     apt-get install g++ cmake libprotobuf-dev \
-            protobuf-compiler php php-cli php-xml
+            protobuf-compiler php php-cli php-xml \
+            libqt5widgets5 qt5-default libqt5webkit5-dev
 
 ### Catkin
 
