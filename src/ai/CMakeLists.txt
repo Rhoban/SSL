@@ -58,7 +58,7 @@ target_link_libraries(ai ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
-add_executable(json_config configs/main.cpp)
+add_executable(json_config configs/main.cpp configs/ConfigManager.h configs/ConfigManager.cpp configs/ConfigModule.cpp configs/ConfigModule.h)
 target_link_libraries(json_config ${ALL_LIBS})
 
 if(CATKIN_ENABLE_TESTING)

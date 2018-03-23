@@ -1,41 +1,38 @@
-#include <iostream>
-#include <map>
-#include <fstream>
-#include "rhoban_utils/serialization/json_serializable.h"
+#include "ConfigModule.h"
 
-class ConfigModule
+ConfigModule::ConfigModule(std::string file)
 {
-private:
-  std::map<std::string, std::string> values;
-  std::string name;
-
-public:
-  ConfigModule(std::string file) {
-    this->loadFromFile(file);
-  };
-
-  ~ConfigModule() {};
-
-  void loadFromFile(std::string file) {
-    Json::Value json = rhoban_utils::file2Json(file);
-
-    std::cout << "oui" << std::endl;
-
-    this->name = file;
-  };
-
-  std::string getName() {
-    return this->name;
-  };
-
-  std::string get(std::string attribute) {
-    return values.at(attribute);
-  };
-
-  void set(std::string attribute, std::string value) {
-    values.at(attribute) = value;
-  };
-
-  void save () {
-  }
+  this->loadFromFile(file);
 };
+
+void ConfigModule::loadFromFile(std::string file)
+{
+  Json::Value json = rhoban_utils::file2Json(file);
+
+  for (std::string s : json.getMemberNames())
+  {
+    std::string valueVariable = json[s].asString();
+    this->values.insert(s, valueVariable);
+  }
+
+  this->name = file;
+};
+
+std::string ConfigModule::getName()
+{
+  return this->name;
+};
+
+std::string ConfigModule::get(std::string attribute)
+{
+  return this->values.at(attribute);
+};
+
+void ConfigModule::set(std::string attribute, std::string value)
+{
+  this->values.at(attribute) = value;
+};
+
+void ConfigModule::save()
+{
+}
