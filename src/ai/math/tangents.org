@@ -203,3 +203,15 @@ v_y & u_y
 \end{array}
 \right)
 $$
+
+and finally,
+
+$$
+M =
+\frac{1}{u \land v}
+\cdot \left(
+\text{signe}( u \land v ) \cdot R \cdot (u+v) +
+( u \land C ) \cdot v + 
+( C \land v ) \cdot u
+\right).
+$$
