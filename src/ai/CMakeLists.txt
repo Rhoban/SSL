@@ -38,8 +38,11 @@ set (SOURCES
     physic/movement_with_no_prediction.cpp
     physic/MovementSample.cpp
     physic/Movement.cpp
+    math/eigen_convertion.cpp
     math/ContinuousAngle.cpp
     math/curve.cpp
+    math/tangents.cpp
+    math/vector.cpp
     core/export_to_plot.cpp
     core/logger.cpp
     referee/Referee.cpp
@@ -64,12 +67,15 @@ if(CATKIN_ENABLE_TESTING)
   set (TEST_SOURCES
     core/test_machine_state.cpp
     core/test_print_collection.cpp
+    math/test_eigen_convertion.cpp
     math/test_curve.cpp
     math/test_circular_vector.cpp
     physic/test_MovementSample.cpp
     physic/test_movement_with_no_prediction.cpp
     physic/test_movement_predicted_by_integration.cpp
     math/test_ContinuousAngle.cpp
+    math/test_tangents.cpp
+    math/test_vector.cpp
     control/test_pid.cpp
     control/test_robot_control.cpp
     ai/robot_behavior/test_robot_behavior.cpp

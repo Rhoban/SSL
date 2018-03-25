@@ -4,6 +4,7 @@
 
 * Forground Tasks
 
+- Goal need to go to the goal line when the cone from ball to posts are too small.
 - Replace double to ContinuousAngle in the ../control/pid.cpp class
 - Remove another bug in send_command due to the bug solution of commit
   08beed21d102319a1e37e42c73cd27a3eca7

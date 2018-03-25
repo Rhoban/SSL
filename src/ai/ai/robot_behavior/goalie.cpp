@@ -1,4 +1,6 @@
 #include "goalie.h"
+#include <math/tangents.h>
+#include <math/eigen_convertion.h>
 
 namespace RhobanSSL {
 
@@ -8,18 +10,13 @@ Eigen::Vector2d Goalie::calculate_goal_position(
     const Eigen::Vector2d & poteau_gauche,
     double goalie_radius
 ){
-    Eigen::Vector2d R = poteau_droit - ball_position;
-    R /= R.norm();
-    Eigen::Vector2d L = poteau_gauche - ball_position;
-    L /= L.norm();
-    Eigen::Matrix2d m;
-    m << 
-        -R[1], R[0],
-         L[1], -L[0];
-    return (
-        ball_position + 
-        m.inverse() * Eigen::Vector2d(goalie_radius, goalie_radius)
+    rhoban_geometry::Point defender_position = rhoban_geometry::center_of_cone_incircle(
+	eigen2point(ball_position),
+	eigen2point(poteau_droit), 
+	eigen2point(poteau_gauche), 
+	goalie_radius
     );
+    return point2eigen( defender_position );
 }
 
 
