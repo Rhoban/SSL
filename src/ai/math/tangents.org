@@ -2,6 +2,8 @@
 
 # To generate the html documentation with mathemtics formula, execute the following command :
 # emacs FILE.org -batch -f org-html-export-to-html --kill
+#
+# You need to install org-mode.
 
 #+OPTIONS: tex:dvipng
 
@@ -11,11 +13,11 @@
 ** Tangent of two circles 
 
 Let $A$ and $B$ be two centers of two circles $\mathcal{C}_A$ and 
-$\mathcal{C}_B$ such that $\mathcal{C}_A$ do not overlap $\matchal{C}_B$.
+$\mathcal{C}_B$ such that $\mathcal{C}_A$ do not overlap $\mathcal{C}_B$.
 
-Let $r_A$ and $r_B$ be the two radius of $\mathcal{C}_A$ and $\mathcal{C}_B$ such that $\mathcal{C}_A$ do not overlap $\matchal{C}_B$. 
+Let $r_A$ and $r_B$ be the two radius of $\mathcal{C}_A$ and $\mathcal{C}_B$ such that $\mathcal{C}_A$ do not overlap $\mathcal{C}_B$. 
 
-Let $M \in \mathca{C}_A$ and $N \in \mathcal{C}_B$ be two points such that 
+Let $M \in \mathcal{C}_A$ and $N \in \mathcal{C}_B$ be two points such that 
 the line $(MN)$ is tangent to the circles $\mathcal{C}_A$ and $\mathcal{C}_B$.
 
 As the line $(MN)$ is tangent to $\mathcal{C}_A$ and $\mathcal{C}_B$, then 
@@ -77,3 +79,127 @@ where
 $\overrightarrow{x} = \frac{ \overrightarrow{AB}}{\|AB\|}$ and 
 $\overrightarrow{y} = \left( -x[1], \atop x[0]\right)$.
 
+** Incircle of a cone
+
+Let $A$, $B$ and $C$ be three points.
+Let $\widehat{ACB}$ be the cone whose vertex is $C$ and the lines are $(A,C)$ and $(B,C)$.
+
+Let $\mathcal{C}$ be the incircle of the cone $\widehat{ACB}$.
+Let $R$ be the radius of the circle. We want to compute the center $M$ of 
+that circle.
+
+Let $u = \frac{ \overrightarrow{CA} }{ \| \overrightarrow{CA} \|}$.
+Let $v = \frac{ \overrightarrow{CB} }{ \| \overrightarrow{CB} \|}$.
+
+Then, if $\mathcal{C}$ is the incircle of $\widehat{ACB}$, then
+
+$$
+\left\{ \begin{array}{l}
+u \land \overrightarrow{CM} = \text{signe}( u \land v ) \cdot R \\
+\overrightarrow{CM} \land v = \text{signe}( u \land v ) \cdot R
+\end{array}
+\right.
+$$
+
+and so,
+
+$$
+\left\{ \begin{array}{l}
+u \land M = \text{signe}( u \land v ) \cdot R + u \land C \\
+M \land v = \text{signe}( u \land v ) \cdot R + C \land v
+\end{array}
+\right.
+$$
+
+where $u \land M = u_x \cdot M_y - u_y \cdot M_x$ and 
+$M \land v = M_x \cdot v_y - M_y \cdot v_x$.
+
+So we obtain,
+
+$$
+\left( \begin{array}{cc}
+-u_y &  u_x \\
+ v_y & -v_x
+\end{array}
+\right)
+\cdot
+\left( \begin{array}{c}
+M_x \\
+M_y
+\end{array}
+\right)
+=
+\left( \begin{array}{c}
+\text{signe}( u \land v ) \cdot R + u \land C \\
+\text{signe}( u \land v ) \cdot R + C \land v
+\end{array}
+\right)
+$$
+
+If we solve the equation, we obtain,
+
+$$
+\left( \begin{array}{c}
+M_x \\
+M_y
+\end{array}
+\right)
+=
+\left( \begin{array}{cc}
+-u_y &  u_x \\
+ v_y & -v_x
+\end{array}
+\right)^{-1}
+\cdot
+\left( \begin{array}{c}
+\text{signe}( u \land v ) \cdot R + u \land C \\
+\text{signe}( u \land v ) \cdot R + C \land v
+\end{array}
+\right)
+$$
+
+and so,
+
+$$
+\left( \begin{array}{c}
+M_x \\
+M_y
+\end{array}
+\right)
+=
+\frac{-1}{u \land v}
+\left( \begin{array}{cc}
+-v_x & -u_x \\
+-v_y & -u_y
+\end{array}
+\right)
+\cdot
+\left( \begin{array}{c}
+\text{signe}( u \land v ) \cdot R + u \land C \\
+\text{signe}( u \land v ) \cdot R + C \land v
+\end{array}
+\right)
+$$
+
+and finally,
+
+$$
+\left( \begin{array}{c}
+M_x \\
+M_y
+\end{array}
+\right)
+=
+\frac{1}{u \land v}
+\left( \begin{array}{cc}
+v_x & u_x \\
+v_y & u_y
+\end{array}
+\right)
+\cdot
+\left( \begin{array}{c}
+\text{signe}( u \land v ) \cdot R + u \land C \\
+\text{signe}( u \land v ) \cdot R + C \land v
+\end{array}
+\right)
+$$
