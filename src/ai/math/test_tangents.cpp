@@ -13,7 +13,7 @@ TEST(test_tangents, center_of_cone_incircle){
         rhoban_geometry::Point circle_center = center_of_cone_incircle(
             cone_vertex, cone_base_A, cone_base_B, circle_radius
         );
-        EXPECT_EQ( circle_center, rhoban_geometry::Point(-1.0, -1.0) );
+        EXPECT_TRUE( norm( circle_center - rhoban_geometry::Point(-1.0, -1.0) )<0.001 );
     }
     {
         rhoban_geometry::Point cone_vertex(0.0, 0.0);
@@ -23,7 +23,7 @@ TEST(test_tangents, center_of_cone_incircle){
         rhoban_geometry::Point circle_center = center_of_cone_incircle(
             cone_vertex, cone_base_A, cone_base_B, circle_radius
         );
-        EXPECT_EQ( circle_center, rhoban_geometry::Point(-1.0, -1.0) );
+        EXPECT_TRUE( norm( circle_center - rhoban_geometry::Point(-1.0, -1.0) )<0.001 );
     }
     {
         rhoban_geometry::Point cone_vertex(2.0, 3.0);
@@ -33,7 +33,7 @@ TEST(test_tangents, center_of_cone_incircle){
         rhoban_geometry::Point circle_center = center_of_cone_incircle(
             cone_vertex, cone_base_A, cone_base_B, circle_radius
         );
-        EXPECT_EQ( circle_center, rhoban_geometry::Point(1.0, 2.0) );
+        EXPECT_TRUE( norm( circle_center - rhoban_geometry::Point(1.0, 2.0) )<0.001 );
     }
     {
         rhoban_geometry::Point cone_vertex(2.0, 3.0);
@@ -43,7 +43,7 @@ TEST(test_tangents, center_of_cone_incircle){
         rhoban_geometry::Point circle_center = center_of_cone_incircle(
             cone_vertex, cone_base_A, cone_base_B, circle_radius
         );
-        EXPECT_EQ( circle_center, rhoban_geometry::Point(1.0, 2.0) );
+        EXPECT_TRUE( norm( circle_center - rhoban_geometry::Point(1.0, 2.0) )<0.001 );
     }
     {
         double d = std::sqrt(3)/2.0;
@@ -88,6 +88,29 @@ TEST(test_tangents, center_of_cone_incircle){
             cone_vertex, cone_base_A, cone_base_B, circle_radius
         );
         EXPECT_TRUE( norm( circle_center - rhoban_geometry::Point(2 + 1.0/2.0, 3 + d/3.0) ) < 0.00001 );
+    }
+}
+
+TEST(test_tangents, tangent_of_two_circle){
+    {
+        rhoban_geometry::Circle circle_A( rhoban_geometry::Point(0.0, 0.0), 1.0 );
+        rhoban_geometry::Circle circle_B( rhoban_geometry::Point(3.0, 0.0), 1.0 );
+        std::vector<rhoban_geometry::Segment> tangents = tangent_of_two_circle(
+            circle_A, circle_B
+        );
+        EXPECT_EQ( tangents[0].A, rhoban_geometry::Point(0.0, 1.0) );
+        EXPECT_EQ( tangents[0].B, rhoban_geometry::Point(3.0, 1.0) );
+        EXPECT_EQ( tangents[1].A, rhoban_geometry::Point(0.0, -1.0) );
+        EXPECT_EQ( tangents[1].B, rhoban_geometry::Point(3.0, -1.0) );
+
+	double d = 3.0;
+        double a = std::sqrt( (d/2)*(d/2) -1 );
+        double y = 1.0*a/( d/2.0 );
+        double x = std::sqrt( 1 - y*y );
+        EXPECT_TRUE( norm( tangents[2].A - rhoban_geometry::Point(x, y) )<0.0001 );
+        EXPECT_TRUE( norm( tangents[2].B - rhoban_geometry::Point(3.0-x, -y) ) < 0.0001 );
+        EXPECT_TRUE( norm( tangents[3].A - rhoban_geometry::Point(x, -y) )<0.0001 );
+        EXPECT_TRUE( norm( tangents[3].B - rhoban_geometry::Point(3.0-x, y) )<0.0001 );
     }
 }
 

@@ -15,7 +15,7 @@
 Let $A$ and $B$ be two centers of two circles $\mathcal{C}_A$ and 
 $\mathcal{C}_B$ such that $\mathcal{C}_A$ do not overlap $\mathcal{C}_B$.
 
-Let $r_A$ and $r_B$ be the two radius of $\mathcal{C}_A$ and $\mathcal{C}_B$ such that $\mathcal{C}_A$ do not overlap $\mathcal{C}_B$. 
+Let $r_A$ and $r_B$ be the two radius of $\mathcal{C}_A$ and $\mathcal{C}_B$.
 
 Let $M \in \mathcal{C}_A$ and $N \in \mathcal{C}_B$ be two points such that 
 the line $(MN)$ is tangent to the circles $\mathcal{C}_A$ and $\mathcal{C}_B$.
@@ -23,15 +23,18 @@ the line $(MN)$ is tangent to the circles $\mathcal{C}_A$ and $\mathcal{C}_B$.
 As the line $(MN)$ is tangent to $\mathcal{C}_A$ and $\mathcal{C}_B$, then 
 $\overrightarrow{AM}$ and $\overrightarrow{BN}$ are colinear.
 
-Let $\overrightarrow{u} = \frac{\overrightarrow{MN}}{ \|\overrightarrow{MN}\| }$, then,
+Let $\overrightarrow{u}$ be the orthonormal vector of $\overrightarrow{MN}$ such that 
+
 $$
 M  = A + r_A \cdot \overrightarrow{u}
 \text{ and }
-N  = B + \epsilon \cdot r_B \overrightarrow{u}
+N  = B + \epsilon_1 \cdot r_B \overrightarrow{u}
 $$
+
 where
+
 $$
-\epsilon = \left\{\begin{array}{ll}
+\epsilon_1 = \left\{\begin{array}{ll}
     -1 & \text{if $\overrightarrow{AM}$ and $\overrightarrow{BN}$ are opposite,} \\
     +1 & \text{otherwise}.
     \end{array}
@@ -41,7 +44,7 @@ $$.
 We obtain that 
 
 $$
-\overrightarrow{MN} = B - A + (\epsilon \cdot r_B - r_A) \cdot \overrightarrow{u}.
+\overrightarrow{MN} = B - A + (\epsilon_1 \cdot r_B - r_A) \cdot \overrightarrow{u}.
 $$
 
 We know that $\overrightarrow{MN}$ is orthogonal to $\overrightarrow{u}$, so 
@@ -51,23 +54,25 @@ By definition, $\overrightarrow{u}$ is normal, so we obtain :
 
 $$
 \left\{ \begin{array}{l}
-<B-A | \overrightarrow{u}> + ( \epsilon \cdot r_B - r_A)> = 0, \\
+<B-A | \overrightarrow{u}> + (\epsilon_1 \cdot r_B - r_A) = 0, \\
 \|\overrightarrow{u}\| = 1.
 \end{array}
 \right.
 $$
 
 Let $\theta$ be the angle between $\overrightarrow{AB}$ and $\overrightarrow{u}$, so we have 
-$<B-A |u> = \|\overline{AB}\| \cdot \cos{\theta}$, so we deduce that we
-have 4 solutions (4 tangents avalaible) described by :
+$<B-A |\overrightarrow{u}> = \|\overrightarrow{AB}\| \cdot \cos{\theta}$, so we deduce that we
+have 4 solutions (4 avalaible tangents) described by :
 
 $$
 \left\{ \begin{array}{ccl}
-\cos{\theta} & = & \frac{r_A - \epsilon \cdot r_B}{ \|\overrightarrow{AB}\| } \\
-\sin{\theta} & = & \pm \sqrt{1 - \cos^2{\theta}}
+\cos{\theta} & = & \frac{r_A - \epsilon_1 \cdot r_B}{ \|\overrightarrow{AB}\| }, \\
+\sin{\theta} & = & \epsilon_2 \cdot \sqrt{1 - \cos^2{\theta}},
 \end{array}
 \right.
 $$
+
+where $\epsilon_2 = \pm 1$.
 
 If we denote by $\overrightarrow{x}$ the normal vector of $\overrightarrow{AB}$ and by $\overrightarrow{y}$ the orthonormal vector of $\overrightarrow{AB}$ we finally have :
 
@@ -88,15 +93,15 @@ Let $\mathcal{C}$ be the incircle of the cone $\widehat{ACB}$.
 Let $R$ be the radius of the circle. We want to compute the center $M$ of 
 that circle.
 
-Let $u = \frac{ \overrightarrow{CA} }{ \| \overrightarrow{CA} \|}$.
-Let $v = \frac{ \overrightarrow{CB} }{ \| \overrightarrow{CB} \|}$.
+Let $\overrightarrow{u} = \frac{ \overrightarrow{CA} }{ \| \overrightarrow{CA} \|}$ and
+$\overrightarrow{v} = \frac{ \overrightarrow{CB} }{ \| \overrightarrow{CB} \|}$.
 
 Then, if $\mathcal{C}$ is the incircle of $\widehat{ACB}$, then
 
 $$
 \left\{ \begin{array}{l}
-u \land \overrightarrow{CM} = \text{signe}( u \land v ) \cdot R \\
-\overrightarrow{CM} \land v = \text{signe}( u \land v ) \cdot R
+\overrightarrow{u} \land \overrightarrow{CM} = \text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R \\
+\overrightarrow{CM} \land \overrightarrow{v} = \text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R
 \end{array}
 \right.
 $$
@@ -105,14 +110,14 @@ and so,
 
 $$
 \left\{ \begin{array}{l}
-u \land M = \text{signe}( u \land v ) \cdot R + u \land C \\
-M \land v = \text{signe}( u \land v ) \cdot R + C \land v
+\overrightarrow{u} \land M = \text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + \overrightarrow{u} \land C \\
+M \land \overrightarrow{v} = \text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + C \land \overrightarrow{v}
 \end{array}
 \right.
 $$
 
-where $u \land M = u_x \cdot M_y - u_y \cdot M_x$ and 
-$M \land v = M_x \cdot v_y - M_y \cdot v_x$.
+where $\overrightarrow{u} \land M = u_x \cdot M_y - u_y \cdot M_x$ and 
+$M \land \overrightarrow{v} = M_x \cdot v_y - M_y \cdot v_x$.
 
 So we obtain,
 
@@ -130,8 +135,8 @@ M_y
 \right)
 =
 \left( \begin{array}{c}
-\text{signe}( u \land v ) \cdot R + u \land C \\
-\text{signe}( u \land v ) \cdot R + C \land v
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + \overrightarrow{u} \land C \\
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + C \land \overrightarrow{v}
 \end{array}
 \right)
 $$
@@ -152,8 +157,8 @@ M_y
 \right)^{-1}
 \cdot
 \left( \begin{array}{c}
-\text{signe}( u \land v ) \cdot R + u \land C \\
-\text{signe}( u \land v ) \cdot R + C \land v
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + \overrightarrow{u} \land C \\
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + C \land \overrightarrow{v}
 \end{array}
 \right)
 $$
@@ -167,7 +172,7 @@ M_y
 \end{array}
 \right)
 =
-\frac{-1}{u \land v}
+\frac{-1}{\overrightarrow{u} \land \overrightarrow{v}}
 \left( \begin{array}{cc}
 -v_x & -u_x \\
 -v_y & -u_y
@@ -175,8 +180,8 @@ M_y
 \right)
 \cdot
 \left( \begin{array}{c}
-\text{signe}( u \land v ) \cdot R + u \land C \\
-\text{signe}( u \land v ) \cdot R + C \land v
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + \overrightarrow{u} \land C \\
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + C \land \overrightarrow{v}
 \end{array}
 \right)
 $$
@@ -190,7 +195,7 @@ M_y
 \end{array}
 \right)
 =
-\frac{1}{u \land v}
+\frac{1}{\overrightarrow{u} \land \overrightarrow{v}}
 \left( \begin{array}{cc}
 v_x & u_x \\
 v_y & u_y
@@ -198,8 +203,8 @@ v_y & u_y
 \right)
 \cdot
 \left( \begin{array}{c}
-\text{signe}( u \land v ) \cdot R + u \land C \\
-\text{signe}( u \land v ) \cdot R + C \land v
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + \overrightarrow{u} \land C \\
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R + C \land \overrightarrow{v}
 \end{array}
 \right)
 $$
@@ -208,10 +213,10 @@ and finally,
 
 $$
 M =
-\frac{1}{u \land v}
+\frac{1}{\overrightarrow{u} \land \overrightarrow{v}}
 \cdot \left(
-\text{signe}( u \land v ) \cdot R \cdot (u+v) +
-( u \land C ) \cdot v + 
-( C \land v ) \cdot u
+\text{signe}( \overrightarrow{u} \land \overrightarrow{v} ) \cdot R \cdot (\overrightarrow{u}+\overrightarrow{v}) +
+( \overrightarrow{u} \land C ) \cdot \overrightarrow{v} + 
+( C \land \overrightarrow{v} ) \cdot \overrightarrow{u}
 \right).
 $$
