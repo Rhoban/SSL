@@ -11,8 +11,8 @@ void ConfigModule::loadFromFile(std::string file)
 
   for (std::string s : json.getMemberNames())
   {
-    std::string valueVariable = json[s].asString();
-    this->values.insert(s, valueVariable);
+    std::string valueVariable = json.get(s, "unknown").asString();
+    this->values.insert({s, valueVariable});
   }
 
   this->name = file;

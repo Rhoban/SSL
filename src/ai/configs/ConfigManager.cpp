@@ -8,11 +8,11 @@ void ConfigManager::loadModule(std::string file)
 
 std::string ConfigManager::get(std::string module, std::string attribute)
 {
-  for (auto i : this->modules)
+  for (ConfigModule m : this->modules)
   {
-    if (i.getName() == module)
+    if (m.getName() == module)
     {
-      return i.get(attribute);
+      return m.get(attribute);
     }
   }
 };
