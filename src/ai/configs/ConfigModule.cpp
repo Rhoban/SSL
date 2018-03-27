@@ -1,4 +1,5 @@
 #include "ConfigModule.h"
+#include <typeinfo>
 
 ConfigModule::ConfigModule(std::string file)
 {
@@ -11,6 +12,7 @@ void ConfigModule::loadFromFile(std::string file)
 
   for (std::string s : json.getMemberNames())
   {
+    //Json::arrayValue to handle
     std::string valueVariable = json.get(s, "unknown").asString();
     this->values.insert({s, valueVariable});
   }
@@ -30,9 +32,26 @@ std::string ConfigModule::get(std::string attribute)
 
 void ConfigModule::set(std::string attribute, std::string value)
 {
-  this->values.at(attribute) = value;
+  if (this->values.find(attribute) != this->values.end())
+  {
+    this->values.at(attribute) = value;
+  }
+  else
+  {
+    this->values.insert({attribute, value});
+  }
 };
 
 void ConfigModule::save()
 {
+  Json::Value root;
+  for (std::pair<std::string, std::string> s : this->values)
+  {
+    root[s.first] = s.second;
+  }
+  std::ofstream file;
+  file.open(this->name);
+  Json::StyledWriter styledWriter;
+  file << styledWriter.write(root);
+  file.close();
 }

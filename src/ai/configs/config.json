@@ -1,6 +1,7 @@
 {
-  "pi": 3.141,
-  "happy": true,
-  "name": "Niels",
-  "nothing": null
+   "happy" : "true",
+   "name" : "Niels",
+   "nothing" : "",
+   "pi" : "3.14159265",
+   "random number" : "218327791"
 }
