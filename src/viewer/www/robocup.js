@@ -21,14 +21,14 @@ var robots = [
         x: -2,
         y: 2,
         orientation: 0,
-        color: 'cyan'
+        color: 'blue'
     },
     {
         id: 2,
         x: -2,
         y: -2,
         orientation: 0,
-        color: 'cyan'
+        color: 'blue'
     },
     {
         id: 2,
@@ -46,6 +46,9 @@ var robots = [
     }
 ];
 
+// Our team color
+var ourColor = 'yellow';
+
 // Ball
 var ball = [0, 0];
 
@@ -62,6 +65,8 @@ class Viewer
         this.dragBegin = null;
         this.viewOffset = [0, 0];
         this.startOffset = [0, 0];
+        this.reversed = false;
+        this.greenred = false;
 
         this.container = document.getElementById('field');
         this.ctx = this.container.getContext('2d');
@@ -100,6 +105,23 @@ class Viewer
         var ratio1 = this.width/(field.length + 2*field.borders);
         if (ratio2 < ratio1) this.ratio = ratio2;
         else this.ratio = ratio1;
+    }
+
+    grColor(color)
+    {
+        if (!this.greenred) {
+            if (color == 'yellow') {
+                return 'yellow';
+            } else {
+                return 'cyan';
+            }
+        } else {
+            if (color == ourColor) {
+                return '#83e568';
+            } else {
+                return '#e56868';
+            }
+        }
     }
 
     update()
@@ -142,6 +164,13 @@ class Viewer
         ctx.scale(this.ratio, -this.ratio);
         // Translating to the view offset
         ctx.translate(this.viewOffset[0], this.viewOffset[1]);
+
+        // Reverse
+        if (this.reversed) {
+            this.sign = -1;
+        } else {
+            this.sign = 1;
+        }
 
         // Drawing the field
         this.drawField();
@@ -202,10 +231,10 @@ class Viewer
         }
 
         // Drawing (symmetrically) goals
-        drawGoals(ctx, 'yellow');
+        drawGoals(ctx, this.reversed ? this.grColor('blue') : this.grColor('yellow'));
         ctx.save();
         ctx.scale(-1, 1);
-        drawGoals(ctx, 'cyan');
+        drawGoals(ctx, this.reversed ? this.grColor('yellow') : this.grColor('blue'));
         ctx.restore();
     }
 
@@ -224,9 +253,11 @@ class Viewer
         var front = 0.75;
 
         ctx.save();
+        if (this.reversed)
+        ctx.scale(-1, 1);
         ctx.beginPath();
         ctx.strokeStyle = '#333';
-        ctx.fillStyle = robot.color;
+        ctx.fillStyle = this.grColor(robot.color);
         ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front);
         ctx.fill();
 
@@ -238,11 +269,12 @@ class Viewer
             robot.y+Math.sin(robot.orientation+Math.PI*2-front)*0.1);
         ctx.lineTo(robot.x, robot.y);
         ctx.fill();
-
+        ctx.restore();
+        ctx.save();
         ctx.fillStyle = '#333';
         ctx.font = '0.1pt sans';
         ctx.scale(1, -1);
-        ctx.fillText(''+robot.id, robot.x-0.03, -robot.y+0.04);
+        ctx.fillText(''+robot.id, this.sign*robot.x-0.03, -robot.y+0.04);
         ctx.restore();
     }
 
@@ -299,4 +331,19 @@ class Viewer
 $(document).ready(function() {
     // Instantiating the viewer
     var viewer = new Viewer();
+
+    $('.reverse-view').change(function() {
+        viewer.reversed = $(this).is(':checked');
+    });
+    $('.greenred-mode').change(function() {
+        viewer.greenred = $(this).is(':checked');
+    });
+    $('.we-are-color').click(function() {
+        if (ourColor == 'yellow') {
+            ourColor = 'blue';
+        } else {
+            ourColor = 'yellow';
+        }
+        $(this).text('We are: '+ourColor);
+    });
 });
