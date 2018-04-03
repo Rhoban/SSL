@@ -18,10 +18,41 @@
                 <canvas class="field" id="field"></canvas>
             </div>
             <div class="panel-right">
+                <h4>Robots</h4>
+                <div class="robots">
+                    <div class="robot robot-{{id}}" rel="{{id}}">
+                        <div class="robot-row">
+                            <div class="robot-id">
+                                <span class="robot-tag">#{{id}}</span>
+                                <span class="warning">
+                                    <img src="warning.png" />
+                                    Low voltage
+                                </span>
+                            </div>
+                            <div class="status">
+                                <img src="vision.png" />
+                            </div>
+                            <div class="status">
+                                <img src="com.png" />
+                            </div>
+                            <div class="expand" rel="{{id}}">
+                                <img class="icon-expand" src="plus.png" />
+                                <img class="icon-collapse" src="minus.png" />
+                            </div>
+                        </div>
+                        <div class="robot-row">
+                            <div class="infos">
+                                Blha blha blha!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <h4>Options</h4>
                 <label class="we-are-color">
                     We are: yellow
                 </label><br/>
+
                 <h4>Viewer options</h4>
                 <label>
                     <input type="checkbox" class="reverse-view">
@@ -32,6 +63,8 @@
                     Green/Red mode
                 </label>
 
+                <h4>Referee</h4>
+                No referee
             </div>
         </div>
     </body>

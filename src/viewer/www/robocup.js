@@ -10,8 +10,8 @@ var field = {
     goalLinearWidth: 0.5,
     goalWidth: 1,
     goalDepth: 0.18,
-    goalThickness: 0.02,
-    linesThickness: 0.01
+    goalThickness: 0.023,
+    linesThickness: 0.02
 };
 
 // Robots
@@ -21,28 +21,32 @@ var robots = [
         x: -2,
         y: 2,
         orientation: 0,
-        color: 'blue'
+        color: 'blue',
+        present: true
     },
     {
         id: 2,
         x: -2,
         y: -2,
         orientation: 0,
-        color: 'blue'
+        color: 'blue',
+        present: true
     },
     {
         id: 2,
         x: 2,
         y: 2,
         orientation: Math.PI,
-        color: 'yellow'
+        color: 'yellow',
+        present: false
     },
     {
         id: 3,
         x: 2,
         y: -1,
         orientation: Math.PI/1.5,
-        color: 'yellow'
+        color: 'yellow',
+        present: true
     }
 ];
 
@@ -91,9 +95,9 @@ class Viewer
         var left = (this.width-(field.length/this.ratio))/2;
         var top = (this.height-(field.width/this.ratio))/2;
         var X = ((this.mousePos[0]-left)/this.ratio);
-        var Y = ((this.mousePos[1]-top)/this.ratio);
+        var Y = -((this.mousePos[1]-top)/this.ratio);
         X -= this.viewOffset[0];
-        Y += this.viewOffset[1];
+        Y -= this.viewOffset[1];
 
         return [X, Y];
     }
@@ -111,9 +115,9 @@ class Viewer
     {
         if (!this.greenred) {
             if (color == 'yellow') {
-                return 'yellow';
+                return '#ede370';
             } else {
-                return 'cyan';
+                return '#70d1ed';
             }
         } else {
             if (color == ourColor) {
@@ -253,28 +257,27 @@ class Viewer
         var front = 0.75;
 
         ctx.save();
+        ctx.globalAlpha = robot.present ? 1 : 0.5;
+
+        ctx.save();
         if (this.reversed)
         ctx.scale(-1, 1);
         ctx.beginPath();
-        ctx.strokeStyle = '#333';
+        ctx.strokeStyle = '#aaa';
         ctx.fillStyle = this.grColor(robot.color);
         ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front);
+        if (!robot.present) {
+            ctx.stroke();
+        }
         ctx.fill();
 
-        ctx.beginPath();
-        ctx.moveTo(robot.x, robot.y);
-        ctx.lineTo(robot.x+Math.cos(robot.orientation+front)*0.1,
-            robot.y+Math.sin(robot.orientation+front)*0.1);
-        ctx.lineTo(robot.x+Math.cos(robot.orientation+Math.PI*2-front)*0.1,
-            robot.y+Math.sin(robot.orientation+Math.PI*2-front)*0.1);
-        ctx.lineTo(robot.x, robot.y);
-        ctx.fill();
         ctx.restore();
         ctx.save();
-        ctx.fillStyle = '#333';
-        ctx.font = '0.1pt sans';
+        ctx.fillStyle = robot.present ? '#333' : 'white';
+        ctx.font = '0.14pt sans';
         ctx.scale(1, -1);
-        ctx.fillText(''+robot.id, this.sign*robot.x-0.03, -robot.y+0.04);
+        ctx.fillText(''+robot.id, this.sign*robot.x-0.05, -robot.y+0.065);
+        ctx.restore();
         ctx.restore();
     }
 
@@ -328,9 +331,46 @@ class Viewer
     }
 }
 
+class Manager
+{
+    constructor() {
+        var template = $('.robots').html();
+        var html = '';
+
+        for (let id=1; id<=8; id++) {
+            var robotHtml = template;
+            robotHtml = robotHtml.replace(/{{id}}/g, id);
+            html += robotHtml;
+        }
+
+        $('.robots').html(html);
+
+        $('.robots .expand').click(function() {
+            var id = $(this).attr('rel');
+            var visible = $('.robot-'+id+' .infos').is(':visible');
+            $('.robots .infos').hide();
+            $('.robots .icon-collapse').hide();
+            $('.robots .icon-expand').show();
+            $('.robot').removeClass('expanded');
+
+            if (visible) {
+                $('.robot-'+id+' .infos').hide();
+            } else {
+                $('.robot-'+id).addClass('expanded');
+                $('.robot-'+id+' .infos').show();
+                $('.robot-'+id+' .icon-collapse').show();
+                $('.robot-'+id+' .icon-expand').hide();
+            }
+        });
+    }
+}
+
 $(document).ready(function() {
     // Instantiating the viewer
     var viewer = new Viewer();
+
+    // Robots manager
+    var manager = new Manager();
 
     $('.reverse-view').change(function() {
         viewer.reversed = $(this).is(':checked');
