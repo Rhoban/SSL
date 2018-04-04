@@ -18,53 +18,101 @@
                 <canvas class="field" id="field"></canvas>
             </div>
             <div class="panel-right">
-                <h4>Robots</h4>
-                <div class="robots">
-                    <div class="robot robot-{{id}}" rel="{{id}}">
-                        <div class="robot-row">
-                            <div class="robot-id">
-                                <span class="robot-tag">#{{id}}</span>
-                                <span class="warning">
-                                    <img src="warning.png" />
-                                    Low voltage
-                                </span>
-                            </div>
-                            <div class="status">
-                                <img src="vision.png" />
-                            </div>
-                            <div class="status">
-                                <img src="com.png" />
-                            </div>
-                            <div class="expand" rel="{{id}}">
-                                <img class="icon-expand" src="plus.png" />
-                                <img class="icon-collapse" src="minus.png" />
-                            </div>
-                        </div>
-                        <div class="robot-row">
-                            <div class="infos">
-                                Blha blha blha!
+                <div class="panel-block">
+                    <div class="panel-title">
+                        <h4>
+                            Robots
+                            <img src="warning-small.png" class="robots-warning not-displayed" />
+                        </h4>
+                    </div>
+                    <div class="panel-content">
+                        <div class="robots">
+                            <div class="robot robot-{{id}}" rel="{{id}}">
+                                <div class="robot-row">
+                                    <div class="robot-id">
+                                        <span class="robot-tag">#{{id}}</span>
+                                        <span class="warning">
+                                            <img src="warning-small.png" />
+                                            Low voltage
+                                        </span>
+                                    </div>
+                                    <div class="status">
+                                        <img src="vision.png" />
+                                    </div>
+                                    <div class="status">
+                                        <img src="com.png" />
+                                    </div>
+                                    <div class="expand" rel="{{id}}">
+                                        <img class="icon-expand" src="plus.png" />
+                                        <img class="icon-collapse" src="minus.png" />
+                                    </div>
+                                </div>
+                                <div class="robot-row">
+                                    <div class="infos">
+                                        Blha blha blha!
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <h4>Options</h4>
-                <label class="we-are-color">
-                    We are: yellow
-                </label><br/>
+                <div class="panel-block">
+                    <div class="panel-title">
+                        <h4>
+                            Options
+                        </h4>
+                    </div>
+                    <div class="panel-content not-shown">
+                        <label class="we-are-color">
+                            We are: yellow
+                        </label><br/>
+                        <label>
+                            <input type="checkbox" class="reverse-view">
+                            Reverse view
+                        </label><br/>
+                        <label>
+                            <input type="checkbox" class="greenred-mode">
+                            Green/Red mode
+                        </label>
+                    </div>
+                </div>
 
-                <h4>Viewer options</h4>
-                <label>
-                    <input type="checkbox" class="reverse-view">
-                    Reverse view
-                </label><br/>
-                <label>
-                    <input type="checkbox" class="greenred-mode">
-                    Green/Red mode
-                </label>
+                <div class="panel-block">
+                    <div class="panel-title">
+                        <h4>
+                            Referee
+                            <img src="warning-small.png" class="referee-warning not-displayed" />
+                        </h4>
+                    </div>
+                    <div class="panel-content not-shown">
+                        No referee
+                    </div>
+                </div>
 
-                <h4>Referee</h4>
-                No referee
+                <div class="panel-block">
+                    <div class="panel-title">
+                        <h4>
+                            Vision
+                            <img src="warning-small.png" class="vision-warning not-displayed" />
+                        </h4>
+                    </div>
+                    <div class="panel-content not-shown">
+                        No vision
+                    </div>
+                </div>
+
+                <div class="panel-block">
+                    <div class="panel-title">
+                        <h4>
+                            Communication
+                            <img src="warning-small.png" class="com-warning not-displayed" />
+                        </h4>
+                    </div>
+                    <div class="panel-content not-shown">
+                        No communication
+                    </div>
+                </div>
             </div>
         </div>
     </body>

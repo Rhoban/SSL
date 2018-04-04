@@ -365,12 +365,44 @@ class Manager
     }
 }
 
+class Panels
+{
+    constructor()
+    {
+        $('.panel-content.not-shown').hide();
+
+        $('.panel-block').each(function() {
+            let content = $(this).find('.panel-content');
+            var title = $(this).find('.panel-title');
+
+            if (content.is(':visible')) {
+                title.find('h4').prepend('<img class="expand-collapse" src="collapse.png"/>');
+            } else {
+                title.find('h4').prepend('<img class="expand-collapse" src="expand.png"/>');
+            }
+
+            title.click(function() {
+                if (content.is(':visible')) {
+                    content.hide();
+                    title.find('h4 .expand-collapse').attr('src', 'expand.png');
+                } else {
+                    content.show();
+                    title.find('h4 .expand-collapse').attr('src', 'collapse.png');
+                }
+            });
+        });
+    }
+}
+
 $(document).ready(function() {
     // Instantiating the viewer
     var viewer = new Viewer();
 
     // Robots manager
     var manager = new Manager();
+
+    // Panels manager
+    var panels = new Panels();
 
     $('.reverse-view').change(function() {
         viewer.reversed = $(this).is(':checked');
