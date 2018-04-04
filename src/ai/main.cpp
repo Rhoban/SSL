@@ -24,7 +24,7 @@ void stop(int s)
 
 int main(int argc, char **argv)
 {
-    // Enavling floating point errors
+    // Enabling floating point errors
     feenableexcept(FE_DIVBYZERO| FE_INVALID | FE_OVERFLOW);
     signal(SIGINT, stop);
 
