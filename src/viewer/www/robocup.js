@@ -125,6 +125,11 @@ class Viewer
         X -= this.viewOffset[0];
         Y -= this.viewOffset[1];
 
+        if (this.reversed) {
+            X = -X;
+            Y = -Y;
+        }
+
         return [X, Y];
     }
 
@@ -340,8 +345,10 @@ class Viewer
         }
 
         ctx.save();
-        if (this.reversed)
-        ctx.scale(-1, 1);
+        if (this.reversed) {
+            ctx.scale(-1, -1);
+        }
+
         ctx.beginPath();
         ctx.strokeStyle = '#aaa';
         ctx.fillStyle = this.grColor(robot.color);
@@ -356,16 +363,16 @@ class Viewer
         ctx.fillStyle = robot.present ? '#333' : 'white';
         ctx.font = '0.14pt sans';
         ctx.scale(1, -1);
-        ctx.fillText(''+robot.id, this.sign*robot.x-0.05, -robot.y+0.065);
+        ctx.fillText(''+robot.id, this.sign*robot.x-0.05, -this.sign*robot.y+0.065);
 
         if (typeof(extra) != 'undefined' && extra) {
             ctx.globalAlpha = 1;
             ctx.font = '0.09pt monospace';
             ctx.fillStyle = '#aaa';
-            ctx.fillText(robot.color+' #'+robot.id, robot.x+0.15, -robot.y-0.1);
-            ctx.fillText('x:'+robot.x.toFixed(2)+'m', robot.x+0.15, -robot.y);
-            ctx.fillText('y:'+robot.y.toFixed(2)+'m', robot.x+0.15, -robot.y+0.1);
-            ctx.fillText('t:'+(180*robot.orientation/Math.PI).toFixed(1)+'°', robot.x+0.15, -robot.y+0.2);
+            ctx.fillText(robot.color+' #'+robot.id, this.sign*robot.x+0.15, -this.sign*robot.y-0.1);
+            ctx.fillText('x:'+this.sign*robot.x.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y);
+            ctx.fillText('y:'+this.sign*robot.y.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y+0.1);
+            ctx.fillText('t:'+(180*robot.orientation/Math.PI).toFixed(1)+'°', this.sign*robot.x+0.15, -this.sign*robot.y+0.2);
         }
 
         ctx.restore();
@@ -379,6 +386,11 @@ class Viewer
         let pos = JSON.parse(JSON.stringify(ball));
         if (this.draggingBall && this.mousePos) {
             pos = this.mousePosMeters();
+        }
+
+        if (this.reversed) {
+            pos[0] = -pos[0];
+            pos[1] = -pos[1];
         }
 
         ctx.beginPath();
@@ -509,6 +521,10 @@ class Viewer
         if (evt.key == 'Escape' || evt.keyCode == 27) {
             this.resetRatio();
             console.log(evt);
+        }
+        if (evt.key == 'Tab' || evt.keyCode == 9) {
+            $('.reverse-view').click();
+            evt.preventDefault();
         }
     }
 }
