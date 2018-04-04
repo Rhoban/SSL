@@ -28,6 +28,8 @@ set (SOURCES
     ${RESOURCES}
 )
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
+
 # Tell CMake to create the helloworld executable
 add_executable(viewer ${SOURCES})
 

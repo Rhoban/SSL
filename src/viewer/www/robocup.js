@@ -1,5 +1,3 @@
-/*jshint esversion: 6*/
-
 // Field geometry
 var field = {
     length: 9.0,
@@ -77,46 +75,18 @@ function robotById(id, color)
     return null;
 }
 
-class Viewer
+
+
+
+function Viewer()
 {
-    constructor()
-    {
-        this.zone = $('.field-zone');
-        this.container = null;
-        this.ctx = null;
-        this.mousePos = null;
-        this.ratio = null;
-        this.dragging = false;
-        this.draggingRobot = null;
-        this.draggingBall = false;
-        this.rotatingRobot = null;
-        this.dragLock = false;
-        this.dragBegin = null;
-        this.viewOffset = [0, 0];
-        this.startOffset = [0, 0];
-        this.reversed = false;
-        this.greenred = false;
-
-        this.container = document.getElementById('field');
-        this.ctx = this.container.getContext('2d');
-
-        setInterval(() => this.update(), 20);
-
-        this.container.addEventListener('mousemove', (evt) => this.mouseMove(evt));
-        this.container.addEventListener('mousedown', (evt) => this.mouseDown(evt));
-        this.container.addEventListener('mouseup', (evt) => this.mouseUp(evt));
-        this.container.addEventListener('DOMMouseScroll', (evt) => this.mouseWheel(evt));
-        this.container.addEventListener('mousewheel', (evt) => this.mouseWheel(evt));
-        document.addEventListener('keypress', (evt) => this.keyPress(evt));
-    }
-
-    mouseMove(evt)
+    this.mouseMove = function(evt)
     {
         this.mousePos = [evt.clientX, evt.clientY];
-    }
+    };
 
     // Compute the mouse position un meter
-    mousePosMeters()
+    this.mousePosMeters = function()
     {
         var left = (this.width-(field.length/this.ratio))/2;
         var top = (this.height-(field.width/this.ratio))/2;
@@ -131,10 +101,10 @@ class Viewer
         }
 
         return [X, Y];
-    }
+    };
 
     // Mouse angle since begining of the drag
-    mouseAngle(robot)
+    this.mouseAngle = function(robot)
     {
         if (this.mousePos) {
             var pos = this.mousePosMeters();
@@ -145,19 +115,19 @@ class Viewer
         }
 
         return 0;
-    }
+    };
 
     // Resetting the ratio to fit the canvas zone
-    resetRatio()
+    this.resetRatio = function()
     {
         var ratio2 = this.height/(field.width + 2*field.borders);
         var ratio1 = this.width/(field.length + 2*field.borders);
         if (ratio2 < ratio1) this.ratio = ratio2;
         else this.ratio = ratio1;
         this.viewOffset = [0, 0];
-    }
+    };
 
-    grColor(color)
+    this.grColor = function(color)
     {
         if (!this.greenred) {
             if (color == 'yellow') {
@@ -172,11 +142,25 @@ class Viewer
                 return '#e56868';
             }
         }
-    }
+    };
 
-    update()
+    this.addText = function(message, x, y, options)
+    {
+        if (typeof(options) == 'undefined') {
+            options = {};
+        }
+        options.text = message;
+        options.x = x;
+        options.y = y;
+
+        this.texts.push(options);
+    };
+
+    this.update = function()
     {
         var ctx = this.ctx;
+
+        this.texts = [];
 
         // Retrieving zone sizes
         this.width = this.zone.width();
@@ -196,7 +180,7 @@ class Viewer
         ctx.fillStyle = '#aaa';
         ctx.font = '12pt sans';
         if (this.mousePos) {
-            let pos = this.mousePosMeters();
+            var pos = this.mousePosMeters();
 
             ctx.fillText("X: "+pos[0].toFixed(2)+"m, Y: "+pos[1].toFixed(2)+"m", 10, 20);
 
@@ -231,11 +215,12 @@ class Viewer
         this.drawRobots();
 
         if (this.mousePos) {
-            let pos = this.mousePosMeters();
+            var robot = null;
+            var pos = this.mousePosMeters();
 
             // Dragging a robot
             if (this.draggingRobot) {
-                let robot = robotById(this.draggingRobot[0], this.draggingRobot[1]);
+                robot = robotById(this.draggingRobot[0], this.draggingRobot[1]);
                 robot = JSON.parse(JSON.stringify(robot));
                 robot.ghost = true;
                 robot.x = pos[0];
@@ -245,11 +230,10 @@ class Viewer
 
             // Rotating a robot
             if (this.rotatingRobot) {
-                let robot = robotById(this.rotatingRobot[0], this.rotatingRobot[1]);
+                robot = robotById(this.rotatingRobot[0], this.rotatingRobot[1]);
                 robot = JSON.parse(JSON.stringify(robot));
 
                 var angle = this.mouseAngle(robot);
-                console.log(angle);
 
                 robot.ghost = true;
                 robot.orientation = angle;
@@ -261,9 +245,26 @@ class Viewer
         this.drawBall();
 
         ctx.restore();
-    }
 
-    drawField()
+        // Drawing text messages
+        ctx.save();
+        ctx.translate(this.width/2, this.height/2);
+        ctx.translate(this.ratio*this.viewOffset[0], -this.ratio*this.viewOffset[1]);
+
+        for (var k in this.texts) {
+            var text = this.texts[k];
+            ctx.beginPath();
+            ctx.font = (this.ratio/10)+'pt sans';
+            if ('color' in text) {
+                ctx.fillStyle = text.color;
+            }
+            ctx.fillText(text.text, text.x*this.ratio, text.y*this.ratio);
+            ctx.fill();
+        }
+        ctx.restore();
+    };
+
+    this.drawField = function()
     {
         var ctx = this.ctx;
 
@@ -315,9 +316,9 @@ class Viewer
         ctx.scale(-1, 1);
         drawGoals(ctx, this.reversed ? this.grColor('yellow') : this.grColor('blue'));
         ctx.restore();
-    }
+    };
 
-    drawRobots()
+    this.drawRobots = function()
     {
         var ctx = this.ctx;
         var over = this.overRobot();
@@ -326,9 +327,9 @@ class Viewer
             var robot = robots[k];
             this.drawRobot(robot, over == robot);
         }
-    }
+    };
 
-    drawRobot(robot, extra)
+    this.drawRobot = function(robot, extra)
     {
         var ctx = this.ctx;
         var front = 0.75;
@@ -359,31 +360,25 @@ class Viewer
         ctx.fill();
 
         ctx.restore();
-        ctx.save();
-        ctx.fillStyle = robot.present ? '#333' : 'white';
-        ctx.font = '0.14pt sans';
-        ctx.scale(1, -1);
-        ctx.fillText(''+robot.id, this.sign*robot.x-0.05, -this.sign*robot.y+0.065);
+        var color = robot.present ? '#333' : 'white';
+
+        this.addText(''+robot.id,this.sign*robot.x-0.05, -this.sign*robot.y+0.055, {color: color});
 
         if (typeof(extra) != 'undefined' && extra) {
-            ctx.globalAlpha = 1;
-            ctx.font = '0.09pt monospace';
             ctx.fillStyle = '#aaa';
-            ctx.fillText(robot.color+' #'+robot.id, this.sign*robot.x+0.15, -this.sign*robot.y-0.1);
-            ctx.fillText('x:'+this.sign*robot.x.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y);
-            ctx.fillText('y:'+this.sign*robot.y.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y+0.1);
-            ctx.fillText('t:'+(180*robot.orientation/Math.PI).toFixed(1)+'°', this.sign*robot.x+0.15, -this.sign*robot.y+0.2);
+            this.addText(robot.color+' #'+robot.id, this.sign*robot.x+0.15, -this.sign*robot.y-0.15, {color: '#aaa'});
+            this.addText('x:'+this.sign*robot.x.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y, {color: '#aaa'});
+            this.addText('y:'+this.sign*robot.y.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y+0.15, {color: '#aaa'});
+            this.addText('t:'+(180*robot.orientation/Math.PI).toFixed(1)+'°', this.sign*robot.x+0.1, 5, -this.sign*robot.y+0.3, {color: '#aaa'});
         }
-
         ctx.restore();
-        ctx.restore();
-    }
+    };
 
-    drawBall()
+    this.drawBall = function()
     {
         var ctx = this.ctx;
 
-        let pos = JSON.parse(JSON.stringify(ball));
+        var pos = JSON.parse(JSON.stringify(ball));
         if (this.draggingBall && this.mousePos) {
             pos = this.mousePosMeters();
         }
@@ -399,17 +394,13 @@ class Viewer
         ctx.fill();
 
         if (this.overBall()) {
-            ctx.save();
-            ctx.scale(1, -1);
-            ctx.font = '0.09pt monospace';
-            ctx.fillText('ball', pos[0]+0.15, -pos[1]-0.1);
-            ctx.fillText('x:'+pos[0].toFixed(2)+'m', pos[0]+0.15, -pos[1]);
-            ctx.fillText('y:'+pos[1].toFixed(2)+'m', pos[0]+0.15, -pos[1]+0.1);
-            ctx.restore();
+            this.addText('ball', pos[0]+0.15, -pos[1]-0.15, {color: 'orange'});
+            this.addText('x:'+pos[0].toFixed(2)+'m', pos[0]+0.15, -pos[1], {color: 'orange'});
+            this.addText('y:'+pos[1].toFixed(2)+'m', pos[0]+0.15, -pos[1]+0.15, {color: 'orange'});
         }
-    }
+    };
 
-    overBall()
+    this.overBall = function()
     {
         if (this.mousePos) {
             var xy = this.mousePosMeters();
@@ -419,9 +410,9 @@ class Viewer
         }
 
         return false;
-    }
+    };
 
-    overRobot()
+    this.overRobot = function()
     {
         if (this.mousePos) {
             var xy = this.mousePosMeters();
@@ -435,19 +426,22 @@ class Viewer
         }
 
         return null;
-    }
+    };
 
     // Mouse is down
-    mouseDown(evt)
+    this.mouseDown = function(evt)
     {
+        console.log(evt);
+
+        var over = false;
         if (this.mousePos) {
             this.dragBegin = this.mousePos;
 
-            if (evt.buttons == 1) {
+            if (evt.originalEvent.which == 1) {
                 if (this.overBall()) {
                     this.draggingBall = true;
                 } else {
-                    let over = this.overRobot();
+                    over = this.overRobot();
                     if (over) {
                         this.draggingRobot = [over.id, over.color];
                     } else if (!this.dragLock) {
@@ -458,23 +452,26 @@ class Viewer
                 }
             }
 
-            if (evt.buttons == 4) {
-                let over = this.overRobot();
+            if (evt.originalEvent.which == 2) {
+                over = this.overRobot();
 
                 if (over) {
                     this.rotatingRobot = [over.id, over.color];
                 }
             }
         }
-    }
+    };
 
     // Stopping the dragging
-    mouseUp(evt)
+    this.mouseUp = function(evt)
     {
+        var robot = null;
+        var pos = null;
+
         if (this.draggingRobot && this.mousePos) {
-            let robot = robotById(this.draggingRobot[0], this.draggingRobot[1]);
+            robot = robotById(this.draggingRobot[0], this.draggingRobot[1]);
             if (robot) {
-                var pos = this.mousePosMeters();
+                pos = this.mousePosMeters();
 
                 // XXX: Communicate with the API
                 robot.x = pos[0];
@@ -483,7 +480,7 @@ class Viewer
         }
 
         if (this.rotatingRobot && this.mousePos) {
-            let robot = robotById(this.rotatingRobot[0], this.rotatingRobot[1]);
+            robot = robotById(this.rotatingRobot[0], this.rotatingRobot[1]);
             if (robot) {
                 var angle = this.mouseAngle(robot);
 
@@ -493,7 +490,7 @@ class Viewer
         }
 
         if (this.draggingBall && this.mousePos) {
-            let pos = this.mousePosMeters();
+            pos = this.mousePosMeters();
 
             // XXX: Communicate with the API
             ball = pos;
@@ -503,62 +500,71 @@ class Viewer
         this.draggingRobot = null;
         this.rotatingRobot = null;
         this.draggingBall = false;
-    }
+    };
 
     // Spinning the mouse wheel
-    mouseWheel(evt)
+    this.mouseWheel = function(evt)
     {
-        this.ratio -= 5*evt.detail;
-        if (this.ratio < 0) {
-            this.ratio = 1;
+        if (!this.dragLock) {
+            this.ratio += 15*evt.deltaY;
+            if (this.ratio < 0) {
+                this.ratio = 1;
+            }
+            evt.preventDefault();
         }
-        evt.preventDefault();
-    }
+    };
 
     // A key was pressed on the keyboard
-    keyPress(evt)
+    this.keyPress = function(evt)
     {
-        if (evt.key == 'Escape' || evt.keyCode == 27) {
+        if (evt.which == 27) {
             this.resetRatio();
-            console.log(evt);
         }
-        if (evt.key == 'Tab' || evt.keyCode == 9) {
+        if (evt.which == 178) {
             $('.reverse-view').click();
             evt.preventDefault();
         }
-    }
+        console.log(evt);
+    };
+
+    this.zone = $('.field-zone');
+    this.container = null;
+    this.ctx = null;
+    this.mousePos = null;
+    this.ratio = null;
+    this.dragging = false;
+    this.draggingRobot = null;
+    this.draggingBall = false;
+    this.rotatingRobot = null;
+    this.dragLock = false;
+    this.dragBegin = null;
+    this.viewOffset = [0, 0];
+    this.startOffset = [0, 0];
+    this.reversed = false;
+    this.greenred = false;
+
+    this.container = document.getElementById('field');
+    this.ctx = this.container.getContext('2d');
+
+    var self = this;
+    setInterval(function() { self.update(); }, 20);
+
+    $('#field').mousemove(function(evt) { self.mouseMove(evt); });
+    $('#field').mousedown(function(evt) { self.mouseDown(evt); });
+    $('#field').mouseup(function(evt) { self.mouseUp(evt); });
+    $('#field').mousewheel(function(evt) { self.mouseWheel(evt); });
+
+    document.addEventListener('keypress', function(evt) { self.keyPress(evt); });
 }
 
-class Manager
+function Manager(viewer)
 {
-    constructor() {
-        $('.panel-content.not-shown').hide();
-
-        $('.panel-block').each(function() {
-            let content = $(this).find('.panel-content');
-            var title = $(this).find('.panel-title');
-
-            if (content.is(':visible')) {
-                title.find('h4').prepend('<img class="expand-collapse" src="collapse.png"/>');
-            } else {
-                title.find('h4').prepend('<img class="expand-collapse" src="expand.png"/>');
-            }
-
-            title.click(function() {
-                if (content.is(':visible')) {
-                    content.hide();
-                    title.find('h4 .expand-collapse').attr('src', 'expand.png');
-                } else {
-                    content.show();
-                    title.find('h4 .expand-collapse').attr('src', 'collapse.png');
-                }
-            });
-        });
-
+    this.robotsPanel = function()
+    {
         var template = $('.robots').html();
         var html = '';
 
-        for (let id=1; id<=8; id++) {
+        for (var id=1; id<=8; id++) {
             var robotHtml = template;
             robotHtml = robotHtml.replace(/{{id}}/g, id);
             html += robotHtml;
@@ -602,7 +608,75 @@ class Manager
                 }
             }
         });
-    }
+    };
+
+    this.optionsPanel = function()
+    {
+        var viewer = this.viewer;
+
+        $('.reverse-view').change(function() {
+            viewer.reversed = $(this).is(':checked');
+        });
+        $('.greenred-mode').change(function() {
+            viewer.greenred = $(this).is(':checked');
+        });
+        $('.we-are-color').click(function() {
+            if (ourColor == 'yellow') {
+                ourColor = 'blue';
+            } else {
+                ourColor = 'yellow';
+            }
+            $(this).text('We are: '+ourColor);
+        });
+        $('.reset-view').click(function() {
+            viewer.resetRatio();
+        });
+        $('.drag-lock').click(function() {
+            viewer.dragLock = !viewer.dragLock;
+
+            if (viewer.dragLock) {
+                $(this).text('Unlock the drag');
+                $(this).addClass('btn-success');
+                $(this).removeClass('btn-danger');
+            } else {
+                $(this).text('Lock the drag');
+                $(this).addClass('btn-danger');
+                $(this).removeClass('btn-success');
+            }
+        });
+    };
+
+    this.viewer = viewer;
+
+    // Making panel collapsable and expandable
+    $('.panel-content.not-shown').hide();
+
+    $('.panel-block').each(function() {
+        var content = $(this).find('.panel-content');
+        var title = $(this).find('.panel-title');
+
+        if (content.is(':visible')) {
+            title.find('h4').prepend('<img class="expand-collapse" src="collapse.png"/>');
+        } else {
+            title.find('h4').prepend('<img class="expand-collapse" src="expand.png"/>');
+        }
+
+        title.click(function() {
+            if (content.is(':visible')) {
+                content.hide();
+                title.find('h4 .expand-collapse').attr('src', 'expand.png');
+            } else {
+                content.show();
+                title.find('h4 .expand-collapse').attr('src', 'collapse.png');
+            }
+        });
+    });
+
+    // Handling robots management panel
+    this.robotsPanel();
+
+    // Viewer options panel
+    this.optionsPanel();
 }
 
 $(document).ready(function() {
@@ -610,36 +684,5 @@ $(document).ready(function() {
     var viewer = new Viewer();
 
     // Panels manager
-    var manager = new Manager();
-
-    $('.reverse-view').change(function() {
-        viewer.reversed = $(this).is(':checked');
-    });
-    $('.greenred-mode').change(function() {
-        viewer.greenred = $(this).is(':checked');
-    });
-    $('.we-are-color').click(function() {
-        if (ourColor == 'yellow') {
-            ourColor = 'blue';
-        } else {
-            ourColor = 'yellow';
-        }
-        $(this).text('We are: '+ourColor);
-    });
-    $('.reset-view').click(function() {
-        viewer.resetRatio();
-    });
-    $('.drag-lock').click(function() {
-        viewer.dragLock = !viewer.dragLock;
-
-        if (viewer.dragLock) {
-            $(this).text('Unlock the drag');
-            $(this).addClass('btn-success');
-            $(this).removeClass('btn-danger');
-        } else {
-            $(this).text('Lock the drag');
-            $(this).addClass('btn-danger');
-            $(this).removeClass('btn-success');
-        }
-    });
+    var manager = new Manager(viewer);
 });

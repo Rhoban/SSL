@@ -33,6 +33,8 @@ MainWindow::MainWindow(QWidget *parent) :
   superBigleuxAction->setShortcut(QKeySequence::Save);
   connect(superBigleuxAction, SIGNAL(triggered()), this, SLOT(on_actionSuperBigleux_triggered()));
   addAction(superBigleuxAction);
+
+  showMaximized();
 }
 
 MainWindow::~MainWindow()
