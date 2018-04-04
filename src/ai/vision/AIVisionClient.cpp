@@ -9,12 +9,14 @@ namespace RhobanSSL
 {
     AIVisionClient::AIVisionClient(
         Data& ai_data, AIVisionClient::Team myTeam, bool simulation
-    ): ai_data(ai_data), myTeam(myTeam), VisionClient(simulation)
+    ): ai_data(ai_data), myTeam(myTeam), VisionClient(simulation), packets(0)
     {
     }
 
     void AIVisionClient::packetReceived()
     {
+        packets++;
+
         // Retrieving field dimensions
         auto geometry = data.geometry();
         if (geometry.has_field()) {
@@ -46,7 +48,7 @@ namespace RhobanSSL
                     double y = ball.y()/1000.0;
                     Point pos(x, y);
 
-                    double distance = pos.getDist( 
+                    double distance = pos.getDist(
                         visionData.ball.movement[0].linear_position
                     );
                     if (!hasBall || distance < nearest) {
@@ -70,7 +72,7 @@ namespace RhobanSSL
     }
 
     void AIVisionClient::updateRobotInformation(
-        SSL_DetectionFrame &detection, 
+        SSL_DetectionFrame &detection,
         SSL_DetectionRobot &robotFrame, bool ally
     ){
         Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;

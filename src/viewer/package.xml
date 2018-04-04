@@ -12,6 +12,7 @@
 
     <build_depend>rhoban_utils</build_depend> <!-- rhoban/utils -->
     <build_depend>tclap</build_depend> <!-- rhobandeps/tclap -->
+    <build_depend>jsoncpp</build_depend> <!-- rhobandeps/jsoncpp -->
     <build_depend>ssl_ai</build_depend>
     <build_depend>ssl_client</build_depend>
 
@@ -19,4 +20,5 @@
     <run_depend>tclap</run_depend>
     <run_depend>ssl_ai</run_depend>
     <run_depend>ssl_client</run_depend>
+    <run_depend>jsoncpp</run_depend>
 </package>

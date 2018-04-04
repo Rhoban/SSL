@@ -13,7 +13,8 @@ int main(int argc, char *argv[])
     cmd.parse(argc, argv);
 
     // JS API
-    API api(simulation.getValue(), yellow.getValue());
+    API api(simulation.getValue(), yellow.getValue() ?
+        RhobanSSL::AIVisionClient::Yellow : RhobanSSL::AIVisionClient::Blue);
 
     // Running Qt application
     QApplication a(argc, argv);

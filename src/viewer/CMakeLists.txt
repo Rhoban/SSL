@@ -1,12 +1,18 @@
 cmake_minimum_required(VERSION 3.0)
-project(viewer)
+project(ssl_viewer)
 
 find_package(catkin REQUIRED COMPONENTS
   rhoban_utils
   ssl_ai
+  jsoncpp
   )
 
-include_directories(${catkin_INCLUDES})
+catkin_package(
+  INCLUDE_DIRS .
+  CATKIN_DEPENDS rhoban_utils jsoncpp ssl_ai
+)
+
+include_directories(${catkin_INCLUDE_DIRS})
 
 # Find the QtWidgets library
 find_package(Qt5Widgets)

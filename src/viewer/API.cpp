@@ -1,9 +1,10 @@
 #include "API.h"
 
-API::API(bool simulation, bool yellow)
+API::API(bool simulation, RhobanSSL::AIVisionClient::Team team)
 :
     simulation(simulation),
-    yellow(yellow)
+    team(team),
+    visionClient(data, team, simulation)
 {
 }
 
@@ -18,5 +19,15 @@ bool API::isSimulation()
 
 bool API::isYellow()
 {
-    return yellow;
+    return team == RhobanSSL::AIVisionClient::Yellow;
+}
+
+bool API::hasVisionData()
+{
+    return visionClient.hasData();
+}
+
+unsigned int API::visionPackets()
+{
+    return visionClient.packets;
 }

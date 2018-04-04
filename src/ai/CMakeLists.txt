@@ -9,6 +9,7 @@ find_package(catkin REQUIRED COMPONENTS
 
 catkin_package(
     INCLUDE_DIRS .
+    LIBRARIES ssl_ai
     CATKIN_DEPENDS ssl_client rhoban_geometry tclap eigen
 )
 
@@ -83,7 +84,7 @@ if(CATKIN_ENABLE_TESTING)
 
   foreach(test_source ${TEST_SOURCES})
       get_filename_component(name_test ${test_source} NAME_WE)
-      catkin_add_gtest(${name_test} ${test_source})  
+      catkin_add_gtest(${name_test} ${test_source})
       target_link_libraries(${name_test} ssl_ai ${ALL_LIBS})
   endforeach(test_source)
 endif(CATKIN_ENABLE_TESTING)

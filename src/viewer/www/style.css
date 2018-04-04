@@ -131,3 +131,14 @@ canvas.field {
 .panel-content {
     padding:5px;
 }
+
+.simulation-mode {
+    color: #af6916;
+    border: #af6916;
+    background-color: #eacb60;
+    padding:5px;
+    border-radius:5px;
+    text-align:center;
+    display:none;
+    font-weight:bold;
+}

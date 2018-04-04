@@ -255,14 +255,14 @@ function Viewer()
         ctx.translate(this.ratio*this.viewOffset[0], -this.ratio*this.viewOffset[1]);
 
         for (var k in this.texts) {
+            ctx.save();
             var text = this.texts[k];
-            ctx.beginPath();
             ctx.font = (this.ratio/10)+'pt sans';
             if ('color' in text) {
                 ctx.fillStyle = text.color;
             }
             ctx.fillText(text.text, text.x*this.ratio, text.y*this.ratio);
-            ctx.fill();
+            ctx.restore();
         }
         ctx.restore();
     };
@@ -372,7 +372,7 @@ function Viewer()
             this.addText(robot.color+' #'+robot.id, this.sign*robot.x+0.15, -this.sign*robot.y-0.15, {color: '#aaa'});
             this.addText('x:'+this.sign*robot.x.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y, {color: '#aaa'});
             this.addText('y:'+this.sign*robot.y.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y+0.15, {color: '#aaa'});
-            this.addText('t:'+(180*robot.orientation/Math.PI).toFixed(1)+'°', this.sign*robot.x+0.1, 5, -this.sign*robot.y+0.3, {color: '#aaa'});
+            this.addText('t:'+(180*robot.orientation/Math.PI).toFixed(1)+'°', this.sign*robot.x+0.15, -this.sign*robot.y+0.3, {color: '#aaa'});
         }
         ctx.restore();
     };
@@ -561,98 +561,102 @@ function Viewer()
 
 function Manager(viewer)
 {
-    this.robotsPanel = function()
+    this.robotsPanel = function(init)
     {
-        var template = $('.robots').html();
-        var html = '';
+        if (init) {
+            var template = $('.robots').html();
+            var html = '';
 
-        for (var id=1; id<=8; id++) {
-            var robotHtml = template;
-            robotHtml = robotHtml.replace(/{{id}}/g, id);
-            html += robotHtml;
-        }
-
-        $('.robots').html(html);
-
-        $('.robots .expand').click(function() {
-            var id = $(this).attr('rel');
-            var visible = $('.robot-'+id+' .infos').is(':visible');
-            $('.robots .infos').hide();
-            $('.robots .icon-collapse').hide();
-            $('.robots .icon-expand').show();
-            $('.robot').removeClass('expanded');
-
-            if (visible) {
-                $('.robot-'+id+' .infos').hide();
-            } else {
-                $('.robot-'+id).addClass('expanded');
-                $('.robot-'+id+' .infos').show();
-                $('.robot-'+id+' .icon-collapse').show();
-                $('.robot-'+id+' .icon-expand').hide();
+            for (var id=1; id<=8; id++) {
+                var robotHtml = template;
+                robotHtml = robotHtml.replace(/{{id}}/g, id);
+                html += robotHtml;
             }
-        });
 
-        $('.robots .enable-disable').click(function() {
-            var id = parseInt($(this).attr('rel'));
-            var robot = robotById(id);
+            $('.robots').html(html);
 
-            if (robot) {
-                robot.enabled = !robot.enabled;
+            $('.robots .expand').click(function() {
+                var id = $(this).attr('rel');
+                var visible = $('.robot-'+id+' .infos').is(':visible');
+                $('.robots .infos').hide();
+                $('.robots .icon-collapse').hide();
+                $('.robots .icon-expand').show();
+                $('.robot').removeClass('expanded');
 
-                if (robot.enabled) {
-                    $(this).removeClass('btn-success');
-                    $(this).addClass('btn-danger');
-                    $(this).text('Disable');
+                if (visible) {
+                    $('.robot-'+id+' .infos').hide();
                 } else {
-                    $(this).addClass('btn-success');
-                    $(this).removeClass('btn-danger');
-                    $(this).text('Enable');
+                    $('.robot-'+id).addClass('expanded');
+                    $('.robot-'+id+' .infos').show();
+                    $('.robot-'+id+' .icon-collapse').show();
+                    $('.robot-'+id+' .icon-expand').hide();
                 }
-            }
-        });
+            });
 
-        if (simulation) {
-            $('.robots .real').hide();
+            $('.robots .enable-disable').click(function() {
+                var id = parseInt($(this).attr('rel'));
+                var robot = robotById(id);
+
+                if (robot) {
+                    robot.enabled = !robot.enabled;
+
+                    if (robot.enabled) {
+                        $(this).removeClass('btn-success');
+                        $(this).addClass('btn-danger');
+                        $(this).text('Disable');
+                    } else {
+                        $(this).addClass('btn-success');
+                        $(this).removeClass('btn-danger');
+                        $(this).text('Enable');
+                    }
+                }
+            });
+
+            if (simulation) {
+                $('.robots .real').hide();
+            }
         }
     };
 
-    this.optionsPanel = function()
+    this.optionsPanel = function(init)
     {
         var viewer = this.viewer;
 
-        $('.reverse-view').change(function() {
-            viewer.reversed = $(this).is(':checked');
-        });
-        $('.greenred-mode').change(function() {
-            viewer.greenred = $(this).is(':checked');
-        });
+        if (init) {
+            $('.reverse-view').change(function() {
+                viewer.reversed = $(this).is(':checked');
+            });
+            $('.greenred-mode').change(function() {
+                viewer.greenred = $(this).is(':checked');
+            });
 
-        $('.we-are-color').text('We are: '+ourColor);
-        $('.we-are-color').click(function() {
-            if (ourColor == 'yellow') {
-                ourColor = 'blue';
-            } else {
-                ourColor = 'yellow';
-            }
-            $(this).text('We are: '+ourColor);
-        });
+            $('.we-are-color').text('We are: '+ourColor);
+            $('.we-are-color').click(function() {
+                if (ourColor == 'yellow') {
+                    ourColor = 'blue';
+                } else {
+                    ourColor = 'yellow';
+                }
+                $(this).text('We are: '+ourColor);
+            });
 
-        $('.reset-view').click(function() {
-            viewer.resetRatio();
-        });
-        $('.drag-lock').click(function() {
-            viewer.dragLock = !viewer.dragLock;
+            $('.reset-view').click(function() {
+                viewer.resetRatio();
+            });
+            $('.drag-lock').click(function() {
+                viewer.dragLock = !viewer.dragLock;
 
-            if (viewer.dragLock) {
-                $(this).text('Unlock the drag');
-                $(this).addClass('btn-success');
-                $(this).removeClass('btn-danger');
-            } else {
-                $(this).text('Lock the drag');
-                $(this).addClass('btn-danger');
-                $(this).removeClass('btn-success');
-            }
-        });
+                if (viewer.dragLock) {
+                    $(this).text('Unlock the drag');
+                    $(this).addClass('btn-success');
+                    $(this).removeClass('btn-danger');
+                } else {
+                    $(this).text('Lock the drag');
+                    $(this).addClass('btn-danger');
+                    $(this).removeClass('btn-success');
+                }
+            });
+        }
     };
 
     this.viewer = viewer;
@@ -688,7 +692,13 @@ function Manager(viewer)
 
     this.visionPanel = function()
     {
-        $('.vision-warning').show();
+        // Updating vison panel
+        if (api.hasVisionData()) {
+            $('.vision-warning').hide();
+            $('.vision-infos').text(api.visionPackets()+' packets received');
+        } else {
+            $('.vision-warning').show();
+        }
     };
 
     this.communicationPanel = function()
@@ -696,25 +706,25 @@ function Manager(viewer)
         $('.com-warning').show();
     };
 
-    this.update = function()
+    this.update = function(init)
     {
+        // Handling robots management panel
+        this.robotsPanel(init);
 
+        // Viewer options panel
+        this.optionsPanel(init);
+
+        // Referee panel
+        this.refereePanel(init);
+
+        // Vision panel
+        this.visionPanel(init);
+
+        // Communication panel
+        this.communicationPanel(init);
     };
 
-    // Handling robots management panel
-    this.robotsPanel();
-
-    // Viewer options panel
-    this.optionsPanel();
-
-    // Referee panel
-    this.refereePanel();
-
-    // Vision panel
-    this.visionPanel();
-
-    // Communication panel
-    this.communicationPanel();
+    this.update(true);
 }
 
 $(document).ready(function() {
@@ -723,6 +733,10 @@ $(document).ready(function() {
 
     // Are we in simulation mode
     simulation = api.isSimulation();
+
+    if (simulation) {
+        $('.simulation-mode').show();
+    }
 
     // Instantiating the viewer
     var viewer = new Viewer();

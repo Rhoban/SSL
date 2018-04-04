@@ -15,6 +15,8 @@ public:
 
     AIVisionClient(Data& data, Team myTeam, bool simulation = false);
 
+    unsigned int packets;
+    
 protected:
     virtual void packetReceived();
 
@@ -23,7 +25,7 @@ protected:
     Vision::VisionData visionData;
 
     void updateRobotInformation(
-        SSL_DetectionFrame &detection, 
+        SSL_DetectionFrame &detection,
         SSL_DetectionRobot &robot, bool ally
     );
 };
