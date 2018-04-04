@@ -8,13 +8,17 @@ class API : public QObject
     Q_OBJECT
 
 public:
-    API();
+    API(bool simulation, bool yellow);
     virtual ~API();
+
+    bool simulation;
+    bool yellow;
 
 signals:
 
 public slots:
-    int sum(int a, int b);
+    bool isSimulation();
+    bool isYellow();
 
 private:
 

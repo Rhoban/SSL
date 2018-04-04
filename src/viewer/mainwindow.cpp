@@ -3,16 +3,16 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(API *api, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     inspector(NULL),
     accessibility(false),
-    superBigleuxMode(false)
+    superBigleuxMode(false),
+    api(api)
 {
   ui->setupUi(this);
 
-  api = new API;
   ui->webView->page()->mainFrame()->addToJavaScriptWindowObject("api", api);
 
   ui->horizontalLayout->setMargin(0);

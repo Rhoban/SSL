@@ -1,6 +1,9 @@
 #include "API.h"
 
-API::API()
+API::API(bool simulation, bool yellow)
+:
+    simulation(simulation),
+    yellow(yellow)
 {
 }
 
@@ -8,7 +11,12 @@ API::~API()
 {
 }
 
-int API::sum(int a, int b)
+bool API::isSimulation()
 {
-    return a + b;
+    return simulation;
+}
+
+bool API::isYellow()
+{
+    return yellow;
 }

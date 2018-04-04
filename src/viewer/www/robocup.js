@@ -55,6 +55,9 @@ var robots = [
 // Our team color
 var ourColor = 'yellow';
 
+// Is it simulation ?
+var simulation = false;
+
 // Ball
 var ball = [0, 0];
 
@@ -547,7 +550,6 @@ function Viewer()
     this.ctx = this.container.getContext('2d');
 
     var self = this;
-    setInterval(function() { self.update(); }, 20);
 
     $('#field').mousemove(function(evt) { self.mouseMove(evt); });
     $('#field').mousedown(function(evt) { self.mouseDown(evt); });
@@ -608,6 +610,10 @@ function Manager(viewer)
                 }
             }
         });
+
+        if (simulation) {
+            $('.robots .real').hide();
+        }
     };
 
     this.optionsPanel = function()
@@ -620,6 +626,8 @@ function Manager(viewer)
         $('.greenred-mode').change(function() {
             viewer.greenred = $(this).is(':checked');
         });
+
+        $('.we-are-color').text('We are: '+ourColor);
         $('.we-are-color').click(function() {
             if (ourColor == 'yellow') {
                 ourColor = 'blue';
@@ -628,6 +636,7 @@ function Manager(viewer)
             }
             $(this).text('We are: '+ourColor);
         });
+
         $('.reset-view').click(function() {
             viewer.resetRatio();
         });
@@ -687,6 +696,11 @@ function Manager(viewer)
         $('.com-warning').show();
     };
 
+    this.update = function()
+    {
+
+    };
+
     // Handling robots management panel
     this.robotsPanel();
 
@@ -704,9 +718,20 @@ function Manager(viewer)
 }
 
 $(document).ready(function() {
+    // What is our color ?
+    ourColor = api.isYellow() ? 'yellow' : 'blue';
+
+    // Are we in simulation mode
+    simulation = api.isSimulation();
+
     // Instantiating the viewer
     var viewer = new Viewer();
 
     // Panels manager
     var manager = new Manager(viewer);
+
+    setInterval(function() {
+        manager.update();
+        viewer.update();
+    }, 20);
 });

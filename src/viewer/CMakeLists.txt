@@ -3,6 +3,7 @@ project(viewer)
 
 find_package(catkin REQUIRED COMPONENTS
   rhoban_utils
+  ssl_ai
   )
 
 include_directories(${catkin_INCLUDES})
