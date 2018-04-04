@@ -672,11 +672,35 @@ function Manager(viewer)
         });
     });
 
+    this.refereePanel = function()
+    {
+        $('.referee-warning').show();
+    };
+
+    this.visionPanel = function()
+    {
+        $('.vision-warning').show();
+    };
+
+    this.communicationPanel = function()
+    {
+        $('.com-warning').show();
+    };
+
     // Handling robots management panel
     this.robotsPanel();
 
     // Viewer options panel
     this.optionsPanel();
+
+    // Referee panel
+    this.refereePanel();
+
+    // Vision panel
+    this.visionPanel();
+
+    // Communication panel
+    this.communicationPanel();
 }
 
 $(document).ready(function() {
