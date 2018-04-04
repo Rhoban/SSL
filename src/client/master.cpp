@@ -38,7 +38,7 @@ int main()
     robot.x_speed = 0;
     robot.y_speed = 0;
     robot.t_speed = 0;
-    robot.kickPower = 1500;
+    robot.kickPower = 60;
 
     struct packet_params params;
     params.kp = 10.0;
