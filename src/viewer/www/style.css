@@ -104,7 +104,30 @@ canvas.field {
     font-family: monospace;
 }
 
-
 .not-displayed {
     display:none;
+}
+
+.panel-block hr {
+    margin:8px;
+    padding:0;
+    opacity:0.25;
+    height:3px;
+}
+
+.panel-block .progress {
+    margin: 2px;
+}
+
+.robots .warning {
+    display:none;
+}
+
+.robots .pos {
+    font-family:monospace;
+    opacity:0.8;
+}
+
+.panel-content {
+    padding:5px;
 }

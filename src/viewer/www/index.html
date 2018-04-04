@@ -33,7 +33,7 @@
                                         <span class="robot-tag">#{{id}}</span>
                                         <span class="warning">
                                             <img src="warning-small.png" />
-                                            Low voltage
+                                            No response
                                         </span>
                                     </div>
                                     <div class="status">
@@ -49,7 +49,40 @@
                                 </div>
                                 <div class="robot-row">
                                     <div class="infos">
-                                        Blha blha blha!
+                                        Power
+                                        <div class="progress">
+                                                <div class="progress-bar progress-bar-striped progress-bar-danger" role="progressbar" style="width: 0%;">
+                                                    ?
+                                                </div>
+                                        </div>
+
+                                        Capacitors
+                                        <div class="progress">
+                                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;">
+                                                    ?
+                                                </div>
+                                        </div>
+
+                                        Position
+                                        <div class="pos">
+                                            X=<span class="pos-x">?</span>m, Y=<span class="pos-x">?</span>m, T=<span class="pos-x">?</span>°
+                                        </div>
+
+                                        <div class="actions">
+                                            <hr/>
+                                            <a class="btn btn-danger enable-disable" rel="{{id}}">
+                                                Disable
+                                            </a>
+                                            <a class="btn btn-success charge">
+                                                Charge
+                                            </a>
+                                            <a class="btn btn-primary">
+                                                Kick
+                                            </a>
+                                            <a class="btn btn-primary">
+                                                Chip kick
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +107,13 @@
                         <label>
                             <input type="checkbox" class="greenred-mode">
                             Green/Red mode
-                        </label>
+                        </label><br/>
+                        <a class="btn btn-primary reset-view">
+                            Reset the view
+                        </a>
+                        <a class="btn btn-danger drag-lock">
+                            Lock the drag
+                        </a>
                     </div>
                 </div>
 
