@@ -58,8 +58,8 @@ canvas.field {
 
 .robot {
     width:100%;
-    font-size:140%;
     padding:5px;
+    font-size:110%;
 }
 
 .robot:hover, .robot.expanded {
@@ -73,6 +73,10 @@ canvas.field {
 .status {
     width:60px;
     opacity: 0.2;
+}
+
+.status.ok {
+    opacity: 0.8;
 }
 
 .expand {
@@ -141,4 +145,35 @@ canvas.field {
     text-align:center;
     display:none;
     font-weight:bold;
+}
+
+.emergency-button {
+    text-align:center;
+    position:absolute;
+    right:32%;
+    top:10px;
+    z-index:9999999;
+}
+
+.emergency-button a {
+    font-size:120%;
+    margin:3px;
+}
+
+.controls .rotate-left {
+    -moz-transform: scale(-1, 1);
+    -webkit-transform: scale(-1, 1);
+    -o-transform: scale(-1, 1);
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1);
+}
+
+.controls .dummy {
+    opacity:0;
+}
+
+.controls .command, .controls .dummy {
+    width:25px;
+    margin:3px;
+    padding:2px;
 }

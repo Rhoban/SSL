@@ -1,5 +1,7 @@
 #include <fenv.h>
 #include <tclap/CmdLine.h>
+#include <com/AICommanderReal.h>
+#include <com/AICommanderSimulation.h>
 #include <QApplication>
 #include "mainwindow.h"
 #include "API.h"
@@ -12,14 +14,27 @@ int main(int argc, char *argv[])
     TCLAP::SwitchArg yellow("y", "yellow", "We are yellow", cmd, false);
     cmd.parse(argc, argv);
 
-    // JS API
+    // Instantiating the commander
+    RhobanSSL::AICommander *commander;
+    if (simulation.getValue()) {
+        commander = new RhobanSSL::AICommanderSimulation(yellow.getValue());
+    } else {
+        commander = new RhobanSSL::AICommanderReal(yellow.getValue());
+    }
+
+    // Viewer API
     API api(simulation.getValue(), yellow.getValue() ?
-        RhobanSSL::AIVisionClient::Yellow : RhobanSSL::AIVisionClient::Blue);
+        RhobanSSL::AIVisionClient::Yellow : RhobanSSL::AIVisionClient::Blue,
+        commander);
 
     // Running Qt application
     QApplication a(argc, argv);
     MainWindow w(&api);
     w.show();
 
-    return a.exec();
+    int result = a.exec();
+
+    delete commander;
+
+    return result;
 }

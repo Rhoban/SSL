@@ -440,32 +440,43 @@ function Viewer()
         var robot = null;
         var pos = null;
 
+        // Dragging the robot
         if (this.draggingRobot && this.mousePos) {
             robot = robotById(this.draggingRobot[0], this.draggingRobot[1]);
-            if (robot) {
-                pos = this.mousePosMeters();
 
-                // XXX: Communicate with the API
-                robot.x = pos[0];
-                robot.y = pos[1];
+            if (robot) {
+                deltaPixels = Math.sqrt(Math.pow(this.mousePos[0]-this.dragBegin[0], 2) +
+                Math.pow(this.mousePos[1]-this.dragBegin[1], 2));
+
+                if (deltaPixels > 10) {
+                    pos = this.mousePosMeters();
+
+                    api.moveRobot(this.draggingRobot[1] == 'yellow',
+                        this.draggingRobot[0], pos[0], pos[1], robot.orientation);
+                } else {
+                    if (robot.team == ourColor) {
+                        this.manager.robotClicked(robot);
+                    }
+                }
             }
         }
 
+        // Rotating a robot
         if (this.rotatingRobot && this.mousePos) {
             robot = robotById(this.rotatingRobot[0], this.rotatingRobot[1]);
             if (robot) {
                 var angle = this.mouseAngle(robot);
 
-                // XXX: Communicate with the API
-                robot.orientation = angle;
+                api.moveRobot(this.rotatingRobot[1] == 'yellow',
+                    this.rotatingRobot[0], robot.x, robot.y, angle);
             }
         }
 
+        // Dragging the ball
         if (this.draggingBall && this.mousePos) {
             pos = this.mousePosMeters();
 
-            // XXX: Communicate with the API
-            ball = pos;
+            api.moveBall(pos[0], pos[1]);
         }
 
         this.dragging = false;
@@ -539,8 +550,13 @@ function Manager(viewer)
 
             if (!(status.id in robots[status.team])) {
                 // Creating robot entry
-                status.enabled = true;
+                status.enabled = false;
+                status.spin = false;
                 robots[status.team][status.id] = status;
+
+                if (status.team == ourColor) {
+                    api.robotCommand(status.id, false);
+                }
             } else {
                 for (var field in status) {
                     // Updating fields
@@ -554,13 +570,22 @@ function Manager(viewer)
         ball = [ballStatus.x, ballStatus.y];
     };
 
+    this.robotClicked = function(robot)
+    {
+        div = $('.robot-'+robot.id);
+
+        if (!div.find('.infos').is(':visible')) {
+            div.find('.expand').click();
+        }
+    };
+
     this.robotsPanel = function(init)
     {
         if (init) {
             var template = $('.robots').html();
             var html = '';
 
-            for (var id=1; id<=8; id++) {
+            for (var id=0; id<8; id++) {
                 var robotHtml = template;
                 robotHtml = robotHtml.replace(/{{id}}/g, id);
                 html += robotHtml;
@@ -586,27 +611,105 @@ function Manager(viewer)
                 }
             });
 
-            $('.robots .enable-disable').click(function() {
+            $('.robots .enable-disable').change(function() {
                 var id = parseInt($(this).attr('rel'));
                 var robot = robotById(id);
 
-                if (robot) {
-                    robot.enabled = !robot.enabled;
-
-                    if (robot.enabled) {
-                        $(this).removeClass('btn-success');
-                        $(this).addClass('btn-danger');
-                        $(this).text('Disable');
-                    } else {
-                        $(this).addClass('btn-success');
-                        $(this).removeClass('btn-danger');
-                        $(this).text('Enable');
-                    }
+                robot.enabled = $(this).is(':checked');
+                if (!robot.enabled) {
+                    robot.spin = false;
                 }
+                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 0, robot.spin);
             });
+
+            var button = function(selector, callback, evt) {
+                if (typeof(evt) == 'undefined') {
+                    evt = 'click'
+                }
+                $('.robots '+selector).on(evt, function() {
+                    var id = parseInt($(this).attr('rel'));
+                    var robot = robotById(id);
+
+                    if (robot) {
+                        callback(robot);
+                    }
+                });
+            };
+
+            button('.spin', function(robot) {
+                if (robot.enabled) {
+                    robot.spin = !robot.spin;
+                }
+                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 0, robot.spin);
+            });
+
+            button('.kick', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 1, robot.spin);
+            });
+
+            button('.kick-chip', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 2, robot.spin);
+            });
+
+            button('.left', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, 0.0, 0.2, 0.0, 0, robot.spin);
+            }, 'mousedown');
+
+            button('.right', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, 0.0, -0.2, 0.0, 0, robot.spin);
+            }, 'mousedown');
+
+            button('.rear', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, -0.2, 0.0, 0.0, 0, robot.spin);
+            }, 'mousedown');
+
+            button('.front', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, 0.2, 0.0, 0.0, 0, robot.spin);
+            }, 'mousedown');
+
+            button('.rotate-right', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, -2, 0, robot.spin);
+            }, 'mousedown');
+
+            button('.rotate-left', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 2, 0, robot.spin);
+            }, 'mousedown');
+
+            button('.command', function(robot) {
+                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 0, robot.spin);
+            }, 'mouseup');
 
             if (simulation) {
                 $('.robots .real').hide();
+            }
+        }
+
+        for (var k in robots[ourColor]) {
+            var robot = robots[ourColor][k];
+
+            var div = $('.robot-'+k);
+            if (robot.present) {
+                div.find('.vision-status').addClass('ok');
+                div.find('.pos-x').text(robot.x.toFixed(3));
+                div.find('.pos-y').text(robot.y.toFixed(3));
+                div.find('.pos-orientation').text(robot.orientation.toFixed(3));
+            } else {
+                div.find('.vision-status').removeClass('ok');
+            }
+
+            var spin = div.find('.spin');
+            if (robot.spin) {
+                if (spin.hasClass('btn-success')) {
+                    spin.removeClass('btn-success');
+                    spin.addClass('btn-danger');
+                    spin.text('Stop spinning');
+                }
+            } else {
+                if (spin.hasClass('btn-danger')) {
+                    spin.addClass('btn-success');
+                    spin.removeClass('btn-danger');
+                    spin.text('Spin');
+                }
             }
         }
     };
@@ -733,13 +836,27 @@ $(document).ready(function() {
 
     if (simulation) {
         $('.simulation-mode').show();
+        $('.communication').hide();
     }
+
+    $('.emergency-button a').click(function() {
+        api.emergencyStop();
+
+        for (var k in robots[ourColor]) {
+            robots[ourColor][k].enabled = false;
+            robots[ourColor][k].spin = false;
+        }
+
+        $('.robots .enable-disable').prop('checked', false);
+    });
 
     // Instantiating the viewer
     var viewer = new Viewer();
 
     // Panels manager
     var manager = new Manager(viewer);
+
+    viewer.manager = manager;
 
     setInterval(function() {
         manager.update();

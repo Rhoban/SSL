@@ -8,11 +8,12 @@ static QString js(Json::Value &json)
     return QString::fromStdString(writer.write(json));
 }
 
-API::API(bool simulation, RhobanSSL::AIVisionClient::Team team)
+API::API(bool simulation, RhobanSSL::AIVisionClient::Team team, RhobanSSL::AICommander *commander)
 :
     simulation(simulation),
     team(team),
-    visionClient(data, team, simulation)
+    visionClient(data, team, simulation),
+    commander(commander)
 {
 }
 
@@ -80,6 +81,31 @@ QString API::ballStatus()
     json["y"] = pos.linear_position.y;
 
     return js(json);
+}
+
+void API::moveBall(double x, double y)
+{
+    commander->moveBall(x, y);
+}
+
+void API::moveRobot(bool yellow, int id, double x, double y, double theta)
+{
+    commander->moveRobot(yellow, id, x, y, theta, true);
+}
+
+void API::robotCommand(int id, bool enabled,
+    double xSpeed, double ySpeed, double thetaSpeed, int kick, bool spin)
+{
+    commander->set(id, enabled, xSpeed, ySpeed, thetaSpeed, kick, spin);
+    commander->flush();
+}
+
+void API::emergencyStop()
+{
+    for (int k=0; k<3; k++) {
+        commander->stopAll();
+        commander->flush();
+    }
 }
 
 std::string API::ourColor()

@@ -13,6 +13,11 @@ public:
 
     virtual void flush();
 
+    virtual void moveBall(double x, double y, double vx=0, double vy=0);
+
+    virtual void moveRobot(bool yellow, int id, double x, double y,
+        double theta, bool turnon);
+
 protected:
     SimClient client;
 };

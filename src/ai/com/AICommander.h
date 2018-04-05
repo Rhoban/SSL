@@ -19,6 +19,8 @@ public:
         double xSpeed;
         double ySpeed;
         double thetaSpeed;
+        int kick;
+        bool spin;
     };
     AICommander(bool yellow);
 
@@ -26,7 +28,7 @@ public:
      * Set the speed of the robot robot_id to the given speed
      */
     void set(uint8_t robot_id, bool enabled,
-        double xSpeed, double ySpeed, double thetaSpeed);
+        double xSpeed, double ySpeed, double thetaSpeed, int kick=false, bool spin=false);
 
     /**
      * Stop all the robots
@@ -38,6 +40,17 @@ public:
      */
     virtual void flush()=0;
     virtual void kick(){};
+
+    /**
+     * Sets the ball position
+     */
+    virtual void moveBall(double x, double y, double vx=0, double vy=0){};
+
+    /**
+     * Moves a robot o a target position
+     */
+    virtual void moveRobot(bool yellow, int id, double x, double y,
+        double theta, bool turnon){};
 
 protected:
     std::vector<struct Command> commands;

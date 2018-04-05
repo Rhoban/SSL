@@ -59,7 +59,7 @@ public:
     );
 
     void sendPacket(grSim_Packet &packet);
-    
+
 protected:
     rhoban_utils::UDPBroadcast broadcast;
 

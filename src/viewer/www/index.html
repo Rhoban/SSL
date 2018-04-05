@@ -17,17 +17,21 @@
         <div class="main-container">
             <div class="field-zone">
                 <canvas class="field" id="field"></canvas>
+                <div class="emergency-button">
+                    <a class="btn btn-danger">
+                        Emergency
+                    </a>
+                </div>
             </div>
             <div class="panel-right">
                 <div class="simulation-mode">
                     Simulation mode
                 </div>
-
                 <div class="panel-block">
                     <div class="panel-title">
                         <h4>
-                            Robots
                             <img src="warning-small.png" class="robots-warning not-displayed" />
+                            Robots
                         </h4>
                     </div>
                     <div class="panel-content">
@@ -35,17 +39,20 @@
                             <div class="robot robot-{{id}}" rel="{{id}}">
                                 <div class="robot-row">
                                     <div class="robot-id">
-                                        <span class="robot-tag">#{{id}}</span>
+                                        <span class="robot-tag">
+                                            <input type="checkbox" class="enable-disable" rel="{{id}}" />
+                                            #{{id}}
+                                        </span>
                                         <span class="warning">
                                             <img src="warning-small.png" />
                                             No response
                                         </span>
                                     </div>
                                     <div class="status vision-status">
-                                        <img src="vision.png" />
+                                        <img src="vision.png" title="Is the robot seen by vision?" />
                                     </div>
                                     <div class="status com-status real">
-                                        <img src="com.png" />
+                                        <img src="com.png" title="Can we communicate with vision" />
                                     </div>
                                     <div class="expand" rel="{{id}}">
                                         <img class="icon-expand" src="plus.png" />
@@ -70,23 +77,55 @@
                                         </div>
                                         </div>
 
-                                        Position
+                                        <br/>Position
                                         <div class="pos">
                                             X=<span class="pos-x">?</span>m, Y=<span class="pos-x">?</span>m, T=<span class="pos-x">?</span>°
                                         </div>
 
+                                        <br/>Control
+                                        <div class="controls">
+                                            <a class="btn btn-info rotate-left command" rel="{{id}}">
+                                                <span class="glyphicon glyphicon-repeat"></span>
+                                            </a>
+                                            <a class="btn btn-info front command" rel="{{id}}">
+                                                <span class="glyphicon glyphicon-chevron-up"></span>
+                                            </a>
+                                            <a class="btn btn-info rotate-right command" rel="{{id}}">
+                                                <span class="glyphicon glyphicon-repeat"></span>
+                                            </a>
+                                            <br/>
+
+                                            <a class="btn btn-info left command" rel="{{id}}">
+                                                <span class="glyphicon glyphicon-chevron-left"></span>
+                                            </a>
+                                            <a class="btn btn-info dummy">
+                                                &nbsp;
+                                            </a>
+                                            <a class="btn btn-info right command" rel="{{id}}">
+                                                <span class="glyphicon glyphicon-chevron-right"></span>
+                                            </a>
+                                            <br/>
+
+                                            <a class="btn btn-info dummy">
+                                                &nbsp;
+                                            </a>
+                                            <a class="btn btn-info rear command" rel="{{id}}">
+                                                <span class="glyphicon glyphicon-chevron-down"></span>
+                                            </a>
+                                        </div>
+
                                         <div class="actions">
                                             <hr/>
-                                            <a class="btn btn-danger enable-disable" rel="{{id}}">
-                                                Disable
-                                            </a>
-                                            <a class="btn btn-success charge real">
+                                            <a class="btn btn-success charge real" rel="{{id}}">
                                                 Charge
                                             </a>
-                                            <a class="btn btn-primary">
+                                            <a class="btn btn-success spin" rel="{{id}}">
+                                                Spin
+                                            </a>
+                                            <a class="btn btn-primary kick" rel="{{id}}">
                                                 Kick
                                             </a>
-                                            <a class="btn btn-primary">
+                                            <a class="btn btn-primary kick-chip" rel="{{id}}">
                                                 Chip kick
                                             </a>
                                         </div>
@@ -94,6 +133,42 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="panel-block">
+                    <div class="panel-title">
+                        <h4>
+                            <img src="warning-small.png" class="referee-warning not-displayed" />
+                            Referee
+                        </h4>
+                    </div>
+                    <div class="panel-content not-shown">
+                        No referee
+                    </div>
+                </div>
+
+                <div class="panel-block">
+                    <div class="panel-title">
+                        <h4>
+                            <img src="warning-small.png" class="vision-warning not-displayed" />
+                            Vision
+                        </h4>
+                    </div>
+                    <div class="panel-content not-shown vision-infos">
+                        No vision
+                    </div>
+                </div>
+
+                <div class="panel-block communication">
+                    <div class="panel-title">
+                        <h4>
+                            <img src="warning-small.png" class="com-warning not-displayed" />
+                            Communication
+                        </h4>
+                    </div>
+                    <div class="panel-content not-shown">
+                        No communication
                     </div>
                 </div>
 
@@ -121,42 +196,6 @@
                         <a class="btn btn-danger drag-lock">
                             Lock the drag
                         </a>
-                    </div>
-                </div>
-
-                <div class="panel-block">
-                    <div class="panel-title">
-                        <h4>
-                            Referee
-                            <img src="warning-small.png" class="referee-warning not-displayed" />
-                        </h4>
-                    </div>
-                    <div class="panel-content not-shown">
-                        No referee
-                    </div>
-                </div>
-
-                <div class="panel-block">
-                    <div class="panel-title">
-                        <h4>
-                            Vision
-                            <img src="warning-small.png" class="vision-warning not-displayed" />
-                        </h4>
-                    </div>
-                    <div class="panel-content not-shown vision-infos">
-                        No vision
-                    </div>
-                </div>
-
-                <div class="panel-block">
-                    <div class="panel-title">
-                        <h4>
-                            Communication
-                            <img src="warning-small.png" class="com-warning not-displayed" />
-                        </h4>
-                    </div>
-                    <div class="panel-content not-shown">
-                        No communication
                     </div>
                 </div>
             </div>
