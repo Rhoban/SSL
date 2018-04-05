@@ -45,6 +45,11 @@ public:
      */
     bool hasData();
 
+    /**
+     * How many packets were received ?
+     */
+    unsigned int getPackets();
+
 protected:
     std::string addr, port;
     std::vector<std::thread*> threads;
@@ -52,6 +57,7 @@ protected:
     bool receivedData;
     volatile bool running;
     rhoban_utils::TimeStamp lastData;
+    unsigned int packets;
 
     /**
      * Initializes the multicast client

@@ -21,7 +21,8 @@ namespace RhobanSSL
 
     MulticastClient::MulticastClient(std::string addr, std::string port) :
     addr(addr), port(port),
-    receivedData(false)
+    receivedData(false),
+    packets(0)
     {
     }
 
@@ -138,6 +139,7 @@ namespace RhobanSSL
             if (len > 0) {
                 mutex.lock();
                 if (process(buffer, len)) {
+                    packets++;
                     packetReceived();
                     receivedData = true;
                     lastData = TimeStamp::now();
@@ -162,5 +164,15 @@ namespace RhobanSSL
     void MulticastClient::packetReceived()
     {
         // Default behaviors does nothing
+    }
+
+    unsigned int MulticastClient::getPackets()
+    {
+        unsigned int tmp;
+        mutex.lock();
+        tmp = packets;
+        mutex.unlock();
+
+        return tmp;
     }
 }

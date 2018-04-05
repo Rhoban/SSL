@@ -13,44 +13,10 @@ var field = {
 };
 
 // Robots
-var robots = [
-    {
-        id: 1,
-        x: -2,
-        y: 2,
-        orientation: 0,
-        color: 'blue',
-        present: true,
-        enabled: true
-    },
-    {
-        id: 2,
-        x: -2,
-        y: -2,
-        orientation: 0,
-        color: 'blue',
-        present: true,
-        enabled: true
-    },
-    {
-        id: 2,
-        x: 2,
-        y: 2,
-        orientation: Math.PI,
-        color: 'yellow',
-        present: false,
-        enabled: true
-    },
-    {
-        id: 3,
-        x: 2,
-        y: -1,
-        orientation: Math.PI/1.5,
-        color: 'yellow',
-        present: true,
-        enabled: true
-    }
-];
+var robots = {
+    'yellow': {},
+    'blue': {}
+};
 
 // Our team color
 var ourColor = 'yellow';
@@ -67,17 +33,12 @@ function robotById(id, color)
         color = ourColor;
     }
 
-    for (var k in robots) {
-        var robot = robots[k];
-
-        if (robot.id == id && robot.color == color) {
-            return robot;
-        }
+    if (color in robots && id in robots[color]) {
+        return robots[color][id];
+    } else {
+        return null;
     }
-
-    return null;
 }
-
 
 
 
@@ -326,9 +287,13 @@ function Viewer()
         var ctx = this.ctx;
         var over = this.overRobot();
 
-        for (var k in robots) {
-            var robot = robots[k];
-            this.drawRobot(robot, over == robot);
+        for (var team in robots) {
+            for (var k in robots[team]) {
+                var robot = robots[team][k];
+                if (robot.present) {
+                    this.drawRobot(robot, over == robot);
+                }
+            }
         }
     };
 
@@ -338,7 +303,7 @@ function Viewer()
         var front = 0.75;
 
         if (!('ghost' in robot) && this.rotatingRobot && this.rotatingRobot[0] == robot.id &&
-            this.rotatingRobot[1] == robot.color) {
+            this.rotatingRobot[1] == robot.team) {
             return;
         }
 
@@ -355,7 +320,7 @@ function Viewer()
 
         ctx.beginPath();
         ctx.strokeStyle = '#aaa';
-        ctx.fillStyle = this.grColor(robot.color);
+        ctx.fillStyle = this.grColor(robot.team);
         ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front);
         if (!robot.present) {
             ctx.stroke();
@@ -369,7 +334,7 @@ function Viewer()
 
         if (typeof(extra) != 'undefined' && extra) {
             ctx.fillStyle = '#aaa';
-            this.addText(robot.color+' #'+robot.id, this.sign*robot.x+0.15, -this.sign*robot.y-0.15, {color: '#aaa'});
+            this.addText(robot.team+' #'+robot.id, this.sign*robot.x+0.15, -this.sign*robot.y-0.15, {color: '#aaa'});
             this.addText('x:'+this.sign*robot.x.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y, {color: '#aaa'});
             this.addText('y:'+this.sign*robot.y.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y+0.15, {color: '#aaa'});
             this.addText('t:'+(180*robot.orientation/Math.PI).toFixed(1)+'°', this.sign*robot.x+0.15, -this.sign*robot.y+0.3, {color: '#aaa'});
@@ -419,11 +384,15 @@ function Viewer()
     {
         if (this.mousePos) {
             var xy = this.mousePosMeters();
-            for (var k in robots) {
-                var robot = robots[k];
-                var dist = Math.sqrt(Math.pow(robot.x-xy[0], 2) + Math.pow(robot.y-xy[1], 2));
-                if (dist < 0.1) {
-                    return robot;
+            for (var team in robots) {
+                for (var k in robots[team]) {
+                    var robot = robots[team][k];
+                    if (robot.present) {
+                    var dist = Math.sqrt(Math.pow(robot.x-xy[0], 2) + Math.pow(robot.y-xy[1], 2));
+                    if (dist < 0.1) {
+                        return robot;
+                    }
+                    }
                 }
             }
         }
@@ -446,7 +415,7 @@ function Viewer()
                 } else {
                     over = this.overRobot();
                     if (over) {
-                        this.draggingRobot = [over.id, over.color];
+                        this.draggingRobot = [over.id, over.team];
                     } else if (!this.dragLock) {
                         // Mouse3 to drag the view
                         this.dragging = true;
@@ -459,7 +428,7 @@ function Viewer()
                 over = this.overRobot();
 
                 if (over) {
-                    this.rotatingRobot = [over.id, over.color];
+                    this.rotatingRobot = [over.id, over.team];
                 }
             }
         }
@@ -561,6 +530,30 @@ function Viewer()
 
 function Manager(viewer)
 {
+    this.updateApi = function()
+    {
+        // Getting robots position from the API and update it
+        var robotsStatus = JSON.parse(api.robotsStatus());
+        for (var k in robotsStatus) {
+            var status = robotsStatus[k];
+
+            if (!(status.id in robots[status.team])) {
+                // Creating robot entry
+                status.enabled = true;
+                robots[status.team][status.id] = status;
+            } else {
+                for (var field in status) {
+                    // Updating fields
+                    robots[status.team][status.id][field] = status[field];
+                }
+            }
+        }
+
+        // Getting ball infos
+        var ballStatus = JSON.parse(api.ballStatus());
+        ball = [ballStatus.x, ballStatus.y];
+    };
+
     this.robotsPanel = function(init)
     {
         if (init) {
@@ -692,10 +685,12 @@ function Manager(viewer)
 
     this.visionPanel = function()
     {
+        var vision = JSON.parse(api.visionStatus());
+
         // Updating vison panel
-        if (api.hasVisionData()) {
+        if (vision.hasData) {
             $('.vision-warning').hide();
-            $('.vision-infos').text(api.visionPackets()+' packets received');
+            $('.vision-infos').text(vision.packets+' packets received');
         } else {
             $('.vision-warning').show();
         }
@@ -708,6 +703,8 @@ function Manager(viewer)
 
     this.update = function(init)
     {
+        this.updateApi();
+
         // Handling robots management panel
         this.robotsPanel(init);
 

@@ -22,11 +22,20 @@ public slots:
     bool isSimulation();
     bool isYellow();
 
-    bool hasVisionData();
-    unsigned int visionPackets();
+    // Vision communication statistics
+    QString visionStatus();
+
+    // Get the status of all robots
+    QString robotsStatus();
+
+    // Gets the status of the ball
+    QString ballStatus();
 
 protected:
     RhobanSSL::Data data;
     RhobanSSL::AIVisionClient::Team team;
     RhobanSSL::AIVisionClient visionClient;
+
+    std::string ourColor();
+    std::string opponentColor();
 };

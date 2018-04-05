@@ -15,8 +15,6 @@ public:
 
     AIVisionClient(Data& data, Team myTeam, bool simulation = false);
 
-    unsigned int packets;
-    
 protected:
     virtual void packetReceived();
 

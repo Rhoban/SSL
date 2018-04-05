@@ -9,14 +9,12 @@ namespace RhobanSSL
 {
     AIVisionClient::AIVisionClient(
         Data& ai_data, AIVisionClient::Team myTeam, bool simulation
-    ): ai_data(ai_data), myTeam(myTeam), VisionClient(simulation), packets(0)
+    ): ai_data(ai_data), myTeam(myTeam), VisionClient(simulation)
     {
     }
 
     void AIVisionClient::packetReceived()
     {
-        packets++;
-
         // Retrieving field dimensions
         auto geometry = data.geometry();
         if (geometry.has_field()) {
