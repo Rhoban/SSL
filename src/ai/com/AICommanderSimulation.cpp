@@ -22,6 +22,7 @@ namespace RhobanSSL
             double kickX = 0;
             double kickY = 0;
 
+            // XXX: These values should be realistic depending on what we do on the real robot!
             if (command.enabled) {
                 if (command.kick == 1) {
                     kickX = 4;

@@ -15,8 +15,8 @@ void Object::update(
 }
 
 void Object::update(
-    double time, const Point & linear_position, 
-    const Angle & angular_position 
+    double time, const Point & linear_position,
+    const Angle & angular_position
 ){
     ContinuousAngle angle( movement[0].angular_position );
     angle.set_to_nearest( angular_position );
@@ -24,8 +24,8 @@ void Object::update(
 }
 
 void Object::update(
-    double time, const Point & linear_position, 
-    const ContinuousAngle & angular_position 
+    double time, const Point & linear_position,
+    const ContinuousAngle & angular_position
 ){
     if( time <= movement.time(0) ){
         //TODO
@@ -59,24 +59,27 @@ Object::Object(): movement(history_size) {
 VisionData::VisionData(){
     field.present = false;
 
+    double dX = 0;
     for (auto team : {Ally, Opponent}) {
         for (int k=0; k<Robots; k++) {
-            robots[team][k].present = false;
             robots[team][k].id = k;
+            robots[team][k].update(1, Point(-4+dX, 3.5));
+            dX += 0.3;
+            robots[team][k].present = false;
         }
     }
 }
 
 void Object::checkAssert( double time ) const {
     assert(
-        not(present) or ( 
-            movement.time(0) > movement.time(1) 
+        not(present) or (
+            movement.time(0) > movement.time(1)
             and
-            movement.time(1) > movement.time(2) 
-        ) 
+            movement.time(1) > movement.time(2)
+        )
     );
 //    assert(
-//        not(present) or ( time > movement.time(0) ) 
+//        not(present) or ( time > movement.time(0) )
 //    );
 }
 
@@ -113,7 +116,7 @@ std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::VisionData&
     }
     out << "ball : " << std::endl;
     out << vision.ball << std::endl;
-    
+
     return out;
 }
 
@@ -127,5 +130,3 @@ std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::Object& obj
 
 
 } } //Namespace
-
-

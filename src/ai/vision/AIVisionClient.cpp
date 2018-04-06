@@ -13,6 +13,23 @@ namespace RhobanSSL
     {
     }
 
+    void AIVisionClient::setRobotPos(Team team, int id, double x, double y, double orientation)
+    {
+        RhobanSSL::Vision::Team visionTeam = RhobanSSL::Vision::Ally;
+        if (team != myTeam) {
+            visionTeam = RhobanSSL::Vision::Opponent;
+        }
+
+        mutex.lock();
+        Vision::Robot &robot = visionData.robots[visionTeam][id];
+        double t = robot.movement.time() + 0.01;
+        Angle angle(rad2deg(orientation));
+        robot.update(t, Point(x, y), angle);
+        mutex.unlock();
+
+        ai_data << visionData;
+    }
+
     void AIVisionClient::packetReceived()
     {
         // Retrieving field dimensions
@@ -22,6 +39,7 @@ namespace RhobanSSL
             visionData.field.fieldLength = geometry.field().field_length()/1000.0;
             visionData.field.fieldWidth = geometry.field().field_width()/1000.0;
             visionData.field.goalWidth = geometry.field().goal_width()/1000.0;
+            // XXX: Receive other data?
         }
 
         auto detection = data.detection();

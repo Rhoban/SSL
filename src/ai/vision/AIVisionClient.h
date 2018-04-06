@@ -15,6 +15,8 @@ public:
 
     AIVisionClient(Data& data, Team myTeam, bool simulation = false);
 
+    void setRobotPos(Team team, int id, double x, double y, double orientation);
+
 protected:
     virtual void packetReceived();
 

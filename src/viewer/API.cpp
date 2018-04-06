@@ -55,7 +55,7 @@ QString API::robotsStatus()
             auto &robot = entry2.second;
 
             jsonRobot["id"] = robot.id;
-            jsonRobot["present"] = robot.present;
+            jsonRobot["present"] = robot.isOk();
             jsonRobot["team"] = ((team == RhobanSSL::Vision::Ally) ? ourColor() : opponentColor());
             auto pos = robot.movement[0];
             jsonRobot["x"] = pos.linear_position.x;
@@ -91,6 +91,8 @@ void API::moveBall(double x, double y)
 void API::moveRobot(bool yellow, int id, double x, double y, double theta)
 {
     commander->moveRobot(yellow, id, x, y, theta, true);
+    visionClient.setRobotPos(yellow ? RhobanSSL::AIVisionClient::Yellow : RhobanSSL::AIVisionClient::Blue,
+        id, x, y, theta);
 }
 
 void API::robotCommand(int id, bool enabled,

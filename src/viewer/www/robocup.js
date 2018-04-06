@@ -290,9 +290,7 @@ function Viewer()
         for (var team in robots) {
             for (var k in robots[team]) {
                 var robot = robots[team][k];
-                if (robot.present) {
-                    this.drawRobot(robot, over == robot);
-                }
+                this.drawRobot(robot, over == robot);
             }
         }
     };
@@ -387,11 +385,9 @@ function Viewer()
             for (var team in robots) {
                 for (var k in robots[team]) {
                     var robot = robots[team][k];
-                    if (robot.present) {
                     var dist = Math.sqrt(Math.pow(robot.x-xy[0], 2) + Math.pow(robot.y-xy[1], 2));
                     if (dist < 0.1) {
                         return robot;
-                    }
                     }
                 }
             }
