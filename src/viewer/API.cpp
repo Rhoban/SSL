@@ -83,6 +83,24 @@ QString API::ballStatus()
     return js(json);
 }
 
+QString API::fieldStatus()
+{
+    Json::Value json;
+
+    RhobanSSL::Vision::VisionData vision;
+    data >> vision;
+
+    auto &field = vision.field;
+    json["present"] = field.present;
+    json["length"] = field.fieldLength;
+    json["width"] = field.fieldWidth;
+    json["goalWidth"] = field.goalWidth;
+    json["goalDepth"] = field.goalDepth;
+    json["boundaryWidth"] = field.boundaryWidth;
+
+    return js(json);
+}
+
 void API::moveBall(double x, double y)
 {
     commander->moveBall(x, y);

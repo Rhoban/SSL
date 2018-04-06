@@ -32,6 +32,9 @@ public slots:
     // Gets the status of the ball
     QString ballStatus();
 
+    // Gets the geometry of the field
+    QString fieldStatus();
+
     // Commands a robot
     void robotCommand(int id, bool enabled,
         double xSpeed=0, double ySpeed=0, double thetaSpeed=0, int kick=0, bool spin=false);

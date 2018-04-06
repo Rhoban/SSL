@@ -59,12 +59,14 @@ Object::Object(): movement(history_size) {
 VisionData::VisionData(){
     field.present = false;
 
-    double dX = 0;
     for (auto team : {Ally, Opponent}) {
         for (int k=0; k<Robots; k++) {
             robots[team][k].id = k;
-            robots[team][k].update(1, Point(-4+dX, 3.5));
-            dX += 0.3;
+            if (team == Ally) {
+                robots[team][k].update(1, Point(-1-k*0.3, 3.75));
+            } else {
+                robots[team][k].update(1, Point(1+k*0.3, 3.75));
+            }
             robots[team][k].present = false;
         }
     }

@@ -39,6 +39,8 @@ namespace RhobanSSL
             visionData.field.fieldLength = geometry.field().field_length()/1000.0;
             visionData.field.fieldWidth = geometry.field().field_width()/1000.0;
             visionData.field.goalWidth = geometry.field().goal_width()/1000.0;
+            visionData.field.goalDepth = geometry.field().goal_depth()/1000.0;
+            visionData.field.boundaryWidth = geometry.field().boundary_width()/1000.0;
             // XXX: Receive other data?
         }
 

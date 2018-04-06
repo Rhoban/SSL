@@ -57,8 +57,9 @@ struct Field
     float fieldLength;
     float fieldWidth;
     float goalWidth;
+    float goalDepth;
+    float boundaryWidth;
 };
-
 
 class VisionData {
 public:
@@ -72,7 +73,7 @@ public:
     void checkAssert( double time ) const;
 
     void print() const;
-    
+
     friend std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::VisionData& vision);
 
 };

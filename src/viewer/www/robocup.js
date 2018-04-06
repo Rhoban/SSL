@@ -3,13 +3,14 @@ var field = {
     length: 9.0,
     width: 6.0,
     borders: 0.5,
-    centerCircleRadius: 1,
+    centerCircleRadius: 0.5,
     goalQuarterCircleRadius: 1,
     goalLinearWidth: 0.5,
     goalWidth: 1,
     goalDepth: 0.18,
     goalThickness: 0.023,
-    linesThickness: 0.02
+    linesThickness: 0.02,
+    boundaryWidth: 0.25
 };
 
 // Robots
@@ -237,6 +238,14 @@ function Viewer()
         ctx.lineWidth = field.linesThickness;
         ctx.strokeRect(-field.length/2, -field.width/2, field.length, field.width);
 
+        // Boundary lines
+        ctx.save();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2*field.linesThickness;
+        var margin = field.boundaryWidth+field.goalDepth;
+        ctx.strokeRect(-(field.length/2)-margin, -(field.width/2)-margin, field.length+2*margin, field.width+2*margin);
+        ctx.restore();
+
         // Lines
         ctx.beginPath();
         ctx.moveTo(0, field.width/2);
@@ -399,8 +408,6 @@ function Viewer()
     // Mouse is down
     this.mouseDown = function(evt)
     {
-        console.log(evt);
-
         var over = false;
         if (this.mousePos) {
             this.dragBegin = this.mousePos;
@@ -503,7 +510,6 @@ function Viewer()
             $('.reverse-view').click();
             evt.preventDefault();
         }
-        console.log(evt);
     };
 
     this.zone = $('.field-zone');
@@ -537,8 +543,20 @@ function Viewer()
 
 function Manager(viewer)
 {
+    this.field = field;
+
     this.updateApi = function()
     {
+        // Getting field dimensions
+        var fieldStatus = JSON.parse(api.fieldStatus());
+        if (fieldStatus.present) {
+            this.field.length = fieldStatus.length;
+            this.field.width = fieldStatus.width;
+            this.field.goalWidth = fieldStatus.goalWidth;
+            this.field.goalDepth = fieldStatus.goalDepth;
+            this.field.boundaryWidth = fieldStatus.boundaryWidth;
+        }
+
         // Getting robots position from the API and update it
         var robotsStatus = JSON.parse(api.robotsStatus());
         for (var k in robotsStatus) {
