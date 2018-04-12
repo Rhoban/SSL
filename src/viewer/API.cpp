@@ -106,9 +106,10 @@ QString API::robotsStatus()
                     // XXX: This is not thread safe, to fix
                     RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
                     auto masterRobot = master->robots[robot.id];
-                    jsonRobot["com"] = masterRobot.present && ((masterRobot.status.status) & STATUS_OK);
+                    jsonRobot["com"] = masterRobot.isOk();
                     jsonRobot["voltage"] = masterRobot.status.voltage/10.0;
                     jsonRobot["capVoltage"] = masterRobot.status.cap_volt;
+                    jsonRobot["driversOk"] = !(masterRobot.status.status & STATUS_DRIVER_ERR);
                 }
                 jsonRobot["team"] = ourColor();
                 jsonRobot["enabled"] = apiRobot.enabled;
@@ -274,7 +275,7 @@ void API::scan()
             // XXX: This is not thread safe, to fix
             RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
             auto masterRobot = master->robots[id];
-            robots[id].enabled = masterRobot.present && ((masterRobot.status.status) & STATUS_OK);
+            robots[id].enabled = masterRobot.isOk();
         }
     }
     mutex.unlock();

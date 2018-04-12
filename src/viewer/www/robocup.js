@@ -715,12 +715,22 @@ function Manager(viewer)
 
         $('.robots-warning').hide();
 
+
         for (var k in robots[ourColor]) {
             var robot = robots[ourColor][k];
 
             $('.robot-'+k+' .enable-disable').prop('checked', robot.enabled);
             var div = $('.robot-'+k);
             div.find('.robot-warning').hide();
+            div.find('.robot-warning-text').hide();
+
+            var robotWarning = function(text)
+            {
+                div.find('.robot-warning').show();
+                div.find('.robot-warning-text').show();
+                div.find('.robot-warning-text').text(text);
+                $('.robots-warning').show();
+            };
 
             if (robot.present) {
                 div.find('.vision-status').addClass('ok');
@@ -733,6 +743,10 @@ function Manager(viewer)
 
             if (!simulation) {
                 if (robot.com) {
+                    if (!robot.driversOk) {
+                        robotWarning("Drivers errors");
+                    }
+
                     var voltage_min = 3.6*6;
                     var voltage_max = 4.2*6;
                     var charge = (robot.voltage-voltage_min)/(voltage_max-voltage_min);
@@ -742,9 +756,8 @@ function Manager(viewer)
                     div.find('.voltage-progress').text(robot.voltage+' V');
                     div.find('.voltage-progress').css('width', Math.round(charge*100)+'%');
 
-                    if (charge < 0.1) {
-                        div.find('.robot-warning').show();
-                        $('.robots-warning').show();
+                    if (charge < 0.15) {
+                        robotWarning("Low voltage "+robot.voltage+"V");
                     }
 
                     var cap_max = 180;
@@ -756,6 +769,9 @@ function Manager(viewer)
 
                     div.find('.com-status').addClass('ok');
                 } else {
+                    if (robot.enabled) {
+                        robotWarning("No com");
+                    }
                     div.find('.com-status').removeClass('ok');
                 }
 
