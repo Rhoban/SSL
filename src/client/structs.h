@@ -32,16 +32,15 @@
  } __attribute__((packed));
 
  // Robot status packet
- struct packet_robot {
-     uint8_t id;
+struct packet_robot {
+    uint8_t id;
 
-     #define STATUS_OK           (1<<0)  // The robot is alive and ok
-     #define STATUS_DRIVER_ERR   (1<<1)  // Error with drivers
-     #define STATUS_IR           (1<<2)  // The infrared barrier detects something
-     uint8_t status;
+    #define STATUS_OK           (1<<0)  // The robot is alive and ok
+    #define STATUS_DRIVER_ERR   (1<<1)  // Error with drivers
+    #define STATUS_IR           (1<<2)  // The infrared barrier detects something
+    uint8_t status;
 
-     uint8_t cap_volt;                  // Kick capcaitor voltage (V)
+    uint8_t cap_volt;                  // Kick capcaitor voltage (V)
 
-     uint8_t bat1_volt;                  // Battery 1 voltage (10th of V)
-     uint8_t bat2_volt;                  // Battery 2 voltage (10th of V)
- } __attribute__((packed));
+    uint8_t voltage;                  // Battery 1 voltage (10th of V)
+} __attribute__((packed));

@@ -15,6 +15,8 @@ public:
     virtual void flush();
     virtual void kick();
 
+    Master *getMaster();
+
 protected:
     bool kicking;
     Master master;

@@ -50,4 +50,4 @@ qt5_use_modules(viewer
     Widgets
 )
 
-target_link_libraries(viewer ${catkin_LIBRARIES})
+target_link_libraries(viewer ${catkin_LIBRARIES} pthread)

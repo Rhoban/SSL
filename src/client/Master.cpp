@@ -22,7 +22,7 @@ namespace RhobanSSL
     Master::Master(std::string port, unsigned int baudrate)
     : serial(port, baudrate, serial::Timeout::simpleTimeout(1000))
     {
-        em();
+        // em();
 
         shouldSend = false;
         shouldSendParams = false;
@@ -53,6 +53,7 @@ namespace RhobanSSL
         packet.t_speed = 0;
 
         for (size_t k=0; k<MAX_ROBOTS; k++) {
+            robots[k].status.status = 0;
             addRobotPacket(k, packet);
         }
         send();
@@ -73,7 +74,8 @@ namespace RhobanSSL
             if (receivedAnswer) {
                 waiting = false;
             }
-            if (diffSec(lastSend, rhoban_utils::TimeStamp::now()) > 0.015) {
+            // XXX: This timeout should be adjusted
+            if (diffSec(lastSend, rhoban_utils::TimeStamp::now()) > 0.02) {
                 waiting = false;
             }
             mutex.unlock();
@@ -87,6 +89,7 @@ namespace RhobanSSL
         tmpPacket.clear();
         tmpNbRobots = 0;
         receivedAnswer = false;
+        lastSend = rhoban_utils::TimeStamp::now();
         shouldSend = true;
     }
 
@@ -124,7 +127,6 @@ namespace RhobanSSL
         memcpy((void *)(data + 3), packet.c_str(), packet.size());
         data[sizeof(data) - 1] = 0xff;
         receivedAnswer = false;
-        lastSend = rhoban_utils::TimeStamp::now();
         mutex.unlock();
 
         // Sending the data
@@ -165,10 +167,10 @@ namespace RhobanSSL
                     } else if (state == 2) {
                         nb_robots = c;
                         pos = 0;
-                        if (nb_robots > MAX_ROBOTS) {
-                            state = 0;
-                        } else {
+                        if (nb_robots <= MAX_ROBOTS) {
                             state++;
+                        } else {
+                            state = 0;
                         }
                     } else if (pos < nb_robots * (1 + sizeof(struct packet_robot))) {
                         temp[pos++] = c;

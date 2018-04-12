@@ -564,11 +564,10 @@ function Manager(viewer)
 
             if (!(status.id in robots[status.team])) {
                 // Creating robot entry
-                status.enabled = false;
                 status.spin = false;
                 robots[status.team][status.id] = status;
 
-                if (status.team == ourColor) {
+                if (status.team == ourColor && simulation) {
                     api.robotCommand(status.id, false);
                 }
             } else {
@@ -629,11 +628,12 @@ function Manager(viewer)
                 var id = parseInt($(this).attr('rel'));
                 var robot = robotById(id);
 
-                robot.enabled = $(this).is(':checked');
+                api.enableRobot(robot.id, !robot.enabled);
                 if (!robot.enabled) {
                     robot.spin = false;
                 }
                 api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 0, robot.spin);
+                $(this).prop('checked', robot.enabled);
             });
 
             var button = function(selector, callback, evt) {
@@ -657,13 +657,24 @@ function Manager(viewer)
                 api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 0, robot.spin);
             });
 
-            button('.kick', function(robot) {
-                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 1, robot.spin);
+            button('.charge', function(robot) {
+                if (robot.enabled) {
+                    robot.charge = !robot.charge;
+                }
+                api.robotCharge(robot.id, robot.charge);
             });
 
+            button('.kick', function(robot) {
+                api.kick(robot.id, 1);
+            }, 'mousedown');
+
             button('.kick-chip', function(robot) {
-                api.robotCommand(robot.id, robot.enabled, 0.0, 0.0, 0.0, 2, robot.spin);
-            });
+                api.kick(robot.id, 2);
+            }, 'mousedown');
+
+            button('.kick, .kick-chip', function(robot) {
+                api.kick(robot.id, 0);
+            }, 'mouseup');
 
             button('.left', function(robot) {
                 api.robotCommand(robot.id, robot.enabled, 0.0, 0.2, 0.0, 0, robot.spin);
@@ -696,12 +707,21 @@ function Manager(viewer)
             if (simulation) {
                 $('.robots .real').hide();
             }
+
+            $('.scan').click(function() {
+                api.scan();
+            });
         }
+
+        $('.robots-warning').hide();
 
         for (var k in robots[ourColor]) {
             var robot = robots[ourColor][k];
 
+            $('.robot-'+k+' .enable-disable').prop('checked', robot.enabled);
             var div = $('.robot-'+k);
+            div.find('.robot-warning').hide();
+
             if (robot.present) {
                 div.find('.vision-status').addClass('ok');
                 div.find('.pos-x').text(robot.x.toFixed(3));
@@ -709,6 +729,47 @@ function Manager(viewer)
                 div.find('.pos-orientation').text(robot.orientation.toFixed(3));
             } else {
                 div.find('.vision-status').removeClass('ok');
+            }
+
+            if (!simulation) {
+                if (robot.com) {
+                    var voltage_min = 3.6*6;
+                    var voltage_max = 4.2*6;
+                    var charge = (robot.voltage-voltage_min)/(voltage_max-voltage_min);
+                    if (charge < 0) charge = 0;
+                    if (charge > 1) charge = 1;
+
+                    div.find('.voltage-progress').text(robot.voltage+' V');
+                    div.find('.voltage-progress').css('width', Math.round(charge*100)+'%');
+
+                    if (charge < 0.1) {
+                        div.find('.robot-warning').show();
+                        $('.robots-warning').show();
+                    }
+
+                    var cap_max = 180;
+                    capCharge = robot.capVoltage/cap_max;
+                    if (capCharge > 1) capCharge = 1;
+
+                    div.find('.capacitors-progress').text(robot.capVoltage+' V');
+                    div.find('.capacitors-progress').css('width', Math.round(capCharge*100)+'%');
+
+                    div.find('.com-status').addClass('ok');
+                } else {
+                    div.find('.com-status').removeClass('ok');
+                }
+
+                var chargeDiv = div.find('.charge');
+                if (robot.charge && chargeDiv.hasClass('btn-success')) {
+                    chargeDiv.removeClass('btn-success');
+                    chargeDiv.addClass('btn-danger');
+                    chargeDiv.text('Stop charge');
+                }
+                if (!robot.charge && chargeDiv.hasClass('btn-danger')) {
+                    chargeDiv.removeClass('btn-danger');
+                    chargeDiv.addClass('btn-success');
+                    chargeDiv.text('Charge');
+                }
             }
 
             var spin = div.find('.spin');
@@ -857,7 +918,6 @@ $(document).ready(function() {
         api.emergencyStop();
 
         for (var k in robots[ourColor]) {
-            robots[ourColor][k].enabled = false;
             robots[ourColor][k].spin = false;
         }
 

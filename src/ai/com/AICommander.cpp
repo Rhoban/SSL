@@ -8,7 +8,7 @@ namespace RhobanSSL
     }
 
     void AICommander::set(uint8_t robot_id, bool enabled,
-        double xSpeed, double ySpeed, double thetaSpeed, int kick, bool spin)
+        double xSpeed, double ySpeed, double thetaSpeed, int kick, bool spin, bool charge)
     {
         Command command;
         command.enabled = enabled;
@@ -18,6 +18,7 @@ namespace RhobanSSL
         command.thetaSpeed = thetaSpeed;
         command.kick = kick;
         command.spin = spin;
+        command.charge = charge;
 
         commands.push_back(command);
     }

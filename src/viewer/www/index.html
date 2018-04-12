@@ -35,6 +35,9 @@
                         </h4>
                     </div>
                     <div class="panel-content">
+                        <div>
+                            <a class="btn btn-info real scan">Scan</a>
+                        </div>
                         <div class="robots">
                             <div class="robot robot-{{id}}" rel="{{id}}">
                                 <div class="robot-row">
@@ -42,6 +45,7 @@
                                         <span class="robot-tag">
                                             <input type="checkbox" class="enable-disable" rel="{{id}}" />
                                             #{{id}}
+                                            <img src="warning-small.png" class="robot-warning not-displayed" />
                                         </span>
                                         <span class="warning">
                                             <img src="warning-small.png" />
@@ -52,7 +56,7 @@
                                         <img src="vision.png" title="Is the robot seen by vision?" />
                                     </div>
                                     <div class="status com-status real">
-                                        <img src="com.png" title="Can we communicate with vision" />
+                                        <img src="com.png" title="Can we communicate with the robot?" />
                                     </div>
                                     <div class="expand" rel="{{id}}">
                                         <img class="icon-expand" src="plus.png" />
@@ -64,14 +68,14 @@
                                         <div class="real">
                                         Power
                                         <div class="progress">
-                                                <div class="progress-bar progress-bar-striped progress-bar-danger" role="progressbar" style="width: 0%;">
+                                                <div class="progress-bar progress-bar-striped progress-bar-danger voltage-progress" role="progressbar" style="width: 0%;">
                                                     ?
                                                 </div>
                                         </div>
 
                                         Capacitors
                                         <div class="progress">
-                                                <div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;">
+                                                <div class="progress-bar progress-bar-striped capacitors-progress" role="progressbar" style="width: 0%;">
                                                     ?
                                                 </div>
                                         </div>

@@ -9,6 +9,7 @@ namespace RhobanSSL
 
     void AICommanderReal::kick(){
         kicking = true;
+        // XXX Should not be used anymore
     }
 
     void AICommanderReal::flush()
@@ -17,14 +18,23 @@ namespace RhobanSSL
         for (auto &command : commands) {
             struct packet_master packet;
             if (command.enabled) {
-                packet.actions = ACTION_ON | ACTION_CHARGE;
-                if( kicking ){
+                packet.actions = ACTION_ON;
+
+                if (command.charge) {
+                    packet.actions |= ACTION_CHARGE;
+                }
+
+                if (command.kick == 1) {
                     packet.actions |= ACTION_KICK1;
+                }
+
+                if (command.kick == 2) {
+                    packet.actions |= ACTION_KICK2;
                 }
             } else {
                 packet.actions = 0;
             }
-            packet.kickPower = 150;
+            packet.kickPower = 80; // XXX: This should be a parameter
             packet.x_speed = command.xSpeed;
             packet.y_speed = command.ySpeed;
             packet.t_speed = command.thetaSpeed;
@@ -34,5 +44,10 @@ namespace RhobanSSL
 
         master.send();
         commands.clear();
+    }
+
+    Master *AICommanderReal::getMaster()
+    {
+        return &master;
     }
 }
