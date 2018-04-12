@@ -35,9 +35,9 @@ namespace RhobanSSL
                 packet.actions = 0;
             }
             packet.kickPower = 80; // XXX: This should be a parameter
-            packet.x_speed = command.xSpeed;
-            packet.y_speed = command.ySpeed;
-            packet.t_speed = command.thetaSpeed;
+            packet.x_speed = command.xSpeed*1000;
+            packet.y_speed = command.ySpeed*1000;
+            packet.t_speed = command.thetaSpeed*1000;
 
             master.addRobotPacket(command.robot_id, packet);
         }
