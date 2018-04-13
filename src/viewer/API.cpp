@@ -114,7 +114,7 @@ QString API::robotsStatus()
                     RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
                     auto masterRobot = master->robots[robot.id];
                     jsonRobot["com"] = masterRobot.isOk();
-                    jsonRobot["voltage"] = masterRobot.status.voltage/10.0;
+                    jsonRobot["voltage"] = masterRobot.status.voltage/8.0;
                     jsonRobot["capVoltage"] = masterRobot.status.cap_volt;
                     jsonRobot["driversOk"] = !(masterRobot.status.status & STATUS_DRIVER_ERR);
                 }
@@ -292,6 +292,7 @@ void API::scan()
 
 void API::joystickTrheadExec()
 {
+    static bool fast = false;
     RhobanSSL::Joystick::JoystickEvent event;
     if (joystick != NULL) {
         joystick->open();
@@ -301,10 +302,10 @@ void API::joystickTrheadExec()
             mutex.lock();
             if (event.type == JS_EVENT_AXIS) {
                 if (event.number == 0) {
-                    robots[joystickRobot].ySpeed = -2*event.getValue();
+                    robots[joystickRobot].ySpeed = -(fast ? 2.0 : 0.5)*event.getValue();
                 }
                 if (event.number == 1) {
-                    robots[joystickRobot].xSpeed = -2*event.getValue();
+                    robots[joystickRobot].xSpeed = -(fast ? 2.0 : 0.5)*event.getValue();
                 }
                 if (event.number == 3) {
                     robots[joystickRobot].thetaSpeed = -1.5*event.getValue();
@@ -313,11 +314,17 @@ void API::joystickTrheadExec()
                 std::cout << "[JOYSTICK] Axis #" << (int)event.number << ": " << event.getValue() << std::endl;;
             }
             if (event.type == JS_EVENT_BUTTON) {
+                if (event.number == 4) {
+                    robots[joystickRobot].spin = event.isPressed();
+                }
                 if (event.number == 5) {
                     robots[joystickRobot].kick = event.isPressed() ? 1 : 0;
                 }
                 if (event.number == 7) {
-                    robots[joystickRobot].spin = event.isPressed();
+                    robots[joystickRobot].kick = event.isPressed() ? 2 : 0;
+                }
+                if (event.number == 6) {
+                    fast = event.getValue();
                 }
 
                 std::cout << "[JOYSTICK] Button #" << (int)event.number << ": " << (int)event.isPressed() << std::endl;;
