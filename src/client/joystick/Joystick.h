@@ -1,9 +1,10 @@
 #pragma once
 
+#include <vector>
 #include <string>
 #include <stdio.h>
 
-#define JOYSTICK_DEVNAME "/dev/input/js1"
+#define JOYSTICK_DEVNAME "/dev/input/js0"
 
 #define JS_EVENT_BUTTON         0x01    /* button pressed/released */
 #define JS_EVENT_AXIS           0x02    /* joystick moved */
@@ -24,13 +25,17 @@ namespace RhobanSSL
             float getValue();
         };
 
-        Joystick();
+        Joystick(std::string device="");
         std::string getDeviceName();
         bool open();
         void close();
         bool getEvent(JoystickEvent *evt);
 
+        static std::vector<std::string> getAvailablePads();
+
     protected:
         int fd;
+
+        std::string device;
     };
 }

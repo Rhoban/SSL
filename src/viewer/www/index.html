@@ -85,7 +85,7 @@
 
                                         <br/>Position
                                         <div class="pos">
-                                            X=<span class="pos-x">?</span>m, Y=<span class="pos-x">?</span>m, T=<span class="pos-x">?</span>°
+                                            X=<span class="pos-x">?</span>m, Y=<span class="pos-y">?</span>m, T=<span class="pos-orientation">?</span>°
                                         </div>
 
                                         <br/>Control
@@ -133,6 +133,9 @@
                                             </a>
                                             <a class="btn btn-primary kick-chip" rel="{{id}}">
                                                 Chip kick
+                                            </a>
+                                            <a class="btn btn-info joystickize" rel="{{id}}">
+                                                Joystick
                                             </a>
                                         </div>
                                     </div>
@@ -202,6 +205,22 @@
                         <a class="btn btn-danger drag-lock">
                             Lock the drag
                         </a>
+                        <hr/>
+                        Joystick device:
+                        <select class="joysticks form-control">
+                        </select>
+                        <select class="joystick-robot form-control">
+                            <option value="0">0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                            <option value="6">6</option>
+                            <option value="7">7</option>
+                        </select>
+                        <a class="btn btn-success joystick-open">Open</a>
+                        <a class="btn btn-danger joystick-close">Close</a>
                     </div>
                 </div>
             </div>

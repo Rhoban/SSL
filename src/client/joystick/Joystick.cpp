@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
+#include <dirent.h>
 
 #include "Joystick.h"
 
@@ -21,22 +22,26 @@ namespace RhobanSSL
         return value/(float(1<<15));
     }
 
-    Joystick::Joystick()
-    : fd(-1)
+    Joystick::Joystick(std::string device)
+    : fd(-1), device(device)
     {
     }
 
     std::string Joystick::getDeviceName()
     {
-        char *e = getenv("JOYSTICK");
-        std::string pad;
-        if (e == NULL) {
-            pad = JOYSTICK_DEVNAME;
+        if (device != "") {
+            return device;
         } else {
-            pad = std::string(e);
-        }
+            char *e = getenv("JOYSTICK");
+            std::string pad;
+            if (e == NULL) {
+                pad = JOYSTICK_DEVNAME;
+            } else {
+                pad = std::string(e);
+            }
 
-        return pad;
+            return pad;
+        }
     }
 
     bool Joystick::open()
@@ -60,5 +65,24 @@ namespace RhobanSSL
             ::close(fd);
             fd = -1;
         }
+    }
+
+    std::vector<std::string> Joystick::getAvailablePads()
+    {
+        std::vector<std::string> joysticks;
+
+        DIR *devInput = opendir("/dev/input");
+
+        while (struct dirent *entry = readdir(devInput)) {
+            std::string name(entry->d_name);
+
+            if (name[0] == 'j' && name[1] =='s') {
+                std::string fullName = "/dev/input/";
+                fullName += name;
+                joysticks.push_back(fullName);
+            }
+        }
+
+        return joysticks;
     }
 }

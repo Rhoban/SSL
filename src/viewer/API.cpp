@@ -17,11 +17,18 @@ API::API(bool simulation, RhobanSSL::AIVisionClient::Team team, RhobanSSL::AICom
     team(team),
     visionClient(data, team, simulation),
     commander(commander),
-    comThread(NULL)
+    comThread(NULL),
+    joystick(NULL),
+    joystickRobot(0)
 {
     for (int id=0; id<MAX_ROBOTS; id++) {
         robots[id].id = id;
         robots[id].enabled = false;
+        robots[id].xSpeed = 0;
+        robots[id].ySpeed = 0;
+        robots[id].thetaSpeed = 0;
+        robots[id].charge = false;
+        robots[id].spin = false;
     }
 
     comThread = new std::thread([this] {
@@ -224,6 +231,8 @@ void API::kick(int id, int kick)
 
 void API::emergencyStop()
 {
+    stopJoystick();
+
     mutex.lock();
     for (int id=0; id<MAX_ROBOTS; id++) {
         robots[id].enabled = false;
@@ -279,4 +288,77 @@ void API::scan()
         }
     }
     mutex.unlock();
+}
+
+void API::joystickTrheadExec()
+{
+    RhobanSSL::Joystick::JoystickEvent event;
+    if (joystick != NULL) {
+        joystick->open();
+    }
+    while ((joystickRobot >= 0) && (joystick != NULL)) {
+        while (joystick->getEvent(&event)) {
+            mutex.lock();
+            if (event.type == JS_EVENT_AXIS) {
+                if (event.number == 0) {
+                    robots[joystickRobot].ySpeed = -2*event.getValue();
+                }
+                if (event.number == 1) {
+                    robots[joystickRobot].xSpeed = -2*event.getValue();
+                }
+                if (event.number == 3) {
+                    robots[joystickRobot].thetaSpeed = -1.5*event.getValue();
+                }
+
+                std::cout << "[JOYSTICK] Axis #" << (int)event.number << ": " << event.getValue() << std::endl;;
+            }
+            if (event.type == JS_EVENT_BUTTON) {
+                if (event.number == 5) {
+                    robots[joystickRobot].kick = event.isPressed() ? 1 : 0;
+                }
+                if (event.number == 7) {
+                    robots[joystickRobot].spin = event.isPressed();
+                }
+
+                std::cout << "[JOYSTICK] Button #" << (int)event.number << ": " << (int)event.isPressed() << std::endl;;
+            }
+            mutex.unlock();
+        }
+
+        QThread::msleep(10);
+    }
+
+    if (joystick != NULL) {
+        delete joystick;
+        joystick->close();
+        joystick = NULL;
+    }
+}
+
+void API::openJoystick(int robot, QString device)
+{
+    if (joystick == NULL) {
+        joystickRobot = robot;
+        joystick = new RhobanSSL::Joystick(device.toStdString());
+
+        joystickThread = new std::thread([this] {
+            this->joystickTrheadExec();
+        });
+    }
+}
+
+void API::stopJoystick()
+{
+    joystickRobot = -1;
+}
+
+QString API::availableJoysticks()
+{
+    Json::Value json(Json::arrayValue);
+
+    for (auto joystick : RhobanSSL::Joystick::getAvailablePads()) {
+        json.append(joystick);
+    }
+
+    return js(json);
 }

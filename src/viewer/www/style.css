@@ -177,3 +177,7 @@ canvas.field {
     margin:3px;
     padding:2px;
 }
+
+body select {
+    margin: 3px;
+}

@@ -34,7 +34,8 @@ namespace RhobanSSL
             } else {
                 packet.actions = 0;
             }
-            packet.kickPower = 80; // XXX: This should be a parameter
+            packet.kickPower = 200; // XXX: This should be a parameter
+
             packet.x_speed = command.xSpeed*1000;
             packet.y_speed = command.ySpeed*1000;
             packet.t_speed = command.thetaSpeed*1000;

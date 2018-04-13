@@ -28,6 +28,11 @@ var simulation = false;
 // Ball
 var ball = [0, 0];
 
+function normalizeTheta(theta)
+{
+    return theta - (2*Math.PI) * Math.floor((theta + Math.PI) / (2*Math.PI));
+}
+
 function robotById(id, color)
 {
     if (typeof(color) == 'undefined') {
@@ -672,6 +677,12 @@ function Manager(viewer)
                 api.kick(robot.id, 2);
             }, 'mousedown');
 
+            button('.joystickize', function(robot) {
+                $('.joystick-robot').val(robot.id+'');
+                $('.joystick-close').click();
+                $('.joystick-open').click();
+            });
+
             button('.kick, .kick-chip', function(robot) {
                 api.kick(robot.id, 0);
             }, 'mouseup');
@@ -736,7 +747,7 @@ function Manager(viewer)
                 div.find('.vision-status').addClass('ok');
                 div.find('.pos-x').text(robot.x.toFixed(3));
                 div.find('.pos-y').text(robot.y.toFixed(3));
-                div.find('.pos-orientation').text(robot.orientation.toFixed(3));
+                div.find('.pos-orientation').text((normalizeTheta(robot.orientation)*180/Math.PI).toFixed(3));
             } else {
                 div.find('.vision-status').removeClass('ok');
             }
@@ -842,6 +853,22 @@ function Manager(viewer)
                     $(this).addClass('btn-danger');
                     $(this).removeClass('btn-success');
                 }
+            });
+
+            var joysticks = JSON.parse(api.availableJoysticks());
+            var html = '';
+            for (var k in joysticks) {
+                html += '<option value="'+joysticks[k]+'">'+joysticks[k]+'</option>';
+            }
+            $('.joysticks').html(html);
+
+            $('.joystick-open').click(function() {
+                console.log("Openning joystick!");
+                api.openJoystick(parseInt($('.joystick-robot').val()), $('.joysticks').val());
+            });
+
+            $('.joystick-close').click(function() {
+                api.stopJoystick();
             });
         }
     };

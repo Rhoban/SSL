@@ -3,6 +3,7 @@
 #include <thread>
 #include <vision/AIVisionClient.h>
 #include <com/AICommander.h>
+#include <joystick/Joystick.h>
 #include <json/json.h>
 #include <string>
 #include <QObject>
@@ -78,6 +79,11 @@ public slots:
     void moveBall(double x, double y);
     void moveRobot(bool yellow, int id, double x, double y, double theta);
 
+    // Joystick
+    QString availableJoysticks();
+    void openJoystick(int robot, QString name);
+    void stopJoystick();
+
 protected:
     RhobanSSL::Data data;
     RhobanSSL::AIVisionClient::Team team;
@@ -90,5 +96,10 @@ protected:
     std::thread *comThread;
     std::mutex mutex;
 
+    std::thread *joystickThread;
+    RhobanSSL::Joystick *joystick;
+    int joystickRobot;
+
     void comThreadExec();
+    void joystickTrheadExec();
 };
