@@ -359,6 +359,22 @@ void API::stopJoystick()
     joystickRobot = -1;
 }
 
+void API::tweakPid(int id)
+{
+    mutex.lock();
+    RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+
+    struct packet_params params;
+    params.kp = 100;
+    params.ki = 1;
+    params.kd = 0;
+    master->addParamPacket(id, params);
+    master->send();
+    master->send();
+
+    mutex.unlock();
+}
+
 QString API::availableJoysticks()
 {
     Json::Value json(Json::arrayValue);

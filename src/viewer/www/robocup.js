@@ -662,6 +662,10 @@ function Manager(viewer)
                 api.robotCommand(robot.id, 0.0, 0.0, 0.0, 0, robot.spin);
             });
 
+            button('.pid', function(robot) {
+                api.tweakPid(robot.id);
+            });
+
             button('.charge', function(robot) {
                 if (robot.enabled) {
                     robot.charge = !robot.charge;

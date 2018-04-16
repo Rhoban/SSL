@@ -84,6 +84,9 @@ public slots:
     void openJoystick(int robot, QString name);
     void stopJoystick();
 
+    // Tweak the PID of a robot
+    void tweakPid(int id);
+
 protected:
     RhobanSSL::Data data;
     RhobanSSL::AIVisionClient::Team team;
