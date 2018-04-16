@@ -31,10 +31,14 @@ namespace RhobanSSL
                 if (command.kick == 2) {
                     packet.actions |= ACTION_KICK2;
                 }
+
+                if (command.spin) {
+                    packet.actions |= ACTION_DRIBBLE;
+                }
             } else {
                 packet.actions = 0;
             }
-            packet.kickPower = 200; // XXX: This should be a parameter
+            packet.kickPower = 250; // XXX: This should be a parameter
 
             packet.x_speed = command.xSpeed*1000;
             packet.y_speed = command.ySpeed*1000;
