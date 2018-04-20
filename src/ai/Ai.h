@@ -1,20 +1,16 @@
-#pragma once
+#ifndef __AI__H__
+#define __AI__H__
 
 #include <com/AICommander.h>
 #include <vision/AIVisionClient.h>
-#include "robot_behavior/robot_behavior.h"
+#include <robot_behavior/robot_behavior.h>
 #include "AiData.h"
 #include <referee/Referee.h>
 #include <core/machine_state.h>
+#include <strategy/Manager.h>
 
 namespace RhobanSSL
 {
-    class TeamId {
-        public:
-        static const int goalie_id; 
-        static const int shooter_id;
-        static const int follower_id; 
-    };
 
     class AI
     {
@@ -37,7 +33,7 @@ namespace RhobanSSL
 
         Vision::VisionData visionData;
         Ai::AiData game_state;
-        Ai::Constants & constants;
+        Strategy::Manager strategy_manager;
 
         machine_infrastructure::MachineState machine;
         unsigned int run_number_old;
@@ -50,15 +46,9 @@ namespace RhobanSSL
             int, 
             std::shared_ptr<RobotBehavior>
         > robot_behaviors;
-        bool time_synchro;
-        double waiting_time_for_synchro;
-        double start_waiting_time_for_synchro;
         
         void stop_all_robots();
-        void assign_behavior_to_robots();
         void update_robots( );
-        void try_to_synchronize_time();
-        bool time_is_synchronized() const;
         double current_time;
         double current_dt;
 
@@ -80,3 +70,5 @@ namespace RhobanSSL
         void limits_velocity( Control & ctrl ) const ;
     };
 };
+
+#endif

@@ -4,7 +4,7 @@
 #include <control/robot_control_with_position_following.h>
 #include <control/robot_control_with_curve.h>
 #include <rhoban_utils/angle.h>
-#include <ai/AiData.h>
+#include <AiData.h>
 
 namespace RhobanSSL {
 

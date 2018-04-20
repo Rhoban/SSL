@@ -4,10 +4,10 @@
 #include <signal.h>
 #include <fenv.h>
 #include <tclap/CmdLine.h>
-#include "vision/AIVisionClient.h"
-#include "com/AICommanderReal.h"
-#include "com/AICommanderSimulation.h"
-#include "ai/AI.h"
+#include <vision/AIVisionClient.h>
+#include <com/AICommanderReal.h>
+#include <com/AICommanderSimulation.h>
+#include "Ai.h"
 #include "Data.h"
 
 static volatile bool running = true;
