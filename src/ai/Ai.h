@@ -25,18 +25,10 @@ namespace RhobanSSL
         void stop();
 
     protected:
-        typedef construct_machine_state_infrastructure<
-            std::string, Ai::AiData, Ai::AiData
-        > machine_infrastructure;
-
         bool running;
 
         Vision::VisionData visionData;
         Ai::AiData game_state;
-        Strategy::Manager strategy_manager;
-
-        machine_infrastructure::MachineState machine;
-        unsigned int run_number_old;
 
         bool enable_kicking;
 
@@ -54,12 +46,8 @@ namespace RhobanSSL
 
         Data & data;
         Referee referee;
+        Strategy::Manager strategy_manager;
         
-        double max_velocity_t;
-        double max_velocity_r;
-        double max_acceleration_t;
-        double max_acceleration_r;
-
         Control update_robot( 
             RobotBehavior & robot_behavior,
             double time, Ai::Robot & robot, Ai::Ball & ball

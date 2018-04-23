@@ -2,22 +2,10 @@
 #include <rhoban_utils/timing/time_stamp.h>
 #include <cmath>
 #include <unistd.h>
-#include <robot_behavior/position_follower.h>
-#include <robot_behavior/goalie.h>
-#include <robot_behavior/shooter.h>
 #include <robot_behavior/do_nothing.h>
-
-using namespace rhoban_geometry;
-using namespace rhoban_utils;
 
 namespace RhobanSSL
 {
-
-
-
-Eigen::Vector2d point_to_eigen( const Point & point ){
-    return Eigen::Vector2d( point.getX(), point.getY() );
-}
 
 
 void AI::limits_velocity( Control & ctrl ) const {
@@ -118,8 +106,7 @@ AI::AI(
     data(data), 
     commander(commander),
     current_dt(0.0),
-    strategy_manager(game_state),
-    machine(game_state, game_state)
+    strategy_manager(game_state, referee)
 {
     running = true;
    
@@ -164,10 +151,10 @@ void AI::update_robots( ){
 
 void AI::run(){
     double period = 1/60.0;    // 100 hz
-    auto lastTick = TimeStamp::now();
+    auto lastTick = rhoban_utils::TimeStamp::now();
 
     while (running) {
-        auto now = TimeStamp::now();
+        auto now = rhoban_utils::TimeStamp::now();
         double elapsed = diffSec(lastTick, now);
         double toSleep = period - elapsed;
         if (toSleep > 0) {
@@ -175,9 +162,9 @@ void AI::run(){
         }else{
             DEBUG("LAG");
         }
-        lastTick = TimeStamp::now();
+        lastTick = rhoban_utils::TimeStamp::now();
         current_dt = current_time;
-        current_time = TimeStamp::now().getTimeMS()/1000.0;
+        current_time = rhoban_utils::TimeStamp::now().getTimeMS()/1000.0;
         current_dt = current_time - current_dt;
         
         data >> visionData;
@@ -193,7 +180,6 @@ void AI::run(){
         strategy_manager.update(current_time);
         strategy_manager.assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
         update_robots( );
-        machine.run( );
     }
 }
 

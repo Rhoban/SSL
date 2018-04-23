@@ -3,6 +3,7 @@
 
 #include "Strategy.h"
 #include <robot_behavior/robot_behavior.h>
+#include <referee/Referee.h>
 #include <map>
 #include <memory>
 #include <AiData.h>
@@ -15,12 +16,16 @@ class Manager {
     std::string current_strategy_name;
     std::map< std::string, std::shared_ptr<Strategy>> strategies;
     Ai::AiData& game_state;
+    const Referee & referee;
     
     double start;
     bool sandbox;
     public:
     
-    Manager(Ai::AiData & game_state);
+    Manager(
+        Ai::AiData & game_state,
+        const Referee & referee
+    );
 
     template <typename STRATEGY>
     STRATEGY & get_strategy( const std::string & name ){

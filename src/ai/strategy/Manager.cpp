@@ -8,7 +8,13 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-Manager::Manager(Ai::AiData & game_state): game_state(game_state) {
+Manager::Manager(
+    Ai::AiData & game_state,
+    const Referee & referee
+):
+    game_state(game_state),
+    referee(referee)
+{
     current_strategy_name = "";
 
     register_strategy( Halt::name, std::shared_ptr<Strategy>( new Halt() ) );
