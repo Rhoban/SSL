@@ -1,28 +1,28 @@
 #pragma once
 
+#include <json/json.h>
 #include <vector>
-#include <rhoban_utils/serialization/json_serializable.h>
-#include "Annotation.h"
-#include "Circle.h"
 
 namespace RhobanSSLAnnotation
 {
-    class Annotations : public rhoban_utils::JsonSerializable
+    class Annotations
     {
     public:
         Annotations();
-        virtual ~Annotations();
 
-        void add(Annotation *annotation);
+        void addCircle(double x, double y, double r,
+            std::string color = "white", bool dashed = false);
 
-        std::string getClassName() const;
+        void addArrow(double x, double y, double toX, double toY,
+            std::string color = "white", bool dashed = false);
 
-        virtual void fromJson(const Json::Value & json_value,
-                              const std::string & dir_name);
+        void addCross(double x, double y,
+            std::string color = "white", bool dashed = false);
 
-        virtual Json::Value toJson() const;
+        Json::Value toJson() const;
+        std::string toJsonString();
 
     protected:
-        std::vector<Annotation*> annotations;
+        Json::Value json;
     };
 }

@@ -52,9 +52,7 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/Referee.cpp
-    annotations/Annotation.cpp
     annotations/Annotations.cpp
-    annotations/Circle.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)

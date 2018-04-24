@@ -3,38 +3,67 @@
 namespace RhobanSSLAnnotation
 {
     Annotations::Annotations()
+    : json(Json::arrayValue)
     {
     }
 
-    Annotations::~Annotations()
+    void Annotations::addCircle(double x, double y, double r,
+        std::string color, bool dashed)
     {
-        for (auto annotation : annotations) {
-            delete annotation;
-        }
+        Json::Value annotation;
+
+        annotation["type"] = "circle";
+        annotation["color"] = color;
+        annotation["dashed"] = dashed;
+
+        annotation["x"] = x;
+        annotation["y"] = y;
+        annotation["r"] = r;
+
+        json.append(annotation);
     }
 
-    std::string Annotations::getClassName() const
+    void Annotations::addArrow(double x, double y, double toX, double toY,
+        std::string color, bool dashed)
     {
-        return "Annotations";
+        Json::Value annotation;
+
+        annotation["type"] = "arrow";
+        annotation["color"] = color;
+        annotation["dashed"] = dashed;
+
+        annotation["x"] = x;
+        annotation["y"] = y;
+        annotation["toX"] = toX;
+        annotation["toY"] = toY;
+
+        json.append(annotation);
     }
 
-    void Annotations::add(Annotation *annotation)
+    void Annotations::addCross(double x, double y,
+        std::string color, bool dashed)
     {
-        annotations.push_back(annotation);
-    }
+        Json::Value annotation;
 
-    void Annotations::fromJson(const Json::Value & json_value, const std::string & dir_name)
-    {
+        annotation["type"] = "cross";
+        annotation["color"] = color;
+        annotation["dashed"] = dashed;
+
+        annotation["x"] = x;
+        annotation["y"] = y;
+
+        json.append(annotation);
     }
 
     Json::Value Annotations::toJson() const
     {
-        Json::Value json(Json::arrayValue);
-
-        for (auto &annotation : annotations) {
-            json.append(annotation->toJson());
-        }
-
         return json;
+    }
+
+    std::string Annotations::toJsonString()
+    {
+        Json::FastWriter writer;
+
+        return writer.write(json);
     }
 }

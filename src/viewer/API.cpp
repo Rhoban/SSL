@@ -390,9 +390,16 @@ QString API::availableJoysticks()
 
 QString API::getAnnotations()
 {
+    static double d = 0;
+    d += 0.01;
     RhobanSSLAnnotation::Annotations annotations;
 
-    annotations.add(new RhobanSSLAnnotation::Circle(3, 3, 1, "blue"));
+    /*
+    // XXX: Annotations examples
+    annotations.addCircle(3, 3, 1, "cyan");
+    annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+    annotations.addCross(-3, 0, "red");
+    */
 
     return QString::fromStdString(annotations.toJsonString());
 }
