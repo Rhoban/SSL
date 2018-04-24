@@ -147,21 +147,6 @@ function Viewer()
             this.resetRatio();
         }
 
-        ctx.fillStyle = '#aaa';
-        ctx.font = '12pt sans';
-        if (this.mousePos) {
-            var pos = this.mousePosMeters();
-
-            ctx.fillText("X: "+pos[0].toFixed(2)+"m, Y: "+pos[1].toFixed(2)+"m", 10, 20);
-
-            // Moving the view offset
-            if (this.dragging) {
-                var dx = (this.mousePos[0] - this.dragBegin[0])/this.ratio;
-                var dy = -(this.mousePos[1]- this.dragBegin[1])/this.ratio;
-                this.viewOffset = [this.startOffset[0] + dx, this.startOffset[1] + dy];
-            }
-        }
-
         // Translating to the center
         ctx.translate(this.width/2, this.height/2);
 
@@ -215,6 +200,21 @@ function Viewer()
         this.drawBall();
 
         ctx.restore();
+
+        ctx.fillStyle = '#aaa';
+        ctx.font = '12pt sans';
+        if (this.mousePos) {
+            var pos = this.mousePosMeters();
+
+            ctx.fillText("X: "+pos[0].toFixed(2)+"m, Y: "+pos[1].toFixed(2)+"m", 10, 20);
+
+            // Moving the view offset
+            if (this.dragging) {
+                var dx = (this.mousePos[0] - this.dragBegin[0])/this.ratio;
+                var dy = -(this.mousePos[1]- this.dragBegin[1])/this.ratio;
+                this.viewOffset = [this.startOffset[0] + dx, this.startOffset[1] + dy];
+            }
+        }
 
         // Drawing text messages
         ctx.save();
