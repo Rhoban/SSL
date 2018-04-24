@@ -84,8 +84,11 @@ public slots:
     void openJoystick(int robot, QString name);
     void stopJoystick();
 
-    // Tweak the PID of a robot
+    // Tweak the PID of a robot (currently a hack to send hard-coded PID values)
     void tweakPid(int id);
+
+    // Get the annotations that needs to be drawn on the screen
+    QString getAnnotations();
 
 protected:
     RhobanSSL::Data data;
