@@ -8,7 +8,7 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-void Manager::daclare_team_ids(
+void Manager::declare_team_ids(
     const std::list<int> & team_ids
 ){
     this->team_ids = team_ids;

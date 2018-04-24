@@ -89,7 +89,7 @@ Control AI::update_robot(
     return Control::make_ignored();
 }
 
-void AI::stop_all_robots(){
+void AI::init_robot_behaviors(){
     for( int k=0; k<Vision::Robots; k++ ){
         robot_behaviors[k] = std::shared_ptr<
             RobotBehavior
@@ -110,7 +110,12 @@ AI::AI(
 {
     running = true;
    
-    stop_all_robots();
+    init_robot_behaviors();
+    std::list<int> robot_ids;
+    for( auto elem : robot_behaviors ){
+        robot_ids.push_front( elem.first );
+    } 
+    strategy_manager.declare_team_ids( robot_ids );
 
 }
 

@@ -39,7 +39,7 @@ namespace RhobanSSL
             std::shared_ptr<RobotBehavior>
         > robot_behaviors;
         
-        void stop_all_robots();
+        void init_robot_behaviors();
         void update_robots( );
         double current_time;
         double current_dt;

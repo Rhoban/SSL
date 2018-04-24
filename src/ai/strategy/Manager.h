@@ -25,7 +25,7 @@ class Manager {
     bool sandbox;
     public:
 
-    void daclare_team_ids(
+    void declare_team_ids(
         const std::list<int> & team_ids
     );
     const std::list<int> & get_team_ids() const;
