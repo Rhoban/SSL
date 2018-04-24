@@ -20,3 +20,5 @@ src/*
 !src/viewer/
 !src/ai/
 !src/.clang_complete
+
+machine.dot
