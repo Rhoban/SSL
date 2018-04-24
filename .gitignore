@@ -19,3 +19,4 @@ src/*
 !src/client/
 !src/viewer/
 !src/ai/
+!src/.clang_complete

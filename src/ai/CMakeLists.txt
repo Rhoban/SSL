@@ -24,13 +24,18 @@ set (SOURCES
     com/AICommander.cpp
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp
-    ai/robot_behavior/goalie.cpp
-    ai/robot_behavior/position_follower.cpp
-    ai/robot_behavior/shooter.cpp
-    ai/robot_behavior/do_nothing.cpp
-    ai/robot_behavior/robot_behavior.cpp
-    ai/AI.cpp
-    ai/AiData.cpp
+    robot_behavior/goalie.cpp
+    robot_behavior/position_follower.cpp
+    robot_behavior/shooter.cpp
+    robot_behavior/do_nothing.cpp
+    robot_behavior/robot_behavior.cpp
+    Ai.cpp
+    AiData.cpp
+    strategy/Manager.cpp
+    strategy/Strategy.cpp
+    strategy/halt.cpp
+    strategy/sandbox.cpp
+    strategy/tare_and_synchronize.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
@@ -47,6 +52,9 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/Referee.cpp
+    annotations/Annotation.cpp
+    annotations/Annotations.cpp
+    annotations/Circle.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
@@ -79,7 +87,7 @@ if(CATKIN_ENABLE_TESTING)
     math/test_vector.cpp
     control/test_pid.cpp
     control/test_robot_control.cpp
-    ai/robot_behavior/test_robot_behavior.cpp
+    robot_behavior/test_robot_behavior.cpp
   )
 
   foreach(test_source ${TEST_SOURCES})

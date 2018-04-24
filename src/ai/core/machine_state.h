@@ -9,6 +9,7 @@
 #include <memory>
 #include <set>
 #include <sstream>
+#include <functional>
 #include <fstream>
 
 namespace machine_state {
@@ -22,7 +23,7 @@ const unsigned int INIT_ATOMIC_RUN_NUMBER = 1;
 template <typename ID, typename STATE_DATA> class State;
 template <typename ID, typename EDGE_DATA> class Edge;
 
-template <typename ID, typename STATE_DATA, typename EDGE_DATA> 
+template <typename ID, typename STATE_DATA, typename EDGE_DATA>
 class MachineState;
 
 template <typename ID, typename STATE_DATA>
@@ -54,13 +55,13 @@ class State {
     }
 
     virtual void run(
-        STATE_DATA& state_data, 
+        STATE_DATA& state_data,
         unsigned int run_number, unsigned int atomic_run_number
     ) = 0;
     virtual ~State() { }
 
     friend std::ostream & operator<< <ID, STATE_DATA>(
-        std::ostream & out, 
+        std::ostream & out,
         const State<ID, STATE_DATA> & machine
     );
 };
@@ -78,15 +79,15 @@ class ConditionClass {
     public:
     /*
      * The execution of condition(...) should not depend from
-     * the execution order of all the condition(...) function 
+     * the execution order of all the condition(...) function
      * of all the edges.
      *
      * Thati's why, the parameter edge_data is const.
      *
      * If you want, you can modify edge_data, just make e
-     * const_cast<EDGE_DATA>(edge_data) in your condition 
-     * function. 
-     * However, you have to check that your code respect 
+     * const_cast<EDGE_DATA>(edge_data) in your condition
+     * function.
+     * However, you have to check that your code respect
      * the previous remark.
      */
     virtual bool condition(
@@ -105,9 +106,9 @@ class Edge: public  ConditionClass<ID, EDGE_DATA> {
     ID end_state;
 
     public:
-    Edge( 
+    Edge(
         const ID & name,
-        const ID & origin, const ID & end 
+        const ID & origin, const ID & end
     ):
         name_edge(name), origin_state(origin), end_state(end)
     { }
@@ -123,13 +124,13 @@ class Edge: public  ConditionClass<ID, EDGE_DATA> {
     }
 
     virtual void run(
-        EDGE_DATA & edge_data, 
+        EDGE_DATA & edge_data,
         unsigned int run_number, unsigned int atomic_run_number
     ) = 0;
     virtual ~Edge() { }
 
     friend std::ostream & operator<< <ID, EDGE_DATA> (
-        std::ostream & out, 
+        std::ostream & out,
         const Edge<ID, EDGE_DATA> & edge
     );
 
@@ -139,7 +140,7 @@ template <typename ID, typename EDGE_DATA>
 std::ostream & operator<<(
     std::ostream & out, const Edge<ID, EDGE_DATA> & edge
 ){
-    out << edge.name() << " : (" << edge.origin() << ", " << edge.end() << ")";  
+    out << edge.name() << " : (" << edge.origin() << ", " << edge.end() << ")";
     return out;
 }
 
@@ -152,7 +153,7 @@ class AnonymousState : public machine_state::State<ID, STATE_DATA> {
 
     public:
     AnonymousState(
-        const ID & id,  
+        const ID & id,
         std::function<
             void (STATE_DATA&, unsigned int, unsigned int)
         > run_fct
@@ -183,7 +184,7 @@ class AnonymousEdge : public machine_state::Edge<ID, EDGE_DATA> {
 
     public:
     AnonymousEdge(
-        const ID & id, const ID & origin, const ID & end, 
+        const ID & id, const ID & origin, const ID & end,
         std::function<
             bool (const EDGE_DATA&, unsigned int, unsigned int)
         > condition_fct,
@@ -192,7 +193,7 @@ class AnonymousEdge : public machine_state::Edge<ID, EDGE_DATA> {
         > run_fct
     ):
         machine_state::Edge<ID, EDGE_DATA>(id, origin, end),
-        condition_fct(condition_fct), run_fct(run_fct) 
+        condition_fct(condition_fct), run_fct(run_fct)
     {
     }
 
@@ -202,7 +203,7 @@ class AnonymousEdge : public machine_state::Edge<ID, EDGE_DATA> {
     ) const {
         return condition_fct( const_data, run_number, atomic_run_number );
     }
-    
+
     virtual void run(
         EDGE_DATA & data,
         unsigned int run_number, unsigned int atomic_run_number
@@ -257,7 +258,7 @@ class MachineState {
             atomic_run_number = INIT_ATOMIC_RUN_NUMBER;
             run_number += 1;
         }
-        
+
         std::set<ID> atomic_run(){
             for( MachineStateFollower<STATE_DATA, EDGE_DATA> * follower : followers ){
                 follower->atomic_update(
@@ -275,7 +276,7 @@ class MachineState {
             for( const ID & state_name : current_states_set ){
                 bool move = false;
                 for(
-                    const ID & edge_name : adjacence.at(state_name) 
+                    const ID & edge_name : adjacence.at(state_name)
                 ){
                     std::shared_ptr<Edge_t> & edge = edges.at(edge_name);
                     const std::shared_ptr<Edge_t> & const_edge = edges.at(
@@ -307,7 +308,7 @@ class MachineState {
             assert( edges.find(edge->name()) == edges.end() );
             assert( states.find(edge->origin()) != states.end() );
             assert( states.find(edge->end()) != states.end() );
-            
+
             adjacence[edge->origin()].push_back( edge->name() );
             edges[edge->name()] = edge;
             return *this;
@@ -317,20 +318,20 @@ class MachineState {
             const ID & id, const ID & origin, const ID & end,
             std::function<
                 bool (
-                    const EDGE_DATA & data, 
+                    const EDGE_DATA & data,
                     unsigned int run_number, unsigned int atomic_run_number
                 )
             > condition_fct = [](
-                const EDGE_DATA & data, 
+                const EDGE_DATA & data,
                 unsigned int run_number, unsigned int atomic_run_number
             ){ return true; },
             std::function<
                 void (
-                    EDGE_DATA & data, 
+                    EDGE_DATA & data,
                     unsigned int run_number, unsigned int atomic_run_number
                 )
             > run_fct = [](
-                EDGE_DATA & data, 
+                EDGE_DATA & data,
                 unsigned int run_number, unsigned int atomic_run_number
             ){ return ; }
         ){
@@ -354,14 +355,14 @@ class MachineState {
         }
 
          MachineState& add_state(
-            const ID & id,  
+            const ID & id,
             std::function<
                 void (
-                    STATE_DATA & data, 
+                    STATE_DATA & data,
                     unsigned int run_number, unsigned int atomic_run_number
                 )
             > run_fct = [](
-                STATE_DATA & data, 
+                STATE_DATA & data,
                 unsigned int run_number, unsigned int atomic_run_number
             ){ return ; }
         ){
@@ -380,11 +381,11 @@ class MachineState {
         }
 
         MachineState( STATE_DATA & state_data, EDGE_DATA & edge_data ):
-            state_data(state_data), edge_data(edge_data), 
+            state_data(state_data), edge_data(edge_data),
             debug(false),
-            run_number(CLEAR_RUN_NUMBER),    
+            run_number(CLEAR_RUN_NUMBER),
             atomic_run_number(CLEAR_ATOMIC_RUN_NUMBER)
-        { } 
+        { }
 
         MachineState& add_init_state( const ID & state_name ){
             assert( states.find(state_name) != states.end() );
@@ -413,7 +414,7 @@ class MachineState {
 
         void start(){
             current_states_set = init_states_set;
-            run_number = INIT_RUN_NUMBER;   
+            run_number = INIT_RUN_NUMBER;
             atomic_run_number = INIT_ATOMIC_RUN_NUMBER;
         }
 
@@ -423,12 +424,12 @@ class MachineState {
 
         const std::set<ID> & run(){
             for(
-                MachineStateFollower<STATE_DATA, EDGE_DATA> * follower : 
-                followers 
+                MachineStateFollower<STATE_DATA, EDGE_DATA> * follower :
+                followers
             ){
                 follower->update(
                     state_data, edge_data,
-                    run_number, atomic_run_number 
+                    run_number, atomic_run_number
                 );
             }
             std::set<ID> old_states;
@@ -436,7 +437,7 @@ class MachineState {
                 old_states = current_states_set;
                 current_states_set = atomic_run();
             } while( old_states != current_states_set );
-            
+
             increase_run_number();
             return current_states_set;
         }
@@ -444,7 +445,7 @@ class MachineState {
         const std::set<ID> & current_states() const {
             return current_states_set;
         }
-        
+
         const std::set<ID> & initial_states() const {
             return init_states_set;
         }
@@ -459,7 +460,7 @@ class MachineState {
             for( auto state_asso : states ){
                 const ID& id =  state_asso.first;
                 states_id[id] = cpt;
-                result << "\n v" << cpt 
+                result << "\n v" << cpt
                     << " [label=\"" << id << "\"";
                 if( is_initial(id) ){
                     result << " shape=\"doubleoctagon\"";
@@ -490,7 +491,7 @@ class MachineState {
             if( ! file.is_open() ) return false;
             file << to_dot();
             file.close();
-            return true;    
+            return true;
         }
 
         bool is_active( const ID & state ) const {
@@ -502,7 +503,7 @@ class MachineState {
         }
 
         friend std::ostream & operator<< <ID, STATE_DATA, EDGE_DATA> (
-            std::ostream & out, 
+            std::ostream & out,
             const MachineState<ID, STATE_DATA, EDGE_DATA> & machine
         );
 };
@@ -514,7 +515,7 @@ std::ostream & operator<<(
     out << "States : ";
     for(
         const std::pair<
-            ID, std::shared_ptr< State<ID, STATE_DATA> > 
+            ID, std::shared_ptr< State<ID, STATE_DATA> >
         > & state_asso : machine.states
     ){
         out << *(state_asso.second) << ", ";
@@ -524,11 +525,11 @@ std::ostream & operator<<(
     for(
         const std::pair<
            ID, std::shared_ptr< Edge<ID, EDGE_DATA> >
-        > & edge_asso : 
+        > & edge_asso :
         machine.edges
     ){
         out << " " << *(edge_asso.second) << ", " << std::endl;
-    }   
+    }
     return out;
 }
 
@@ -582,7 +583,7 @@ class RisingEdge_wrapper : public MachineStateFollower<STATE_DATA, EDGE_DATA> {
         if( rising_edge ){
             run_number_for_last_rising = run_number;
             atomic_run_number_for_last_rising = atomic_run_number;
-        } 
+        }
         last_condition_value = value;
     }
 
@@ -632,7 +633,7 @@ class RisingEdge {
 
 template <typename ID, typename STATE_DATA, typename EDGE_DATA>
 struct construct_machine_state_infrastructure {
-    typedef ID Id; 
+    typedef ID Id;
     typedef STATE_DATA StateData;
     typedef EDGE_DATA EdgeData;
 

@@ -1,5 +1,6 @@
--I../referee/
--i../rhobanproject/rhobanutils/
+-I./referee/
+-I./rhoban/utils/include/
+-I/usr/include/x86_64-linux-gnu/qt5/
 -I/usr/include/x86_64-linux-gnu/qt5/Qsci
 -I/usr/include/x86_64-linux-gnu/qt5/QtConcurrent
 -I/usr/include/x86_64-linux-gnu/qt5/QtCore
@@ -24,3 +25,12 @@
 -I/usr/include/x86_64-linux-gnu/qt5/QtWebKitWidgets
 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets
 -I/usr/include/x86_64-linux-gnu/qt5/QtXml
+-I./client/
+-I./rhoban/utils/include/
+-I./rhobandeps/jsoncpp/include/
+-I./rhobandeps/eigen/
+-I./ai/
+-I./../build_release/ssl_client/
+-I./rhoban/geometry/include/
+-I./rhobandeps/serial/include/
+-fPIC
