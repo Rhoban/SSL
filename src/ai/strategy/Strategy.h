@@ -9,7 +9,19 @@ namespace RhobanSSL {
 namespace Strategy {
 
 class Strategy {
+    private:
+    int goalie_id;
+    std::list<int> robot_ids;
+
     public:
+
+    Strategy();
+
+    void set_goalie( int id );
+    int get_goalie() const;   
+
+    void set_robot_affectation( const std::list<int> & robot_ids );
+    const std::list<int> & get_robot_affectation() const;
 
     virtual void update(double time){};
 
@@ -18,11 +30,23 @@ class Strategy {
     virtual void pause(double time){};
     virtual void resume(double time){};
 
+    /*
+     * This function give the minimal numer of robot 
+     * that strategy command.
+     */
+    virtual int min_robots() const = 0;
+    /*
+     * This function give the maximal numer of robot 
+     * that strategy command.
+     * if it is set to -1, then the strategy can command any number of robot.
+     */
+    virtual int max_robots() const = 0;
+
+
     virtual void assign_behavior_to_robots(
-        std::map<
-            int, 
-            std::shared_ptr<RobotBehavior>
-        > & robot_behaviors,
+        std::function<
+            void (int, std::shared_ptr<RobotBehavior>)
+        > assign_behavior,
         double time, double dt
     ) = 0;
 

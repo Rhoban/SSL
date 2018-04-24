@@ -7,12 +7,15 @@
 #include <map>
 #include <memory>
 #include <AiData.h>
+#include <list>
 
 namespace RhobanSSL {
 namespace Strategy {
 
 class Manager {
     private:
+    std::list<int> team_ids;
+
     std::string current_strategy_name;
     std::map< std::string, std::shared_ptr<Strategy>> strategies;
     Ai::AiData& game_state;
@@ -21,6 +24,11 @@ class Manager {
     double start;
     bool sandbox;
     public:
+
+    void daclare_team_ids(
+        const std::list<int> & team_ids
+    );
+    const std::list<int> & get_team_ids() const;
     
     Manager(
         Ai::AiData & game_state,
@@ -44,7 +52,10 @@ class Manager {
         const std::string& strategy_name, std::shared_ptr<Strategy> strategy
     );
    
-    void assign_strategy( const std::string & strategy_name, double time );
+    void assign_strategy(
+        const std::string & strategy_name, double time,
+        const std::list<int> & robot_ids
+    );
  
     void update(double time);
     void analyse_data(double time);

@@ -6,6 +6,13 @@ namespace Strategy {
 
 const std::string Tare_and_synchronize::name="tare_and_synchronize";
 
+int Tare_and_synchronize::min_robots() const {
+    return 0;
+}
+int Tare_and_synchronize::max_robots() const {
+    return -1;
+}
+
 void Tare_and_synchronize::start(double time){
     DEBUG("START TIME SYNCHRONIZATION");
     behavior_was_assigned = false;
@@ -33,19 +40,19 @@ void Tare_and_synchronize::stop(double time){
 }
 
 void Tare_and_synchronize::assign_behavior_to_robots(
-    std::map<
-        int, 
-        std::shared_ptr<RobotBehavior>
-    > & robot_behaviors,
+    std::function<
+        void (int, std::shared_ptr<RobotBehavior>)
+    > assign_behavior,
     double time, double dt
 ){
     if( ! behavior_was_assigned ){
         for(
-            std::pair<int, std::shared_ptr<RobotBehavior> > elem : 
-            robot_behaviors 
+            int id: get_robot_affectation() 
         ){
-            robot_behaviors[ elem.first ] = std::shared_ptr<RobotBehavior>(
-                new DoNothing()
+            assign_behavior(
+                id, std::shared_ptr<RobotBehavior>(
+                    new DoNothing()
+                )
             );
         }
         behavior_was_assigned = true;

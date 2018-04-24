@@ -20,6 +20,15 @@ const int TeamId::follower_id = 3;
 
 const std::string Sandbox::name="sandbox";
 
+int Sandbox::min_robots() const {
+    return 2;        
+}
+
+int Sandbox::max_robots() const {
+    return -1;
+}
+
+
 Sandbox::Sandbox(Ai::AiData & game_state):
     game_state(game_state)
 {
@@ -35,19 +44,19 @@ void Sandbox::stop(double time){
 }
 
 void Sandbox::assign_behavior_to_robots(
-    std::map<
-        int, 
-        std::shared_ptr<RobotBehavior>
-    > & robot_behaviors,
+    std::function<
+        void (int, std::shared_ptr<RobotBehavior>)
+    > assign_behavior,
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
         for(
-            std::pair<int, std::shared_ptr<RobotBehavior> > elem : 
-            robot_behaviors 
+            int id : get_robot_affectation()
         ){
-            robot_behaviors[ elem.first ] = std::shared_ptr<RobotBehavior>(
-                new DoNothing()
+            assign_behavior(
+                id, std::shared_ptr<RobotBehavior>(
+                    new DoNothing()
+                )
             );
         }
 
@@ -78,9 +87,11 @@ void Sandbox::assign_behavior_to_robots(
             game_state.constants.translation_velocity_limit,
             game_state.constants.rotation_velocity_limit
         );
-        robot_behaviors[TeamId::follower_id] = std::shared_ptr<
-            RobotBehavior
-        >( follower ); 
+        assign_behavior( 
+            TeamId::follower_id, std::shared_ptr<
+                RobotBehavior
+            >( follower )
+        ); 
 
         // We create a goalie :    
         Goalie* goalie = new Goalie(
@@ -105,9 +116,11 @@ void Sandbox::assign_behavior_to_robots(
             game_state.constants.translation_velocity_limit,
             game_state.constants.rotation_velocity_limit
         );
-        robot_behaviors[TeamId::goalie_id] = std::shared_ptr<
-            RobotBehavior
-        >( goalie ); 
+        assign_behavior(
+            TeamId::goalie_id, std::shared_ptr<
+                RobotBehavior
+            >( goalie )
+        ); 
 
         #if 1
         // We create a shooter :
@@ -154,9 +167,11 @@ void Sandbox::assign_behavior_to_robots(
             ball_position, robot_position, robot_orientation, 
             time, dt 
         );
-        robot_behaviors[TeamId::shooter_id] = std::shared_ptr<
-            RobotBehavior
-        >( shooter ); 
+        assign_behavior( 
+            TeamId::shooter_id, std::shared_ptr<
+                RobotBehavior
+            >( shooter )
+        ); 
         #endif
 
         behavior_has_been_assigned = true;

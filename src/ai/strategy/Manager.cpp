@@ -8,6 +8,15 @@
 namespace RhobanSSL {
 namespace Strategy {
 
+void Manager::daclare_team_ids(
+    const std::list<int> & team_ids
+){
+    this->team_ids = team_ids;
+}
+const std::list<int> & Manager::get_team_ids() const {
+    return team_ids;
+}
+
 Manager::Manager(
     Ai::AiData & game_state,
     const Referee & referee
@@ -28,7 +37,7 @@ Manager::Manager(
     );
     sandbox = false;
     start = -1.0;
-    assign_strategy( Halt::name, 0.0 ); // TODO TIME !
+    assign_strategy( Halt::name, 0.0, team_ids ); // TODO TIME !
 }
 
 void Manager::register_strategy(
@@ -38,12 +47,17 @@ void Manager::register_strategy(
     strategies[strategy_name] = strategy;
 }
 
-void Manager::assign_strategy( const std::string & strategy_name, double time ){
+void Manager::assign_strategy(
+    const std::string & strategy_name, 
+    double time, const std::list<int> & robot_ids
+){
     assert( strategies.find(strategy_name) != strategies.end() );
     if( current_strategy_name != ""){
         current_strategy().stop(time);
     }
     current_strategy_name = strategy_name;
+    
+    current_strategy().set_robot_affectation( robot_ids );
     current_strategy().start(time);
 }
 
@@ -55,7 +69,10 @@ void Manager::analyse_data(double time){
 }
 void Manager::choose_a_strategy(double time){
     if(start==-1.0){ 
-        assign_strategy( Tare_and_synchronize::name, time );
+        assign_strategy(
+            Tare_and_synchronize::name, time, 
+            team_ids 
+        );
         start = time;
         return;
     }
@@ -67,7 +84,9 @@ void Manager::choose_a_strategy(double time){
     }
 
     if( ! sandbox ){
-        assign_strategy( Sandbox::name, time );
+        assign_strategy(
+            Sandbox::name, time, team_ids 
+        );
         sandbox = true;
     }
 }
@@ -96,7 +115,12 @@ void Manager::assign_behavior_to_robots(
     > & robot_behaviors,
     double time, double dt
 ){
-    current_strategy().assign_behavior_to_robots(robot_behaviors, time, dt);
+    current_strategy().assign_behavior_to_robots(
+        [&](int id, std::shared_ptr<RobotBehavior> behavior){
+             return  
+           robot_behaviors[id] = behavior; 
+        }, time, dt
+    );
 }
 
 Strategy & Manager::current_strategy(){
