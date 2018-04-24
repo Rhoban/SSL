@@ -643,7 +643,7 @@ function Manager(viewer)
 
             var button = function(selector, callback, evt) {
                 if (typeof(evt) == 'undefined') {
-                    evt = 'click'
+                    evt = 'click';
                 }
                 $('.robots '+selector).on(evt, function() {
                     var id = parseInt($(this).attr('rel'));
