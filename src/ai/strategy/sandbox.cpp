@@ -40,9 +40,9 @@ void Sandbox::assign_behavior_to_robots(
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
-        int shooter_id = get_robot_ids()[0];
+        int shooter_id = robot_id(0);
         //int shooter_id = TeamId::shooter_id;      
-        int follower_id = get_robot_ids()[1];
+        int follower_id = robot_id(1);
         //int follower_id = TeamId::follower_id;
         for(
             int id : get_robot_ids()

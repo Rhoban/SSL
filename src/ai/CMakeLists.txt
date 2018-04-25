@@ -35,6 +35,7 @@ set (SOURCES
     strategy/Strategy.cpp
     strategy/halt.cpp
     strategy/sandbox.cpp
+    strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp

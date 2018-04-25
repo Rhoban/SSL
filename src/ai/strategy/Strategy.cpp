@@ -37,6 +37,11 @@ const std::vector<int> & Strategy::get_player_ids() const {
     return player_ids;
 }
 
+int Strategy::robot_id( int id ) const {
+    assert( 0<=id and id<robot_ids.size() ); // Whent that line make an assertion, that means, you don't have updated the min_robots() implementation inside your strategy code.
+    return robot_ids[id];
+}
+
 Strategy::~Strategy(){ }
 
 }
