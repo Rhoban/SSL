@@ -28,6 +28,9 @@ var simulation = false;
 // Ball
 var ball = [0, 0];
 
+// Strategies
+var strategies = [];
+
 function normalizeTheta(theta)
 {
     return theta - (2*Math.PI) * Math.floor((theta + Math.PI) / (2*Math.PI));
@@ -977,9 +980,100 @@ function Manager(viewer)
         }
     };
 
-    this.communicationPanel = function()
+    this.communicationPanel = function(init)
     {
-        $('.com-warning').show();
+        if (init) {
+            $('.com-warning').show();
+        }
+    };
+
+    this.renderStrategies = function()
+    {
+        var html = '';
+        var self = this;
+
+        for (var k in strategies) {
+            var strategy = strategies[k];
+
+            html += '<div class="strategy">';
+            html += '<h4>'+strategy.name+' <a href="#" class="strategy-delete" rel="'+k+'"><img src="delete.png" /></a></h4>';
+            for (var name in strategy.params) {
+                var value = strategy.params[name];
+                html += name + ': ';
+                html += '<input data-strategy="'+k+'" data-param="'+name+'" type="text" value="'+value+'" /><br/>';
+            }
+            html += '</div>';
+        }
+
+        if (html == '') {
+            html += 'No strategy';
+        }
+
+        $('.strategies').html(html);
+        $('.strategy-delete').click(function() {
+            var value = parseInt($(this).attr('rel'));
+            console.log(value);
+
+            for (;value < strategies.length-1; value++) {
+                strategies[value] = strategies[value+1];
+            }
+            strategies.pop();
+            self.renderStrategies();
+        });
+
+        $('.strategies input').change(function() {
+            var strategy = parseInt($(this).attr('data-strategy'));
+            var param = $(this).attr('data-param');
+
+            strategies[strategy].params[param] = $(this).val();
+        });
+    };
+
+    this.strategiesPanel = function(init)
+    {
+        if (init) {
+            var managers = JSON.parse(api.getManagers());
+            var options = '';
+
+            for (var k in managers) {
+                var manager = managers[k];
+                options += '<option value="'+manager+'">'+manager+'</option>';
+            }
+
+            var strategiesAvailable = JSON.parse(api.getStrategies());
+            var strategiesOptions = '';
+
+            for (var n in strategiesAvailable) {
+                var strategy = strategiesAvailable[n];
+                strategiesOptions += '<option value="'+strategy.name+'">'+strategy.name+'</option>';
+            }
+
+            $('#managers').html(options);
+            $('#strategies-selector').html(strategiesOptions);
+            var self = this;
+
+            $('.add-strategy').click(function() {
+                console.log(strategiesAvailable);
+                var selected = $('#strategies-selector').val();
+                for (var s in strategiesAvailable) {
+                    var strategy = strategiesAvailable[s];
+                    if (selected == strategy.name) {
+                        strategies.push(JSON.parse(JSON.stringify(strategy)));
+                    }
+                    self.renderStrategies();
+                }
+            });
+
+            $('.control-play').click(function() {
+                api.managerPlay();
+            });
+            $('.control-pause').click(function() {
+                api.managerPause();
+            });
+            $('.control-stop').click(function() {
+                api.managerStop();
+            });
+        }
     };
 
     this.update = function(init)
@@ -1000,6 +1094,9 @@ function Manager(viewer)
 
         // Communication panel
         this.communicationPanel(init);
+
+        // Strategies panel
+        this.strategiesPanel(init);
     };
 
     this.update(true);

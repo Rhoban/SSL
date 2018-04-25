@@ -90,6 +90,16 @@ public slots:
     // Get the annotations that needs to be drawn on the screen
     QString getAnnotations();
 
+    // Getting the strategies
+    QString getStrategies();
+
+    // Getting managers
+    QString getManagers();
+
+    void managerStop();
+    void managerPlay();
+    void managerPause();
+
 protected:
     RhobanSSL::Data data;
     RhobanSSL::AIVisionClient::Team team;

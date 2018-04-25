@@ -181,3 +181,22 @@ canvas.field {
 body select {
     margin: 3px;
 }
+
+.manager-control {
+    text-align:center;
+}
+
+.manager-control img {
+    margin-left:5px;
+    margin-right:5px;
+    cursor: pointer;
+}
+
+.manager-cols {
+    display: flex;
+    justify-content: space-between;;
+}
+
+.strategy {
+    margin-top:5px;
+}

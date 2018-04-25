@@ -279,7 +279,7 @@ void API::scan()
     // Enabling robots depending on their statuses
     for (int id=0; id<MAX_ROBOTS; id++) {
         if (simulation) {
-            if (id < 7) {
+            if (id <= 7) {
                 robots[id].enabled = true;
             }
         } else {
@@ -402,4 +402,53 @@ QString API::getAnnotations()
     */
 
     return QString::fromStdString(annotations.toJsonString());
+}
+
+QString API::getStrategies()
+{
+    Json::Value json(Json::arrayValue);
+
+    {
+        Json::Value goal;
+        Json::Value params;
+        params["robot"] = "1";
+        params["goalDist"] = "0.5";
+        goal["name"] = "goal";
+        goal["params"] = params;
+        json.append(goal);
+    }
+
+    {
+        Json::Value wall;
+        Json::Value params;
+        params["robot1"] = "2";
+        params["robot2"] = "3";
+        wall["name"] = "wall";
+        wall["params"] = params;
+        json.append(wall);
+    }
+
+    return js(json);
+}
+
+QString API::getManagers()
+{
+    Json::Value json(Json::arrayValue);
+
+    json.append("Manual");
+    json.append("RoboCup");
+
+    return js(json);
+}
+
+void API::managerStop()
+{
+}
+
+void API::managerPlay()
+{
+}
+
+void API::managerPause()
+{
 }
