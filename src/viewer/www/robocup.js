@@ -926,7 +926,6 @@ function Manager(viewer)
             $('.joysticks').html(html);
 
             $('.joystick-open').click(function() {
-                console.log("Openning joystick!");
                 api.openJoystick(parseInt($('.joystick-robot').val()), $('.joysticks').val());
             });
 
@@ -1012,7 +1011,6 @@ function Manager(viewer)
         $('.strategies').html(html);
         $('.strategy-delete').click(function() {
             var value = parseInt($(this).attr('rel'));
-            console.log(value);
 
             for (;value < strategies.length-1; value++) {
                 strategies[value] = strategies[value+1];
@@ -1053,7 +1051,6 @@ function Manager(viewer)
             var self = this;
 
             $('.add-strategy').click(function() {
-                console.log(strategiesAvailable);
                 var selected = $('#strategies-selector').val();
                 for (var s in strategiesAvailable) {
                     var strategy = strategiesAvailable[s];

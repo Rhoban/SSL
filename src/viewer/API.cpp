@@ -187,7 +187,6 @@ void API::enableRobot(int id, bool enabled)
 {
     mutex.lock();
     if (id >= 0 && id < MAX_ROBOTS) {
-        std::cout << "Enabling: " << enabled << std::endl;
         robots[id].enabled = enabled;
 
         if (!robots[id].enabled) {
@@ -363,18 +362,20 @@ void API::stopJoystick()
 
 void API::tweakPid(int id)
 {
-    mutex.lock();
-    RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+    if (!simulation) {
+        mutex.lock();
+        RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
 
-    struct packet_params params;
-    params.kp = 100;
-    params.ki = 1;
-    params.kd = 0;
-    master->addParamPacket(id, params);
-    master->send();
-    master->send();
+        struct packet_params params;
+        params.kp = 100;
+        params.ki = 1;
+        params.kd = 0;
+        master->addParamPacket(id, params);
+        master->send();
+        master->send();
 
-    mutex.unlock();
+        mutex.unlock();
+    }
 }
 
 QString API::availableJoysticks()
@@ -394,12 +395,14 @@ QString API::getAnnotations()
     d += 0.01;
     RhobanSSLAnnotation::Annotations annotations;
 
-    /*
+
     // XXX: Annotations examples
     annotations.addCircle(3, 3, 1, "cyan");
     annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
     annotations.addCross(-3, 0, "red");
-    */
+    // XXX: Texte
+    // XXX: Segment
+
 
     return QString::fromStdString(annotations.toJsonString());
 }
