@@ -1,6 +1,7 @@
 #include <QThread>
 #include <unistd.h>
 #include "API.h"
+#include <annotations/Annotations.h>
 #include <com/AICommanderReal.h>
 
 // Helper, converts a json value to its string representation
@@ -185,7 +186,8 @@ void API::moveRobot(bool yellow, int id, double x, double y, double theta)
 void API::enableRobot(int id, bool enabled)
 {
     mutex.lock();
-    if (id > 0 && id < MAX_ROBOTS) {
+    if (id >= 0 && id < MAX_ROBOTS) {
+        std::cout << "Enabling: " << enabled << std::endl;
         robots[id].enabled = enabled;
 
         if (!robots[id].enabled) {
@@ -384,4 +386,20 @@ QString API::availableJoysticks()
     }
 
     return js(json);
+}
+
+QString API::getAnnotations()
+{
+    static double d = 0;
+    d += 0.01;
+    RhobanSSLAnnotation::Annotations annotations;
+
+    /*
+    // XXX: Annotations examples
+    annotations.addCircle(3, 3, 1, "cyan");
+    annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+    annotations.addCross(-3, 0, "red");
+    */
+
+    return QString::fromStdString(annotations.toJsonString());
 }
