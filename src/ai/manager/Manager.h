@@ -1,7 +1,7 @@
 #ifndef __STRATEGY__MANAGER__H__
 #define __STRATEGY__MANAGER__H__
 
-#include "Strategy.h"
+#include <strategy/Strategy.h>
 #include <robot_behavior/robot_behavior.h>
 #include <referee/Referee.h>
 #include <map>
@@ -9,12 +9,12 @@
 #include <AiData.h>
 
 namespace RhobanSSL {
-namespace Strategy {
+namespace Manager {
 
 class Manager {
     private:
     std::string current_strategy_name;
-    std::map< std::string, std::shared_ptr<Strategy>> strategies;
+    std::map< std::string, std::shared_ptr<Strategy::Strategy>> strategies;
     Ai::AiData& game_state;
     const Referee & referee;
     
@@ -37,11 +37,12 @@ class Manager {
         return get_strategy<STRATEGY>( STRATEGY::name );
     };
 
-    Strategy & current_strategy();
+    Strategy::Strategy & current_strategy();
     const std::string & strategy_name() const;
 
     void register_strategy(
-        const std::string& strategy_name, std::shared_ptr<Strategy> strategy
+        const std::string& strategy_name,
+        std::shared_ptr<Strategy::Strategy> strategy
     );
    
     void assign_strategy( const std::string & strategy_name, double time );

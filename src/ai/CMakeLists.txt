@@ -31,7 +31,7 @@ set (SOURCES
     robot_behavior/robot_behavior.cpp
     Ai.cpp
     AiData.cpp
-    strategy/Manager.cpp
+    manager/Manager.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
     strategy/sandbox.cpp
