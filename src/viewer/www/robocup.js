@@ -147,21 +147,6 @@ function Viewer()
             this.resetRatio();
         }
 
-        ctx.fillStyle = '#aaa';
-        ctx.font = '12pt sans';
-        if (this.mousePos) {
-            var pos = this.mousePosMeters();
-
-            ctx.fillText("X: "+pos[0].toFixed(2)+"m, Y: "+pos[1].toFixed(2)+"m", 10, 20);
-
-            // Moving the view offset
-            if (this.dragging) {
-                var dx = (this.mousePos[0] - this.dragBegin[0])/this.ratio;
-                var dy = -(this.mousePos[1]- this.dragBegin[1])/this.ratio;
-                this.viewOffset = [this.startOffset[0] + dx, this.startOffset[1] + dy];
-            }
-        }
-
         // Translating to the center
         ctx.translate(this.width/2, this.height/2);
 
@@ -214,7 +199,26 @@ function Viewer()
         // Drawing the ball
         this.drawBall();
 
+        // Drawing annotations
+        this.drawAnnotations();
+
         ctx.restore();
+
+        // Drawing texts
+        ctx.fillStyle = '#aaa';
+        ctx.font = '12pt sans';
+        if (this.mousePos) {
+            var mpos = this.mousePosMeters();
+
+            ctx.fillText("X: "+mpos[0].toFixed(2)+"m, Y: "+mpos[1].toFixed(2)+"m", 10, 20);
+
+            // Moving the view offset
+            if (this.dragging) {
+                var dx = (this.mousePos[0] - this.dragBegin[0])/this.ratio;
+                var dy = -(this.mousePos[1]- this.dragBegin[1])/this.ratio;
+                this.viewOffset = [this.startOffset[0] + dx, this.startOffset[1] + dy];
+            }
+        }
 
         // Drawing text messages
         ctx.save();
@@ -377,6 +381,59 @@ function Viewer()
             this.addText('ball', pos[0]+0.15, -pos[1]-0.15, {color: 'orange'});
             this.addText('x:'+pos[0].toFixed(2)+'m', pos[0]+0.15, -pos[1], {color: 'orange'});
             this.addText('y:'+pos[1].toFixed(2)+'m', pos[0]+0.15, -pos[1]+0.15, {color: 'orange'});
+        }
+    };
+
+    this.drawAnnotations = function()
+    {
+        var ctx = this.ctx;
+        var annotations = JSON.parse(api.getAnnotations());
+
+        for (var k in annotations) {
+            var annotation = annotations[k];
+            ctx.fillStyle = annotation.color;
+            ctx.strokeStyle = annotation.color;
+            if (annotation.dashed) {
+                ctx.setLineDash([0.02, 0.02]);
+            } else {
+                ctx.setLineDash([]);
+            }
+
+            ctx.beginPath();
+            switch (annotation.type) {
+                case "circle": {
+                    ctx.arc(annotation.x, annotation.y, annotation.r, 0, Math.PI*2);
+                    ctx.stroke();
+                }
+                break;
+                case "arrow": {
+                    ctx.save();
+                    ctx.moveTo(annotation.x, annotation.y);
+                    ctx.lineTo(annotation.toX, annotation.toY);
+
+                    ctx.moveTo(annotation.toX, annotation.toY);
+                    var d = 0.12;
+                    var alpha = Math.atan2(annotation.y-annotation.toY, annotation.x-annotation.toX);
+                    ctx.lineTo(annotation.toX + Math.cos(alpha+0.4)*d,
+                    annotation.toY + Math.sin(alpha+0.4)*d);
+
+                    ctx.moveTo(annotation.toX, annotation.toY);
+                    ctx.lineTo(annotation.toX + Math.cos(alpha-0.4)*d,
+                    annotation.toY + Math.sin(alpha-0.4)*d);
+
+                    ctx.stroke();
+                    ctx.restore();
+                }
+                break;
+                case "cross": {
+                    ctx.moveTo(annotation.x - 0.1, annotation.y - 0.1);
+                    ctx.lineTo(annotation.x + 0.1, annotation.y + 0.1);
+                    ctx.moveTo(annotation.x - 0.1, annotation.y + 0.1);
+                    ctx.lineTo(annotation.x + 0.1, annotation.y - 0.1);
+                    ctx.stroke();
+                }
+                break;
+            }
         }
     };
 
@@ -643,7 +700,7 @@ function Manager(viewer)
 
             var button = function(selector, callback, evt) {
                 if (typeof(evt) == 'undefined') {
-                    evt = 'click'
+                    evt = 'click';
                 }
                 $('.robots '+selector).on(evt, function() {
                     var id = parseInt($(this).attr('rel'));
@@ -730,6 +787,13 @@ function Manager(viewer)
 
         $('.robots-warning').hide();
 
+        var robotWarning = function(div, text)
+        {
+            div.find('.robot-warning').show();
+            div.find('.robot-warning-text').show();
+            div.find('.robot-warning-text').text(text);
+            $('.robots-warning').show();
+        };
 
         for (var k in robots[ourColor]) {
             var robot = robots[ourColor][k];
@@ -738,14 +802,6 @@ function Manager(viewer)
             var div = $('.robot-'+k);
             div.find('.robot-warning').hide();
             div.find('.robot-warning-text').hide();
-
-            var robotWarning = function(text)
-            {
-                div.find('.robot-warning').show();
-                div.find('.robot-warning-text').show();
-                div.find('.robot-warning-text').text(text);
-                $('.robots-warning').show();
-            };
 
             if (robot.present) {
                 div.find('.vision-status').addClass('ok');
@@ -759,7 +815,7 @@ function Manager(viewer)
             if (!simulation) {
                 if (robot.com) {
                     if (!robot.driversOk) {
-                        robotWarning("Drivers errors");
+                        robotWarning(div, "Drivers errors");
                     }
 
                     var voltage_min = 3.6*6;
@@ -772,7 +828,7 @@ function Manager(viewer)
                     div.find('.voltage-progress').css('width', Math.round(charge*100)+'%');
 
                     if (charge < 0.15) {
-                        robotWarning("Low voltage "+robot.voltage+"V");
+                        robotWarning(div, "Low voltage "+robot.voltage+"V");
                     }
 
                     var cap_max = 180;
@@ -785,7 +841,7 @@ function Manager(viewer)
                     div.find('.com-status').addClass('ok');
                 } else {
                     if (robot.enabled) {
-                        robotWarning("No com");
+                        robotWarning(div, "No com");
                     }
                     div.find('.com-status').removeClass('ok');
                 }

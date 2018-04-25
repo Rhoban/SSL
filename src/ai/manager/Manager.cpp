@@ -1,12 +1,12 @@
 #include "Manager.h"
 
 // The different strategies
-#include "halt.h"
-#include "tare_and_synchronize.h"
-#include "sandbox.h"
+#include <strategy/halt.h>
+#include <strategy/tare_and_synchronize.h>
+#include <strategy/sandbox.h>
 
 namespace RhobanSSL {
-namespace Strategy {
+namespace Manager {
 
 void Manager::declare_team_ids(
     const std::list<int> & team_ids
@@ -26,22 +26,31 @@ Manager::Manager(
 {
     current_strategy_name = "";
 
-    register_strategy( Halt::name, std::shared_ptr<Strategy>( new Halt() ) );
     register_strategy(
-        Tare_and_synchronize::name,
-        std::shared_ptr<Strategy>( new Tare_and_synchronize() )
+        Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Halt() 
+        )
     );
     register_strategy(
-        Sandbox::name,
-        std::shared_ptr<Strategy>( new Sandbox(game_state) )
+        Strategy::Tare_and_synchronize::name,
+        std::shared_ptr<Strategy::Strategy>( 
+            new Strategy::Tare_and_synchronize()
+        )
+    );
+    register_strategy(
+        Strategy::Sandbox::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Sandbox(game_state)
+        )
     );
     sandbox = false;
     start = -1.0;
-    assign_strategy( Halt::name, 0.0, team_ids ); // TODO TIME !
+    assign_strategy( Strategy::Halt::name, 0.0, team_ids ); // TODO TIME !
 }
 
 void Manager::register_strategy(
-    const std::string& strategy_name, std::shared_ptr<Strategy>  strategy
+    const std::string& strategy_name,
+    std::shared_ptr<Strategy::Strategy>  strategy
 ){
     assert( strategies.find(strategy_name) == strategies.end() );
     strategies[strategy_name] = strategy;
@@ -70,29 +79,34 @@ void Manager::analyse_data(double time){
 void Manager::choose_a_strategy(double time){
     if(start==-1.0){ 
         assign_strategy(
-            Tare_and_synchronize::name, time, 
-            team_ids 
+            Strategy::Tare_and_synchronize::name, time,
+            team_ids
         );
         start = time;
         return;
     }
 
     if( 
-        ! get_strategy<Tare_and_synchronize>().is_tared_and_synchronized()
+        ! get_strategy<Strategy::Tare_and_synchronize>().is_tared_and_synchronized()
     ){
         return;
     }
 
     if( ! sandbox ){
         assign_strategy(
-            Sandbox::name, time, team_ids 
+            Strategy::Sandbox::name, time,
+            team_ids
         );
         sandbox = true;
     }
 }
 
 void Manager::update_strategies(double time){
-    for( std::pair< std::string, std::shared_ptr<Strategy> > elem : strategies ){
+    for(
+        std::pair< 
+            std::string, std::shared_ptr<Strategy::Strategy> 
+        > elem : strategies
+    ){
         elem.second->update(time);
     }
 }
@@ -123,7 +137,7 @@ void Manager::assign_behavior_to_robots(
     );
 }
 
-Strategy & Manager::current_strategy(){
+Strategy::Strategy & Manager::current_strategy(){
     return *strategies.at(current_strategy_name);
 }
 

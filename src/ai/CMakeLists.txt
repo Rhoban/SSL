@@ -31,7 +31,7 @@ set (SOURCES
     robot_behavior/robot_behavior.cpp
     Ai.cpp
     AiData.cpp
-    strategy/Manager.cpp
+    manager/Manager.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
     strategy/sandbox.cpp
@@ -52,6 +52,7 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/Referee.cpp
+    annotations/Annotations.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
