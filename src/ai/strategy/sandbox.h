@@ -8,15 +8,6 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-
-class TeamId {
-    public:
-    static const int goalie_id; 
-    static const int shooter_id;
-    static const int follower_id; 
-};
-
-
 class Sandbox : public Strategy {
     private:
         Ai::AiData & game_state;

@@ -47,7 +47,7 @@ void Tare_and_synchronize::assign_behavior_to_robots(
 ){
     if( ! behavior_was_assigned ){
         for(
-            int id: get_robot_affectation() 
+            int id: get_robot_ids() 
         ){
             assign_behavior(
                 id, std::shared_ptr<RobotBehavior>(

@@ -1,5 +1,5 @@
-#ifndef __STRATEGY__MANAGER__H__
-#define __STRATEGY__MANAGER__H__
+#ifndef __MANAGER__MANAGER__H__
+#define __MANAGER__MANAGER__H__
 
 #include <strategy/Strategy.h>
 #include <robot_behavior/robot_behavior.h>
@@ -7,14 +7,15 @@
 #include <map>
 #include <memory>
 #include <AiData.h>
-#include <list>
+#include <vector>
 
 namespace RhobanSSL {
 namespace Manager {
 
 class Manager {
     private:
-    std::list<int> team_ids;
+    int goalie_id;
+    std::vector<int> team_ids;
 
     std::string current_strategy_name;
     std::map< std::string, std::shared_ptr<Strategy::Strategy>> strategies;
@@ -25,11 +26,15 @@ class Manager {
     bool sandbox;
     public:
 
-    void declare_team_ids(
-        const std::list<int> & team_ids
+    void declare_goalie_id(
+        int goalie_id
     );
-    const std::list<int> & get_team_ids() const;
-    
+    void declare_team_ids(
+        const std::vector<int> & team_ids
+    );
+    const std::vector<int> & get_team_ids() const;
+    int get_goalie_id() const;   
+ 
     Manager(
         Ai::AiData & game_state,
         const Referee & referee
@@ -55,7 +60,7 @@ class Manager {
    
     void assign_strategy(
         const std::string & strategy_name, double time,
-        const std::list<int> & robot_ids
+        const std::vector<int> & robot_ids
     );
  
     void update(double time);

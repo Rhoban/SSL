@@ -8,16 +8,6 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-#ifdef SSL_SIMU
-const int TeamId::goalie_id = 5; 
-const int TeamId::shooter_id = 0;
-const int TeamId::follower_id = 3;
-#else
-const int TeamId::goalie_id = 8; 
-const int TeamId::shooter_id = 5;
-const int TeamId::follower_id = 3;
-#endif
-
 const std::string Sandbox::name="sandbox";
 
 int Sandbox::min_robots() const {
@@ -50,8 +40,12 @@ void Sandbox::assign_behavior_to_robots(
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
+        int shooter_id = get_robot_ids()[0];
+        //int shooter_id = TeamId::shooter_id;      
+        int follower_id = get_robot_ids()[1];
+        //int follower_id = TeamId::follower_id;
         for(
-            int id : get_robot_affectation()
+            int id : get_robot_ids()
         ){
             assign_behavior(
                 id, std::shared_ptr<RobotBehavior>(
@@ -66,7 +60,7 @@ void Sandbox::assign_behavior_to_robots(
         );
         const Ai::Robot & robot_follower = game_state.robots[
             Vision::Ally
-        ][TeamId::follower_id];
+        ][follower_id];
         Eigen::Vector2d follower_position(
             robot_follower.get_movement().linear_position(time).getX(),
             robot_follower.get_movement().linear_position(time).getY()
@@ -88,7 +82,7 @@ void Sandbox::assign_behavior_to_robots(
             game_state.constants.rotation_velocity_limit
         );
         assign_behavior( 
-            TeamId::follower_id, std::shared_ptr<
+            follower_id, std::shared_ptr<
                 RobotBehavior
             >( follower )
         ); 
@@ -117,7 +111,7 @@ void Sandbox::assign_behavior_to_robots(
             game_state.constants.rotation_velocity_limit
         );
         assign_behavior(
-            TeamId::goalie_id, std::shared_ptr<
+            get_goalie(), std::shared_ptr<
                 RobotBehavior
             >( goalie )
         ); 
@@ -155,7 +149,7 @@ void Sandbox::assign_behavior_to_robots(
             ball.get_movement().linear_position(time).getX(),
             ball.get_movement().linear_position(time).getY()
         );
-        const Ai::Robot & robot = game_state.robots[Vision::Ally][TeamId::shooter_id];
+        const Ai::Robot & robot = game_state.robots[Vision::Ally][shooter_id];
         Eigen::Vector2d robot_position(
             robot.get_movement().linear_position(time).getX(),
             robot.get_movement().linear_position(time).getY()
@@ -168,7 +162,7 @@ void Sandbox::assign_behavior_to_robots(
             time, dt 
         );
         assign_behavior( 
-            TeamId::shooter_id, std::shared_ptr<
+            shooter_id, std::shared_ptr<
                 RobotBehavior
             >( shooter )
         ); 

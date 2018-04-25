@@ -111,10 +111,18 @@ AI::AI(
     running = true;
    
     init_robot_behaviors();
-    std::list<int> robot_ids;
+    std::vector<int> robot_ids( robot_behaviors.size() );
+    int i = 0;
     for( auto elem : robot_behaviors ){
-        robot_ids.push_front( elem.first );
+        robot_ids[i] = elem.first;
+        i++;
     } 
+    #ifdef SSL_SIMU
+    int goalie_id = 5;
+    #else
+    int goalie_id = 8;
+    #endif
+    strategy_manager.declare_goalie_id( goalie_id );
     strategy_manager.declare_team_ids( robot_ids );
 
 }

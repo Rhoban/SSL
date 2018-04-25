@@ -25,7 +25,7 @@ void Halt::assign_behavior_to_robots(
     double time, double dt
 ){
     for(
-        int id : get_robot_affectation()
+        int id : get_robot_ids()
     ){
         assign_behavior(
             id, std::shared_ptr<RobotBehavior>(

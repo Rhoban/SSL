@@ -8,12 +8,22 @@
 namespace RhobanSSL {
 namespace Manager {
 
+
+
+void Manager::declare_goalie_id(
+    int goalie_id
+){
+    this->goalie_id = goalie_id;
+}
+int Manager::get_goalie_id() const {
+    return goalie_id;
+}
 void Manager::declare_team_ids(
-    const std::list<int> & team_ids
+    const std::vector<int> & team_ids
 ){
     this->team_ids = team_ids;
 }
-const std::list<int> & Manager::get_team_ids() const {
+const std::vector<int> & Manager::get_team_ids() const {
     return team_ids;
 }
 
@@ -58,7 +68,7 @@ void Manager::register_strategy(
 
 void Manager::assign_strategy(
     const std::string & strategy_name, 
-    double time, const std::list<int> & robot_ids
+    double time, const std::vector<int> & robot_ids
 ){
     assert( strategies.find(strategy_name) != strategies.end() );
     if( current_strategy_name != ""){
@@ -66,6 +76,7 @@ void Manager::assign_strategy(
     }
     current_strategy_name = strategy_name;
     
+    current_strategy().set_goalie( goalie_id );
     current_strategy().set_robot_affectation( robot_ids );
     current_strategy().start(time);
 }

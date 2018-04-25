@@ -11,7 +11,10 @@ namespace Strategy {
 class Strategy {
     private:
     int goalie_id;
-    std::list<int> robot_ids;
+    std::vector<int> robot_ids;
+    std::vector<int> player_ids;
+
+    void update_player_ids();
 
     public:
 
@@ -20,8 +23,10 @@ class Strategy {
     void set_goalie( int id );
     int get_goalie() const;   
 
-    void set_robot_affectation( const std::list<int> & robot_ids );
-    const std::list<int> & get_robot_affectation() const;
+    void set_robot_affectation( const std::vector<int> & robot_ids );
+    
+    const std::vector<int> & get_robot_ids() const;
+    const std::vector<int> & get_player_ids() const;
 
     virtual void update(double time){};
 
