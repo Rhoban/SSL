@@ -4,14 +4,7 @@
 #include <rhoban_geometry/point.h>
 #include <math/vector.h>
 #include <list>
-
-
-struct Obstacle {
-    double radius;
-    rhoban_geometry::Point linear_position;
-	
-    Obstacle( double radius, const rhoban_geometry::Point & linear_position );
-};
+#include "Obstacle.h"
 
 class Avoid_obstacle {
    public:
