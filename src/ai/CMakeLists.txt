@@ -45,6 +45,8 @@ set (SOURCES
     referee/Referee.cpp
     makers/avoid_obstacle.cpp
     makers/algo1.cpp
+    makers/space_discretization.cpp
+    makers/Astar.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
@@ -77,6 +79,8 @@ if(CATKIN_ENABLE_TESTING)
     ai/robot_behavior/test_robot_behavior.cpp
     makers/test_avoid_obstacle.cpp
     makers/test_algo1.cpp
+    makers/test_space_discretization.cpp
+    makers/test_Astar.cpp
   )
 
   foreach(test_source ${TEST_SOURCES})
