@@ -1,24 +1,25 @@
-#ifndef __MANAGER__MANAGER__H__
-#define __MANAGER__MANAGER__H__
+#ifndef __MANAGER__MANUAL__H__
+#define __MANAGER__MANUAL__H__
 
-#include <strategy/Strategy.h>
-#include <robot_behavior/robot_behavior.h>
-#include <map>
-#include <memory>
-#include <vector>
+#include "Manager.h"
 
 namespace RhobanSSL {
 namespace Manager {
 
-class Manager {
+class Manual {
     private:
     int goalie_id;
     std::vector<int> team_ids;
 
     std::string current_strategy_name;
     std::map< std::string, std::shared_ptr<Strategy::Strategy>> strategies;
+    Ai::AiData& game_state;
+    const Referee & referee;
     
+    double start;
+    bool sandbox;
     public:
+
     void declare_goalie_id(
         int goalie_id
     );
@@ -27,6 +28,11 @@ class Manager {
     );
     const std::vector<int> & get_team_ids() const;
     int get_goalie_id() const;   
+ 
+    Manual(
+        Ai::AiData & game_state,
+        const Referee & referee
+    );
 
     template <typename STRATEGY>
     STRATEGY & get_strategy( const std::string & name ){
@@ -51,19 +57,17 @@ class Manager {
         const std::vector<int> & robot_ids
     );
  
-    virtual void update(double time) = 0;
-
-    virtual void update_strategies(double time);
-    virtual void update_current_strategy(double time);
-
-    virtual void assign_behavior_to_robots(
+    void update(double time);
+    void analyse_data(double time);
+    void choose_a_strategy(double time);
+    void update_strategies(double time);
+    void update_current_strategy(double time);
+    void assign_behavior_to_robots(
         std::map<
             int, 
             std::shared_ptr<RobotBehavior>
         > & robot_behaviors, double time, double dt
     );
-
-    virtual ~Manager();
 };
 
 };

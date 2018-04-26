@@ -46,7 +46,7 @@ namespace RhobanSSL
 
         Data & data;
         Referee referee;
-        Manager::Manager strategy_manager;
+        std::shared_ptr<Manager::Manager> strategy_manager;
         
         Control update_robot( 
             RobotBehavior & robot_behavior,

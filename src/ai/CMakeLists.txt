@@ -32,6 +32,8 @@ set (SOURCES
     Ai.cpp
     AiData.cpp
     manager/Manager.cpp
+    manager/Match.cpp
+    manager/Manual.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
     strategy/sandbox.cpp

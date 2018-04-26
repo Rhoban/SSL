@@ -3,6 +3,8 @@
 #include <cmath>
 #include <unistd.h>
 #include <robot_behavior/do_nothing.h>
+#include <manager/Manual.h>
+#include <manager/Match.h>
 
 namespace RhobanSSL
 {
@@ -105,8 +107,7 @@ AI::AI(
 ): 
     data(data), 
     commander(commander),
-    current_dt(0.0),
-    strategy_manager(game_state, referee)
+    current_dt(0.0)
 {
     running = true;
    
@@ -122,8 +123,12 @@ AI::AI(
     #else
     int goalie_id = 8;
     #endif
-    strategy_manager.declare_goalie_id( goalie_id );
-    strategy_manager.declare_team_ids( robot_ids );
+    strategy_manager = std::shared_ptr<Manager::Manager>(
+        new Manager::Manual(game_state)
+        //new Manager::Match(game_state, referee)
+    );
+    strategy_manager->declare_goalie_id( goalie_id );
+    strategy_manager->declare_team_ids( robot_ids );
 
 }
 
@@ -190,8 +195,8 @@ void AI::run(){
         
         game_state.update( visionData );
         referee.update(current_time);
-        strategy_manager.update(current_time);
-        strategy_manager.assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
+        strategy_manager->update(current_time);
+        strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
         update_robots( );
     }
 }
