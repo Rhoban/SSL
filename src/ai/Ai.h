@@ -7,7 +7,7 @@
 #include "AiData.h"
 #include <referee/Referee.h>
 #include <core/machine_state.h>
-#include <strategy/Manager.h>
+#include <manager/Manager.h>
 
 namespace RhobanSSL
 {
@@ -39,14 +39,14 @@ namespace RhobanSSL
             std::shared_ptr<RobotBehavior>
         > robot_behaviors;
         
-        void stop_all_robots();
+        void init_robot_behaviors();
         void update_robots( );
         double current_time;
         double current_dt;
 
         Data & data;
         Referee referee;
-        Strategy::Manager strategy_manager;
+        std::shared_ptr<Manager::Manager> strategy_manager;
         
         Control update_robot( 
             RobotBehavior & robot_behavior,

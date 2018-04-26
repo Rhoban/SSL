@@ -8,17 +8,16 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-#ifdef SSL_SIMU
-const int TeamId::goalie_id = 5; 
-const int TeamId::shooter_id = 0;
-const int TeamId::follower_id = 3;
-#else
-const int TeamId::goalie_id = 8; 
-const int TeamId::shooter_id = 5;
-const int TeamId::follower_id = 3;
-#endif
-
 const std::string Sandbox::name="sandbox";
+
+int Sandbox::min_robots() const {
+    return 2;        
+}
+
+int Sandbox::max_robots() const {
+    return -1;
+}
+
 
 Sandbox::Sandbox(Ai::AiData & game_state):
     game_state(game_state)
@@ -35,19 +34,23 @@ void Sandbox::stop(double time){
 }
 
 void Sandbox::assign_behavior_to_robots(
-    std::map<
-        int, 
-        std::shared_ptr<RobotBehavior>
-    > & robot_behaviors,
+    std::function<
+        void (int, std::shared_ptr<RobotBehavior>)
+    > assign_behavior,
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
+        int shooter_id = robot_id(0);
+        //int shooter_id = TeamId::shooter_id;      
+        int follower_id = robot_id(1);
+        //int follower_id = TeamId::follower_id;
         for(
-            std::pair<int, std::shared_ptr<RobotBehavior> > elem : 
-            robot_behaviors 
+            int id : get_robot_ids()
         ){
-            robot_behaviors[ elem.first ] = std::shared_ptr<RobotBehavior>(
-                new DoNothing()
+            assign_behavior(
+                id, std::shared_ptr<RobotBehavior>(
+                    new DoNothing()
+                )
             );
         }
 
@@ -57,7 +60,7 @@ void Sandbox::assign_behavior_to_robots(
         );
         const Ai::Robot & robot_follower = game_state.robots[
             Vision::Ally
-        ][TeamId::follower_id];
+        ][follower_id];
         Eigen::Vector2d follower_position(
             robot_follower.get_movement().linear_position(time).getX(),
             robot_follower.get_movement().linear_position(time).getY()
@@ -78,9 +81,11 @@ void Sandbox::assign_behavior_to_robots(
             game_state.constants.translation_velocity_limit,
             game_state.constants.rotation_velocity_limit
         );
-        robot_behaviors[TeamId::follower_id] = std::shared_ptr<
-            RobotBehavior
-        >( follower ); 
+        assign_behavior( 
+            follower_id, std::shared_ptr<
+                RobotBehavior
+            >( follower )
+        ); 
 
         // We create a goalie :    
         Goalie* goalie = new Goalie(
@@ -105,9 +110,11 @@ void Sandbox::assign_behavior_to_robots(
             game_state.constants.translation_velocity_limit,
             game_state.constants.rotation_velocity_limit
         );
-        robot_behaviors[TeamId::goalie_id] = std::shared_ptr<
-            RobotBehavior
-        >( goalie ); 
+        assign_behavior(
+            get_goalie(), std::shared_ptr<
+                RobotBehavior
+            >( goalie )
+        ); 
 
         #if 1
         // We create a shooter :
@@ -142,7 +149,7 @@ void Sandbox::assign_behavior_to_robots(
             ball.get_movement().linear_position(time).getX(),
             ball.get_movement().linear_position(time).getY()
         );
-        const Ai::Robot & robot = game_state.robots[Vision::Ally][TeamId::shooter_id];
+        const Ai::Robot & robot = game_state.robots[Vision::Ally][shooter_id];
         Eigen::Vector2d robot_position(
             robot.get_movement().linear_position(time).getX(),
             robot.get_movement().linear_position(time).getY()
@@ -154,9 +161,11 @@ void Sandbox::assign_behavior_to_robots(
             ball_position, robot_position, robot_orientation, 
             time, dt 
         );
-        robot_behaviors[TeamId::shooter_id] = std::shared_ptr<
-            RobotBehavior
-        >( shooter ); 
+        assign_behavior( 
+            shooter_id, std::shared_ptr<
+                RobotBehavior
+            >( shooter )
+        ); 
         #endif
 
         behavior_has_been_assigned = true;

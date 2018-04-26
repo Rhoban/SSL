@@ -16,6 +16,9 @@ class Tare_and_synchronize : public Strategy {
         double start_waiting_time_for_synchro;
 
     public:
+        int min_robots() const;
+        int max_robots() const;
+
         bool is_tared_and_synchronized() const;
 
         static const std::string name;
@@ -25,10 +28,9 @@ class Tare_and_synchronize : public Strategy {
         void update(double time);
         
         void assign_behavior_to_robots(
-            std::map<
-                int, 
-                std::shared_ptr<RobotBehavior>
-            > & robot_behaviors,
+            std::function<
+                void (int, std::shared_ptr<RobotBehavior>)
+            > assign_behavior,
             double time, double dt
         );
         virtual ~Tare_and_synchronize();

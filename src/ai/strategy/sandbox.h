@@ -8,20 +8,14 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-
-class TeamId {
-    public:
-    static const int goalie_id; 
-    static const int shooter_id;
-    static const int follower_id; 
-};
-
-
 class Sandbox : public Strategy {
     private:
         Ai::AiData & game_state;
         bool behavior_has_been_assigned;
     public:
+        int min_robots() const;
+        int max_robots() const;
+
         Sandbox(Ai::AiData & game_state);
 
         static const std::string name;
@@ -30,10 +24,9 @@ class Sandbox : public Strategy {
         void stop(double time);
         
         void assign_behavior_to_robots(
-            std::map<
-                int, 
-                std::shared_ptr<RobotBehavior>
-            > & robot_behaviors,
+            std::function<
+                void (int, std::shared_ptr<RobotBehavior>)
+            > assign_behavior,
             double time, double dt
         );
         virtual ~Sandbox();

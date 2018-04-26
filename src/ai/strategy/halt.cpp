@@ -6,6 +6,12 @@ namespace Strategy {
 
 const std::string Halt::name="halt";
 
+int Halt::min_robots() const {
+    return 0;
+}
+int Halt::max_robots() const {
+    return -1;
+}
 void Halt::start(double time){
 }
 
@@ -13,18 +19,18 @@ void Halt::stop(double time){
 }
 
 void Halt::assign_behavior_to_robots(
-    std::map<
-        int, 
-        std::shared_ptr<RobotBehavior>
-    > & robot_behaviors,
+    std::function<
+        void (int, std::shared_ptr<RobotBehavior>)
+    > assign_behavior,
     double time, double dt
 ){
     for(
-        std::pair<int, std::shared_ptr<RobotBehavior> > elem : 
-        robot_behaviors 
+        int id : get_robot_ids()
     ){
-        robot_behaviors[ elem.first ] = std::shared_ptr<RobotBehavior>(
-            new DoNothing()
+        assign_behavior(
+            id, std::shared_ptr<RobotBehavior>(
+                new DoNothing()
+            )
         );
     }
 }

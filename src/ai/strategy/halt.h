@@ -10,16 +10,18 @@ namespace Strategy {
 
 class Halt : public Strategy {
     public:
+        int min_robots() const;
+        int max_robots() const;
+
         static const std::string name;
 
         void start(double time);
         void stop(double time);
         
         void assign_behavior_to_robots(
-            std::map<
-                int, 
-                std::shared_ptr<RobotBehavior>
-            > & robot_behaviors,
+            std::function<
+                void (int, std::shared_ptr<RobotBehavior>)
+            > assign_behavior,
             double time, double dt
         );
         virtual ~Halt();

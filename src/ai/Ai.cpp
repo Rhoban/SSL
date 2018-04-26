@@ -3,6 +3,8 @@
 #include <cmath>
 #include <unistd.h>
 #include <robot_behavior/do_nothing.h>
+#include <manager/Manual.h>
+#include <manager/Match.h>
 
 namespace RhobanSSL
 {
@@ -89,7 +91,7 @@ Control AI::update_robot(
     return Control::make_ignored();
 }
 
-void AI::stop_all_robots(){
+void AI::init_robot_behaviors(){
     for( int k=0; k<Vision::Robots; k++ ){
         robot_behaviors[k] = std::shared_ptr<
             RobotBehavior
@@ -105,12 +107,28 @@ AI::AI(
 ): 
     data(data), 
     commander(commander),
-    current_dt(0.0),
-    strategy_manager(game_state, referee)
+    current_dt(0.0)
 {
     running = true;
    
-    stop_all_robots();
+    init_robot_behaviors();
+    std::vector<int> robot_ids( robot_behaviors.size() );
+    int i = 0;
+    for( auto elem : robot_behaviors ){
+        robot_ids[i] = elem.first;
+        i++;
+    } 
+    #ifdef SSL_SIMU
+    int goalie_id = 5;
+    #else
+    int goalie_id = 8;
+    #endif
+    strategy_manager = std::shared_ptr<Manager::Manager>(
+        new Manager::Manual(game_state)
+        //new Manager::Match(game_state, referee)
+    );
+    strategy_manager->declare_goalie_id( goalie_id );
+    strategy_manager->declare_team_ids( robot_ids );
 
 }
 
@@ -177,8 +195,8 @@ void AI::run(){
         
         game_state.update( visionData );
         referee.update(current_time);
-        strategy_manager.update(current_time);
-        strategy_manager.assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
+        strategy_manager->update(current_time);
+        strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
         update_robots( );
     }
 }
