@@ -29,6 +29,7 @@ class Strategy {
     const std::vector<int> & get_player_ids() const;
 
     int robot_id( int id ) const;
+    int player_id( int id ) const;
 
 
     virtual void update(double time){};
