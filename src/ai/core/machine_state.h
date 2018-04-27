@@ -213,7 +213,8 @@ class AnonymousEdge : public machine_state::Edge<ID, EDGE_DATA> {
     virtual ~AnonymousEdge(){}
 };
 
-template <typename STATE_DATA, typename EDGE_DATA>
+
+template <typename ID, typename STATE_DATA, typename EDGE_DATA>
 class MachineStateFollower {
     public:
     virtual void update(
@@ -224,7 +225,53 @@ class MachineStateFollower {
         STATE_DATA & state_data, EDGE_DATA & edge_data,
         unsigned int run_number, unsigned int atomic_run_number
     ) = 0;
+    virtual void edge_run(
+        ID edge_id, STATE_DATA & state_data, EDGE_DATA & edge_data,
+        unsigned int run_number, unsigned int atomic_run_number
+    ){}; 
+    virtual void state_run(
+        ID state_id, STATE_DATA & state_data, EDGE_DATA & edge_data,
+        unsigned int run_number, unsigned int atomic_run_number
+    ){}; 
     virtual ~MachineStateFollower(){ }
+};
+
+template <typename ID, typename STATE_DATA, typename EDGE_DATA>
+struct EdgeFollower : public MachineStateFollower<ID, STATE_DATA, EDGE_DATA>
+{
+    typedef std::function<
+        void (
+            ID edge_id, STATE_DATA & state_data, EDGE_DATA & edge_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        )
+    > edge_run_type;
+
+    edge_run_type edge_run_fct;
+    
+    EdgeFollower( edge_run_type edge_run_fct ):
+         edge_run_fct( edge_run_fct )
+    {}
+
+    void update(
+        STATE_DATA & state_data, EDGE_DATA & edge_data,
+        unsigned int run_number, unsigned int atomic_run_number
+    ){}
+    void atomic_update(
+        STATE_DATA & state_data, EDGE_DATA & edge_data,
+        unsigned int run_number, unsigned int atomic_run_number
+    ){}
+    void edge_run(
+        ID edge_id, STATE_DATA & state_data, EDGE_DATA & edge_data,
+        unsigned int run_number, unsigned int atomic_run_number
+    ){
+        edge_run_fct(
+            edge_id, state_data, edge_data, run_number, atomic_run_number
+        );
+    }; 
+    void state_run(
+        ID state_id, STATE_DATA & state_data, EDGE_DATA & edge_data,
+        unsigned int run_number, unsigned int atomic_run_number
+    ){}; 
 };
 
 
@@ -244,7 +291,7 @@ class MachineState {
         std::set<ID> init_states_set;
         std::set<ID> current_states_set;
 
-        std::list<MachineStateFollower<STATE_DATA, EDGE_DATA>*> followers;
+        std::list<MachineStateFollower<ID, STATE_DATA, EDGE_DATA>*> followers;
 
         bool debug;
 
@@ -260,7 +307,7 @@ class MachineState {
         }
 
         std::set<ID> atomic_run(){
-            for( MachineStateFollower<STATE_DATA, EDGE_DATA> * follower : followers ){
+            for( MachineStateFollower<ID, STATE_DATA, EDGE_DATA> * follower : followers ){
                 follower->atomic_update(
                     state_data, edge_data,
                     run_number, atomic_run_number
@@ -271,6 +318,12 @@ class MachineState {
                 states.at( state_name )->run(
                     state_data, run_number, atomic_run_number
                 );
+		for( MachineStateFollower<ID, STATE_DATA, EDGE_DATA> * follower : followers ){
+		    follower->state_run(
+			state_name, state_data, edge_data,
+			run_number, atomic_run_number
+		    );
+		}
             }
             std::list<ID> edges_to_run;
             for( const ID & state_name : current_states_set ){
@@ -298,6 +351,12 @@ class MachineState {
             }
             for( const ID& id : edges_to_run ){
                 edges.at(id)->run(edge_data, run_number, atomic_run_number);
+		for( MachineStateFollower<ID, STATE_DATA, EDGE_DATA> * follower : followers ){
+		    follower->edge_run(
+			id, state_data, edge_data,
+			run_number, atomic_run_number
+		    );
+		}
             }
             increase_atomic_run_number();
             return new_states;
@@ -374,11 +433,27 @@ class MachineState {
         }
 
         MachineState& register_follower(
-            MachineStateFollower<STATE_DATA, EDGE_DATA> & follower
+            MachineStateFollower<ID, STATE_DATA, EDGE_DATA> & follower
         ){
             followers.push_back( &follower );
             return *this;
         }
+
+	private:
+             std::list< EdgeFollower<ID, STATE_DATA, EDGE_DATA> > edge_followers;
+
+	public:
+        void execute_at_each_edge(
+            std::function< 
+	        void (
+                    ID edge_id, STATE_DATA & state_data, EDGE_DATA & edge_data,
+                    unsigned int run_number, unsigned int atomic_run_number
+                )
+            > edge_run
+	){
+             edge_followers.push_back( EdgeFollower<ID, STATE_DATA, EDGE_DATA>(edge_run) );
+             register_follower( edge_followers.back() );
+	}
 
         MachineState( STATE_DATA & state_data, EDGE_DATA & edge_data ):
             state_data(state_data), edge_data(edge_data),
@@ -404,6 +479,11 @@ class MachineState {
             return edges.size();
         }
 
+        const Edge_t & edge(const ID & edge_id) const {
+             assert( edges.find(edge_id) != edges.end() );
+             return *edges.at(edge_id);
+        }
+
         unsigned int state_number() const {
             return states.size();
         }
@@ -424,7 +504,7 @@ class MachineState {
 
         const std::set<ID> & run(){
             for(
-                MachineStateFollower<STATE_DATA, EDGE_DATA> * follower :
+                MachineStateFollower<ID, STATE_DATA, EDGE_DATA> * follower :
                 followers
             ){
                 follower->update(
@@ -449,6 +529,10 @@ class MachineState {
         const std::set<ID> & initial_states() const {
             return init_states_set;
         }
+
+	unsigned int get_run_number() const {
+	    return run_number;
+	}
 
         std::string to_dot() const {
             std::ostringstream result;
@@ -533,8 +617,8 @@ std::ostream & operator<<(
     return out;
 }
 
-template <typename STATE_DATA, typename EDGE_DATA>
-class RisingEdge_wrapper : public MachineStateFollower<STATE_DATA, EDGE_DATA> {
+template <typename ID, typename STATE_DATA, typename EDGE_DATA>
+class RisingEdge_wrapper : public MachineStateFollower<ID, STATE_DATA, EDGE_DATA> {
     private:
     unsigned int run_number_for_last_rising;
     unsigned int atomic_run_number_for_last_rising;
@@ -550,7 +634,6 @@ class RisingEdge_wrapper : public MachineStateFollower<STATE_DATA, EDGE_DATA> {
 
     public:
 
-    template <typename I>
     RisingEdge_wrapper(
         std::function<
             bool (
@@ -558,7 +641,7 @@ class RisingEdge_wrapper : public MachineStateFollower<STATE_DATA, EDGE_DATA> {
                 unsigned int run_number, unsigned int atomic_run_number
             )
         > condition_fct,
-        MachineState<I, STATE_DATA, EDGE_DATA> & machine
+        MachineState<ID, STATE_DATA, EDGE_DATA> & machine
     ):
         run_number_for_last_rising(CLEAR_RUN_NUMBER),
         atomic_run_number_for_last_rising(CLEAR_ATOMIC_RUN_NUMBER),
@@ -596,13 +679,12 @@ class RisingEdge_wrapper : public MachineStateFollower<STATE_DATA, EDGE_DATA> {
 };
 
 
-template <typename STATE_DATA, typename EDGE_DATA>
+template <typename ID, typename STATE_DATA, typename EDGE_DATA>
 class RisingEdge {
     private:
-    std::shared_ptr< RisingEdge_wrapper<STATE_DATA, EDGE_DATA> > rising;
+    std::shared_ptr< RisingEdge_wrapper<ID, STATE_DATA, EDGE_DATA> > rising;
 
     public:
-    template <typename I>
     RisingEdge(
         std::function<
             bool (
@@ -610,10 +692,10 @@ class RisingEdge {
                 unsigned int run_number, unsigned int atomic_run_number
             )
         > condition_fct,
-        MachineState<I, STATE_DATA, EDGE_DATA> & machine
+        MachineState<ID, STATE_DATA, EDGE_DATA> & machine
     ):
         rising(
-            new RisingEdge_wrapper<STATE_DATA, EDGE_DATA>(
+            new RisingEdge_wrapper<ID, STATE_DATA, EDGE_DATA>(
                 condition_fct, machine
             )
         )
@@ -642,7 +724,9 @@ struct construct_machine_state_infrastructure {
 
     typedef machine_state::MachineState<Id, StateData, EdgeData> MachineState;
 
-    typedef machine_state::RisingEdge<StateData, EdgeData> RisingEdge;
+    typedef machine_state::RisingEdge<Id, StateData, EdgeData> RisingEdge;
+
+    typedef machine_state::MachineStateFollower<Id, StateData, EdgeData> MachineStateFollower;
 };
 
 #endif

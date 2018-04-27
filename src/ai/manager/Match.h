@@ -12,8 +12,7 @@ class Match : public Manager {
     const Referee & referee;
     Ai::AiData& game_state;
 
-    double start;
-    bool sandbox;
+    int last_referee_changement;
     
     public:
 

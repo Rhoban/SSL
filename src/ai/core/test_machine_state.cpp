@@ -1056,7 +1056,7 @@ TEST(test_machine_state, anonym_state_anonym_edge){
 
 }
 
-class Follower : public machine_state::MachineStateFollower<std::ostream, std::ostream> {
+class Follower : public machine_state::MachineStateFollower<std::string, std::ostream, std::ostream> {
     public:
         std::string name;
     

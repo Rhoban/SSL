@@ -2,42 +2,47 @@
 #include <debug.h>
 #include <core/print_collection.h>
 
-#define STATE_INIT "init" 
-#define STATE_HALTED "halted" 
-#define STATE_STOPPED "stopped" 
-#define STATE_PREPARE_KICKOFF "prepare_kickoff" 
-#define STATE_PREPARE_PENALTY "prepare_penalty" 
-#define STATE_RUNNING "running" 
-#define STATE_TIMEOUT "timeout" 
-
-#define EDGE_INIT_TO_STOPPED "stop_game_u" 
-#define EDGE_HALTED_TO_STOPPED "stop_game_h" 
-#define EDGE_PREPARE_KICKOFF_TO_STOPPED "stop_game_pk" 
-#define EDGE_PREPARE_PENALTY_TO_STOPPED "stop_game_pp" 
-#define EDGE_RUNNING_TO_STOPPED "stop_game_r" 
-#define EDGE_TIMEOUT_TO_STOPPED "stop_game_t" 
-
-#define EDGE_INIT_TO_HALTED "halt_game_u" 
-#define EDGE_STOPPED_TO_HALTED "halt_game_s" 
-#define EDGE_PREPARE_KICKOFF_TO_HALTED "halt_game_pk" 
-#define EDGE_PREPARE_PENALTY_TO_HALTED "halt_game_pp" 
-#define EDGE_RUNNING_TO_HALTED "halt_game_r" 
-#define EDGE_TIMEOUT_TO_HALTED "halt_game_t" 
-
-#define EDGE_TIMEOUT_START "timeout_start" 
-#define EDGE_FORCE_START "force_start" 
-#define EDGE_KICKOFF "kickoff" 
-#define EDGE_PENALTY "penalty" 
-#define EDGE_INDIRECT "indirect"
-#define EDGE_DIRECT "direct"
-
-#define EDGE_NORMAL_START_FOR_KICKOFF "normal_start_k"
-#define EDGE_NORMAL_START_FOR_PENALTY "normal_start_p"
-
-#define EDGE_TIMEOUT_RESUME "timeout_resume"
-#define EDGE_GOAL "goal"
-
 namespace RhobanSSL {
+
+const std::string Referee_Id::STATE_INIT = "init"; 
+const std::string Referee_Id::STATE_HALTED = "halted";
+const std::string Referee_Id::STATE_STOPPED = "stopped"; 
+const std::string Referee_Id::STATE_PREPARE_KICKOFF = "prepare_kickoff";
+const std::string Referee_Id::STATE_PREPARE_PENALTY = "prepare_penalty";
+const std::string Referee_Id::STATE_RUNNING = "running";
+const std::string Referee_Id::STATE_TIMEOUT = "timeout";
+
+const std::string Referee_Id::EDGE_INIT_TO_STOPPED = "stop_game_u";
+const std::string Referee_Id::EDGE_HALTED_TO_STOPPED = "stop_game_h"; 
+const std::string Referee_Id::EDGE_PREPARE_KICKOFF_TO_STOPPED = "stop_game_pk"; 
+const std::string Referee_Id::EDGE_PREPARE_PENALTY_TO_STOPPED = "stop_game_pp"; 
+const std::string Referee_Id::EDGE_RUNNING_TO_STOPPED = "stop_game_r"; 
+const std::string Referee_Id::EDGE_TIMEOUT_TO_STOPPED = "stop_game_t"; 
+
+const std::string Referee_Id::EDGE_INIT_TO_HALTED = "halt_game_u"; 
+const std::string Referee_Id::EDGE_STOPPED_TO_HALTED = "halt_game_s"; 
+const std::string Referee_Id::EDGE_PREPARE_KICKOFF_TO_HALTED = "halt_game_pk"; 
+const std::string Referee_Id::EDGE_PREPARE_PENALTY_TO_HALTED = "halt_game_pp"; 
+const std::string Referee_Id::EDGE_RUNNING_TO_HALTED = "halt_game_r"; 
+const std::string Referee_Id::EDGE_TIMEOUT_TO_HALTED = "halt_game_t"; 
+
+const std::string Referee_Id::EDGE_TIMEOUT_START = "timeout_start"; 
+const std::string Referee_Id::EDGE_FORCE_START = "force_start"; 
+const std::string Referee_Id::EDGE_KICKOFF_YELLOW = "kickoff_yellow"; 
+const std::string Referee_Id::EDGE_KICKOFF_BLUE = "kickoff_blue"; 
+const std::string Referee_Id::EDGE_PENALTY = "penalty"; 
+const std::string Referee_Id::EDGE_INDIRECT = "indirect";
+const std::string Referee_Id::EDGE_DIRECT = "direct";
+
+const std::string Referee_Id::EDGE_NORMAL_START_FOR_KICKOFF = "normal_start_k";
+const std::string Referee_Id::EDGE_NORMAL_START_FOR_PENALTY = "normal_start_p";
+
+const std::string Referee_Id::EDGE_TIMEOUT_RESUME = "timeout_resume";
+const std::string Referee_Id::EDGE_GOAL = "goal";
+
+
+
+
 
 Referee_data::Referee_data():
     datas(2), last_time(0.0), last_command_counter(0)
@@ -90,154 +95,178 @@ bool command_is_one_of_(
 
 
 Referee::Referee():
+    edge_entropy_number(0),
     machine_state(referee_data, referee_data)
 {
     machine_state
-        .add_state( STATE_INIT ) // Referee is lost
-        .add_state( STATE_HALTED )
-        .add_state( STATE_STOPPED )
-        .add_state( STATE_PREPARE_KICKOFF )
-        .add_state( STATE_PREPARE_PENALTY )
-        .add_state( STATE_RUNNING )
-        .add_state( STATE_TIMEOUT )
-        .add_init_state( STATE_INIT )
+        .add_state( Referee_Id::STATE_INIT ) // Referee is lost
+        .add_state( Referee_Id::STATE_HALTED )
+        .add_state( Referee_Id::STATE_STOPPED )
+        .add_state( Referee_Id::STATE_PREPARE_KICKOFF )
+        .add_state( Referee_Id::STATE_PREPARE_PENALTY )
+        .add_state( Referee_Id::STATE_RUNNING )
+        .add_state( Referee_Id::STATE_TIMEOUT )
+        .add_init_state( Referee_Id::STATE_INIT )
     ;
 
 
     machine_state  
         .add_edge(
-            EDGE_INIT_TO_STOPPED,
-            STATE_INIT, STATE_STOPPED,
+            Referee_Id::EDGE_INIT_TO_STOPPED,
+            Referee_Id::STATE_INIT, Referee_Id::STATE_STOPPED,
             command_is_<SSL_Referee::STOP>
         )
         .add_edge(
-            EDGE_HALTED_TO_STOPPED,
-            STATE_HALTED, STATE_STOPPED,
+            Referee_Id::EDGE_HALTED_TO_STOPPED,
+            Referee_Id::STATE_HALTED, Referee_Id::STATE_STOPPED,
             command_is_<SSL_Referee::STOP>
         )
         .add_edge(
-            EDGE_PREPARE_KICKOFF_TO_STOPPED,
-            STATE_PREPARE_KICKOFF, STATE_STOPPED,
+            Referee_Id::EDGE_PREPARE_KICKOFF_TO_STOPPED,
+            Referee_Id::STATE_PREPARE_KICKOFF, Referee_Id::STATE_STOPPED,
             command_is_<SSL_Referee::STOP>
         )
         .add_edge(
-            EDGE_PREPARE_PENALTY_TO_STOPPED,
-            STATE_PREPARE_PENALTY, STATE_STOPPED,
+            Referee_Id::EDGE_PREPARE_PENALTY_TO_STOPPED,
+            Referee_Id::STATE_PREPARE_PENALTY, Referee_Id::STATE_STOPPED,
             command_is_<SSL_Referee::STOP>
         )
         .add_edge(
-            EDGE_RUNNING_TO_STOPPED,
-            STATE_RUNNING, STATE_STOPPED,
+            Referee_Id::EDGE_RUNNING_TO_STOPPED,
+            Referee_Id::STATE_RUNNING, Referee_Id::STATE_STOPPED,
             command_is_<SSL_Referee::STOP>
         )
         .add_edge(
-            EDGE_TIMEOUT_TO_STOPPED,
-            STATE_TIMEOUT, STATE_STOPPED,
+            Referee_Id::EDGE_TIMEOUT_TO_STOPPED,
+            Referee_Id::STATE_TIMEOUT, Referee_Id::STATE_STOPPED,
             command_is_<SSL_Referee::STOP>
         )
     ;
    
     machine_state  
         .add_edge(
-            EDGE_INIT_TO_HALTED,
-            STATE_INIT, STATE_HALTED,
+            Referee_Id::EDGE_INIT_TO_HALTED,
+            Referee_Id::STATE_INIT, Referee_Id::STATE_HALTED,
             command_is_<SSL_Referee::HALT>
         )
         .add_edge(
-            EDGE_STOPPED_TO_HALTED,
-            STATE_STOPPED, STATE_HALTED,
+            Referee_Id::EDGE_STOPPED_TO_HALTED,
+            Referee_Id::STATE_STOPPED, Referee_Id::STATE_HALTED,
             command_is_<SSL_Referee::HALT>
         )
         .add_edge(
-            EDGE_PREPARE_KICKOFF_TO_HALTED,
-            STATE_PREPARE_KICKOFF, STATE_HALTED,
+            Referee_Id::EDGE_PREPARE_KICKOFF_TO_HALTED,
+            Referee_Id::STATE_PREPARE_KICKOFF, Referee_Id::STATE_HALTED,
             command_is_<SSL_Referee::HALT>
         )
         .add_edge(
-            EDGE_PREPARE_PENALTY_TO_HALTED,
-            STATE_PREPARE_PENALTY, STATE_HALTED,
+            Referee_Id::EDGE_PREPARE_PENALTY_TO_HALTED,
+            Referee_Id::STATE_PREPARE_PENALTY, Referee_Id::STATE_HALTED,
             command_is_<SSL_Referee::HALT>
         )
         .add_edge(
-            EDGE_RUNNING_TO_HALTED,
-            STATE_RUNNING, STATE_HALTED,
+            Referee_Id::EDGE_RUNNING_TO_HALTED,
+            Referee_Id::STATE_RUNNING, Referee_Id::STATE_HALTED,
             command_is_<SSL_Referee::HALT>
         )
         .add_edge(
-            EDGE_TIMEOUT_TO_HALTED,
-            STATE_TIMEOUT, STATE_HALTED,
+            Referee_Id::EDGE_TIMEOUT_TO_HALTED,
+            Referee_Id::STATE_TIMEOUT, Referee_Id::STATE_HALTED,
             command_is_<SSL_Referee::HALT>
         )
     ;
 
     machine_state.add_edge(
-        EDGE_TIMEOUT_START,
-        STATE_STOPPED, STATE_TIMEOUT,
+        Referee_Id::EDGE_TIMEOUT_START,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_TIMEOUT,
         command_is_one_of_<
             SSL_Referee::TIMEOUT_BLUE, SSL_Referee::TIMEOUT_YELLOW
         >
     );
     machine_state.add_edge(
-        EDGE_FORCE_START,
-        STATE_STOPPED, STATE_RUNNING,
+        Referee_Id::EDGE_FORCE_START,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
         command_is_<SSL_Referee::FORCE_START>
     );
     machine_state.add_edge(
-        EDGE_KICKOFF,
-        STATE_STOPPED, STATE_PREPARE_KICKOFF,
-        command_is_one_of_<
-            SSL_Referee::PREPARE_KICKOFF_BLUE, SSL_Referee::PREPARE_KICKOFF_YELLOW
-        >
+        Referee_Id::EDGE_KICKOFF_YELLOW,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_KICKOFF,
+        command_is_< SSL_Referee::PREPARE_KICKOFF_YELLOW>,
+        [&](
+            const Referee_data & referee_data, 
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_kickoff = Ai::Blue;
+        }
     );
     machine_state.add_edge(
-        EDGE_PENALTY,
-        STATE_STOPPED, STATE_PREPARE_PENALTY,
+        Referee_Id::EDGE_KICKOFF_BLUE,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_KICKOFF,
+        command_is_<SSL_Referee::PREPARE_KICKOFF_BLUE>,
+        [&](
+            const Referee_data & referee_data, 
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_kickoff = Ai::Yellow;
+        }
+    );
+    machine_state.add_edge(
+        Referee_Id::EDGE_PENALTY,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_PENALTY,
         command_is_one_of_<
             SSL_Referee::PREPARE_PENALTY_BLUE, SSL_Referee::PREPARE_PENALTY_YELLOW
         >
     );
     machine_state.add_edge(
-        EDGE_INDIRECT,
-        STATE_STOPPED, STATE_RUNNING,
+        Referee_Id::EDGE_INDIRECT,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
         command_is_one_of_<
             SSL_Referee::INDIRECT_FREE_BLUE, SSL_Referee::INDIRECT_FREE_YELLOW
         >
     );
     machine_state.add_edge(
-        EDGE_DIRECT,
-        STATE_STOPPED, STATE_RUNNING,
+        Referee_Id::EDGE_DIRECT,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
         command_is_one_of_<
             SSL_Referee::DIRECT_FREE_BLUE, SSL_Referee::DIRECT_FREE_YELLOW
         >
     );
 
     machine_state.add_edge(
-        EDGE_NORMAL_START_FOR_KICKOFF,
-        STATE_PREPARE_KICKOFF, STATE_RUNNING,
+        Referee_Id::EDGE_NORMAL_START_FOR_KICKOFF,
+        Referee_Id::STATE_PREPARE_KICKOFF, Referee_Id::STATE_RUNNING,
         command_is_<SSL_Referee::NORMAL_START>
     );
     machine_state.add_edge(
-        EDGE_NORMAL_START_FOR_PENALTY,
-        STATE_PREPARE_PENALTY, STATE_RUNNING,
+        Referee_Id::EDGE_NORMAL_START_FOR_PENALTY,
+        Referee_Id::STATE_PREPARE_PENALTY, Referee_Id::STATE_RUNNING,
         command_is_<SSL_Referee::NORMAL_START>
     );
 
     machine_state.add_edge(
-        EDGE_TIMEOUT_RESUME,
-        STATE_HALTED, STATE_TIMEOUT,
+        Referee_Id::EDGE_TIMEOUT_RESUME,
+        Referee_Id::STATE_HALTED, Referee_Id::STATE_TIMEOUT,
         command_is_one_of_<
             SSL_Referee::TIMEOUT_BLUE, SSL_Referee::TIMEOUT_YELLOW
         >
     );
 
     machine_state.add_edge(
-        EDGE_GOAL,
-        STATE_STOPPED, STATE_STOPPED,
+        Referee_Id::EDGE_GOAL,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_STOPPED,
         command_is_one_of_<
             SSL_Referee::GOAL_BLUE, SSL_Referee::GOAL_YELLOW
         >
     );
 
+    machine_state.execute_at_each_edge(
+        [&](
+             std::string edge_id, Referee_data & state_data, Referee_data & edge_data,
+             unsigned int run_number, unsigned int atomic_run_number
+        ){
+             edge_entropy_number += 1;
+        }
+    );
 
     machine_state.start();
 }
@@ -273,5 +302,19 @@ void Referee::update( double time ){
     assert( machine_state.current_states().size() == 1 );
     save_last_time_stamps();
 }
+
+
+unsigned int Referee::edge_entropy() const {
+    return edge_entropy_number;
+}
+const Referee::ID & Referee::get_state() const {
+    assert( machine_state.current_states().size() == 1 );
+    return *( machine_state.current_states().begin());
+}
+
+Ai::Team Referee::kickoff_team() const {
+    return team_having_kickoff;
+}
+
 
 }

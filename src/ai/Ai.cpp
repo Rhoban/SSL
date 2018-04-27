@@ -102,9 +102,11 @@ void AI::init_robot_behaviors(){
 }
 
 AI::AI(
+    Ai::Team team,
     Data& data, 
     AICommander *commander
-): 
+):
+    team(team), 
     data(data), 
     commander(commander),
     current_dt(0.0)
@@ -124,8 +126,8 @@ AI::AI(
     int goalie_id = 8;
     #endif
     strategy_manager = std::shared_ptr<Manager::Manager>(
-        new Manager::Manual(game_state)
-        //new Manager::Match(game_state, referee)
+        //new Manager::Manual(game_state)
+        new Manager::Match(game_state, referee)
     );
     strategy_manager->declare_goalie_id( goalie_id );
     strategy_manager->declare_team_ids( robot_ids );

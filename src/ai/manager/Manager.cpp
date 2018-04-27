@@ -18,6 +18,14 @@ void Manager::declare_team_ids(
 ){
     this->team_ids = team_ids;
 }
+
+void Manager::set_team( Ai::Team team ){
+     this->team = team;
+}
+Ai::Team Manager::get_team() const{
+     return team;
+}
+
 const std::vector<int> & Manager::get_team_ids() const {
     return team_ids;
 }

@@ -4,6 +4,7 @@
 #include <strategy/halt.h>
 #include <strategy/tare_and_synchronize.h>
 #include <strategy/sandbox.h>
+#include <strategy/prepare_kickoff.h>
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 
@@ -15,7 +16,8 @@ Match::Match(
     const Referee & referee
 ):
     game_state(game_state),
-    referee(referee)
+    referee(referee),
+    last_referee_changement(0)
 {
 
     register_strategy(
@@ -33,6 +35,12 @@ Match::Match(
         Strategy::Sandbox::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Sandbox(game_state)
+        )
+    );
+    register_strategy(
+        Strategy::Prepare_kickoff::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Prepare_kickoff(game_state)
         )
     );
     register_strategy(
@@ -66,8 +74,6 @@ Match::Match(
             )
         )
     );
-    sandbox = false;
-    start = -1.0;
     assign_strategy(
         Strategy::Halt::name, 0.0, 
         get_team_ids()
@@ -77,31 +83,23 @@ Match::Match(
 void Match::analyse_data(double time){
 }
 void Match::choose_a_strategy(double time){
-    if(start==-1.0){ 
-        assign_strategy(
-            Strategy::Tare_and_synchronize::name, time,
-            get_team_ids()
-        );
-        start = time;
-        return;
-    }
-
-    if( 
-        ! get_strategy<Strategy::Tare_and_synchronize>().is_tared_and_synchronized()
-    ){
-        return;
-    }
-
-    if( ! sandbox ){
-        assign_strategy(
-            Strategy::Sandbox::name, time,
-            get_team_ids()
-        );
-//        assign_strategy(
-//            "Goalie", time,
-//            get_team_ids()
-//        );
-        sandbox = true;
+    if( referee.edge_entropy() > last_referee_changement ){
+        if( referee.get_state() == Referee_Id::STATE_INIT ){
+        } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
+            assign_strategy( Strategy::Halt::name, time, get_team_ids() );
+        } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
+        } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
+            assign_strategy( Strategy::Prepare_kickoff::name, time, get_team_ids() );
+            if( get_team() == referee.kickoff_team() ){
+                get_strategy<Strategy::Prepare_kickoff>().set_kicking(true);
+            }else{
+                get_strategy<Strategy::Prepare_kickoff>().set_kicking(false);
+            }
+        } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
+        } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
+        } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
+        }
+        last_referee_changement = referee.edge_entropy();
     }
 }
 

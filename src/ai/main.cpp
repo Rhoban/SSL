@@ -57,7 +57,11 @@ int main(int argc, char **argv)
         commander->stopAll();
         commander->flush();
     } else {
-        ai = new AI(data, commander);
+        ai = new AI(
+            yellow.getValue() ?
+                Ai::Yellow : Ai::Blue,
+            data, commander
+        ),
         ai->run();
         delete ai;
     }

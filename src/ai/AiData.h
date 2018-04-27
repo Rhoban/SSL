@@ -26,10 +26,15 @@
 namespace RhobanSSL {
 namespace Ai {
 
+typedef enum {
+    Yellow, Blue
+} Team;
+
 class Object {
 private: 
     Vision::Object vision_data;
     RhobanSSL::Movement * movement;
+
 
 public:
 
@@ -90,6 +95,7 @@ struct Constants {
 
 class AiData {
 public:
+
     AiData();
 
     std::map<Vision::Team, std::map<int, Robot>> robots;

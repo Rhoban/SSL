@@ -14,9 +14,12 @@ namespace RhobanSSL
 
     class AI
     {
+    private:
+        Ai::Team team;
     public:
 
         AI(
+            Ai::Team team,
             Data & data, 
             AICommander *commander
         );

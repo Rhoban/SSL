@@ -12,6 +12,7 @@ namespace Manager {
 
 class Manager {
     private:
+    Ai::Team team;
     int goalie_id;
     std::vector<int> team_ids;
 
@@ -19,6 +20,8 @@ class Manager {
     std::map< std::string, std::shared_ptr<Strategy::Strategy>> strategies;
     
     public:
+    void set_team( Ai::Team team );
+    Ai::Team get_team() const;
     void declare_goalie_id(
         int goalie_id
     );
