@@ -29,6 +29,7 @@ set (SOURCES
     robot_behavior/shooter.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/robot_behavior.cpp
+    robot_behavior/apply_enseirb_project_action.cpp
     Ai.cpp
     AiData.cpp
     manager/Manager.cpp
@@ -41,6 +42,9 @@ set (SOURCES
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
     strategy/prepare_kickoff.cpp
+    strategy/prepare_to_run.cpp
+    strategy/enseirb_project_wrapper.cpp
+    strategy/enseirb_projects/example.c
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
