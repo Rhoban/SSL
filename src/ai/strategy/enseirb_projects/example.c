@@ -19,8 +19,8 @@ struct Action getBehaviour(
 ){
     struct Action result;
     result.id = DONT_HAVE_BALL;
-    result.x = -robot_id*0.4;
-    result.y = robot_id*0.4;
+    result.x = -(robot_id/2)*0.4;
+    result.y = ((robot_id%2==0) ? -1:1) * (1+robot_id/2)*0.4;
     result.t = robot_id*2*M_PI/nb_robots; 
     return result;
 }

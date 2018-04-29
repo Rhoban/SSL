@@ -42,6 +42,10 @@ namespace Ai {
     { }
 
     void AiData::update( const Vision::VisionData vision_data ){
+        if( vision_data.field.present ){
+            static_cast<Vision::Field&>(field) = vision_data.field;
+        }; 
+
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
                 robots[team][k].set_vision_data(

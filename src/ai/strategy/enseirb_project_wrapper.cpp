@@ -28,6 +28,23 @@ void Enseirb_project_wrapper::allocate_enseirb_data(){
     }
     robot_actions = std::vector<Action>(get_robot_ids().size());
     robots = new Robot[nb_robots];
+}
+
+void Enseirb_project_wrapper::initialize_enseirb_data(){
+    config.width = game_state.field.fieldWidth;
+    config.height = game_state.field.fieldLength;
+    config.goal_size = game_state.field.goalWidth;
+    ball.radius = game_state.constants.radius_ball;
+    DEBUG( 
+        "ICI -- width : " << 
+        config.width <<
+        ", height : " << 
+        config.height <<
+        ", goal_size : " << 
+        config.goal_size <<
+        ", ball radius : " << 
+        ball.radius
+    );
     int i=0;
     for( auto team: {Vision::Ally, Vision::Opponent} ){
         for( const std::pair<int, Ai::Robot> & elem : game_state.robots[team] ){
@@ -41,13 +58,6 @@ void Enseirb_project_wrapper::allocate_enseirb_data(){
             i+=1;
         }
     }
-}
-
-void Enseirb_project_wrapper::initialize_enseirb_data(){
-    config.width = game_state.field.fieldWidth;
-    config.height = game_state.field.fieldLength;
-    config.goal_size = game_state.field.goalWidth;
-    ball.radius = game_state.constants.radius_ball;
 }
 
 void Enseirb_project_wrapper::desallocate_enseirb_data(){
@@ -143,11 +153,12 @@ void Enseirb_project_wrapper::update(double time){
     } 
         
     // get robot actions
-    for( int i; i<get_robot_ids().size(); i++ ){
-        robot_actions[i] = getBehaviour(
+    for( int i=0; i<get_robot_ids().size(); i++ ){
+        Action action = getBehaviour(
             &config, robots, nb_robots, &ball, 
             robot_id(i)
         );
+        robot_actions[i] = action;
     }
 }
 

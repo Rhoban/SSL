@@ -26,7 +26,6 @@ void Apply_enseirb_project_action::update(
     Eigen::Vector2d linear_position(
         action.x, action.y
     );
-    DEBUG( "action.x : " << action.x << ", action.y : " << action.y << ", action.t : " << action.t);
     ContinuousAngle angular_position(action.t);
     this->set_following_position(
         linear_position, angular_position

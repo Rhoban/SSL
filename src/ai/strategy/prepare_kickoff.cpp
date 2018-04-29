@@ -74,8 +74,9 @@ void Prepare_kickoff::assign_behavior_to_robots(
         //double fieldWidth = game_state.field.fieldwidth;
         double robot_radius = game_state.constants.robot_radius;
         for( int i=0; i<nb_robots; i++ ){
-            int id = player_id(i); 
-            Eigen::Vector2d follower_linear_position(-1.0, -(nb_robots/2)*4*robot_radius*  + 4*robot_radius*i);
+            int id = player_id(i);
+            float y_pos = ( i - (nb_robots/2) )*4.0*robot_radius;
+            Eigen::Vector2d follower_linear_position(-1.0, y_pos);
             ContinuousAngle follower_angular_position(M_PI/2.0);
             assign_behavior(
                 id, std::shared_ptr<RobotBehavior>(
