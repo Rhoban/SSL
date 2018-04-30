@@ -30,9 +30,9 @@ class RobotBehavior {
         double birthday;
         double lastUpdate; 
 
-        Eigen::Vector2d robot_linear_position;
+        Vector2d robot_linear_position;
         ContinuousAngle robot_angular_position;
-        Eigen::Vector2d ball_position;
+        Vector2d ball_position;
 
     public:
         RobotBehavior();
@@ -54,7 +54,7 @@ class RobotBehavior {
 };
 
 namespace detail {
-    double vec2angle( Eigen::Vector2d direction );
+    double vec2angle( Vector2d direction );
 };
 
 }; //Namespace Rhoban

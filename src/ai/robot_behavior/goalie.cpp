@@ -1,29 +1,29 @@
 #include "goalie.h"
 #include <math/tangents.h>
-#include <math/eigen_convertion.h>
+#include <math/vector.h>
 
 namespace RhobanSSL {
 
-Eigen::Vector2d Goalie::calculate_goal_position(
-    const Eigen::Vector2d & ball_position,
-    const Eigen::Vector2d & poteau_droit,
-    const Eigen::Vector2d & poteau_gauche,
+Vector2d Goalie::calculate_goal_position(
+    const Vector2d & ball_position,
+    const Vector2d & poteau_droit,
+    const Vector2d & poteau_gauche,
     double goalie_radius
 ){
     rhoban_geometry::Point defender_position = rhoban_geometry::center_of_cone_incircle(
-	eigen2point(ball_position),
-	eigen2point(poteau_droit), 
-	eigen2point(poteau_gauche), 
-	goalie_radius
+        vector2point(ball_position),
+        vector2point(poteau_droit), 
+        vector2point(poteau_gauche), 
+        goalie_radius
     );
-    return point2eigen( defender_position );
+    return Vector2d( defender_position );
 }
 
 
 Goalie::Goalie(
-    const Eigen::Vector2d & left_post_position,
-    const Eigen::Vector2d & right_post_position,
-    const Eigen::Vector2d & waiting_goal_position,
+    const Vector2d & left_post_position,
+    const Vector2d & right_post_position,
+    const Vector2d & waiting_goal_position,
     double penalty_rayon,
     double goalie_radius,
     double time, double dt
@@ -55,12 +55,12 @@ void Goalie::update(
 
     double goal_rotation = detail::vec2angle(ball_position - robot_linear_position);
 
-    Eigen::Vector2d defender_pos = calculate_goal_position(
+    Vector2d defender_pos = calculate_goal_position(
         ball_position, right_post_position, left_post_position,
         goalie_radius
     );
 
-    if( (defender_pos - goal_center).norm() > penalty_rayon ){
+    if( norm_2(defender_pos - goal_center) > penalty_rayon ){
         defender_pos = waiting_goal_position;
     }
 

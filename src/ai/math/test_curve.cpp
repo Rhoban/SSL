@@ -4,7 +4,6 @@
 #include "curve.h"
 
 #include <iostream>
-#include <Eigen/Dense>
 #include <cmath>
 
 bool eq( double u, double v, double err ){
@@ -40,13 +39,13 @@ TEST(test_curve, curves){
 
 
         RenormalizedCurve curve(
-            [&](double u){ return Eigen::Vector2d(length*u,0.0); },
+            [&](double u){ return Vector2d(length*u,0.0); },
             du,
             [&](double t){ return time_max/length; },
             dt_micro, dt_micro/100
         );
         for( double u=0.0; u<=1.0; u = u+ dt ){
-            EXPECT_TRUE( curve.original_curve(u) == Eigen::Vector2d(2*u,0));
+            EXPECT_TRUE( curve.original_curve(u) == Vector2d(2*u,0));
         }
 
         EXPECT_TRUE(
@@ -89,7 +88,7 @@ TEST(test_curve, curves){
             EXPECT_TRUE(
                 eq(
                     1.0,
-                    ( curve_t_dt_it(t+dt) - curve_t_it(t) ).norm()/dt,
+                    ( norm_2( curve_t_dt_it(t+dt) - curve_t_it(t) ) )/dt,
                     error_renormalisation(t, curve, error_curve, dt) + dt_micro/10.0
                 )
             );
@@ -97,10 +96,10 @@ TEST(test_curve, curves){
 
         EXPECT_TRUE(
             eq(
-                (
+                norm_2(
                     curve(curve.max_time()+dt) -
                     curve( curve.max_time() )
-                ).norm(),
+                ),
                 0,
                 erreur
             ) 
@@ -124,7 +123,7 @@ TEST(test_curve, curves){
         double erreur = dt/10;
 
         RenormalizedCurve curve(
-            [](double u){ return Eigen::Vector2d(u*u,2*u); },
+            [](double u){ return Vector2d(u*u,2*u); },
             dt_micro,
             [](double t){ return t+.1; },
             dt_micro, dt_micro/100
@@ -162,7 +161,7 @@ TEST(test_curve, curves){
             DEBUG("time_max : " << time_max );
             DEBUG("time_max 1  : " << curve.get_time_max() );
             DEBUG("t+.1 : " << t+.1 );
-            DEBUG( ( curve_t_dt_it(t+dt) - curve_t_it(t) ).norm()/dt );
+            DEBUG( norm_2( curve_t_dt_it(t+dt) - curve_t_it(t) )/dt );
             DEBUG(
                 "error_ren : " <<  
                     error_renormalisation(t, curve, error_curve, dt) + du/10.0
@@ -171,7 +170,7 @@ TEST(test_curve, curves){
             EXPECT_TRUE(
                 eq(
                     t+.1,
-                    ( curve_t_dt_it(t+dt) - curve_t_it(t) ).norm()/dt,
+                    norm_2( curve_t_dt_it(t+dt) - curve_t_it(t) )/dt,
                     error_renormalisation(t, curve, error_curve, dt)//+ du/10.0
                 )
             );
@@ -235,7 +234,7 @@ TEST(test_curve, empty_curves){
         double dt = 0.01;
         double dt_micro = dt/100;
 
-        Eigen::Vector2d position(3.0,7.0);
+        Vector2d position(3.0,7.0);
         RenormalizedCurve curve(
             [&](double u){ return position; },
             dt_micro,
@@ -259,10 +258,10 @@ struct Rotation {
 };
 
 struct Translation {
-    Eigen::Vector2d position;
+    Vector2d position;
 
-    Eigen::Vector2d operator()(double u) const {
-        return  position + Eigen::Vector2d(u, u*u);
+    Vector2d operator()(double u) const {
+        return  position + Vector2d(u, u*u);
     };
 
     Translation():position(0.0,0.0){};
@@ -276,8 +275,8 @@ struct fct_wrapper {
         const std::function<double (double u)> & rotation
     ):rotation(rotation){ };
 
-    Eigen::Vector2d operator()(double t){
-        return Eigen::Vector2d( rotation(t), 0.0 );
+    Vector2d operator()(double t){
+        return Vector2d( rotation(t), 0.0 );
     };
 };
 
@@ -295,7 +294,7 @@ TEST(test_curve, use_cases){
         double dt_micro = dt/100;
 
         RenormalizedCurve curve(
-            [](double u){ return Eigen::Vector2d(90.0*u,0.0); },
+            [](double u){ return Vector2d(90.0*u,0.0); },
             dt_micro,
             [](double t){ return 10.0; },
             dt_micro, dt_micro/100
@@ -307,7 +306,7 @@ TEST(test_curve, use_cases){
         double dt_micro = dt/100;
 
         Curve2d crv(
-            [](double u){ return Eigen::Vector2d(90.0*u,0.0); },
+            [](double u){ return Vector2d(90.0*u,0.0); },
             dt_micro
         );
         EXPECT_TRUE( crv.size() == 90 );
@@ -339,8 +338,8 @@ TEST(test_curve, use_cases){
         RenormalizedCurve::CurveIterator curve_t_it = curve.curve_iterator();
         RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curve_iterator();
         for( double t = 0; t< curve.max_time()-dt; t+= dt ){
-            Eigen::Vector2d xt = curve_t_it(t);
-            Eigen::Vector2d xdt = curve_t_dt_it(t+dt);
+            Vector2d xt = curve_t_it(t);
+            Vector2d xdt = curve_t_dt_it(t+dt);
             EXPECT_TRUE( xdt[0] >= xt[0] );
             EXPECT_TRUE( xdt[1] >= xt[1] );
         }

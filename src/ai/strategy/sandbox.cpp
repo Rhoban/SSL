@@ -61,7 +61,7 @@ void Sandbox::assign_behavior_to_robots(
         const Ai::Robot & robot_follower = game_state.robots[
             Vision::Ally
         ][follower_id];
-        Eigen::Vector2d follower_position(
+        Vector2d follower_position(
             robot_follower.get_movement().linear_position(time).getX(),
             robot_follower.get_movement().linear_position(time).getY()
         );
@@ -145,12 +145,12 @@ void Sandbox::assign_behavior_to_robots(
             game_state.constants.rotation_velocity_limit
         );
         const Ai::Ball & ball = game_state.ball;
-        Eigen::Vector2d ball_position(
+        Vector2d ball_position(
             ball.get_movement().linear_position(time).getX(),
             ball.get_movement().linear_position(time).getY()
         );
         const Ai::Robot & robot = game_state.robots[Vision::Ally][shooter_id];
-        Eigen::Vector2d robot_position(
+        Vector2d robot_position(
             robot.get_movement().linear_position(time).getX(),
             robot.get_movement().linear_position(time).getY()
         );

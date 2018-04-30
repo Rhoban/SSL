@@ -105,7 +105,7 @@ void Curve2d::init(){
 }
 
 Curve2d::Curve2d(
-    const std::function<Eigen::Vector2d (double u)> & curve,
+    const std::function<Vector2d (double u)> & curve,
     double step_curve_parameter
 ):
     curve(curve),
@@ -117,7 +117,7 @@ Curve2d::Curve2d(
 
 
 Curve2d::Curve2d(
-    const std::function<Eigen::Vector2d (double u)> & curve,
+    const std::function<Vector2d (double u)> & curve,
     double step_curve_parameter, double curve_length
 ):
     curve(curve), step_curve_parameter(step_curve_parameter), 
@@ -134,7 +134,7 @@ Curve2d::Curve2d( const Curve2d & curve ):
     init();
 };
 
-Eigen::Vector2d Curve2d::operator()(double u) const {
+Vector2d Curve2d::operator()(double u) const {
     return this->curve(u);
 }
 
@@ -158,7 +158,7 @@ void RenormalizedCurve::init(){
 }
 
 RenormalizedCurve::RenormalizedCurve(
-    const std::function<Eigen::Vector2d (double u)> & curve,
+    const std::function<Vector2d (double u)> & curve,
     double step_curve_parameter,
     const std::function<double (double t)> & velocity_consign,
     double step_time, double length_tolerance
@@ -187,7 +187,7 @@ double RenormalizedCurve::max_time() const {
     return this->time_max;
 }
 
-Eigen::Vector2d RenormalizedCurve::original_curve( double u ) const {
+Vector2d RenormalizedCurve::original_curve( double u ) const {
     return curve(u);
 }
 
@@ -220,7 +220,7 @@ double RenormalizedCurve::time( double length ) const {
     return TimeCurve( *this )(length);
 }
 
-Eigen::Vector2d RenormalizedCurve::operator()(double t) const {
+Vector2d RenormalizedCurve::operator()(double t) const {
 //    return original_curve( this->inverse_of_arc_length( position_consign(t) ) );
     return CurveIterator(*this)(t);
 //original_curve( this->inverse_of_arc_length( position_consign(t) ) );

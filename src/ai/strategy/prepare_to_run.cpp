@@ -27,7 +27,7 @@ void Prepare_to_run::stop(double time){
 }
 
 RobotBehavior* Prepare_to_run::create_follower(
-    const Eigen::Vector2d & follower_position,
+    const Vector2d & follower_position,
     const ContinuousAngle& angle,
     double time, double dt
 ) const {
@@ -62,7 +62,7 @@ void Prepare_to_run::assign_behavior_to_robots(
         assign_behavior(
             goalie_id, std::shared_ptr<RobotBehavior>(
                  Prepare_to_run::create_follower(
-                     Eigen::Vector2d(-3.0, 0.0), ContinuousAngle(M_PI/2.0),
+                     Vector2d(-3.0, 0.0), ContinuousAngle(M_PI/2.0),
                      time, dt
                  )
             )
@@ -74,7 +74,7 @@ void Prepare_to_run::assign_behavior_to_robots(
         for( int i=0; i<nb_robots; i++ ){
             int id = player_id(i);
             float y_pos = ( i - (nb_robots/2) )*4.0*robot_radius;
-            Eigen::Vector2d follower_linear_position(-(i%2)-1, y_pos);
+            Vector2d follower_linear_position(-(i%2)-1, y_pos);
             ContinuousAngle follower_angular_position(M_PI/2.0);
             assign_behavior(
                 id, std::shared_ptr<RobotBehavior>(

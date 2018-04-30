@@ -18,12 +18,6 @@ bool are_equal(
     return norm( v1-v2 ) < EPSILON;
 }
 
-bool are_equal(
-    const Eigen::Vector2d & v1, const Eigen::Vector2d & v2 
-){
-    return ( v1-v2 ).norm() < EPSILON;
-}
-
 TEST(test_frame_changement, constructor){
     Frame_changement fc;
 
@@ -154,12 +148,10 @@ TEST(test_frame_changement, rotation){
 template <typename VECTOR_CLASS> double X(const VECTOR_CLASS & v );
 template <> double X<Vector2d>(const Vector2d & v ){ return v.getX(); }
 template <> double X<rhoban_geometry::Point>(const rhoban_geometry::Point & p ){ return p.getX(); }
-template <> double X<Eigen::Vector2d>(const Eigen::Vector2d & v ){ return v[0]; }
 
 template <typename VECTOR_CLASS> double Y(const VECTOR_CLASS & v );
 template <> double Y<Vector2d>(const Vector2d & v ){ return v.getY(); }
 template <> double Y<rhoban_geometry::Point>(const rhoban_geometry::Point & p ){ return p.getY(); }
-template <> double Y<Eigen::Vector2d>(const Eigen::Vector2d & v ){ return v[1]; }
 
 
 TEST(test_frame_changement, all){

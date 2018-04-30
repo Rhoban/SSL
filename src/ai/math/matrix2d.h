@@ -27,5 +27,9 @@ class Matrix2d : public Boost_Matrix2d {
     }
 };
 
+template <typename MATRIX_CLASS>
+Matrix2d inverse( const MATRIX_CLASS & m ){
+    return Matrix2d( m ).inverse();
+}
 
 #endif

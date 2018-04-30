@@ -1,6 +1,5 @@
 #include "apply_enseirb_project_action.h"
 #include <math/tangents.h>
-#include <math/eigen_convertion.h>
 
 namespace RhobanSSL {
 
@@ -23,7 +22,7 @@ void Apply_enseirb_project_action::update(
     //  this->robot_angular_position 
     // are all avalaible
 
-    Eigen::Vector2d linear_position(
+    Vector2d linear_position(
         action.x, action.y
     );
     ContinuousAngle angular_position(action.t);

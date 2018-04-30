@@ -22,7 +22,7 @@ class Prepare_to_run : public Strategy {
         static const std::string name;
 
         RobotBehavior* create_follower(
-            const Eigen::Vector2d & follower_position,
+            const Vector2d & follower_position,
             const ContinuousAngle& angle,
             double time, double dt
         ) const;

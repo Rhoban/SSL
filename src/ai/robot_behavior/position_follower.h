@@ -8,7 +8,7 @@ namespace RhobanSSL
 
 class PositionFollower : public RobotBehavior {
     private:
-        Eigen::Vector2d position;
+        Vector2d position;
         ContinuousAngle angle;
 
         RobotControlWithPositionFollowing robot_control;
@@ -25,7 +25,7 @@ class PositionFollower : public RobotBehavior {
         );
 
         void set_following_position(
-            const Eigen::Vector2d & position_to_follow,
+            const Vector2d & position_to_follow,
             const ContinuousAngle & angle
         );
 

@@ -5,15 +5,15 @@
 class PidStatic : public PidController {
     public:
     ContinuousAngle angle;
-    Eigen::Vector2d position;
+    Vector2d position;
     
     PidStatic(
-        const ContinuousAngle & angle, const Eigen::Vector2d & position 
+        const ContinuousAngle & angle, const Vector2d & position 
     ):
         angle(angle), position(position)
     { };
 
-    Eigen::Vector2d goal_position( double t ) const {
+    Vector2d goal_position( double t ) const {
         return position;
     };
 
@@ -25,21 +25,21 @@ class PidStatic : public PidController {
 class PidLinear : public PidController {
     public:
     ContinuousAngle origin_angle;
-    Eigen::Vector2d origin_position;
+    Vector2d origin_position;
     ContinuousAngle angular_velocity;
-    Eigen::Vector2d linear_velocity;
+    Vector2d linear_velocity;
     
     PidLinear(
-        const Eigen::Vector2d & origin_position, 
+        const Vector2d & origin_position, 
         const ContinuousAngle & origin_angle,
-        const Eigen::Vector2d & linear_velocity,
+        const Vector2d & linear_velocity,
         const ContinuousAngle & angular_velocity
     ):
         origin_angle(origin_angle), origin_position(origin_position), 
         angular_velocity(angular_velocity), linear_velocity(linear_velocity)
     { };
 
-    Eigen::Vector2d goal_position( double t ) const {
+    Vector2d goal_position( double t ) const {
         return origin_position + linear_velocity*t;
     };
 
@@ -52,7 +52,7 @@ TEST(test_pid, use_cases){
     {
         PidStatic controller(
             ContinuousAngle(321), 
-            Eigen::Vector2d(21.0, 4.0) 
+            Vector2d(21.0, 4.0) 
         );
         controller.set_orientation_pid( 0.0, 0.0, 0.0 );
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
@@ -74,7 +74,7 @@ TEST(test_pid, is_static){
     {
         PidStatic controller(
             ContinuousAngle(321), 
-            Eigen::Vector2d(21.0, 4.0) 
+            Vector2d(21.0, 4.0) 
         );
         controller.set_orientation_pid( 1.0, 1.0, 1.0 );
         controller.set_translation_pid( 1.0, 1.0, 1.0 );
@@ -85,10 +85,10 @@ TEST(test_pid, is_static){
         EXPECT_TRUE( controller.is_static() );
         
         PidControl control = controller.absolute_control_in_absolute_frame(
-            Eigen::Vector2d(1.0, 2.0), ContinuousAngle(0.1)
+            Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
         EXPECT_TRUE(
-            control.velocity_translation == Eigen::Vector2d(0.0, 0.0)
+            control.velocity_translation == Vector2d(0.0, 0.0)
         );
         EXPECT_TRUE(
             control.velocity_rotation == ContinuousAngle(0.0)
@@ -98,10 +98,10 @@ TEST(test_pid, is_static){
         EXPECT_TRUE( ! controller.is_static() );
 
         control = controller.absolute_control_in_absolute_frame(
-            Eigen::Vector2d(1.0, 2.0), ContinuousAngle(0.1)
+            Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
         EXPECT_TRUE(
-            control.velocity_translation != Eigen::Vector2d(0.0, 0.0)
+            control.velocity_translation != Vector2d(0.0, 0.0)
         );
         EXPECT_TRUE(
             control.velocity_rotation != ContinuousAngle(0.0)
@@ -114,7 +114,7 @@ TEST(test_pid, get_time){
     {
         PidStatic controller(
             ContinuousAngle(321), 
-            Eigen::Vector2d(21.0, 4.0) 
+            Vector2d(21.0, 4.0) 
         );
         controller.set_orientation_pid( 0.0, 0.0, 0.0 );
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
@@ -137,7 +137,7 @@ TEST(test_pid, get_dt){
     {
         PidStatic controller(
             ContinuousAngle(321), 
-            Eigen::Vector2d(21.0, 4.0) 
+            Vector2d(21.0, 4.0) 
         );
         controller.set_orientation_pid( 0.0, 0.0, 0.0 );
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
@@ -159,7 +159,7 @@ TEST(test_pid, null_pid){
     {
         PidStatic controller(
             ContinuousAngle(321), 
-            Eigen::Vector2d(21.0, 4.0) 
+            Vector2d(21.0, 4.0) 
         );
         controller.set_orientation_pid( 0.0, 0.0, 0.0 );
         controller.set_translation_pid( 0.0, 0.0, 0.0 );
@@ -169,20 +169,20 @@ TEST(test_pid, null_pid){
         controller.update( 20.0 );
         
         PidControl control = controller.absolute_control_in_absolute_frame(
-            Eigen::Vector2d(1.0, 2.0), ContinuousAngle(0.1)
+            Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
 
         EXPECT_TRUE(
-            control.velocity_translation == Eigen::Vector2d(0.0,0.0)
+            control.velocity_translation == Vector2d(0.0,0.0)
         );
         EXPECT_TRUE(
             control.velocity_rotation == ContinuousAngle(0.0)
         );
     } 
     {
-        Eigen::Vector2d origin_position(1.0, 2.0);
+        Vector2d origin_position(1.0, 2.0);
         ContinuousAngle origin_orientation(3.0); 
-        Eigen::Vector2d linear_velocity(4.0, 5.0);
+        Vector2d linear_velocity(4.0, 5.0);
         ContinuousAngle angular_velocity(6.0); 
 
         PidLinear controller(
@@ -199,13 +199,13 @@ TEST(test_pid, null_pid){
         controller.update( 20.0 );
         
         PidControl control = controller.absolute_control_in_absolute_frame(
-            Eigen::Vector2d(1.0, 2.0), ContinuousAngle(0.1)
+            Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
 
         EXPECT_TRUE(
-            (
-                control.velocity_translation - Eigen::Vector2d(4.0,5.0)
-            ).norm() < 0.00001    
+            norm_2(
+                control.velocity_translation - Vector2d(4.0,5.0)
+            ) < 0.00001    
         );
         EXPECT_TRUE(
             std::fabs(
@@ -217,9 +217,9 @@ TEST(test_pid, null_pid){
 
 TEST(test_pid, pid){
     {
-        Eigen::Vector2d origin_position(1.0, 2.0);
+        Vector2d origin_position(1.0, 2.0);
         ContinuousAngle origin_orientation(3.0); 
-        Eigen::Vector2d linear_velocity(4.0, 5.0);
+        Vector2d linear_velocity(4.0, 5.0);
         ContinuousAngle angular_velocity(6.0); 
 
         PidLinear controller(
@@ -238,23 +238,23 @@ TEST(test_pid, pid){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
-        Eigen::Vector2d current_position(1.0, 2.0);
+        Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
         PidControl control = controller.absolute_control_in_absolute_frame(
             current_position, current_orientation
         );
 
-        Eigen::Vector2d pos = (
+        Vector2d pos = (
             origin_position + linear_velocity * controller.get_time()
         );
-        Eigen::Vector2d error_pos = current_position - pos;
+        Vector2d error_pos = current_position - pos;
         EXPECT_TRUE(
-            (
+            norm_2(
                 control.velocity_translation - (
-                    Eigen::Vector2d(4.0,5.0) - 
+                    Vector2d(4.0,5.0) - 
                     error_pos * kp / controller.get_dt()
                 )
-            ).norm() < 0.00001    
+            ) < 0.00001    
         );
 
         ContinuousAngle ori = (
@@ -273,9 +273,9 @@ TEST(test_pid, pid){
         );
     } 
     {
-        Eigen::Vector2d origin_position(1.0, 2.0);
+        Vector2d origin_position(1.0, 2.0);
         ContinuousAngle origin_orientation(3.0); 
-        Eigen::Vector2d linear_velocity(4.0, 5.0);
+        Vector2d linear_velocity(4.0, 5.0);
         ContinuousAngle angular_velocity(6.0); 
 
         PidLinear controller(
@@ -294,23 +294,23 @@ TEST(test_pid, pid){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
-        Eigen::Vector2d current_position(1.0, 2.0);
+        Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
         PidControl control = controller.absolute_control_in_absolute_frame(
             current_position, current_orientation
         );
 
-        Eigen::Vector2d pos = (
+        Vector2d pos = (
             origin_position + linear_velocity * controller.get_time()
         );
-        Eigen::Vector2d error_pos = current_position - pos;
+        Vector2d error_pos = current_position - pos;
         EXPECT_TRUE(
-            (
+            norm_2(
                 control.velocity_translation - (
-                    Eigen::Vector2d(4.0,5.0) - 
+                    Vector2d(4.0,5.0) - 
                     error_pos * ki
                 )
-            ).norm() < 0.00001    
+            ) < 0.00001    
         );
 
         ContinuousAngle ori = (
@@ -329,9 +329,9 @@ TEST(test_pid, pid){
         );
     } 
     {
-        Eigen::Vector2d origin_position(1.0, 2.0);
+        Vector2d origin_position(1.0, 2.0);
         ContinuousAngle origin_orientation(3.0); 
-        Eigen::Vector2d linear_velocity(4.0, 5.0);
+        Vector2d linear_velocity(4.0, 5.0);
         ContinuousAngle angular_velocity(6.0); 
 
         PidLinear controller(
@@ -350,23 +350,23 @@ TEST(test_pid, pid){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
-        Eigen::Vector2d current_position(1.0, 2.0);
+        Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
         PidControl control = controller.absolute_control_in_absolute_frame(
             current_position, current_orientation
         );
 
-        Eigen::Vector2d pos = (
+        Vector2d pos = (
             origin_position + linear_velocity * controller.get_time()
         );
-        Eigen::Vector2d error_pos = current_position - pos;
+        Vector2d error_pos = current_position - pos;
         EXPECT_TRUE(
-            (
+            norm_2(
                 control.velocity_translation - (
-                    Eigen::Vector2d(4.0,5.0) - 
+                    Vector2d(4.0,5.0) - 
                     error_pos * kd / (controller.get_dt()*controller.get_dt())
                 )
-            ).norm() < 0.00001    
+            ) < 0.00001    
         );
 
         ContinuousAngle ori = (

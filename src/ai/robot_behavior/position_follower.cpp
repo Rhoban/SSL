@@ -11,7 +11,7 @@ PositionFollower::PositionFollower(double time, double dt):
 } 
 
 void PositionFollower::set_following_position(
-    const Eigen::Vector2d & position_to_follow,
+    const Vector2d & position_to_follow,
     const ContinuousAngle & angle
 ){
     this->position = position_to_follow;

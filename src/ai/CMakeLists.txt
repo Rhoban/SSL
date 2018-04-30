@@ -4,13 +4,13 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 find_package(catkin REQUIRED COMPONENTS
-  ssl_client tclap rhoban_geometry eigen
+  ssl_client tclap rhoban_geometry
 )
 
 catkin_package(
     INCLUDE_DIRS .
     LIBRARIES ssl_ai
-    CATKIN_DEPENDS ssl_client rhoban_geometry tclap eigen
+    CATKIN_DEPENDS ssl_client rhoban_geometry tclap
 )
 
 find_package(Protobuf REQUIRED)
@@ -54,7 +54,6 @@ set (SOURCES
     physic/movement_on_new_frame.cpp
     physic/MovementSample.cpp
     physic/Movement.cpp
-    math/eigen_convertion.cpp
     math/ContinuousAngle.cpp
     math/curve.cpp
     math/tangents.cpp
@@ -86,7 +85,6 @@ if(CATKIN_ENABLE_TESTING)
   set (TEST_SOURCES
     core/test_machine_state.cpp
     core/test_print_collection.cpp
-    math/test_eigen_convertion.cpp
     math/test_curve.cpp
     math/test_circular_vector.cpp
     math/test_frame_changement.cpp

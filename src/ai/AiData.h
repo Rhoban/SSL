@@ -8,7 +8,6 @@
 #include <vision/VisionData.h>
 #include <physic/Movement.h>
 #include <math/frame_changement.h>
-#include <Eigen/Dense>
 
 // Comment the following line if you are working with the real robot.
 // If you are working with the grSim simulator, don't comment.
@@ -67,10 +66,10 @@ struct Constants {
     double robot_radius;
     double radius_ball;
     double front_size;
-    Eigen::Vector2d left_post_position;
-    Eigen::Vector2d right_post_position;
-    Eigen::Vector2d goal_center;
-    Eigen::Vector2d waiting_goal_position;
+    Vector2d left_post_position;
+    Vector2d right_post_position;
+    Vector2d goal_center;
+    Vector2d waiting_goal_position;
     // PID for translation
     double p_translation;
     double i_translation;

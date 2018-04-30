@@ -3,8 +3,8 @@
 
 
 #include <debug.h>
-#include <Eigen/Dense>
 #include <vector>
+#include <math/vector.h>
 
 #include <math/curve.h>
 #include "pid.h"
@@ -18,8 +18,8 @@ namespace robot_control_details {
             const std::function<double (double u)> & rotation
         ):rotation(rotation){ };
 
-        Eigen::Vector2d operator()(double t){
-            return Eigen::Vector2d( rotation(t), 0.0 );
+        Vector2d operator()(double t){
+            return Vector2d( rotation(t), 0.0 );
         };
     };
 }
@@ -44,13 +44,13 @@ class CurveForRobot {
 
     public:
         CurveForRobot(
-            const std::function<Eigen::Vector2d (double u)> & translation,
+            const std::function<Vector2d (double u)> & translation,
             double translation_velocity, double translation_acceleration,
             const std::function<double (double u)> & rotation,
             double angular_velocity, double angular_acceleration, 
             double calculus_step
         );
-        Eigen::Vector2d translation(double t) const;
+        Vector2d translation(double t) const;
         double rotation(double t) const;
 
         void print_translation_curve( double dt ) const;
@@ -68,7 +68,7 @@ class RobotControl {
 
     public:
         PidControl limited_control(
-            const Eigen::Vector2d & robot_position, 
+            const Vector2d & robot_position, 
             const ContinuousAngle & robot_orientation
         ) const;
 
@@ -84,7 +84,7 @@ class RobotControl {
         );
 
         virtual PidControl absolute_control_in_absolute_frame(
-            const Eigen::Vector2d & robot_position, 
+            const Vector2d & robot_position, 
             const ContinuousAngle & robot_orientation
         ) const = 0;
 
@@ -97,18 +97,18 @@ class RobotControl {
          */
         static PidControl absolute_to_relative_control(
             const PidControl & absoluteControl,
-            const Eigen::Vector2d & robot_position, 
+            const Vector2d & robot_position, 
             const ContinuousAngle & robot_orientation,
             double dt
         );
 
         PidControl absolute_control_in_robot_frame(
-            const Eigen::Vector2d & robot_position, 
+            const Vector2d & robot_position, 
             const ContinuousAngle & robot_orientation
         ) const;
 
         PidControl relative_control_in_robot_frame(
-            const Eigen::Vector2d & robot_position, 
+            const Vector2d & robot_position, 
             const ContinuousAngle & robot_orientation
         ) const;
 
@@ -117,7 +117,7 @@ class RobotControl {
 class RobotControlWithPid : public RobotControl, public PidController {
     public:
         PidControl absolute_control_in_absolute_frame(
-            const Eigen::Vector2d & robot_position, 
+            const Vector2d & robot_position, 
             const ContinuousAngle & robot_orientation
         ) const;
 

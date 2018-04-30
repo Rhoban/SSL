@@ -33,6 +33,10 @@ class Vector2d : public Boost_Vector2d {
         return (*this)[1];
     }
 
+    double norm() const {
+        return boost::numeric::ublas::norm_2( *this );
+    }
+
     template <typename BOOST_VECTOR>
     Vector2d( const BOOST_VECTOR & v ){
         static_cast<Boost_Vector2d&>(*this) = v;
@@ -42,6 +46,7 @@ class Vector2d : public Boost_Vector2d {
 rhoban_geometry::Point vector2point( const Vector2d & v );
 
 bool operator==(const Vector2d & v1, const Vector2d & v2);
+bool operator!=(const Vector2d & v1, const Vector2d & v2);
 
 rhoban_geometry::Point operator+(const rhoban_geometry::Point & p, const Vector2d & v);
 rhoban_geometry::Point operator+(const Vector2d & v, const rhoban_geometry::Point & p);

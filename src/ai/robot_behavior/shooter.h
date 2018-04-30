@@ -6,14 +6,14 @@
 namespace RhobanSSL {
 
 struct Translation_for_shooting {
-    Eigen::Vector2d position_robot;
-    Eigen::Vector2d position_ball;
-    Eigen::Vector2d goal_center;
+    Vector2d position_robot;
+    Vector2d position_ball;
+    Vector2d goal_center;
    
     double front_size;
     double radius_ball;
  
-    Eigen::Vector2d operator()(double u) const;
+    Vector2d operator()(double u) const;
 };
 
 struct Rotation_for_shooting {
@@ -24,16 +24,16 @@ struct Rotation_for_shooting {
 };
 
 struct Translation_for_home {
-    Eigen::Vector2d position_robot;
-    Eigen::Vector2d position_home;
+    Vector2d position_robot;
+    Vector2d position_home;
     
-    Eigen::Vector2d operator()(double u) const;
+    Vector2d operator()(double u) const;
 };
 
 struct Rotation_for_home {
     double orientation;
-    Eigen::Vector2d position_ball;
-    Eigen::Vector2d position_robot;
+    Vector2d position_ball;
+    Vector2d position_robot;
 
     double operator()(double u) const ;
 };
@@ -51,7 +51,7 @@ class Shooter : public RobotBehavior {
 
         double calculus_step;
 
-        Eigen::Vector2d goal_center;
+        Vector2d goal_center;
         double front_size;
         double radius_ball;
 
@@ -67,7 +67,7 @@ class Shooter : public RobotBehavior {
 
     public:
         Shooter(
-            const Eigen::Vector2d & goal_center, double robot_radius,
+            const Vector2d & goal_center, double robot_radius,
             double front_size, double radius_ball,
             double translation_velocity,
             double translation_acceleration,
@@ -91,14 +91,14 @@ class Shooter : public RobotBehavior {
         );
 
         void go_to_shoot(
-            const Eigen::Vector2d & ball_position, 
-            const Eigen::Vector2d & robot_position,
+            const Vector2d & ball_position, 
+            const Vector2d & robot_position,
             double robot_orientation,
             double time, double current_dt
         );
         void go_home(
-            const Eigen::Vector2d & ball_position, 
-            const Eigen::Vector2d & robot_position,
+            const Vector2d & ball_position, 
+            const Vector2d & robot_position,
             double robot_orientation,
             double time, double current_dt
         );

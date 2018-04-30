@@ -5,7 +5,7 @@ using namespace rhoban_utils;
 namespace RhobanSSL {
 
 Shooter::Shooter(
-    const Eigen::Vector2d & goal_center, double robot_radius,
+    const Vector2d & goal_center, double robot_radius,
     double front_size, double radius_ball,
     double translation_velocity,
     double translation_acceleration,
@@ -44,8 +44,8 @@ void Shooter::set_limits(
 }
 
 void Shooter::go_to_shoot(
-    const Eigen::Vector2d & ball_position, 
-    const Eigen::Vector2d & robot_position,
+    const Vector2d & ball_position, 
+    const Vector2d & robot_position,
     double robot_orientation,
     double time, double current_dt
 ){
@@ -70,8 +70,8 @@ void Shooter::go_to_shoot(
 }
 
 void Shooter::go_home(
-    const Eigen::Vector2d & ball_position, 
-    const Eigen::Vector2d & robot_position,
+    const Vector2d & ball_position, 
+    const Vector2d & robot_position,
     double robot_orientation,
     double time, double current_dt
 ){
@@ -132,31 +132,31 @@ Control Shooter::control() const {
 
 
 
-Eigen::Vector2d Translation_for_shooting::operator()(double u) const {
+Vector2d Translation_for_shooting::operator()(double u) const {
     if( u <= 0.0 ){
         u = 0.0;
     }
     if( u >= 1.0 ){
         u = 1.0;
     }
-    Eigen::Vector2d v = goal_center - position_ball;
+    Vector2d v = goal_center - position_ball;
     double distance = v.norm();
     v /= distance;
-    Eigen::Vector2d res = position_ball - (v * (front_size + radius_ball));
+    Vector2d res = position_ball - (v * (front_size + radius_ball));
     
-    Eigen::Vector2d decalage(- (position_ball - position_robot).norm() /2.0, 0.0);
+    Vector2d decalage(- norm_2(position_ball - position_robot) /2.0, 0.0);
     
     //SHOOT
     return  position_robot * (1.0-u) + res * u + (
         decalage * ( (2*u-1.0)*(2*u-1.0) - 1 )
     );
-    //return  position_robot + Eigen::Vector2d(u,u); 
+    //return  position_robot + Vector2d(u,u); 
 //    
 //    //RETOUR
-//    //return  position_robot * (1.0-u) + Eigen::Vector2d(-1.0, -1.0) * u 
+//    //return  position_robot * (1.0-u) + Vector2d(-1.0, -1.0) * u 
 //    //    ; //res * (1.0-u);
-    //return  position_robot + Eigen::Vector2d(u,0.0); 
-    //return  position_robot; // + Eigen::Vector2d(u,0.0); 
+    //return  position_robot + Vector2d(u,0.0); 
+    //return  position_robot; // + Vector2d(u,0.0); 
 }
 
 double Rotation_for_shooting::operator()(double u) const {
@@ -173,7 +173,7 @@ double Rotation_for_shooting::operator()(double u) const {
     //return  (M_PI/2.0)*u + orientation;
 }
 
-Eigen::Vector2d Translation_for_home::operator()(double u) const {
+Vector2d Translation_for_home::operator()(double u) const {
     if( u <= 0.0 ){
         u = 0.0;
     }

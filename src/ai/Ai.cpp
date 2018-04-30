@@ -5,7 +5,6 @@
 #include <robot_behavior/do_nothing.h>
 #include <manager/Manual.h>
 #include <manager/Match.h>
-#include <math/eigen_convertion.h>
 
 namespace RhobanSSL
 {
@@ -17,7 +16,7 @@ void AI::limits_velocity( Control & ctrl ) const {
             ctrl.velocity_translation.norm() > 
             game_state.constants.translation_velocity_limit 
         ){
-            ctrl.velocity_translation = Eigen::Vector2d(0.0, 0.0);
+            ctrl.velocity_translation = Vector2d(0.0, 0.0);
             std::cerr << "WARNING : we reached the "
                 "limit translation velocity !" << std::endl;
         }
@@ -70,7 +69,7 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
             );
         }else{
             Vector2d velocity_translation = game_state.team_point_of_view.from_basis(
-                eigen2vector(ctrl.velocity_translation)
+                ctrl.velocity_translation
             ); 
             commander->set(
                 map_id, true, 

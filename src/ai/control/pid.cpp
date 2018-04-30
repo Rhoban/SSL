@@ -8,7 +8,7 @@ PidControl::PidControl():
 { };
 
 PidControl::PidControl(
-    const Eigen::Vector2d & velocity_translation,
+    const Vector2d & velocity_translation,
     ContinuousAngle velocity_rotation
 ):
     velocity_translation(velocity_translation),
@@ -16,7 +16,7 @@ PidControl::PidControl(
 { };
 
 std::ostream& operator << ( std::ostream & out, const PidControl& control  ){
-    out << "[lin vel. : " << control.velocity_translation.transpose()
+    out << "[lin vel. : " << control.velocity_translation
         << ", ang vel. : " << control.velocity_rotation << "]";
     return out;
 }
@@ -77,27 +77,27 @@ double PidController::get_time() const {
     return this->time;
 }
 
-Eigen::Vector2d PidController::translation_control_in_absolute_frame(
-    const Eigen::Vector2d & robot_position, 
+Vector2d PidController::translation_control_in_absolute_frame(
+    const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
     assert(dt>0);
-    if( is_static() ) return Eigen::Vector2d(0.0, 0.0);
-    Eigen::Vector2d xt = goal_position(time);
-    Eigen::Vector2d xt_dt = goal_position(time+dt);
-    Eigen::Vector2d velocity = (xt_dt - xt )/dt;
+    if( is_static() ) return Vector2d(0.0, 0.0);
+    Vector2d xt = goal_position(time);
+    Vector2d xt_dt = goal_position(time+dt);
+    Vector2d velocity = (xt_dt - xt )/dt;
 
-    Eigen::Vector2d error = robot_position - xt;
+    Vector2d error = robot_position - xt;
 
     if( 
         std::fabs( error[0] ) < CALCULUS_ERROR and 
         std::fabs( error[1] ) < CALCULUS_ERROR
     ){
-        error = Eigen::Vector2d(0.0,0.0);
+        error = Vector2d(0.0,0.0);
     }
 
     #if 0
-    Eigen::Matrix2d rotation_matrix;
+    Matrix2d rotation_matrix;
     ContinuousAngle a_r = rotation_control_in_absolute_frame(
         robot_position, robot_orientation
     );
@@ -118,7 +118,7 @@ Eigen::Vector2d PidController::translation_control_in_absolute_frame(
     error /= std::fabs( rotation_matrix.determinant() );
     #endif
     
-    Eigen::Vector2d absolute_command = (
+    Vector2d absolute_command = (
         velocity - kp_t*error/dt - ki_t*error - kd_t*error/(dt*dt) 
     );
 
@@ -127,7 +127,7 @@ Eigen::Vector2d PidController::translation_control_in_absolute_frame(
 }
 
 double PidController::rotation_control_in_absolute_frame(
-    const Eigen::Vector2d & robot_position, 
+    const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
     if( is_static() ) return 0.0;
@@ -156,7 +156,7 @@ double PidController::rotation_control_in_absolute_frame(
 }
 
 PidControl PidController::absolute_control_in_absolute_frame(
-    const Eigen::Vector2d & robot_position, 
+    const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
     return PidControl(

@@ -64,7 +64,7 @@ Manual::Manual(
                 [&](double time, double dt){
 		    PositionFollower* follower = new PositionFollower( time, dt );
 		    follower->set_following_position(
-			Eigen::Vector2d(-2.0, 1.0), ContinuousAngle(M_PI/2.0)
+			Vector2d(-2.0, 1.0), ContinuousAngle(M_PI/2.0)
 		    );
 		    follower->set_translation_pid(
 			game_state.constants.p_translation,

@@ -1,11 +1,11 @@
 #include "robot_behavior.h"
-#include <math/eigen_convertion.h>
+#include <math/vector.h>
 
 namespace RhobanSSL {
 
 namespace detail {
 
-double vec2angle( Eigen::Vector2d direction ){
+double vec2angle( Vector2d direction ){
     double norm = direction.norm();
     if( norm == 0.0 ) return 0.0;
     direction /= norm;
@@ -67,10 +67,10 @@ void RobotBehavior::update_time_and_position(
     const Ai::Robot & robot, const Ai::Ball & ball
 ){
     lastUpdate = time;
-    this->robot_linear_position = point2eigen(
+    this->robot_linear_position = Vector2d(
         robot.get_movement().linear_position(time)
     );
-    this->ball_position = point2eigen( 
+    this->ball_position = Vector2d( 
         ball.get_movement().linear_position(time)
     );
     this->robot_angular_position = robot.get_movement().angular_position(

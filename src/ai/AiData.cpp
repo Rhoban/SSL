@@ -110,13 +110,13 @@ namespace Ai {
             
             front_size = .06;
             
-            left_post_position = Eigen::Vector2d( -4.5, -0.5 );
-            right_post_position = Eigen::Vector2d( -4.50, 0.5 );
+            left_post_position = Vector2d( -4.5, -0.5 );
+            right_post_position = Vector2d( -4.50, 0.5 );
             goal_center = (
                 left_post_position + right_post_position
             )/2;
             waiting_goal_position = (
-                goal_center + Eigen::Vector2d(0.0, 0.0)
+                goal_center + Vector2d(0.0, 0.0)
             );
             // PID for translation
             p_translation = 0.05; 
@@ -144,13 +144,13 @@ namespace Ai {
 
             front_size = .06;
 
-            left_post_position = Eigen::Vector2d( 0., -0.29 );
-            right_post_position = Eigen::Vector2d( 0., 0.29 );
+            left_post_position = Vector2d( 0., -0.29 );
+            right_post_position = Vector2d( 0., 0.29 );
             goal_center = (
                 left_post_position + right_post_position
             )/2;
             waiting_goal_position = (
-                goal_center + Eigen::Vector2d(0.3, 0.0)
+                goal_center + Vector2d(0.3, 0.0)
             );
             // PID for translation
             p_translation = 0.02; 

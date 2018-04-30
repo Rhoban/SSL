@@ -10,7 +10,7 @@ class RobotControlWithCurve : public RobotControlWithPid {
         RobotControlWithCurve();
 
         void set_movement(
-            const std::function<Eigen::Vector2d (double u)> & translation,
+            const std::function<Vector2d (double u)> & translation,
             double translation_velocity, double translation_acceleration,
             const std::function<double (double u)> & rotation,
             double angular_velocity, double angular_acceleration, 
@@ -18,7 +18,7 @@ class RobotControlWithCurve : public RobotControlWithPid {
         );
 
         ContinuousAngle goal_orientation( double t ) const;
-        Eigen::Vector2d goal_position( double t ) const;
+        Vector2d goal_position( double t ) const;
 };
 
 #endif

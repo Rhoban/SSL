@@ -1,18 +1,18 @@
 #include <gtest/gtest.h>
 
 #include "robot_control.h"
-
+#include <math/matrix2d.h>
 
 TEST(test_robot_control, absolute_to_relative_control){
     {
         // No velocity translation 
         // No velocity rotation
-        Eigen::Vector2d velocity_translation(0.0, 0.0);
+        Vector2d velocity_translation(0.0, 0.0);
         ContinuousAngle velocity_rotation(0.0);
         PidControl absolute_control(
             velocity_translation, velocity_rotation
         );
-        Eigen::Vector2d robot_position(1.0,2.0);
+        Vector2d robot_position(1.0,2.0);
         ContinuousAngle robot_orientation(3.0);
         double dt = 1.0;
         
@@ -20,17 +20,17 @@ TEST(test_robot_control, absolute_to_relative_control){
             absolute_control, robot_position, robot_orientation, dt
         );
 
-        EXPECT_TRUE(control.velocity_translation == Eigen::Vector2d(0.0,0.0));
+        EXPECT_TRUE(control.velocity_translation == Vector2d(0.0,0.0));
         EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(0.0) );
     }
     {
         // No velocity translation 
-        Eigen::Vector2d velocity_translation(0.0, 0.0);
+        Vector2d velocity_translation(0.0, 0.0);
         ContinuousAngle velocity_rotation(2.0);
         PidControl absolute_control(
             velocity_translation, velocity_rotation
         );
-        Eigen::Vector2d robot_position(1.0,2.0);
+        Vector2d robot_position(1.0,2.0);
         ContinuousAngle robot_orientation(3.0);
         double dt = 1.0;
         
@@ -38,17 +38,17 @@ TEST(test_robot_control, absolute_to_relative_control){
             absolute_control, robot_position, robot_orientation, dt
         );
 
-        EXPECT_TRUE(control.velocity_translation == Eigen::Vector2d(0.0,0.0));
+        EXPECT_TRUE(control.velocity_translation == Vector2d(0.0,0.0));
         EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(2.0) );
     }
     {
         // No velocity rotation
-        Eigen::Vector2d velocity_translation(5.0, 6.0);
+        Vector2d velocity_translation(5.0, 6.0);
         ContinuousAngle velocity_rotation(0.0);
         PidControl absolute_control(
             velocity_translation, velocity_rotation
         );
-        Eigen::Vector2d robot_position(1.0,2.0);
+        Vector2d robot_position(1.0,2.0);
         ContinuousAngle robot_orientation(3.0);
         double dt = 1.0;
         
@@ -56,23 +56,22 @@ TEST(test_robot_control, absolute_to_relative_control){
             absolute_control, robot_position, robot_orientation, dt
         );
         
-        Eigen::Matrix2d rotation_matrix;
-        rotation_matrix << 
+        Matrix2d rotation_matrix(
             std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
             -std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
-        ;
-        Eigen::Vector2d v = rotation_matrix * velocity_translation;
+        );
+        Vector2d v = rotation_matrix * velocity_translation;
 
-        EXPECT_TRUE( ( control.velocity_translation - v ).norm() < 0.001 );
+        EXPECT_TRUE( norm_2( control.velocity_translation - v ) < 0.001 );
         EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(0.0) );
     }
     {
-        Eigen::Vector2d velocity_translation(1.0, 2.0);
+        Vector2d velocity_translation(1.0, 2.0);
         ContinuousAngle velocity_rotation(3.0);
         PidControl absolute_control(
             velocity_translation, velocity_rotation
         );
-        Eigen::Vector2d robot_position(4.0,5.0);
+        Vector2d robot_position(4.0,5.0);
         ContinuousAngle robot_orientation(6.0);
         double dt = 7.0;
         
@@ -85,23 +84,21 @@ TEST(test_robot_control, absolute_to_relative_control){
         ContinuousAngle theta_t_dt = omega * dt + robot_orientation;
         ContinuousAngle theta_t = omega * 0.0 + robot_orientation;
 
-        Eigen::Matrix2d matrix_t_dt;
-        matrix_t_dt << 
+        Matrix2d matrix_t_dt(
             std::sin(theta_t_dt.value()), std::cos(theta_t_dt.value()),
             - std::cos(theta_t_dt.value()), std::sin(theta_t_dt.value())
-        ;
-        Eigen::Matrix2d matrix_t;
-        matrix_t << 
+        );
+        Matrix2d matrix_t(
             std::sin(theta_t.value()), std::cos(theta_t.value()),
             - std::cos(theta_t.value()), std::sin(theta_t.value())
-        ;
+        );
 
-        Eigen::Vector2d VC = (
-            ( matrix_t_dt - matrix_t ).inverse() 
+        Vector2d VC = (
+            inverse( matrix_t_dt - matrix_t )
         ) * velocity_translation * omega.value() * dt;
 
         EXPECT_TRUE(
-            ( control.velocity_translation - VC ).norm() < 0.001
+            norm_2( control.velocity_translation - VC ) < 0.001
         );
         EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(3.0) );
     }
@@ -113,11 +110,11 @@ class TestRobotControl : public RobotControl {
         return 2.0;
     };
     PidControl absolute_control_in_absolute_frame(
-        const Eigen::Vector2d & robot_position, 
+        const Vector2d & robot_position, 
         const ContinuousAngle & robot_orientation
     ) const {
         return PidControl(
-            Eigen::Vector2d(3.0, 4.0), 
+            Vector2d(3.0, 4.0), 
             ContinuousAngle(3)
         );
     };
@@ -135,10 +132,10 @@ TEST(test_robot_control, limit_control){
         );
 
         PidControl limited = robot_control.limited_control(
-            Eigen::Vector2d(0.0, 0.0), ContinuousAngle(0.0)
+            Vector2d(0.0, 0.0), ContinuousAngle(0.0)
         );
 
-        EXPECT_TRUE( limited.velocity_translation == Eigen::Vector2d(3.0, 4.0) );
+        EXPECT_TRUE( limited.velocity_translation == Vector2d(3.0, 4.0) );
         EXPECT_TRUE( limited.velocity_rotation == ContinuousAngle(3) );
     }
     {
@@ -152,7 +149,7 @@ TEST(test_robot_control, limit_control){
         );
 
         PidControl limited = robot_control.limited_control(
-            Eigen::Vector2d(0.0, 0.0), ContinuousAngle(0.0)
+            Vector2d(0.0, 0.0), ContinuousAngle(0.0)
         );
 
         EXPECT_TRUE( 

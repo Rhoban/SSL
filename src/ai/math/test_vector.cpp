@@ -77,6 +77,22 @@ TEST(test_vector, norm){
         Vector2d v(4.0, 3.0);
         EXPECT_EQ( norm(v), 5.0 );
     }
+    {
+        Vector2d v(0.0, 0.0);
+        EXPECT_TRUE( std::fabs(v.norm()) < 0.0001 );
+    }
+    {
+        Vector2d v(2.0, 0.0);
+        EXPECT_TRUE( std::fabs(v.norm() - 2.0) < 0.0001 );
+    }
+    {
+        Vector2d v(0.0, 2.0);
+        EXPECT_TRUE( std::fabs(v.norm() - 2.0) < 0.0001 );
+    }
+    {
+        Vector2d v(1.0, 1.0);
+        EXPECT_TRUE( std::fabs(v.norm() - std::sqrt(2.0)) < 0.0001 );
+    }
 }
 
 TEST(test_vector, normalized){
@@ -101,8 +117,6 @@ TEST(test_vector, normalized){
         EXPECT_EQ( normalized(v), Vector2d(3.0/5.0,4.0/5.0) );
     }
 }
-
-
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

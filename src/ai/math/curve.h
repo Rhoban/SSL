@@ -2,8 +2,9 @@
 #define __curve__H__
 
 #include <debug.h>
-#include <Eigen/Dense>
 #include <vector>
+#include <functional>
+#include <math/vector.h>
 
 struct ContinuousVelocityConsign {
     double distance;
@@ -42,7 +43,7 @@ class Curve2d;
 
 class Curve2d {
     public:
-        std::function<Eigen::Vector2d (double u)> curve;
+        std::function<Vector2d (double u)> curve;
         
         double step_curve_parameter;
         double curve_length;
@@ -53,7 +54,7 @@ class Curve2d {
             const Curve2d & _this;
             double v;
             double length;
-            Eigen::Vector2d old;
+            Vector2d old;
 
             Length( const Curve2d & _this ):
                 _this(_this),
@@ -65,11 +66,11 @@ class Curve2d {
             double next(double u){
                 assert( v <= u ); 
                 for( ; v <= u; v+=_this.step_curve_parameter ){
-                    Eigen::Vector2d current = _this.curve( v );
-                    length += ( current - old ).norm();
+                    Vector2d current = _this.curve( v );
+                    length += norm_2( current - old );
                     old = current;
                 }
-                return length + ( _this.curve(u) - old ).norm();
+                return length + norm_2( _this.curve(u) - old );
             }
 
 
@@ -84,7 +85,7 @@ class Curve2d {
             const Curve2d & _this;
             double u;
             double length;
-            Eigen::Vector2d old;
+            Vector2d old;
 
             Inverse_of_length( const Curve2d & _this ):
                 _this(_this),
@@ -97,8 +98,8 @@ class Curve2d {
                 if( l <= 0 ) return 0.0;
                 if( l >= _this.curve_length ) return 1.0;
                 for( ; length < l; u+=_this.step_curve_parameter ){
-                    Eigen::Vector2d current = _this.curve( u );
-                    length += ( current - old ).norm();
+                    Vector2d current = _this.curve( u );
+                    length += norm_2( current - old );
                     old = current;
                 }
                 return u;
@@ -109,16 +110,16 @@ class Curve2d {
 
     public:
         Curve2d(
-            const std::function<Eigen::Vector2d (double u)> & curve,
+            const std::function<Vector2d (double u)> & curve,
             double step_curve_parameter
         );
         Curve2d(
-            const std::function<Eigen::Vector2d (double u)> & curve,
+            const std::function<Vector2d (double u)> & curve,
             double step_curve_parameter, double curve_length
         );
         Curve2d( const Curve2d& curve );
 
-        Eigen::Vector2d operator()(double u) const;
+        Vector2d operator()(double u) const;
 
         double arc_length( double u ) const;
         Length length_iterator() const {
@@ -190,7 +191,7 @@ class RenormalizedCurve : public Curve2d {
 
 
         RenormalizedCurve(
-            const std::function<Eigen::Vector2d (double u)> & curve,
+            const std::function<Vector2d (double u)> & curve,
             double step_curve_parameter,
             const std::function<double (double t)> & velocity_consign,
             double step_time, double length_tolerance
@@ -204,7 +205,7 @@ class RenormalizedCurve : public Curve2d {
         void set_step_time( double dt );
 
         double max_time() const;
-        Eigen::Vector2d original_curve( double u ) const;
+        Vector2d original_curve( double u ) const;
         double time( double length ) const;
         TimeCurve time_iterator() const;
         double position_consign( double t ) const;
@@ -222,7 +223,7 @@ class RenormalizedCurve : public Curve2d {
             { }
 
             
-            Eigen::Vector2d operator()(double t) {
+            Vector2d operator()(double t) {
                 if( _this.time_max <= t ){
                     return _this.original_curve(1.0);
                 }
@@ -236,7 +237,7 @@ class RenormalizedCurve : public Curve2d {
         PositionConsign position_consign_iterator() const {
             return PositionConsign(*this);
         }
-        Eigen::Vector2d operator()(double t) const;
+        Vector2d operator()(double t) const;
 
         double get_time_max() const { return time_max; };
         double error_position_consign() const;
