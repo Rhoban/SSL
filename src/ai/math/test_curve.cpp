@@ -8,7 +8,7 @@
 #include <cmath>
 
 bool eq( double u, double v, double err ){
-    return std::abs(u-v) <= err;
+    return std::fabs(u-v) <= err;
 }
 
 double error_renormalisation(

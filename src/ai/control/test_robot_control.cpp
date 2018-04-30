@@ -156,13 +156,13 @@ TEST(test_robot_control, limit_control){
         );
 
         EXPECT_TRUE( 
-            std::abs( 
+            std::fabs( 
                 limited.velocity_translation.norm() - 
                 translation_velocity_limit
             ) < 0.0001
         );
         EXPECT_TRUE(
-            std::abs(
+            std::fabs(
                 limited.velocity_rotation.value() - rotation_velocity_limit 
             ) < 0.0001 
         );

@@ -62,7 +62,7 @@ TEST(test_movement_predicted_by_integration, use_cases){
                 ) < 0.00001
             );
             EXPECT_TRUE(
-                std::abs(
+                std::fabs(
                     (
                         pred.angular_position(6+t) - (
                             ang + ang_vel*t + ang_accel*t*t/2.0 

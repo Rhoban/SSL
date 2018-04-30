@@ -121,7 +121,7 @@ PidControl RobotControl::limited_control(
         if( res.velocity_rotation.abs() >= rotation_velocity_limit ){
             res.velocity_rotation *= (
                 rotation_velocity_limit.value() / (
-                    std::abs( res.velocity_rotation.value() ) 
+                    std::fabs( res.velocity_rotation.value() ) 
                 ) 
             );
             std::cerr << "We limit the rotation velocity to" << 
@@ -181,7 +181,7 @@ PidControl RobotControl::absolute_to_relative_control(
     const Eigen::Vector2d & a_t = absolute_control.velocity_translation;
     const ContinuousAngle & a_r =  absolute_control.velocity_rotation;
 
-    if( std::abs(a_r.value()) > CALCULUS_ERROR ){
+    if( std::fabs(a_r.value()) > CALCULUS_ERROR ){
         rotation_matrix << 
             std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value()), 
             std::cos((a_r*dt+robot_orientation).value()) - std::cos(robot_orientation.value()),

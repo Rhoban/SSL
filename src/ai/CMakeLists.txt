@@ -59,6 +59,7 @@ set (SOURCES
     math/curve.cpp
     math/tangents.cpp
     math/vector.cpp
+    math/matrix2d.cpp
     math/frame_changement.cpp
     core/export_to_plot.cpp
     core/logger.cpp
@@ -95,6 +96,7 @@ if(CATKIN_ENABLE_TESTING)
     math/test_ContinuousAngle.cpp
     math/test_tangents.cpp
     math/test_vector.cpp
+    math/test_matrix2d.cpp
     control/test_pid.cpp
     control/test_robot_control.cpp
     robot_behavior/test_robot_behavior.cpp

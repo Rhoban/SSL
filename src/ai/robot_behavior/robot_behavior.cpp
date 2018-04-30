@@ -70,7 +70,7 @@ void RobotBehavior::update_time_and_position(
     this->robot_linear_position = point2eigen(
         robot.get_movement().linear_position(time)
     );
-    this->ball_position = vector2eigen( 
+    this->ball_position = point2eigen( 
         ball.get_movement().linear_position(time)
     );
     this->robot_angular_position = robot.get_movement().angular_position(

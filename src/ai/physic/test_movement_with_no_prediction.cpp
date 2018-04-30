@@ -28,7 +28,7 @@ TEST(test_movement_with_no_prediction, use_cases){
         EXPECT_TRUE( pred.angular_position(6.1) == 108 );
         EXPECT_TRUE( pred.angular_position(6.2) == 108 );
 
-        Point vel = Point(27-8,54-16)/3.0;
+        Vector2d vel = Vector2d(27-8,54-16)/3.0;
         EXPECT_TRUE( pred.linear_velocity(6) == vel );
         EXPECT_TRUE( pred.linear_velocity(6.1) == vel );
         EXPECT_TRUE( pred.linear_velocity(6.2) == vel );

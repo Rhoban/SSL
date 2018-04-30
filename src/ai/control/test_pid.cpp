@@ -208,7 +208,7 @@ TEST(test_pid, null_pid){
             ).norm() < 0.00001    
         );
         EXPECT_TRUE(
-            std::abs(
+            std::fabs(
                 ( control.velocity_rotation - ContinuousAngle(6.0) ).value()
             ) < 0.00001
         );
@@ -262,7 +262,7 @@ TEST(test_pid, pid){
         );
         ContinuousAngle error_ori = current_orientation - ori;
         EXPECT_TRUE(
-            std::abs(
+            std::fabs(
                 (
                     control.velocity_rotation - (
                         ContinuousAngle( 6.0 ) - 
@@ -318,7 +318,7 @@ TEST(test_pid, pid){
         );
         ContinuousAngle error_ori = current_orientation - ori;
         EXPECT_TRUE(
-            std::abs(
+            std::fabs(
                 (
                     control.velocity_rotation - (
                         ContinuousAngle( 6.0 ) - 
@@ -374,7 +374,7 @@ TEST(test_pid, pid){
         );
         ContinuousAngle error_ori = current_orientation - ori;
         EXPECT_TRUE(
-            std::abs(
+            std::fabs(
                 (
                     control.velocity_rotation - (
                         ContinuousAngle( 6.0 ) - 

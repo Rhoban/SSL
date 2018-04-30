@@ -14,11 +14,13 @@ Point center_of_cone_incircle(
     double u_vec_v = vectorial_product(u, v);
     assert( u_vec_v != 0.0 );
     double signe = (u_vec_v>=0)?1:-1;
-    return (
-        (u+v)*(signe*circle_radius) + 
-        v*vectorial_product(u, cone_vertex) + 
-        u*vectorial_product(cone_vertex, v)
-    )/u_vec_v;
+    return vector2point( 
+        (
+            (u+v)*(signe*circle_radius) + 
+            v*vectorial_product(u, cone_vertex) + 
+            u*vectorial_product(cone_vertex, v)
+        )/u_vec_v
+    );
 }
 
 

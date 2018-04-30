@@ -90,8 +90,8 @@ Eigen::Vector2d PidController::translation_control_in_absolute_frame(
     Eigen::Vector2d error = robot_position - xt;
 
     if( 
-        std::abs( error[0] ) < CALCULUS_ERROR and 
-        std::abs(error[1] ) < CALCULUS_ERROR
+        std::fabs( error[0] ) < CALCULUS_ERROR and 
+        std::fabs( error[1] ) < CALCULUS_ERROR
     ){
         error = Eigen::Vector2d(0.0,0.0);
     }
@@ -115,7 +115,7 @@ Eigen::Vector2d PidController::translation_control_in_absolute_frame(
           - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
         ;
     }
-    error /= std::abs( rotation_matrix.determinant() );
+    error /= std::fabs( rotation_matrix.determinant() );
     #endif
     
     Eigen::Vector2d absolute_command = (
@@ -142,7 +142,7 @@ double PidController::rotation_control_in_absolute_frame(
     //DEBUG("robot_orientation: " << robot_orientation );
     //DEBUG("error: " << error );
  
-    if( std::abs( error.value() ) <= CALCULUS_ERROR ){
+    if( std::fabs( error.value() ) <= CALCULUS_ERROR ){
         //DEBUG("ERROR SET TO 0");
         error = 0.0;
     }

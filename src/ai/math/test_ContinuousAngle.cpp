@@ -66,15 +66,15 @@ TEST(test_ContinuousAngle, constructors){
 TEST(test_ContinuousAngle, angle){
     {
         ContinuousAngle c(2*M_PI);
-        EXPECT_TRUE( std::abs( c.angle().getSignedValue() - 0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( c.angle().getSignedValue() - 0 ) < 0.00001 );
     }
     {
         ContinuousAngle c(4*M_PI);
-        EXPECT_TRUE( std::abs( c.angle().getSignedValue() - 0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( c.angle().getSignedValue() - 0 ) < 0.00001 );
     }
     {
         ContinuousAngle c(-4*M_PI);
-        EXPECT_TRUE( std::abs( c.angle().getSignedValue() - 0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( c.angle().getSignedValue() - 0 ) < 0.00001 );
     }
 }
 
@@ -82,12 +82,12 @@ TEST(test_ContinuousAngle, abs){
     {
         ContinuousAngle c(1.4);
         ContinuousAngle d = c.abs();
-        EXPECT_TRUE( std::abs( d.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( d.value() - 1.4 ) < 0.0001 );
     }
     {
         ContinuousAngle c(-1.4);
         ContinuousAngle d = c.abs();
-        EXPECT_TRUE( std::abs( d.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( d.value() - 1.4 ) < 0.0001 );
     }
 }
 
@@ -95,19 +95,19 @@ TEST(test_ContinuousAngle, operator_plus){
     {
         ContinuousAngle c(1.4);
         c+=1;
-        EXPECT_TRUE( std::abs( c.value() - 2.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 2.4 ) < 0.0001 );
     }
     {
         ContinuousAngle c(1.4);
         ContinuousAngle d = c + 1;
-        EXPECT_TRUE( std::abs( c.value() - 1.4 ) < 0.0001 );
-        EXPECT_TRUE( std::abs( d.value() - 2.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( d.value() - 2.4 ) < 0.0001 );
     }
     {
         ContinuousAngle c(1.4);
         ContinuousAngle d = +c;
-        EXPECT_TRUE( std::abs( c.value() - 1.4 ) < 0.0001 );
-        EXPECT_TRUE( std::abs( d.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( d.value() - 1.4 ) < 0.0001 );
     }
 }
 
@@ -115,19 +115,19 @@ TEST(test_ContinuousAngle, operator_minus){
     {
         ContinuousAngle c(1.4);
         c-=1;
-        EXPECT_TRUE( std::abs( c.value() - 0.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 0.4 ) < 0.0001 );
     }
     {
         ContinuousAngle c(1.4);
         ContinuousAngle d = c - 1;
-        EXPECT_TRUE( std::abs( c.value() - 1.4 ) < 0.0001 );
-        EXPECT_TRUE( std::abs( d.value() - 0.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( d.value() - 0.4 ) < 0.0001 );
     }
     {
         ContinuousAngle c(1.4);
         ContinuousAngle d = -c;
-        EXPECT_TRUE( std::abs( c.value() - 1.4 ) < 0.0001 );
-        EXPECT_TRUE( std::abs( d.value() + 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( d.value() + 1.4 ) < 0.0001 );
     }
 }
 
@@ -135,13 +135,13 @@ TEST(test_ContinuousAngle, operator_prod){
     {
         ContinuousAngle c(1.4);
         c*=2;
-        EXPECT_TRUE( std::abs( c.value() - 2.8 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 2.8 ) < 0.0001 );
     }
     {
         ContinuousAngle c(1.4);
         ContinuousAngle d = c * 2;
-        EXPECT_TRUE( std::abs( c.value() - 1.4 ) < 0.0001 );
-        EXPECT_TRUE( std::abs( d.value() - 2.8 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( d.value() - 2.8 ) < 0.0001 );
     }
 }
 
@@ -149,13 +149,13 @@ TEST(test_ContinuousAngle, operator_div){
     {
         ContinuousAngle c(2.8);
         c/=2;
-        EXPECT_TRUE( std::abs( c.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 1.4 ) < 0.0001 );
     }
     {
         ContinuousAngle c(2.8);
         ContinuousAngle d = c / 2;
-        EXPECT_TRUE( std::abs( c.value() - 2.8 ) < 0.0001 );
-        EXPECT_TRUE( std::abs( d.value() - 1.4 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.value() - 2.8 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( d.value() - 1.4 ) < 0.0001 );
     }
 }
 
@@ -178,7 +178,7 @@ TEST(test_ContinuousAngle, operator_equal){
 TEST(test_ContinuousAngle, turn){
     {
         ContinuousAngle c(2.8);
-        EXPECT_TRUE( std::abs( c.turn() - 0.445633840657 ) < 0.0001 );
+        EXPECT_TRUE( std::fabs( c.turn() - 0.445633840657 ) < 0.0001 );
     }
 }
 
@@ -272,7 +272,7 @@ TEST(test_ContinuousAngle, set_to_nearest){
             c.set_to_nearest( angle );
             
             EXPECT_TRUE(
-                std::abs( c.value() - d.value() ) < 2*step
+                std::fabs( c.value() - d.value() ) < 2*step
             );
         } 
     }
@@ -288,7 +288,7 @@ TEST(test_ContinuousAngle, set_to_nearest){
             );
             c.set_to_nearest( angle );
             EXPECT_TRUE(
-                std::abs( c.value() - d.value() ) < 2*step
+                std::fabs( c.value() - d.value() ) < 2*step
             );
             
         }
@@ -305,7 +305,7 @@ TEST(test_ContinuousAngle, set_to_nearest){
             c.set_to_nearest( angle );
            
             EXPECT_TRUE(
-                std::abs( 
+                std::fabs( 
                     Angle( rad2deg(c.value()) ).getSignedValue()
                     -
                     angle.getSignedValue()
@@ -313,7 +313,7 @@ TEST(test_ContinuousAngle, set_to_nearest){
             );
             
             EXPECT_TRUE(
-                std::abs( c.value() - d.value() ) < 2*step
+                std::fabs( c.value() - d.value() ) < 2*step
             );
         }
     }
@@ -328,7 +328,7 @@ TEST(test_ContinuousAngle, set_to_nearest){
             c.set_to_nearest( angle );
 
             EXPECT_TRUE(
-                std::abs( 
+                std::fabs( 
                     Angle( rad2deg(c.value()) ).getSignedValue()
                     -
                     angle.getSignedValue()
@@ -336,7 +336,7 @@ TEST(test_ContinuousAngle, set_to_nearest){
             );
 
             EXPECT_TRUE(
-                std::abs( c.value() - d.value() ) < 2*step
+                std::fabs( c.value() - d.value() ) < 2*step
             );
             
         }
@@ -356,7 +356,7 @@ TEST(test_ContinuousAngle, set_to_nearest){
             c = Angle( rad2deg(angle) );
             
             EXPECT_TRUE(
-                std::abs( c.value() - d.value() ) < 2*step
+                std::fabs( c.value() - d.value() ) < 2*step
             );
         } 
     }
@@ -372,7 +372,7 @@ TEST(test_ContinuousAngle, set_to_nearest){
             );
             c = Angle( rad2deg(angle) );
             EXPECT_TRUE(
-                std::abs( c.value() - d.value() ) < 2*step
+                std::fabs( c.value() - d.value() ) < 2*step
             );
             
         }

@@ -29,7 +29,7 @@ TEST(test_eigen_convertion, point2eigen){
 TEST(test_eigen_convertion, vector2eigen){
     {
         Vector2d v1(2.0, 3.0);
-        Eigen::Vector2d v2 = point2eigen(v1);
+        Eigen::Vector2d v2 = vector2eigen(v1);
         EXPECT_EQ(v2, Eigen::Vector2d(2.0, 3.0) );
     }
 }

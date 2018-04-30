@@ -56,7 +56,7 @@ TEST(test_MovementSample, some_use_cases){
         EXPECT_TRUE( mov.angular_velocity(1) == ContinuousAngle(28) );
         EXPECT_TRUE( mov.angular_velocity(0) == ContinuousAngle(76) );
         
-        EXPECT_TRUE( mov.linear_acceleration(0) == Point(12,24) );
+        EXPECT_TRUE( mov.linear_acceleration(0) == Vector2d(12,24) );
 
         EXPECT_TRUE( mov.angular_acceleration(0) == ContinuousAngle(48) );
     }
@@ -81,14 +81,12 @@ TEST(test_MovementSample, some_use_cases){
         EXPECT_TRUE( mov.angular_velocity(0) == ContinuousAngle(76)/3 );
         
         EXPECT_TRUE( 
-            ( mov.linear_acceleration(0) - Point(17,34)/(2*3*3) ).getDist(
-                Point(0.0,0.0)
-            ) 
+            norm( mov.linear_acceleration(0) - Vector2d(17,34)/(2*3*3) )
             < 0.0001 
         );
 
         EXPECT_TRUE(
-            std::abs( 
+            std::fabs( 
                 ( 
                     mov.angular_acceleration(0) - ContinuousAngle(68)/(2*3*3)
                 ).value()
@@ -123,27 +121,23 @@ TEST(test_MovementSample, some_use_cases){
         EXPECT_TRUE( mov.angular_velocity(0) == ContinuousAngle(921)/4 );
         
         EXPECT_TRUE( 
-            ( mov.linear_acceleration(1) - Point(17,34)/(2*3*3) ).getDist(
-                Point(0.0,0.0)
-            ) 
+            norm( mov.linear_acceleration(1) - Vector2d(17,34)/(2*3*3) )
             < 0.0001 
         );
         EXPECT_TRUE( 
-            ( mov.linear_acceleration(0) - Point(872,1744)/(3*4*4) ).getDist(
-                Point(0.0,0.0)
-            ) 
+            norm( mov.linear_acceleration(0) - Vector2d(872,1744)/(3*4*4) )
             < 0.0001 
         );
 
         EXPECT_TRUE(
-            std::abs( 
+            std::fabs( 
                 ( 
                     mov.angular_acceleration(1) - ContinuousAngle(68)/(2*3*3)
                 ).value()
             ) < 0.0001
         );
         EXPECT_TRUE(
-            std::abs( 
+            std::fabs( 
                 ( 
                     mov.angular_acceleration(0) - ContinuousAngle(2459)/(3*4*4)
                 ).value()
