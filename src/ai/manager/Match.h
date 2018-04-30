@@ -11,7 +11,7 @@ class Match : public Manager {
     private:
     const Referee & referee;
 
-    int last_referee_changement;
+    unsigned int last_referee_changement;
     
     public:
 

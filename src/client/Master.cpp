@@ -136,7 +136,7 @@ namespace RhobanSSL
     void Master::execute()
     {
         int state = 0;
-        int pos = 0;
+        unsigned int pos = 0;
         size_t nb_robots = 0;
         uint8_t temp[1024];
 

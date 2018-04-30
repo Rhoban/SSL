@@ -17,6 +17,8 @@ public:
 
     Master *getMaster();
 
+    virtual ~AICommanderReal();
+
 protected:
     bool kicking;
     Master master;

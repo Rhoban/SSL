@@ -58,4 +58,8 @@ namespace RhobanSSL
     {
         client.moveRobot(yellow, id, x, y, theta*180/M_PI, turnon);
     }
+
+    AICommanderSimulation::~AICommanderSimulation(){
+    }
+
 }

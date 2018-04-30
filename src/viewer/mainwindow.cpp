@@ -5,10 +5,10 @@
 
 MainWindow::MainWindow(API *api, QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    inspector(NULL),
     accessibility(false),
     superBigleuxMode(false),
+    inspector(NULL),
+    ui(new Ui::MainWindow),
     api(api)
 {
   ui->setupUi(this);

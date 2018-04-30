@@ -3,7 +3,7 @@
 namespace RhobanSSL
 {
     AICommanderReal::AICommanderReal(bool yellow)
-    : AICommander(yellow), master("/dev/ttyACM0", 1000000), kicking(false)
+    : AICommander(yellow), kicking(false), master("/dev/ttyACM0", 1000000)
     {
     }
 
@@ -55,4 +55,8 @@ namespace RhobanSSL
     {
         return &master;
     }
+
+    AICommanderReal::~AICommanderReal(){
+    }
+
 }

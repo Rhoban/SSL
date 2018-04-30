@@ -9,7 +9,7 @@ namespace RhobanSSL
 {
     AIVisionClient::AIVisionClient(
         Data& ai_data, AIVisionClient::Team myTeam, bool simulation
-    ): ai_data(ai_data), myTeam(myTeam), VisionClient(simulation)
+    ): VisionClient(simulation), ai_data(ai_data), myTeam(myTeam) 
     {
     }
 

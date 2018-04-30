@@ -89,7 +89,7 @@ void Enseirb_project_wrapper::assign_behavior_to_robots(
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
-        for( int i=0; i<get_robot_ids().size(); i++ ){
+        for( unsigned int i=0; i<get_robot_ids().size(); i++ ){
             RhobanSSL::Apply_enseirb_project_action *robot_behavior = new RhobanSSL::Apply_enseirb_project_action(
                 robot_actions[i],
                 time, dt
@@ -136,7 +136,6 @@ void Enseirb_project_wrapper::update(double time){
     for( auto team: {Vision::Ally, Vision::Opponent} ){
         for( const std::pair<int, Ai::Robot> & elem : game_state.robots[team] ){
             int id = elem.first;
-            const Ai::Robot & robot = elem.second;
             const RhobanSSL::Movement & robot_mov = game_state.ball.get_movement();
             linear_position = robot_mov.linear_position(time );
             angular_position = robot_mov.angular_position(time);
@@ -153,7 +152,7 @@ void Enseirb_project_wrapper::update(double time){
     } 
         
     // get robot actions
-    for( int i=0; i<get_robot_ids().size(); i++ ){
+    for( unsigned int i=0; i<get_robot_ids().size(); i++ ){
         Action action = getBehaviour(
             &config, robots, nb_robots, &ball, 
             robot_id(i)

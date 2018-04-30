@@ -39,7 +39,7 @@ class RobotBehavior {
         
         double age() const;
         bool is_born() const;
-        double set_birthday( double birthday );
+        void set_birthday( double birthday );
 
         void update_time_and_position(
             double time, 

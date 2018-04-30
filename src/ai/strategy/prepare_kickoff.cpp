@@ -33,7 +33,6 @@ RobotBehavior* Prepare_kickoff::create_follower(
     double time, double dt
 ) const {
     PositionFollower* follower = new PositionFollower(time, dt);
-    (-3.0, 0.0);
     follower->set_following_position(
         follower_position, angle
     );

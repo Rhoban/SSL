@@ -80,7 +80,6 @@ TEST(test_robot_control, absolute_to_relative_control){
             absolute_control, robot_position, robot_orientation, dt
         );
 
-        double t = 0.0;
         ContinuousAngle omega = velocity_rotation;
         
         ContinuousAngle theta_t_dt = omega * dt + robot_orientation;

@@ -1,4 +1,5 @@
 #include "robot_behavior.h"
+#include <math/eigen_convertion.h>
 
 namespace RhobanSSL {
 
@@ -56,7 +57,7 @@ RobotBehavior::RobotBehavior() : birthday(-1.0) { };
 
 double RobotBehavior::age() const { return lastUpdate - birthday; };
 bool RobotBehavior::is_born() const { return birthday > 0; };
-double RobotBehavior::set_birthday( double birthday ){
+void RobotBehavior::set_birthday( double birthday ){
     assert( birthday > 0 );
     this->birthday = birthday;
 };
@@ -66,14 +67,11 @@ void RobotBehavior::update_time_and_position(
     const Ai::Robot & robot, const Ai::Ball & ball
 ){
     lastUpdate = time;
-    this->robot_linear_position = Eigen::Vector2d( 
-        robot.get_movement().linear_position(time).getX(), 
-        robot.get_movement().linear_position(time).getY()
+    this->robot_linear_position = point2eigen(
+        robot.get_movement().linear_position(time)
     );
-    const Movement & mov = robot.get_movement();
-    this->ball_position = Eigen::Vector2d(
-        ball.get_movement().linear_position(time).getX(),
-        ball.get_movement().linear_position(time).getY()
+    this->ball_position = vector2eigen( 
+        ball.get_movement().linear_position(time)
     );
     this->robot_angular_position = robot.get_movement().angular_position(
         time

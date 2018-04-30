@@ -53,6 +53,8 @@ public:
     virtual void moveRobot(bool yellow, int id, double x, double y,
         double theta, bool turnon){};
 
+    virtual ~AICommander();
+
 protected:
     std::vector<struct Command> commands;
 

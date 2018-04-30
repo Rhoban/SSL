@@ -16,7 +16,7 @@ TEST(test_circular_vector, Constructors){
     {
         circular_vector<double> vec(3);
         EXPECT_TRUE( vec.size() == 3 );
-        for( int i = 0 ; i<vec.size(); i++ ){
+        for( unsigned int i = 0 ; i<vec.size(); i++ ){
             EXPECT_TRUE( vec[i] == 0 );
         }
     }

@@ -7,6 +7,8 @@ namespace RhobanSSL
     {
     }
 
+    AICommander::~AICommander(){ }
+
     void AICommander::set(uint8_t robot_id, bool enabled,
         double xSpeed, double ySpeed, double thetaSpeed, int kick, bool spin, bool charge)
     {

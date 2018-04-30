@@ -107,7 +107,10 @@ void Curve2d::init(){
 Curve2d::Curve2d(
     const std::function<Eigen::Vector2d (double u)> & curve,
     double step_curve_parameter
-):curve(curve), step_curve_parameter(step_curve_parameter), curve_length(-1.0)
+):
+    curve(curve),
+    step_curve_parameter(step_curve_parameter),
+    curve_length(-1.0)
 {
     init();
 };
@@ -161,8 +164,8 @@ RenormalizedCurve::RenormalizedCurve(
     double step_time, double length_tolerance
 ):
     Curve2d(curve, step_curve_parameter), velocity_consign(velocity_consign), 
-    step_time(step_time), 
-    length_tolerance(length_tolerance)
+    length_tolerance(length_tolerance),
+    step_time(step_time)
 {
     init();
 };
@@ -174,8 +177,8 @@ RenormalizedCurve::RenormalizedCurve(
     double length_tolerance
 ):
     Curve2d(curve), velocity_consign(velocity_consign), 
-    step_time(step_time), 
-    length_tolerance(length_tolerance)
+    length_tolerance(length_tolerance),
+    step_time(step_time)
 {
     init();
 };

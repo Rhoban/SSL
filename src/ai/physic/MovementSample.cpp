@@ -30,7 +30,8 @@ void MovementSample::insert( const PositionSample & sample ){
 }
 
 bool MovementSample::is_valid() const {
-    for( int i=0; i<this->size()-1; i++ ){
+    assert(this->size()>=1);
+    for( unsigned int i=0; i<this->size()-1; i++ ){
         if( (*this)[i].time <= (*this)[i+1].time ){
             return false;
         }

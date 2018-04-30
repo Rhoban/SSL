@@ -5,8 +5,8 @@
 namespace RhobanSSL {
 
 Apply_enseirb_project_action::Apply_enseirb_project_action( const Action& action, double time, double dt ):
-    action( action ),
-    PositionFollower(time, dt)
+    PositionFollower(time, dt),
+    action( action )
 { }
 
 void Apply_enseirb_project_action::update(

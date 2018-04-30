@@ -10,8 +10,8 @@ From_robot_behavior::From_robot_behavior(
         std::shared_ptr<RobotBehavior>(double time, double dt)
     > robot_behavior_allocator, bool is_goalie
 ):
-    is_goalie(is_goalie),
-    robot_behavior_allocator(robot_behavior_allocator)
+    robot_behavior_allocator(robot_behavior_allocator),
+    is_goalie(is_goalie)
 {
 };
 int From_robot_behavior::min_robots() const {

@@ -18,6 +18,8 @@ public:
     virtual void moveRobot(bool yellow, int id, double x, double y,
         double theta, bool turnon);
 
+    virtual ~AICommanderSimulation();
+
 protected:
     SimClient client;
 };

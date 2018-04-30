@@ -65,8 +65,9 @@ template <typename T>
 std::ostream& operator<<(
     std::ostream& stream, const circular_vector<T> & vec
 ){
+    assert( vec.size() >= 1 );
     stream << "(";
-    for( int i=0; i< vec.size()-1; i++ ){
+    for( unsigned int i=0; i< vec.size()-1; i++ ){
         stream << vec[i] << ", ";  
     }
     stream << vec[vec.size()-1];

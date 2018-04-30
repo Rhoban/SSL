@@ -111,12 +111,11 @@ AI::AI(
     AICommander *commander
 ):
     team(team), 
-    data(data), 
+    running(true),
     commander(commander),
-    current_dt(0.0)
+    current_dt(0.0),
+    data(data)
 {
-    running = true;
-   
     init_robot_behaviors();
     std::vector<int> robot_ids( robot_behaviors.size() );
     int i = 0;

@@ -16,6 +16,7 @@ ContinuousAngle::ContinuousAngle(const ContinuousAngle & angle) :
 
 ContinuousAngle& ContinuousAngle::operator=( double angle ){
     this->angle_value = angle;
+    return *this;
 }
 //ContinuousAngle& ContinuousAngle::operator=( const Angle & angle ){
 //    this->set_to_nearest( angle );
