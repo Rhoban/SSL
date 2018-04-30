@@ -74,4 +74,7 @@ Movement_predicted_by_integration::angular_acceleration( double time ) const {
     return samples.angular_acceleration(0);
 }
 
+Movement_predicted_by_integration::~Movement_predicted_by_integration(){
+}
+
 }

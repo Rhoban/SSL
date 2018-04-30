@@ -68,9 +68,12 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
                 map_id, true, 0.0, 0.0, 0.0 
             );
         }else{
+            Eigen::Vector2d velocity_translation = game_state.team_point_of_view.from_basis(
+                ctrl.velocity_translation
+            ); 
             commander->set(
                 map_id, true, 
-                ctrl.velocity_translation[0], sign_y*ctrl.velocity_translation[1], 
+                velocity_translation[0], sign_y*velocity_translation[1], 
                 ctrl.velocity_rotation.value()
             );
         }
@@ -100,6 +103,7 @@ void AI::init_robot_behaviors(){
         );
     }
 }
+
 
 AI::AI(
     Ai::Team team,
@@ -131,6 +135,7 @@ AI::AI(
     );
     strategy_manager->declare_goalie_id( goalie_id );
     strategy_manager->declare_team_ids( robot_ids );
+    strategy_manager->set_team(team);
 
 }
 

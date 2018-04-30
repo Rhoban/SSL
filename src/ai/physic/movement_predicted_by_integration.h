@@ -27,6 +27,8 @@ class Movement_predicted_by_integration : public Movement {
         virtual ContinuousAngle angular_acceleration( double time ) const;
 
         virtual void print(std::ostream& stream) const;
+
+        virtual ~Movement_predicted_by_integration();
 };
 
 }

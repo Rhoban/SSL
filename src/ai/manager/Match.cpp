@@ -17,7 +17,7 @@ Match::Match(
     Ai::AiData & game_state,
     const Referee & referee
 ):
-    game_state(game_state),
+    Manager(game_state),
     referee(referee),
     last_referee_changement(0)
 {
@@ -58,6 +58,10 @@ Match::Match(
 }
 
 void Match::analyse_data(double time){
+    // We change the point of view of the team
+    change_team_point_of_view(
+        referee.blue_have_it_s_goal_on_positive_x_axis()    
+    );
 }
 void Match::choose_a_strategy(double time){
     if( referee.edge_entropy() > last_referee_changement ){

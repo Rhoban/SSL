@@ -68,6 +68,8 @@ struct Referee_data {
 
 class Referee {
 private:
+    bool blueTeamOnPositiveHalf;
+
     RefereeClient referee;
     Referee_data referee_data;
     unsigned int edge_entropy_number;
@@ -91,6 +93,8 @@ public:
 
     void update( double time );
     Ai::Team kickoff_team() const ;
+
+    bool blue_have_it_s_goal_on_positive_x_axis() const;
 };
 
 }

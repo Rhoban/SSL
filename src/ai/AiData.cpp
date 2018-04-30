@@ -2,6 +2,7 @@
 #include <assert.h>
 #include <physic/movement_predicted_by_integration.h>
 #include <physic/movement_with_no_prediction.h>
+#include <physic/movement_on_new_frame.h>
 #include <debug.h>
 namespace RhobanSSL {
 namespace Ai {
@@ -22,11 +23,18 @@ namespace Ai {
         this->movement->set_sample( this->vision_data.movement );
     }
     void Object::set_movement( Movement * movement ){
-        assert( movement != this->movement ); 
         if( this->movement ){
+            assert( movement != static_cast<Movement_on_new_frame*>(this->movement)->get_original_movement() ); 
             delete this->movement;
         }
-        this->movement = movement;
+        // We change the frame according referee informatiosns
+        this->movement = new Movement_on_new_frame(movement);
+    }
+    void Object::change_frame(
+        const rhoban_geometry::Point & origin,
+        const Vector2d & v1, const Vector2d & v2
+    ){
+        static_cast<Movement_on_new_frame*>(movement)->set_frame(origin, v1, v2);
     }
 
     const RhobanSSL::Movement & Object::get_movement() const {
@@ -55,6 +63,21 @@ namespace Ai {
         }
         ball.set_vision_data( vision_data.ball );
     }
+
+    void AiData::change_frame_for_all_objects(
+        const rhoban_geometry::Point & origin,
+        const Vector2d & v1, const Vector2d & v2
+    ){
+        team_point_of_view.set_frame( origin, v1, v2 );
+        for( auto team : {Vision::Ally, Vision::Opponent} ){
+            for( int k=0; k<Vision::Robots; k++ ){
+                robots[team][k].change_frame( origin, v1, v2 );
+            }
+        }
+        ball.change_frame( origin, v1, v2 );
+    };
+
+
 
     AiData::AiData(){
         for( auto team : {Vision::Ally, Vision::Opponent} ){

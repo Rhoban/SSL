@@ -51,6 +51,7 @@ set (SOURCES
     control/pid.cpp
     physic/movement_predicted_by_integration.cpp
     physic/movement_with_no_prediction.cpp
+    physic/movement_on_new_frame.cpp
     physic/MovementSample.cpp
     physic/Movement.cpp
     math/eigen_convertion.cpp
@@ -58,6 +59,7 @@ set (SOURCES
     math/curve.cpp
     math/tangents.cpp
     math/vector.cpp
+    math/frame_changement.cpp
     core/export_to_plot.cpp
     core/logger.cpp
     referee/Referee.cpp
@@ -86,6 +88,7 @@ if(CATKIN_ENABLE_TESTING)
     math/test_eigen_convertion.cpp
     math/test_curve.cpp
     math/test_circular_vector.cpp
+    math/test_frame_changement.cpp
     physic/test_MovementSample.cpp
     physic/test_movement_with_no_prediction.cpp
     physic/test_movement_predicted_by_integration.cpp

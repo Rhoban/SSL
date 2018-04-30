@@ -56,4 +56,7 @@ Movement_with_no_prediction::clone() const {
     return mov;
 }
 
+Movement_with_no_prediction::~Movement_with_no_prediction(){
+}
+
 }

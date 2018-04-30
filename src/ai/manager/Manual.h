@@ -8,8 +8,6 @@ namespace Manager {
 
 class Manual : public Manager {
     private:
-
-    Ai::AiData& game_state;
     
     bool strategy_was_assigned;
     

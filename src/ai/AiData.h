@@ -7,6 +7,7 @@
 #include <physic/MovementSample.h>
 #include <vision/VisionData.h>
 #include <physic/Movement.h>
+#include <math/frame_changement.h>
 #include <Eigen/Dense>
 
 // Comment the following line if you are working with the real robot.
@@ -44,6 +45,12 @@ public:
 
     void set_vision_data( const Vision::Object & vision_data  );
     void set_movement( Movement * movement );
+
+    //We assume that v1 and v2 are orthonormal
+    void change_frame(
+        const rhoban_geometry::Point & origin,
+        const Vector2d & v1, const Vector2d & v2
+    );
 
     bool isOk() const ;
 
@@ -101,6 +108,13 @@ public:
     std::map<Vision::Team, std::map<int, Robot>> robots;
     Ball ball;
     Field field;
+
+    Frame_changement team_point_of_view;
+
+    void change_frame_for_all_objects(
+        const rhoban_geometry::Point & origin,
+        const Vector2d & v1, const Vector2d & v2
+    );
 
     Constants constants;
 

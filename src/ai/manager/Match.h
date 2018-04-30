@@ -10,7 +10,6 @@ namespace Manager {
 class Match : public Manager {
     private:
     const Referee & referee;
-    Ai::AiData& game_state;
 
     int last_referee_changement;
     

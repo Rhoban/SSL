@@ -6,20 +6,28 @@
 #include <map>
 #include <memory>
 #include <vector>
+#include <AiData.h>
 
 namespace RhobanSSL {
 namespace Manager {
 
 class Manager {
     private:
+
+    bool blueTeamOnPositiveHalf;
     Ai::Team team;
     int goalie_id;
     std::vector<int> team_ids;
 
     std::string current_strategy_name;
     std::map< std::string, std::shared_ptr<Strategy::Strategy>> strategies;
+
+    protected:
+    Ai::AiData & game_state;
     
     public:
+    Manager( Ai::AiData& game_state );
+
     void set_team( Ai::Team team );
     Ai::Team get_team() const;
     void declare_goalie_id(
@@ -65,6 +73,8 @@ class Manager {
             std::shared_ptr<RobotBehavior>
         > & robot_behaviors, double time, double dt
     );
+
+    void change_team_point_of_view( bool blue_have_it_s_goal_on_positive_x_axis );
 
     virtual ~Manager();
 };

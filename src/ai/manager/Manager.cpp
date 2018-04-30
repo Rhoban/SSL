@@ -91,6 +91,39 @@ Strategy::Strategy & Manager::current_strategy(){
 }
 
 
+void Manager::change_team_point_of_view( bool blue_have_it_s_goal_on_positive_x_axis ){
+    // We change the point of view of the team
+    if( blueTeamOnPositiveHalf != blue_have_it_s_goal_on_positive_x_axis ){
+        blueTeamOnPositiveHalf = blue_have_it_s_goal_on_positive_x_axis;
+        if(
+            (
+                get_team() == Ai::Blue
+                and 
+                blue_have_it_s_goal_on_positive_x_axis
+            )or(
+                get_team() == Ai::Yellow
+                and 
+                ! blue_have_it_s_goal_on_positive_x_axis
+            )
+        ){
+            game_state.change_frame_for_all_objects(
+                rhoban_geometry::Point(0.0,0.0),
+                Vector2d(-1.0, 0.0), Vector2d(0.0, -1.0)
+            );
+        }else{
+            game_state.change_frame_for_all_objects(
+                rhoban_geometry::Point(0.0,0.0),
+                Vector2d(1.0, 0.0), Vector2d(0.0, 1.0)
+            );
+        }
+    }
+
+}
+
+Manager::Manager( Ai::AiData& game_state ):
+    game_state(game_state)
+{ }
+
 Manager::~Manager(){ }
 
 };

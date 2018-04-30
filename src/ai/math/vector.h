@@ -8,6 +8,7 @@
 typedef rhoban_geometry::Point Vector2d;
 
 double vectorial_product( const Vector2d & v1, const Vector2d & v2 );
+double scalar_product( const Vector2d & v1, const Vector2d & v2 );
 
 double norm( const Vector2d & v1 );
 Vector2d normalized( const Vector2d & v1 );

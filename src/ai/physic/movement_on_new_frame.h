@@ -1,16 +1,28 @@
-#ifndef __MOVEMENT_WITH_NO_PREDICTION_H__ 
-#define __MOVEMENT_WITH_NO_PREDICTION_H__ 
+#ifndef __MOVEMENT_ON_NEW_FRAME_H__ 
+#define __MOVEMENT_ON_NEW_FRAME_H__ 
 
 #include <physic/Movement.h>
+#include <math/frame_changement.h>
 
 namespace RhobanSSL {
 
-class Movement_with_no_prediction : public Movement {
+class Movement_on_new_frame : public Movement {
     private:
-        MovementSample samples;
+        Movement* movement;
+        Frame_changement frame;
 
     public:
+
+        //We assume that v1 and v2 are orthonormal
+        void set_frame(
+            const rhoban_geometry::Point & origin,
+            const Vector2d & v1, const Vector2d & v2
+        );
+
         virtual Movement * clone() const;
+        const Movement* get_original_movement() const;
+
+        Movement_on_new_frame(Movement* movement);
 
         virtual void set_sample( const MovementSample & samples );
         virtual const MovementSample & get_sample() const;
@@ -26,7 +38,7 @@ class Movement_with_no_prediction : public Movement {
 
         virtual void print(std::ostream& stream) const;
 
-        virtual ~Movement_with_no_prediction();
+        virtual ~Movement_on_new_frame();
 };
 
 

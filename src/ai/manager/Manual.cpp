@@ -13,7 +13,7 @@ namespace Manager {
 Manual::Manual(
     Ai::AiData & game_state
 ):
-    game_state(game_state)
+    Manager(game_state)
 {
 
     register_strategy(

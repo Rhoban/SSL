@@ -29,6 +29,33 @@ TEST(test_vector, vectorial_product){
     }
 }
 
+TEST(test_vector, scalar_product){
+    {
+        Vector2d v1(0.0, 0.0);
+        Vector2d v2(0.0, 0.0);
+        EXPECT_EQ( scalar_product(v1, v2), 0.0 );
+    }
+    {
+        Vector2d v1(1.0, 2.0);
+        Vector2d v2(0.0, 0.0);
+        EXPECT_EQ( scalar_product(v1, v2), 0.0 );
+    }
+    {
+        Vector2d v1(0.0, 0.0);
+        Vector2d v2(3.0, 4.0);
+        EXPECT_EQ( scalar_product(v1, v2), 0.0 );
+    }
+    {
+        Vector2d v1(2.0, 3.0);
+        Vector2d v2(4.0, 5.0);
+        EXPECT_EQ(
+            scalar_product(v1, v2),
+            2.0*4.0+3.0*5.0 
+        );
+    }
+}
+
+
 TEST(test_vector, norm){
     {
         Vector2d v(0.0, 0.0);

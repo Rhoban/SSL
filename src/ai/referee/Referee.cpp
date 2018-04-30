@@ -196,7 +196,7 @@ Referee::Referee():
             const Referee_data & referee_data, 
             unsigned int run_number, unsigned int atomic_run_number
         ){
-            team_having_kickoff = Ai::Blue;
+            team_having_kickoff = Ai::Yellow;
         }
     );
     machine_state.add_edge(
@@ -207,7 +207,7 @@ Referee::Referee():
             const Referee_data & referee_data, 
             unsigned int run_number, unsigned int atomic_run_number
         ){
-            team_having_kickoff = Ai::Yellow;
+            team_having_kickoff = Ai::Blue;
         }
     );
     machine_state.add_edge(
@@ -277,6 +277,9 @@ void Referee::extract_data(){
         // issue.
     if( referee_data.last_time < data.packet_timestamp() ){
         referee_data.datas.insert( data );
+        if( data.has_blueteamonpositivehalf() ){
+            blueTeamOnPositiveHalf = data.blueteamonpositivehalf();
+        }
     }
 }
 
@@ -316,5 +319,8 @@ Ai::Team Referee::kickoff_team() const {
     return team_having_kickoff;
 }
 
+bool Referee::blue_have_it_s_goal_on_positive_x_axis() const {
+    return blueTeamOnPositiveHalf;
+}
 
 }
