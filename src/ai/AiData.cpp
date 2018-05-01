@@ -77,7 +77,9 @@ namespace Ai {
         ball.change_frame( origin, v1, v2 );
     };
 
-
+    void AiData::change_team_color( Ai::Team team_color ){
+        this->team_color = team_color;
+    }
 
     AiData::AiData(){
         for( auto team : {Vision::Ally, Vision::Opponent} ){
@@ -93,6 +95,7 @@ namespace Ai {
             //new Movement_predicted_by_integration()
         );
     }
+
 
     bool Ai::Object::isOk() const {
         //TODO

@@ -32,7 +32,7 @@ public:
 
     Robot robots[MAX_ROBOTS];
 
-    API(bool simulation, RhobanSSL::AIVisionClient::Team team, RhobanSSL::AICommander *commander);
+    API(bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander);
     virtual ~API();
 
     bool simulation;
@@ -102,7 +102,7 @@ public slots:
 
 protected:
     RhobanSSL::Data data;
-    RhobanSSL::AIVisionClient::Team team;
+    RhobanSSL::Ai::Team team;
     RhobanSSL::AIVisionClient visionClient;
     RhobanSSL::AICommander *commander;
 

@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
 
     // Viewer API
     API api(simulation.getValue(), yellow.getValue() ?
-        RhobanSSL::AIVisionClient::Yellow : RhobanSSL::AIVisionClient::Blue,
+        RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
         commander);
 
     // Running Qt application

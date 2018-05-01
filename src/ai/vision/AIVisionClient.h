@@ -3,25 +3,23 @@
 #include <VisionClient.h>
 #include "VisionData.h"
 #include <Data.h>
+#include <AiData.h>
 
 namespace RhobanSSL
 {
 class AIVisionClient : public VisionClient
 {
 public:
-    typedef enum {
-        Yellow, Blue
-    } Team;
 
-    AIVisionClient(Data& data, Team myTeam, bool simulation = false);
+    AIVisionClient(Data& ai_data, Ai::Team myTeam, bool simulation = false);
 
-    void setRobotPos(Team team, int id, double x, double y, double orientation);
+    void setRobotPos(Ai::Team team, int id, double x, double y, double orientation);
 
 protected:
     virtual void packetReceived();
 
     Data & ai_data;
-    Team myTeam;
+    Ai::Team myTeam;
     Vision::VisionData visionData;
 
     void updateRobotInformation(

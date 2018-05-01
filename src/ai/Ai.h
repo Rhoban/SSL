@@ -15,11 +15,13 @@ namespace RhobanSSL
     class AI
     {
     private:
-        Ai::Team team;
+        std::string team_name;
+        Ai::Team default_team;
     public:
 
         AI(
-            Ai::Team team,
+            std::string team_name,
+            Ai::Team default_team,
             Data & data, 
             AICommander *commander
         );
@@ -59,6 +61,8 @@ namespace RhobanSSL
         void prepare_to_send_control( int robot_id, Control control );
 
         void limits_velocity( Control & ctrl ) const ;
+
+        void share_data();
     };
 };
 

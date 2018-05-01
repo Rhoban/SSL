@@ -10,6 +10,8 @@
 #include "Ai.h"
 #include "Data.h"
 
+#define TEAM_NAME "AMC"
+
 static volatile bool running = true;
 
 using namespace RhobanSSL;
@@ -31,16 +33,33 @@ int main(int argc, char **argv)
     // Command line parsing
     TCLAP::CmdLine cmd("Rhoban SSL AI", ' ', "0.0");
     TCLAP::SwitchArg simulation("s", "simulation", "Simulation mode", cmd, false);
-    TCLAP::SwitchArg yellow("y", "yellow", "We are yellow", cmd, false);
+    TCLAP::SwitchArg yellow("y", "yellow", "If set we are yellow otherwise we are blue.", cmd, false);
+
+    TCLAP::ValueArg<std::string> team_name(
+        "t", // short argument name  (with one character)
+        "team", // long argument name
+        "The referee team name. The default value is '" TEAM_NAME  "'. "
+        "The team name is used to detect from the referee the team color. "
+        "If referee is not used, or there is no referee or the team name "
+        "provided by the referee doesn't match the given team name, then, "
+        "we use the default color provided by the yellow argument.", // long Description of the argument
+        false, // Flag is not required
+        TEAM_NAME, // Default value
+        "string", // short description of the expected value.
+        cmd
+    );
+
     TCLAP::SwitchArg em("e", "em", "Stop all", cmd, false);
     cmd.parse(argc, argv);
+
+    DEBUG("The name of the team have been set to : " << team_name.getValue() );
 
     Data data;
 
     // Instantiationg the vision
     AIVisionClient vision(
         data,
-        yellow.getValue() ? AIVisionClient::Yellow : AIVisionClient::Blue,
+        yellow.getValue() ? Ai::Yellow : Ai::Blue,
         simulation.getValue()
     );
 
@@ -58,6 +77,7 @@ int main(int argc, char **argv)
         commander->flush();
     } else {
         ai = new AI(
+            team_name.getValue(),
             yellow.getValue() ?
                 Ai::Yellow : Ai::Blue,
             data, commander

@@ -106,11 +106,13 @@ void AI::init_robot_behaviors(){
 
 
 AI::AI(
-    Ai::Team team,
+    std::string team_name,
+    Ai::Team default_team,
     Data& data, 
     AICommander *commander
 ):
-    team(team), 
+    team_name(team_name),
+    default_team(default_team), 
     running(true),
     commander(commander),
     current_dt(0.0),
@@ -128,18 +130,23 @@ AI::AI(
     #else
     int goalie_id = 8;
     #endif
+
+    game_state.change_team_color(default_team);
+    game_state.team_name = team_name;
     strategy_manager = std::shared_ptr<Manager::Manager>(
         //new Manager::Manual(game_state)
         new Manager::Match(game_state, referee)
     );
     strategy_manager->declare_goalie_id( goalie_id );
     strategy_manager->declare_team_ids( robot_ids );
-    strategy_manager->set_team(team);
 
 }
 
 
 void AI::update_robots( ){
+
+    commander->set_yellow( game_state.team_color == Ai::Yellow  );
+
     double time =  this->current_time;
     Ai::Ball & ball = game_state.ball;
     
@@ -203,6 +210,7 @@ void AI::run(){
         referee.update(current_time);
         strategy_manager->update(current_time);
         strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
+        share_data();
         update_robots( );
     }
 }
@@ -212,5 +220,10 @@ void AI::stop()
     running = false;
 }
 
+void AI::share_data(){
+    Data_from_ai ai_data;
+    ai_data.team_color = game_state.team_color;
+    data << ai_data;
+}
     
 }

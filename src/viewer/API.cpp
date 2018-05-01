@@ -12,7 +12,7 @@ static QString js(Json::Value &json)
     return QString::fromStdString(writer.write(json));
 }
 
-API::API(bool simulation, RhobanSSL::AIVisionClient::Team team, RhobanSSL::AICommander *commander)
+API::API(bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander)
 :
     simulation(simulation),
     team(team),
@@ -74,7 +74,7 @@ bool API::isSimulation()
 
 bool API::isYellow()
 {
-    return team == RhobanSSL::AIVisionClient::Yellow;
+    return team == RhobanSSL::Ai::Yellow;
 }
 
 QString API::visionStatus()
@@ -178,7 +178,7 @@ void API::moveRobot(bool yellow, int id, double x, double y, double theta)
 {
     mutex.lock();
     commander->moveRobot(yellow, id, x, y, theta, true);
-    visionClient.setRobotPos(yellow ? RhobanSSL::AIVisionClient::Yellow : RhobanSSL::AIVisionClient::Blue,
+    visionClient.setRobotPos(yellow ? RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
         id, x, y, theta);
     mutex.unlock();
 }

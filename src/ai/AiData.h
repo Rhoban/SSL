@@ -27,7 +27,7 @@ namespace RhobanSSL {
 namespace Ai {
 
 typedef enum {
-    Yellow, Blue
+    Yellow, Blue, Unknown
 } Team;
 
 class Object {
@@ -101,6 +101,8 @@ struct Constants {
 
 class AiData {
 public:
+    std::string team_name;
+    Ai::Team team_color;
 
     AiData();
 
@@ -114,6 +116,7 @@ public:
         const rhoban_geometry::Point & origin,
         const Vector2d & v1, const Vector2d & v2
     );
+    void change_team_color( Ai::Team team_color );
 
     Constants constants;
 

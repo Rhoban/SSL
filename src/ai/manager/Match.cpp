@@ -59,7 +59,8 @@ Match::Match(
 
 void Match::analyse_data(double time){
     // We change the point of view of the team
-    change_team_point_of_view(
+    change_team_and_point_of_view(
+        referee.get_team_color( get_team_name() ),
         referee.blue_have_it_s_goal_on_positive_x_axis()    
     );
 }

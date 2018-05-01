@@ -8,12 +8,12 @@ using namespace rhoban_utils;
 namespace RhobanSSL
 {
     AIVisionClient::AIVisionClient(
-        Data& ai_data, AIVisionClient::Team myTeam, bool simulation
+        Data& ai_data, Ai::Team myTeam, bool simulation
     ): VisionClient(simulation), ai_data(ai_data), myTeam(myTeam) 
     {
     }
 
-    void AIVisionClient::setRobotPos(Team team, int id, double x, double y, double orientation)
+    void AIVisionClient::setRobotPos(Ai::Team team, int id, double x, double y, double orientation)
     {
         RhobanSSL::Vision::Team visionTeam = RhobanSSL::Vision::Ally;
         if (team != myTeam) {
@@ -32,6 +32,10 @@ namespace RhobanSSL
 
     void AIVisionClient::packetReceived()
     {
+        Data_from_ai data_from_ai;
+        ai_data >> data_from_ai;
+        
+        myTeam = data_from_ai.team_color;
         // Retrieving field dimensions
         auto geometry = data.geometry();
         if (geometry.has_field()) {
@@ -80,10 +84,10 @@ namespace RhobanSSL
 
         // Robots informations
         for (auto robot : detection.robots_blue()) {
-            updateRobotInformation(detection, robot, myTeam == Blue);
+            updateRobotInformation(detection, robot, myTeam == Ai::Blue);
         }
         for (auto robot : detection.robots_yellow()) {
-            updateRobotInformation(detection, robot, myTeam == Yellow);
+            updateRobotInformation(detection, robot, myTeam == Ai::Yellow);
         }
 
         ai_data << visionData;

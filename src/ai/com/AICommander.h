@@ -25,6 +25,8 @@ public:
     };
     AICommander(bool yellow);
 
+    void set_yellow(bool value);
+
     /**
      * Set the speed of the robot robot_id to the given speed
      */

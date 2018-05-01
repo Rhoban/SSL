@@ -16,7 +16,6 @@ class Manager {
 
     bool blueIsNotSet;
     bool blueTeamOnPositiveHalf;
-    Ai::Team team;
     int goalie_id;
     std::vector<int> team_ids;
 
@@ -29,8 +28,8 @@ class Manager {
     public:
     Manager( Ai::AiData& game_state );
 
-    void set_team( Ai::Team team );
     Ai::Team get_team() const;
+    const std::string & get_team_name() const;
     void declare_goalie_id(
         int goalie_id
     );
@@ -75,7 +74,7 @@ class Manager {
         > & robot_behaviors, double time, double dt
     );
 
-    void change_team_point_of_view( bool blue_have_it_s_goal_on_positive_x_axis );
+    void change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis );
 
     virtual ~Manager();
 };

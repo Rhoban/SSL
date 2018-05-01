@@ -1,10 +1,17 @@
 #include "AICommander.h"
+#include <debug.h>
 
 namespace RhobanSSL
 {
     AICommander::AICommander(bool yellow)
     : yellow(yellow)
     {
+    }
+
+    void AICommander::set_yellow(bool value){
+        if( this->yellow != value ){
+            this->yellow = value;
+        }
     }
 
     AICommander::~AICommander(){ }

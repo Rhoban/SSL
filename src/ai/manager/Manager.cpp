@@ -1,4 +1,5 @@
 #include "Manager.h"
+#include <debug.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -19,11 +20,11 @@ void Manager::declare_team_ids(
     this->team_ids = team_ids;
 }
 
-void Manager::set_team( Ai::Team team ){
-     this->team = team;
-}
 Ai::Team Manager::get_team() const{
-     return team;
+     return game_state.team_color;
+}
+const std::string & Manager::get_team_name() const{
+     return game_state.team_name;
 }
 
 const std::vector<int> & Manager::get_team_ids() const {
@@ -91,7 +92,13 @@ Strategy::Strategy & Manager::current_strategy(){
 }
 
 
-void Manager::change_team_point_of_view( bool blue_have_it_s_goal_on_positive_x_axis ){
+void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis ){
+    
+    if( team != Ai::Unknown and get_team() != team ){
+        assert( team == Ai::Blue or team == Ai::Yellow );
+        game_state.change_team_color( team );
+        blueIsNotSet = true;
+    }
     // We change the point of view of the team
     if( 
         blueIsNotSet
