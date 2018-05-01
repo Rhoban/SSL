@@ -2,6 +2,7 @@
 #include <math/tangents.h>
 
 namespace RhobanSSL {
+namespace Robot_behavior {
 
 Apply_enseirb_project_action::Apply_enseirb_project_action( const Action& action, double time, double dt ):
     PositionFollower(time, dt),
@@ -55,4 +56,5 @@ Control Apply_enseirb_project_action::control() const {
     return ctrl;
 }
 
+}
 }

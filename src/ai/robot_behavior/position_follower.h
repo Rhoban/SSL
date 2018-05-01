@@ -1,10 +1,11 @@
-#ifndef __POSITION_FOLLOWER__H__
-#define __POSITION_FOLLOWER__H__
+#ifndef __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
+#define __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
 
 #include "robot_behavior.h"
 
 namespace RhobanSSL
 {
+namespace Robot_behavior {
 
 class PositionFollower : public RobotBehavior {
     private:
@@ -41,7 +42,7 @@ class PositionFollower : public RobotBehavior {
         virtual Control control() const;
 };
 
-
+};
 }; //Namespace Rhoban
 
 #endif

@@ -7,7 +7,7 @@ const std::string From_robot_behavior::name = "From_robot_behavior";
 
 From_robot_behavior::From_robot_behavior( 
     std::function<
-        std::shared_ptr<RobotBehavior>(double time, double dt)
+        std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)
     > robot_behavior_allocator, bool is_goalie
 ):
     robot_behavior_allocator(robot_behavior_allocator),
@@ -33,7 +33,7 @@ void From_robot_behavior::stop(double time){
 
 void From_robot_behavior::assign_behavior_to_robots(
     std::function<
-        void (int, std::shared_ptr<RobotBehavior>)
+        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
     > assign_behavior,
     double time, double dt
 ){

@@ -65,7 +65,7 @@ class Manual {
     void assign_behavior_to_robots(
         std::map<
             int, 
-            std::shared_ptr<RobotBehavior>
+            std::shared_ptr<Robot_behavior::RobotBehavior>
         > & robot_behaviors, double time, double dt
     );
 };

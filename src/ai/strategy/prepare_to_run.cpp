@@ -26,12 +26,12 @@ void Prepare_to_run::stop(double time){
     DEBUG("STOP PREPARE KICKOFF");
 }
 
-RobotBehavior* Prepare_to_run::create_follower(
+Robot_behavior::RobotBehavior* Prepare_to_run::create_follower(
     const Vector2d & follower_position,
     const ContinuousAngle& angle,
     double time, double dt
 ) const {
-    PositionFollower* follower = new PositionFollower(time, dt);
+    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(time, dt);
     follower->set_following_position(
         follower_position, angle
     );
@@ -53,14 +53,14 @@ RobotBehavior* Prepare_to_run::create_follower(
 
 void Prepare_to_run::assign_behavior_to_robots(
     std::function<
-        void (int, std::shared_ptr<RobotBehavior>)
+        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
     > assign_behavior,
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
         int goalie_id = get_goalie();
         assign_behavior(
-            goalie_id, std::shared_ptr<RobotBehavior>(
+            goalie_id, std::shared_ptr<Robot_behavior::RobotBehavior>(
                  Prepare_to_run::create_follower(
                      Vector2d(-3.0, 0.0), ContinuousAngle(M_PI/2.0),
                      time, dt
@@ -77,7 +77,7 @@ void Prepare_to_run::assign_behavior_to_robots(
             Vector2d follower_linear_position(-(i%2)-1, y_pos);
             ContinuousAngle follower_angular_position(M_PI/2.0);
             assign_behavior(
-                id, std::shared_ptr<RobotBehavior>(
+                id, std::shared_ptr<Robot_behavior::RobotBehavior>(
                     Prepare_to_run::create_follower(
                         follower_linear_position, follower_angular_position,
                         time, dt

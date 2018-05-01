@@ -39,7 +39,7 @@ namespace RhobanSSL
 
         std::map<
             int, 
-            std::shared_ptr<RobotBehavior>
+            std::shared_ptr<Robot_behavior::RobotBehavior>
         > robot_behaviors;
         
         void init_robot_behaviors();
@@ -52,7 +52,7 @@ namespace RhobanSSL
         std::shared_ptr<Manager::Manager> strategy_manager;
         
         Control update_robot( 
-            RobotBehavior & robot_behavior,
+            Robot_behavior::RobotBehavior & robot_behavior,
             double time, Ai::Robot & robot, Ai::Ball & ball
         );
 

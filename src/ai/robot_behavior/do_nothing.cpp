@@ -1,6 +1,7 @@
 #include "do_nothing.h"
 
 namespace RhobanSSL {
+namespace Robot_behavior {
 
 DoNothing::DoNothing(){ }
 
@@ -13,4 +14,5 @@ Control DoNothing::control() const {
     return Control();
 }
 
+}
 }

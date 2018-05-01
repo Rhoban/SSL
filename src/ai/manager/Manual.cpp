@@ -31,7 +31,7 @@ Manual::Manual(
         "Goalie", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 [&](double time, double dt){
-                    Goalie* goalie = new Goalie(
+                    Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(
                         game_state.constants.left_post_position, 
                         game_state.constants.right_post_position, 
                         game_state.constants.waiting_goal_position, 
@@ -53,7 +53,7 @@ Manual::Manual(
                         game_state.constants.translation_velocity_limit,
                         game_state.constants.rotation_velocity_limit
                     );
-                    return std::shared_ptr<RobotBehavior>(goalie);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
                 }, true
             )
         )
@@ -62,7 +62,7 @@ Manual::Manual(
         "Position Follower", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 [&](double time, double dt){
-		    PositionFollower* follower = new PositionFollower( time, dt );
+		    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower( time, dt );
 		    follower->set_following_position(
 			Vector2d(-2.0, 1.0), ContinuousAngle(M_PI/2.0)
 		    );
@@ -79,7 +79,7 @@ Manual::Manual(
 			game_state.constants.translation_velocity_limit,
 			game_state.constants.rotation_velocity_limit
 		    );
-                    return std::shared_ptr<RobotBehavior>(follower);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(follower);
                 }
             )
         )

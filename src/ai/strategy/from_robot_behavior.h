@@ -12,7 +12,7 @@ namespace Strategy {
 class From_robot_behavior: public Strategy {
     private:
         std::function<
-            std::shared_ptr<RobotBehavior> (double time, double dt) 
+            std::shared_ptr<Robot_behavior::RobotBehavior> (double time, double dt) 
         > robot_behavior_allocator;
         bool behavior_has_been_assigned;
         bool is_goalie;
@@ -21,7 +21,7 @@ class From_robot_behavior: public Strategy {
 
         From_robot_behavior( 
             std::function<
-                std::shared_ptr<RobotBehavior>(double time, double dt)
+                std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)
             > robot_behavior_allocator,
             bool is_goalie = false
         );
@@ -35,7 +35,7 @@ class From_robot_behavior: public Strategy {
         
         virtual void assign_behavior_to_robots(
             std::function<
-                void (int, std::shared_ptr<RobotBehavior>)
+                void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
             > assign_behavior,
             double time, double dt
         );

@@ -1,11 +1,12 @@
-#ifndef __APPLY_ENSEIRB_PROJECT_ACTION__H__
-#define __APPLY_ENSEIRB_PROJECT_ACTION__H__
+#ifndef __ROBOT_BEHAVIOR__APPLY_ENSEIRB_PROJECT_ACTION__H__
+#define __ROBOT_BEHAVIOR__APPLY_ENSEIRB_PROJECT_ACTION__H__
 
 #include "position_follower.h"
 #include <strategy/enseirb_projects/api.h>
 
 namespace RhobanSSL
 {
+namespace Robot_behavior {
 
 class Apply_enseirb_project_action : public PositionFollower {
     private:
@@ -22,6 +23,7 @@ class Apply_enseirb_project_action : public PositionFollower {
         virtual Control control() const;
 };
 
+};
 }; //Namespace Rhoban
 
 #endif

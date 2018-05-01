@@ -1,9 +1,10 @@
-#ifndef __DO_NOTHING__H__
-#define __DO_NOTHING__H__
+#ifndef __ROBOT_BEHAVIOR__DO_NOTHING__H__
+#define __ROBOT_BEHAVIOR__DO_NOTHING__H__
 
 #include "robot_behavior.h"
 
 namespace RhobanSSL {
+namespace Robot_behavior {
 
 class DoNothing : public RobotBehavior {
     public:
@@ -17,6 +18,7 @@ class DoNothing : public RobotBehavior {
         virtual Control control() const;
 };
 
+};
 }; //Namespace Rhoban
 
 #endif

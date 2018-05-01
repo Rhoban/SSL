@@ -41,7 +41,7 @@ void Tare_and_synchronize::stop(double time){
 
 void Tare_and_synchronize::assign_behavior_to_robots(
     std::function<
-        void (int, std::shared_ptr<RobotBehavior>)
+        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
     > assign_behavior,
     double time, double dt
 ){
@@ -50,8 +50,8 @@ void Tare_and_synchronize::assign_behavior_to_robots(
             int id: get_robot_ids() 
         ){
             assign_behavior(
-                id, std::shared_ptr<RobotBehavior>(
-                    new DoNothing()
+                id, std::shared_ptr<Robot_behavior::RobotBehavior>(
+                    new Robot_behavior::DoNothing()
                 )
             );
         }

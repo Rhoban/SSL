@@ -1,5 +1,5 @@
-#ifndef __ROBOT_BEHAVIOR__H__
-#define __ROBOT_BEHAVIOR__H__
+#ifndef __ROBOT_BEHAVIOR__ROBOT_BEHAVIOR__H__
+#define __ROBOT_BEHAVIOR__ROBOT_BEHAVIOR__H__
 
 #include <control/robot_control_with_position_following.h>
 #include <control/robot_control_with_curve.h>
@@ -23,6 +23,8 @@ struct Control : PidControl {
 };
 
 std::ostream& operator << ( std::ostream &, const Control& control  );
+
+namespace Robot_behavior {
 
 class RobotBehavior {
     protected:
@@ -57,6 +59,7 @@ namespace detail {
     double vec2angle( Vector2d direction );
 };
 
+};
 }; //Namespace Rhoban
 
 #endif

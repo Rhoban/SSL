@@ -1,6 +1,7 @@
 #include "position_follower.h"
 
 namespace RhobanSSL {
+namespace Robot_behavior {
 
 
 
@@ -66,5 +67,5 @@ void PositionFollower::set_limits(
     );
 }
 
-
+}
 }

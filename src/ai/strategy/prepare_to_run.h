@@ -21,7 +21,7 @@ class Prepare_to_run : public Strategy {
 
         static const std::string name;
 
-        RobotBehavior* create_follower(
+        Robot_behavior::RobotBehavior* create_follower(
             const Vector2d & follower_position,
             const ContinuousAngle& angle,
             double time, double dt
@@ -32,7 +32,7 @@ class Prepare_to_run : public Strategy {
 
         void assign_behavior_to_robots(
             std::function<
-                void (int, std::shared_ptr<RobotBehavior>)
+                void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
             > assign_behavior,
             double time, double dt
         );

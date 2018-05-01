@@ -84,13 +84,13 @@ void Enseirb_project_wrapper::stop(double time){
 
 void Enseirb_project_wrapper::assign_behavior_to_robots(
     std::function<
-        void (int, std::shared_ptr<RobotBehavior>)
+        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
     > assign_behavior,
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
         for( unsigned int i=0; i<get_robot_ids().size(); i++ ){
-            RhobanSSL::Apply_enseirb_project_action *robot_behavior = new RhobanSSL::Apply_enseirb_project_action(
+            Robot_behavior::Apply_enseirb_project_action *robot_behavior = new Robot_behavior::Apply_enseirb_project_action(
                 robot_actions[i],
                 time, dt
             ) ;
@@ -110,7 +110,7 @@ void Enseirb_project_wrapper::assign_behavior_to_robots(
             );
 
             assign_behavior(
-                robot_id(i), std::shared_ptr<RobotBehavior>( robot_behavior )
+                robot_id(i), std::shared_ptr<Robot_behavior::RobotBehavior>( robot_behavior )
             );
         }
         behavior_has_been_assigned = true;

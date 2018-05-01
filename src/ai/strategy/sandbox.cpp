@@ -35,7 +35,7 @@ void Sandbox::stop(double time){
 
 void Sandbox::assign_behavior_to_robots(
     std::function<
-        void (int, std::shared_ptr<RobotBehavior>)
+        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
     > assign_behavior,
     double time, double dt
 ){
@@ -48,14 +48,14 @@ void Sandbox::assign_behavior_to_robots(
             int id : get_robot_ids()
         ){
             assign_behavior(
-                id, std::shared_ptr<RobotBehavior>(
-                    new DoNothing()
+                id, std::shared_ptr<Robot_behavior::RobotBehavior>(
+                    new Robot_behavior::DoNothing()
                 )
             );
         }
 
         DEBUG("SANDBOX ASSIGN BEHAVIOR");
-        PositionFollower* follower = new PositionFollower(
+        Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(
             time, dt
         );
         const Ai::Robot & robot_follower = game_state.robots[
@@ -83,12 +83,12 @@ void Sandbox::assign_behavior_to_robots(
         );
         assign_behavior( 
             follower_id, std::shared_ptr<
-                RobotBehavior
+                Robot_behavior::RobotBehavior
             >( follower )
         ); 
 
         // We create a goalie :    
-        Goalie* goalie = new Goalie(
+        Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(
             game_state.constants.left_post_position, 
             game_state.constants.right_post_position, 
             game_state.constants.waiting_goal_position, 
@@ -112,13 +112,13 @@ void Sandbox::assign_behavior_to_robots(
         );
         assign_behavior(
             get_goalie(), std::shared_ptr<
-                RobotBehavior
+                Robot_behavior::RobotBehavior
             >( goalie )
         ); 
 
         #if 1
         // We create a shooter :
-        Shooter* shooter = new Shooter(
+        Robot_behavior::Shooter* shooter = new Robot_behavior::Shooter(
             game_state.constants.goal_center,
             game_state.constants.robot_radius,
             game_state.constants.front_size,
@@ -163,7 +163,7 @@ void Sandbox::assign_behavior_to_robots(
         );
         assign_behavior( 
             shooter_id, std::shared_ptr<
-                RobotBehavior
+                Robot_behavior::RobotBehavior
             >( shooter )
         ); 
         #endif

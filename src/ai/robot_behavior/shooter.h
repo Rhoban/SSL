@@ -1,9 +1,10 @@
-#ifndef __SHOOTER__H__
-#define __SHOOTER__H__
+#ifndef __ROBOT_BEHAVIOR__SHOOTER__H__
+#define __ROBOT_BEHAVIOR__SHOOTER__H__
 
 #include "robot_behavior.h"
 
 namespace RhobanSSL {
+namespace Robot_behavior {
 
 struct Translation_for_shooting {
     Vector2d position_robot;
@@ -110,6 +111,7 @@ class Shooter : public RobotBehavior {
 
 };
 
+};
 }; //Namespace Rhoban
 
 #endif

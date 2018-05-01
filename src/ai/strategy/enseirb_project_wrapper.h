@@ -43,7 +43,7 @@ class Enseirb_project_wrapper : public Strategy {
 
         virtual void assign_behavior_to_robots(
             std::function<
-                void (int, std::shared_ptr<RobotBehavior>)
+                void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
             > assign_behavior,
             double time, double dt
         );

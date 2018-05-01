@@ -3,18 +3,6 @@
 
 namespace RhobanSSL {
 
-namespace detail {
-
-double vec2angle( Vector2d direction ){
-    double norm = direction.norm();
-    if( norm == 0.0 ) return 0.0;
-    direction /= norm;
-    double res = std::acos( direction[0] );
-    if( direction[1] <= 0 ) return -res;
-    return res;
-}
-
-}
 
 Control::Control():
     PidControl(), kick(false), active(true), ignore(false)
@@ -49,8 +37,20 @@ Control Control::make_ignored(){
 
 
 
+namespace Robot_behavior {
 
+namespace detail {
 
+double vec2angle( Vector2d direction ){
+    double norm = direction.norm();
+    if( norm == 0.0 ) return 0.0;
+    direction /= norm;
+    double res = std::acos( direction[0] );
+    if( direction[1] <= 0 ) return -res;
+    return res;
+}
+
+}
 
 
 RobotBehavior::RobotBehavior() : birthday(-1.0) { };
@@ -78,4 +78,5 @@ void RobotBehavior::update_time_and_position(
     );
 };
 
+}
 }

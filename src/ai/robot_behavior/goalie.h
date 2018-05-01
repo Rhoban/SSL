@@ -1,10 +1,11 @@
-#ifndef __GOALIE__H__
-#define __GOALIE__H__
+#ifndef __ROBOT_BEHAVIOR__GOALIE__H__
+#define __ROBOT_BEHAVIOR__GOALIE__H__
 
 #include "position_follower.h"
 
 namespace RhobanSSL
 {
+namespace Robot_behavior {
 
 class Goalie : public PositionFollower {
     private:
@@ -42,6 +43,7 @@ class Goalie : public PositionFollower {
         );
 };
 
+};
 }; //Namespace Rhoban
 
 #endif

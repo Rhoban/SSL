@@ -81,7 +81,7 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
 }
 
 Control AI::update_robot( 
-    RobotBehavior & robot_behavior,
+    Robot_behavior::RobotBehavior & robot_behavior,
     double time, Ai::Robot & robot, Ai::Ball & ball
 ){
     if( robot.isOk() ){
@@ -97,9 +97,9 @@ Control AI::update_robot(
 void AI::init_robot_behaviors(){
     for( int k=0; k<Vision::Robots; k++ ){
         robot_behaviors[k] = std::shared_ptr<
-            RobotBehavior
+            Robot_behavior::RobotBehavior
         >(
-            new DoNothing()
+            new Robot_behavior::DoNothing()
         );
     }
 }
@@ -148,7 +148,7 @@ void AI::update_robots( ){
 
         Ai::Robot & robot = game_state.robots[team][robot_id];
 
-        RobotBehavior & robot_behavior = *( 
+        Robot_behavior::RobotBehavior & robot_behavior = *( 
             robot_behaviors[robot_id] 
         );
         Control ctrl = update_robot( 

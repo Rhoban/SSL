@@ -3,6 +3,7 @@
 #include <math/vector.h>
 
 namespace RhobanSSL {
+namespace Robot_behavior {
 
 Vector2d Goalie::calculate_goal_position(
     const Vector2d & ball_position,
@@ -69,4 +70,5 @@ void Goalie::update(
     PositionFollower::update_control(time);   
 }
 
+}
 }

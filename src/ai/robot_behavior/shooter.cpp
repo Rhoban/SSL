@@ -3,6 +3,7 @@
 using namespace rhoban_utils;
 
 namespace RhobanSSL {
+namespace Robot_behavior {
 
 Shooter::Shooter(
     const Vector2d & goal_center, double robot_radius,
@@ -195,4 +196,5 @@ double Rotation_for_home::operator()(double u) const {
     return  (1-u)*orientation + u*target;
 }
 
+}
 }

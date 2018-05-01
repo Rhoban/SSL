@@ -74,12 +74,12 @@ void Manager::update_current_strategy(double time){
 void Manager::assign_behavior_to_robots(
     std::map<
         int, 
-        std::shared_ptr<RobotBehavior>
+        std::shared_ptr<Robot_behavior::RobotBehavior>
     > & robot_behaviors,
     double time, double dt
 ){
     current_strategy().assign_behavior_to_robots(
-        [&](int id, std::shared_ptr<RobotBehavior> behavior){
+        [&](int id, std::shared_ptr<Robot_behavior::RobotBehavior> behavior){
              return  
            robot_behaviors[id] = behavior; 
         }, time, dt
