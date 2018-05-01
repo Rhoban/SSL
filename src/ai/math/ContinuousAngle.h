@@ -52,6 +52,7 @@ public:
     bool operator>=( const ContinuousAngle& angle ) const;
 
     void set_to_nearest( double angle );
+    void set_to_nearest( const ContinuousAngle & angle );
     void set_to_nearest( const rhoban_utils::Angle & angle );
 };
 

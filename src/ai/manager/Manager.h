@@ -14,6 +14,7 @@ namespace Manager {
 class Manager {
     private:
 
+    bool blueIsNotSet;
     bool blueTeamOnPositiveHalf;
     Ai::Team team;
     int goalie_id;

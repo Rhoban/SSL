@@ -16,6 +16,8 @@ void PositionFollower::set_following_position(
 ){
     this->position = position_to_follow;
     this->angle = angle;
+    this->angle = this->robot_angular_position;
+    this->angle.set_to_nearest(angle); 
 }
 
 void PositionFollower::update_control(double time){

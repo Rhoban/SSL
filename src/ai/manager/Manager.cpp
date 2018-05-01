@@ -93,7 +93,12 @@ Strategy::Strategy & Manager::current_strategy(){
 
 void Manager::change_team_point_of_view( bool blue_have_it_s_goal_on_positive_x_axis ){
     // We change the point of view of the team
-    if( blueTeamOnPositiveHalf != blue_have_it_s_goal_on_positive_x_axis ){
+    if( 
+        blueIsNotSet
+        or
+        blueTeamOnPositiveHalf != blue_have_it_s_goal_on_positive_x_axis
+    ){
+        blueIsNotSet = false;
         blueTeamOnPositiveHalf = blue_have_it_s_goal_on_positive_x_axis;
         if(
             (
@@ -121,6 +126,7 @@ void Manager::change_team_point_of_view( bool blue_have_it_s_goal_on_positive_x_
 }
 
 Manager::Manager( Ai::AiData& game_state ):
+    blueIsNotSet(true),
     game_state(game_state)
 { }
 

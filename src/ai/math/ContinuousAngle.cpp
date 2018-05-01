@@ -140,6 +140,9 @@ void ContinuousAngle::set_to_nearest( double angle ){
 void ContinuousAngle::set_to_nearest( const Angle & angle ){
     set_to_nearest( deg2rad(angle.getSignedValue()) );
 }
+void ContinuousAngle::set_to_nearest( const ContinuousAngle & angle ){
+    set_to_nearest( angle.value() );
+}
 
 std::ostream& operator<<(std::ostream& out, const ContinuousAngle& a){
     double n = a.nb_turn();
