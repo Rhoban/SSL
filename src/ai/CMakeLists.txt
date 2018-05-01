@@ -30,6 +30,7 @@ set (SOURCES
     robot_behavior/do_nothing.cpp
     robot_behavior/robot_behavior.cpp
     robot_behavior/apply_enseirb_project_action.cpp
+    robot_behavior/navigation_with_obstacle_avoidance.cpp
     Ai.cpp
     AiData.cpp
     manager/Manager.cpp
