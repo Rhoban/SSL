@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
 #include <debug.h>
-#include "vector.h"
+#include "vector2d.h"
 
-TEST(test_vector, vectorial_product){
+TEST(test_vector2d, vectorial_product){
     {
         Vector2d v1(0.0, 0.0);
         Vector2d v2(0.0, 0.0);
@@ -29,7 +29,7 @@ TEST(test_vector, vectorial_product){
     }
 }
 
-TEST(test_vector, scalar_product){
+TEST(test_vector2d, scalar_product){
     {
         Vector2d v1(0.0, 0.0);
         Vector2d v2(0.0, 0.0);
@@ -56,7 +56,7 @@ TEST(test_vector, scalar_product){
 }
 
 
-TEST(test_vector, norm){
+TEST(test_vector2d, norm){
     {
         Vector2d v(0.0, 0.0);
         EXPECT_EQ( norm(v), 0.0 );
@@ -95,7 +95,7 @@ TEST(test_vector, norm){
     }
 }
 
-TEST(test_vector, normalized){
+TEST(test_vector2d, normalized){
     {
         Vector2d v(1.0, 0.0);
         EXPECT_EQ( normalized(v), Vector2d(1.0,0.0) );

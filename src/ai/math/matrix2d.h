@@ -1,7 +1,7 @@
 #ifndef __TOOLS__MATRIX2D_H__
 #define __TOOLS__MATRIX2D_H__
 
-#include "vector.h"
+#include "vector2d.h"
 #include <boost/numeric/ublas/matrix.hpp>
 
 typedef boost::numeric::ublas::matrix<double> Boost_Matrix2d;

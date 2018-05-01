@@ -1,4 +1,5 @@
-#include "vector.h"
+#include "vector2d.h"
+
 rhoban_geometry::Point operator+(const rhoban_geometry::Point & p, const Vector2d & v){
     return rhoban_geometry::Point( p.getX()+v[0], p.getY()+v[1] );
 }

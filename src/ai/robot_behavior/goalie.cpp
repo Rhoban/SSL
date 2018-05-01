@@ -1,6 +1,6 @@
 #include "goalie.h"
 #include <math/tangents.h>
-#include <math/vector.h>
+#include <math/vector2d.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {

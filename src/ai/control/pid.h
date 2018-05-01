@@ -3,7 +3,7 @@
 
 #include <debug.h>
 #include <math/ContinuousAngle.h>
-#include <math/vector.h>
+#include <math/vector2d.h>
 
 struct PidControl {
     Vector2d velocity_translation;

@@ -57,7 +57,7 @@ set (SOURCES
     math/ContinuousAngle.cpp
     math/curve.cpp
     math/tangents.cpp
-    math/vector.cpp
+    math/vector2d.cpp
     math/matrix2d.cpp
     math/frame_changement.cpp
     core/export_to_plot.cpp
@@ -93,7 +93,7 @@ if(CATKIN_ENABLE_TESTING)
     physic/test_movement_predicted_by_integration.cpp
     math/test_ContinuousAngle.cpp
     math/test_tangents.cpp
-    math/test_vector.cpp
+    math/test_vector2d.cpp
     math/test_matrix2d.cpp
     control/test_pid.cpp
     control/test_robot_control.cpp

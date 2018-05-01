@@ -1,7 +1,7 @@
 #ifndef __MOVEMENT_H__ 
 #define __MOVEMENT_H__ 
 
-#include <math/vector.h>
+#include <math/vector2d.h>
 #include <iostream>
 #include "MovementSample.h"
 

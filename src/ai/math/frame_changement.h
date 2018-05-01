@@ -1,7 +1,7 @@
 #ifndef __MATH__FRAME_CHANGEMENT__H__
 #define __MATH__FRAME_CHANGEMENT__H__
 
-#include "vector.h"
+#include "vector2d.h"
 #include <math/matrix2d.h>
 
 class Frame_changement {

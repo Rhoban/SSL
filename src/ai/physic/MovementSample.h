@@ -3,7 +3,7 @@
 
 #include <rhoban_geometry/point.h>
 #include <math/ContinuousAngle.h>
-#include <math/vector.h>
+#include <math/vector2d.h>
 #include <math/circular_vector.h>
 namespace RhobanSSL {
 

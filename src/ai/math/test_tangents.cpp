@@ -2,7 +2,7 @@
 
 #include <debug.h>
 #include "tangents.h"
-#include "vector.h"
+#include "vector2d.h"
 
 TEST(test_tangents, center_of_cone_incircle){
     {

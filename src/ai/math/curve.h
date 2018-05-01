@@ -4,7 +4,7 @@
 #include <debug.h>
 #include <vector>
 #include <functional>
-#include <math/vector.h>
+#include <math/vector2d.h>
 
 struct ContinuousVelocityConsign {
     double distance;

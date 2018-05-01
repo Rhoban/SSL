@@ -1,5 +1,5 @@
 #include "robot_behavior.h"
-#include <math/vector.h>
+#include <math/vector2d.h>
 
 namespace RhobanSSL {
 

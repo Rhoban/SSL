@@ -4,7 +4,7 @@
 
 #include <debug.h>
 #include <vector>
-#include <math/vector.h>
+#include <math/vector2d.h>
 
 #include <math/curve.h>
 #include "pid.h"

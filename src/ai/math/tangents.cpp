@@ -1,5 +1,5 @@
 #include "tangents.h"
-#include "vector.h"
+#include "vector2d.h"
 
 namespace rhoban_geometry {
 
