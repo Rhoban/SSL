@@ -1,9 +1,12 @@
 #include "Manager.h"
+
 #include <debug.h>
+#include <strategy/halt.h>
 
 namespace RhobanSSL {
 namespace Manager {
 
+#define MANAGER__REMOVE_ROBOTS "manager__remove_robots"
 
 
 void Manager::declare_goalie_id(
@@ -39,23 +42,44 @@ void Manager::register_strategy(
     strategies[strategy_name] = strategy;
 }
 
+void Manager::clear_strategy_assignement(){
+    for( const std::string & name : current_strategy_names ){
+        get_strategy(name).stop(time());
+    }
+    current_strategy_names.clear();
+    assign_strategy(
+        MANAGER__REMOVE_ROBOTS, time(), get_invalid_team_ids() 
+    );
+}
+
+
+
 void Manager::assign_strategy(
     const std::string & strategy_name, 
     double time, const std::vector<int> & robot_ids
 ){
     assert( strategies.find(strategy_name) != strategies.end() );
-    if( current_strategy_name != ""){
-        current_strategy().stop(time);
-    }
-    current_strategy_name = strategy_name;
+
+    current_strategy_names.push_front( strategy_name );
+    Strategy::Strategy & strategy = get_strategy( strategy_name ); 
     
-    current_strategy().set_goalie( goalie_id );
-    current_strategy().set_robot_affectation( robot_ids );
-    current_strategy().start(time);
+    strategy.set_goalie( goalie_id );
+    strategy.set_robot_affectation( robot_ids );
+    strategy.start(time);
 }
 
-const std::string & Manager::strategy_name() const{
-    return current_strategy_name;
+Strategy::Strategy & Manager::get_strategy( const std::string & strategy_name ) {
+    assert( strategies.find(strategy_name) != strategies.end() );
+    return *(strategies.at(strategy_name)); 
+}
+
+const Strategy::Strategy & Manager::get_strategy( const std::string & strategy_name ) const {
+    assert( strategies.find(strategy_name) != strategies.end() );
+    return *(strategies.at(strategy_name)); 
+}
+
+const std::list<std::string> & Manager::get_current_strategy_names() const{
+    return current_strategy_names;
 }
 
 void Manager::update_strategies(double time){
@@ -68,8 +92,10 @@ void Manager::update_strategies(double time){
     }
 }
 
-void Manager::update_current_strategy(double time){
-    current_strategy().update( time );
+void Manager::update_current_strategies(double time){
+    for( const std::string & name : current_strategy_names ){
+        get_strategy(name).update( time );
+    }
 }
 
 void Manager::assign_behavior_to_robots(
@@ -79,16 +105,14 @@ void Manager::assign_behavior_to_robots(
     > & robot_behaviors,
     double time, double dt
 ){
-    current_strategy().assign_behavior_to_robots(
-        [&](int id, std::shared_ptr<Robot_behavior::RobotBehavior> behavior){
-             return  
-           robot_behaviors[id] = behavior; 
-        }, time, dt
-    );
-}
-
-Strategy::Strategy & Manager::current_strategy(){
-    return *strategies.at(current_strategy_name);
+    for( const std::string & name : current_strategy_names ){
+        get_strategy(name).assign_behavior_to_robots(
+            [&](int id, std::shared_ptr<Robot_behavior::RobotBehavior> behavior){
+                 return  
+               robot_behaviors[id] = behavior; 
+            }, time, dt
+        );
+    }
 }
 
 
@@ -135,8 +159,73 @@ void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_
 Manager::Manager( Ai::AiData& game_state ):
     blueIsNotSet(true),
     game_state(game_state)
-{ }
+{
+    register_strategy(
+        MANAGER__REMOVE_ROBOTS, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Halt() 
+        )
+    );
+}
 
+bool Manager::is_inside( int id ) const {
+    const RhobanSSL::Movement & mov = game_state.robots.at(Vision::Team::Ally).at(id).get_movement();
+    return game_state.field.is_inside( mov.linear_position(time()) );
+}
+    
+bool Manager::is_valid( int id ) const{
+    return (
+        game_state.robots.at(Vision::Team::Ally).at(id).isOk()
+        and
+        is_inside(id)
+    ); 
+}
+
+int Manager::time() const {
+    return game_state.time;
+}
+
+int Manager::dt() const {
+    return game_state.dt;
+}
+
+void Manager::affect_invalid_robots_to_invalid_robots_strategy(){
+    Strategy::Strategy & strategy = get_strategy( MANAGER__REMOVE_ROBOTS );
+    strategy.stop(time());
+    strategy.set_robot_affectation( get_invalid_team_ids() );
+    strategy.start(time());
+}
+
+void Manager::remove_invalid_robots(){
+    detect_invalid_robots();
+    affect_invalid_robots_to_invalid_robots_strategy();
+}
+
+void Manager::detect_invalid_robots(){
+    int nb_valid = 0;
+    int n_robots = team_ids.size();
+    for(int i=0; i<n_robots; i++ ){
+        if( is_valid( team_ids[i] ) ){
+            nb_valid ++ ;
+        }
+    }
+    valid_team_ids.clear();
+    invalid_team_ids.clear();
+    for(int i=0; i<n_robots; i++ ){
+        int id = team_ids[i];
+        if( is_valid( id ) ){
+            valid_team_ids.push_back( id );
+        }else{
+            invalid_team_ids.push_back( id );
+        }
+    }
+}
+
+const std::vector<int> & Manager::get_valid_team_ids() const {
+    return valid_team_ids;
+}
+const std::vector<int> & Manager::get_invalid_team_ids() const {
+    return invalid_team_ids;
+}
 Manager::~Manager(){ }
 
 };

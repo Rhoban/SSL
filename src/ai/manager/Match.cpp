@@ -66,23 +66,24 @@ void Match::analyse_data(double time){
 }
 void Match::choose_a_strategy(double time){
     if( referee.edge_entropy() > last_referee_changement ){
+        clear_strategy_assignement();
         if( referee.get_state() == Referee_Id::STATE_INIT ){
         } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
-            assign_strategy( Strategy::Halt::name, time, get_team_ids() );
+            assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
-            assign_strategy( Strategy::Prepare_to_run::name, time, get_team_ids() );
+            assign_strategy( Strategy::Prepare_to_run::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
-            assign_strategy( Strategy::Prepare_kickoff::name, time, get_team_ids() );
+            assign_strategy( Strategy::Prepare_kickoff::name, time, get_valid_team_ids() );
             if( get_team() == referee.kickoff_team() ){
-                get_strategy<Strategy::Prepare_kickoff>().set_kicking(true);
+                get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
             }else{
-                get_strategy<Strategy::Prepare_kickoff>().set_kicking(false);
+                get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            assign_strategy( Strategy::Enseirb_project_wrapper::name, time, get_team_ids() );
+            assign_strategy( Strategy::Enseirb_project_wrapper::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
-            assign_strategy( Strategy::Halt::name, time, get_team_ids() );
+            assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }
         last_referee_changement = referee.edge_entropy();
     }
@@ -90,7 +91,7 @@ void Match::choose_a_strategy(double time){
 
 void Match::update(double time){
     //update_strategies(time);
-    update_current_strategy(time);
+    update_current_strategies(time);
     analyse_data(time);
     choose_a_strategy(time);
 }

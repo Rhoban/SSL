@@ -198,6 +198,9 @@ void AI::run(){
         current_time = rhoban_utils::TimeStamp::now().getTimeMS()/1000.0;
         current_dt = current_time - current_dt;
         
+        game_state.time = current_time,
+        game_state.dt = current_dt;
+
         data >> visionData;
 
         //DEBUG( visionData );
@@ -208,6 +211,7 @@ void AI::run(){
         
         game_state.update( visionData );
         referee.update(current_time);
+        strategy_manager->remove_invalid_robots();
         strategy_manager->update(current_time);
         strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
         share_data();

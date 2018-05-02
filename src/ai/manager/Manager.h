@@ -18,16 +18,26 @@ class Manager {
     bool blueTeamOnPositiveHalf;
     int goalie_id;
     std::vector<int> team_ids;
+    std::vector<int> valid_team_ids;
+    std::vector<int> invalid_team_ids;
 
-    std::string current_strategy_name;
+    std::list<std::string> current_strategy_names;
     std::map< std::string, std::shared_ptr<Strategy::Strategy>> strategies;
+
+    void affect_invalid_robots_to_invalid_robots_strategy();
+    void detect_invalid_robots();
 
     protected:
     Ai::AiData & game_state;
     
     public:
+    int time() const ;
+    int dt() const ;
+
     Manager( Ai::AiData& game_state );
 
+    bool is_valid( int id ) const;
+    bool is_inside( int id ) const;
     Ai::Team get_team() const;
     const std::string & get_team_name() const;
     void declare_goalie_id(
@@ -37,26 +47,31 @@ class Manager {
         const std::vector<int> & team_ids
     );
     const std::vector<int> & get_team_ids() const;
+    const std::vector<int> & get_valid_team_ids() const;
+    const std::vector<int> & get_invalid_team_ids() const;
     int get_goalie_id() const;   
 
     template <typename STRATEGY>
-    STRATEGY & get_strategy( const std::string & name ){
+    STRATEGY & get_strategy_( const std::string & name ){
         return static_cast<STRATEGY&>( *strategies.at( name ) );
     };
 
     template <typename STRATEGY>
-    STRATEGY & get_strategy(){
-        return get_strategy<STRATEGY>( STRATEGY::name );
+    STRATEGY & get_strategy_(){
+        return get_strategy_<STRATEGY>( STRATEGY::name );
     };
 
-    Strategy::Strategy & current_strategy();
-    const std::string & strategy_name() const;
+    Strategy::Strategy & get_strategy( const std::string & strategy_name );
+    const Strategy::Strategy & get_strategy( const std::string & strategy_name ) const;
+    const std::list<std::string> & get_current_strategy_names() const;
 
     void register_strategy(
         const std::string& strategy_name,
         std::shared_ptr<Strategy::Strategy> strategy
     );
-   
+
+    void clear_strategy_assignement();
+
     void assign_strategy(
         const std::string & strategy_name, double time,
         const std::vector<int> & robot_ids
@@ -65,7 +80,7 @@ class Manager {
     virtual void update(double time) = 0;
 
     virtual void update_strategies(double time);
-    virtual void update_current_strategy(double time);
+    virtual void update_current_strategies(double time);
 
     virtual void assign_behavior_to_robots(
         std::map<
@@ -75,6 +90,8 @@ class Manager {
     );
 
     void change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis );
+
+    void remove_invalid_robots();
 
     virtual ~Manager();
 };

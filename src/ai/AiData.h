@@ -1,6 +1,7 @@
 #ifndef __AIDATA_H__
 #define __AIDATA_H__
 
+#include <debug.h>
 #include <map>
 #include <rhoban_utils/angle.h>
 #include <rhoban_utils/timing/time_stamp.h>
@@ -60,7 +61,16 @@ public:
 class Robot : public Object { };
 class Ball : public Object { };
 
-struct Field : Vision::Field { };
+struct Field : Vision::Field {
+
+    bool is_inside( const rhoban_geometry::Point & point ) const {
+        return (
+            std::fabs( point.getX() ) < (fieldLength/2.0 + boundaryWidth)
+            and
+            std::fabs( point.getY() ) < (fieldWidth/2.0 + boundaryWidth)
+        );
+    }
+};
 
 struct Constants {
     double robot_radius;
@@ -101,6 +111,10 @@ struct Constants {
 
 class AiData {
 public:
+    double time; //(Write for Ai)
+    double dt; //(Write for Ai)
+
+
     std::string team_name;
     Ai::Team team_color;
 

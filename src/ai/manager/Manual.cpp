@@ -93,14 +93,14 @@ Manual::Manual(
 
 void Manual::update(double time){
     //update_strategies(time);
-    update_current_strategy(time);
+    update_current_strategies(time);
     if( ! strategy_was_assigned ){
         assign_strategy(
             "Goalie",
             //"Position Follower",
             time, get_team_ids()
         );
-	strategy_was_assigned = true;
+	    strategy_was_assigned = true;
     }
 }
 
