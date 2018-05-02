@@ -10,9 +10,9 @@ namespace Robot_behavior {
 
 class Apply_enseirb_project_action : public PositionFollower {
     private:
-        const Action & action; 
+        const enseirb::Action & action; 
     public:
-        Apply_enseirb_project_action( const Action& action, double time, double dt );
+        Apply_enseirb_project_action( const enseirb::Action& action, double time, double dt );
 
         virtual void update(
             double time,

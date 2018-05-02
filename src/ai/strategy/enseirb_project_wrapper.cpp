@@ -26,14 +26,15 @@ void Enseirb_project_wrapper::allocate_enseirb_data(){
     for( auto team: {Vision::Ally, Vision::Opponent} ){
         nb_robots+=game_state.robots[team].size();
     }
-    robot_actions = std::vector<Action>(get_robot_ids().size());
-    robots = new Robot[nb_robots];
+    robot_actions = std::vector<enseirb::Action>(get_robot_ids().size());
+    robots = new enseirb::Robot[nb_robots];
 }
 
 void Enseirb_project_wrapper::initialize_enseirb_data(){
     config.width = game_state.field.fieldWidth;
     config.height = game_state.field.fieldLength;
     config.goal_size = game_state.field.goalWidth;
+    config.margin = game_state.field.boundaryWidth;
     ball.radius = game_state.constants.radius_ball;
     int i=0;
     for( auto team: {Vision::Ally, Vision::Opponent} ){
@@ -43,7 +44,8 @@ void Enseirb_project_wrapper::initialize_enseirb_data(){
             robot_2_index[std::pair<Vision::Team, int>( team, id )] = i;
             robots[i].id = id;
             robots[i].radius = game_state.constants.robot_radius;
-            robots[i].team = (team == Vision::Ally)? TEAM_1:TEAM_2;
+            robots[i].team = ( (team == Vision::Ally)? enseirb::Team::ALLY : enseirb::Team::OPPONENT );
+            robots[i].is_goal = (get_goalie() == id);
             robots[i].is_valid = game_state.robot_is_valid(id);
             //Robots[i].behaviour.id = // TODO 
             i+=1;
@@ -61,13 +63,13 @@ void Enseirb_project_wrapper::start(double time){
     allocate_enseirb_data();
     initialize_enseirb_data();
     
-    start_strategy(&config, robots, nb_robots, TEAM_1);
+    start_strategy(&config, robots, nb_robots, enseirb::Team::ALLY);
 
     behavior_has_been_assigned = false;
 }
 
 void Enseirb_project_wrapper::stop(double time){
-    stop_strategy(&config, robots, nb_robots, TEAM_1);
+    stop_strategy(&config, robots, nb_robots, enseirb::Team::ALLY);
     desallocate_enseirb_data();
     DEBUG("STOP ENSEIRB");
 }
@@ -79,7 +81,7 @@ void Enseirb_project_wrapper::assign_behavior_to_robots(
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
-        setBehaviour(&config, robots, nb_robots, TEAM_1);
+        setBehaviour(&config, robots, nb_robots, enseirb::Team::ALLY);
         for( unsigned int i=0; i<get_robot_ids().size(); i++ ){
             Robot_behavior::Apply_enseirb_project_action *robot_behavior = new Robot_behavior::Apply_enseirb_project_action(
                 robot_actions[i],
@@ -142,11 +144,11 @@ void Enseirb_project_wrapper::update(double time){
         }
     }
  
-    update_strategy(&config, robots, nb_robots, TEAM_1);
+    update_strategy(&config, robots, nb_robots, enseirb::Team::ALLY, time);
 
     // get robot actions
     for( unsigned int i=0; i<get_robot_ids().size(); i++ ){
-        Action action = getBehaviour(
+        enseirb::Action action = getBehaviour(
             &config, robots, nb_robots, &ball, 
             robot_2_index.at(
                 std::pair<Vision::Team, int>(Vision::Team::Ally, robot_id(i))

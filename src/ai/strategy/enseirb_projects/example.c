@@ -22,7 +22,7 @@ static int* id_robot_to_id_in_valid_robot_id = 0;
 void create_map_from_id_to_robot_id(int nb_robots){
     int max_id = -1;
     for( int i=0; i<nb_robots; i++ ){
-        if( robots[i].team == TEAM_1 && robots[i].id > max_id ){
+        if( robots[i].team == ALLY && robots[i].id > max_id ){
             max_id = robots[i].id;
         }
     }
@@ -51,7 +51,7 @@ void free_valid_robots_table(){
 void update_valid_robots_table(int nb_robots){
     nb_of_valid_robots  = 0;
     for( int i=0; i<nb_robots; i++ ){
-        if( robots[i].is_valid && robots[i].team == TEAM_1){
+        if( robots[i].is_valid && robots[i].team == ALLY){
             nb_of_valid_robots ++ ;
         }
     }
@@ -59,7 +59,7 @@ void update_valid_robots_table(int nb_robots){
     valid_robots = (int*) malloc( nb_of_valid_robots * sizeof(int) );
     int j=0;
     for( int i=0; i<nb_robots; i++ ){
-        if( robots[i].is_valid  && robots[i].team == TEAM_1 ){
+        if( robots[i].is_valid  && robots[i].team == ALLY ){
             valid_robots[j] = robots[i].id;
             j++;
         }
@@ -94,7 +94,8 @@ void update_strategy(
     struct Config * config,
     struct Robot * robots,
     int nb_robots,
-    int team
+    int team,
+    double time
 ){
     update_valid_robots_table(nb_robots);
     update_map_from_id_to_robot_id();
@@ -108,7 +109,8 @@ struct Action getBehaviour(
     int i = id_robot_to_id_in_valid_robot_id[robot_id];
 
     struct Action result;
-    result.id = DONT_HAVE_BALL;
+    result.dribler = 0;
+    result.kicker = DO_NOTHING;
     result.x = -(i/2)*0.4;
     result.y = ((i%2==0) ? -1:1) * (1+i/2)*0.4;
     result.t = i*2*M_PI/nb_robots; 

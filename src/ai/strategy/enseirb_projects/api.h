@@ -1,127 +1,111 @@
-/*! \mainpage Index
-
- * \section intro_sec Introduction
- *
- * This project aims to create a behavior simulator for the Small Size League Robot,
- * along with a responsive visual simulator.
- *
- * \section install_sec Install
- *
- * In order to compile the program from source, you must install all the following
- * SDL dependencies along with their corresponding development package : libsdl2-2.0-0, libsdl2-ttf-2.0-0,
- * libsdl2-gfx-1.0-0, libsdl2-image-2.0-0.
- *
- * Then, move into the "build" repository and run "cmake ..".
- * Finally, enter the command "make all" to build the main execuatble along with the tests.
- *
- *
- *
- *
- */
-
 #ifndef __STRATEGY__ENSEIRB__API_H__
 #define __STRATEGY__ENSEIRB__API_H__
 
 #ifdef __cplusplus
+namespace enseirb {
 extern "C"
 {
 #endif
 
-// Structures
-
+//
+// This Config structure define 
+// the field geometry and some 
+// extra information of the robocup.
+//
 struct Config {
     double width, height;
+    double margin;
     double goal_size;
 };
 
-#define GOAL_KEEPER 0
-#define DEFENDER  1
-#define STRIKER 2
-
-#define TEAM_1 0
-#define TEAM_2 1
-
-struct Behaviour {
-    int id;
-    void * data;
-};
-
-#define MARKING 0
-#define FIRST_DEFENDER_IN_COORDINATED_DEFENSE_STRATEGY 1
-#define SECOND_DEFENDER_IN_COORDINATED_DEFENSE_STRATEGY 2
-
-struct DefenderBehaviourData {
-    int id;
-    int target_id;
-};
+typedef enum {
+    ALLY,
+    OPPONENT
+} Team;
 
 struct Robot {
-    int id;
-    double radius;
-    double x, y, t;
-    double vx, vy, vt;
-    int team;
-    int is_valid;
-    struct Behaviour behaviour;
+    int id; // the identifer of the robot
+    double radius; // the radius of the robot
+    double x, y, t; //linear position (x,y) and  angular position (t)
+    double vx, vy, vt; // linear velocity (vx, vy) and angular velocity (vt)
+    Team team;  // the team of the robot 
+    int is_goal; // True if it is the goal
+    int is_valid; // Set to true if the robot is in game and in a valid state
 };
 
 struct Ball {
-    double radius;
-    double x, y, vx, vy;
+    double radius;  // The ball radius
+    double x, y, vx, vy; // linear position x,y and linear velocity vx, vy
 };
 
-#define DONT_HAVE_BALL 0
-#define DRIBBLE 1
-#define SHOOT 2
-#define LOBB 3
+typedef enum {
+    DO_NOTHING,
+    SHOOT,
+    LOBB
+} Kicker;
 
 struct Action {
-    int id;
-    double x, y, t;
+    int dribler; // a boolean : true if dribler should be actived 
+    Kicker kicker; // Define if kicker should be actived
+    double x, y, t;// linear position x,y and angular position t
 };
 
-// Fonctions
 
-void update_strategy(
+// This function is called when we start a strategy.
+// In a match a strategy is called several times.
+// When a strategy is started, the array robots, is 
+// not rallocated. The robot table is free just
+// when the strategy is finished (stoped). 
+void start_strategy(
     struct Config * config,
     struct Robot * robots,
     int nb_robots,
     int team
 );
 
-void start_strategy(struct Config * config,
-                  struct Robot * robots,
-                  int nb_robots,
-                  int team);
+// This function is call at each iteration of the 
+// main program
+void update_strategy(
+    struct Config * config,
+    struct Robot * robots,
+    int nb_robots,
+    int team,
+    double time   // the time of the clock 
+);
 
-void update_strategy(struct Config * config,
-                  struct Robot * robots,
-                  int nb_robots,
-                  int team);
+// This function is called when we stop (finish) a strategy.
+// When a strategy is finished, the robot array can be reallocated.
+void stop_strategy(
+    struct Config * config,
+    struct Robot * robots,
+    int nb_robots,
+    int team
+);
 
-void stop_strategy(struct Config * config,
-                  struct Robot * robots,
-                  int nb_robots,
-                  int team);
+void setBehaviour(
+    struct Config * config,
+    struct Robot * robots,
+    int nb_robots,
+    int team
+);
 
-void setBehaviour(struct Config * config,
-                  struct Robot * robots,
-                  int nb_robots,
-                  int team);
-
-struct Action getBehaviour(struct Config * config,
-                           struct Robot * robots,
-                           int nb_robots,
-                           struct Ball * ball,
-                           int robot_id);
-
-// Autres constantes
-
-#define DEFENDER_GOAL_KEEPER_DISTANCE_IN_COORDINATED_DEFENSE_STRATEGY 2
+//
+// At each loop iteration , for all robots of your team that is present 
+// in the robots table, getBeahviour is called.
+//
+// All the getBehaviour function are called after update_strategy()
+//
+struct Action getBehaviour(
+    struct Config * config,
+    struct Robot * robots,
+    int nb_robots,
+    struct Ball * ball,
+    int robot_id
+);
 
 #ifdef __cplusplus
 }
+}
 #endif
-
 
 #endif

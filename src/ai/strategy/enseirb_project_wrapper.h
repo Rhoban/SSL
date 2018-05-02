@@ -22,10 +22,10 @@ class Enseirb_project_wrapper : public Strategy {
 
         // std::vector<int, std::pair<Vision::Team, int> > index_2_robot;
         std::map<std::pair<Vision::Team, int>, int> robot_2_index;
-        std::vector<Action> robot_actions;
-        Ball ball;
-        struct Config config;
-        struct Robot * robots;
+        std::vector<enseirb::Action> robot_actions;
+        enseirb::Ball ball;
+        struct enseirb::Config config;
+        struct enseirb::Robot * robots;
         int nb_robots;
 
     public:

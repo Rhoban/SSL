@@ -4,7 +4,7 @@
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-Apply_enseirb_project_action::Apply_enseirb_project_action( const Action& action, double time, double dt ):
+Apply_enseirb_project_action::Apply_enseirb_project_action( const enseirb::Action& action, double time, double dt ):
     PositionFollower(time, dt),
     action( action )
 { }
@@ -38,16 +38,16 @@ Control Apply_enseirb_project_action::control() const {
     ctrl.kick = false;
     ctrl.active = true;
     ctrl.ignore = false;
-    switch(action.id){
-        case DONT_HAVE_BALL:
+    if(action.dribler){
+        DEBUG("Dribbling not implemented.");
+    }
+    switch(action.kicker){
+        case enseirb::Kicker::DO_NOTHING:
             break;
-        case DRIBBLE:
-            DEBUG("Dribbling not implemented.");
-            break;
-        case SHOOT :
+        case enseirb::Kicker::SHOOT:
             ctrl.kick = true;
             break;
-        case LOBB:
+        case enseirb::Kicker::LOBB:
             DEBUG("Lobbing not implemented.");
             break;
         default:
