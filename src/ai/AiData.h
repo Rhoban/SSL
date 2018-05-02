@@ -15,8 +15,8 @@
 #define SSL_SIMU
 
 #ifdef SSL_SIMU
-    #define ROTATION_VELOCITY_LIMIT -1.0
-    #define TRANSLATION_VELOCITY_LIMIT -1.0
+    #define ROTATION_VELOCITY_LIMIT 3.0
+    #define TRANSLATION_VELOCITY_LIMIT 8.0
 #else
     //#define ROTATION_VELOCITY_LIMIT 3.0
     //#define TRANSLATION_VELOCITY_LIMIT 2.0
@@ -113,7 +113,6 @@ class AiData {
 public:
     double time; //(Write for Ai)
     double dt; //(Write for Ai)
-
 
     std::string team_name;
     Ai::Team team_color;

@@ -32,6 +32,3 @@
 
 - Ajouter test unitaitre pour pid, avec initilaisation dt à >0
 - Mettre de la documentation pour l'initialisation de dt dans pid
-
-
-Get information of goal ! ! In enseirb and in AiData

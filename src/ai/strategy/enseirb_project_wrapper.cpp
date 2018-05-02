@@ -31,8 +31,8 @@ void Enseirb_project_wrapper::allocate_enseirb_data(){
 }
 
 void Enseirb_project_wrapper::initialize_enseirb_data(){
-    config.width = game_state.field.fieldWidth;
-    config.height = game_state.field.fieldLength;
+    config.width = game_state.field.fieldLength;
+    config.height = game_state.field.fieldWidth;
     config.goal_size = game_state.field.goalWidth;
     config.margin = game_state.field.boundaryWidth;
     ball.radius = game_state.constants.radius_ball;
@@ -45,7 +45,11 @@ void Enseirb_project_wrapper::initialize_enseirb_data(){
             robots[i].id = id;
             robots[i].radius = game_state.constants.robot_radius;
             robots[i].team = ( (team == Vision::Ally)? enseirb::Team::ALLY : enseirb::Team::OPPONENT );
-            robots[i].is_goal = (get_goalie() == id);
+            robots[i].is_goal = (
+                ( (team==Vision::Ally) and (get_goalie()==id) )
+                or 
+                ( (team==Vision::Opponent) and (get_goalie_opponent()==id) )
+            );
             robots[i].is_valid = game_state.robot_is_valid(id);
             //Robots[i].behaviour.id = // TODO 
             i+=1;

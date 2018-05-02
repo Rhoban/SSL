@@ -63,6 +63,10 @@ void Match::analyse_data(double time){
         referee.get_team_color( get_team_name() ),
         referee.blue_have_it_s_goal_on_positive_x_axis()    
     );
+    change_ally_and_opponent_goalie_id(
+        referee.blue_goalie_id(),
+        referee.yellow_goalie_id()
+    );
 }
 void Match::choose_a_strategy(double time){
     if( referee.edge_entropy() > last_referee_changement ){

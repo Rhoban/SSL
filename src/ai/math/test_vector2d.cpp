@@ -92,6 +92,8 @@ TEST(test_vector2d, norm){
     {
         Vector2d v(1.0, 1.0);
         EXPECT_TRUE( std::fabs(v.norm() - std::sqrt(2.0)) < 0.0001 );
+        EXPECT_TRUE( std::fabs(v.norm() - norm(v)) < 0.0001 );
+        EXPECT_TRUE( std::fabs(v.norm() - norm_2(v)) < 0.0001 );
     }
 }
 

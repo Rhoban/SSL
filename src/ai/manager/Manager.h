@@ -17,6 +17,7 @@ class Manager {
     bool blueIsNotSet;
     bool blueTeamOnPositiveHalf;
     int goalie_id;
+    int goalie_opponent_id;
     std::vector<int> team_ids;
     std::vector<int> valid_team_ids;
     std::vector<int> invalid_team_ids;
@@ -38,16 +39,16 @@ class Manager {
 
     Ai::Team get_team() const;
     const std::string & get_team_name() const;
-    void declare_goalie_id(
-        int goalie_id
-    );
-    void declare_team_ids(
-        const std::vector<int> & team_ids
-    );
+    void declare_goalie_id( int goalie_id );
+    void declare_goalie_opponent_id( int goalie_opponent_id );
+    void declare_team_ids( const std::vector<int> & team_ids );
     const std::vector<int> & get_team_ids() const;
     const std::vector<int> & get_valid_team_ids() const;
     const std::vector<int> & get_invalid_team_ids() const;
+    // return the goalie id. If id<0 then no goalie is declared.
     int get_goalie_id() const;   
+    // return the opponent goalie id. If id<0 then no opponent goalie is declared.
+    int get_goalie_opponent_id() const;   
 
     template <typename STRATEGY>
     STRATEGY & get_strategy_( const std::string & name ){
@@ -86,6 +87,8 @@ class Manager {
             std::shared_ptr<Robot_behavior::RobotBehavior>
         > & robot_behaviors, double time, double dt
     );
+
+    void change_ally_and_opponent_goalie_id( int blue_goalie_id, int yellow_goalie_id);
 
     void change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis );
 

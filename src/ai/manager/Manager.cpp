@@ -8,7 +8,15 @@ namespace Manager {
 
 #define MANAGER__REMOVE_ROBOTS "manager__remove_robots"
 
+int Manager::get_goalie_opponent_id() const {
+    return goalie_opponent_id;
+}
 
+void Manager::declare_goalie_opponent_id(
+    int goalie_opponent_id
+){
+    this->goalie_opponent_id = goalie_opponent_id;
+}
 void Manager::declare_goalie_id(
     int goalie_id
 ){
@@ -64,6 +72,7 @@ void Manager::assign_strategy(
     Strategy::Strategy & strategy = get_strategy( strategy_name ); 
     
     strategy.set_goalie( goalie_id );
+    strategy.set_goalie_opponent( goalie_opponent_id );
     strategy.set_robot_affectation( robot_ids );
     strategy.start(time);
 }
@@ -115,6 +124,16 @@ void Manager::assign_behavior_to_robots(
     }
 }
 
+void Manager::change_ally_and_opponent_goalie_id( int blue_goalie_id, int yellow_goalie_id){
+    declare_goalie_id(
+        (get_team() == Ai::Team::Yellow)? yellow_goalie_id : blue_goalie_id
+    );
+    declare_goalie_opponent_id(
+        (get_team() == Ai::Team::Yellow)? blue_goalie_id : yellow_goalie_id
+    );
+}
+
+
 
 void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis ){
     
@@ -158,6 +177,8 @@ void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_
 
 Manager::Manager( Ai::AiData& game_state ):
     blueIsNotSet(true),
+    goalie_id(-1),
+    goalie_opponent_id(-1),
     game_state(game_state)
 {
     register_strategy(

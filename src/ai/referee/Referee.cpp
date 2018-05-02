@@ -323,6 +323,14 @@ bool Referee::blue_have_it_s_goal_on_positive_x_axis() const {
     return blueTeamOnPositiveHalf;
 }
 
+int Referee::yellow_goalie_id() const {
+    return referee_data.current().yellow().goalie();
+}
+
+int Referee::blue_goalie_id() const {
+    return referee_data.current().blue().goalie();
+}
+
 Ai::Team Referee::get_team_color( const std::string & team_name ) const {
     if( referee_data.current().yellow().name() == team_name ){
         return Ai::Yellow;

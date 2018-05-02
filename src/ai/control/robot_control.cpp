@@ -120,23 +120,28 @@ PidControl RobotControl::limited_control(
     );
     if( rotation_velocity_limit > ContinuousAngle(0.0) ){ 
         if( res.velocity_rotation.abs() >= rotation_velocity_limit ){
+            //ContinuousAngle old = res.velocity_rotation;
             res.velocity_rotation *= (
                 rotation_velocity_limit.value() / (
-                    std::fabs( res.velocity_rotation.value() ) 
+                    std::fabs( res.velocity_rotation.value() )/.8 
                 ) 
             );
-            std::cerr << "We limit the rotation velocity to" << 
-                res.velocity_rotation << "!" << std::endl;
+            //std::cerr << "Control : We limit the rotation velocity from " <<
+            //    old << " to" << 
+            //    res.velocity_rotation << "!" << std::endl;
         }
     }
 
     if( translation_velocity_limit > 0.0 ){
         if( res.velocity_translation.norm() >= translation_velocity_limit ){
+            //Vector2d old =  res.velocity_translation;
             res.velocity_translation *= ( 
-                translation_velocity_limit / res.velocity_translation.norm()
+                translation_velocity_limit / 
+                (res.velocity_translation.norm()/.8)
             );
-            std::cerr << "We limit the translation velocity to" << 
-                res.velocity_translation << "!" << std::endl;
+            //std::cerr << "Control : We limit the translation velocity from " <<
+            //    old << " to" << 
+            //    res.velocity_translation << "!" << std::endl;
         }
     }
     return res;

@@ -11,6 +11,7 @@ namespace Strategy {
 class Strategy {
     private:
     int goalie_id;
+    int goalie_opponent_id;
     std::vector<int> robot_ids;
     std::vector<int> player_ids;
 
@@ -21,7 +22,12 @@ class Strategy {
     Strategy();
 
     void set_goalie( int id );
+    void set_goalie_opponent( int id );
+    
+    // Get the goalie id. If id<0 then no goalie is declared 
     int get_goalie() const;   
+    // Get the opponent goalie id. If id<0 then no opponent goalie is declared  
+    int get_goalie_opponent() const;   
 
     void set_robot_affectation( const std::vector<int> & robot_ids );
     

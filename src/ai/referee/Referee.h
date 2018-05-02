@@ -96,6 +96,10 @@ public:
 
     bool blue_have_it_s_goal_on_positive_x_axis() const;
     Ai::Team get_team_color( const std::string & team_name ) const;    
+
+    int yellow_goalie_id() const;
+    int blue_goalie_id() const;
+
 };
 
 }

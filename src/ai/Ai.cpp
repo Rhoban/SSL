@@ -17,7 +17,7 @@ void AI::limits_velocity( Control & ctrl ) const {
             game_state.constants.translation_velocity_limit 
         ){
             ctrl.velocity_translation = Vector2d(0.0, 0.0);
-            std::cerr << "WARNING : we reached the "
+            std::cerr << "AI WARNING : we reached the "
                 "limit translation velocity !" << std::endl;
         }
     }
@@ -27,7 +27,7 @@ void AI::limits_velocity( Control & ctrl ) const {
             game_state.constants.rotation_velocity_limit 
         ){
             ctrl.velocity_rotation = 0.0;
-            std::cerr << "WARNING : we reached the "
+            std::cerr << "AI WARNING : we reached the "
                 "limit rotation velocity !" << std::endl;
         }
     }

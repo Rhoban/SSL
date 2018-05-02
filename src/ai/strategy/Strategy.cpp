@@ -4,7 +4,8 @@ namespace RhobanSSL {
 namespace Strategy {
 
 Strategy::Strategy():
-    goalie_id(-1)
+    goalie_id(-1),
+    goalie_opponent_id(-1)
 { }
 
 /*
@@ -30,8 +31,16 @@ void Strategy::set_goalie( int id ){
     update_player_ids();
 }
 
+void Strategy::set_goalie_opponent( int id ){
+    goalie_opponent_id = id;
+}
+
 int Strategy::get_goalie() const {
     return goalie_id;
+} 
+
+int Strategy::get_goalie_opponent() const {
+    return goalie_opponent_id;
 } 
 
 

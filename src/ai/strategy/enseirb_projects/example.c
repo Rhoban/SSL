@@ -111,8 +111,15 @@ struct Action getBehaviour(
     struct Action result;
     result.dribler = 0;
     result.kicker = DO_NOTHING;
-    result.x = -(i/2)*0.4;
-    result.y = ((i%2==0) ? -1:1) * (1+i/2)*0.4;
-    result.t = i*2*M_PI/nb_robots; 
+
+    if( robot->is_goal ){
+        result.x = -config->width/2.0;
+        result.y = 0.0;
+        result.t = -M_PI;
+    }else{
+        result.x = -(i/2)*0.4;
+        result.y = ((i%2==0) ? -1:1) * (1+i/2)*0.4;
+        result.t = i*2*M_PI/nb_robots; 
+    }
     return result;
 }
