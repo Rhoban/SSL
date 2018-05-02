@@ -61,6 +61,7 @@ struct Robot {
     double x, y, t;
     double vx, vy, vt;
     int team;
+    int is_valid;
     struct Behaviour behaviour;
 };
 
@@ -80,6 +81,28 @@ struct Action {
 };
 
 // Fonctions
+
+void update_strategy(
+    struct Config * config,
+    struct Robot * robots,
+    int nb_robots,
+    int team
+);
+
+void start_strategy(struct Config * config,
+                  struct Robot * robots,
+                  int nb_robots,
+                  int team);
+
+void update_strategy(struct Config * config,
+                  struct Robot * robots,
+                  int nb_robots,
+                  int team);
+
+void stop_strategy(struct Config * config,
+                  struct Robot * robots,
+                  int nb_robots,
+                  int team);
 
 void setBehaviour(struct Config * config,
                   struct Robot * robots,

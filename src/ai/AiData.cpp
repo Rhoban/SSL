@@ -174,5 +174,18 @@ namespace Ai {
             penalty_rayon = 10.0; // For the goalie
         #endif
     }
+
+    bool AiData::robot_is_inside_the_field( int robot_id ) const {
+        const RhobanSSL::Movement & mov = robots.at(Vision::Team::Ally).at(robot_id).get_movement();
+        return field.is_inside( mov.linear_position(time) );
+    }
+
+    bool AiData::robot_is_valid( int robot_id ) const {
+        return (
+            robots.at(Vision::Team::Ally).at(robot_id).isOk()
+            and
+            robot_is_inside_the_field(robot_id)
+        ); 
+    }
  
 } } //Namespace

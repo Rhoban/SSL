@@ -36,8 +36,6 @@ class Manager {
 
     Manager( Ai::AiData& game_state );
 
-    bool is_valid( int id ) const;
-    bool is_inside( int id ) const;
     Ai::Team get_team() const;
     const std::string & get_team_name() const;
     void declare_goalie_id(

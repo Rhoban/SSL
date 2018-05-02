@@ -167,19 +167,6 @@ Manager::Manager( Ai::AiData& game_state ):
     );
 }
 
-bool Manager::is_inside( int id ) const {
-    const RhobanSSL::Movement & mov = game_state.robots.at(Vision::Team::Ally).at(id).get_movement();
-    return game_state.field.is_inside( mov.linear_position(time()) );
-}
-    
-bool Manager::is_valid( int id ) const{
-    return (
-        game_state.robots.at(Vision::Team::Ally).at(id).isOk()
-        and
-        is_inside(id)
-    ); 
-}
-
 int Manager::time() const {
     return game_state.time;
 }
@@ -204,7 +191,7 @@ void Manager::detect_invalid_robots(){
     int nb_valid = 0;
     int n_robots = team_ids.size();
     for(int i=0; i<n_robots; i++ ){
-        if( is_valid( team_ids[i] ) ){
+        if( game_state.robot_is_valid( team_ids[i] ) ){
             nb_valid ++ ;
         }
     }
@@ -212,7 +199,7 @@ void Manager::detect_invalid_robots(){
     invalid_team_ids.clear();
     for(int i=0; i<n_robots; i++ ){
         int id = team_ids[i];
-        if( is_valid( id ) ){
+        if( game_state.robot_is_valid( id ) ){
             valid_team_ids.push_back( id );
         }else{
             invalid_team_ids.push_back( id );

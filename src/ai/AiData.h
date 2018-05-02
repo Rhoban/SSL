@@ -135,6 +135,10 @@ public:
     Constants constants;
 
     void update( const Vision::VisionData vision_data);
+
+    // Rturn true is the robot is ready and inside the field
+    bool robot_is_valid( int robot_id ) const;
+    bool robot_is_inside_the_field( int robot_id ) const;
 };
 
 } }
