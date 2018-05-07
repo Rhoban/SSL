@@ -3,6 +3,11 @@
 namespace RhobanSSL {
 namespace Strategy {
 
+Union::Union( Ai::AiData & ai_data ):
+    Strategy(ai_data),
+    min(0), max(0)
+{ }
+
 void Union::add_goalie_strategy( std::shared_ptr<Strategy> strategy ){
     min += strategy->min_robots();
     strategy_with_goal = strategy;
@@ -27,11 +32,6 @@ int Union::max_robots() const {
 }
 
 Union::~Union(){
-}
-
-Union::Union():
-    min(0), max(0)
-{
 }
 
 void Union::clear(){

@@ -4,8 +4,8 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-Prepare_to_run::Prepare_to_run(Ai::AiData & game_state):
-    game_state(game_state)
+Prepare_to_run::Prepare_to_run(Ai::AiData & ai_data):
+    Strategy(ai_data)
 {
 }
 
@@ -31,7 +31,7 @@ Robot_behavior::RobotBehavior* Prepare_to_run::create_follower(
     const ContinuousAngle& angle,
     double time, double dt
 ) const {
-    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(time, dt);
+    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(game_state, time, dt);
     follower->set_following_position(
         follower_position, angle
     );

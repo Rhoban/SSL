@@ -6,6 +6,10 @@ namespace Strategy {
 
 const std::string Halt::name="halt";
 
+Halt::Halt(Ai::AiData & ai_data):
+    Strategy(ai_data)
+{ }
+
 int Halt::min_robots() const {
     return 0;
 }
@@ -29,7 +33,7 @@ void Halt::assign_behavior_to_robots(
     ){
         assign_behavior(
             id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::DoNothing()
+                new Robot_behavior::DoNothing(game_state)
             )
         );
     }

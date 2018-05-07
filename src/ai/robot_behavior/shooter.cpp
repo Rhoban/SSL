@@ -6,6 +6,7 @@ namespace RhobanSSL {
 namespace Robot_behavior {
 
 Shooter::Shooter(
+    Ai::AiData & ai_data,
     const Vector2d & goal_center, double robot_radius,
     double front_size, double radius_ball,
     double translation_velocity,
@@ -14,7 +15,9 @@ Shooter::Shooter(
     double angular_acceleration,
     double calculus_step,
     double time, double dt
-){
+):
+    RobotBehavior( ai_data )
+{
     this->goal_center = goal_center;
     this->robot_radius = robot_radius;
     this->translation_velocity = translation_velocity;

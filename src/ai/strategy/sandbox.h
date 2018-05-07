@@ -3,14 +3,12 @@
 
 #include "Strategy.h"
 #include <string>
-#include <AiData.h>
 
 namespace RhobanSSL {
 namespace Strategy {
 
 class Sandbox : public Strategy {
     private:
-        Ai::AiData & game_state;
         bool behavior_has_been_assigned;
     public:
         int min_robots() const;

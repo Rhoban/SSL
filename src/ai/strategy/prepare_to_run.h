@@ -10,8 +10,6 @@ namespace Strategy {
 
 
 class Prepare_to_run : public Strategy {
-    private:
-        Ai::AiData & game_state;
     public:
 
         Prepare_to_run(Ai::AiData & game_state);

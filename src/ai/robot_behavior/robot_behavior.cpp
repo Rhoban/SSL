@@ -53,7 +53,9 @@ double vec2angle( Vector2d direction ){
 }
 
 
-RobotBehavior::RobotBehavior() : birthday(-1.0) { };
+RobotBehavior::RobotBehavior( Ai::AiData & ai_data ) :
+    birthday(-1.0), game_state(ai_data)
+{ };
 
 double RobotBehavior::age() const { return lastUpdate - birthday; };
 bool RobotBehavior::is_born() const { return birthday > 0; };
@@ -66,6 +68,7 @@ void RobotBehavior::update_time_and_position(
     double time, 
     const Ai::Robot & robot, const Ai::Ball & ball
 ){
+    this->robot_ptr = &robot; 
     lastUpdate = time;
     this->robot_linear_position = Vector2d(
         robot.get_movement().linear_position(time)
@@ -77,6 +80,16 @@ void RobotBehavior::update_time_and_position(
         time
     );
 };
+
+const Ai::Robot & RobotBehavior::robot() const {
+    return *robot_ptr;
+}
+
+double RobotBehavior::time() const {
+    return game_state.time;
+
+}
+
 
 }
 }

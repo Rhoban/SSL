@@ -28,7 +28,7 @@ namespace Robot_behavior {
 
 class RobotBehavior {
     protected:
-    
+        const Ai::Robot* robot_ptr;     
         double birthday;
         double lastUpdate; 
 
@@ -36,9 +36,11 @@ class RobotBehavior {
         ContinuousAngle robot_angular_position;
         Vector2d ball_position;
 
+        Ai::AiData & game_state;
     public:
-        RobotBehavior();
-        
+        RobotBehavior( Ai::AiData & ia_data );
+
+        double time() const;        
         double age() const;
         bool is_born() const;
         void set_birthday( double birthday );
@@ -53,6 +55,8 @@ class RobotBehavior {
             const Ai::Robot & robot, const Ai::Ball & ball
         ) = 0;
         virtual Control control() const = 0;
+
+        const Ai::Robot & robot() const ;
 };
 
 namespace detail {

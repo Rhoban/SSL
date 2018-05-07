@@ -16,6 +16,8 @@ class Tare_and_synchronize : public Strategy {
         double start_waiting_time_for_synchro;
 
     public:
+        Tare_and_synchronize( Ai::AiData & ai_data );
+
         int min_robots() const;
         int max_robots() const;
 

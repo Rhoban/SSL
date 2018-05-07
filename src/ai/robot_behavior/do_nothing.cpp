@@ -3,7 +3,11 @@
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-DoNothing::DoNothing(){ }
+DoNothing::DoNothing(
+    Ai::AiData & ai_data
+):
+    RobotBehavior(ai_data)
+{ }
 
 void DoNothing::update(
     double time, 

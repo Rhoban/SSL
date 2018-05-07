@@ -99,7 +99,7 @@ void AI::init_robot_behaviors(){
         robot_behaviors[k] = std::shared_ptr<
             Robot_behavior::RobotBehavior
         >(
-            new Robot_behavior::DoNothing()
+            new Robot_behavior::DoNothing(game_state)
         );
     }
 }

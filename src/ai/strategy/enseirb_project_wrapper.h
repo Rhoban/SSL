@@ -17,7 +17,6 @@ class Enseirb_project_wrapper : public Strategy {
         void initialize_enseirb_data();
 
     private:
-        Ai::AiData & game_state;
         bool behavior_has_been_assigned;
 
         // std::vector<int, std::pair<Vision::Team, int> > index_2_robot;

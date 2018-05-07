@@ -1,10 +1,13 @@
 #include "navigation_with_obstacle_avoidance.h"
+#include <rhoban_geometry/segment.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-Navigation_with_obstacle_avoidance::Navigation_with_obstacle_avoidance( Ai::AiData & ai_data ):
-    ai_data(ai_data), position(0.0, 0.0), angle(0.0)
+Navigation_with_obstacle_avoidance::Navigation_with_obstacle_avoidance(
+    Ai::AiData & ai_data
+):
+    RobotBehavior(ai_data), position(0.0, 0.0), angle(0.0)
 {
 } 
 
@@ -19,7 +22,25 @@ void Navigation_with_obstacle_avoidance::set_following_position(
 }
 
 void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
-
+    rhoban_geometry::Segment flying_traject(
+        vector2point(this->robot_linear_position), vector2point(position)
+    );
+    for( Vision::Team team : { Vision::Team::Ally, Vision::Team::Opponent } ){
+        for( const std::pair<int,Ai::Robot> & elem : game_state.robots[team] ){
+            int robot_id = elem.first;
+            const Ai::Robot & obstacle  = elem.second;
+            if( obstacle.isOk() ){
+                rhoban_geometry::Circle(
+                    vector2point(
+                        obstacle.get_movement().linear_position(time())
+                    ),
+                    2.5*game_state.constants.robot_radius// TODO
+                );
+                if( obstacle.id() != robot().id() ){
+                }
+            }
+        }
+    }  
 }
 
 bool Navigation_with_obstacle_avoidance::do_we_activate_obstacle_avoidance(){
@@ -51,6 +72,7 @@ void Navigation_with_obstacle_avoidance::update(
     //  this->robot_linear_position
     //  this->ball_position
     //  this->robot_angular_position 
+    //  this->robot()
     // are all avalaible
 
     determine_the_closest_obstacle();

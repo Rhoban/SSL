@@ -4,11 +4,14 @@
 #include <robot_behavior/robot_behavior.h>
 #include <map>
 #include <memory>
+#include <AiData.h>
 
 namespace RhobanSSL {
 namespace Strategy {
 
 class Strategy {
+    protected:
+    Ai::AiData & game_state;
     private:
     int goalie_id;
     int goalie_opponent_id;
@@ -19,7 +22,7 @@ class Strategy {
 
     public:
 
-    Strategy();
+    Strategy(Ai::AiData & ai_data);
 
     void set_goalie( int id );
     void set_goalie_opponent( int id );

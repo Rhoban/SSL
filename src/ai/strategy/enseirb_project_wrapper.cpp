@@ -7,7 +7,7 @@ namespace RhobanSSL {
 namespace Strategy {
 
 Enseirb_project_wrapper::Enseirb_project_wrapper(Ai::AiData & game_state):
-    game_state(game_state),
+    Strategy(game_state),
     robots(0), nb_robots(0)
 {
 }
@@ -88,6 +88,7 @@ void Enseirb_project_wrapper::assign_behavior_to_robots(
         setBehaviour(&config, robots, nb_robots, enseirb::Team::ALLY);
         for( unsigned int i=0; i<get_robot_ids().size(); i++ ){
             Robot_behavior::Apply_enseirb_project_action *robot_behavior = new Robot_behavior::Apply_enseirb_project_action(
+                game_state,
                 robot_actions[i],
                 time, dt
             ) ;

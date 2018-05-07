@@ -6,10 +6,12 @@ namespace Strategy {
 const std::string From_robot_behavior::name = "From_robot_behavior";
 
 From_robot_behavior::From_robot_behavior( 
+    Ai::AiData & ai_data,
     std::function<
         std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)
     > robot_behavior_allocator, bool is_goalie
 ):
+    Strategy(ai_data),
     robot_behavior_allocator(robot_behavior_allocator),
     is_goalie(is_goalie)
 {

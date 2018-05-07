@@ -14,7 +14,6 @@ namespace Robot_behavior {
  */
 class Navigation_with_obstacle_avoidance : public RobotBehavior {
     private:
-        Ai::AiData & ai_data;
 
         Vector2d position;
         ContinuousAngle angle;

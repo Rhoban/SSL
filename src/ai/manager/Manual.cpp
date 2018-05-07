@@ -18,20 +18,22 @@ Manual::Manual(
 
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt() 
+            new Strategy::Halt(game_state)
         )
     );
     register_strategy(
         Strategy::Tare_and_synchronize::name,
         std::shared_ptr<Strategy::Strategy>( 
-            new Strategy::Tare_and_synchronize()
+            new Strategy::Tare_and_synchronize(game_state)
         )
     );
     register_strategy(
         "Goalie", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
+                game_state,
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(
+                        game_state,
                         game_state.constants.left_post_position, 
                         game_state.constants.right_post_position, 
                         game_state.constants.waiting_goal_position, 
@@ -61,8 +63,9 @@ Manual::Manual(
     register_strategy(
         "Position Follower", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
+                game_state,
                 [&](double time, double dt){
-		    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower( time, dt );
+		    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower( game_state, time, dt );
 		    follower->set_following_position(
 			Vector2d(-2.0, 1.0), ContinuousAngle(M_PI/2.0)
 		    );

@@ -12,7 +12,6 @@ namespace Strategy {
 class Prepare_kickoff : public Strategy {
     private:
         bool is_kicking;
-        Ai::AiData & game_state;
     public:
 
         Prepare_kickoff(Ai::AiData & game_state);

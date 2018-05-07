@@ -9,7 +9,7 @@ namespace Robot_behavior {
 
 class Goalie : public PositionFollower {
     private:
-        PositionFollower follower();
+        //PositionFollower follower(); TODO : to remove if not necessary
 
         Vector2d left_post_position; 
         Vector2d right_post_position;
@@ -28,6 +28,7 @@ class Goalie : public PositionFollower {
 
     public:
         Goalie(
+            Ai::AiData& ai_data,
             const Vector2d & left_post_position,
             const Vector2d & right_post_position,
             const Vector2d & waiting_goal_position,

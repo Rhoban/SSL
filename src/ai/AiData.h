@@ -39,6 +39,10 @@ private:
 
 public:
 
+    int id() const {
+        return vision_data.id;
+    }
+
     Object();
     Object( const Object& object );
     Object& operator=( const Object& object );

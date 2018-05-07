@@ -20,7 +20,7 @@ int Sandbox::max_robots() const {
 
 
 Sandbox::Sandbox(Ai::AiData & game_state):
-    game_state(game_state)
+    Strategy(game_state)
 {
 }
 
@@ -49,14 +49,14 @@ void Sandbox::assign_behavior_to_robots(
         ){
             assign_behavior(
                 id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                    new Robot_behavior::DoNothing()
+                    new Robot_behavior::DoNothing(game_state)
                 )
             );
         }
 
         DEBUG("SANDBOX ASSIGN BEHAVIOR");
         Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(
-            time, dt
+            game_state, time, dt
         );
         const Ai::Robot & robot_follower = game_state.robots[
             Vision::Ally
@@ -89,6 +89,7 @@ void Sandbox::assign_behavior_to_robots(
 
         // We create a goalie :    
         Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(
+            game_state,
             game_state.constants.left_post_position, 
             game_state.constants.right_post_position, 
             game_state.constants.waiting_goal_position, 
@@ -119,6 +120,7 @@ void Sandbox::assign_behavior_to_robots(
         #if 1
         // We create a shooter :
         Robot_behavior::Shooter* shooter = new Robot_behavior::Shooter(
+            game_state,
             game_state.constants.goal_center,
             game_state.constants.robot_radius,
             game_state.constants.front_size,

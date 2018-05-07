@@ -18,7 +18,7 @@ class Union : public Strategy {
  
     public:
 
-    Union();
+    Union(Ai::AiData & ai_data);
 
     void  clear();
 

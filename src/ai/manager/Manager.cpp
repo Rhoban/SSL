@@ -183,7 +183,7 @@ Manager::Manager( Ai::AiData& game_state ):
 {
     register_strategy(
         MANAGER__REMOVE_ROBOTS, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt() 
+            new Strategy::Halt(game_state) 
         )
     );
 }

@@ -68,6 +68,7 @@ class Shooter : public RobotBehavior {
 
     public:
         Shooter(
+            Ai::AiData& ai_data,
             const Vector2d & goal_center, double robot_radius,
             double front_size, double radius_ball,
             double translation_velocity,

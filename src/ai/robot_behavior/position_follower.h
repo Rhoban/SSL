@@ -15,7 +15,7 @@ class PositionFollower : public RobotBehavior {
         RobotControlWithPositionFollowing robot_control;
 
     public:
-        PositionFollower( double time, double dt ); 
+        PositionFollower( Ai::AiData& ai_data, double time, double dt ); 
 
         void set_translation_pid( double kp, double ki, double kd );
         void set_orientation_pid( double kp, double ki, double kd );

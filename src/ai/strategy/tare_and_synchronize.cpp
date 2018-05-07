@@ -6,6 +6,11 @@ namespace Strategy {
 
 const std::string Tare_and_synchronize::name="tare_and_synchronize";
 
+Tare_and_synchronize::Tare_and_synchronize(Ai::AiData & ai_data):
+    Strategy(ai_data)
+{
+}
+
 int Tare_and_synchronize::min_robots() const {
     return 0;
 }
@@ -51,7 +56,7 @@ void Tare_and_synchronize::assign_behavior_to_robots(
         ){
             assign_behavior(
                 id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                    new Robot_behavior::DoNothing()
+                    new Robot_behavior::DoNothing(game_state)
                 )
             );
         }

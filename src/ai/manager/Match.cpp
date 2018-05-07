@@ -24,13 +24,13 @@ Match::Match(
 
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt() 
+            new Strategy::Halt(game_state) 
         )
     );
     register_strategy(
         Strategy::Tare_and_synchronize::name,
         std::shared_ptr<Strategy::Strategy>( 
-            new Strategy::Tare_and_synchronize()
+            new Strategy::Tare_and_synchronize(game_state)
         )
     );
     register_strategy(

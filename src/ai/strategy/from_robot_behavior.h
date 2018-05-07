@@ -20,6 +20,7 @@ class From_robot_behavior: public Strategy {
     public:
 
         From_robot_behavior( 
+            Ai::AiData & ai_data,
             std::function<
                 std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)
             > robot_behavior_allocator,

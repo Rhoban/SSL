@@ -4,8 +4,11 @@
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-Apply_enseirb_project_action::Apply_enseirb_project_action( const enseirb::Action& action, double time, double dt ):
-    PositionFollower(time, dt),
+Apply_enseirb_project_action::Apply_enseirb_project_action(
+    Ai::AiData & ai_data,
+    const enseirb::Action& action, double time, double dt
+):
+    PositionFollower( ai_data, time, dt),
     action( action )
 { }
 

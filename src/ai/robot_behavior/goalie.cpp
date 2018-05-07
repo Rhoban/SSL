@@ -22,6 +22,7 @@ Vector2d Goalie::calculate_goal_position(
 
 
 Goalie::Goalie(
+    Ai::AiData & ai_data,
     const Vector2d & left_post_position,
     const Vector2d & right_post_position,
     const Vector2d & waiting_goal_position,
@@ -29,7 +30,7 @@ Goalie::Goalie(
     double goalie_radius,
     double time, double dt
 ):
-    PositionFollower(time, dt)
+    PositionFollower(ai_data, time, dt)
 {
     this->left_post_position = left_post_position;
     this->right_post_position = right_post_position;
