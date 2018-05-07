@@ -4,7 +4,7 @@ namespace RhobanSSL {
 namespace Strategy {
 
 Strategy::Strategy(Ai::AiData & ai_data):
-    game_state(ai_data),
+    ai_data(ai_data),
     goalie_id(-1),
     goalie_opponent_id(-1)
 { }

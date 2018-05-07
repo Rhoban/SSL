@@ -28,7 +28,7 @@ class Enseirb_project_wrapper : public Strategy {
         int nb_robots;
 
     public:
-        Enseirb_project_wrapper(Ai::AiData & game_state);
+        Enseirb_project_wrapper(Ai::AiData & ai_data);
 
         virtual int min_robots() const;
         virtual int max_robots() const;

@@ -11,14 +11,14 @@ class AIVisionClient : public VisionClient
 {
 public:
 
-    AIVisionClient(Data& ai_data, Ai::Team myTeam, bool simulation = false);
+    AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation = false);
 
     void setRobotPos(Ai::Team team, int id, double x, double y, double orientation);
 
 protected:
     virtual void packetReceived();
 
-    Data & ai_data;
+    Data & shared_data;
     Ai::Team myTeam;
     Vision::VisionData visionData;
 

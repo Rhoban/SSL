@@ -36,7 +36,7 @@ class RobotBehavior {
         ContinuousAngle robot_angular_position;
         Vector2d ball_position;
 
-        Ai::AiData & game_state;
+        Ai::AiData & ai_data;
     public:
         RobotBehavior( Ai::AiData & ia_data );
 

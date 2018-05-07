@@ -26,7 +26,7 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
         vector2point(this->robot_linear_position), vector2point(position)
     );
     for( Vision::Team team : { Vision::Team::Ally, Vision::Team::Opponent } ){
-        for( const std::pair<int,Ai::Robot> & elem : game_state.robots[team] ){
+        for( const std::pair<int,Ai::Robot> & elem : ai_data.robots[team] ){
             int robot_id = elem.first;
             const Ai::Robot & obstacle  = elem.second;
             if( obstacle.isOk() ){
@@ -34,7 +34,7 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
                     vector2point(
                         obstacle.get_movement().linear_position(time())
                     ),
-                    2.5*game_state.constants.robot_radius// TODO
+                    2.5*ai_data.constants.robot_radius// TODO
                 );
                 if( obstacle.id() != robot().id() ){
                 }

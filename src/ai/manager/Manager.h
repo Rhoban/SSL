@@ -29,13 +29,13 @@ class Manager {
     void detect_invalid_robots();
 
     protected:
-    Ai::AiData & game_state;
+    Ai::AiData & ai_data;
     
     public:
     int time() const ;
     int dt() const ;
 
-    Manager( Ai::AiData& game_state );
+    Manager( Ai::AiData& ai_data );
 
     Ai::Team get_team() const;
     const std::string & get_team_name() const;

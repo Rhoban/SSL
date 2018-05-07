@@ -11,7 +11,7 @@ namespace Strategy {
 
 class Strategy {
     protected:
-    Ai::AiData & game_state;
+    Ai::AiData & ai_data;
     private:
     int goalie_id;
     int goalie_opponent_id;

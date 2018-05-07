@@ -11,20 +11,20 @@ namespace RhobanSSL
 
 
 void AI::limits_velocity( Control & ctrl ) const {
-    if( game_state.constants.translation_velocity_limit > 0.0 ){
+    if( ai_data.constants.translation_velocity_limit > 0.0 ){
         if( 
             ctrl.velocity_translation.norm() > 
-            game_state.constants.translation_velocity_limit 
+            ai_data.constants.translation_velocity_limit 
         ){
             ctrl.velocity_translation = Vector2d(0.0, 0.0);
             std::cerr << "AI WARNING : we reached the "
                 "limit translation velocity !" << std::endl;
         }
     }
-    if( game_state.constants.rotation_velocity_limit > 0.0 ){
+    if( ai_data.constants.rotation_velocity_limit > 0.0 ){
         if( 
             std::fabs( ctrl.velocity_rotation.value() ) > 
-            game_state.constants.rotation_velocity_limit 
+            ai_data.constants.rotation_velocity_limit 
         ){
             ctrl.velocity_rotation = 0.0;
             std::cerr << "AI WARNING : we reached the "
@@ -68,7 +68,7 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
                 map_id, true, 0.0, 0.0, 0.0 
             );
         }else{
-            Vector2d velocity_translation = game_state.team_point_of_view.from_basis(
+            Vector2d velocity_translation = ai_data.team_point_of_view.from_basis(
                 ctrl.velocity_translation
             ); 
             commander->set(
@@ -99,7 +99,7 @@ void AI::init_robot_behaviors(){
         robot_behaviors[k] = std::shared_ptr<
             Robot_behavior::RobotBehavior
         >(
-            new Robot_behavior::DoNothing(game_state)
+            new Robot_behavior::DoNothing(ai_data)
         );
     }
 }
@@ -131,11 +131,11 @@ AI::AI(
     int goalie_id = 8;
     #endif
 
-    game_state.change_team_color(default_team);
-    game_state.team_name = team_name;
+    ai_data.change_team_color(default_team);
+    ai_data.team_name = team_name;
     strategy_manager = std::shared_ptr<Manager::Manager>(
-        //new Manager::Manual(game_state)
-        new Manager::Match(game_state, referee)
+        //new Manager::Manual(ai_data)
+        new Manager::Match(ai_data, referee)
     );
     strategy_manager->declare_goalie_id( goalie_id );
     strategy_manager->declare_team_ids( robot_ids );
@@ -145,15 +145,15 @@ AI::AI(
 
 void AI::update_robots( ){
 
-    commander->set_yellow( game_state.team_color == Ai::Yellow  );
+    commander->set_yellow( ai_data.team_color == Ai::Yellow  );
 
     double time =  this->current_time;
-    Ai::Ball & ball = game_state.ball;
+    Ai::Ball & ball = ai_data.ball;
     
     auto team = Vision::Ally;
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
 
-        Ai::Robot & robot = game_state.robots[team][robot_id];
+        Ai::Robot & robot = ai_data.robots[team][robot_id];
 
         Robot_behavior::RobotBehavior & robot_behavior = *( 
             robot_behaviors[robot_id] 
@@ -198,8 +198,8 @@ void AI::run(){
         current_time = rhoban_utils::TimeStamp::now().getTimeMS()/1000.0;
         current_dt = current_time - current_dt;
         
-        game_state.time = current_time,
-        game_state.dt = current_dt;
+        ai_data.time = current_time,
+        ai_data.dt = current_dt;
 
         data >> visionData;
 
@@ -209,7 +209,7 @@ void AI::run(){
         visionData.checkAssert(current_time);
         //DEBUG("");
         
-        game_state.update( visionData );
+        ai_data.update( visionData );
         referee.update(current_time);
         strategy_manager->remove_invalid_robots();
         strategy_manager->update(current_time);
@@ -225,9 +225,9 @@ void AI::stop()
 }
 
 void AI::share_data(){
-    Data_from_ai ai_data;
-    ai_data.team_color = game_state.team_color;
-    data << ai_data;
+    Data_from_ai data_from_ai;
+    data_from_ai.team_color = ai_data.team_color;
+    data << data_from_ai;
 }
     
 }

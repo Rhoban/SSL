@@ -54,7 +54,7 @@ double vec2angle( Vector2d direction ){
 
 
 RobotBehavior::RobotBehavior( Ai::AiData & ai_data ) :
-    birthday(-1.0), game_state(ai_data)
+    birthday(-1.0), ai_data(ai_data)
 { };
 
 double RobotBehavior::age() const { return lastUpdate - birthday; };
@@ -86,7 +86,7 @@ const Ai::Robot & RobotBehavior::robot() const {
 }
 
 double RobotBehavior::time() const {
-    return game_state.time;
+    return ai_data.time;
 
 }
 

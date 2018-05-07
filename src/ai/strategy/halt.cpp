@@ -33,7 +33,7 @@ void Halt::assign_behavior_to_robots(
     ){
         assign_behavior(
             id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::DoNothing(game_state)
+                new Robot_behavior::DoNothing(ai_data)
             )
         );
     }

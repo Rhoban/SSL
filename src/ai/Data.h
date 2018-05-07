@@ -21,7 +21,7 @@ private: // Do not remove !
     Vision::VisionData vision_data;
 
     std::mutex mutex_for_ai_data;
-    Data_from_ai ai_data;
+    Data_from_ai data_from_ai;
 
 public:
 

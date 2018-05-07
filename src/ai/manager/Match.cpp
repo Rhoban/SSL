@@ -14,41 +14,41 @@ namespace RhobanSSL {
 namespace Manager {
 
 Match::Match(
-    Ai::AiData & game_state,
+    Ai::AiData & ai_data,
     const Referee & referee
 ):
-    Manager(game_state),
+    Manager(ai_data),
     referee(referee),
     last_referee_changement(0)
 {
 
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt(game_state) 
+            new Strategy::Halt(ai_data) 
         )
     );
     register_strategy(
         Strategy::Tare_and_synchronize::name,
         std::shared_ptr<Strategy::Strategy>( 
-            new Strategy::Tare_and_synchronize(game_state)
+            new Strategy::Tare_and_synchronize(ai_data)
         )
     );
     register_strategy(
         Strategy::Prepare_kickoff::name,
         std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Prepare_kickoff(game_state)
+            new Strategy::Prepare_kickoff(ai_data)
         )
     );
     register_strategy(
         Strategy::Prepare_to_run::name,
         std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Prepare_to_run(game_state)
+            new Strategy::Prepare_to_run(ai_data)
         )
     );
     register_strategy(
         Strategy::Enseirb_project_wrapper::name,
         std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Enseirb_project_wrapper(game_state)
+            new Strategy::Enseirb_project_wrapper(ai_data)
         )
     );
     assign_strategy(

@@ -31,22 +31,22 @@ Robot_behavior::RobotBehavior* Prepare_to_run::create_follower(
     const ContinuousAngle& angle,
     double time, double dt
 ) const {
-    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(game_state, time, dt);
+    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(ai_data, time, dt);
     follower->set_following_position(
         follower_position, angle
     );
     follower->set_translation_pid(
-        game_state.constants.p_translation,
-        game_state.constants.i_translation, 
-        game_state.constants.d_translation
+        ai_data.constants.p_translation,
+        ai_data.constants.i_translation, 
+        ai_data.constants.d_translation
     );
     follower->set_orientation_pid(
-        game_state.constants.p_orientation, game_state.constants.i_orientation, 
-        game_state.constants.d_orientation
+        ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
+        ai_data.constants.d_orientation
     );
     follower->set_limits(
-        game_state.constants.translation_velocity_limit,
-        game_state.constants.rotation_velocity_limit
+        ai_data.constants.translation_velocity_limit,
+        ai_data.constants.rotation_velocity_limit
     );
     return follower;
 }
@@ -69,8 +69,8 @@ void Prepare_to_run::assign_behavior_to_robots(
         );
 
         int nb_robots = get_player_ids().size();
-        //double fieldWidth = game_state.field.fieldwidth;
-        double robot_radius = game_state.constants.robot_radius;
+        //double fieldWidth = ai_data.field.fieldwidth;
+        double robot_radius = ai_data.constants.robot_radius;
         for( int i=0; i<nb_robots; i++ ){
             int id = player_id(i);
             float y_pos = ( i - (nb_robots/2) )*4.0*robot_radius;

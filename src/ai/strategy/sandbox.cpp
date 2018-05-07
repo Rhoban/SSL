@@ -19,8 +19,8 @@ int Sandbox::max_robots() const {
 }
 
 
-Sandbox::Sandbox(Ai::AiData & game_state):
-    Strategy(game_state)
+Sandbox::Sandbox(Ai::AiData & ai_data):
+    Strategy(ai_data)
 {
 }
 
@@ -49,16 +49,16 @@ void Sandbox::assign_behavior_to_robots(
         ){
             assign_behavior(
                 id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                    new Robot_behavior::DoNothing(game_state)
+                    new Robot_behavior::DoNothing(ai_data)
                 )
             );
         }
 
         DEBUG("SANDBOX ASSIGN BEHAVIOR");
         Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(
-            game_state, time, dt
+            ai_data, time, dt
         );
-        const Ai::Robot & robot_follower = game_state.robots[
+        const Ai::Robot & robot_follower = ai_data.robots[
             Vision::Ally
         ][follower_id];
         Vector2d follower_position(
@@ -69,17 +69,17 @@ void Sandbox::assign_behavior_to_robots(
             follower_position, ContinuousAngle(M_PI/2.0)
         );
         follower->set_translation_pid(
-            game_state.constants.p_translation,
-            game_state.constants.i_translation, 
-            game_state.constants.d_translation
+            ai_data.constants.p_translation,
+            ai_data.constants.i_translation, 
+            ai_data.constants.d_translation
         );
         follower->set_orientation_pid(
-            game_state.constants.p_orientation, game_state.constants.i_orientation, 
-            game_state.constants.d_orientation
+            ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
+            ai_data.constants.d_orientation
         );
         follower->set_limits(
-            game_state.constants.translation_velocity_limit,
-            game_state.constants.rotation_velocity_limit
+            ai_data.constants.translation_velocity_limit,
+            ai_data.constants.rotation_velocity_limit
         );
         assign_behavior( 
             follower_id, std::shared_ptr<
@@ -89,27 +89,27 @@ void Sandbox::assign_behavior_to_robots(
 
         // We create a goalie :    
         Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(
-            game_state,
-            game_state.constants.left_post_position, 
-            game_state.constants.right_post_position, 
-            game_state.constants.waiting_goal_position, 
-            game_state.constants.penalty_rayon, 
-            game_state.constants.robot_radius,
+            ai_data,
+            ai_data.constants.left_post_position, 
+            ai_data.constants.right_post_position, 
+            ai_data.constants.waiting_goal_position, 
+            ai_data.constants.penalty_rayon, 
+            ai_data.constants.robot_radius,
             time, dt
         );
         goalie->set_translation_pid( 
-            game_state.constants.p_translation,
-            game_state.constants.i_translation, 
-            game_state.constants.d_translation
+            ai_data.constants.p_translation,
+            ai_data.constants.i_translation, 
+            ai_data.constants.d_translation
         );
         goalie->set_orientation_pid(
-            game_state.constants.p_orientation,
-            game_state.constants.i_orientation, 
-            game_state.constants.d_orientation
+            ai_data.constants.p_orientation,
+            ai_data.constants.i_orientation, 
+            ai_data.constants.d_orientation
         );
         goalie->set_limits(
-            game_state.constants.translation_velocity_limit,
-            game_state.constants.rotation_velocity_limit
+            ai_data.constants.translation_velocity_limit,
+            ai_data.constants.rotation_velocity_limit
         );
         assign_behavior(
             get_goalie(), std::shared_ptr<
@@ -120,38 +120,38 @@ void Sandbox::assign_behavior_to_robots(
         #if 1
         // We create a shooter :
         Robot_behavior::Shooter* shooter = new Robot_behavior::Shooter(
-            game_state,
-            game_state.constants.goal_center,
-            game_state.constants.robot_radius,
-            game_state.constants.front_size,
-            game_state.constants.radius_ball,
-            game_state.constants.translation_velocity,
-            game_state.constants.translation_acceleration,
-            game_state.constants.angular_velocity,
-            game_state.constants.angular_acceleration,
-            game_state.constants.calculus_step,
+            ai_data,
+            ai_data.constants.goal_center,
+            ai_data.constants.robot_radius,
+            ai_data.constants.front_size,
+            ai_data.constants.radius_ball,
+            ai_data.constants.translation_velocity,
+            ai_data.constants.translation_acceleration,
+            ai_data.constants.angular_velocity,
+            ai_data.constants.angular_acceleration,
+            ai_data.constants.calculus_step,
             time, dt
         );
         shooter->set_translation_pid(
-            game_state.constants.p_translation,
-            game_state.constants.i_translation, 
-            game_state.constants.d_translation
+            ai_data.constants.p_translation,
+            ai_data.constants.i_translation, 
+            ai_data.constants.d_translation
         );
         shooter->set_orientation_pid(
-            game_state.constants.p_orientation,
-            game_state.constants.i_orientation, 
-            game_state.constants.d_orientation
+            ai_data.constants.p_orientation,
+            ai_data.constants.i_orientation, 
+            ai_data.constants.d_orientation
         );
         shooter->set_limits(
-            game_state.constants.translation_velocity_limit,
-            game_state.constants.rotation_velocity_limit
+            ai_data.constants.translation_velocity_limit,
+            ai_data.constants.rotation_velocity_limit
         );
-        const Ai::Ball & ball = game_state.ball;
+        const Ai::Ball & ball = ai_data.ball;
         Vector2d ball_position(
             ball.get_movement().linear_position(time).getX(),
             ball.get_movement().linear_position(time).getY()
         );
-        const Ai::Robot & robot = game_state.robots[Vision::Ally][shooter_id];
+        const Ai::Robot & robot = ai_data.robots[Vision::Ally][shooter_id];
         Vector2d robot_position(
             robot.get_movement().linear_position(time).getX(),
             robot.get_movement().linear_position(time).getY()

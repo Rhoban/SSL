@@ -33,7 +33,7 @@ namespace RhobanSSL
         bool running;
 
         Vision::VisionData visionData;
-        Ai::AiData game_state;
+        Ai::AiData ai_data;
 
         bool enable_kicking;
 

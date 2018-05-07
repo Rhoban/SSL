@@ -13,7 +13,7 @@ class Manual {
 
     std::string current_strategy_name;
     std::map< std::string, std::shared_ptr<Strategy::Strategy>> strategies;
-    Ai::AiData& game_state;
+    Ai::AiData& ai_data;
     const Referee & referee;
     
     double start;
@@ -30,7 +30,7 @@ class Manual {
     int get_goalie_id() const;   
  
     Manual(
-        Ai::AiData & game_state,
+        Ai::AiData & ai_data,
         const Referee & referee
     );
 

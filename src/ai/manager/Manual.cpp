@@ -11,49 +11,49 @@ namespace RhobanSSL {
 namespace Manager {
 
 Manual::Manual(
-    Ai::AiData & game_state
+    Ai::AiData & ai_data
 ):
-    Manager(game_state)
+    Manager(ai_data)
 {
 
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt(game_state)
+            new Strategy::Halt(ai_data)
         )
     );
     register_strategy(
         Strategy::Tare_and_synchronize::name,
         std::shared_ptr<Strategy::Strategy>( 
-            new Strategy::Tare_and_synchronize(game_state)
+            new Strategy::Tare_and_synchronize(ai_data)
         )
     );
     register_strategy(
         "Goalie", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
-                game_state,
+                ai_data,
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(
-                        game_state,
-                        game_state.constants.left_post_position, 
-                        game_state.constants.right_post_position, 
-                        game_state.constants.waiting_goal_position, 
-                        game_state.constants.penalty_rayon, 
-                        game_state.constants.robot_radius,
+                        ai_data,
+                        ai_data.constants.left_post_position, 
+                        ai_data.constants.right_post_position, 
+                        ai_data.constants.waiting_goal_position, 
+                        ai_data.constants.penalty_rayon, 
+                        ai_data.constants.robot_radius,
                         time, dt
                     );
                     goalie->set_translation_pid( 
-                        game_state.constants.p_translation,
-                        game_state.constants.i_translation, 
-                        game_state.constants.d_translation
+                        ai_data.constants.p_translation,
+                        ai_data.constants.i_translation, 
+                        ai_data.constants.d_translation
                     );
                     goalie->set_orientation_pid(
-                        game_state.constants.p_orientation,
-                        game_state.constants.i_orientation, 
-                        game_state.constants.d_orientation
+                        ai_data.constants.p_orientation,
+                        ai_data.constants.i_orientation, 
+                        ai_data.constants.d_orientation
                     );
                     goalie->set_limits(
-                        game_state.constants.translation_velocity_limit,
-                        game_state.constants.rotation_velocity_limit
+                        ai_data.constants.translation_velocity_limit,
+                        ai_data.constants.rotation_velocity_limit
                     );
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
                 }, true
@@ -63,24 +63,24 @@ Manual::Manual(
     register_strategy(
         "Position Follower", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
-                game_state,
+                ai_data,
                 [&](double time, double dt){
-		    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower( game_state, time, dt );
+		    Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower( ai_data, time, dt );
 		    follower->set_following_position(
 			Vector2d(-2.0, 1.0), ContinuousAngle(M_PI/2.0)
 		    );
 		    follower->set_translation_pid(
-			game_state.constants.p_translation,
-			game_state.constants.i_translation, 
-			game_state.constants.d_translation
+			ai_data.constants.p_translation,
+			ai_data.constants.i_translation, 
+			ai_data.constants.d_translation
 		    );
 		    follower->set_orientation_pid(
-			game_state.constants.p_orientation, game_state.constants.i_orientation, 
-			game_state.constants.d_orientation
+			ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
+			ai_data.constants.d_orientation
 		    );
 		    follower->set_limits(
-			game_state.constants.translation_velocity_limit,
-			game_state.constants.rotation_velocity_limit
+			ai_data.constants.translation_velocity_limit,
+			ai_data.constants.rotation_velocity_limit
 		    );
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(follower);
                 }

@@ -14,7 +14,7 @@ class Sandbox : public Strategy {
         int min_robots() const;
         int max_robots() const;
 
-        Sandbox(Ai::AiData & game_state);
+        Sandbox(Ai::AiData & ai_data);
 
         static const std::string name;
 

@@ -6,8 +6,8 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-Enseirb_project_wrapper::Enseirb_project_wrapper(Ai::AiData & game_state):
-    Strategy(game_state),
+Enseirb_project_wrapper::Enseirb_project_wrapper(Ai::AiData & ai_data):
+    Strategy(ai_data),
     robots(0), nb_robots(0)
 {
 }
@@ -24,33 +24,33 @@ int Enseirb_project_wrapper::max_robots() const {
 void Enseirb_project_wrapper::allocate_enseirb_data(){
     nb_robots = 0;
     for( auto team: {Vision::Ally, Vision::Opponent} ){
-        nb_robots+=game_state.robots[team].size();
+        nb_robots+=ai_data.robots[team].size();
     }
     robot_actions = std::vector<enseirb::Action>(get_robot_ids().size());
     robots = new enseirb::Robot[nb_robots];
 }
 
 void Enseirb_project_wrapper::initialize_enseirb_data(){
-    config.width = game_state.field.fieldLength;
-    config.height = game_state.field.fieldWidth;
-    config.goal_size = game_state.field.goalWidth;
-    config.margin = game_state.field.boundaryWidth;
-    ball.radius = game_state.constants.radius_ball;
+    config.width = ai_data.field.fieldLength;
+    config.height = ai_data.field.fieldWidth;
+    config.goal_size = ai_data.field.goalWidth;
+    config.margin = ai_data.field.boundaryWidth;
+    ball.radius = ai_data.constants.radius_ball;
     int i=0;
     for( auto team: {Vision::Ally, Vision::Opponent} ){
-        for( const std::pair<int, Ai::Robot> & elem : game_state.robots[team] ){
+        for( const std::pair<int, Ai::Robot> & elem : ai_data.robots[team] ){
             int id = elem.first;
             // index_2_robot[i] = std::pair<Vision::Team, int>( team, id );
             robot_2_index[std::pair<Vision::Team, int>( team, id )] = i;
             robots[i].id = id;
-            robots[i].radius = game_state.constants.robot_radius;
+            robots[i].radius = ai_data.constants.robot_radius;
             robots[i].team = ( (team == Vision::Ally)? enseirb::Team::ALLY : enseirb::Team::OPPONENT );
             robots[i].is_goal = (
                 ( (team==Vision::Ally) and (get_goalie()==id) )
                 or 
                 ( (team==Vision::Opponent) and (get_goalie_opponent()==id) )
             );
-            robots[i].is_valid = game_state.robot_is_valid(id);
+            robots[i].is_valid = ai_data.robot_is_valid(id);
             //Robots[i].behaviour.id = // TODO 
             i+=1;
         }
@@ -88,23 +88,23 @@ void Enseirb_project_wrapper::assign_behavior_to_robots(
         setBehaviour(&config, robots, nb_robots, enseirb::Team::ALLY);
         for( unsigned int i=0; i<get_robot_ids().size(); i++ ){
             Robot_behavior::Apply_enseirb_project_action *robot_behavior = new Robot_behavior::Apply_enseirb_project_action(
-                game_state,
+                ai_data,
                 robot_actions[i],
                 time, dt
             ) ;
 
             robot_behavior->set_translation_pid(
-                game_state.constants.p_translation,
-                game_state.constants.i_translation, 
-                game_state.constants.d_translation
+                ai_data.constants.p_translation,
+                ai_data.constants.i_translation, 
+                ai_data.constants.d_translation
             );
             robot_behavior->set_orientation_pid(
-                game_state.constants.p_orientation, game_state.constants.i_orientation, 
-                game_state.constants.d_orientation
+                ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
+                ai_data.constants.d_orientation
             );
             robot_behavior->set_limits(
-                game_state.constants.translation_velocity_limit,
-                game_state.constants.rotation_velocity_limit
+                ai_data.constants.translation_velocity_limit,
+                ai_data.constants.rotation_velocity_limit
             );
 
             assign_behavior(
@@ -120,7 +120,7 @@ void Enseirb_project_wrapper::update(double time){
     ContinuousAngle angular_velocity;
 
     //update ball
-    const RhobanSSL::Movement & mov = game_state.ball.get_movement();
+    const RhobanSSL::Movement & mov = ai_data.ball.get_movement();
 
     rhoban_geometry::Point linear_position = mov.linear_position(time );
     Vector2d linear_velocity = mov.linear_velocity(time);
@@ -132,9 +132,9 @@ void Enseirb_project_wrapper::update(double time){
 
     //update all robot positions
     for( auto team: {Vision::Ally, Vision::Opponent} ){
-        for( const std::pair<int, Ai::Robot> & elem : game_state.robots[team] ){
+        for( const std::pair<int, Ai::Robot> & elem : ai_data.robots[team] ){
             int id = elem.first;
-            const RhobanSSL::Movement & robot_mov = game_state.ball.get_movement();
+            const RhobanSSL::Movement & robot_mov = ai_data.ball.get_movement();
             linear_position = robot_mov.linear_position(time );
             angular_position = robot_mov.angular_position(time);
             linear_velocity = robot_mov.linear_velocity(time);

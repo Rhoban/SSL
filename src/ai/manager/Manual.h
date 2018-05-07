@@ -12,7 +12,7 @@ class Manual : public Manager {
     bool strategy_was_assigned;
     
     public:
-    Manual( Ai::AiData & game_state );
+    Manual( Ai::AiData & ai_data );
    
     void update(double time);
 

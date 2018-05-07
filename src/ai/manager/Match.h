@@ -16,7 +16,7 @@ class Match : public Manager {
     public:
 
     Match(
-        Ai::AiData & game_state,
+        Ai::AiData & ai_data,
         const Referee & referee
     );
 

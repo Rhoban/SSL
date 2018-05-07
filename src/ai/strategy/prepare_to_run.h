@@ -12,7 +12,7 @@ namespace Strategy {
 class Prepare_to_run : public Strategy {
     public:
 
-        Prepare_to_run(Ai::AiData & game_state);
+        Prepare_to_run(Ai::AiData & ai_data);
         bool behavior_has_been_assigned;
         int min_robots() const;
         int max_robots() const;

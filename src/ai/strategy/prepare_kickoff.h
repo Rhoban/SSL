@@ -14,7 +14,7 @@ class Prepare_kickoff : public Strategy {
         bool is_kicking;
     public:
 
-        Prepare_kickoff(Ai::AiData & game_state);
+        Prepare_kickoff(Ai::AiData & ai_data);
         bool behavior_has_been_assigned;
         int min_robots() const;
         int max_robots() const;

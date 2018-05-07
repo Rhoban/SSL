@@ -8,8 +8,8 @@ using namespace rhoban_utils;
 namespace RhobanSSL
 {
     AIVisionClient::AIVisionClient(
-        Data& ai_data, Ai::Team myTeam, bool simulation
-    ): VisionClient(simulation), ai_data(ai_data), myTeam(myTeam) 
+        Data& shared_data, Ai::Team myTeam, bool simulation
+    ): VisionClient(simulation), shared_data(shared_data), myTeam(myTeam) 
     {
     }
 
@@ -27,13 +27,13 @@ namespace RhobanSSL
         robot.update(t, Point(x, y), angle);
         mutex.unlock();
 
-        ai_data << visionData;
+        shared_data << visionData;
     }
 
     void AIVisionClient::packetReceived()
     {
         Data_from_ai data_from_ai;
-        ai_data >> data_from_ai;
+        shared_data >> data_from_ai;
         
         myTeam = data_from_ai.team_color;
         // Retrieving field dimensions
@@ -90,7 +90,7 @@ namespace RhobanSSL
             updateRobotInformation(detection, robot, myTeam == Ai::Yellow);
         }
 
-        ai_data << visionData;
+        shared_data << visionData;
     }
 
     void AIVisionClient::updateRobotInformation(

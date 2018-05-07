@@ -32,10 +32,10 @@ void Manager::declare_team_ids(
 }
 
 Ai::Team Manager::get_team() const{
-     return game_state.team_color;
+     return ai_data.team_color;
 }
 const std::string & Manager::get_team_name() const{
-     return game_state.team_name;
+     return ai_data.team_name;
 }
 
 const std::vector<int> & Manager::get_team_ids() const {
@@ -139,7 +139,7 @@ void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_
     
     if( team != Ai::Unknown and get_team() != team ){
         assert( team == Ai::Blue or team == Ai::Yellow );
-        game_state.change_team_color( team );
+        ai_data.change_team_color( team );
         blueIsNotSet = true;
     }
     // We change the point of view of the team
@@ -161,12 +161,12 @@ void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_
                 ! blue_have_it_s_goal_on_positive_x_axis
             )
         ){
-            game_state.change_frame_for_all_objects(
+            ai_data.change_frame_for_all_objects(
                 rhoban_geometry::Point(0.0,0.0),
                 Vector2d(-1.0, 0.0), Vector2d(0.0, -1.0)
             );
         }else{
-            game_state.change_frame_for_all_objects(
+            ai_data.change_frame_for_all_objects(
                 rhoban_geometry::Point(0.0,0.0),
                 Vector2d(1.0, 0.0), Vector2d(0.0, 1.0)
             );
@@ -175,25 +175,25 @@ void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_
 
 }
 
-Manager::Manager( Ai::AiData& game_state ):
+Manager::Manager( Ai::AiData& ai_data ):
     blueIsNotSet(true),
     goalie_id(-1),
     goalie_opponent_id(-1),
-    game_state(game_state)
+    ai_data(ai_data)
 {
     register_strategy(
         MANAGER__REMOVE_ROBOTS, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt(game_state) 
+            new Strategy::Halt(ai_data) 
         )
     );
 }
 
 int Manager::time() const {
-    return game_state.time;
+    return ai_data.time;
 }
 
 int Manager::dt() const {
-    return game_state.dt;
+    return ai_data.dt;
 }
 
 void Manager::affect_invalid_robots_to_invalid_robots_strategy(){
@@ -212,7 +212,7 @@ void Manager::detect_invalid_robots(){
     int nb_valid = 0;
     int n_robots = team_ids.size();
     for(int i=0; i<n_robots; i++ ){
-        if( game_state.robot_is_valid( team_ids[i] ) ){
+        if( ai_data.robot_is_valid( team_ids[i] ) ){
             nb_valid ++ ;
         }
     }
@@ -220,7 +220,7 @@ void Manager::detect_invalid_robots(){
     invalid_team_ids.clear();
     for(int i=0; i<n_robots; i++ ){
         int id = team_ids[i];
-        if( game_state.robot_is_valid( id ) ){
+        if( ai_data.robot_is_valid( id ) ){
             valid_team_ids.push_back( id );
         }else{
             invalid_team_ids.push_back( id );
