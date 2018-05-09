@@ -123,9 +123,21 @@ public:
 
     AiData();
 
-    std::map<Vision::Team, std::map<int, Robot>> robots;
+
+    typedef std::map<int, Robot> Robots_table;
+    typedef std::map<Vision::Team, Robots_table> Robots_table_by_team;
+    Robots_table_by_team robots;
+
+    std::vector< std::pair<Vision::Team, Robot*> > all_robots;
+    
     Ball ball;
     Field field;
+
+    // the key is a pair of robot identifeds.
+    typedef std::map< std::pair<int, int>, double > Collision_times_table;
+
+    Collision_times_table table_of_collision_times;
+
 
     Frame_changement team_point_of_view;
 
@@ -142,6 +154,19 @@ public:
     // Rturn true is the robot is ready and inside the field
     bool robot_is_valid( int robot_id ) const;
     bool robot_is_inside_the_field( int robot_id ) const;
+
+    void visit_all_pair_of_robots(
+        std::function <
+            void (
+                Vision::Team robot_team_1, Robot & robot_1,
+                Vision::Team robot_team_2, Robot & robot_2 
+            )
+        > visitor
+    );
+
+    const Collision_times_table & get_table_of_collision_times() const;
+
+    void compute_table_of_collision_times();
 };
 
 } }

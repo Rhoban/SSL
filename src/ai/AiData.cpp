@@ -4,6 +4,8 @@
 #include <physic/movement_with_no_prediction.h>
 #include <physic/movement_on_new_frame.h>
 #include <debug.h>
+#include <physic/collision.h>
+
 namespace RhobanSSL {
 namespace Ai {
 
@@ -62,6 +64,7 @@ namespace Ai {
             }
         }
         ball.set_vision_data( vision_data.ball );
+        compute_table_of_collision_times();
     }
 
     void AiData::change_frame_for_all_objects(
@@ -82,12 +85,24 @@ namespace Ai {
     }
 
     AiData::AiData(){
+        int nb_robots = 0;
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
                 robots[team][k].set_movement(
                     new Movement_with_no_prediction()
                     //new Movement_predicted_by_integration()
                 );
+                nb_robots++;
+            }
+        }
+        all_robots = std::vector< std::pair<Vision::Team, Robot*> >(nb_robots);
+        unsigned int i = 0;
+        for( auto team : {Vision::Ally, Vision::Opponent} ){
+            for( int k=0; k<Vision::Robots; k++ ){
+                all_robots[i] = std::pair< Vision::Team, Robot* >(
+                    team, &( robots.at(team).at(k) )
+                );
+                i++;
             }
         }
         ball.set_movement(
@@ -187,5 +202,56 @@ namespace Ai {
             robot_is_inside_the_field(robot_id)
         ); 
     }
+
+    const AiData::Collision_times_table & AiData::get_table_of_collision_times() const 
+    {
+        return table_of_collision_times;
+    }
+
+    void AiData::visit_all_pair_of_robots(
+        std::function <
+            void (
+                Vision::Team robot_team_1, Robot & robot_1,
+                Vision::Team robot_team_2, Robot & robot_2 
+            )
+        > visitor
+    ){
+        for( unsigned int i = 0; i < all_robots.size(); i++ ){
+            for( unsigned int j = i+1; j < all_robots.size(); j++ ){
+                visitor(
+                    all_robots[i].first, *all_robots[i].second,
+                    all_robots[j].first, *all_robots[j].second
+                );
+            }
+        }
+    }
+
+    void AiData::compute_table_of_collision_times(){
+        for( int i=0; i<all_robots.size(); i++ ){
+            for( int j=i+1; j<all_robots.size(); j++ ){
+                Robot & robot_1 = *all_robots[i].second;
+                Robot & robot_2 = *all_robots[j].second;
+                double radius_error = 0.0;
+                std::pair<bool, double> collision = collision_time(
+                    constants.robot_radius, 
+                    robot_1.get_movement(),
+                    constants.robot_radius, 
+                    robot_2.get_movement(),
+                    radius_error, time
+                );
+                if( collision.first ){
+                    table_of_collision_times[ std::pair<int,int>(i,j) ] = collision.second;
+                }
+            }
+        }
+    }
+
+/*
+double Navigation_with_obstacle_avoidance::collision_time( int robot_1, int robot_2 ) const {
+    std::pair<int, int> key( robot_1, robot_2 );
+    assert( table_of_collision_times.find(key) != table_of_collision_times.clear() );
+    return table_of_collision_times.at(key);
+}
+*/
  
 } } //Namespace

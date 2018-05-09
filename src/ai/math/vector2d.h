@@ -37,6 +37,10 @@ class Vector2d : public Boost_Vector2d {
         return boost::numeric::ublas::norm_2( *this );
     }
 
+    double norm_square() const {
+        return (*this)[0]*(*this)[0] + (*this)[1]*(*this)[1];
+    }
+
     template <typename BOOST_VECTOR>
     Vector2d( const BOOST_VECTOR & v ){
         static_cast<Boost_Vector2d&>(*this) = v;

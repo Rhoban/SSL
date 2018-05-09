@@ -1,7 +1,34 @@
 #include "pid.h"
 #include <rhoban_utils/angle.h>
+#include <math/matrix2d.h>
 
 #define CALCULUS_ERROR 0.000
+
+std::pair<Vector2d, ContinuousAngle> PidControl::relative_control(
+    const ContinuousAngle & robot_orientation,
+    double dt
+) const {
+    Matrix2d rotation_matrix;
+
+    const Vector2d & a_t = velocity_translation;
+    const ContinuousAngle & a_r =  velocity_rotation;
+
+    if( std::fabs(a_r.value()) > CALCULUS_ERROR ){
+        rotation_matrix = Matrix2d(
+            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value()), 
+            std::cos((a_r*dt+robot_orientation).value()) - std::cos(robot_orientation.value()),
+          - std::cos((a_r*dt+robot_orientation).value()) + std::cos(robot_orientation.value()), 
+            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value())
+        );
+        rotation_matrix = (a_r*dt).value()*( rotation_matrix.inverse() );
+    }else{
+        rotation_matrix = Matrix2d(
+            std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
+          - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
+        );
+    }
+    return std::pair<Vector2d, ContinuousAngle>( rotation_matrix * a_t, a_r );
+}
 
 PidControl::PidControl():
     velocity_translation(0.0, 0.0), velocity_rotation(0.0)

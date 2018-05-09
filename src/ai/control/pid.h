@@ -4,6 +4,7 @@
 #include <debug.h>
 #include <math/ContinuousAngle.h>
 #include <math/vector2d.h>
+#include <utility>
 
 struct PidControl {
     Vector2d velocity_translation;
@@ -14,7 +15,9 @@ struct PidControl {
         const Vector2d & velocity_translation,
         ContinuousAngle velocity_rotation
     );
-
+    std::pair<Vector2d, ContinuousAngle> relative_control(
+        const ContinuousAngle & angular_orientation, double dt
+    ) const ;
 };
 
 std::ostream& operator << ( std::ostream &, const PidControl& control );
