@@ -115,7 +115,7 @@ PidControl RobotControl::limited_control(
     const Vector2d & robot_position, 
     const ContinuousAngle & robot_orientation
 ) const {
-    PidControl res = absolute_control_in_absolute_frame(
+    PidControl res = control(
         robot_position, robot_orientation
     );
     if( rotation_velocity_limit > ContinuousAngle(0.0) ){ 
@@ -123,7 +123,7 @@ PidControl RobotControl::limited_control(
             //ContinuousAngle old = res.velocity_rotation;
             res.velocity_rotation *= (
                 rotation_velocity_limit.value() / (
-                    std::fabs( res.velocity_rotation.value() )/.8 
+                    std::fabs( res.velocity_rotation.value() )/security_margin
                 ) 
             );
             //std::cerr << "Control : We limit the rotation velocity from " <<
@@ -137,7 +137,7 @@ PidControl RobotControl::limited_control(
             //Vector2d old =  res.velocity_translation;
             res.velocity_translation *= ( 
                 translation_velocity_limit / 
-                (res.velocity_translation.norm()/.8)
+                (res.velocity_translation.norm()/security_margin)
             );
             //std::cerr << "Control : We limit the translation velocity from " <<
             //    old << " to" << 
@@ -147,81 +147,11 @@ PidControl RobotControl::limited_control(
     return res;
 }
 
-PidControl RobotControl::absolute_control_in_robot_frame(
+PidControl RobotControlWithPid::control(
     const Vector2d & robot_position, 
     const ContinuousAngle & robot_orientation
 ) const {
-    PidControl res;
-
-    Matrix2d rotation_matrix(
-          std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
-        - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
-    );
-
-    PidControl control = limited_control(
-        robot_position, robot_orientation
-    );
-
-    res.velocity_translation = rotation_matrix * control.velocity_translation;
-    res.velocity_rotation = control.velocity_rotation;
-
-    return res;
-}
-
-
-
-/*
- * Calculus are explaine in the document : 
- * calcul_de_la_commande_en_vitesse_d_un_robot_holonome.org 
- */
-PidControl RobotControl::absolute_to_relative_control(
-    const PidControl & absolute_control,
-    const Vector2d & robot_position, 
-    const ContinuousAngle & robot_orientation,
-    double dt
-){
-    PidControl res;
-    Matrix2d rotation_matrix;
-
-    const Vector2d & a_t = absolute_control.velocity_translation;
-    const ContinuousAngle & a_r =  absolute_control.velocity_rotation;
-
-    if( std::fabs(a_r.value()) > CALCULUS_ERROR ){
-        rotation_matrix = Matrix2d(
-            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value()), 
-            std::cos((a_r*dt+robot_orientation).value()) - std::cos(robot_orientation.value()),
-          - std::cos((a_r*dt+robot_orientation).value()) + std::cos(robot_orientation.value()), 
-            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value())
-        );
-        rotation_matrix = (a_r*dt).value()*( rotation_matrix.inverse() );
-    }else{
-        rotation_matrix = Matrix2d(
-            std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
-          - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
-        );
-    }
-    res.velocity_translation = rotation_matrix * a_t;
-    res.velocity_rotation = a_r;
-
-    return res;
-}
-
-PidControl RobotControl::relative_control_in_robot_frame(
-    const Vector2d & robot_position, 
-    const ContinuousAngle & robot_orientation
-) const {
-    return RobotControl::absolute_to_relative_control(
-        limited_control( robot_position, robot_orientation ),
-        robot_position, robot_orientation,
-        get_dt()
-    );
-}
-
-PidControl RobotControlWithPid::absolute_control_in_absolute_frame(
-    const Vector2d & robot_position, 
-    const ContinuousAngle & robot_orientation
-) const {
-    return PidController::absolute_control_in_absolute_frame(
+    return PidController::control(
         robot_position, robot_orientation
     );
 }

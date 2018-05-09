@@ -34,6 +34,9 @@ void AI::limits_velocity( Control & ctrl ) const {
 }
 
 void AI::prepare_to_send_control( int robot_id, Control ctrl ){
+    ctrl = ctrl.relative_control(
+        ai_data.robots[Vision::Ally][robot_id].get_movement().angular_position( ai_data.time ), ai_data.dt
+    );
     limits_velocity(ctrl);
 
     #ifdef SSL_SIMU

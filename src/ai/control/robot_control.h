@@ -62,6 +62,8 @@ class CurveForRobot {
 
 
 class RobotControl {
+    public:
+        static constexpr double security_margin = .8;
     private:
         double translation_velocity_limit;
         ContinuousAngle rotation_velocity_limit;
@@ -83,7 +85,7 @@ class RobotControl {
             double rotation_velocity_limit
         );
 
-        virtual PidControl absolute_control_in_absolute_frame(
+        virtual PidControl control(
             const Vector2d & robot_position, 
             const ContinuousAngle & robot_orientation
         ) const = 0;
@@ -91,32 +93,11 @@ class RobotControl {
         /* TODO : write a documentation to explaint that function */
         virtual double get_dt() const = 0;
 
-        /*
-         * Calculus are explaine in the document : 
-         * calcul_de_la_commande_en_vitesse_d_un_robot_holonome.org 
-         */
-        static PidControl absolute_to_relative_control(
-            const PidControl & absoluteControl,
-            const Vector2d & robot_position, 
-            const ContinuousAngle & robot_orientation,
-            double dt
-        );
-
-        PidControl absolute_control_in_robot_frame(
-            const Vector2d & robot_position, 
-            const ContinuousAngle & robot_orientation
-        ) const;
-
-        PidControl relative_control_in_robot_frame(
-            const Vector2d & robot_position, 
-            const ContinuousAngle & robot_orientation
-        ) const;
-
 };
 
 class RobotControlWithPid : public RobotControl, public PidController {
     public:
-        PidControl absolute_control_in_absolute_frame(
+        PidControl control(
             const Vector2d & robot_position, 
             const ContinuousAngle & robot_orientation
         ) const;

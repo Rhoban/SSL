@@ -47,7 +47,7 @@ void PositionFollower::update(
 }
 
 Control PositionFollower::control() const {
-    Control ctrl = robot_control.relative_control_in_robot_frame(
+    Control ctrl = robot_control.limited_control(
         robot_linear_position, robot_angular_position
     );
     return ctrl;

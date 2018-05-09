@@ -227,8 +227,8 @@ namespace Ai {
     }
 
     void AiData::compute_table_of_collision_times(){
-        for( int i=0; i<all_robots.size(); i++ ){
-            for( int j=i+1; j<all_robots.size(); j++ ){
+        for( unsigned int i=0; i<all_robots.size(); i++ ){
+            for( unsigned int j=i+1; j<all_robots.size(); j++ ){
                 Robot & robot_1 = *all_robots[i].second;
                 Robot & robot_2 = *all_robots[j].second;
                 double radius_error = 0.0;

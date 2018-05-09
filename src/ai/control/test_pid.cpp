@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <math/matrix2d.h>
 
 #include "pid.h"
 
@@ -84,7 +85,7 @@ TEST(test_pid, is_static){
 
         EXPECT_TRUE( controller.is_static() );
         
-        PidControl control = controller.absolute_control_in_absolute_frame(
+        PidControl control = controller.control(
             Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
         EXPECT_TRUE(
@@ -97,7 +98,7 @@ TEST(test_pid, is_static){
         controller.set_static(false);
         EXPECT_TRUE( ! controller.is_static() );
 
-        control = controller.absolute_control_in_absolute_frame(
+        control = controller.control(
             Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
         EXPECT_TRUE(
@@ -168,7 +169,7 @@ TEST(test_pid, null_pid){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
-        PidControl control = controller.absolute_control_in_absolute_frame(
+        PidControl control = controller.control(
             Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
 
@@ -198,7 +199,7 @@ TEST(test_pid, null_pid){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
-        PidControl control = controller.absolute_control_in_absolute_frame(
+        PidControl control = controller.control(
             Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
 
@@ -240,7 +241,7 @@ TEST(test_pid, pid){
         
         Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
-        PidControl control = controller.absolute_control_in_absolute_frame(
+        PidControl control = controller.control(
             current_position, current_orientation
         );
 
@@ -296,7 +297,7 @@ TEST(test_pid, pid){
         
         Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
-        PidControl control = controller.absolute_control_in_absolute_frame(
+        PidControl control = controller.control(
             current_position, current_orientation
         );
 
@@ -352,7 +353,7 @@ TEST(test_pid, pid){
         
         Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
-        PidControl control = controller.absolute_control_in_absolute_frame(
+        PidControl control = controller.control(
             current_position, current_orientation
         );
 
@@ -384,6 +385,108 @@ TEST(test_pid, pid){
             ) < 0.00001    
         );
     } 
+}
+
+
+TEST(test_pid, PidControl__relative_control){
+    {
+        // No velocity translation 
+        // No velocity rotation
+        Vector2d velocity_translation(0.0, 0.0);
+        ContinuousAngle velocity_rotation(0.0);
+        PidControl absolute_control(
+            velocity_translation, velocity_rotation
+        );
+        Vector2d robot_position(1.0,2.0);
+        ContinuousAngle robot_orientation(3.0);
+        double dt = 1.0;
+        
+        PidControl control = absolute_control.relative_control(
+            robot_orientation, dt
+        );
+
+        EXPECT_TRUE(control.velocity_translation == Vector2d(0.0,0.0));
+        EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(0.0) );
+    }
+    {
+        // No velocity translation 
+        Vector2d velocity_translation(0.0, 0.0);
+        ContinuousAngle velocity_rotation(2.0);
+        PidControl absolute_control(
+            velocity_translation, velocity_rotation
+        );
+        Vector2d robot_position(1.0,2.0);
+        ContinuousAngle robot_orientation(3.0);
+        double dt = 1.0;
+        
+        PidControl control = absolute_control.relative_control(
+            robot_orientation, dt
+        );
+
+        EXPECT_TRUE(control.velocity_translation == Vector2d(0.0,0.0));
+        EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(2.0) );
+    }
+    {
+        // No velocity rotation
+        Vector2d velocity_translation(5.0, 6.0);
+        ContinuousAngle velocity_rotation(0.0);
+        PidControl absolute_control(
+            velocity_translation, velocity_rotation
+        );
+        Vector2d robot_position(1.0,2.0);
+        ContinuousAngle robot_orientation(3.0);
+        double dt = 1.0;
+        
+        PidControl control = absolute_control.relative_control(
+            robot_orientation, dt
+        );
+        
+        Matrix2d rotation_matrix(
+            std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
+            -std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
+        );
+        Vector2d v = rotation_matrix * velocity_translation;
+
+        EXPECT_TRUE( norm_2( control.velocity_translation - v ) < 0.001 );
+        EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(0.0) );
+    }
+    {
+        Vector2d velocity_translation(1.0, 2.0);
+        ContinuousAngle velocity_rotation(3.0);
+        PidControl absolute_control(
+            velocity_translation, velocity_rotation
+        );
+        Vector2d robot_position(4.0,5.0);
+        ContinuousAngle robot_orientation(6.0);
+        double dt = 7.0;
+        
+        PidControl control = absolute_control.relative_control(
+            robot_orientation, dt
+        );
+
+        ContinuousAngle omega = velocity_rotation;
+        
+        ContinuousAngle theta_t_dt = omega * dt + robot_orientation;
+        ContinuousAngle theta_t = omega * 0.0 + robot_orientation;
+
+        Matrix2d matrix_t_dt(
+            std::sin(theta_t_dt.value()), std::cos(theta_t_dt.value()),
+            - std::cos(theta_t_dt.value()), std::sin(theta_t_dt.value())
+        );
+        Matrix2d matrix_t(
+            std::sin(theta_t.value()), std::cos(theta_t.value()),
+            - std::cos(theta_t.value()), std::sin(theta_t.value())
+        );
+
+        Vector2d VC = (
+            inverse( matrix_t_dt - matrix_t )
+        ) * velocity_translation * omega.value() * dt;
+
+        EXPECT_TRUE(
+            norm_2( control.velocity_translation - VC ) < 0.001
+        );
+        EXPECT_TRUE(control.velocity_rotation == ContinuousAngle(3.0) );
+    }
 }
 
 int main(int argc, char **argv) {

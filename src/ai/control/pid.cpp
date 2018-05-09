@@ -4,7 +4,7 @@
 
 #define CALCULUS_ERROR 0.000
 
-std::pair<Vector2d, ContinuousAngle> PidControl::relative_control(
+PidControl PidControl::relative_control(
     const ContinuousAngle & robot_orientation,
     double dt
 ) const {
@@ -27,7 +27,7 @@ std::pair<Vector2d, ContinuousAngle> PidControl::relative_control(
           - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
         );
     }
-    return std::pair<Vector2d, ContinuousAngle>( rotation_matrix * a_t, a_r );
+    return PidControl( rotation_matrix * a_t, a_r );
 }
 
 PidControl::PidControl():
@@ -104,7 +104,7 @@ double PidController::get_time() const {
     return this->time;
 }
 
-Vector2d PidController::translation_control_in_absolute_frame(
+Vector2d PidController::translation_control(
     const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
@@ -125,7 +125,7 @@ Vector2d PidController::translation_control_in_absolute_frame(
 
     #if 0
     Matrix2d rotation_matrix;
-    ContinuousAngle a_r = rotation_control_in_absolute_frame(
+    ContinuousAngle a_r = angular_control(
         robot_position, robot_orientation
     );
     if( a_r != 0 ){
@@ -153,7 +153,7 @@ Vector2d PidController::translation_control_in_absolute_frame(
     return  absolute_command; 
 }
 
-double PidController::rotation_control_in_absolute_frame(
+double PidController::angular_control(
     const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
@@ -182,15 +182,15 @@ double PidController::rotation_control_in_absolute_frame(
     return absolute_command;
 }
 
-PidControl PidController::absolute_control_in_absolute_frame(
+PidControl PidController::control(
     const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
     return PidControl(
-        translation_control_in_absolute_frame(
+        translation_control(
             robot_position, robot_orientation
         ),
-        rotation_control_in_absolute_frame(
+        angular_control(
             robot_position, robot_orientation
         )
     );

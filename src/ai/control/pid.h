@@ -15,7 +15,7 @@ struct PidControl {
         const Vector2d & velocity_translation,
         ContinuousAngle velocity_rotation
     );
-    std::pair<Vector2d, ContinuousAngle> relative_control(
+    PidControl relative_control(
         const ContinuousAngle & angular_orientation, double dt
     ) const ;
 };
@@ -54,16 +54,16 @@ struct PidController {
     virtual ContinuousAngle goal_orientation( double t ) const =0;
     virtual Vector2d goal_position( double t ) const = 0;
 
-    Vector2d translation_control_in_absolute_frame(
+    Vector2d translation_control(
         const Vector2d & robot_position, 
         ContinuousAngle robot_orientation
     ) const;
-    double rotation_control_in_absolute_frame(
+    double angular_control(
         const Vector2d & robot_position, 
         ContinuousAngle robot_orientation
     ) const;
     
-    virtual PidControl absolute_control_in_absolute_frame(
+    virtual PidControl control(
         const Vector2d & robot_position, 
         ContinuousAngle robot_orientation
     ) const;
