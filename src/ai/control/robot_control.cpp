@@ -115,7 +115,7 @@ PidControl RobotControl::limited_control(
     const Vector2d & robot_position, 
     const ContinuousAngle & robot_orientation
 ) const {
-    PidControl res = control(
+    PidControl res = no_limited_control(
         robot_position, robot_orientation
     );
     if( rotation_velocity_limit > ContinuousAngle(0.0) ){ 
@@ -147,11 +147,11 @@ PidControl RobotControl::limited_control(
     return res;
 }
 
-PidControl RobotControlWithPid::control(
+PidControl RobotControlWithPid::no_limited_control(
     const Vector2d & robot_position, 
     const ContinuousAngle & robot_orientation
 ) const {
-    return PidController::control(
+    return PidController::no_limited_control(
         robot_position, robot_orientation
     );
 }

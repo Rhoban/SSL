@@ -54,16 +54,16 @@ struct PidController {
     virtual ContinuousAngle goal_orientation( double t ) const =0;
     virtual Vector2d goal_position( double t ) const = 0;
 
-    Vector2d translation_control(
+    Vector2d no_limited_translation_control(
         const Vector2d & robot_position, 
         ContinuousAngle robot_orientation
     ) const;
-    double angular_control(
+    double no_limited_angular_control(
         const Vector2d & robot_position, 
         ContinuousAngle robot_orientation
     ) const;
     
-    virtual PidControl control(
+    virtual PidControl no_limited_control(
         const Vector2d & robot_position, 
         ContinuousAngle robot_orientation
     ) const;

@@ -9,7 +9,7 @@ class TestRobotControl : public RobotControl {
     double get_dt() const {
         return 2.0;
     };
-    PidControl control(
+    PidControl no_limited_control(
         const Vector2d & robot_position, 
         const ContinuousAngle & robot_orientation
     ) const {
@@ -48,7 +48,7 @@ TEST(test_robot_control, limit_control){
             translation_velocity_limit, rotation_velocity_limit
         );
 
-        DEBUG( "vel : " << robot_control.control(
+        DEBUG( "vel : " << robot_control.no_limited_control(
             Vector2d(0.0, 0.0), ContinuousAngle(0.0)
         ) );
         DEBUG( "lim vel : " << robot_control.limited_control(

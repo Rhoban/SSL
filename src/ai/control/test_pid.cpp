@@ -85,7 +85,7 @@ TEST(test_pid, is_static){
 
         EXPECT_TRUE( controller.is_static() );
         
-        PidControl control = controller.control(
+        PidControl control = controller.no_limited_control(
             Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
         EXPECT_TRUE(
@@ -98,7 +98,7 @@ TEST(test_pid, is_static){
         controller.set_static(false);
         EXPECT_TRUE( ! controller.is_static() );
 
-        control = controller.control(
+        control = controller.no_limited_control(
             Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
         EXPECT_TRUE(
@@ -169,7 +169,7 @@ TEST(test_pid, null_pid){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
-        PidControl control = controller.control(
+        PidControl control = controller.no_limited_control(
             Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
 
@@ -199,7 +199,7 @@ TEST(test_pid, null_pid){
         controller.init_time( 10.0, 1.0 );
         controller.update( 20.0 );
         
-        PidControl control = controller.control(
+        PidControl control = controller.no_limited_control(
             Vector2d(1.0, 2.0), ContinuousAngle(0.1)
         );
 
@@ -241,7 +241,7 @@ TEST(test_pid, pid){
         
         Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
-        PidControl control = controller.control(
+        PidControl control = controller.no_limited_control(
             current_position, current_orientation
         );
 
@@ -297,7 +297,7 @@ TEST(test_pid, pid){
         
         Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
-        PidControl control = controller.control(
+        PidControl control = controller.no_limited_control(
             current_position, current_orientation
         );
 
@@ -353,7 +353,7 @@ TEST(test_pid, pid){
         
         Vector2d current_position(1.0, 2.0);
         ContinuousAngle current_orientation(0.1);
-        PidControl control = controller.control(
+        PidControl control = controller.no_limited_control(
             current_position, current_orientation
         );
 

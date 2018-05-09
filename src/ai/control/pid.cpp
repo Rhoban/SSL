@@ -104,7 +104,7 @@ double PidController::get_time() const {
     return this->time;
 }
 
-Vector2d PidController::translation_control(
+Vector2d PidController::no_limited_translation_control(
     const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
@@ -153,7 +153,7 @@ Vector2d PidController::translation_control(
     return  absolute_command; 
 }
 
-double PidController::angular_control(
+double PidController::no_limited_angular_control(
     const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
@@ -182,15 +182,15 @@ double PidController::angular_control(
     return absolute_command;
 }
 
-PidControl PidController::control(
+PidControl PidController::no_limited_control(
     const Vector2d & robot_position, 
     ContinuousAngle robot_orientation
 ) const {
     return PidControl(
-        translation_control(
+        no_limited_translation_control(
             robot_position, robot_orientation
         ),
-        angular_control(
+        no_limited_angular_control(
             robot_position, robot_orientation
         )
     );
