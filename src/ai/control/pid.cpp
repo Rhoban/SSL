@@ -106,7 +106,7 @@ double PidController::get_time() const {
 
 Vector2d PidController::no_limited_translation_control(
     const Vector2d & robot_position, 
-    ContinuousAngle robot_orientation
+    const ContinuousAngle & robot_orientation
 ) const {
     assert(dt>0);
     if( is_static() ) return Vector2d(0.0, 0.0);
@@ -155,7 +155,7 @@ Vector2d PidController::no_limited_translation_control(
 
 double PidController::no_limited_angular_control(
     const Vector2d & robot_position, 
-    ContinuousAngle robot_orientation
+    const ContinuousAngle & robot_orientation
 ) const {
     if( is_static() ) return 0.0;
     ContinuousAngle theta_t = goal_orientation(time);
@@ -184,7 +184,7 @@ double PidController::no_limited_angular_control(
 
 PidControl PidController::no_limited_control(
     const Vector2d & robot_position, 
-    ContinuousAngle robot_orientation
+    const ContinuousAngle & robot_orientation 
 ) const {
     return PidControl(
         no_limited_translation_control(

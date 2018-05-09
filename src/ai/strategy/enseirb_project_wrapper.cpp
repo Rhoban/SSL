@@ -104,7 +104,9 @@ void Enseirb_project_wrapper::assign_behavior_to_robots(
             );
             robot_behavior->set_limits(
                 ai_data.constants.translation_velocity_limit,
-                ai_data.constants.rotation_velocity_limit
+                ai_data.constants.rotation_velocity_limit,
+                ai_data.constants.translation_acceleration_limit,
+                ai_data.constants.rotation_acceleration_limit
             );
 
             assign_behavior(

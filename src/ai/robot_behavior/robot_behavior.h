@@ -34,6 +34,8 @@ class RobotBehavior {
 
         Vector2d robot_linear_position;
         ContinuousAngle robot_angular_position;
+        Vector2d robot_linear_velocity;
+        ContinuousAngle robot_angular_velocity;
         Vector2d ball_position;
 
         Ai::AiData & ai_data;

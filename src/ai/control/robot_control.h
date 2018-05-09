@@ -63,26 +63,29 @@ class CurveForRobot {
 
 class RobotControl {
     public:
-        static constexpr double security_margin = .8;
+        static constexpr double security_margin = .92;
     private:
         double translation_velocity_limit;
         ContinuousAngle rotation_velocity_limit;
+        double translation_acceleration_limit;
+        ContinuousAngle rotation_acceleration_limit;
 
     public:
         PidControl limited_control(
             const Vector2d & robot_position, 
-            const ContinuousAngle & robot_orientation
+            const ContinuousAngle & robot_orientation,
+            const Vector2d & robot_linear_velocity, 
+            const ContinuousAngle & robot_angular_velocity
         ) const;
 
 
-        RobotControl(): 
-            translation_velocity_limit(-1),
-            rotation_velocity_limit(-1)
-        { };
+        RobotControl();
 
         void set_limits(
             double translation_velocity_limit,
-            double rotation_velocity_limit
+            double rotation_velocity_limit,
+            double translation_acceleration_limit,
+            double rotation_acceleration_limit
         );
 
         virtual PidControl no_limited_control(

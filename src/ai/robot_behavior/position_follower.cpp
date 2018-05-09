@@ -39,8 +39,10 @@ void PositionFollower::update(
     RobotBehavior::update_time_and_position( time, robot, ball );
     // Now 
     //  this->robot_linear_position
-    //  this->ball_position
     //  this->robot_angular_position 
+    //  this->robot_linear_velocity
+    //  this->robot_angular_velocity
+    //  this->ball_position
     // are all avalaible
 
     update_control(time);
@@ -48,7 +50,8 @@ void PositionFollower::update(
 
 Control PositionFollower::control() const {
     Control ctrl = robot_control.limited_control(
-        robot_linear_position, robot_angular_position
+        robot_linear_position, robot_angular_position,
+        robot_linear_velocity, robot_angular_velocity
     );
     return ctrl;
 }
@@ -63,10 +66,13 @@ void PositionFollower::set_orientation_pid( double kp, double ki, double kd ){
 
 void PositionFollower::set_limits(
     double translation_velocity_limit,
-    double rotation_velocity_limit
+    double rotation_velocity_limit,
+    double translation_acceleration_limit,
+    double rotation_acceleration_limit
 ){
     robot_control.set_limits(
-        translation_velocity_limit, rotation_velocity_limit
+        translation_velocity_limit, rotation_velocity_limit,
+        translation_acceleration_limit, rotation_acceleration_limit
     );
 }
 

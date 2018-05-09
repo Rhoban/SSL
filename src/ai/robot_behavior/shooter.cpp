@@ -40,10 +40,13 @@ void Shooter::set_orientation_pid( double kp, double ki, double kd ){
 
 void Shooter::set_limits(
     double translation_velocity_limit,
-    double rotation_velocity_limit
+    double rotation_velocity_limit,
+    double translation_acceleration_limit,
+    double rotation_acceleration_limit
 ){
     robot_control.set_limits(
-        translation_velocity_limit, rotation_velocity_limit
+        translation_velocity_limit, rotation_velocity_limit,
+        translation_acceleration_limit, rotation_acceleration_limit
     );
 }
 
@@ -127,7 +130,8 @@ Control Shooter::control() const {
     if( age() <= 0.0 ) return Control::make_null();
 
     Control ctrl = robot_control.limited_control(
-        robot_linear_position, robot_angular_position
+        robot_linear_position, robot_angular_position,
+        robot_linear_velocity, robot_angular_velocity
     );
 
     return ctrl;

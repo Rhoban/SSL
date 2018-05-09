@@ -5,6 +5,7 @@
 #include <math/curve.h>
 #include "pid.h"
 #include <math/matrix2d.h>
+#include <algorithm>
 
 #define CALCULUS_ERROR 0.00000001
 
@@ -105,45 +106,102 @@ void CurveForRobot::print_rotation_curve( double dt ) const {
 
 void RobotControl::set_limits(
     double translation_velocity_limit,
-    double rotation_velocity_limit
+    double rotation_velocity_limit,
+    double translation_acceleration_limit,
+    double rotation_acceleration_limit
 ){
     this->translation_velocity_limit = translation_velocity_limit;
     this->rotation_velocity_limit = ContinuousAngle(rotation_velocity_limit);
+    this->translation_acceleration_limit = translation_acceleration_limit;
+    this->rotation_acceleration_limit = ContinuousAngle(rotation_acceleration_limit);
 } 
+
+RobotControl::RobotControl(): 
+    translation_velocity_limit(-1),
+    rotation_velocity_limit(-1),
+    translation_acceleration_limit(-1),
+    rotation_acceleration_limit(-1)
+{ };
+
 
 PidControl RobotControl::limited_control(
     const Vector2d & robot_position, 
-    const ContinuousAngle & robot_orientation
+    const ContinuousAngle & robot_orientation,
+    const Vector2d & robot_linear_velocity, 
+    const ContinuousAngle & robot_angular_velocity
 ) const {
     PidControl res = no_limited_control(
         robot_position, robot_orientation
     );
-    if( rotation_velocity_limit > ContinuousAngle(0.0) ){ 
-        if( res.velocity_rotation.abs() >= rotation_velocity_limit ){
-            //ContinuousAngle old = res.velocity_rotation;
+
+    double max_angular_velocity;
+    if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
+        max_angular_velocity = robot_angular_velocity.value() + get_dt() * rotation_acceleration_limit.value();
+        if( rotation_velocity_limit >= 0 ){
+            max_angular_velocity = std::min( rotation_velocity_limit.value(), max_angular_velocity );
+        }
+    }else{
+        max_angular_velocity = rotation_velocity_limit.value();
+    }
+    double min_angular_velocity = -1;
+    if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
+        min_angular_velocity = std::max( 0.0,  robot_angular_velocity.value() - get_dt() * rotation_acceleration_limit.value() );
+    }
+
+
+    if( max_angular_velocity > 0.0 ){ 
+        if( res.velocity_rotation.abs() >= max_angular_velocity ){
             res.velocity_rotation *= (
-                rotation_velocity_limit.value() / (
+                max_angular_velocity / (
                     std::fabs( res.velocity_rotation.value() )/security_margin
                 ) 
             );
-            //std::cerr << "Control : We limit the rotation velocity from " <<
-            //    old << " to" << 
-            //    res.velocity_rotation << "!" << std::endl;
+        }
+    }
+    if( min_angular_velocity > 0.0 ){ 
+        if( res.velocity_rotation.abs() < min_angular_velocity ){
+            res.velocity_rotation *= (
+                min_angular_velocity / (
+                    std::fabs( res.velocity_rotation.value() )*security_margin
+                ) 
+            );
         }
     }
 
-    if( translation_velocity_limit > 0.0 ){
-        if( res.velocity_translation.norm() >= translation_velocity_limit ){
-            //Vector2d old =  res.velocity_translation;
+    double max_linear_velocity;
+    if( translation_acceleration_limit >= 0.0 ){ 
+        max_linear_velocity = robot_linear_velocity.norm() + translation_acceleration_limit * get_dt();
+        if( translation_velocity_limit >= 0 ){
+            max_linear_velocity = std::min( translation_velocity_limit, max_linear_velocity );
+        }
+    }else{
+        max_linear_velocity = translation_velocity_limit;
+    }
+    double min_linear_velocity = - 1.0;
+    if( translation_acceleration_limit >= 0.0 ){ 
+        min_linear_velocity = std::max( 0.0, robot_linear_velocity.norm() - get_dt()*this->translation_acceleration_limit );
+    }
+
+
+    if( max_linear_velocity > 0.0 ){
+        if( res.velocity_translation.norm() >= max_linear_velocity ){
             res.velocity_translation *= ( 
-                translation_velocity_limit / 
+                max_linear_velocity /
                 (res.velocity_translation.norm()/security_margin)
             );
-            //std::cerr << "Control : We limit the translation velocity from " <<
-            //    old << " to" << 
-            //    res.velocity_translation << "!" << std::endl;
         }
     }
+
+
+    if( min_linear_velocity > 0.0 ){
+        if( res.velocity_translation.norm() < min_linear_velocity ){
+            res.velocity_translation *= ( 
+                min_linear_velocity /
+                (res.velocity_translation.norm() * security_margin)
+            );
+        }
+    }
+
     return res;
 }
 

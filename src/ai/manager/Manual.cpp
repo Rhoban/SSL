@@ -53,7 +53,9 @@ Manual::Manual(
                     );
                     goalie->set_limits(
                         ai_data.constants.translation_velocity_limit,
-                        ai_data.constants.rotation_velocity_limit
+                        ai_data.constants.rotation_velocity_limit,
+                        ai_data.constants.translation_acceleration_limit,
+                        ai_data.constants.rotation_acceleration_limit
                     );
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
                 }, true
@@ -79,8 +81,10 @@ Manual::Manual(
 			ai_data.constants.d_orientation
 		    );
 		    follower->set_limits(
-			ai_data.constants.translation_velocity_limit,
-			ai_data.constants.rotation_velocity_limit
+                ai_data.constants.translation_velocity_limit,
+                ai_data.constants.rotation_velocity_limit,
+                ai_data.constants.translation_acceleration_limit,
+                ai_data.constants.rotation_acceleration_limit
 		    );
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(follower);
                 }

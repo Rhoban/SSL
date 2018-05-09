@@ -79,6 +79,8 @@ void RobotBehavior::update_time_and_position(
     this->robot_angular_position = robot.get_movement().angular_position(
         time
     );
+    this->robot_linear_velocity = robot.get_movement().linear_velocity(time);
+    this->robot_angular_velocity = robot.get_movement().angular_velocity(time);
 };
 
 const Ai::Robot & RobotBehavior::robot() const {

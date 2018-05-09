@@ -14,16 +14,6 @@
 // If you are working with the grSim simulator, don't comment.
 #define SSL_SIMU
 
-#ifdef SSL_SIMU
-    #define ROTATION_VELOCITY_LIMIT 3.0
-    #define TRANSLATION_VELOCITY_LIMIT 8.0
-#else
-    //#define ROTATION_VELOCITY_LIMIT 3.0
-    //#define TRANSLATION_VELOCITY_LIMIT 2.0
-    #define ROTATION_VELOCITY_LIMIT 20.0
-    #define TRANSLATION_VELOCITY_LIMIT 8.0
-#endif
-
 namespace RhobanSSL {
 namespace Ai {
 
@@ -77,6 +67,19 @@ struct Field : Vision::Field {
 };
 
 struct Constants {
+
+    static constexpr double WHEEL_RADIUS = 0.03; // In meter
+    static constexpr double WHEEL_EXCENTRICITY = 0.08; // In meter
+    static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 10.0; // 10 turn by second
+    static constexpr double TRANSLATION_ACCELERATION_LIMIT = WHEEL_NB_TURNS_ACCELERATION_LIMIT*WHEEL_RADIUS*2.0*M_PI; // 10 tours * 0.03 m * 2*PI  m/s^-2
+    static constexpr double ROTATION_ACCELERATION_LIMIT = 2.0*M_PI*(WHEEL_RADIUS/WHEEL_EXCENTRICITY)*WHEEL_NB_TURNS_ACCELERATION_LIMIT; //
+
+#ifdef SSL_SIMU
+    static constexpr double ROTATION_VELOCITY_LIMIT = 3.0;
+    static constexpr double TRANSLATION_VELOCITY_LIMIT = 8.0;
+#else
+#endif
+
     double robot_radius;
     double radius_ball;
     double front_size;
@@ -104,6 +107,8 @@ struct Constants {
     double penalty_rayon;
     double translation_velocity_limit;
     double rotation_velocity_limit;
+    double translation_acceleration_limit;
+    double rotation_acceleration_limit;
     
     void init();
 

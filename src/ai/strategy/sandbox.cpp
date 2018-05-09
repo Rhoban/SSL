@@ -79,7 +79,9 @@ void Sandbox::assign_behavior_to_robots(
         );
         follower->set_limits(
             ai_data.constants.translation_velocity_limit,
-            ai_data.constants.rotation_velocity_limit
+            ai_data.constants.rotation_velocity_limit,
+            ai_data.constants.translation_acceleration_limit,
+            ai_data.constants.rotation_acceleration_limit
         );
         assign_behavior( 
             follower_id, std::shared_ptr<
@@ -109,7 +111,9 @@ void Sandbox::assign_behavior_to_robots(
         );
         goalie->set_limits(
             ai_data.constants.translation_velocity_limit,
-            ai_data.constants.rotation_velocity_limit
+            ai_data.constants.rotation_velocity_limit,
+            ai_data.constants.translation_acceleration_limit,
+            ai_data.constants.rotation_acceleration_limit
         );
         assign_behavior(
             get_goalie(), std::shared_ptr<
@@ -144,7 +148,9 @@ void Sandbox::assign_behavior_to_robots(
         );
         shooter->set_limits(
             ai_data.constants.translation_velocity_limit,
-            ai_data.constants.rotation_velocity_limit
+            ai_data.constants.rotation_velocity_limit,
+            ai_data.constants.translation_acceleration_limit,
+            ai_data.constants.rotation_acceleration_limit
         );
         const Ai::Ball & ball = ai_data.ball;
         Vector2d ball_position(

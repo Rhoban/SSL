@@ -46,7 +46,9 @@ Robot_behavior::RobotBehavior* Prepare_to_run::create_follower(
     );
     follower->set_limits(
         ai_data.constants.translation_velocity_limit,
-        ai_data.constants.rotation_velocity_limit
+        ai_data.constants.rotation_velocity_limit,
+        ai_data.constants.translation_acceleration_limit,
+        ai_data.constants.rotation_acceleration_limit
     );
     return follower;
 }

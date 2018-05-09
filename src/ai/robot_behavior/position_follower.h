@@ -22,7 +22,9 @@ class PositionFollower : public RobotBehavior {
 
         void set_limits(
             double translation_velocity_limit,
-            double rotation_velocity_limit
+            double rotation_velocity_limit,
+            double translation_acceleration_limit,
+            double rotation_acceleration_limit
         );
 
         void set_following_position(

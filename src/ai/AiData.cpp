@@ -122,6 +122,8 @@ namespace Ai {
         radius_ball = 0.04275/2.0;
         translation_velocity_limit = TRANSLATION_VELOCITY_LIMIT;
         rotation_velocity_limit = ROTATION_VELOCITY_LIMIT;
+        translation_acceleration_limit = TRANSLATION_ACCELERATION_LIMIT;
+        rotation_acceleration_limit = ROTATION_ACCELERATION_LIMIT;
         #ifdef SSL_SIMU
             DEBUG("SIMULATION MODE ACTIVATED");
             // SSL SIMUL
