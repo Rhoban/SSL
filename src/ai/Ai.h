@@ -63,6 +63,8 @@ namespace RhobanSSL
         void limits_velocity( Control & ctrl ) const ;
 
         void share_data();
+        void prevent_collision( int robot_id, Control & ctrl );
+
     };
 };
 

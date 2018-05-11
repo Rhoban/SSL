@@ -16,6 +16,11 @@ std::pair<bool, double> collision_time(
     double radius_2, const Movement & movement_2,
     double radius_error, double time
 );
+std::pair<bool, double> collision_time(
+    double radius_A, const rhoban_geometry::Point & A, const Vector2d & V_A,
+    double radius_B, const rhoban_geometry::Point & B, const Vector2d & V_B,
+    double radius_error
+);
 
 };
 

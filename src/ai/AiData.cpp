@@ -130,15 +130,23 @@ namespace Ai {
         robot_radius = 0.09;
         radius_ball = 0.04275/2.0;
         
-        //translation_velocity_limit = TRANSLATION_VELOCITY_LIMIT;
-        //rotation_velocity_limit = ROTATION_VELOCITY_LIMIT;
-        //translation_acceleration_limit = TRANSLATION_ACCELERATION_LIMIT;
-        //rotation_acceleration_limit = ROTATION_ACCELERATION_LIMIT;
+        translation_velocity_limit = TRANSLATION_VELOCITY_LIMIT;
+        rotation_velocity_limit = ROTATION_VELOCITY_LIMIT;
+        translation_acceleration_limit = TRANSLATION_ACCELERATION_LIMIT;
+        rotation_acceleration_limit = ROTATION_ACCELERATION_LIMIT;
 
-        translation_velocity_limit = 8.0;
-        rotation_velocity_limit = 4.0;
-        translation_acceleration_limit = -1.0;
-        rotation_acceleration_limit = -1.0;
+        DEBUG( "translation_velocity_limit : " << translation_velocity_limit );
+        DEBUG( "rotation_velocity_limit : " << rotation_velocity_limit );
+        DEBUG( "translation_acceleration_limit : " << translation_acceleration_limit );
+        DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
+
+        security_acceleration_ratio = .5;
+        radius_security_for_collision = 0.03;    
+        
+        //translation_velocity_limit = 8.0;
+        //rotation_velocity_limit = 4.0;
+        //translation_acceleration_limit = -1.0;
+        //rotation_acceleration_limit = -1.0;
 
 
         #ifdef SSL_SIMU
@@ -249,12 +257,40 @@ namespace Ai {
         }
     }
 
+    std::list< std::pair<int, double> > AiData::get_collision(
+        int robot_id, const Vector2d & velocity_translation
+    ) const {
+        std::list< std::pair< int, double> > result;
+        
+        const Robot * robot_1 = &( robots.at(Vision::Team::Ally).at(robot_id) );
+        for( unsigned int i=0; i<all_robots.size(); i++ ){
+            const Robot * robot_2 = all_robots[i].second;
+            if( robot_1->id() != robot_2->id() ){
+                double radius_error = constants.radius_security_for_collision;
+                std::pair<bool, double> collision = collision_time(
+                    constants.robot_radius, 
+                    robot_1->get_movement().linear_position( robot_1->get_movement().last_time() ),
+                    velocity_translation,
+                    constants.robot_radius, 
+                    robot_2->get_movement().linear_position( robot_2->get_movement().last_time() ),
+                    robot_2->get_movement().linear_velocity( robot_2->get_movement().last_time() ),
+                    radius_error
+                );
+                if( collision.first ){
+                    result.push_back( std::pair<int,double>( i, collision.second ) );
+                }
+            }
+        }
+        return result;
+    } 
+
     void AiData::compute_table_of_collision_times(){
+        table_of_collision_times.clear();
         for( unsigned int i=0; i<all_robots.size(); i++ ){
             for( unsigned int j=i+1; j<all_robots.size(); j++ ){
                 Robot & robot_1 = *all_robots[i].second;
                 Robot & robot_2 = *all_robots[j].second;
-                double radius_error = 0.0;
+                double radius_error = constants.radius_security_for_collision;
                 std::pair<bool, double> collision = collision_time(
                     constants.robot_radius, 
                     robot_1.get_movement(),
@@ -268,13 +304,5 @@ namespace Ai {
             }
         }
     }
-
-/*
-double Navigation_with_obstacle_avoidance::collision_time( int robot_1, int robot_2 ) const {
-    std::pair<int, int> key( robot_1, robot_2 );
-    assert( table_of_collision_times.find(key) != table_of_collision_times.clear() );
-    return table_of_collision_times.at(key);
-}
-*/
  
 } } //Namespace

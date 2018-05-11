@@ -9,6 +9,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <strategy/enseirb_project_wrapper.h>
 #include <robot_behavior/goalie.h>
+#include <core/print_collection.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -75,7 +76,9 @@ void Match::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
-            assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_team_ids() );
+            if( get_valid_team_ids().size() > 0  ){
+                assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_team_ids() );
+            }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
             assign_strategy( Strategy::Prepare_kickoff::name, time, get_valid_team_ids() );
             if( get_team() == referee.kickoff_team() ){

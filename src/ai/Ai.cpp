@@ -5,6 +5,10 @@
 #include <robot_behavior/do_nothing.h>
 #include <manager/Manual.h>
 #include <manager/Match.h>
+#include <physic/MovementSample.h>
+#include <math/vector2d.h>
+#include <physic/constants.h>
+#include <core/print_collection.h>
 
 namespace RhobanSSL
 {
@@ -33,15 +37,121 @@ void AI::limits_velocity( Control & ctrl ) const {
     }
 }
 
-void prevent_collision( int robot_id, Control & ctrl ){
-    //TODO
+void AI::prevent_collision( int robot_id, Control & ctrl ){
+    const Ai::Robot & robot = ai_data.robots.at(Vision::Team::Ally).at(robot_id);
+    
+    const Vector2d & ctrl_velocity = ctrl.velocity_translation;
+    Vector2d robot_velocity = robot.get_movement().linear_velocity( ai_data.time );
+    
+    std::list< std::pair<int, double> > collisions_with_ctrl = ai_data.get_collision(
+        robot_id, ctrl_velocity
+    );
+    //std::list< std::pair<int, double> > collisions_with_movement = ai_data.get_collision(
+    //    robot_id, robot_velocity
+    //);
+
+    for( const std::pair<int, double> & collision : collisions_with_ctrl ){
+        double time_before_collision = collision.second;
+        double ctrl_velocity_norm = ctrl_velocity.norm();
+        double time_to_stop = ctrl_velocity_norm/(
+            ai_data.constants.security_acceleration_ratio
+            *
+            ai_data.constants.translation_acceleration_limit
+        );
+        if( time_before_collision <= time_to_stop and ctrl_velocity_norm > EPSILON_VELOCITY ){
+            double robot_velocity_norm = robot_velocity.norm();
+            double velocity_increase = 0.0;
+            if( robot_velocity_norm > 0 ){
+                double velocity_increase = ( 1 - ai_data.dt * ai_data.constants.translation_acceleration_limit/robot_velocity_norm );
+                if( velocity_increase < 0.0 ){
+                    velocity_increase = 0.0;
+                }else{
+                }
+            }
+            ctrl.velocity_translation = robot_velocity * velocity_increase;
+        } 
+    }
+
+#if 0
+    //TODO improve the loop to work fast
+    for( const std::pair< std::pair<int,int>, double > & elem : ai_data.table_of_collision_times ){
+        const std::pair<int ,int> & collision = elem.first;
+        Ai::Robot* robot = 0;
+        if( 
+            ( ai_data.all_robots[ collision.first ].second->id() == robot_id )
+            and
+            ( ai_data.all_robots[ collision.first ].first == Vision::Team::Ally )
+        ){
+            robot = ai_data.all_robots[ collision.first ].second;
+        }
+        if( 
+            ( ai_data.all_robots[ collision.second ].second->id() == robot_id )
+            and
+            ( ai_data.all_robots[ collision.first ].first == Vision::Team::Ally )
+        ){
+            robot = ai_data.all_robots[ collision.second ].second;
+        }
+        if( robot ){ 
+            //DEBUG("We stop Robot " << robot_id << " to prevent collision.");
+            double time_before_collision = elem.second;
+            //DEBUG( "time before collision : " << time );
+            Vector2d velocity = robot->get_movement().linear_velocity( ai_data.time );
+            double velocity_norm = velocity.norm();
+            double time_to_stop = velocity.norm()/(
+                ai_data.constants.security_acceleration_ratio
+                *
+                ai_data.constants.translation_acceleration_limit
+            );
+            // DEBUG("velo : " << velocity);
+            // DEBUG("time to stop : " << time_to_stop << "accele : " << ai_data.constants.translation_acceleration_limit );
+            if( time_before_collision <= time_to_stop and velocity_norm > EPSILON_VELOCITY ){
+                double velocity_increase = ( 1 - ai_data.dt * ai_data.constants.translation_acceleration_limit/velocity_norm );
+                if( velocity_increase < 0.0 ){
+                    velocity_increase = 0.0;
+                    DEBUG("SOP" );
+                }else{
+                    DEBUG("Emergency stop -- time_befor_coll " << time_before_collision << ", time_to_top " << time_to_stop );
+                }
+                velocity_increase = 0.0;
+                ctrl.velocity_translation = velocity * velocity_increase;
+            } 
+        }
+    }
+#endif
 }
 
+
+static MovementSample debug_mov(4);
+
 void AI::prepare_to_send_control( int robot_id, Control ctrl ){
+
+
+#if 0    
+    if( robot_id == 5 ){
+        debug_mov.insert(
+            PositionSample(
+                ai_data.time,
+                vector2point(ctrl.velocity_translation),
+                ctrl.velocity_rotation       
+            )
+        );
+        DEBUG(
+            "ROBOT : " 
+                << ai_data.time << " " 
+                << debug_mov.dt(0) << " "
+                << Vector2d(debug_mov.linear_position(0)).norm() << " "
+                << debug_mov.linear_velocity(0).norm() << " "
+                << ai_data.dt << " " 
+                << ai_data.robots[Vision::Ally][robot_id].get_movement().linear_velocity(ai_data.time).norm() << " "
+                << ai_data.robots[Vision::Ally][robot_id].get_movement().linear_acceleration(ai_data.time).norm() << " "
+         );
+    }
+#endif
+
+    prevent_collision( robot_id, ctrl );
     ctrl = ctrl.relative_control(
         ai_data.robots[Vision::Ally][robot_id].get_movement().angular_position( ai_data.time ), ai_data.dt
     );
-    prevent_collision( robot_id, ctrl );
     limits_velocity(ctrl);
 
     #ifdef SSL_SIMU
@@ -78,7 +188,7 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
         }else{
             Vector2d velocity_translation = ai_data.team_point_of_view.from_basis(
                 ctrl.velocity_translation
-            ); 
+            );
             commander->set(
                 map_id, true, 
                 velocity_translation[0], sign_y*velocity_translation[1], 
@@ -223,6 +333,10 @@ void AI::run(){
         strategy_manager->update(current_time);
         strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
         share_data();
+        //ai_data.compute_table_of_collision_times();
+        //if( ai_data.table_of_collision_times.size() != 0 ){
+        //   DEBUG( ai_data.table_of_collision_times );
+        //}
         update_robots( );
     }
 }

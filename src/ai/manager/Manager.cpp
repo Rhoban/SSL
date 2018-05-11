@@ -71,6 +71,8 @@ void Manager::assign_strategy(
     current_strategy_names.push_front( strategy_name );
     Strategy::Strategy & strategy = get_strategy( strategy_name ); 
     
+    assert( strategy.min_robots() <= robot_ids.size() );
+    
     strategy.set_goalie( goalie_id );
     strategy.set_goalie_opponent( goalie_opponent_id );
     strategy.set_robot_affectation( robot_ids );

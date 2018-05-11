@@ -3,6 +3,7 @@
 
 #include <debug.h>
 #include <map>
+#include <list>
 #include <rhoban_utils/angle.h>
 #include <rhoban_utils/timing/time_stamp.h>
 #include <physic/MovementSample.h>
@@ -70,7 +71,7 @@ struct Constants {
 
     static constexpr double WHEEL_RADIUS = 0.03; // In meter
     static constexpr double WHEEL_EXCENTRICITY = 0.08; // In meter
-    static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 10.0; // 10 turn by second
+    static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 70.0; // TODO : SET TO 10 turn by second
     static constexpr double TRANSLATION_ACCELERATION_LIMIT = WHEEL_NB_TURNS_ACCELERATION_LIMIT*WHEEL_RADIUS*2.0*M_PI; // 10 tours * 0.03 m * 2*PI  m/s^-2
     static constexpr double ROTATION_ACCELERATION_LIMIT = 2.0*M_PI*(WHEEL_RADIUS/WHEEL_EXCENTRICITY)*WHEEL_NB_TURNS_ACCELERATION_LIMIT; //
 
@@ -109,7 +110,11 @@ struct Constants {
     double rotation_velocity_limit;
     double translation_acceleration_limit;
     double rotation_acceleration_limit;
-    
+
+    double time_limit_between_collision; 
+    double security_acceleration_ratio;
+    double radius_security_for_collision;    
+
     void init();
 
     Constants(){ 
@@ -173,6 +178,8 @@ public:
     const Collision_times_table & get_table_of_collision_times() const;
 
     void compute_table_of_collision_times();
+    std::list< std::pair<int, double> > get_collision( int robot_id, const Vector2d & ctrl ) const;
+
 };
 
 } }
