@@ -14,6 +14,9 @@ public:
     virtual void set_sample( const MovementSample & samples ) = 0;
     virtual const MovementSample & get_sample() const = 0;
 
+    /* Return the last time of the samples */
+    virtual double last_time() const = 0;
+
     virtual rhoban_geometry::Point linear_position( double time ) const = 0;
     virtual ContinuousAngle angular_position( double time ) const = 0;
 

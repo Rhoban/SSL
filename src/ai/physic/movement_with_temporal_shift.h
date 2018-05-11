@@ -1,30 +1,29 @@
-#ifndef __MOVEMENT_ON_NEW_FRAME_H__ 
-#define __MOVEMENT_ON_NEW_FRAME_H__ 
+#ifndef __MOVEMENT_WITH_TEMPORAL_SHIFT__H__
+#define __MOVEMENT_WITH_TEMPORAL_SHIFT__H__
 
 #include <physic/Movement.h>
-#include <math/frame_changement.h>
 
 namespace RhobanSSL {
 
-class Movement_on_new_frame : public Movement {
+class Movement_with_temporal_shift : public Movement {
     private:
         Movement* movement;
-        Frame_changement frame;
+        std::function< double () > temporal_shift;
 
     public:
 
         //We assume that v1 and v2 are orthonormal
-        void set_frame(
-            const rhoban_geometry::Point & origin,
-            const Vector2d & v1, const Vector2d & v2
-        );
+        void set_shift( double shift_time );
+
+        virtual double last_time() const;
 
         virtual Movement * clone() const;
         const Movement* get_original_movement() const;
 
-        virtual double last_time() const;
-
-        Movement_on_new_frame(Movement* movement);
+        Movement_with_temporal_shift(
+            Movement* movement,
+            std::function< double () > temporal_shift
+        );
 
         virtual void set_sample( const MovementSample & samples );
         virtual const MovementSample & get_sample() const;
@@ -40,7 +39,7 @@ class Movement_on_new_frame : public Movement {
 
         virtual void print(std::ostream& stream) const;
 
-        virtual ~Movement_on_new_frame();
+        virtual ~Movement_with_temporal_shift();
 };
 
 

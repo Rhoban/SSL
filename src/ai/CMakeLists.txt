@@ -53,6 +53,7 @@ set (SOURCES
     physic/movement_predicted_by_integration.cpp
     physic/movement_with_no_prediction.cpp
     physic/movement_on_new_frame.cpp
+    physic/movement_with_temporal_shift.cpp
     physic/MovementSample.cpp
     physic/Movement.cpp
     physic/collision.cpp

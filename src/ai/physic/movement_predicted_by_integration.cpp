@@ -27,6 +27,9 @@ const MovementSample & Movement_predicted_by_integration::get_sample() const {
     return samples;
 }
 
+double Movement_predicted_by_integration::last_time() const {
+    return samples.time(0);
+}
  
 rhoban_geometry::Point
 Movement_predicted_by_integration::linear_position( double time ) const {

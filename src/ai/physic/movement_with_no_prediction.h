@@ -12,6 +12,8 @@ class Movement_with_no_prediction : public Movement {
     public:
         virtual Movement * clone() const;
 
+        virtual double last_time() const;
+
         virtual void set_sample( const MovementSample & samples );
         virtual const MovementSample & get_sample() const;
 

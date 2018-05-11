@@ -3,6 +3,11 @@
 
 namespace RhobanSSL {
 
+
+double Movement_with_no_prediction::last_time() const {
+    return samples.time(0);
+}
+
 void
 Movement_with_no_prediction::print(std::ostream& stream) const {
     stream << samples; 

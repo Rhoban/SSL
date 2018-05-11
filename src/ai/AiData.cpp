@@ -3,6 +3,7 @@
 #include <physic/movement_predicted_by_integration.h>
 #include <physic/movement_with_no_prediction.h>
 #include <physic/movement_on_new_frame.h>
+#include <physic/movement_with_temporal_shift.h>
 #include <debug.h>
 #include <physic/collision.h>
 
@@ -84,13 +85,18 @@ namespace Ai {
         this->team_color = team_color;
     }
 
-    AiData::AiData(){
+    AiData::AiData():
+        time_shift_with_vision(0.0)
+    {
         int nb_robots = 0;
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
                 robots[team][k].set_movement(
-                    new Movement_with_no_prediction()
-                    //new Movement_predicted_by_integration()
+                    new Movement_with_temporal_shift(
+                        new Movement_with_no_prediction()
+                        //new Movement_predicted_by_integration()
+                        , [this](){ return this->time_shift_with_vision; }
+                    )
                 );
                 nb_robots++;
             }
@@ -106,8 +112,11 @@ namespace Ai {
             }
         }
         ball.set_movement(
-            new Movement_with_no_prediction()
-            //new Movement_predicted_by_integration()
+            new Movement_with_temporal_shift(
+                new Movement_with_no_prediction()
+                //new Movement_predicted_by_integration()
+                , [this](){ return this->time_shift_with_vision; }
+            )
         );
     }
 
@@ -120,10 +129,18 @@ namespace Ai {
     void Constants::init(){
         robot_radius = 0.09;
         radius_ball = 0.04275/2.0;
-        translation_velocity_limit = TRANSLATION_VELOCITY_LIMIT;
-        rotation_velocity_limit = ROTATION_VELOCITY_LIMIT;
-        translation_acceleration_limit = TRANSLATION_ACCELERATION_LIMIT;
-        rotation_acceleration_limit = ROTATION_ACCELERATION_LIMIT;
+        
+        //translation_velocity_limit = TRANSLATION_VELOCITY_LIMIT;
+        //rotation_velocity_limit = ROTATION_VELOCITY_LIMIT;
+        //translation_acceleration_limit = TRANSLATION_ACCELERATION_LIMIT;
+        //rotation_acceleration_limit = ROTATION_ACCELERATION_LIMIT;
+
+        translation_velocity_limit = 8.0;
+        rotation_velocity_limit = 4.0;
+        translation_acceleration_limit = -1.0;
+        rotation_acceleration_limit = -1.0;
+
+
         #ifdef SSL_SIMU
             DEBUG("SIMULATION MODE ACTIVATED");
             // SSL SIMUL
@@ -141,13 +158,17 @@ namespace Ai {
             // PID for translation
             p_translation = 0.05; 
             //p_translation = 0.0; 
-            i_translation = .0001;
-            d_translation = .0005;
+            //i_translation = .0001;
+            i_translation = .000;
+            //d_translation = .0005;
+            d_translation = .000;
             // PID for orientation
             p_orientation = 0.05;
             //p_orientation = 0.0;
-            i_orientation = 0.0001;
-            d_orientation = 0.0005;
+            //i_orientation = 0.0001;
+            i_orientation = 0.000;
+            d_orientation = 0.000;
+            //d_orientation = 0.0005;
 
             translation_velocity = 2.0;
             translation_acceleration = 1.0;

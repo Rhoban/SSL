@@ -39,7 +39,13 @@ rhoban_geometry::Point
 Movement_on_new_frame::linear_position( double time ) const {
     return frame.to_frame(movement->linear_position(time));
 }
-        
+
+double Movement_on_new_frame::last_time() const {
+    return movement->last_time();
+}
+
+
+ 
 ContinuousAngle
 Movement_on_new_frame::angular_position( double time ) const {
     return movement->angular_position(time);

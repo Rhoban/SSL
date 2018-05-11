@@ -10,12 +10,19 @@ namespace Strategy {
 
 class Tare_and_synchronize : public Strategy {
     private:
-        bool behavior_was_assigned;
-        bool time_synchro;
-        double waiting_time_for_synchro;
-        double start_waiting_time_for_synchro;
+        bool halt_behavior_was_assigned;
+        bool move_behavior_was_assigned;
+        bool time_is_synchro;
+        double ai_time_command;
+        
+        double vision_time_command;
+        double ai_time_associated_to_vision_time_command;
+
+        void set_temporal_shift_between_vision();
 
     public:
+        double get_temporal_shift_between_vision() const;
+
         Tare_and_synchronize( Ai::AiData & ai_data );
 
         int min_robots() const;

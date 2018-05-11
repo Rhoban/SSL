@@ -17,6 +17,8 @@ class Movement_predicted_by_integration : public Movement {
         virtual void set_sample( const MovementSample & samples );
         virtual const MovementSample & get_sample() const;
 
+        virtual double last_time() const;
+
         virtual rhoban_geometry::Point linear_position( double time ) const;
         virtual ContinuousAngle angular_position( double time ) const;
 
