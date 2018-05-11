@@ -42,14 +42,12 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
     
     const Vector2d & ctrl_velocity = ctrl.velocity_translation;
     Vector2d robot_velocity = robot.get_movement().linear_velocity( ai_data.time );
+
+    bool collision_is_detected = false;
     
     std::list< std::pair<int, double> > collisions_with_ctrl = ai_data.get_collision(
         robot_id, ctrl_velocity
     );
-    //std::list< std::pair<int, double> > collisions_with_movement = ai_data.get_collision(
-    //    robot_id, robot_velocity
-    //);
-
     for( const std::pair<int, double> & collision : collisions_with_ctrl ){
         double time_before_collision = collision.second;
         double ctrl_velocity_norm = ctrl_velocity.norm();
@@ -59,18 +57,38 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
             ai_data.constants.translation_acceleration_limit
         );
         if( time_before_collision <= time_to_stop and ctrl_velocity_norm > EPSILON_VELOCITY ){
-            double robot_velocity_norm = robot_velocity.norm();
-            double velocity_increase = 0.0;
-            if( robot_velocity_norm > 0 ){
-                double velocity_increase = ( 1 - ai_data.dt * ai_data.constants.translation_acceleration_limit/robot_velocity_norm );
-                if( velocity_increase < 0.0 ){
-                    velocity_increase = 0.0;
-                }else{
-                }
-            }
-            ctrl.velocity_translation = robot_velocity * velocity_increase;
-        } 
+            collision_is_detected = true;
+        }
     }
+
+    std::list< std::pair<int, double> > collisions_with_movement = ai_data.get_collision(
+        robot_id, robot_velocity
+    );
+    for( const std::pair<int, double> & collision : collisions_with_movement ){
+        double time_before_collision = collision.second;
+        double robot_velocity_norm = ctrl_velocity.norm();
+        double time_to_stop = robot_velocity_norm/(
+            ai_data.constants.security_acceleration_ratio
+            *
+            ai_data.constants.translation_acceleration_limit
+        );
+        if( time_before_collision <= time_to_stop and robot_velocity_norm > EPSILON_VELOCITY ){
+            collision_is_detected = true;
+        }
+    }
+
+    if( collision_is_detected ){
+        double robot_velocity_norm = robot_velocity.norm();
+        double velocity_increase = 0.0;
+        if( robot_velocity_norm > 0 ){
+            double velocity_increase = ( 1 - ai_data.dt * ai_data.constants.translation_acceleration_limit/robot_velocity_norm );
+            if( velocity_increase < 0.0 ){
+                velocity_increase = 0.0;
+            }else{
+            }
+        }
+        ctrl.velocity_translation = robot_velocity * velocity_increase;
+    } 
 
 #if 0
     //TODO improve the loop to work fast
