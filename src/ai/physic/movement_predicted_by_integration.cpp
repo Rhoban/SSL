@@ -33,6 +33,9 @@ double Movement_predicted_by_integration::last_time() const {
  
 rhoban_geometry::Point
 Movement_predicted_by_integration::linear_position( double time ) const {
+    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
+        time = samples[0].time;
+    }
     assert( samples[0].time <= time );
     double dt = time - samples.time(0);
     return (
@@ -43,6 +46,9 @@ Movement_predicted_by_integration::linear_position( double time ) const {
         
 ContinuousAngle
 Movement_predicted_by_integration::angular_position( double time ) const {
+    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
+        time = samples[0].time;
+    }
     assert( samples[0].time <= time );
     double dt = time - samples.time(0);
     return (
@@ -53,6 +59,9 @@ Movement_predicted_by_integration::angular_position( double time ) const {
        
 Vector2d
 Movement_predicted_by_integration::linear_velocity( double time ) const {
+    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
+        time = samples[0].time;
+    }
     assert( samples[0].time <= time );
     double dt = time - samples.time(0);
     return samples.linear_velocity(0) + samples.linear_acceleration(0) * dt;
@@ -60,6 +69,9 @@ Movement_predicted_by_integration::linear_velocity( double time ) const {
         
 ContinuousAngle
 Movement_predicted_by_integration::angular_velocity( double time ) const {
+    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
+        time = samples[0].time;
+    }
     assert( samples[0].time <= time );
     double dt = time - samples.time(0);
     return samples.angular_velocity(0) + samples.angular_acceleration(0) * dt;
@@ -67,12 +79,18 @@ Movement_predicted_by_integration::angular_velocity( double time ) const {
         
 Vector2d
 Movement_predicted_by_integration::linear_acceleration( double time ) const {
+    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
+        time = samples[0].time;
+    }
     assert( samples[0].time <= time );
     return samples.linear_acceleration(0);
 }
        
 ContinuousAngle
 Movement_predicted_by_integration::angular_acceleration( double time ) const {
+    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
+        time = samples[0].time;
+    }
     assert( samples[0].time <= time );
     return samples.angular_acceleration(0);
 }

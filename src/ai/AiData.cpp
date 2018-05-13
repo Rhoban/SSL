@@ -93,8 +93,8 @@ namespace Ai {
             for( int k=0; k<Vision::Robots; k++ ){
                 robots[team][k].set_movement(
                     new Movement_with_temporal_shift(
-                        new Movement_with_no_prediction()
-                        //new Movement_predicted_by_integration()
+                        //new Movement_with_no_prediction()
+                        new Movement_predicted_by_integration()
                         , [this](){ return this->time_shift_with_vision; }
                     )
                 );
@@ -113,8 +113,8 @@ namespace Ai {
         }
         ball.set_movement(
             new Movement_with_temporal_shift(
-                new Movement_with_no_prediction()
-                //new Movement_predicted_by_integration()
+                //new Movement_with_no_prediction()
+                new Movement_predicted_by_integration()
                 , [this](){ return this->time_shift_with_vision; }
             )
         );
@@ -179,6 +179,8 @@ namespace Ai {
             i_orientation = 0.000;
             d_orientation = 0.000;
             //d_orientation = 0.0005;
+
+
 
             translation_velocity = 2.0;
             translation_acceleration = 1.0;

@@ -71,7 +71,7 @@ struct Constants {
 
     static constexpr double WHEEL_RADIUS = 0.03; // In meter
     static constexpr double WHEEL_EXCENTRICITY = 0.08; // In meter
-    static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 70.0; // TODO : SET TO 10 turn by second
+    static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 100.0; // TODO : SET TO 10 turn by second
     static constexpr double TRANSLATION_ACCELERATION_LIMIT = WHEEL_NB_TURNS_ACCELERATION_LIMIT*WHEEL_RADIUS*2.0*M_PI; // 10 tours * 0.03 m * 2*PI  m/s^-2
     static constexpr double ROTATION_ACCELERATION_LIMIT = 2.0*M_PI*(WHEEL_RADIUS/WHEEL_EXCENTRICITY)*WHEEL_NB_TURNS_ACCELERATION_LIMIT; //
 
