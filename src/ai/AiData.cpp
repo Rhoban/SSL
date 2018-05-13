@@ -141,9 +141,9 @@ namespace Ai {
         DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
 
         security_acceleration_ratio = .5;
-        obstacle_avoidance_ratio = .5/4; // should be lessr than security_acceleration_ratio
-        radius_security_for_collision = 0.03;    
-        radius_security_for_avoidance = 0.06;  // should be greatear than  radius_security_for_collision  
+        obstacle_avoidance_ratio = .5/10; // should be lessr than security_acceleration_ratio
+        radius_security_for_collision = 0.01;    
+        radius_security_for_avoidance = 0.03;  // should be greatear than  radius_security_for_collision  
         
         //translation_velocity_limit = 8.0;
         //rotation_velocity_limit = 4.0;
