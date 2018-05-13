@@ -161,6 +161,35 @@ TEST(test_vector2d, normalized){
     }
 }
 
+TEST(test_vector2d, vector2point){
+    {
+        Vector2d v(0.0, 0.0);
+        rhoban_geometry::Point p = vector2point(v);
+        EXPECT_EQ( p.getX(), 0.0 );
+        EXPECT_EQ( p.getY(), 0.0 );
+    }
+    {
+        Vector2d v(12.0, 42.0);
+        rhoban_geometry::Point p = vector2point(v);
+        EXPECT_EQ( p.getX(), v[0] );
+        EXPECT_EQ( p.getY(), v[1] );
+    }
+}
+
+TEST(test_vector2d, point2vector){
+    {
+        rhoban_geometry::Point p(0.0, 0.0);
+        Vector2d v = point2vector(p);
+        EXPECT_EQ( v[0], 0.0 );
+        EXPECT_EQ( v[1], 0.0 );
+    }
+    {
+        rhoban_geometry::Point p(12.0, 42.0);
+        Vector2d v = point2vector(p);
+        EXPECT_EQ( p.getX(), v[0] );
+        EXPECT_EQ( p.getY(), v[1] );
+    }
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

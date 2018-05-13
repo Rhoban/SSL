@@ -45,7 +45,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
 
     bool collision_is_detected = false;
     
-    std::list< std::pair<int, double> > collisions_with_ctrl = ai_data.get_collision(
+    std::list< std::pair<int, double> > collisions_with_ctrl = ai_data.get_collisions(
         robot_id, ctrl_velocity
     );
     for( const std::pair<int, double> & collision : collisions_with_ctrl ){
@@ -61,7 +61,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
         }
     }
 
-    std::list< std::pair<int, double> > collisions_with_movement = ai_data.get_collision(
+    std::list< std::pair<int, double> > collisions_with_movement = ai_data.get_collisions(
         robot_id, robot_velocity
     );
     for( const std::pair<int, double> & collision : collisions_with_movement ){

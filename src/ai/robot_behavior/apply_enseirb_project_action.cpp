@@ -8,7 +8,7 @@ Apply_enseirb_project_action::Apply_enseirb_project_action(
     Ai::AiData & ai_data,
     const enseirb::Action& action, double time, double dt
 ):
-    PositionFollower( ai_data, time, dt),
+    Navigation_with_obstacle_avoidance( ai_data, time, dt),
     action( action )
 { }
 
@@ -34,10 +34,10 @@ void Apply_enseirb_project_action::update(
         linear_position, angular_position
     );
 
-    PositionFollower::update_control( time );   
+    Navigation_with_obstacle_avoidance::update_control( time, robot, ball );   
 }
 Control Apply_enseirb_project_action::control() const {
-    Control ctrl = PositionFollower::control(); 
+    Control ctrl = Navigation_with_obstacle_avoidance::control(); 
     ctrl.kick = false;
     ctrl.active = true;
     ctrl.ignore = false;

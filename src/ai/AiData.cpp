@@ -141,7 +141,9 @@ namespace Ai {
         DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
 
         security_acceleration_ratio = .5;
+        obstacle_avoidance_ratio = .5/4; // should be lessr than security_acceleration_ratio
         radius_security_for_collision = 0.03;    
+        radius_security_for_avoidance = 0.06;  // should be greatear than  radius_security_for_collision  
         
         //translation_velocity_limit = 8.0;
         //rotation_velocity_limit = 4.0;
@@ -257,7 +259,7 @@ namespace Ai {
         }
     }
 
-    std::list< std::pair<int, double> > AiData::get_collision(
+    std::list< std::pair<int, double> > AiData::get_collisions(
         int robot_id, const Vector2d & velocity_translation
     ) const {
         std::list< std::pair< int, double> > result;
@@ -265,7 +267,7 @@ namespace Ai {
         const Robot * robot_1 = &( robots.at(Vision::Team::Ally).at(robot_id) );
         for( unsigned int i=0; i<all_robots.size(); i++ ){
             const Robot * robot_2 = all_robots[i].second;
-            if( robot_1->id() != robot_2->id() ){
+            if( robot_1->id() != robot_2->id() or all_robots[i].first != Vision::Team::Ally ){
                 double radius_error = constants.radius_security_for_collision;
                 std::pair<bool, double> collision = collision_time(
                     constants.robot_radius, 

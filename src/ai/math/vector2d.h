@@ -48,6 +48,7 @@ class Vector2d : public Boost_Vector2d {
 };
 
 rhoban_geometry::Point vector2point( const Vector2d & v );
+Vector2d point2vector( const rhoban_geometry::Point & p );
 
 bool operator==(const Vector2d & v1, const Vector2d & v2);
 bool operator!=(const Vector2d & v1, const Vector2d & v2);

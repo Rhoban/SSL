@@ -113,7 +113,10 @@ struct Constants {
 
     double time_limit_between_collision; 
     double security_acceleration_ratio;
+    double obstacle_avoidance_ratio;
+
     double radius_security_for_collision;    
+    double radius_security_for_avoidance;
 
     void init();
 
@@ -178,7 +181,7 @@ public:
     const Collision_times_table & get_table_of_collision_times() const;
 
     void compute_table_of_collision_times();
-    std::list< std::pair<int, double> > get_collision( int robot_id, const Vector2d & ctrl ) const;
+    std::list< std::pair<int, double> > get_collisions( int robot_id, const Vector2d & ctrl ) const;
 
 };
 

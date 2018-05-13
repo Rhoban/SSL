@@ -1,6 +1,7 @@
 #include "sandbox.h"
 
 #include <robot_behavior/position_follower.h>
+#include <robot_behavior/navigation_with_obstacle_avoidance.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/shooter.h>
 #include <robot_behavior/do_nothing.h>
@@ -55,7 +56,10 @@ void Sandbox::assign_behavior_to_robots(
         }
 
         DEBUG("SANDBOX ASSIGN BEHAVIOR");
-        Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(
+        //Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(
+        //    ai_data, time, dt
+        //);
+        Robot_behavior::Navigation_with_obstacle_avoidance* follower = new Robot_behavior::Navigation_with_obstacle_avoidance(
             ai_data, time, dt
         );
         const Ai::Robot & robot_follower = ai_data.robots[

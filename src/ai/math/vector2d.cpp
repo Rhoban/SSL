@@ -32,6 +32,10 @@ rhoban_geometry::Point vector2point( const Vector2d & v ){
     return rhoban_geometry::Point( v[0], v[1] );
 }
 
+Vector2d point2vector( const rhoban_geometry::Point & p ){
+    return Vector2d(p);
+}
+
 bool operator==(const Vector2d & v1, const Vector2d & v2){
     return (v1[0] == v2[0]) and (v1[1] == v2[1]);
 }

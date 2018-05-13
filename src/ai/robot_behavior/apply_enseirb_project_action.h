@@ -1,14 +1,14 @@
 #ifndef __ROBOT_BEHAVIOR__APPLY_ENSEIRB_PROJECT_ACTION__H__
 #define __ROBOT_BEHAVIOR__APPLY_ENSEIRB_PROJECT_ACTION__H__
 
-#include "position_follower.h"
+#include "navigation_with_obstacle_avoidance.h"
 #include <strategy/enseirb_projects/api.h>
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class Apply_enseirb_project_action : public PositionFollower {
+class Apply_enseirb_project_action : public Navigation_with_obstacle_avoidance {
     private:
         const enseirb::Action & action; 
     public:
