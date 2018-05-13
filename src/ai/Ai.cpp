@@ -13,6 +13,16 @@
 namespace RhobanSSL
 {
 
+        
+void AI::check_time_is_coherent() const {
+    #ifndef NDEBUG
+    for( unsigned int i=0; i<ai_data.all_robots.size(); i++ ){
+        assert(
+            ai_data.all_robots.at(i).second->get_movement().last_time() - 0.000001 <= ai_data.time
+       );
+    }
+    #endif
+}
 
 void AI::limits_velocity( Control & ctrl ) const {
     if( ai_data.constants.translation_velocity_limit > 0.0 ){
@@ -344,8 +354,13 @@ void AI::run(){
         //DEBUG("");
         visionData.checkAssert(current_time);
         //DEBUG("");
-        
+ 
         ai_data.update( visionData );
+       
+        #ifndef NDEBUG
+        check_time_is_coherent();
+        #endif
+
         referee.update(current_time);
         strategy_manager->remove_invalid_robots();
         strategy_manager->update(current_time);

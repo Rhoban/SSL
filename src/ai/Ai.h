@@ -61,6 +61,7 @@ namespace RhobanSSL
         void prepare_to_send_control( int robot_id, Control control );
 
         void limits_velocity( Control & ctrl ) const ;
+        void check_time_is_coherent() const;
 
         void share_data();
         void prevent_collision( int robot_id, Control & ctrl );
