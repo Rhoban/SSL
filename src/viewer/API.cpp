@@ -12,13 +12,13 @@ static QString js(Json::Value &json)
     return QString::fromStdString(writer.write(json));
 }
 
-API::API(bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander)
+API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander)
 :
     simulation(simulation),
+    teamName(teamName),
     team(team),
     visionClient(data, team, simulation),
     commander(commander),
-    comThread(NULL),
     joystick(NULL),
     joystickRobot(0)
 {
@@ -32,16 +32,34 @@ API::API(bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *comm
         robots[id].spin = false;
     }
 
+    /*
+    ai = new RhobanSSL::AI(
+        teamName,
+        team,
+        data,
+        commander
+    );
+    */
+
     comThread = new std::thread([this] {
         this->comThreadExec();
     });
+
+    // aiThread = new std::thread([this] {
+    //     this->aiThreadExec();
+    // });
 }
 
 API::~API()
 {
-    if (comThread) {
-        comThread->join();
-        delete comThread;
+    if (aiThread) {
+        ai->stop();
+        aiThread->join();
+        delete aiThread;
+    }
+
+    if (ai) {
+        delete ai;
     }
 }
 
@@ -65,6 +83,11 @@ void API::comThreadExec()
         mutex.unlock();
         QThread::msleep(10);
     }
+}
+
+void API::aiThreadExec()
+{
+    ai->run();
 }
 
 bool API::isSimulation()
@@ -103,10 +126,10 @@ QString API::robotsStatus()
             jsonRobot["id"] = robot.id;
             jsonRobot["present"] = robot.isOk();
             jsonRobot["team"] = ((team == RhobanSSL::Vision::Ally) ? ourColor() : opponentColor());
-            auto pos = robot.movement[0];
-            jsonRobot["x"] = pos.linear_position.x;
-            jsonRobot["y"] = pos.linear_position.y;
-            jsonRobot["orientation"] = pos.angular_position.value();
+            auto movement = robot.movement;
+            jsonRobot["x"] = movement.linear_position().getX();
+            jsonRobot["y"] = movement.linear_position().getY();
+            jsonRobot["orientation"] = movement.angular_position().value();
 
             auto &apiRobot = robots[robot.id];
             if (team == RhobanSSL::Vision::Ally) {
@@ -118,6 +141,9 @@ QString API::robotsStatus()
                     jsonRobot["voltage"] = masterRobot.status.voltage/8.0;
                     jsonRobot["capVoltage"] = masterRobot.status.cap_volt;
                     jsonRobot["driversOk"] = !(masterRobot.status.status & STATUS_DRIVER_ERR);
+                    jsonRobot["ir"] = (masterRobot.status.status & STATUS_IR) ? true : false;
+                } else {
+                    jsonRobot["ir"] = false;
                 }
                 jsonRobot["team"] = ourColor();
                 jsonRobot["enabled"] = apiRobot.enabled;
@@ -126,6 +152,7 @@ QString API::robotsStatus()
                 jsonRobot["team"] = opponentColor();
                 jsonRobot["enabled"] = false;
                 jsonRobot["charge"] = false;
+                jsonRobot["ir"] = false;
             }
 
             json.append(jsonRobot);
@@ -273,6 +300,7 @@ void API::scan()
             commander->set(id, false, 0, 0, 0);
         }
         commander->flush();
+        QThread::msleep(30);
     }
 
     // Enabling robots depending on their statuses
@@ -286,8 +314,16 @@ void API::scan()
             RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
             auto masterRobot = master->robots[id];
             robots[id].enabled = masterRobot.isOk();
+
+            if (id == 3) {
+                std::cout << "Age: " << masterRobot.age() << std::endl;
+            }
+            if (masterRobot.isOk()) {
+                std::cout << "Robot #" << id << " is enabled!" << std::endl;
+            }
         }
     }
+
     mutex.unlock();
 }
 
