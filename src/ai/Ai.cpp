@@ -71,6 +71,9 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
         }
     }
 
+    /* Prevent real collision */ 
+    /* Uncomment for more safety */
+    /*
     std::list< std::pair<int, double> > collisions_with_movement = ai_data.get_collisions(
         robot_id, robot_velocity
     );
@@ -86,7 +89,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
             collision_is_detected = true;
         }
     }
-
+    */
     if( collision_is_detected ){
         double robot_velocity_norm = robot_velocity.norm();
         double velocity_increase = 0.0;
