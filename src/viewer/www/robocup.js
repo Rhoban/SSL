@@ -362,10 +362,16 @@ function Viewer()
         if ("ir" in robot && robot.ir && robot.com) {
             ctx.beginPath();
             ctx.globalAlpha = 0.5;
-            ctx.strokeStyle = '#54ff00';
-            ctx.arc(robot.x + Math.cos(robot.orientation)*0.08,
-            robot.y+Math.sin(robot.orientation)*0.08,
-            0.06, 0, Math.PI*2);
+            ctx.strokeStyle = '#f51a90';
+            ctx.lineWidth = 0.01;
+            ctx.arc(robot.x + Math.cos(robot.orientation)*0.085,
+            robot.y+Math.sin(robot.orientation)*0.085,
+            0.03, -Math.PI/2, Math.PI/2);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(robot.x + Math.cos(robot.orientation)*0.085,
+            robot.y+Math.sin(robot.orientation)*0.085,
+            0.06, -Math.PI/2, Math.PI/2);
             ctx.stroke();
         }
 
