@@ -358,6 +358,17 @@ function Viewer()
             this.addText('y:'+this.sign*robot.y.toFixed(2)+'m', this.sign*robot.x+0.15, -this.sign*robot.y+0.15, {color: '#aaa'});
             this.addText('t:'+(180*robot.orientation/Math.PI).toFixed(1)+'°', this.sign*robot.x+0.15, -this.sign*robot.y+0.3, {color: '#aaa'});
         }
+
+        if ("ir" in robot && robot.ir && robot.com) {
+            ctx.beginPath();
+            ctx.globalAlpha = 0.5;
+            ctx.strokeStyle = '#54ff00';
+            ctx.arc(robot.x + Math.cos(robot.orientation)*0.08,
+            robot.y+Math.sin(robot.orientation)*0.08,
+            0.06, 0, Math.PI*2);
+            ctx.stroke();
+        }
+
         ctx.restore();
     };
 

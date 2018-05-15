@@ -141,6 +141,9 @@ QString API::robotsStatus()
                     jsonRobot["voltage"] = masterRobot.status.voltage/8.0;
                     jsonRobot["capVoltage"] = masterRobot.status.cap_volt;
                     jsonRobot["driversOk"] = !(masterRobot.status.status & STATUS_DRIVER_ERR);
+                    jsonRobot["ir"] = (masterRobot.status.status & STATUS_IR) ? true : false;
+                } else {
+                    jsonRobot["ir"] = false;
                 }
                 jsonRobot["team"] = ourColor();
                 jsonRobot["enabled"] = apiRobot.enabled;
@@ -149,6 +152,7 @@ QString API::robotsStatus()
                 jsonRobot["team"] = opponentColor();
                 jsonRobot["enabled"] = false;
                 jsonRobot["charge"] = false;
+                jsonRobot["ir"] = false;
             }
 
             json.append(jsonRobot);
