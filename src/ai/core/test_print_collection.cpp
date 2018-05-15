@@ -16,17 +16,17 @@ TEST(test_print_collection, print_list){
     std::list<std::string> l;
    
     s << l;
-    EXPECT_TRUE( s.str() == "[]" );
+    EXPECT_TRUE( s.str() == "<>" );
     clear(s);
  
     l.push_back( "voiture" );
     s << l;
-    EXPECT_TRUE( s.str() == "[voiture, ]" );
+    EXPECT_TRUE( s.str() == "<voiture, >" );
     clear(s);
 
     l.push_back( "maison" );
     s << l;
-    EXPECT_TRUE( s.str() == "[voiture, maison, ]" );
+    EXPECT_TRUE( s.str() == "<voiture, maison, >" );
     clear(s);
 }
 
