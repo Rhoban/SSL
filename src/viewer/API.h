@@ -8,6 +8,7 @@
 #include <string>
 #include <QObject>
 #include <Data.h>
+#include <Ai.h>
 
 class API : public QObject
 {
@@ -32,7 +33,8 @@ public:
 
     Robot robots[MAX_ROBOTS];
 
-    API(bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander);
+    API(std::string teamName, bool simulation,
+        RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander);
     virtual ~API();
 
     bool simulation;
@@ -101,6 +103,8 @@ public slots:
     void managerPause();
 
 protected:
+    std::string teamName;
+    RhobanSSL::AI *ai;
     RhobanSSL::Data data;
     RhobanSSL::Ai::Team team;
     RhobanSSL::AIVisionClient visionClient;
@@ -110,6 +114,8 @@ protected:
     std::string opponentColor();
 
     std::thread *comThread;
+    std::thread *aiThread;
+
     std::mutex mutex;
 
     std::thread *joystickThread;
@@ -117,5 +123,6 @@ protected:
     int joystickRobot;
 
     void comThreadExec();
+    void aiThreadExec();
     void joystickTrheadExec();
 };

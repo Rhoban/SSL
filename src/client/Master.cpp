@@ -11,7 +11,10 @@ namespace RhobanSSL
 
     bool Master::Robot::isOk()
     {
-        return present && age() < 0.3 && (status.status & STATUS_OK);
+        bool ok = present && age() < 0.5 && (status.status & STATUS_OK);
+        // std::cout << "Status: " << (int)(status.status & STATUS_OK) << ", Present: "
+        // << (int) present << ", Age: " << age() << " ok: " << (int)ok << std::endl;
+        return ok;
     }
 
     Master::Robot::Robot()
