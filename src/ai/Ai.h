@@ -49,6 +49,8 @@ namespace RhobanSSL
         double current_time;
         double current_dt;
 
+        Shared_data shared_data;
+
         Data & data;
         Referee referee;
         std::shared_ptr<Manager::Manager> strategy_manager;
@@ -58,7 +60,8 @@ namespace RhobanSSL
             double time, Ai::Robot & robot, Ai::Ball & ball
         );
 
-        void prepare_to_send_control( int robot_id, Control control );
+        void send_control( int robot_id, const Control & control );
+        void prepare_to_send_control( int robot_id, Control & control );
 
         void limits_velocity( Control & ctrl ) const ;
         void check_time_is_coherent() const;
