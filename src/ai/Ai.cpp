@@ -71,6 +71,9 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
         }
     }
 
+    /* Prevent real collision */ 
+    /* Uncomment for more safety */
+    /*
     std::list< std::pair<int, double> > collisions_with_movement = ai_data.get_collisions(
         robot_id, robot_velocity
     );
@@ -86,7 +89,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
             collision_is_detected = true;
         }
     }
-
+    */
     if( collision_is_detected ){
         double robot_velocity_norm = robot_velocity.norm();
         double velocity_increase = 0.0;
@@ -151,37 +154,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
 
 static MovementSample debug_mov(4);
 
-void AI::prepare_to_send_control( int robot_id, Control ctrl ){
-
-
-#if 0    
-    if( robot_id == 5 ){
-        debug_mov.insert(
-            PositionSample(
-                ai_data.time,
-                vector2point(ctrl.velocity_translation),
-                ctrl.velocity_rotation       
-            )
-        );
-        DEBUG(
-            "ROBOT : " 
-                << ai_data.time << " " 
-                << debug_mov.dt(0) << " "
-                << Vector2d(debug_mov.linear_position(0)).norm() << " "
-                << debug_mov.linear_velocity(0).norm() << " "
-                << ai_data.dt << " " 
-                << ai_data.robots[Vision::Ally][robot_id].get_movement().linear_velocity(ai_data.time).norm() << " "
-                << ai_data.robots[Vision::Ally][robot_id].get_movement().linear_acceleration(ai_data.time).norm() << " "
-         );
-    }
-#endif
-
-    prevent_collision( robot_id, ctrl );
-    ctrl = ctrl.relative_control(
-        ai_data.robots[Vision::Ally][robot_id].get_movement().angular_position( ai_data.time ), ai_data.dt
-    );
-    limits_velocity(ctrl);
-
+void AI::send_control( int robot_id, const Control & ctrl ){
     #ifdef SSL_SIMU
         double sign_y = 1.0;
     #else
@@ -224,6 +197,36 @@ void AI::prepare_to_send_control( int robot_id, Control ctrl ){
             );
         }
     }
+}
+
+void AI::prepare_to_send_control( int robot_id, Control & ctrl ){
+#if 0    
+    if( robot_id == 5 ){
+        debug_mov.insert(
+            PositionSample(
+                ai_data.time,
+                vector2point(ctrl.velocity_translation),
+                ctrl.velocity_rotation       
+            )
+        );
+        DEBUG(
+            "ROBOT : " 
+                << ai_data.time << " " 
+                << debug_mov.dt(0) << " "
+                << Vector2d(debug_mov.linear_position(0)).norm() << " "
+                << debug_mov.linear_velocity(0).norm() << " "
+                << ai_data.dt << " " 
+                << ai_data.robots[Vision::Ally][robot_id].get_movement().linear_velocity(ai_data.time).norm() << " "
+                << ai_data.robots[Vision::Ally][robot_id].get_movement().linear_acceleration(ai_data.time).norm() << " "
+         );
+    }
+#endif
+
+    prevent_collision( robot_id, ctrl );
+    ctrl = ctrl.relative_control(
+        ai_data.robots[Vision::Ally][robot_id].get_movement().angular_position( ai_data.time ), ai_data.dt
+    );
+    limits_velocity(ctrl);
 }
 
 Control AI::update_robot( 
@@ -298,30 +301,21 @@ void AI::update_robots( ){
     
     auto team = Vision::Ally;
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
+        Shared_data::Final_control & final_control = shared_data.final_control_for_robots[robot_id]; 
+        if( final_control.is_disabled_by_viewer  ){
+            final_control.control = Control::make_desactivated();
+        }else if( ! final_control.is_manually_controled_by_viewer ){
+            Ai::Robot & robot = ai_data.robots[team][robot_id];
 
-        Ai::Robot & robot = ai_data.robots[team][robot_id];
-
-        Robot_behavior::RobotBehavior & robot_behavior = *( 
-            robot_behaviors[robot_id] 
-        );
-        Control ctrl = update_robot( 
-            robot_behavior, time, robot, ball
-        ); 
-#if 0 
-        if(team == Vision::Ally && robot_id == TeamId::shooter_id){                
-            DEBUG( "sample : " << robot.get_movement().get_sample() );
-            DEBUG( "derivate : " << robot.get_movement().get_sample() );
-            DEBUG( "linear position : " << robot.get_movement().linear_position(this->current_time) );
-            DEBUG( "angular position : " << robot.get_movement().angular_position(this->current_time) );
-            DEBUG( "linear velocity : " << robot.get_movement().linear_velocity(this->current_time) );
-            DEBUG( "angular velocity : " << robot.get_movement().angular_velocity(this->current_time) );
-            DEBUG( "linear acceleration : " << robot.get_movement().linear_acceleration(this->current_time) );
-            DEBUG( "angular acceleration : " << robot.get_movement().angular_acceleration(this->current_time) );
-            DEBUG( "ctrl : " << ctrl );
-        }
-#endif
-
-        prepare_to_send_control( robot_id, ctrl );
+            Robot_behavior::RobotBehavior & robot_behavior = *( 
+                robot_behaviors[robot_id] 
+            );
+            final_control.control = update_robot( 
+                robot_behavior, time, robot, ball
+            );
+            prepare_to_send_control( robot_id, final_control.control );
+        } 
+        send_control( robot_id, final_control.control );
     }
     commander->flush();
 }
@@ -370,7 +364,12 @@ void AI::run(){
         //if( ai_data.table_of_collision_times.size() != 0 ){
         //   DEBUG( ai_data.table_of_collision_times );
         //}
+
+        data >> shared_data;    
+    
         update_robots( );
+        
+        data << shared_data;    
     }
 }
 

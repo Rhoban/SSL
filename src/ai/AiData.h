@@ -69,6 +69,8 @@ struct Field : Vision::Field {
 
 struct Constants {
 
+    static constexpr int NB_OF_ROBOTS_BY_TEAM = 8;
+
     static constexpr double WHEEL_RADIUS = 0.03; // In meter
     static constexpr double WHEEL_EXCENTRICITY = 0.08; // In meter
     static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 100.0; // TODO : SET TO 10 turn by second
