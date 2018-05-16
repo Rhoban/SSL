@@ -12,8 +12,6 @@
 
 #define TEAM_NAME "AMC"
 
-static volatile bool running = true;
-
 using namespace RhobanSSL;
 AI *ai = NULL;
 
