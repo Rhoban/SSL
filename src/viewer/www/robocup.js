@@ -850,6 +850,12 @@ function Manager(viewer)
             $('.robot-'+k+' .enable-disable').prop('disabled', !robot.manual);
             $('.robot-'+k+' .active').prop('disabled', !robot.manual);
 
+            if (robot.manual) {
+                $('.robot-'+k+' .manual-control-zone').show();
+            } else {
+                $('.robot-'+k+' .manual-control-zone').hide();
+            }
+
             var div = $('.robot-'+k);
             div.find('.robot-warning').hide();
             div.find('.robot-warning-text').hide();
