@@ -9,12 +9,17 @@ namespace RhobanSSL
 {
     AIVisionClient::AIVisionClient(
         Data& shared_data, Ai::Team myTeam, bool simulation
-    ): VisionClient(simulation), shared_data(shared_data), myTeam(myTeam) 
+    ): VisionClient(simulation), shared_data(shared_data), myTeam(myTeam)
     {
     }
 
     void AIVisionClient::setRobotPos(Ai::Team team, int id, double x, double y, double orientation)
     {
+        Data_from_ai data_from_ai;
+        shared_data >> data_from_ai;
+
+        myTeam = data_from_ai.team_color;
+        
         RhobanSSL::Vision::Team visionTeam = RhobanSSL::Vision::Ally;
         if (team != myTeam) {
             visionTeam = RhobanSSL::Vision::Opponent;
@@ -34,7 +39,7 @@ namespace RhobanSSL
     {
         Data_from_ai data_from_ai;
         shared_data >> data_from_ai;
-        
+
         myTeam = data_from_ai.team_color;
         // Retrieving field dimensions
         auto geometry = data.geometry();
