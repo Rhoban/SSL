@@ -30,6 +30,9 @@ public slots:
     // Vision communication statistics
     QString visionStatus();
 
+    // Status of the referee
+    QString refereeStatus();
+
     // Get the status of all robots
     QString robotsStatus();
 

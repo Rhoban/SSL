@@ -107,7 +107,9 @@ bool API::isSimulation()
 
 bool API::isYellow()
 {
-    return team == RhobanSSL::Ai::Yellow;
+    Data_from_ai data_from_ai;
+    data >> data_from_ai;
+    return data_from_ai.team_color == Ai::Team::Yellow;
 }
 
 QString API::visionStatus()
@@ -116,6 +118,26 @@ QString API::visionStatus()
 
     json["hasData"] = visionClient.hasData();
     json["packets"] = visionClient.getPackets();
+
+    return js(json);
+}
+
+QString API::refereeStatus()
+{
+    Json::Value json;
+
+    auto &referee = ai->getReferee();
+    auto &refereeClient = referee.getRefereeClient();
+    SSL_Referee data = refereeClient.getData();
+    json["our_color"] = ourColor();
+    json["hasData"] = refereeClient.hasData();
+    json["packets"] = refereeClient.getPackets();
+    json["stage"] = SSL_Referee_Stage_Name(data.stage());
+    json["command"] = SSL_Referee_Command_Name(data.command());
+    json["time_left"] = data.stage_time_left();
+    json["blue_positive"] = data.blueteamonpositivehalf();
+    json["yellow_name"] = data.yellow().name();
+    json["blue_name"] = data.blue().name();
 
     return js(json);
 }
@@ -222,7 +244,7 @@ void API::moveRobot(bool yellow, int id, double x, double y, double theta)
 {
     mutex.lock();
     commander->moveRobot(yellow, id, x, y, theta, true);
-    visionClient.setRobotPos(yellow ? RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
+    visionClient.setRobotPos(yellow ? Ai::Team::Yellow : Ai::Team::Blue,
         id, x, y, theta);
     mutex.unlock();
 }
@@ -359,11 +381,10 @@ void API::emergencyStop()
 
 std::string API::ourColor()
 {
-    if (isYellow()) {
-        return "yellow";
-    } else {
-        return "blue";
-    }
+    Data_from_ai data_from_ai;
+    data >> data_from_ai;
+
+    return data_from_ai.team_color == Ai::Team::Yellow ? "yellow" : "blue";
 }
 
 std::string API::opponentColor()
@@ -562,9 +583,9 @@ QString API::getAnnotations()
 
     // XXX: Annotations examples, this should be later wired to come from the AI
     // strategy
-    annotations.addCircle(3, 3, 1, "cyan");
-    annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
-    annotations.addCross(-3, 0, "red");
+    // annotations.addCircle(3, 3, 1, "cyan");
+    // annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+    // annotations.addCross(-3, 0, "red");
     // XXX: Texte
     // XXX: Segment
 

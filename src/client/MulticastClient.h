@@ -43,7 +43,7 @@ public:
     /**
      * Is there valid received packet ?
      */
-    bool hasData();
+    bool hasData() const;
 
     /**
      * How many packets were received ?

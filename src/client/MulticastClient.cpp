@@ -151,7 +151,7 @@ namespace RhobanSSL
         }
     }
 
-    bool MulticastClient::hasData()
+    bool MulticastClient::hasData() const
     {
         if (receivedData) {
             auto delta = diffMs(lastData, TimeStamp::now());
@@ -168,11 +168,6 @@ namespace RhobanSSL
 
     unsigned int MulticastClient::getPackets()
     {
-        unsigned int tmp;
-        mutex.lock();
-        tmp = packets;
-        mutex.unlock();
-
-        return tmp;
+        return packets;
     }
 }

@@ -22,12 +22,14 @@ namespace RhobanSSL
         AI(
             std::string team_name,
             Ai::Team default_team,
-            Data & data, 
+            Data & data,
             AICommander *commander
         );
 
         void run();
         void stop();
+
+        Referee &getReferee();
 
     protected:
         bool running;
@@ -40,10 +42,10 @@ namespace RhobanSSL
         AICommander *commander;
 
         std::map<
-            int, 
+            int,
             std::shared_ptr<Robot_behavior::RobotBehavior>
         > robot_behaviors;
-        
+
         void init_robot_behaviors();
         void update_robots( );
         double current_time;
@@ -54,8 +56,8 @@ namespace RhobanSSL
         Data & data;
         Referee referee;
         std::shared_ptr<Manager::Manager> strategy_manager;
-        
-        Control update_robot( 
+
+        Control update_robot(
             Robot_behavior::RobotBehavior & robot_behavior,
             double time, Ai::Robot & robot, Ai::Ball & ball
         );

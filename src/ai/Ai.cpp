@@ -388,4 +388,9 @@ void AI::share_data(){
     data << data_from_ai;
 }
 
+Referee &AI::getReferee()
+{
+    return referee;
+}
+
 }

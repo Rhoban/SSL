@@ -50,7 +50,7 @@ struct Referee_Id {
 
 
 struct Referee_data {
-    
+
     //datas[0] is the most recent
     //datas[1] the older
     circular_vector<SSL_Referee> datas;
@@ -87,7 +87,7 @@ private:
     Ai::Team team_having_kickoff;
 public:
     Referee();
-    
+
     unsigned int edge_entropy() const ;
     const ID & get_state() const ;
 
@@ -95,10 +95,12 @@ public:
     Ai::Team kickoff_team() const ;
 
     bool blue_have_it_s_goal_on_positive_x_axis() const;
-    Ai::Team get_team_color( const std::string & team_name ) const;    
+    Ai::Team get_team_color( const std::string & team_name ) const;
 
     int yellow_goalie_id() const;
     int blue_goalie_id() const;
+
+    RefereeClient &getRefereeClient();
 
 };
 

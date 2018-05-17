@@ -52,4 +52,6 @@ qt5_use_modules(viewer
     Widgets
 )
 
-target_link_libraries(viewer ${catkin_LIBRARIES} pthread)
+find_package(Protobuf REQUIRED)
+
+target_link_libraries(viewer ${catkin_LIBRARIES} pthread ${PROTOBUF_LIBRARIES})

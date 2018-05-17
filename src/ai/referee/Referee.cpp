@@ -4,33 +4,33 @@
 
 namespace RhobanSSL {
 
-const std::string Referee_Id::STATE_INIT = "init"; 
+const std::string Referee_Id::STATE_INIT = "init";
 const std::string Referee_Id::STATE_HALTED = "halted";
-const std::string Referee_Id::STATE_STOPPED = "stopped"; 
+const std::string Referee_Id::STATE_STOPPED = "stopped";
 const std::string Referee_Id::STATE_PREPARE_KICKOFF = "prepare_kickoff";
 const std::string Referee_Id::STATE_PREPARE_PENALTY = "prepare_penalty";
 const std::string Referee_Id::STATE_RUNNING = "running";
 const std::string Referee_Id::STATE_TIMEOUT = "timeout";
 
 const std::string Referee_Id::EDGE_INIT_TO_STOPPED = "stop_game_u";
-const std::string Referee_Id::EDGE_HALTED_TO_STOPPED = "stop_game_h"; 
-const std::string Referee_Id::EDGE_PREPARE_KICKOFF_TO_STOPPED = "stop_game_pk"; 
-const std::string Referee_Id::EDGE_PREPARE_PENALTY_TO_STOPPED = "stop_game_pp"; 
-const std::string Referee_Id::EDGE_RUNNING_TO_STOPPED = "stop_game_r"; 
-const std::string Referee_Id::EDGE_TIMEOUT_TO_STOPPED = "stop_game_t"; 
+const std::string Referee_Id::EDGE_HALTED_TO_STOPPED = "stop_game_h";
+const std::string Referee_Id::EDGE_PREPARE_KICKOFF_TO_STOPPED = "stop_game_pk";
+const std::string Referee_Id::EDGE_PREPARE_PENALTY_TO_STOPPED = "stop_game_pp";
+const std::string Referee_Id::EDGE_RUNNING_TO_STOPPED = "stop_game_r";
+const std::string Referee_Id::EDGE_TIMEOUT_TO_STOPPED = "stop_game_t";
 
-const std::string Referee_Id::EDGE_INIT_TO_HALTED = "halt_game_u"; 
-const std::string Referee_Id::EDGE_STOPPED_TO_HALTED = "halt_game_s"; 
-const std::string Referee_Id::EDGE_PREPARE_KICKOFF_TO_HALTED = "halt_game_pk"; 
-const std::string Referee_Id::EDGE_PREPARE_PENALTY_TO_HALTED = "halt_game_pp"; 
-const std::string Referee_Id::EDGE_RUNNING_TO_HALTED = "halt_game_r"; 
-const std::string Referee_Id::EDGE_TIMEOUT_TO_HALTED = "halt_game_t"; 
+const std::string Referee_Id::EDGE_INIT_TO_HALTED = "halt_game_u";
+const std::string Referee_Id::EDGE_STOPPED_TO_HALTED = "halt_game_s";
+const std::string Referee_Id::EDGE_PREPARE_KICKOFF_TO_HALTED = "halt_game_pk";
+const std::string Referee_Id::EDGE_PREPARE_PENALTY_TO_HALTED = "halt_game_pp";
+const std::string Referee_Id::EDGE_RUNNING_TO_HALTED = "halt_game_r";
+const std::string Referee_Id::EDGE_TIMEOUT_TO_HALTED = "halt_game_t";
 
-const std::string Referee_Id::EDGE_TIMEOUT_START = "timeout_start"; 
-const std::string Referee_Id::EDGE_FORCE_START = "force_start"; 
-const std::string Referee_Id::EDGE_KICKOFF_YELLOW = "kickoff_yellow"; 
-const std::string Referee_Id::EDGE_KICKOFF_BLUE = "kickoff_blue"; 
-const std::string Referee_Id::EDGE_PENALTY = "penalty"; 
+const std::string Referee_Id::EDGE_TIMEOUT_START = "timeout_start";
+const std::string Referee_Id::EDGE_FORCE_START = "force_start";
+const std::string Referee_Id::EDGE_KICKOFF_YELLOW = "kickoff_yellow";
+const std::string Referee_Id::EDGE_KICKOFF_BLUE = "kickoff_blue";
+const std::string Referee_Id::EDGE_PENALTY = "penalty";
 const std::string Referee_Id::EDGE_INDIRECT = "indirect";
 const std::string Referee_Id::EDGE_DIRECT = "direct";
 
@@ -68,28 +68,28 @@ bool Referee_data::command_is_new() const {
 
 template <SSL_Referee_Command E>
 bool command_is_(
-    const Referee_data & referee_data, 
+    const Referee_data & referee_data,
     unsigned int run_number, unsigned int atomic_run_number
 ){
     return (
-        referee_data.command_is_new() 
+        referee_data.command_is_new()
     ) and (
         referee_data.current().command() == E
-    ); 
+    );
 }
 
 template <SSL_Referee_Command E1, SSL_Referee_Command E2>
 bool command_is_one_of_(
-    const Referee_data & referee_data, 
+    const Referee_data & referee_data,
     unsigned int run_number, unsigned int atomic_run_number
 ){
     return (
-        referee_data.command_is_new() 
+        referee_data.command_is_new()
     ) and (
         ( referee_data.current().command() == E1 )
-        or 
-        ( referee_data.current().command() == E2 ) 
-    ); 
+        or
+        ( referee_data.current().command() == E2 )
+    );
 }
 
 
@@ -110,7 +110,7 @@ Referee::Referee():
     ;
 
 
-    machine_state  
+    machine_state
         .add_edge(
             Referee_Id::EDGE_INIT_TO_STOPPED,
             Referee_Id::STATE_INIT, Referee_Id::STATE_STOPPED,
@@ -142,8 +142,8 @@ Referee::Referee():
             command_is_<SSL_Referee::STOP>
         )
     ;
-   
-    machine_state  
+
+    machine_state
         .add_edge(
             Referee_Id::EDGE_INIT_TO_HALTED,
             Referee_Id::STATE_INIT, Referee_Id::STATE_HALTED,
@@ -193,7 +193,7 @@ Referee::Referee():
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_KICKOFF,
         command_is_< SSL_Referee::PREPARE_KICKOFF_YELLOW>,
         [&](
-            const Referee_data & referee_data, 
+            const Referee_data & referee_data,
             unsigned int run_number, unsigned int atomic_run_number
         ){
             team_having_kickoff = Ai::Yellow;
@@ -204,7 +204,7 @@ Referee::Referee():
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_KICKOFF,
         command_is_<SSL_Referee::PREPARE_KICKOFF_BLUE>,
         [&](
-            const Referee_data & referee_data, 
+            const Referee_data & referee_data,
             unsigned int run_number, unsigned int atomic_run_number
         ){
             team_having_kickoff = Ai::Blue;
@@ -272,8 +272,8 @@ Referee::Referee():
 }
 
 void Referee::extract_data(){
-    SSL_Referee data = referee.getData(); 
-        // Use this function just one time if you want to avoir thread 
+    SSL_Referee data = referee.getData();
+        // Use this function just one time if you want to avoir thread
         // issue.
     if( referee_data.last_time < data.packet_timestamp() ){
         referee_data.datas.insert( data );
@@ -286,11 +286,11 @@ void Referee::extract_data(){
 void Referee::save_last_time_stamps(){
     if( referee_data.last_time < referee_data.current().packet_timestamp() ){
         referee_data.last_time = referee_data.current().packet_timestamp();
-        
-        if( 
-            referee_data.last_command_counter < 
-            referee_data.current().command_counter() 
-        ){ 
+
+        if(
+            referee_data.last_command_counter <
+            referee_data.current().command_counter()
+        ){
             referee_data.last_command_counter = referee_data.current().command_counter();
             DEBUG( "Command is : " << referee_data.current().command() );
             DEBUG( "State is : " << machine_state.current_states() );
@@ -339,6 +339,11 @@ Ai::Team Referee::get_team_color( const std::string & team_name ) const {
         return Ai::Blue;
     }
     return Ai::Unknown;
-};    
+};
+
+RefereeClient &Referee::getRefereeClient()
+{
+    return referee;
+}
 
 }

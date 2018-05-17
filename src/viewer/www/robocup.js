@@ -13,6 +13,11 @@ var field = {
     boundaryWidth: 0.25
 };
 
+// Blue on positive ?
+var bluePositive = true;
+var yellowName = 'yellow';
+var blueName = 'blue';
+
 // Robots
 var robots = {
     'yellow': {},
@@ -20,7 +25,7 @@ var robots = {
 };
 
 // Our team color
-var ourColor = 'yellow';
+var ourColor = 'blue';
 
 // Is it simulation ?
 var simulation = false;
@@ -214,6 +219,10 @@ function Viewer()
             var mpos = this.mousePosMeters();
 
             ctx.fillText("X: "+mpos[0].toFixed(2)+"m, Y: "+mpos[1].toFixed(2)+"m", 10, 20);
+            ctx.fillStyle = this.grColor('yellow');
+            ctx.fillText('Yellow: '+yellowName, 10, 40);
+            ctx.fillStyle = this.grColor('blue');
+            ctx.fillText('Blue: '+blueName, 10, 60);
 
             // Moving the view offset
             if (this.dragging) {
@@ -274,7 +283,7 @@ function Viewer()
         ctx.arc(0, 0, field.centerCircleRadius, 0, Math.PI*2);
         ctx.stroke();
 
-        function drawGoals(ctx, color) {
+        function drawGoals(ctx, color, teamName) {
             // Goals zone
             ctx.strokeStyle = '#aaa';
             ctx.lineWidth = field.linesThickness;
@@ -296,10 +305,15 @@ function Viewer()
         }
 
         // Drawing (symmetrically) goals
-        drawGoals(ctx, this.reversed ? this.grColor('blue') : this.grColor('yellow'));
         ctx.save();
-        ctx.scale(-1, 1);
-        drawGoals(ctx, this.reversed ? this.grColor('yellow') : this.grColor('blue'));
+        if (!bluePositive) ctx.scale(-1, 1);
+        drawGoals(ctx, this.reversed ? this.grColor('blue') : this.grColor('yellow'));
+        ctx.restore();
+
+        ctx.save();
+        if (bluePositive) ctx.scale(-1, 1);
+        drawGoals(ctx, this.reversed ? this.grColor('yellow') : this.grColor('blue'),
+            bluePositive ? blueName : yellowName);
         ctx.restore();
     };
 
@@ -925,16 +939,6 @@ function Manager(viewer)
                 viewer.greenred = $(this).is(':checked');
             });
 
-            $('.we-are-color').text('We are: '+ourColor);
-            $('.we-are-color').click(function() {
-                if (ourColor == 'yellow') {
-                    ourColor = 'blue';
-                } else {
-                    ourColor = 'yellow';
-                }
-                $(this).text('We are: '+ourColor);
-            });
-
             $('.reset-view').click(function() {
                 viewer.resetRatio();
             });
@@ -967,6 +971,8 @@ function Manager(viewer)
                 api.stopJoystick();
             });
         }
+
+        $('.we-are-color').text('We are: '+ourColor);
     };
 
     this.viewer = viewer;
@@ -1010,6 +1016,30 @@ function Manager(viewer)
             $('.vision-infos').text(vision.packets+' packets received');
         } else {
             $('.vision-warning').show();
+        }
+    };
+
+    this.refereePanel = function()
+    {
+        var referee = JSON.parse(api.refereeStatus());
+
+        // Updating referee panel
+        if (referee.hasData) {
+            $('.referee-warning').hide();
+            var html = '';
+            html += '<b>Stage</b>: '+referee.stage+'<br/>';
+            html += '<b>Time left</b>: '+(referee.time_left/1000000.0).toFixed(2)+'s<br/>';
+            html += '<b>Command</b>: '+referee.command+'<br/>';
+            html += '<hr/>';
+            html += referee.packets+' packets received';
+            ourColor = referee.our_color;
+            yellowName = referee.yellow_name;
+            blueName = referee.blue_name;
+
+            bluePositive = referee.blue_positive;
+            $('.referee-infos').html(html);
+        } else {
+            $('.referee-warning').show();
         }
     };
 
@@ -1107,6 +1137,8 @@ function Manager(viewer)
         }
     };
 
+    this.divider = 10;
+
     this.update = function(init)
     {
         this.updateApi();
@@ -1114,20 +1146,25 @@ function Manager(viewer)
         // Handling robots management panel
         this.robotsPanel(init);
 
-        // Viewer options panel
-        this.optionsPanel(init);
+        this.divider++;
+        if (this.divider >= 10) {
+            // Viewer options panel
+            this.optionsPanel(init);
 
-        // Referee panel
-        this.refereePanel(init);
+            // Referee panel
+            this.refereePanel(init);
 
-        // Vision panel
-        this.visionPanel(init);
+            // Vision panel
+            this.visionPanel(init);
 
-        // Communication panel
-        this.communicationPanel(init);
+            // Communication panel
+            this.communicationPanel(init);
 
-        // Strategies panel
-        this.strategiesPanel(init);
+            // Strategies panel
+            this.strategiesPanel(init);
+
+            this.divider = 0;
+        }
     };
 
     this.update(true);
