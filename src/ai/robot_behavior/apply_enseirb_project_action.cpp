@@ -8,7 +8,7 @@ Apply_enseirb_project_action::Apply_enseirb_project_action(
     Ai::AiData & ai_data,
     const enseirb::Action& action, double time, double dt
 ):
-    Navigation_with_obstacle_avoidance( ai_data, time, dt),
+    A_star_path( ai_data, time, dt),
     action( action )
 { }
 
@@ -34,10 +34,10 @@ void Apply_enseirb_project_action::update(
         linear_position, angular_position
     );
 
-    Navigation_with_obstacle_avoidance::update_control( time, robot, ball );   
+    A_star_path::update_control( time, robot, ball );   
 }
 Control Apply_enseirb_project_action::control() const {
-    Control ctrl = Navigation_with_obstacle_avoidance::control(); 
+    Control ctrl = A_star_path::control(); 
     ctrl.kick = false;
     ctrl.active = true;
     ctrl.ignore = false;

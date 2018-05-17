@@ -81,8 +81,7 @@ void Navigation_with_obstacle_avoidance::convert_cycle_direction_to_linear_and_a
     Control follower_control = position_follower.control();
     avoidance_control.velocity_rotation = follower_control.velocity_rotation;
     avoidance_control.velocity_translation = limit_cycle_direction*(
-        follower_control.velocity_translation.norm(),
-        this->robot_linear_velocity.norm()/limit_cycle_direction.norm()
+        follower_control.velocity_translation.norm()/limit_cycle_direction.norm()
     );
 }
 
