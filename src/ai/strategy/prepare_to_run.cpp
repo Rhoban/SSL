@@ -1,6 +1,6 @@
 #include "prepare_to_run.h"
 #include <robot_behavior/position_follower.h>
-#include <robot_behavior/navigation_with_obstacle_avoidance.h>
+#include <robot_behavior/a_star_path.h>
 
 namespace RhobanSSL {
 namespace Strategy {
@@ -33,7 +33,7 @@ Robot_behavior::RobotBehavior* Prepare_to_run::create_follower(
     double time, double dt
 ) const {
     //Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(ai_data, time, dt);
-    Robot_behavior::Navigation_with_obstacle_avoidance* follower = new Robot_behavior::Navigation_with_obstacle_avoidance(ai_data, time, dt);
+    Robot_behavior::A_star_path* follower = new Robot_behavior::A_star_path(ai_data, time, dt);
     follower->set_following_position(
         follower_position, angle
     );

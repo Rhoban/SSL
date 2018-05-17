@@ -27,6 +27,10 @@ class Prepare_kickoff : public Strategy {
             double time, double dt
         ) const;
 
+        void set_starting_position(
+            const std::vector< rhoban_geometry::Point > & starting_position
+        );
+
         void start(double time);
         void stop(double time);
 

@@ -28,6 +28,7 @@ set (SOURCES
     robot_behavior/position_follower.cpp
     robot_behavior/shooter.cpp
     robot_behavior/do_nothing.cpp
+    robot_behavior/a_star_path.cpp
     robot_behavior/robot_behavior.cpp
     robot_behavior/apply_enseirb_project_action.cpp
     robot_behavior/navigation_with_obstacle_avoidance.cpp
