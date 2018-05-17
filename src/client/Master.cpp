@@ -78,7 +78,7 @@ namespace RhobanSSL
                 waiting = false;
             }
             // XXX: This timeout should be adjusted
-            if (diffSec(lastSend, rhoban_utils::TimeStamp::now()) > 0.02) {
+            if (diffSec(lastSend, rhoban_utils::TimeStamp::now()) > 0.03) {
                 waiting = false;
             }
             mutex.unlock();
