@@ -155,11 +155,6 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
 static MovementSample debug_mov(4);
 
 void AI::send_control( int robot_id, const Control & ctrl ){
-    #ifdef SSL_SIMU
-        double sign_y = 1.0;
-    #else
-        double sign_y = -1.0;
-    #endif
 
     #ifdef SSL_SIMU
         int map_id;
@@ -189,7 +184,7 @@ void AI::send_control( int robot_id, const Control & ctrl ){
 
             commander->set(
                 map_id, true,
-                velocity_translation[0], sign_y*velocity_translation[1],
+                velocity_translation[0], velocity_translation[1],
                 ctrl.velocity_rotation.value(),
                 kick,
                 ctrl.spin,
