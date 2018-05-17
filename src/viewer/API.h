@@ -15,24 +15,6 @@ class API : public QObject
     Q_OBJECT
 
 public:
-    // Robot objects
-    struct Robot
-    {
-        int id;
-        bool enabled;
-
-        float xSpeed;
-        float ySpeed;
-        float thetaSpeed;
-
-        bool spin;
-        bool charge;
-        int kick;
-        int kickPower;
-    };
-
-    Robot robots[MAX_ROBOTS];
-
     API(std::string teamName, bool simulation,
         RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander);
     virtual ~API();
@@ -62,6 +44,12 @@ public slots:
 
     // Enable/disable a robot
     void enableRobot(int id, bool enabled);
+
+    // Manual control a robot
+    void manualControl(int id, bool manual);
+
+    // Active the robot
+    void activeRobot(int id, bool active);
 
     // Commands a robot
     void robotCommand(int id,
@@ -122,7 +110,7 @@ protected:
     RhobanSSL::Joystick *joystick;
     int joystickRobot;
 
-    void comThreadExec();
+    // void comThreadExec();
     void aiThreadExec();
-    void joystickTrheadExec();
+    void joystickThreadExec();
 };

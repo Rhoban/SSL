@@ -13,7 +13,7 @@
 namespace RhobanSSL
 {
 
-        
+
 void AI::check_time_is_coherent() const {
     #ifndef NDEBUG
     for( unsigned int i=0; i<ai_data.all_robots.size(); i++ ){
@@ -26,9 +26,9 @@ void AI::check_time_is_coherent() const {
 
 void AI::limits_velocity( Control & ctrl ) const {
     if( ai_data.constants.translation_velocity_limit > 0.0 ){
-        if( 
-            ctrl.velocity_translation.norm() > 
-            ai_data.constants.translation_velocity_limit 
+        if(
+            ctrl.velocity_translation.norm() >
+            ai_data.constants.translation_velocity_limit
         ){
             ctrl.velocity_translation = Vector2d(0.0, 0.0);
             std::cerr << "AI WARNING : we reached the "
@@ -36,9 +36,9 @@ void AI::limits_velocity( Control & ctrl ) const {
         }
     }
     if( ai_data.constants.rotation_velocity_limit > 0.0 ){
-        if( 
-            std::fabs( ctrl.velocity_rotation.value() ) > 
-            ai_data.constants.rotation_velocity_limit 
+        if(
+            std::fabs( ctrl.velocity_rotation.value() ) >
+            ai_data.constants.rotation_velocity_limit
         ){
             ctrl.velocity_rotation = 0.0;
             std::cerr << "AI WARNING : we reached the "
@@ -49,12 +49,12 @@ void AI::limits_velocity( Control & ctrl ) const {
 
 void AI::prevent_collision( int robot_id, Control & ctrl ){
     const Ai::Robot & robot = ai_data.robots.at(Vision::Team::Ally).at(robot_id);
-    
+
     const Vector2d & ctrl_velocity = ctrl.velocity_translation;
     Vector2d robot_velocity = robot.get_movement().linear_velocity( ai_data.time );
 
     bool collision_is_detected = false;
-    
+
     std::list< std::pair<int, double> > collisions_with_ctrl = ai_data.get_collisions(
         robot_id, ctrl_velocity
     );
@@ -71,7 +71,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
         }
     }
 
-    /* Prevent real collision */ 
+    /* Prevent real collision */
     /* Uncomment for more safety */
     /*
     std::list< std::pair<int, double> > collisions_with_movement = ai_data.get_collisions(
@@ -101,28 +101,28 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
             }
         }
         ctrl.velocity_translation = robot_velocity * velocity_increase;
-    } 
+    }
 
 #if 0
     //TODO improve the loop to work fast
     for( const std::pair< std::pair<int,int>, double > & elem : ai_data.table_of_collision_times ){
         const std::pair<int ,int> & collision = elem.first;
         Ai::Robot* robot = 0;
-        if( 
+        if(
             ( ai_data.all_robots[ collision.first ].second->id() == robot_id )
             and
             ( ai_data.all_robots[ collision.first ].first == Vision::Team::Ally )
         ){
             robot = ai_data.all_robots[ collision.first ].second;
         }
-        if( 
+        if(
             ( ai_data.all_robots[ collision.second ].second->id() == robot_id )
             and
             ( ai_data.all_robots[ collision.first ].first == Vision::Team::Ally )
         ){
             robot = ai_data.all_robots[ collision.second ].second;
         }
-        if( robot ){ 
+        if( robot ){
             //DEBUG("We stop Robot " << robot_id << " to prevent collision.");
             double time_before_collision = elem.second;
             //DEBUG( "time before collision : " << time );
@@ -145,7 +145,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
                 }
                 velocity_increase = 0.0;
                 ctrl.velocity_translation = velocity * velocity_increase;
-            } 
+            }
         }
     }
 #endif
@@ -162,13 +162,6 @@ void AI::send_control( int robot_id, const Control & ctrl ){
     #endif
 
     #ifdef SSL_SIMU
-    #else
-    if( ctrl.kick and enable_kicking ){
-        commander->kick();
-    }
-    #endif
-
-    #ifdef SSL_SIMU
         int map_id;
         map_id = robot_id;
     #else
@@ -180,42 +173,49 @@ void AI::send_control( int robot_id, const Control & ctrl ){
         }
     #endif
 
-    
     if ( !ctrl.ignore) {
         if( ! ctrl.active ){
             commander->set(
-                map_id, true, 0.0, 0.0, 0.0 
+                map_id, true, 0.0, 0.0, 0.0
             );
         }else{
             Vector2d velocity_translation = ai_data.team_point_of_view.from_basis(
                 ctrl.velocity_translation
             );
+
+            int kick = 0;
+            if (ctrl.kick) kick = 1;
+            else if (ctrl.chipKick) kick = 2;
+
             commander->set(
-                map_id, true, 
-                velocity_translation[0], sign_y*velocity_translation[1], 
-                ctrl.velocity_rotation.value()
+                map_id, true,
+                velocity_translation[0], sign_y*velocity_translation[1],
+                ctrl.velocity_rotation.value(),
+                kick,
+                ctrl.spin,
+                ctrl.charge
             );
         }
     }
 }
 
 void AI::prepare_to_send_control( int robot_id, Control & ctrl ){
-#if 0    
+#if 0
     if( robot_id == 5 ){
         debug_mov.insert(
             PositionSample(
                 ai_data.time,
                 vector2point(ctrl.velocity_translation),
-                ctrl.velocity_rotation       
+                ctrl.velocity_rotation
             )
         );
         DEBUG(
-            "ROBOT : " 
-                << ai_data.time << " " 
+            "ROBOT : "
+                << ai_data.time << " "
                 << debug_mov.dt(0) << " "
                 << Vector2d(debug_mov.linear_position(0)).norm() << " "
                 << debug_mov.linear_velocity(0).norm() << " "
-                << ai_data.dt << " " 
+                << ai_data.dt << " "
                 << ai_data.robots[Vision::Ally][robot_id].get_movement().linear_velocity(ai_data.time).norm() << " "
                 << ai_data.robots[Vision::Ally][robot_id].get_movement().linear_acceleration(ai_data.time).norm() << " "
          );
@@ -229,14 +229,14 @@ void AI::prepare_to_send_control( int robot_id, Control & ctrl ){
     limits_velocity(ctrl);
 }
 
-Control AI::update_robot( 
+Control AI::update_robot(
     Robot_behavior::RobotBehavior & robot_behavior,
     double time, Ai::Robot & robot, Ai::Ball & ball
 ){
     if( robot.isOk() ){
         robot_behavior.update(time, robot, ball);
         Control ctrl = robot_behavior.control();
-        return ctrl; 
+        return ctrl;
     }else{
         return Control::make_desactivated();
     }
@@ -257,11 +257,11 @@ void AI::init_robot_behaviors(){
 AI::AI(
     std::string team_name,
     Ai::Team default_team,
-    Data& data, 
+    Data& data,
     AICommander *commander
 ):
     team_name(team_name),
-    default_team(default_team), 
+    default_team(default_team),
     running(true),
     commander(commander),
     current_dt(0.0),
@@ -273,7 +273,7 @@ AI::AI(
     for( auto elem : robot_behaviors ){
         robot_ids[i] = elem.first;
         i++;
-    } 
+    }
     #ifdef SSL_SIMU
     int goalie_id = 5;
     #else
@@ -298,26 +298,26 @@ void AI::update_robots( ){
 
     double time =  this->current_time;
     Ai::Ball & ball = ai_data.ball;
-    
+
     auto team = Vision::Ally;
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
-        Shared_data::Final_control & final_control = shared_data.final_control_for_robots[robot_id]; 
+        Shared_data::Final_control & final_control = shared_data.final_control_for_robots[robot_id];
         if( final_control.is_disabled_by_viewer  ){
             final_control.control = Control::make_desactivated();
         }else if( ! final_control.is_manually_controled_by_viewer ){
             Ai::Robot & robot = ai_data.robots[team][robot_id];
 
-            Robot_behavior::RobotBehavior & robot_behavior = *( 
-                robot_behaviors[robot_id] 
+            Robot_behavior::RobotBehavior & robot_behavior = *(
+                robot_behaviors[robot_id]
             );
-            final_control.control = update_robot( 
+            final_control.control = update_robot(
                 robot_behavior, time, robot, ball
             );
             prepare_to_send_control( robot_id, final_control.control );
-        } 
+        }
         send_control( robot_id, final_control.control );
     }
-    commander->flush();
+
 }
 
 void AI::run(){
@@ -337,7 +337,7 @@ void AI::run(){
         current_dt = current_time;
         current_time = rhoban_utils::TimeStamp::now().getTimeMS()/1000.0;
         current_dt = current_time - current_dt;
-        
+
         ai_data.time = current_time,
         ai_data.dt = current_dt;
 
@@ -348,9 +348,9 @@ void AI::run(){
         //DEBUG("");
         visionData.checkAssert(current_time);
         //DEBUG("");
- 
+
         ai_data.update( visionData );
-       
+
         #ifndef NDEBUG
         check_time_is_coherent();
         #endif
@@ -365,11 +365,15 @@ void AI::run(){
         //   DEBUG( ai_data.table_of_collision_times );
         //}
 
-        data >> shared_data;    
-    
+        data >> shared_data;
+
         update_robots( );
-        
-        data << shared_data;    
+
+        data << shared_data;
+
+        // XXX: Flushing takes some time in real mode, and should be done in parallel
+        // along with the computing of the AI
+        commander->flush();
     }
 }
 
@@ -383,5 +387,5 @@ void AI::share_data(){
     data_from_ai.team_color = ai_data.team_color;
     data << data_from_ai;
 }
-    
+
 }

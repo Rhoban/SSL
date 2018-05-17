@@ -22,14 +22,17 @@
       <file>www/pause.png</file>
       <file>www/plus.png</file>
       <file>www/warning.png</file>
+      <file>www/power.png</file>
       <file>www/jquery.mousewheel.min.js</file>
       <file>www/vision.png</file>
       <file>www/index.html</file>
       <file>www/bg.png</file>
       <file>www/next.png</file>
+      <file>www/network.png</file>
       <file>www/strip.png</file>
       <file>www/collapse.png</file>
       <file>www/style.css</file>
+      <file>www/hand.png</file>
       <file>www/warning-small.png</file>
       <file>www/minus.png</file>
       <file>www/expand.png</file>

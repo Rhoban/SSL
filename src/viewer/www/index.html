@@ -43,8 +43,21 @@
                                 <div class="robot-row">
                                     <div class="robot-id">
                                         <span class="robot-tag">
-                                            <input type="checkbox" class="enable-disable" rel="{{id}}" />
-                                            #{{id}}
+                                            <b>#{{id}}</b>
+                                            <label>
+                                                <input type="checkbox" class="manual-control" rel="{{id}}" />
+                                                <img class="checkbox-icon" src="hand.png" />
+                                            </label>
+
+                                            <label>
+                                                <input type="checkbox" class="active" rel="{{id}}" />
+                                                <img class="checkbox-icon" src="power.png" />
+                                            </label>
+
+                                            <label>
+                                                <input type="checkbox" class="enable-disable" rel="{{id}}" />
+                                                <img class="checkbox-icon" src="network.png" />
+                                            </label>
                                             <img src="warning-small.png" class="robot-warning not-displayed" />
                                             <span class="robot-warning-text not-displayed text-warning">
                                             </span>

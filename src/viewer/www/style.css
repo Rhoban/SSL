@@ -200,3 +200,7 @@ body select {
 .strategy {
     margin-top:5px;
 }
+
+.checkbox-icon {
+    margin-left:-15px;
+}

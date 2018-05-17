@@ -711,11 +711,22 @@ function Manager(viewer)
                 var robot = robotById(id);
 
                 api.enableRobot(robot.id, !robot.enabled);
-                if (!robot.enabled) {
-                    robot.spin = false;
-                }
                 api.robotCommand(robot.id, 0.0, 0.0, 0.0, 0, robot.spin);
                 $(this).prop('checked', robot.enabled);
+            });
+
+            $('.robots .manual-control').change(function() {
+                var id = parseInt($(this).attr('rel'));
+                var robot = robotById(id);
+
+                api.manualControl(robot.id, $(this).is(':checked'));
+            });
+
+            $('.robots .active').change(function() {
+                var id = parseInt($(this).attr('rel'));
+                var robot = robotById(id);
+
+                api.activeRobot(robot.id, $(this).is(':checked'));
             });
 
             var button = function(selector, callback, evt) {
@@ -819,6 +830,12 @@ function Manager(viewer)
             var robot = robots[ourColor][k];
 
             $('.robot-'+k+' .enable-disable').prop('checked', robot.enabled);
+            $('.robot-'+k+' .manual-control').prop('checked', robot.manual);
+            $('.robot-'+k+' .active').prop('checked', robot.active);
+
+            $('.robot-'+k+' .enable-disable').prop('disabled', !robot.manual);
+            $('.robot-'+k+' .active').prop('disabled', !robot.manual);
+
             var div = $('.robot-'+k);
             div.find('.robot-warning').hide();
             div.find('.robot-warning-text').hide();

@@ -1,8 +1,11 @@
 #include <QThread>
 #include <unistd.h>
 #include "API.h"
+#include <robot_behavior/robot_behavior.h>
 #include <annotations/Annotations.h>
 #include <com/AICommanderReal.h>
+
+using namespace RhobanSSL;
 
 // Helper, converts a json value to its string representation
 static QString js(Json::Value &json)
@@ -22,32 +25,37 @@ API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, Rhoban
     joystick(NULL),
     joystickRobot(0)
 {
-    for (int id=0; id<MAX_ROBOTS; id++) {
-        robots[id].id = id;
-        robots[id].enabled = false;
-        robots[id].xSpeed = 0;
-        robots[id].ySpeed = 0;
-        robots[id].thetaSpeed = 0;
-        robots[id].charge = false;
-        robots[id].spin = false;
-    }
+    // Be sure that the final controls are initalized to no-speed
+    RhobanSSL::Shared_data shared;
+    data >> shared;
+    for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+        RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
 
-    /*
+        control.charge = false;
+        control.active = true;
+        control.velocity_translation = Vector2d(0, 0);
+        control.velocity_rotation = ContinuousAngle(0);
+        control.spin = false;
+    }
+    data << shared;
+
+    // Instanciating AI
     ai = new RhobanSSL::AI(
         teamName,
         team,
         data,
         commander
     );
-    */
 
+    /*
     comThread = new std::thread([this] {
         this->comThreadExec();
     });
+    */
 
-    // aiThread = new std::thread([this] {
-    //     this->aiThreadExec();
-    // });
+    aiThread = new std::thread([this] {
+        this->aiThreadExec();
+    });
 }
 
 API::~API()
@@ -63,13 +71,14 @@ API::~API()
     }
 }
 
+/*
 void API::comThreadExec()
 {
     // Communicating with robots
     while (true) {
         mutex.lock();
         bool hasRobot = false;
-        for (int id=0; id<MAX_ROBOTS; id++) {
+        for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
             auto &robot = robots[id];
             if (robot.enabled) {
                 hasRobot = true;
@@ -84,6 +93,7 @@ void API::comThreadExec()
         QThread::msleep(10);
     }
 }
+*/
 
 void API::aiThreadExec()
 {
@@ -117,6 +127,9 @@ QString API::robotsStatus()
     RhobanSSL::Vision::VisionData vision;
     data >> vision;
 
+    RhobanSSL::Shared_data shared;
+    data >> shared;
+
     for (auto &entry : vision.robots) {
         auto &team = entry.first;
         for (auto &entry2 : entry.second) {
@@ -131,10 +144,12 @@ QString API::robotsStatus()
             jsonRobot["y"] = movement.linear_position().getY();
             jsonRobot["orientation"] = movement.angular_position().value();
 
-            auto &apiRobot = robots[robot.id];
             if (team == RhobanSSL::Vision::Ally) {
+                auto final_control = shared.final_control_for_robots[robot.id];
+                Control control = final_control.control;
+
                 if (!simulation) {
-                    // XXX: This is not thread safe, to fix
+                    // XXX: This should be read from the AI
                     RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
                     auto masterRobot = master->robots[robot.id];
                     jsonRobot["com"] = masterRobot.isOk();
@@ -146,8 +161,10 @@ QString API::robotsStatus()
                     jsonRobot["ir"] = false;
                 }
                 jsonRobot["team"] = ourColor();
-                jsonRobot["enabled"] = apiRobot.enabled;
-                jsonRobot["charge"] = apiRobot.charge;
+                jsonRobot["enabled"] = !control.ignore;
+                jsonRobot["active"] = control.active;
+                jsonRobot["manual"] = final_control.is_manually_controled_by_viewer;
+                jsonRobot["charge"] = control.charge;
             } else {
                 jsonRobot["team"] = opponentColor();
                 jsonRobot["enabled"] = false;
@@ -213,13 +230,47 @@ void API::moveRobot(bool yellow, int id, double x, double y, double theta)
 void API::enableRobot(int id, bool enabled)
 {
     mutex.lock();
-    if (id >= 0 && id < MAX_ROBOTS) {
-        robots[id].enabled = enabled;
+    if (id >= 0 && id < Ai::Constants::NB_OF_ROBOTS_BY_TEAM) {
+        RhobanSSL::Shared_data shared;
+        data >> shared;
+        RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
 
-        if (!robots[id].enabled) {
-            robots[id].charge = false;
-            robots[id].spin = false;
+        control.ignore = !enabled;
+
+        if (control.ignore) {
+            control.charge = false;
+            control.spin = false;
         }
+
+        data << shared;
+    }
+    mutex.unlock();
+}
+
+void API::manualControl(int id, bool manual)
+{
+    mutex.lock();
+    if (id >= 0 && id < Ai::Constants::NB_OF_ROBOTS_BY_TEAM) {
+        RhobanSSL::Shared_data shared;
+        data >> shared;
+        auto &final_control = shared.final_control_for_robots[id];
+
+        final_control.is_manually_controled_by_viewer = manual;
+        data << shared;
+    }
+    mutex.unlock();
+}
+
+void API::activeRobot(int id, bool active)
+{
+    mutex.lock();
+    if (id >= 0 && id < Ai::Constants::NB_OF_ROBOTS_BY_TEAM) {
+        RhobanSSL::Shared_data shared;
+        data >> shared;
+        RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+
+        control.active = active;
+        data << shared;
     }
     mutex.unlock();
 }
@@ -228,32 +279,55 @@ void API::robotCommand(int id,
     double xSpeed, double ySpeed, double thetaSpeed, int kick, bool spin, bool charge)
 {
     mutex.lock();
-    if (robots[id].enabled) {
-        robots[id].xSpeed = xSpeed;
-        robots[id].ySpeed = ySpeed;
-        robots[id].thetaSpeed = thetaSpeed;
-        robots[id].kick = kick;
-        robots[id].spin = spin;
-        robots[id].charge = charge;
+
+    RhobanSSL::Shared_data shared;
+    data >> shared;
+    RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+
+    if (!control.ignore) {
+        control.velocity_translation = Vector2d(xSpeed, ySpeed);
+        control.velocity_rotation = ContinuousAngle(thetaSpeed);
+        control.kick = kick;
+        control.spin = spin;
+        control.charge = charge;
     }
+
+    data << shared;
     mutex.unlock();
 }
 
 void API::robotCharge(int id, bool charge)
 {
     mutex.lock();
-    if (robots[id].enabled) {
-        robots[id].charge = charge;
+    RhobanSSL::Shared_data shared;
+    data >> shared;
+    RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+    if (!control.ignore) {
+        control.charge = charge;
     }
+    data << shared;
     mutex.unlock();
 }
 
 void API::kick(int id, int kick)
 {
     mutex.lock();
-    if (robots[id].enabled) {
-        robots[id].kick = kick;
+    RhobanSSL::Shared_data shared;
+    data >> shared;
+    RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+
+    if (!control.ignore) {
+        control.kick = false;
+        control.chipKick = false;
+
+        if (kick == 1) {
+            control.kick = true;
+        }
+        if (kick == 2) {
+            control.chipKick = true;
+        }
     }
+    data << shared;
     mutex.unlock();
 }
 
@@ -262,10 +336,20 @@ void API::emergencyStop()
     stopJoystick();
 
     mutex.lock();
-    for (int id=0; id<MAX_ROBOTS; id++) {
-        robots[id].enabled = false;
+
+    RhobanSSL::Shared_data shared;
+    data >> shared;
+
+    for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+        auto &final_control = shared.final_control_for_robots[id];
+        final_control.is_manually_controled_by_viewer = true;
+        final_control.control.ignore = true;
+        final_control.control.active = false;
     }
 
+    data << shared;
+
+    // XXX: Is this good?
     for (int k=0; k<3; k++) {
         commander->stopAll();
         commander->flush();
@@ -294,26 +378,40 @@ std::string API::opponentColor()
 void API::scan()
 {
     mutex.lock();
-    // Sending a disable packet to all robots
-    for (int n=0; n<3; n++) {
-        for (int id=0; id<MAX_ROBOTS; id++) {
-            commander->set(id, false, 0, 0, 0);
-        }
-        commander->flush();
-        QThread::msleep(30);
-    }
 
     // Enabling robots depending on their statuses
-    for (int id=0; id<MAX_ROBOTS; id++) {
+    RhobanSSL::Shared_data shared;
+    RhobanSSL::Shared_data shared_tmp_manual;
+    data >> shared;
+    shared_tmp_manual = shared;
+
+    // Sending a disable packet to all robots
+    for (int n=0; n<3; n++) {
+        for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+            if (shared_tmp_manual.final_control_for_robots[id].is_manually_controled_by_viewer) {
+                shared_tmp_manual.final_control_for_robots[id].control.active = false;
+                shared_tmp_manual.final_control_for_robots[id].control.ignore = false;
+            }
+        }
+        data << shared_tmp_manual;
+        QThread::msleep(25);
+    }
+
+    // Restoring the data state
+    data << shared;
+
+    for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+        RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
         if (simulation) {
             if (id <= 7) {
-                robots[id].enabled = true;
+                control.ignore = false;
             }
         } else {
-            // XXX: This is not thread safe, to fix
+            // XXX: We should not access directly master for this, but use the hardware
+            // present flag?
             RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
             auto masterRobot = master->robots[id];
-            robots[id].enabled = masterRobot.isOk();
+            control.ignore = !masterRobot.isOk();
 
             if (id == 3) {
                 std::cout << "Age: " << masterRobot.age() << std::endl;
@@ -323,42 +421,58 @@ void API::scan()
             }
         }
     }
+    data << shared;
 
     mutex.unlock();
 }
 
-void API::joystickTrheadExec()
+void API::joystickThreadExec()
 {
     static bool fast = false;
     RhobanSSL::Joystick::JoystickEvent event;
     if (joystick != NULL) {
         joystick->open();
     }
+
+    {
+        RhobanSSL::Shared_data shared;
+        data >> shared;
+        auto &final_control = shared.final_control_for_robots[joystickRobot];
+        final_control.is_manually_controled_by_viewer = true;
+        data << shared;
+    }
+
+    float xSpeed = 0;
+    float ySpeed = 0;
+    float thetaSpeed = 0;
+    bool spin = false;
+    int kick = false;
+
     while ((joystickRobot >= 0) && (joystick != NULL)) {
         while (joystick->getEvent(&event)) {
             mutex.lock();
             if (event.type == JS_EVENT_AXIS) {
                 if (event.number == 0) {
-                    robots[joystickRobot].ySpeed = -(fast ? 2.0 : 0.5)*event.getValue();
+                    ySpeed = -(fast ? 2.0 : 0.5)*event.getValue();
                 }
                 if (event.number == 1) {
-                    robots[joystickRobot].xSpeed = -(fast ? 2.0 : 0.5)*event.getValue();
+                    xSpeed = -(fast ? 2.0 : 0.5)*event.getValue();
                 }
                 if (event.number == 3) {
-                    robots[joystickRobot].thetaSpeed = -1.5*event.getValue();
+                    thetaSpeed = -1.5*event.getValue();
                 }
 
                 std::cout << "[JOYSTICK] Axis #" << (int)event.number << ": " << event.getValue() << std::endl;;
             }
             if (event.type == JS_EVENT_BUTTON) {
                 if (event.number == 4) {
-                    robots[joystickRobot].spin = event.isPressed();
+                    spin = event.isPressed();
                 }
                 if (event.number == 5) {
-                    robots[joystickRobot].kick = event.isPressed() ? 1 : 0;
+                    kick = event.isPressed() ? 1 : 0;
                 }
                 if (event.number == 7) {
-                    robots[joystickRobot].kick = event.isPressed() ? 2 : 0;
+                    kick = event.isPressed() ? 2 : 0;
                 }
                 if (event.number == 6) {
                     fast = event.getValue();
@@ -366,6 +480,20 @@ void API::joystickTrheadExec()
 
                 std::cout << "[JOYSTICK] Button #" << (int)event.number << ": " << (int)event.isPressed() << std::endl;;
             }
+
+            // Updating control
+            RhobanSSL::Shared_data shared;
+            data >> shared;
+            RhobanSSL::Control &control = shared.final_control_for_robots[joystickRobot].control;
+            control.velocity_translation = Vector2d(xSpeed, ySpeed);
+            control.velocity_rotation = ContinuousAngle(thetaSpeed);
+            control.spin = spin;
+            control.kick = false;
+            control.chipKick = false;
+            if (kick == 1) control.kick = true;
+            if (kick == 2) control.chipKick = true;
+            data << shared;
+
             mutex.unlock();
         }
 
@@ -386,7 +514,7 @@ void API::openJoystick(int robot, QString device)
         joystick = new RhobanSSL::Joystick(device.toStdString());
 
         joystickThread = new std::thread([this] {
-            this->joystickTrheadExec();
+            this->joystickThreadExec();
         });
     }
 }
@@ -432,7 +560,8 @@ QString API::getAnnotations()
     RhobanSSLAnnotation::Annotations annotations;
 
 
-    // XXX: Annotations examples
+    // XXX: Annotations examples, this should be later wired to come from the AI
+    // strategy
     annotations.addCircle(3, 3, 1, "cyan");
     annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
     annotations.addCross(-3, 0, "red");

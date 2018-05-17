@@ -10,6 +10,10 @@ namespace RhobanSSL {
 
 struct Control : PidControl {
     bool kick;
+    bool chipKick;
+    int kickPower;
+    bool spin;
+    bool charge;
     bool active;
     bool ignore;
 
@@ -28,9 +32,9 @@ namespace Robot_behavior {
 
 class RobotBehavior {
     protected:
-        const Ai::Robot* robot_ptr;     
+        const Ai::Robot* robot_ptr;
         double birthday;
-        double lastUpdate; 
+        double lastUpdate;
 
         Vector2d robot_linear_position;
         ContinuousAngle robot_angular_position;
@@ -42,18 +46,18 @@ class RobotBehavior {
     public:
         RobotBehavior( Ai::AiData & ia_data );
 
-        double time() const;        
+        double time() const;
         double age() const;
         bool is_born() const;
         void set_birthday( double birthday );
 
         void update_time_and_position(
-            double time, 
+            double time,
             const Ai::Robot & robot, const Ai::Ball & ball
         );
 
         virtual void update(
-            double time, 
+            double time,
             const Ai::Robot & robot, const Ai::Ball & ball
         ) = 0;
         virtual Control control() const = 0;
