@@ -637,7 +637,3 @@ void API::managerStop()
 void API::managerPlay()
 {
 }
-
-void API::managerPause()
-{
-}

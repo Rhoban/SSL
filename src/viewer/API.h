@@ -91,7 +91,6 @@ public slots:
 
     void managerStop();
     void managerPlay();
-    void managerPause();
 
 protected:
     std::string teamName;

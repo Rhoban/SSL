@@ -4,8 +4,8 @@ var field = {
     width: 6.0,
     borders: 0.5,
     centerCircleRadius: 0.5,
-    goalQuarterCircleRadius: 1,
-    goalLinearWidth: 0.5,
+    penaltyAreaWidth: 2,
+    penaltyAreaDepth: 1,
     goalWidth: 1,
     goalDepth: 0.18,
     goalThickness: 0.023,
@@ -288,9 +288,10 @@ function Viewer()
             ctx.strokeStyle = '#aaa';
             ctx.lineWidth = field.linesThickness;
             ctx.beginPath();
-            ctx.arc(-field.length/2, -field.goalLinearWidth/2, field.goalQuarterCircleRadius, -Math.PI/2, 0);
-            ctx.lineTo(-(field.length/2)+field.goalQuarterCircleRadius, field.goalLinearWidth/2);
-            ctx.arc(-field.length/2, field.goalLinearWidth/2, field.goalQuarterCircleRadius, 0, Math.PI/2);
+            ctx.moveTo(-field.length/2, -field.penaltyAreaWidth/2);
+            ctx.lineTo(-field.length/2 + field.penaltyAreaDepth, -field.penaltyAreaWidth/2);
+            ctx.lineTo(-field.length/2 + field.penaltyAreaDepth, field.penaltyAreaWidth/2);
+            ctx.lineTo(-field.length/2, field.penaltyAreaWidth/2);
             ctx.stroke();
 
             // Goals
@@ -1133,9 +1134,6 @@ function Manager(viewer)
 
             $('.control-play').click(function() {
                 api.managerPlay();
-            });
-            $('.control-pause').click(function() {
-                api.managerPause();
             });
             $('.control-stop').click(function() {
                 api.managerStop();
