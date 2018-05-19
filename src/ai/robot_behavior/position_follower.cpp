@@ -8,7 +8,7 @@ namespace Robot_behavior {
 PositionFollower::PositionFollower(
     Ai::AiData & ai_data, double time, double dt
 ):
-    RobotBehavior(ai_data),
+    ConsignFollower(ai_data),
     position(0.0, 0.0), angle(0.0)
 {
     robot_control.init_time( time, dt );

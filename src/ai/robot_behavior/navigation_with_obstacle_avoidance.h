@@ -12,7 +12,9 @@ namespace Robot_behavior {
  * This is an implementation of the article : 
  * "Orbital Obstavle Avoidance Algorithm for reliable and on-line mobile robot navigation", Lounis Adouane, LASMEA.
  */
-class Navigation_with_obstacle_avoidance : public RobotBehavior {
+class Navigation_with_obstacle_avoidance :
+    public ConsignFollower 
+{
     private:
         PositionFollower position_follower;
 
@@ -71,7 +73,7 @@ class Navigation_with_obstacle_avoidance : public RobotBehavior {
             double rotation_acceleration_limit
         );
 
-        void set_following_position(
+        virtual void set_following_position(
             const Vector2d & position_to_follow,
             const ContinuousAngle & angle
         );

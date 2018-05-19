@@ -1,7 +1,5 @@
 #include "prepare_to_run.h"
-#include <robot_behavior/position_follower.h>
-#include <robot_behavior/a_star_path.h>
-
+#include <robot_behavior/factory.h>
 namespace RhobanSSL {
 namespace Strategy {
 
@@ -33,24 +31,9 @@ Robot_behavior::RobotBehavior* Prepare_to_run::create_follower(
     double time, double dt
 ) const {
     //Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(ai_data, time, dt);
-    Robot_behavior::A_star_path* follower = new Robot_behavior::A_star_path(ai_data, time, dt);
+    Robot_behavior::ConsignFollower* follower = Robot_behavior::Factory::fixed_consign_follower(ai_data);
     follower->set_following_position(
         follower_position, angle
-    );
-    follower->set_translation_pid(
-        ai_data.constants.p_translation,
-        ai_data.constants.i_translation, 
-        ai_data.constants.d_translation
-    );
-    follower->set_orientation_pid(
-        ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
-        ai_data.constants.d_orientation
-    );
-    follower->set_limits(
-        ai_data.constants.translation_velocity_limit,
-        ai_data.constants.rotation_velocity_limit,
-        ai_data.constants.translation_acceleration_limit,
-        ai_data.constants.rotation_acceleration_limit
     );
     return follower;
 }
