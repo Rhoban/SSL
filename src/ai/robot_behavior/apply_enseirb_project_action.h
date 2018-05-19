@@ -8,8 +8,9 @@ namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class Apply_enseirb_project_action : public A_star_path {
+class Apply_enseirb_project_action : public ConsignFollower {
     private:
+        ConsignFollower * follower;
         const enseirb::Action & action; 
     public:
         Apply_enseirb_project_action( Ai::AiData& ai_data, const enseirb::Action& action, double time, double dt );
@@ -19,6 +20,13 @@ class Apply_enseirb_project_action : public A_star_path {
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
+
+        virtual void set_following_position(
+            const Vector2d & position_to_follow,
+            const ContinuousAngle & angle
+        );
+
+        virtual ~Apply_enseirb_project_action();
         
         virtual Control control() const;
 };

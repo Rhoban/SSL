@@ -93,22 +93,6 @@ void Enseirb_project_wrapper::assign_behavior_to_robots(
                 time, dt
             ) ;
 
-            robot_behavior->set_translation_pid(
-                ai_data.constants.p_translation,
-                ai_data.constants.i_translation, 
-                ai_data.constants.d_translation
-            );
-            robot_behavior->set_orientation_pid(
-                ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
-                ai_data.constants.d_orientation
-            );
-            robot_behavior->set_limits(
-                ai_data.constants.translation_velocity_limit,
-                ai_data.constants.rotation_velocity_limit,
-                ai_data.constants.translation_acceleration_limit,
-                ai_data.constants.rotation_acceleration_limit
-            );
-
             assign_behavior(
                 robot_id(i), std::shared_ptr<Robot_behavior::RobotBehavior>( robot_behavior )
             );
