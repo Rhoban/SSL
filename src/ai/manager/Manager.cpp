@@ -71,7 +71,7 @@ void Manager::assign_strategy(
     current_strategy_names.push_front( strategy_name );
     Strategy::Strategy & strategy = get_strategy( strategy_name );
 
-    assert( strategy.min_robots() <= robot_ids.size() );
+    assert( static_cast<unsigned int>(strategy.min_robots()) <= robot_ids.size() );
 
     strategy.set_goalie( goalie_id );
     strategy.set_goalie_opponent( goalie_opponent_id );
@@ -121,9 +121,22 @@ void Manager::assign_behavior_to_robots(
 ){
     for( const std::string & name : current_strategy_names ){
         get_strategy(name).assign_behavior_to_robots(
-            [&](int id, std::shared_ptr<Robot_behavior::RobotBehavior> behavior){
-                 return
-               robot_behaviors[id] = behavior;
+            [&](
+                int id, 
+                std::shared_ptr<Robot_behavior::RobotBehavior> behavior
+            ){
+                #ifndef NDEBUG
+                bool id_is_present = false;
+                for( int robot_id : this->get_strategy(name).get_robot_ids() ){
+                    if( robot_id == id ){
+                        id_is_present = true;
+                        break;
+                    }
+                }
+                assert( id_is_present );
+                #endif
+
+                return robot_behaviors[id] = behavior; 
             }, time, dt
         );
     }
