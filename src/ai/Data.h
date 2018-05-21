@@ -48,12 +48,21 @@ public:
     
     Data& operator<<( const Vision::VisionData & vision_data );
     Data& operator>>( Vision::VisionData & vision_data );
+    void edit_vision_data( // Use that function if you ha no choice. Prefer << and >> operator.
+        std::function< void (Vision::VisionData & vision_data) > vision_data_editor 
+    );
 
     Data& operator<<( const Data_from_ai & data_from_ai );
     Data& operator>>( Data_from_ai & data_from_ai );
+    void edit_data_from_ai( // Use that function if you ha no choice. Prefer << and >> operator.
+        std::function< void (Data_from_ai & data_from_ai) > data_from_ai_editor 
+    );
 
     Data& operator<<( const Shared_data & shared_data );
     Data& operator>>( Shared_data & shared_data );
+    void edit_shared_data( // Use that function if you ha no choice. Prefer << and >> operator.
+        std::function< void (Shared_data & shared_data) > shared_data_editor 
+    );
 };
 
 }
