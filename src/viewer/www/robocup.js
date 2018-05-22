@@ -1057,50 +1057,10 @@ function Manager(viewer)
         }
     };
 
-    this.renderStrategies = function()
-    {
-        var html = '';
-        var self = this;
-
-        for (var k in strategies) {
-            var strategy = strategies[k];
-
-            html += '<div class="strategy">';
-            html += '<h4>'+strategy.name+' <a href="#" class="strategy-delete" rel="'+k+'"><img src="delete.png" /></a></h4>';
-            for (var name in strategy.params) {
-                var value = strategy.params[name];
-                html += name + ': ';
-                html += '<input data-strategy="'+k+'" data-param="'+name+'" type="text" value="'+value+'" /><br/>';
-            }
-            html += '</div>';
-        }
-
-        if (html == '') {
-            html += 'No strategy';
-        }
-
-        $('.strategies').html(html);
-        $('.strategy-delete').click(function() {
-            var value = parseInt($(this).attr('rel'));
-
-            for (;value < strategies.length-1; value++) {
-                strategies[value] = strategies[value+1];
-            }
-            strategies.pop();
-            self.renderStrategies();
-        });
-
-        $('.strategies input').change(function() {
-            var strategy = parseInt($(this).attr('data-strategy'));
-            var param = $(this).attr('data-param');
-
-            strategies[strategy].params[param] = $(this).val();
-        });
-    };
-
     this.strategiesPanel = function(init)
     {
         if (init) {
+            // Updating managers
             var managers = JSON.parse(api.getManagers());
             var options = '';
 
@@ -1109,34 +1069,47 @@ function Manager(viewer)
                 options += '<option value="'+manager+'">'+manager+'</option>';
             }
 
+            // Updating robots
+            var template = $('.robot-strategies').html();
+            var html = '';
+            for (var id=0; id<8; id++) {
+                html += template.replace(/{{id}}/g, id);
+            }
+            $('.robot-strategies').html(html);
+
+            // Updating strategies
             var strategiesAvailable = JSON.parse(api.getStrategies());
-            var strategiesOptions = '';
+            var strategiesOptions = '<option value="">-</otpion>';
 
             for (var n in strategiesAvailable) {
                 var strategy = strategiesAvailable[n];
-                strategiesOptions += '<option value="'+strategy.name+'">'+strategy.name+'</option>';
+                strategiesOptions += '<option value="'+strategy+'">'+strategy+'</option>';
             }
 
             $('#managers').html(options);
-            $('#strategies-selector').html(strategiesOptions);
+            $('.strategies-selector').html(strategiesOptions);
             var self = this;
 
-            $('.add-strategy').click(function() {
-                var selected = $('#strategies-selector').val();
-                for (var s in strategiesAvailable) {
-                    var strategy = strategiesAvailable[s];
-                    if (selected == strategy.name) {
-                        strategies.push(JSON.parse(JSON.stringify(strategy)));
-                    }
-                    self.renderStrategies();
-                }
+            $('.clear-strategy').click(function() {
+                var id = $(this).attr('rel');
+                $('.strategy-'+id).val('');
+                $('apply-'+id).click();
+            });
+
+            $('.apply-strategy').click(function() {
+                var id = $(this).attr('rel');
+                var strategy = $('.strategy-'+id).val();
+                api.applyStrategy(id, strategy);
             });
 
             $('.control-play').click(function() {
+                api.setManager($('#managers').val());
                 api.managerPlay();
             });
             $('.control-stop').click(function() {
                 api.managerStop();
+                $('#managers').val('Manual');
+                $('.strategies-selector').val('');
             });
         }
     };

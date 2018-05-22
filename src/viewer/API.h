@@ -85,10 +85,13 @@ public slots:
 
     // Getting the strategies
     QString getStrategies();
+    void updateAssignments();
+    void applyStrategy(int id, QString name);
+    void clearAssignments();
 
     // Getting managers
     QString getManagers();
-
+    void setManager(QString manager);
     void managerStop();
     void managerPlay();
 
@@ -99,6 +102,8 @@ protected:
     RhobanSSL::Ai::Team team;
     RhobanSSL::AIVisionClient visionClient;
     RhobanSSL::AICommander *commander;
+
+    std::map<int, std::string> assignments;
 
     std::string ourColor();
     std::string opponentColor();

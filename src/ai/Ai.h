@@ -29,7 +29,14 @@ namespace RhobanSSL
         void run();
         void stop();
 
+        std::vector<std::string> getAvailableManagers();
+        void setManager(std::string manager);
+        std::shared_ptr<Manager::Manager> getManager();
+        std::shared_ptr<Manager::Manager> getManualManager();
+
         Referee &getReferee();
+
+        double getCurrentTime();
 
     protected:
         bool running;
@@ -56,6 +63,7 @@ namespace RhobanSSL
         Data & data;
         Referee referee;
         std::shared_ptr<Manager::Manager> strategy_manager;
+        std::shared_ptr<Manager::Manager> manual_manager;
 
         Control update_robot(
             Robot_behavior::RobotBehavior & robot_behavior,

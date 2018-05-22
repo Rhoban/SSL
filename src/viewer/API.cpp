@@ -3,6 +3,7 @@
 #include "API.h"
 #include <robot_behavior/robot_behavior.h>
 #include <annotations/Annotations.h>
+#include <manager/Manual.h>
 #include <com/AICommanderReal.h>
 
 using namespace RhobanSSL;
@@ -593,28 +594,44 @@ QString API::getAnnotations()
     return QString::fromStdString(annotations.toJsonString());
 }
 
+void API::updateAssignments()
+{
+    std::map<std::string, std::vector<int>> strategies;
+
+    for (auto &entry : assignments) {
+        if (entry.second != "") {
+            strategies[entry.second].push_back(entry.first);
+        }
+    }
+
+    auto manual = ai->getManualManager();
+    manual->clear_strategy_assignement();
+    double t = ai->getCurrentTime();
+
+    for (auto &entry : strategies) {
+        manual->assign_strategy(entry.first, t, entry.second);
+    }
+}
+
+void API::applyStrategy(int id, QString name)
+{
+    assignments[id] = name.toStdString();
+    updateAssignments();
+}
+
+void API::clearAssignments()
+{
+    assignments.clear();
+    updateAssignments();
+}
+
 QString API::getStrategies()
 {
     Json::Value json(Json::arrayValue);
 
-    {
-        Json::Value goal;
-        Json::Value params;
-        params["robot"] = "1";
-        params["goalDist"] = "0.5";
-        goal["name"] = "goal";
-        goal["params"] = params;
-        json.append(goal);
-    }
-
-    {
-        Json::Value wall;
-        Json::Value params;
-        params["robot1"] = "2";
-        params["robot2"] = "3";
-        wall["name"] = "wall";
-        wall["params"] = params;
-        json.append(wall);
+    auto manual = ai->getManualManager();
+    for (auto &strategy : manual->get_available_strategies()) {
+        json.append(strategy);
     }
 
     return js(json);
@@ -624,16 +641,33 @@ QString API::getManagers()
 {
     Json::Value json(Json::arrayValue);
 
-    json.append("Manual");
-    json.append("RoboCup");
+    for (auto &manager : ai->getAvailableManagers()) {
+        json.append(manager);
+    }
 
     return js(json);
 }
 
+void API::setManager(QString manager)
+{
+    ai->setManager(manager.toStdString());
+}
+
 void API::managerStop()
 {
+    ai->setManager("Manual");
+    clearAssignments();
 }
 
 void API::managerPlay()
 {
+    RhobanSSL::Shared_data shared;
+    data >> shared;
+
+    for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+        auto &final_control = shared.final_control_for_robots[id];
+        final_control.is_manually_controled_by_viewer = false;
+    }
+
+    data << shared;
 }

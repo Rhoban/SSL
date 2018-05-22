@@ -255,16 +255,15 @@
 
                         <hr/>
 
-                        <div class="strategies">
-                            No strategy
+                        <div class="robot-strategies">
+                            <div class="robot-strategy">
+                                <b>#{{id}}</b>
+                                <select class="strategies-selector strategy-{{id}}" class="form-control">
+                                </select>
+                                <a href="#" class="btn btn-success apply-strategy apply-{{id}}" rel="{{id}}">Apply</a>
+                                <a href="#" class="btn btn-warning clear-strategy" rel="{{id}}">Clear</a>
+                            </div>
                         </div>
-
-                        <hr/>
-
-                        <select id="strategies-selector" class="form-control">
-                        </select>
-
-                        <a href="#" class="add-strategy">Add strategy</a>
                     </div>
                 </div>
             </div>

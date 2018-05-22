@@ -56,37 +56,40 @@ void Manager::clear_strategy_assignement(){
     }
     current_strategy_names.clear();
     assign_strategy(
-        MANAGER__REMOVE_ROBOTS, time(), get_invalid_team_ids() 
+        MANAGER__REMOVE_ROBOTS, time(), get_invalid_team_ids()
     );
 }
 
 
 
 void Manager::assign_strategy(
-    const std::string & strategy_name, 
+    const std::string & strategy_name,
     double time, const std::vector<int> & robot_ids
 ){
     assert( strategies.find(strategy_name) != strategies.end() );
 
     current_strategy_names.push_front( strategy_name );
-    Strategy::Strategy & strategy = get_strategy( strategy_name ); 
-    
+    Strategy::Strategy & strategy = get_strategy( strategy_name );
+
     assert( strategy.min_robots() <= robot_ids.size() );
-    
+
     strategy.set_goalie( goalie_id );
     strategy.set_goalie_opponent( goalie_opponent_id );
     strategy.set_robot_affectation( robot_ids );
     strategy.start(time);
+
+    std::cout << "Manager: Assigning " << strategy_name << " to " <<
+        robot_ids.size() << " robots" << std::endl;
 }
 
 Strategy::Strategy & Manager::get_strategy( const std::string & strategy_name ) {
     assert( strategies.find(strategy_name) != strategies.end() );
-    return *(strategies.at(strategy_name)); 
+    return *(strategies.at(strategy_name));
 }
 
 const Strategy::Strategy & Manager::get_strategy( const std::string & strategy_name ) const {
     assert( strategies.find(strategy_name) != strategies.end() );
-    return *(strategies.at(strategy_name)); 
+    return *(strategies.at(strategy_name));
 }
 
 const std::list<std::string> & Manager::get_current_strategy_names() const{
@@ -95,8 +98,8 @@ const std::list<std::string> & Manager::get_current_strategy_names() const{
 
 void Manager::update_strategies(double time){
     for(
-        std::pair< 
-            std::string, std::shared_ptr<Strategy::Strategy> 
+        std::pair<
+            std::string, std::shared_ptr<Strategy::Strategy>
         > elem : strategies
     ){
         elem.second->update(time);
@@ -111,7 +114,7 @@ void Manager::update_current_strategies(double time){
 
 void Manager::assign_behavior_to_robots(
     std::map<
-        int, 
+        int,
         std::shared_ptr<Robot_behavior::RobotBehavior>
     > & robot_behaviors,
     double time, double dt
@@ -119,8 +122,8 @@ void Manager::assign_behavior_to_robots(
     for( const std::string & name : current_strategy_names ){
         get_strategy(name).assign_behavior_to_robots(
             [&](int id, std::shared_ptr<Robot_behavior::RobotBehavior> behavior){
-                 return  
-               robot_behaviors[id] = behavior; 
+                 return
+               robot_behaviors[id] = behavior;
             }, time, dt
         );
     }
@@ -138,14 +141,14 @@ void Manager::change_ally_and_opponent_goalie_id( int blue_goalie_id, int yellow
 
 
 void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis ){
-    
+
     if( team != Ai::Unknown and get_team() != team ){
         assert( team == Ai::Blue or team == Ai::Yellow );
         ai_data.change_team_color( team );
         blueIsNotSet = true;
     }
     // We change the point of view of the team
-    if( 
+    if(
         blueIsNotSet
         or
         blueTeamOnPositiveHalf != blue_have_it_s_goal_on_positive_x_axis
@@ -155,11 +158,11 @@ void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_
         if(
             (
                 get_team() == Ai::Blue
-                and 
+                and
                 blue_have_it_s_goal_on_positive_x_axis
             )or(
                 get_team() == Ai::Yellow
-                and 
+                and
                 ! blue_have_it_s_goal_on_positive_x_axis
             )
         ){
@@ -185,7 +188,7 @@ Manager::Manager( Ai::AiData& ai_data ):
 {
     register_strategy(
         MANAGER__REMOVE_ROBOTS, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt(ai_data) 
+            new Strategy::Halt(ai_data)
         )
     );
 }
@@ -237,6 +240,18 @@ const std::vector<int> & Manager::get_invalid_team_ids() const {
     return invalid_team_ids;
 }
 Manager::~Manager(){ }
+
+
+std::vector<std::string> Manager::get_available_strategies()
+{
+    std::vector<std::string> strategyNames;
+
+    for (auto &entry : strategies) {
+        strategyNames.push_back(entry.first);
+    }
+
+    return strategyNames;
+}
 
 };
 };

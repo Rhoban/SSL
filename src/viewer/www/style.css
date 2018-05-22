@@ -204,3 +204,11 @@ body select {
 .checkbox-icon {
     margin-left:-15px;
 }
+
+.strategies-selector {
+    width: 150px;
+}
+
+select {
+    color:black !important;
+}

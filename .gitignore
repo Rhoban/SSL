@@ -22,3 +22,4 @@ src/*
 !src/.clang_complete
 
 machine.dot
+**.pch

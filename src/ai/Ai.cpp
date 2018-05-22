@@ -263,29 +263,63 @@ AI::AI(
     data(data)
 {
     init_robot_behaviors();
+
+
+    ai_data.change_team_color(default_team);
+    ai_data.team_name = team_name;
+
+    manual_manager = std::shared_ptr<Manager::Manager>(
+        new Manager::Manual(ai_data)
+    );
+
+    setManager("Match");
+}
+
+std::vector<std::string> AI::getAvailableManagers()
+{
+    return {"Manual", "Match"};
+}
+
+void AI::setManager(std::string managerName)
+{
     std::vector<int> robot_ids( robot_behaviors.size() );
     int i = 0;
     for( auto elem : robot_behaviors ){
         robot_ids[i] = elem.first;
         i++;
     }
+
+    // XXX: This should be in another place
     #ifdef SSL_SIMU
     int goalie_id = 5;
     #else
     int goalie_id = 8;
     #endif
 
-    ai_data.change_team_color(default_team);
-    ai_data.team_name = team_name;
-    strategy_manager = std::shared_ptr<Manager::Manager>(
-        //new Manager::Manual(ai_data)
-        new Manager::Match(ai_data, referee)
-    );
+    std::cout << "Setting the manager to: " << managerName << std::endl;
+    if (managerName == "Manual") {
+        strategy_manager = manual_manager;
+    } else if (managerName == "Match") {
+        strategy_manager = std::shared_ptr<Manager::Manager>(
+            new Manager::Match(ai_data, referee)
+        );
+    } else {
+        std::cerr << "Unknown manager: " << managerName << std::endl;
+    }
+
     strategy_manager->declare_goalie_id( goalie_id );
     strategy_manager->declare_team_ids( robot_ids );
-
 }
 
+std::shared_ptr<Manager::Manager> AI::getManager()
+{
+    return strategy_manager;
+}
+
+std::shared_ptr<Manager::Manager> AI::getManualManager()
+{
+    return manual_manager;
+}
 
 void AI::update_robots( ){
 
@@ -386,6 +420,11 @@ void AI::share_data(){
 Referee &AI::getReferee()
 {
     return referee;
+}
+
+double AI::getCurrentTime()
+{
+    return ai_data.time;
 }
 
 }

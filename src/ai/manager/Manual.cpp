@@ -23,7 +23,7 @@ Manual::Manual(
     );
     register_strategy(
         Strategy::Tare_and_synchronize::name,
-        std::shared_ptr<Strategy::Strategy>( 
+        std::shared_ptr<Strategy::Strategy>(
             new Strategy::Tare_and_synchronize(ai_data)
         )
     );
@@ -34,21 +34,21 @@ Manual::Manual(
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(
                         ai_data,
-                        ai_data.constants.left_post_position, 
-                        ai_data.constants.right_post_position, 
-                        ai_data.constants.waiting_goal_position, 
-                        ai_data.constants.penalty_rayon, 
+                        ai_data.constants.left_post_position,
+                        ai_data.constants.right_post_position,
+                        ai_data.constants.waiting_goal_position,
+                        ai_data.constants.penalty_rayon,
                         ai_data.constants.robot_radius,
                         time, dt
                     );
-                    goalie->set_translation_pid( 
+                    goalie->set_translation_pid(
                         ai_data.constants.p_translation,
-                        ai_data.constants.i_translation, 
+                        ai_data.constants.i_translation,
                         ai_data.constants.d_translation
                     );
                     goalie->set_orientation_pid(
                         ai_data.constants.p_orientation,
-                        ai_data.constants.i_orientation, 
+                        ai_data.constants.i_orientation,
                         ai_data.constants.d_orientation
                     );
                     goalie->set_limits(
@@ -73,11 +73,11 @@ Manual::Manual(
 		    );
 		    follower->set_translation_pid(
 			ai_data.constants.p_translation,
-			ai_data.constants.i_translation, 
+			ai_data.constants.i_translation,
 			ai_data.constants.d_translation
 		    );
 		    follower->set_orientation_pid(
-			ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
+			ai_data.constants.p_orientation, ai_data.constants.i_orientation,
 			ai_data.constants.d_orientation
 		    );
 		    follower->set_limits(
@@ -92,7 +92,7 @@ Manual::Manual(
         )
     );
     assign_strategy(
-        Strategy::Halt::name, 0.0, 
+        Strategy::Halt::name, 0.0,
         get_team_ids()
    ); // TODO TIME !
    strategy_was_assigned = false;

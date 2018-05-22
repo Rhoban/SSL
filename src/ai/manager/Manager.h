@@ -30,10 +30,12 @@ class Manager {
 
     protected:
     Ai::AiData & ai_data;
-    
+
     public:
     int time() const ;
     int dt() const ;
+
+    std::vector<std::string> get_available_strategies();
 
     Manager( Ai::AiData& ai_data );
 
@@ -46,9 +48,9 @@ class Manager {
     const std::vector<int> & get_valid_team_ids() const;
     const std::vector<int> & get_invalid_team_ids() const;
     // return the goalie id. If id<0 then no goalie is declared.
-    int get_goalie_id() const;   
+    int get_goalie_id() const;
     // return the opponent goalie id. If id<0 then no opponent goalie is declared.
-    int get_goalie_opponent_id() const;   
+    int get_goalie_opponent_id() const;
 
     template <typename STRATEGY>
     STRATEGY & get_strategy_( const std::string & name ){
@@ -75,7 +77,7 @@ class Manager {
         const std::string & strategy_name, double time,
         const std::vector<int> & robot_ids
     );
- 
+
     virtual void update(double time) = 0;
 
     virtual void update_strategies(double time);
@@ -83,7 +85,7 @@ class Manager {
 
     virtual void assign_behavior_to_robots(
         std::map<
-            int, 
+            int,
             std::shared_ptr<Robot_behavior::RobotBehavior>
         > & robot_behaviors, double time, double dt
     );
