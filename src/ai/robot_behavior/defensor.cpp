@@ -30,7 +30,14 @@ void Defensor::update(
     
 
     double goal_rotation = M_PI/2.0; // radian
-    Vector2d defender_pos = this->ball_position;
+    Vector2d our_goal_center( - ai_data.field.fieldLength/2.0, 0.0  );
+    Vector2d direction = our_goal_center - this->ball_position;
+    direction = direction/direction.norm();
+
+    double error = 0.03;
+    Vector2d defender_pos =  this->ball_position + direction * (
+         ai_data.constants.robot_radius + ai_data.constants.radius_ball + error
+    );
     
     follower->set_following_position(defender_pos, goal_rotation );
 
