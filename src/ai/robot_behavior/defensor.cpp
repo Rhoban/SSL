@@ -46,7 +46,9 @@ void Defensor::update(
 
 
 Control Defensor::control() const {
-    return follower->control();
+    Control ctrl = follower->control();
+    // ctrl.spin = true; // We active the dribler ! 
+    return ctrl; 
 }
 
 Defensor::~Defensor(){
