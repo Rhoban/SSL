@@ -22,6 +22,22 @@ Vector2d Goalie::calculate_goal_position(
 
 
 Goalie::Goalie(
+    Ai::AiData & ai_data
+):
+	Goalie::Goalie(
+		ai_data,
+		ai_data.constants.left_post_position,
+		ai_data.constants.right_post_position,
+		ai_data.constants.waiting_goal_position,
+		ai_data.constants.penalty_rayon,
+		ai_data.constants.robot_radius,
+		ai_data.time, ai_data.dt
+	)
+{
+}
+
+
+Goalie::Goalie(
     Ai::AiData & ai_data,
     const Vector2d & left_post_position,
     const Vector2d & right_post_position,
@@ -30,7 +46,8 @@ Goalie::Goalie(
     double goalie_radius,
     double time, double dt
 ):
-    PositionFollower(ai_data, time, dt)
+    RobotBehavior(ai_data),
+    follower( Factory::fixed_consign_follower(ai_data) )
 {
     this->left_post_position = left_post_position;
     this->right_post_position = right_post_position;
@@ -66,9 +83,18 @@ void Goalie::update(
         defender_pos = waiting_goal_position;
     }
 
-    this->set_following_position(defender_pos, goal_rotation );
+    follower->set_following_position(defender_pos, goal_rotation );
 
-    PositionFollower::update_control(time);   
+    follower->update(time, robot, ball);   
+}
+
+
+Control Goalie::control() const {
+    return follower->control();
+}
+
+Goalie::~Goalie(){
+    delete follower;
 }
 
 }

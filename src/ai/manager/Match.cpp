@@ -52,10 +52,21 @@ Match::Match(
             new Strategy::Enseirb_project_wrapper(ai_data)
         )
     );
+    register_strategy(
+        "Goalie", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                }, true //it is a goal
+            )
+        )
+    );
     assign_strategy(
         Strategy::Halt::name, 0.0, 
         get_team_ids()
-   ); // TODO TIME !
+    ); // TODO TIME !
 }
 
 void Match::analyse_data(double time){
@@ -88,7 +99,8 @@ void Match::choose_a_strategy(double time){
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            assign_strategy( Strategy::Enseirb_project_wrapper::name, time, get_valid_team_ids() );
+            //assign_strategy( Strategy::Enseirb_project_wrapper::name, time, get_valid_team_ids() );
+            assign_strategy( "Goalie", time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }

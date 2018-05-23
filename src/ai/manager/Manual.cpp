@@ -6,6 +6,7 @@
 #include <strategy/sandbox.h>
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
+#include <robot_behavior/position_follower.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -32,31 +33,7 @@ Manual::Manual(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(
-                        ai_data,
-                        ai_data.constants.left_post_position,
-                        ai_data.constants.right_post_position,
-                        ai_data.constants.waiting_goal_position,
-                        ai_data.constants.penalty_rayon,
-                        ai_data.constants.robot_radius,
-                        time, dt
-                    );
-                    goalie->set_translation_pid(
-                        ai_data.constants.p_translation,
-                        ai_data.constants.i_translation,
-                        ai_data.constants.d_translation
-                    );
-                    goalie->set_orientation_pid(
-                        ai_data.constants.p_orientation,
-                        ai_data.constants.i_orientation,
-                        ai_data.constants.d_orientation
-                    );
-                    goalie->set_limits(
-                        ai_data.constants.translation_velocity_limit,
-                        ai_data.constants.rotation_velocity_limit,
-                        ai_data.constants.translation_acceleration_limit,
-                        ai_data.constants.rotation_acceleration_limit
-                    );
+                    Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
                 }, true
             )

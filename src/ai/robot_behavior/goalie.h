@@ -1,15 +1,18 @@
 #ifndef __ROBOT_BEHAVIOR__GOALIE__H__
 #define __ROBOT_BEHAVIOR__GOALIE__H__
 
-#include "position_follower.h"
+#include "robot_behavior.h"
+#include "factory.h"
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class Goalie : public PositionFollower {
+class Goalie : public RobotBehavior  {
     private:
         //PositionFollower follower(); TODO : to remove if not necessary
+
+	ConsignFollower* follower;
 
         Vector2d left_post_position; 
         Vector2d right_post_position;
@@ -27,6 +30,8 @@ class Goalie : public PositionFollower {
         );
 
     public:
+        Goalie(Ai::AiData& ai_data);
+
         Goalie(
             Ai::AiData& ai_data,
             const Vector2d & left_post_position,
@@ -42,6 +47,10 @@ class Goalie : public PositionFollower {
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
+
+	virtual Control control() const;
+
+	virtual ~Goalie();
 };
 
 };
