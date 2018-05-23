@@ -9,6 +9,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <strategy/enseirb_project_wrapper.h>
 #include <robot_behavior/goalie.h>
+#include <robot_behavior/defensor.h>
 #include <core/print_collection.h>
 
 namespace RhobanSSL {
@@ -63,6 +64,17 @@ Match::Match(
             )
         )
     );
+    register_strategy(
+        "Defensor", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                }, false // it is not a goal
+            )
+        )
+    );
     assign_strategy(
         Strategy::Halt::name, 0.0, 
         get_team_ids()
@@ -100,7 +112,8 @@ void Match::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
             //assign_strategy( Strategy::Enseirb_project_wrapper::name, time, get_valid_team_ids() );
-            assign_strategy( "Goalie", time, get_valid_team_ids() );
+            //assign_strategy( "Goalie", time, get_valid_team_ids() );
+            assign_strategy( "Defensor", time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }
