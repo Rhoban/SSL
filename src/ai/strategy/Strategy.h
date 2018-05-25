@@ -3,6 +3,8 @@
 
 #include <robot_behavior/robot_behavior.h>
 #include <map>
+#include <utility>
+#include <math/ContinuousAngle.h>
 #include <memory>
 #include <AiData.h>
 
@@ -47,6 +49,26 @@ class Strategy {
     virtual void stop(double time){};
     virtual void pause(double time){};
     virtual void resume(double time){};
+
+    /* 
+     * Return a list of position where it is recommended to place a 
+     * robot before starting the strategy.
+     * the size of the list should be smaller than the parameter 
+     * number_of_avalaible_robots.
+     */
+    virtual std::list<
+        std::pair<rhoban_geometry::Point,ContinuousAngle>
+    > get_starting_positions( int number_of_avalaible_robots ) const;  
+    /* 
+     * Set the position where it is recommended to place a goalie 
+     * before starting the strategy.
+     * If this function return false, then no position is given for a goale.
+     * If the strategy have no goalie, this function have to return false.
+     */
+    virtual bool get_starting_position_for_goalie(
+        rhoban_geometry::Point & linear_position, 
+        ContinuousAngle & angular_position
+    ) const;  
 
     /*
      * This function give the minimal numer of robot 

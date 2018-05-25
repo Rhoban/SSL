@@ -66,6 +66,22 @@ int Strategy::player_id( int id ) const {
     return player_ids[id];
 }
 
+std::list<
+    std::pair<rhoban_geometry::Point,ContinuousAngle>
+> Strategy::get_starting_positions( int number_of_avalaible_robots ) const {
+    return std::list<
+        std::pair<rhoban_geometry::Point,ContinuousAngle>
+    >();
+};  
+
+bool Strategy::get_starting_position_for_goalie(
+    rhoban_geometry::Point& linear_position,
+    ContinuousAngle  & angular_position
+) const {
+    return false;
+}  
+
+
 Strategy::~Strategy(){ }
 
 }

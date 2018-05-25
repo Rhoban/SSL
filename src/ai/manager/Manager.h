@@ -12,6 +12,10 @@ namespace RhobanSSL {
 namespace Manager {
 
 class Manager {
+    public:
+
+        static constexpr const char* MANAGER__REMOVE_ROBOTS = "manager__remove_robots";
+
     private:
 
     bool blueIsNotSet;

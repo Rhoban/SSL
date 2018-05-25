@@ -10,10 +10,12 @@
 namespace RhobanSSL {
 namespace Manager {
 
-Manual::Manual(
-    Ai::AiData & ai_data
-):
-    Manager(ai_data)
+Manual::Manual( Ai::AiData & ai_data ):
+    Manager(ai_data),
+    team_color(ai_data.team_color),
+    goal_to_positive_axis(true),
+    ally_goalie_id(0),
+    oponnent_goalie_id(0)
 {
 
     register_strategy(
@@ -98,9 +100,37 @@ Manual::Manual(
    strategy_was_assigned = false;
 }
 
+    
+void Manual::assign_point_of_view_and_goalie(){
+    change_team_and_point_of_view(
+        team_color,
+        goal_to_positive_axis
+    );
+    change_ally_and_opponent_goalie_id(
+        ally_goalie_id,
+        oponnent_goalie_id       
+    );
+}
+
+void Manual::set_team_color( Ai::Team team_color ){
+    this->team_color = team_color;
+}
+
+void Manual::define_goal_to_positive_axis(bool value){
+    this->goal_to_positive_axis = goal_to_positive_axis;
+}
+void Manual::set_ally_goalie_id( int id ){
+    this->ally_goalie_id = id;
+}
+void Manual::set_oponnent_goalie_id( int id ){
+    this->oponnent_goalie_id = id;
+}
+
+
 void Manual::update(double time){
     //update_strategies(time);
     update_current_strategies(time);
+    assign_point_of_view_and_goalie();
     if( ! strategy_was_assigned ){
         assign_strategy(
             "Goalie",

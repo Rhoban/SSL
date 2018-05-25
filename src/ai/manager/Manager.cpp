@@ -6,8 +6,6 @@
 namespace RhobanSSL {
 namespace Manager {
 
-#define MANAGER__REMOVE_ROBOTS "manager__remove_robots"
-
 int Manager::get_goalie_opponent_id() const {
     return goalie_opponent_id;
 }
@@ -227,6 +225,9 @@ void Manager::remove_invalid_robots(){
 }
 
 void Manager::detect_invalid_robots(){
+    // TODO : we need to detect when the list of invalid robot change.
+    // When it change, then, we need to reaffect robot ids.    
+
     int nb_valid = 0;
     int n_robots = team_ids.size();
     for(int i=0; i<n_robots; i++ ){
