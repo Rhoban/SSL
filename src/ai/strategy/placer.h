@@ -3,6 +3,7 @@
 
 #include "Strategy.h"
 #include <string>
+#include <list>
 #include <robot_behavior/robot_behavior.h>
 
 namespace RhobanSSL {
@@ -11,7 +12,8 @@ namespace Strategy {
 
 class Placer : public Strategy {
     private:
-        std::vector<
+        std::map<
+            int,
             std::pair<rhoban_geometry::Point, ContinuousAngle>
         > player_positions;
         std::vector< 
@@ -27,10 +29,11 @@ class Placer : public Strategy {
         // Try to place one robot at each given position.
         // This function return which robot id have been placed. 
         // the order of robot id correspond to the order of the given robot position
-        std::vector< int > set_positions(
-            const std::vector< 
-                std::pair<rhoban_geometry::Point, ContinuousAngle> 
-            > & player_positions
+        void set_positions(
+            const std::vector<int> & robot_affectations,
+            const std::vector<
+                std::pair<rhoban_geometry::Point, ContinuousAngle>
+            > & robot_consigns
         );
         void set_goalie_positions(
             const rhoban_geometry::Point & linear_position,

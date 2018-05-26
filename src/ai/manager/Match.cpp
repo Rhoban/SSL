@@ -77,54 +77,7 @@ void Match::analyse_data(double time){
         referee.yellow_goalie_id()
     );
 }
-
     
-void Match::aggregate_all_starting_position_of_all_strategies(){
-    // For the players
-    std::list<
-        std::pair<rhoban_geometry::Point,ContinuousAngle>
-    > starting_positions = get_strategy_<
-        Strategy::Enseirb_project_wrapper
-    >().get_starting_positions( get_valid_team_ids().size() );
-
-    // For the goalie
-    goal_has_to_be_placed = get_strategy_<
-        Strategy::Enseirb_project_wrapper
-    >().get_starting_position_for_goalie(
-        goalie_linear_position, goalie_angular_position
-    );
-}
-
-void Match::declare_robot_positions_in_the_placer(){
-    if(goal_has_to_be_placed){
-        get_strategy_<
-            Strategy::Placer
-        >().set_goalie_positions(
-            goalie_linear_position,
-            goalie_angular_position
-        );
-    }else{
-        get_strategy_<
-            Strategy::Placer
-        >().ignore_goalie();
-    }
-
-
-    assert( starting_positions.size() <=  get_valid_team_ids().size() );
-
-    enseirb_robots = get_strategy_<Strategy::Placer>().set_positions(
-        list2vector(starting_positions)
-    );
-}
-
-void Match::place_all_the_robots(double time){
-    aggregate_all_starting_position_of_all_strategies();
-    assign_strategy( 
-        Strategy::Placer::name, time, 
-        get_valid_team_ids()
-    );
-    declare_robot_positions_in_the_placer();
-}
 
 void Match::choose_a_strategy(double time){
     if( referee.edge_entropy() > last_referee_changement ){
@@ -137,7 +90,9 @@ void Match::choose_a_strategy(double time){
                 if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_team_ids() );
                 }else{
-                    place_all_the_robots(time);
+                    std::list<std::string> future_strats;
+                    future_strats.push_back(Strategy::Enseirb_project_wrapper::name);
+                    place_all_the_robots(time, future_strats );
                 }
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
@@ -149,7 +104,16 @@ void Match::choose_a_strategy(double time){
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            assign_strategy( Strategy::Enseirb_project_wrapper::name, time, enseirb_robots );
+            std::list<std::string> future_strats;
+            future_strats.push_back(Strategy::Enseirb_project_wrapper::name);
+            declare_next_strategies(future_strats);
+            assign_strategy(
+                Strategy::Enseirb_project_wrapper::name, 
+                time, 
+                get_robot_affectations(
+                    Strategy::Enseirb_project_wrapper::name
+                )
+            );
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }

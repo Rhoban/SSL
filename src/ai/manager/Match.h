@@ -27,18 +27,6 @@ class Match : public Manager {
 
     virtual ~Match();
 
-    private:
-    std::list<
-        std::pair<rhoban_geometry::Point,ContinuousAngle>
-    > starting_positions;
-    bool goal_has_to_be_placed;
-    rhoban_geometry::Point goalie_linear_position;
-    ContinuousAngle goalie_angular_position;
-
-    void aggregate_all_starting_position_of_all_strategies();
-    void declare_robot_positions_in_the_placer();
-    void place_all_the_robots(double time);
-
 };
 
 };

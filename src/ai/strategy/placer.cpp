@@ -41,8 +41,8 @@ void Placer::assign_behavior_to_robots(
                 id, std::shared_ptr<Robot_behavior::RobotBehavior>(
                     Robot_behavior::Factory::fixed_consign_follower(
                         ai_data, 
-                        player_positions[i].first, 
-                        player_positions[i].second
+                        player_positions[id].first, 
+                        player_positions[id].second
                     )
                 )
             );
@@ -58,40 +58,21 @@ Placer::~Placer(){
  * 
  *
  */
-std::vector< int > Placer::set_positions(
-    const std::vector< 
-        std::pair<rhoban_geometry::Point, ContinuousAngle> 
-    > & wished_robot_positions
+void Placer::set_positions(
+    const std::vector<int> & robot_affectations,
+    const std::vector<
+        std::pair<rhoban_geometry::Point, ContinuousAngle>
+    > & robot_consigns
 ){
-    assert( wished_robot_positions.size() <= get_player_ids().size() );
-    player_positions = std::vector< 
-        std::pair<rhoban_geometry::Point, ContinuousAngle> 
-    >( get_player_ids().size() );
-    this->wished_robot_positions = wished_robot_positions;
-    std::vector<int> robot_affectation(wished_robot_positions.size());
-    // TODO find beeter optimisation !
-    for( unsigned int i=0; i<wished_robot_positions.size(); i++ ){
-        player_positions[i] = wished_robot_positions[i]; 
-        robot_affectation[i] = robot_id(i);
+    assert(
+        robot_affectations.size() == 
+        robot_consigns.size()
+    );
+    
+    player_positions.clear();
+    for( unsigned int i=0; i<robot_affectations.size(); i++ ){
+        player_positions[ robot_affectations[i] ] = robot_consigns[i];
     }
-    // TODO : have a better default placer !
-    for( unsigned int i=wished_robot_positions.size(); i<get_player_ids().size(); i++ ){
-        player_positions[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
-            rhoban_geometry::Point(
-                -2.0, 
-                (
-                    2*ai_data.constants.robot_radius 
-                    +
-                    8*ai_data.constants.radius_ball/2.0
-                )*(
-                    (i-wished_robot_positions.size()) - 
-                    (get_player_ids().size()-wished_robot_positions.size())*.5
-                )
-            ),
-            ContinuousAngle(0.0)
-        ); 
-    }
-    return robot_affectation;
 }
 
 void Placer::set_goalie_positions(
