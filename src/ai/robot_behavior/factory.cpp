@@ -7,7 +7,11 @@
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-ConsignFollower* Factory::fixed_consign_follower( Ai::AiData & ai_data ){
+ConsignFollower* Factory::fixed_consign_follower(
+    Ai::AiData & ai_data,
+    const rhoban_geometry::Point & position,
+    const ContinuousAngle & angle
+){
     A_star_path* follower = new A_star_path(ai_data, ai_data.time, ai_data.dt); 
     //Navigation_with_obstacle_avoidance* follower = new Navigation_with_obstacle_avoidance(ai_data, ai_data.time, ai_data.dt); 
     // PositionFollower* follower = new PositionFollower(ai_data, ai_data.time, ai_data.dt); 
@@ -26,6 +30,7 @@ ConsignFollower* Factory::fixed_consign_follower( Ai::AiData & ai_data ){
         ai_data.constants.translation_acceleration_limit,
         ai_data.constants.rotation_acceleration_limit
     );
+    follower->set_following_position(position, angle);
     return follower;
 }
 

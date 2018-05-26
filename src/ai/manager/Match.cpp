@@ -4,12 +4,14 @@
 #include <strategy/halt.h>
 #include <strategy/tare_and_synchronize.h>
 #include <strategy/sandbox.h>
+#include <strategy/placer.h>
 #include <strategy/prepare_kickoff.h>
 #include <strategy/prepare_to_run.h>
 #include <strategy/from_robot_behavior.h>
 #include <strategy/enseirb_project_wrapper.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
+#include <core/collection.h>
 #include <core/print_collection.h>
 
 namespace RhobanSSL {
@@ -75,6 +77,12 @@ Match::Match(
             )
         )
     );
+    register_strategy(
+        Strategy::Placer::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Placer(ai_data)
+        )
+    );
     assign_strategy(
         Strategy::Halt::name, 0.0, 
         get_team_ids()
@@ -92,6 +100,8 @@ void Match::analyse_data(double time){
         referee.yellow_goalie_id()
     );
 }
+    
+
 void Match::choose_a_strategy(double time){
     if( referee.edge_entropy() > last_referee_changement ){
         clear_strategy_assignement();
@@ -99,8 +109,14 @@ void Match::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
-            if( get_valid_team_ids().size() > 0  ){
-                assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_team_ids() );
+            if(get_valid_team_ids().size() > 0){
+                if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
+                    assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_team_ids() );
+                }else{
+                    std::list<std::string> future_strats;
+                    future_strats.push_back(Strategy::Enseirb_project_wrapper::name);
+                    place_all_the_robots(time, future_strats );
+                }
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
             assign_strategy( Strategy::Prepare_kickoff::name, time, get_valid_team_ids() );
@@ -111,9 +127,20 @@ void Match::choose_a_strategy(double time){
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            //assign_strategy( Strategy::Enseirb_project_wrapper::name, time, get_valid_team_ids() );
-            //assign_strategy( "Goalie", time, get_valid_team_ids() );
-            assign_strategy( "Defensor", time, get_valid_team_ids() );
+            //std::string strategy_name = Strategy::Enseirb_project_wrapper::name;
+            //std::string strategy_name = "Goalie";
+            std::string strategy_name = "Defensor";
+            
+            std::list<std::string> future_strats;
+            future_strats.push_back(strategy_name);
+            declare_next_strategies(future_strats);
+            assign_strategy(
+                strategy_name,
+                time, 
+                get_robot_affectations(
+                    strategy_name
+                )
+            );
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }

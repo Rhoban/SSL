@@ -10,6 +10,7 @@ namespace Manager {
 class Match : public Manager {
     private:
     const Referee & referee;
+    std::vector<int> enseirb_robots;
 
     unsigned int last_referee_changement;
     
@@ -25,6 +26,7 @@ class Match : public Manager {
     void choose_a_strategy(double time);
 
     virtual ~Match();
+
 };
 
 };

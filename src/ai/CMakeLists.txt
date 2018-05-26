@@ -46,6 +46,7 @@ set (SOURCES
     strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
+    strategy/placer.cpp
     strategy/prepare_kickoff.cpp
     strategy/prepare_to_run.cpp
     strategy/enseirb_project_wrapper.cpp

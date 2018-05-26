@@ -10,7 +10,11 @@ namespace Robot_behavior {
 
 class Factory {
     public:
-    static ConsignFollower* fixed_consign_follower( Ai::AiData & ai_data );
+    static ConsignFollower* fixed_consign_follower(
+        Ai::AiData & ai_data,
+        const rhoban_geometry::Point & position = rhoban_geometry::Point(0.0, 0.0), 
+        const ContinuousAngle & angle = ContinuousAngle(0.0)
+    );
 
 };
 

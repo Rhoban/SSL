@@ -2,11 +2,12 @@
 
 #include <debug.h>
 #include <strategy/halt.h>
+#include <core/collection.h>
+#include <algorithm>
+#include <core/print_collection.h>
 
 namespace RhobanSSL {
 namespace Manager {
-
-#define MANAGER__REMOVE_ROBOTS "manager__remove_robots"
 
 int Manager::get_goalie_opponent_id() const {
     return goalie_opponent_id;
@@ -204,6 +205,12 @@ Manager::Manager( Ai::AiData& ai_data ):
             new Strategy::Halt(ai_data)
         )
     );
+    register_strategy(
+        MANAGER__PLACER,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Placer(ai_data)
+        )
+    );
 }
 
 int Manager::time() const {
@@ -227,6 +234,9 @@ void Manager::remove_invalid_robots(){
 }
 
 void Manager::detect_invalid_robots(){
+    // TODO : we need to detect when the list of invalid robot change.
+    // When it change, then, we need to reaffect robot ids.    
+
     int nb_valid = 0;
     int n_robots = team_ids.size();
     for(int i=0; i<n_robots; i++ ){
@@ -235,11 +245,16 @@ void Manager::detect_invalid_robots(){
         }
     }
     valid_team_ids.clear();
+    valid_player_ids.clear();
+
     invalid_team_ids.clear();
     for(int i=0; i<n_robots; i++ ){
         int id = team_ids[i];
         if( ai_data.robot_is_valid( id ) ){
             valid_team_ids.push_back( id );
+            if( goalie_id != id ){
+                valid_player_ids.push_back( id );
+            }
         }else{
             invalid_team_ids.push_back( id );
         }
@@ -248,6 +263,9 @@ void Manager::detect_invalid_robots(){
 
 const std::vector<int> & Manager::get_valid_team_ids() const {
     return valid_team_ids;
+}
+const std::vector<int> & Manager::get_valid_player_ids() const {
+    return valid_player_ids;
 }
 const std::vector<int> & Manager::get_invalid_team_ids() const {
     return invalid_team_ids;
@@ -264,6 +282,192 @@ std::vector<std::string> Manager::get_available_strategies()
     }
 
     return strategyNames;
+}
+
+void Manager::aggregate_all_starting_position_of_all_strategies(){
+    starting_positions.clear();
+    repartitions_of_starting_positions.clear();
+
+    // For the players
+    goal_has_to_be_placed = false;
+    for( const std::string & strategy_name : next_strategies ){
+        std::list<
+            std::pair<rhoban_geometry::Point,ContinuousAngle>
+        > starts = get_strategy(
+            strategy_name
+        ).get_starting_positions( get_valid_team_ids().size() );
+        
+        starting_positions.insert( starting_positions.end(), starts.begin(), starts.end() );
+        
+        repartitions_of_starting_positions.push_back(
+            std::pair<std::string, int>( strategy_name, starts.size() )
+        );
+
+        // For the goalie
+        rhoban_geometry::Point goalie_linear_position;
+        ContinuousAngle goalie_angular_position;
+        if(
+            get_strategy(strategy_name).get_starting_position_for_goalie(
+                goalie_linear_position, goalie_angular_position
+            )
+        ){
+            assert( not(goal_has_to_be_placed) ); // Two goal is defined, check you are not assigning two stratgies with a goal ! 
+            this->goalie_linear_position = goalie_linear_position;
+            this->goalie_angular_position = goalie_angular_position;
+            goal_has_to_be_placed = true;
+        }
+    }
+}
+
+void Manager::declare_robot_positions_in_the_placer(){
+    if(goal_has_to_be_placed){
+        get_strategy_<
+            Strategy::Placer
+        >().set_goalie_positions(
+            goalie_linear_position,
+            goalie_angular_position
+        );
+    }else{
+        get_strategy_<
+            Strategy::Placer
+        >().ignore_goalie();
+    }
+
+    assert( starting_positions.size() <=  get_valid_team_ids().size() );
+
+    get_strategy_<Strategy::Placer>().set_positions(
+        robot_affectations, robot_consigns
+    );
+}
+
+void Manager::place_all_the_robots(
+    double time, const std::list<std::string> & next_strategies
+){
+    declare_next_strategies(next_strategies);
+    declare_robot_positions_in_the_placer();
+    assign_strategy( 
+        Strategy::Placer::name, time, 
+        get_valid_team_ids()
+    );
+}
+
+const std::vector<int> & Manager::get_robot_affectations( const std::string & strategy_name ) const {
+    assert(
+        robot_affectations_by_strategy.find(strategy_name) != 
+        robot_affectations_by_strategy.end()
+    );
+    return robot_affectations_by_strategy.at(strategy_name);
+}
+
+void Manager::declare_next_strategies(const std::list<std::string> & next_strategies){
+    this->next_strategies = next_strategies;
+    aggregate_all_starting_position_of_all_strategies();
+    determine_the_robot_needs_for_the_strategies();
+    sort_robot_ordered_by_the_distance_with_starting_position();
+    compute_robot_affectations_to_strategies();
+}
+
+
+    
+void Manager::determine_the_robot_needs_for_the_strategies(){
+    nb_of_extra_robots = (
+        get_valid_team_ids().size() - starting_positions.size()
+    ); 
+    nb_of_extra_robots_non_affected = (
+        get_valid_team_ids().size() - starting_positions.size()
+    ); 
+    robot_affectations_by_strategy.clear();
+    number_of_extra_robot_by_strategy.clear();
+    for( const std::pair<std::string, int> & elem : repartitions_of_starting_positions ){
+        const std::string & strategy_name = elem.first; 
+        const int nb_robots = elem.second;
+
+        unsigned int extra_robots = 0;
+        if( get_strategy(strategy_name).max_robots()==-1 ){
+            extra_robots = nb_of_extra_robots_non_affected;
+            nb_of_extra_robots_non_affected = 0;
+        }else{
+            extra_robots = std::min(
+                nb_of_extra_robots_non_affected, 
+                static_cast<unsigned int>( get_strategy(strategy_name).max_robots() ) 
+            );
+            nb_of_extra_robots_non_affected -= extra_robots;
+        }
+        number_of_extra_robot_by_strategy[strategy_name] = extra_robots;
+
+        robot_affectations_by_strategy[strategy_name] = std::vector<int>( nb_robots+extra_robots );
+    }
+}
+
+void Manager::sort_robot_ordered_by_the_distance_with_starting_position(){
+    assert( starting_positions.size() <= get_valid_player_ids().size() );
+    robot_consigns = std::vector< 
+        std::pair<rhoban_geometry::Point, ContinuousAngle> 
+    >( get_valid_player_ids().size() );
+    robot_affectations.resize( get_valid_player_ids().size() );
+    // TODO find beeter optimisation !
+    int i = 0;
+    for(
+        const std::pair<rhoban_geometry::Point,ContinuousAngle> & pos : 
+        starting_positions
+    ){
+        robot_consigns[i] = pos; 
+        robot_affectations[i] = get_valid_player_ids()[i];
+        i++;
+    }
+    // TODO : have a better default placer !
+    for( unsigned int i=starting_positions.size(); i<get_valid_player_ids().size(); i++ ){
+        robot_consigns[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
+            rhoban_geometry::Point(
+                -2.0, 
+                (
+                    2*ai_data.constants.robot_radius 
+                    +
+                    8*ai_data.constants.radius_ball/2.0
+                )*(
+                    (i-starting_positions.size()) - 
+                    (get_valid_player_ids().size()-starting_positions.size())*.5
+                )
+            ),
+            ContinuousAngle(0.0)
+        ); 
+        robot_affectations[i] = get_valid_player_ids()[i];
+    }
+}
+
+void Manager::compute_robot_affectations_to_strategies(){
+    int cpt = 0;
+    for(
+        const std::pair<std::string, int> & elem : 
+        repartitions_of_starting_positions
+    ){
+        const std::string & strategy_name = elem.first; 
+        const int nb_robots = elem.second;
+        DEBUG("nb_robots : " << nb_robots);
+        for( int i=0; i<nb_robots; i++ ){
+            robot_affectations_by_strategy[strategy_name][i] = robot_affectations[cpt+i];
+        }
+        unsigned int extra_robots = number_of_extra_robot_by_strategy.at( strategy_name );
+        DEBUG("extra_robots : " << extra_robots);
+
+        DEBUG( "start_pos : " << starting_positions.size() );
+        DEBUG( "nb_of_extra_robots : " << nb_of_extra_robots );
+        DEBUG( "nb_of_extra_robots_non_affected : " << nb_of_extra_robots_non_affected );
+        DEBUG( "size : " << robot_affectations_by_strategy[strategy_name].size());
+        for( unsigned int i=0; i<extra_robots; i++ ){
+            DEBUG(robot_affectations_by_strategy[strategy_name]);
+            DEBUG( nb_robots+i );
+            DEBUG(robot_affectations_by_strategy[strategy_name][nb_robots+i]);
+            DEBUG( robot_affectations );
+            DEBUG( starting_positions.size() );
+            DEBUG( nb_of_extra_robots - nb_of_extra_robots_non_affected - extra_robots );
+            robot_affectations_by_strategy[strategy_name][nb_robots+i] = robot_affectations[
+                i + starting_positions.size() + nb_of_extra_robots - nb_of_extra_robots_non_affected - extra_robots
+            ];
+        }
+        DEBUG("robot affect : " << robot_affectations_by_strategy);
+        cpt += nb_robots;
+    }
 }
 
 };
