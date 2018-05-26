@@ -3,7 +3,6 @@
 // The different strategies
 #include <strategy/halt.h>
 #include <strategy/tare_and_synchronize.h>
-#include <strategy/sandbox.h>
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/position_follower.h>

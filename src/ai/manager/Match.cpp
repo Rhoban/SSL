@@ -3,7 +3,6 @@
 // The different strategies
 #include <strategy/halt.h>
 #include <strategy/tare_and_synchronize.h>
-#include <strategy/sandbox.h>
 #include <strategy/placer.h>
 #include <strategy/prepare_kickoff.h>
 #include <strategy/prepare_to_run.h>

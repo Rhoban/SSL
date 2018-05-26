@@ -2,7 +2,6 @@
 #define __MANAGER__MANUAL__H__
 
 #include "Manager.h"
-#include <referee/Referee.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -15,10 +14,7 @@ class Manual {
     std::string current_strategy_name;
     std::map< std::string, std::shared_ptr<Strategy::Strategy>> strategies;
     Ai::AiData& ai_data;
-    const Referee & referee;
 
-    double start;
-    bool sandbox;
     public:
 
     std::vector<std::string> get_available_strategies();
@@ -32,10 +28,7 @@ class Manual {
     const std::vector<int> & get_team_ids() const;
     int get_goalie_id() const;
 
-    Manual(
-        Ai::AiData & ai_data,
-        const Referee & referee
-    );
+    Manual( Ai::AiData & ai_data );
 
     template <typename STRATEGY>
     STRATEGY & get_strategy( const std::string & name ){

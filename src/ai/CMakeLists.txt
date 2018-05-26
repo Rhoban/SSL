@@ -42,7 +42,6 @@ set (SOURCES
     manager/Manual.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
-    strategy/sandbox.cpp
     strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
