@@ -157,14 +157,7 @@ namespace Ai {
             
             front_size = .06;
             
-            left_post_position = Vector2d( -4.5, -0.5 );
-            right_post_position = Vector2d( -4.50, 0.5 );
-            goal_center = (
-                left_post_position + right_post_position
-            )/2;
-            waiting_goal_position = (
-                goal_center + Vector2d(0.0, 0.0)
-            );
+            waiting_goal_position = Vector2d(0.3, 0.0);
             // PID for translation
             p_translation = 0.05; 
             //p_translation = 0.0; 
@@ -197,14 +190,7 @@ namespace Ai {
 
             front_size = .06;
 
-            left_post_position = Vector2d( 0., -0.29 );
-            right_post_position = Vector2d( 0., 0.29 );
-            goal_center = (
-                left_post_position + right_post_position
-            )/2;
-            waiting_goal_position = (
-                goal_center + Vector2d(0.3, 0.0)
-            );
+            waiting_goal_position = Vector2d(0.3, 0.0);
             // PID for translation
             p_translation = 0.02; 
             i_translation = .001;

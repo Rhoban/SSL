@@ -103,9 +103,13 @@ void Sandbox::assign_behavior_to_robots(
 
         #if 1
         // We create a shooter :
+        Vector2d goal_center(
+            ai_data.field.fieldLength/2.0, 0.0
+        );
         Robot_behavior::Shooter* shooter = new Robot_behavior::Shooter(
+
             ai_data,
-            ai_data.constants.goal_center,
+            goal_center,
             ai_data.constants.robot_radius,
             ai_data.constants.front_size,
             ai_data.constants.radius_ball,

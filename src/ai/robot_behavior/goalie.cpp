@@ -26,10 +26,10 @@ Goalie::Goalie(
 ):
 	Goalie::Goalie(
 		ai_data,
-		ai_data.constants.left_post_position,
-		ai_data.constants.right_post_position,
-		ai_data.constants.waiting_goal_position,
-		ai_data.constants.penalty_rayon,
+		Vector2d(-ai_data.field.fieldLength/2.0, ai_data.field.goalWidth/2.0),
+		Vector2d(-ai_data.field.fieldLength/2.0, -ai_data.field.goalWidth/2.0),
+        Vector2d(-ai_data.field.fieldLength/2.0, 0.0 ) + ai_data.constants.waiting_goal_position,
+		ai_data.field.penaltyAreaDepth,
 		ai_data.constants.robot_radius,
 		ai_data.time, ai_data.dt
 	)

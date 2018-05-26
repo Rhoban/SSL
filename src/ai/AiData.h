@@ -86,9 +86,6 @@ struct Constants {
     double robot_radius;
     double radius_ball;
     double front_size;
-    Vector2d left_post_position;
-    Vector2d right_post_position;
-    Vector2d goal_center;
     Vector2d waiting_goal_position;
     // PID for translation
     double p_translation;

@@ -37,7 +37,7 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
-                }, true
+                }, false // we don't want to define a goal here !
             )
         )
     );
@@ -74,7 +74,7 @@ Manual::Manual( Ai::AiData & ai_data ):
         Strategy::Halt::name, 0.0,
         get_team_ids()
    ); // TODO TIME !
-   strategy_was_assigned = false;
+   //strategy_was_assigned = false;
 }
 
     
@@ -82,10 +82,6 @@ void Manual::assign_point_of_view_and_goalie(){
     change_team_and_point_of_view(
         team_color,
         goal_to_positive_axis
-    );
-    change_ally_and_opponent_goalie_id(
-        ally_goalie_id,
-        oponnent_goalie_id       
     );
 }
 
@@ -96,26 +92,20 @@ void Manual::set_team_color( Ai::Team team_color ){
 void Manual::define_goal_to_positive_axis(bool value){
     this->goal_to_positive_axis = goal_to_positive_axis;
 }
-void Manual::set_ally_goalie_id( int id ){
-    this->ally_goalie_id = id;
-}
-void Manual::set_oponnent_goalie_id( int id ){
-    this->oponnent_goalie_id = id;
-}
 
 
 void Manual::update(double time){
     //update_strategies(time);
     update_current_strategies(time);
     assign_point_of_view_and_goalie();
-    if( ! strategy_was_assigned ){
-        assign_strategy(
-            "Goalie",
-            //"Position Follower",
-            time, get_team_ids()
-        );
-	    strategy_was_assigned = true;
-    }
+    //if( ! strategy_was_assigned ){
+    //    assign_strategy(
+    //        "Goalie",
+    //        //"Position Follower",
+    //        time, get_team_ids()
+    //    );
+	//    strategy_was_assigned = true;
+    //}
 }
 
 Manual::~Manual(){ }

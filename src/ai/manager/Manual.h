@@ -24,8 +24,6 @@ class Manual : public Manager {
 
     void set_team_color( Ai::Team team_color );
     void define_goal_to_positive_axis(bool value = true);
-    void set_ally_goalie_id( int id );
-    void set_oponnent_goalie_id( int id );
 
     void update(double time);
 
