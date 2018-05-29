@@ -91,10 +91,12 @@ if(CATKIN_ENABLE_TESTING)
 
   set (TEST_SOURCES
     core/test_machine_state.cpp
+    core/test_collection.cpp
     core/test_print_collection.cpp
     math/test_curve.cpp
     math/test_circular_vector.cpp
     math/test_frame_changement.cpp
+    math/test_matching.cpp
     physic/test_MovementSample.cpp
     physic/test_movement_with_no_prediction.cpp
     physic/test_movement_predicted_by_integration.cpp

@@ -2,9 +2,11 @@
 
 #include <debug.h>
 #include <strategy/halt.h>
-#include <core/collection.h>
 #include <algorithm>
+#include <core/collection.h>
 #include <core/print_collection.h>
+#include <algorithm>
+#include <math/matching.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -405,17 +407,67 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position(){
         std::pair<rhoban_geometry::Point, ContinuousAngle> 
     >( get_valid_player_ids().size() );
     robot_affectations.resize( get_valid_player_ids().size() );
-    // TODO find beeter optimisation !
-    int i = 0;
-    for(
-        const std::pair<rhoban_geometry::Point,ContinuousAngle> & pos : 
+
+    std::vector<
+        std::pair<rhoban_geometry::Point, ContinuousAngle>
+    > choising_positions = list2vector(
         starting_positions
+    );
+
+    std::function<
+        double( 
+            const int & robot_id,
+            const std::pair<rhoban_geometry::Point, ContinuousAngle> & pos
+        ) 
+    > robot_ranking = [this](
+        const int & robot_id,
+        const std::pair<rhoban_geometry::Point, ContinuousAngle> & pos 
     ){
-        robot_consigns[i] = pos; 
-        robot_affectations[i] = get_valid_player_ids()[i];
-        i++;
+        return Vector2d(
+            pos.first -
+            this->robot(robot_id).get_movement().linear_position(time())
+        ).norm_square();
+    };
+
+    std::function<
+        double( 
+            const std::pair<rhoban_geometry::Point, ContinuousAngle> & pos,
+            const int & robot_id
+        ) 
+    > distance_ranking = [this](
+        const std::pair<rhoban_geometry::Point, ContinuousAngle> & pos, 
+        const int & robot_id
+    ){
+        return Vector2d(
+            pos.first -
+            this->robot(robot_id).get_movement().linear_position(time())
+        ).norm_square();
+    };
+
+    matching::Matchings matchings = matching::gale_shapley_algorithm(
+        get_valid_player_ids(), choising_positions,
+        robot_ranking, distance_ranking,
+        false, false
+    );
+
+    std::list <int> not_choosen_robot;
+    for( unsigned int id : matchings.unaffected_man ){
+        not_choosen_robot.push_back( get_valid_player_ids()[id] );
     }
+     
+    for(
+        unsigned int i=0; i<choising_positions.size(); i++
+    ){
+        const std::pair<rhoban_geometry::Point,ContinuousAngle> & pos = choising_positions[i];
+        robot_consigns[i] = pos; 
+        robot_affectations[i] = get_valid_player_ids()[
+            matchings.women_to_man_matchings.at(i)
+        ];
+    }
+
+
     // TODO : have a better default placer !
+    std::list<int>::const_iterator it = not_choosen_robot.begin();
     for( unsigned int i=starting_positions.size(); i<get_valid_player_ids().size(); i++ ){
         robot_consigns[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
             rhoban_geometry::Point(
@@ -431,7 +483,8 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position(){
             ),
             ContinuousAngle(0.0)
         ); 
-        robot_affectations[i] = get_valid_player_ids()[i];
+        robot_affectations[i] = *it;
+        it++;
     }
 }
 
@@ -443,31 +496,23 @@ void Manager::compute_robot_affectations_to_strategies(){
     ){
         const std::string & strategy_name = elem.first; 
         const int nb_robots = elem.second;
-        DEBUG("nb_robots : " << nb_robots);
         for( int i=0; i<nb_robots; i++ ){
             robot_affectations_by_strategy[strategy_name][i] = robot_affectations[cpt+i];
         }
         unsigned int extra_robots = number_of_extra_robot_by_strategy.at( strategy_name );
-        DEBUG("extra_robots : " << extra_robots);
 
-        DEBUG( "start_pos : " << starting_positions.size() );
-        DEBUG( "nb_of_extra_robots : " << nb_of_extra_robots );
-        DEBUG( "nb_of_extra_robots_non_affected : " << nb_of_extra_robots_non_affected );
-        DEBUG( "size : " << robot_affectations_by_strategy[strategy_name].size());
         for( unsigned int i=0; i<extra_robots; i++ ){
-            DEBUG(robot_affectations_by_strategy[strategy_name]);
-            DEBUG( nb_robots+i );
-            DEBUG(robot_affectations_by_strategy[strategy_name][nb_robots+i]);
-            DEBUG( robot_affectations );
-            DEBUG( starting_positions.size() );
-            DEBUG( nb_of_extra_robots - nb_of_extra_robots_non_affected - extra_robots );
             robot_affectations_by_strategy[strategy_name][nb_robots+i] = robot_affectations[
                 i + starting_positions.size() + nb_of_extra_robots - nb_of_extra_robots_non_affected - extra_robots
             ];
         }
-        DEBUG("robot affect : " << robot_affectations_by_strategy);
         cpt += nb_robots;
     }
+}
+
+
+Ai::Robot& Manager::robot( int robot_number) const {
+    return ai_data.robots.at( Vision::Team::Ally ).at( robot_number );
 }
 
 };

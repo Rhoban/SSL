@@ -147,6 +147,11 @@ class Manager {
         double time, const std::list<std::string> & next_strategies
     );
     const std::vector<int> & get_robot_affectations( const std::string & strategy_name ) const;
+
+    // Return the ally robot whose number is 
+    // `̀robot_number'.
+    Ai::Robot& robot( int robot_number) const;
+
 };
 
 
