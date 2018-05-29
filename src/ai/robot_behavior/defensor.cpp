@@ -28,19 +28,41 @@ void Defensor::update(
     //  this->robot_angular_position 
     // are all avalaible
     
+    //int robot_id = 2;
+    //const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
+    //const Ai::Robot & robot = robot_table.at(robot_id);
+    
+//    const rhoban_geometry::Point & robot_position_point = robot.get_movement().linear_position( ai_data.time );
+    
 
     double goal_rotation = M_PI/2.0; // radian
     Vector2d our_goal_center( - ai_data.field.fieldLength/2.0, 0.0  );
     Vector2d direction = our_goal_center - this->ball_position;
     direction = direction/direction.norm();
 
+    double target_radius_from_ball = 0.5;
     double error = 0.03;
     Vector2d defender_pos =  this->ball_position + direction * (
-         ai_data.constants.robot_radius + ai_data.constants.radius_ball + error
-    );
-    
-    follower->set_following_position(defender_pos, goal_rotation );
+         ai_data.constants.robot_radius + ai_data.constants.radius_ball + target_radius_from_ball + error
+    );    
 
+    follower->avoid_the_ball(false);
+    follower->set_following_position(defender_pos, goal_rotation);
+
+    //if (defender_pos.getX() < this->ball_position.getX()) {
+#if 0    
+    if (robot_position_point.getX() < this->ball_position.getX()) {
+        follower->set_following_position(defender_pos, goal_rotation );
+    }
+    else {
+        if (robot_position_point.getY() < this->ball_position.getY()) {
+        follower->set_following_position(defender_pos, goal_rotation );
+        }
+        else {
+        follower->set_following_position(defender_pos, goal_rotation );
+        }
+    }
+#endif
     follower->update(time, robot, ball);   
 }
 

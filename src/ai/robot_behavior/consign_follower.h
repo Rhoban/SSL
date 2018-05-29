@@ -15,6 +15,8 @@ class ConsignFollower : public RobotBehavior {
         const ContinuousAngle & angle
     ) = 0;
 
+    void avoid_the_ball( bool value );
+
     virtual ~ConsignFollower();
 };
 

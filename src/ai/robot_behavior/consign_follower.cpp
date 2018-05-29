@@ -9,5 +9,7 @@ ConsignFollower::ConsignFollower( Ai::AiData & ai_data ):
 
 ConsignFollower::~ConsignFollower(){ }
 
+void ConsignFollower::avoid_the_ball( bool value ){ }
+
 }
 }

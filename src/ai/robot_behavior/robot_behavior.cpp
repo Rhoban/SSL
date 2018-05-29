@@ -68,7 +68,8 @@ void RobotBehavior::update_time_and_position(
     double time, 
     const Ai::Robot & robot, const Ai::Ball & ball
 ){
-    this->robot_ptr = &robot; 
+    this->robot_ptr = &robot;
+    this->ball_ptr = &ball; 
     lastUpdate = time;
     this->robot_linear_position = Vector2d(
         robot.get_movement().linear_position(time)
@@ -85,6 +86,10 @@ void RobotBehavior::update_time_and_position(
 
 const Ai::Robot & RobotBehavior::robot() const {
     return *robot_ptr;
+}
+
+const Ai::Ball & RobotBehavior::ball() const {
+    return *ball_ptr;
 }
 
 double RobotBehavior::time() const {
