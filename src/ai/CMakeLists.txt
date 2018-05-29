@@ -60,6 +60,7 @@ set (SOURCES
     physic/movement_with_temporal_shift.cpp
     physic/MovementSample.cpp
     physic/Movement.cpp
+    physic/factory.cpp
     physic/collision.cpp
     math/ContinuousAngle.cpp
     math/curve.cpp

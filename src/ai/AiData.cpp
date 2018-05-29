@@ -1,11 +1,9 @@
 #include "AiData.h"
 #include <assert.h>
-#include <physic/movement_predicted_by_integration.h>
-#include <physic/movement_with_no_prediction.h>
-#include <physic/movement_on_new_frame.h>
-#include <physic/movement_with_temporal_shift.h>
+#include <physic/factory.h>
 #include <debug.h>
 #include <physic/collision.h>
+#include <physic/movement_on_new_frame.h>
 
 namespace RhobanSSL {
 namespace Ai {
@@ -92,11 +90,7 @@ namespace Ai {
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
                 robots[team][k].set_movement(
-                    new Movement_with_temporal_shift(
-                        //new Movement_with_no_prediction()
-                        new Movement_predicted_by_integration()
-                        , [this](){ return this->time_shift_with_vision; }
-                    )
+                    physic::Factory::robot_movement(*this)
                 );
                 nb_robots++;
             }
@@ -112,11 +106,7 @@ namespace Ai {
             }
         }
         ball.set_movement(
-            new Movement_with_temporal_shift(
-                //new Movement_with_no_prediction()
-                new Movement_predicted_by_integration()
-                , [this](){ return this->time_shift_with_vision; }
-            )
+            physic::Factory::ball_movement(*this)
         );
     }
 
