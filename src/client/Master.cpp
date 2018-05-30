@@ -69,31 +69,34 @@ namespace RhobanSSL
 
     void Master::send()
     {
-        // Waiting to either have received an answer from the last send() or reached the
-        // overall cycle timeout
-        bool waiting = true;
-        while (waiting) {
-            mutex.lock();
-            if (receivedAnswer) {
-                waiting = false;
+        if (tmpPacket.size() > 0) { // There is something to send
+            // Waiting to either have received an answer from the last send() or reached the
+            // overall cycle timeout
+            bool waiting = true;
+            while (waiting) {
+                mutex.lock();
+                if (receivedAnswer) {
+                    waiting = false;
+                } else {
+                    // XXX: This timeout should be adjusted
+                    if (diffSec(lastSend, rhoban_utils::TimeStamp::now()) > 0.03) {
+                        waiting = false;
+                    }
+                }
+                mutex.unlock();
+                usleep(100);
             }
-            // XXX: This timeout should be adjusted
-            if (diffSec(lastSend, rhoban_utils::TimeStamp::now()) > 0.03) {
-                waiting = false;
-            }
-            mutex.unlock();
-            usleep(100);
-        }
 
-        // XXX: Did we finished the last send cycle?
-        // We should wait either the timeout or the reception is over
-        packet = tmpPacket;
-        nbRobots = tmpNbRobots;
-        tmpPacket.clear();
-        tmpNbRobots = 0;
-        receivedAnswer = false;
-        lastSend = rhoban_utils::TimeStamp::now();
-        shouldSend = true;
+            // XXX: Did we finished the last send cycle?
+            // We should wait either the timeout or the reception is over
+            packet = tmpPacket;
+            nbRobots = tmpNbRobots;
+            tmpPacket.clear();
+            tmpNbRobots = 0;
+            receivedAnswer = false;
+            lastSend = rhoban_utils::TimeStamp::now();
+            shouldSend = true;
+        }
     }
 
     void Master::addPacket(int robot, int instruction, char *packet, size_t len)
@@ -179,6 +182,11 @@ namespace RhobanSSL
                         temp[pos++] = c;
                     } else {
                         if (c == 0xff) {
+                            if (nb_robots == 0) {
+                                std::cout << "- No robots in answer!" << std::endl;
+                            } else {
+                                std::cout << "- Robots in answer!" << std::endl;
+                            }
                             /*
                             if (nb_robots > 0) {
                                 static int packets = 0;

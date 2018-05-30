@@ -726,7 +726,7 @@ function Manager(viewer)
                 var robot = robotById(id);
 
                 api.enableRobot(robot.id, !robot.enabled);
-                api.robotCommand(robot.id, 0.0, 0.0, 0.0, 0, robot.spin);
+                api.robotCommand(robot.id, 0.0, 0.0, 0.0);
                 $(this).prop('checked', robot.enabled);
             });
 
@@ -762,7 +762,7 @@ function Manager(viewer)
                 if (robot.enabled) {
                     robot.spin = !robot.spin;
                 }
-                api.robotCommand(robot.id, 0.0, 0.0, 0.0, 0, robot.spin);
+                api.robotCommand(robot.id, 0.0, 0.0, 0.0);
             });
 
             button('.pid', function(robot) {
@@ -795,31 +795,31 @@ function Manager(viewer)
             }, 'mouseup');
 
             button('.left', function(robot) {
-                api.robotCommand(robot.id, 0.0, 0.2, 0.0, 0, robot.spin);
+                api.robotCommand(robot.id, 0.0, 0.2, 0.0);
             }, 'mousedown');
 
             button('.right', function(robot) {
-                api.robotCommand(robot.id, 0.0, -0.2, 0.0, 0, robot.spin);
+                api.robotCommand(robot.id, 0.0, -0.2, 0.0);
             }, 'mousedown');
 
             button('.rear', function(robot) {
-                api.robotCommand(robot.id, -0.2, 0.0, 0.0, 0, robot.spin);
+                api.robotCommand(robot.id, -0.2, 0.0, 0.0);
             }, 'mousedown');
 
             button('.front', function(robot) {
-                api.robotCommand(robot.id, 0.2, 0.0, 0.0, 0, robot.spin);
+                api.robotCommand(robot.id, 0.2, 0.0, 0.0);
             }, 'mousedown');
 
             button('.rotate-right', function(robot) {
-                api.robotCommand(robot.id, 0.0, 0.0, -2, 0, robot.spin);
+                api.robotCommand(robot.id, 0.0, 0.0, -2);
             }, 'mousedown');
 
             button('.rotate-left', function(robot) {
-                api.robotCommand(robot.id, 0.0, 0.0, 2, 0, robot.spin);
+                api.robotCommand(robot.id, 0.0, 0.0, 2);
             }, 'mousedown');
 
             button('.command', function(robot) {
-                api.robotCommand(robot.id, 0.0, 0.0, 0.0, 0, robot.spin);
+                api.robotCommand(robot.id, 0.0, 0.0, 0.0);
             }, 'mouseup');
 
             if (simulation) {

@@ -32,11 +32,13 @@ API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, Rhoban
     for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
         RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
 
+        control.ignore = true;
         control.charge = false;
-        control.active = true;
+        control.active = false;
         control.velocity_translation = Vector2d(0, 0);
         control.velocity_rotation = ContinuousAngle(0);
         control.spin = false;
+        shared.final_control_for_robots[id].is_manually_controled_by_viewer = true;
     }
     data << shared;
 
@@ -299,7 +301,7 @@ void API::activeRobot(int id, bool active)
 }
 
 void API::robotCommand(int id,
-    double xSpeed, double ySpeed, double thetaSpeed, int kick, bool spin, bool charge)
+    double xSpeed, double ySpeed, double thetaSpeed)
 {
     mutex.lock();
 
@@ -310,9 +312,6 @@ void API::robotCommand(int id,
     if (!control.ignore) {
         control.velocity_translation = Vector2d(xSpeed, ySpeed);
         control.velocity_rotation = ContinuousAngle(thetaSpeed);
-        control.kick = kick;
-        control.spin = spin;
-        control.charge = charge;
     }
 
     data << shared;
@@ -468,6 +467,7 @@ void API::joystickThreadExec()
     float ySpeed = 0;
     float thetaSpeed = 0;
     bool spin = false;
+    bool charge = false;
     int kick = false;
 
     while ((joystickRobot >= 0) && (joystick != NULL)) {
@@ -490,6 +490,9 @@ void API::joystickThreadExec()
                 if (event.number == 4) {
                     spin = event.isPressed();
                 }
+                if (event.number == 3 && event.isPressed()) {
+                    charge = !charge;
+                }
                 if (event.number == 5) {
                     kick = event.isPressed() ? 1 : 0;
                 }
@@ -510,6 +513,7 @@ void API::joystickThreadExec()
             control.velocity_translation = Vector2d(xSpeed, ySpeed);
             control.velocity_rotation = ContinuousAngle(thetaSpeed);
             control.spin = spin;
+            control.charge = charge;
             control.kick = false;
             control.chipKick = false;
             if (kick == 1) control.kick = true;
