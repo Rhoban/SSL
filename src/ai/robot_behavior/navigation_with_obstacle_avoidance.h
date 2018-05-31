@@ -51,8 +51,6 @@ class Navigation_with_obstacle_avoidance :
         void compute_the_limit_cycle_direction();
         void convert_cycle_direction_to_linear_and_angular_velocity();
 
-        void avoid_the_ball(bool value = true);
-
 
     public:
         Navigation_with_obstacle_avoidance(
@@ -88,6 +86,7 @@ class Navigation_with_obstacle_avoidance :
             const Vector2d & position_to_follow,
             const ContinuousAngle & angle
         );
+        virtual void avoid_the_ball(bool value = true);
 
 };
 

@@ -32,7 +32,7 @@ ConsignFollower* Factory::fixed_consign_follower(
         ai_data.constants.rotation_acceleration_limit
     );
     follower->set_following_position(position, angle);
-    follower->avoid_the_ball(not(ignore_the_ball));
+    follower->avoid_the_ball(not(ignore_the_ball));    
     return follower;
 }
 
