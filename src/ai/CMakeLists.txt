@@ -27,6 +27,7 @@ set (SOURCES
     robot_behavior/factory.cpp
     robot_behavior/goalie.cpp
     robot_behavior/defensor.cpp
+    robot_behavior/striker.cpp
     robot_behavior/position_follower.cpp
     robot_behavior/shooter.cpp
     robot_behavior/do_nothing.cpp

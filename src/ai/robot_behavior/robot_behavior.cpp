@@ -97,6 +97,18 @@ double RobotBehavior::time() const {
 
 }
 
+const rhoban_geometry::Point RobotBehavior::ally_goal_center() const {
+    return  rhoban_geometry::Point( - ai_data.field.fieldLength/2.0, 0.0 );
+    
+}
+
+const rhoban_geometry::Point RobotBehavior::oponent_goal_center() const {
+    return rhoban_geometry::Point( ai_data.field.fieldLength/2.0, 0.0 );
+}
+
+const rhoban_geometry::Point RobotBehavior::center_mark() const {
+    return rhoban_geometry::Point( 0.0, 0.0 );
+}
 
 }
 }

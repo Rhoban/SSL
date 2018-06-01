@@ -65,6 +65,9 @@ class RobotBehavior {
 
         const Ai::Robot & robot() const ;
         const Ai::Ball & ball() const ;
+        const rhoban_geometry::Point ally_goal_center() const ;
+        const rhoban_geometry::Point oponent_goal_center() const ;
+        const rhoban_geometry::Point center_mark() const ;
 };
 
 namespace detail {

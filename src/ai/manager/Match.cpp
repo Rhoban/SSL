@@ -10,6 +10,7 @@
 #include <strategy/enseirb_project_wrapper.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
+#include <robot_behavior/striker.h>
 #include <core/collection.h>
 #include <core/print_collection.h>
 
@@ -77,6 +78,17 @@ Match::Match(
         )
     );
     register_strategy(
+        "Striker", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
         Strategy::Placer::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Placer(ai_data)
@@ -129,6 +141,7 @@ void Match::choose_a_strategy(double time){
             //std::string strategy_name = Strategy::Enseirb_project_wrapper::name;
             //std::string strategy_name = "Goalie";
             std::string strategy_name = "Defensor";
+            //std::string strategy_name = "Striker";
             
             std::list<std::string> future_strats;
             future_strats.push_back(strategy_name);
