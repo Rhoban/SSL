@@ -50,7 +50,7 @@ void Prepare_kickoff::assign_behavior_to_robots(
         assign_behavior(
             goalie_id, std::shared_ptr<Robot_behavior::RobotBehavior>(
                  Prepare_kickoff::create_follower(
-                     Vector2d(-2.0, 0.0), ContinuousAngle(M_PI/2.0),
+                     Vector2d(-4.0, 0.0), ContinuousAngle(M_PI/2.0),
                      time, dt
                  )
             )

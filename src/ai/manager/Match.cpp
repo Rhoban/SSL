@@ -61,12 +61,23 @@ Match::Match(
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
-                }, true //it is a goal
+                }, false //it is a goal
             )
         )
     );
     register_strategy(
-        "Defensor", std::shared_ptr<Strategy::Strategy>(
+        "Defensor1", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
+        "Defensor2", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
@@ -126,20 +137,21 @@ void Match::choose_a_strategy(double time){
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            //std::string strategy_name = Strategy::Enseirb_project_wrapper::name;
-            //std::string strategy_name = "Goalie";
-            std::string strategy_name = "Defensor";
-            
-            std::list<std::string> future_strats;
-            future_strats.push_back(strategy_name);
-            declare_next_strategies(future_strats);
-            assign_strategy(
-                strategy_name,
-                time, 
-                get_robot_affectations(
-                    strategy_name
-                )
-            );
+            std::list<std::string> future_strats = {
+                "Defensor1", "Defensor2", 
+                "Goalie"
+                //Strategy::Enseirb_project_wrapper::name
+            };
+            declare_next_strategies(future_strats); //This is needed to comput robot affectation
+            for( const std::string & strategy_name : future_strats ){
+                assign_strategy(
+                    strategy_name,
+                    time, 
+                    get_robot_affectations(
+                        strategy_name
+                    )
+                );
+            }
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }

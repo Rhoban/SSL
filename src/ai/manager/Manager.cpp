@@ -81,8 +81,8 @@ void Manager::assign_strategy(
     strategy.set_robot_affectation( robot_ids );
     strategy.start(time);
 
-    std::cout << "Manager: Assigning " << strategy_name << " to " <<
-        robot_ids.size() << " robots" << std::endl;
+    std::cout << "Manager: Assigning " << strategy.get_robot_ids() << " to " <<
+        robot_ids.size() << " robots : " << "(goalie : "<< strategy.get_goalie() << ")" << std::endl;
 }
 
 Strategy::Strategy & Manager::get_strategy( const std::string & strategy_name ) {
@@ -129,6 +129,8 @@ void Manager::assign_behavior_to_robots(
                 std::shared_ptr<Robot_behavior::RobotBehavior> behavior
             ){
                 #if 0 // HACK : TODO  -- quick fix
+                DEBUG("Strategy : " << name);
+                DEBUG("Current assignation : " << id);
                 #ifndef NDEBUG
                 bool id_is_present = false;
                 for( int robot_id : this->get_strategy(name).get_robot_ids() ){
@@ -137,6 +139,7 @@ void Manager::assign_behavior_to_robots(
                         break;
                     }
                 }
+                DEBUG("Robot presence : " << id_is_present);
                 assert( id_is_present );
                 #endif
                 #endif
@@ -374,10 +377,10 @@ void Manager::declare_next_strategies(const std::list<std::string> & next_strate
     
 void Manager::determine_the_robot_needs_for_the_strategies(){
     nb_of_extra_robots = (
-        get_valid_team_ids().size() - starting_positions.size()
+        get_valid_player_ids().size() - starting_positions.size()
     ); 
     nb_of_extra_robots_non_affected = (
-        get_valid_team_ids().size() - starting_positions.size()
+        get_valid_player_ids().size() - starting_positions.size()
     ); 
     robot_affectations_by_strategy.clear();
     number_of_extra_robot_by_strategy.clear();
@@ -490,7 +493,9 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position(){
 }
 
 void Manager::compute_robot_affectations_to_strategies(){
-    int cpt = 0;
+    // TODO MANAGE THE CASE OF THE GOAL !
+    unsigned int cpt_robot = 0;
+    unsigned int cpt_extra_robot = 0;
     for(
         const std::pair<std::string, int> & elem : 
         repartitions_of_starting_positions
@@ -498,16 +503,16 @@ void Manager::compute_robot_affectations_to_strategies(){
         const std::string & strategy_name = elem.first; 
         const int nb_robots = elem.second;
         for( int i=0; i<nb_robots; i++ ){
-            robot_affectations_by_strategy[strategy_name][i] = robot_affectations[cpt+i];
+            robot_affectations_by_strategy[strategy_name][i] = robot_affectations.at(cpt_robot+i);
         }
         unsigned int extra_robots = number_of_extra_robot_by_strategy.at( strategy_name );
 
         for( unsigned int i=0; i<extra_robots; i++ ){
-            robot_affectations_by_strategy[strategy_name][nb_robots+i] = robot_affectations[
-                i + starting_positions.size() + nb_of_extra_robots - nb_of_extra_robots_non_affected - extra_robots
-            ];
+            unsigned int offset = starting_positions.size();
+            robot_affectations_by_strategy[strategy_name][nb_robots+i] = robot_affectations.at(i + offset + cpt_extra_robot);
         }
-        cpt += nb_robots;
+        cpt_robot += nb_robots;
+        cpt_extra_robot += extra_robots;
     }
 }
 
