@@ -84,7 +84,8 @@ void Goalie::update(
     }
 
     follower->set_following_position(defender_pos, goal_rotation );
-
+    follower->avoid_the_ball(false);
+    
     follower->update(time, robot, ball);   
 }
 

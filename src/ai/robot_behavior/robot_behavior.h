@@ -33,6 +33,7 @@ namespace Robot_behavior {
 class RobotBehavior {
     protected:
         const Ai::Robot* robot_ptr;
+        const Ai::Ball* ball_ptr;
         double birthday;
         double lastUpdate;
 
@@ -63,6 +64,10 @@ class RobotBehavior {
         virtual Control control() const = 0;
 
         const Ai::Robot & robot() const ;
+        const Ai::Ball & ball() const ;
+        const rhoban_geometry::Point ally_goal_center() const ;
+        const rhoban_geometry::Point oponent_goal_center() const ;
+        const rhoban_geometry::Point center_mark() const ;
 };
 
 namespace detail {

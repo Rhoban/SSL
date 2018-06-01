@@ -1,4 +1,4 @@
-#include "defensor.h"
+#include "striker.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 
@@ -6,7 +6,7 @@ namespace RhobanSSL {
 namespace Robot_behavior {
 
 
-Defensor::Defensor(
+Striker::Striker(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
@@ -14,7 +14,7 @@ Defensor::Defensor(
 {
 }
 
-void Defensor::update(
+void Striker::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
@@ -35,25 +35,24 @@ void Defensor::update(
     const rhoban_geometry::Point & robot_position_point = robot.get_movement().linear_position( ai_data.time );
     
 
-    double target_rotation = M_PI/2.0; // radian
-    rhoban_geometry::Point ally_goal_point = ally_goal_center();
-    Vector2d direction = ally_goal_point - this->ball_position;
+    double goal_rotation = M_PI/2.0; // radian
+    Vector2d our_goal_center( - ai_data.field.fieldLength/2.0, 0.0 );
+    Vector2d direction = our_goal_center - this->ball_position;
     direction = direction/direction.norm();
 
-    double target_radius_from_ball = 0.0;
+    double target_radius_from_ball = 0.5;
     double error = 0.03;
-    Vector2d target_position = this->ball_position + direction * (
+    Vector2d striker_pos =  this->ball_position + direction * (
          ai_data.constants.robot_radius + ai_data.constants.radius_ball + target_radius_from_ball + error
     );    
 
-    // if ( robot_position_point.getX() < this->ball_position.getX() ) {
-    if ( scalar_product(robot_position_point - ball_position, target_position - ball_position) > 0 ) {
+    if ( robot_position_point.getX() < this->ball_position.getX() ) {
         follower->avoid_the_ball(false);
     } else {
-        follower->avoid_the_ball(true);
+        follower->avoid_the_ball(true);    
     }
 
-    follower->set_following_position(target_position, target_rotation);
+    follower->set_following_position(striker_pos, goal_rotation);
     
 
     #if 0    
@@ -71,13 +70,13 @@ void Defensor::update(
 }
 
 
-Control Defensor::control() const {
+Control Striker::control() const {
     Control ctrl = follower->control();
     // ctrl.spin = true; // We active the dribler ! 
     return ctrl; 
 }
 
-Defensor::~Defensor(){
+Striker::~Striker(){
     delete follower;
 }
 

@@ -10,8 +10,14 @@
 #include <strategy/enseirb_project_wrapper.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
+#include <robot_behavior/striker.h>
 #include <core/collection.h>
 #include <core/print_collection.h>
+
+#define GOALIE "Goalie" 
+#define DEFENSOR1 "Defensor1" 
+#define DEFENSOR2 "Defensor2" 
+#define STRIKER "Striker" 
 
 namespace RhobanSSL {
 namespace Manager {
@@ -55,7 +61,7 @@ Match::Match(
         )
     );
     register_strategy(
-        "Goalie", std::shared_ptr<Strategy::Strategy>(
+        GOALIE, std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
@@ -66,7 +72,7 @@ Match::Match(
         )
     );
     register_strategy(
-        "Defensor1", std::shared_ptr<Strategy::Strategy>(
+        DEFENSOR1, std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
@@ -77,12 +83,23 @@ Match::Match(
         )
     );
     register_strategy(
-        "Defensor2", std::shared_ptr<Strategy::Strategy>(
+        DEFENSOR2, std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
                     Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
+        STRIKER, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
                 }, false // it is not a goal
             )
         )
@@ -138,10 +155,10 @@ void Match::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
             std::list<std::string> future_strats = {
-                "Defensor1", "Defensor2", 
-                "Goalie"
+                GOALIE, DEFENSOR1, STRIKER
                 //Strategy::Enseirb_project_wrapper::name
             };
+
             declare_next_strategies(future_strats); //This is needed to comput robot affectation
             for( const std::string & strategy_name : future_strats ){
                 assign_strategy(
