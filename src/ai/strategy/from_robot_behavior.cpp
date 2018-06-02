@@ -17,6 +17,20 @@ From_robot_behavior::From_robot_behavior(
 {
 };
 
+From_robot_behavior::From_robot_behavior( 
+    Ai::AiData & ai_data,
+    std::function<
+        std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)
+    > robot_behavior_allocator,
+    const rhoban_geometry::Point & starting_linear_position, 
+    const ContinuousAngle & starting_angular_position,
+    bool is_goalie
+):
+    From_robot_behavior( ai_data, robot_behavior_allocator, is_goalie )
+{
+    set_starting_position( starting_linear_position, starting_angular_position );  
+};
+
 
 Goalie_need From_robot_behavior::needs_goalie() const {
     return is_goalie ? Goalie_need::YES : Goalie_need::NO;
@@ -46,11 +60,14 @@ void From_robot_behavior::assign_behavior_to_robots(
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
-        if( is_goalie and have_to_manage_the_goalie() ){
-            assign_behavior(
-                get_goalie(), 
-                robot_behavior_allocator(time, dt)
-            );
+        if( is_goalie ){
+            DEBUG( "GOALIE : " << get_goalie() );
+            if( have_to_manage_the_goalie() ){ 
+                assign_behavior(
+                    get_goalie(), 
+                    robot_behavior_allocator(time, dt)
+                );
+            }
         }else{
             assign_behavior(
                 player_id(0), 

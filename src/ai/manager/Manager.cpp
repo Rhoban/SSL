@@ -308,6 +308,7 @@ void Manager::aggregate_all_starting_position_of_all_strategies(){
 
     // For the players
     goal_has_to_be_placed = false;
+    strategy_with_goal = "";
     for( const std::string & strategy_name : next_strategies ){
         std::list<
             std::pair<rhoban_geometry::Point,ContinuousAngle>
@@ -355,6 +356,7 @@ void Manager::aggregate_all_starting_position_of_all_strategies(){
                 this->goalie_angular_position = ContinuousAngle(0.0);
             }
             goal_has_to_be_placed = true;
+            strategy_with_goal = strategy_name;
         }
     }
 }
@@ -548,6 +550,11 @@ void Manager::compute_robot_affectations_to_strategies(){
 
 Ai::Robot& Manager::robot( int robot_number) const {
     return ai_data.robots.at( Vision::Team::Ally ).at( robot_number );
+}
+
+const std::string & Manager::get_next_strategy_with_goalie() const
+{
+    return strategy_with_goal;
 }
 
 };

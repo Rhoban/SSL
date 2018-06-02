@@ -127,13 +127,14 @@ void Match::choose_a_strategy(double time){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
                 }else{
                     future_strats = {
-                        GOALIE, DEFENSOR1, STRIKER
+                        GOALIE
+                        , DEFENSOR1, STRIKER
                     };
                     place_all_the_robots(time, future_strats );
                 }
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
-            bool have_a_goalie = true; //true;
+            bool have_a_goalie = true;
             assign_strategy( Strategy::Prepare_kickoff::name, time, get_valid_player_ids(), have_a_goalie );
             if( get_team() == referee.kickoff_team() ){
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
@@ -145,12 +146,13 @@ void Match::choose_a_strategy(double time){
 
             declare_next_strategies(future_strats); //This is needed to comput robot affectation
             for( const std::string & strategy_name : future_strats ){
+                bool have_a_goalie = (get_next_strategy_with_goalie() == strategy_name);
                 assign_strategy(
                     strategy_name,
                     time, 
                     get_robot_affectations(
                         strategy_name
-                    )
+                    ), have_a_goalie
                 );
             }
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
