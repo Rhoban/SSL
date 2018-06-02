@@ -18,6 +18,7 @@ class Prepare_kickoff : public Strategy {
         bool behavior_has_been_assigned;
         int min_robots() const;
         int max_robots() const;
+        virtual Goalie_need needs_goalie() const;
 
         static const std::string name;
 

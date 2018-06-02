@@ -83,7 +83,7 @@ class Manager {
 
     void assign_strategy(
         const std::string & strategy_name, double time,
-        const std::vector<int> & robot_ids
+        const std::vector<int> & robot_ids, bool assign_goalie=false
     );
 
     virtual void update(double time) = 0;
@@ -133,6 +133,7 @@ class Manager {
         std::vector<
             std::pair<rhoban_geometry::Point, ContinuousAngle>
         > robot_consigns;
+        std::pair<rhoban_geometry::Point, ContinuousAngle> goalie_consigns;
 
 
     void declare_robot_positions_in_the_placer();

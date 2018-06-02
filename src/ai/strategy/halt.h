@@ -14,6 +14,7 @@ class Halt : public Strategy {
 
         int min_robots() const;
         int max_robots() const;
+        virtual Goalie_need needs_goalie() const;
 
         static const std::string name;
 
@@ -28,6 +29,8 @@ class Halt : public Strategy {
         );
         virtual ~Halt();
 }; 
+
+
 
 };
 };

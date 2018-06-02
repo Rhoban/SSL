@@ -21,6 +21,9 @@ int Tare_and_synchronize::min_robots() const {
 int Tare_and_synchronize::max_robots() const {
     return 1;
 }
+Goalie_need Tare_and_synchronize::needs_goalie() const {
+    return Goalie_need::NO;
+}
 
 void Tare_and_synchronize::start(double time){
     DEBUG("START TIME SYNCHRONIZATION");
@@ -121,5 +124,6 @@ void Tare_and_synchronize::assign_behavior_to_robots(
 Tare_and_synchronize::~Tare_and_synchronize(){
 }
 
+        
 }
 }

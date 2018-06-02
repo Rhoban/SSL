@@ -18,6 +18,10 @@ int Placer::min_robots() const {
 int Placer::max_robots() const {
     return -1;
 }
+Goalie_need Placer::needs_goalie() const {
+    return Goalie_need::IF_POSSIBLE;
+}
+
 void Placer::start(double time){
     DEBUG("START PREPARE PLACER");
     behavior_has_been_assigned = false;
@@ -34,6 +38,18 @@ void Placer::assign_behavior_to_robots(
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
+        if( have_to_manage_the_goalie() ){
+            assign_behavior(
+                get_goalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(
+                    Robot_behavior::Factory::fixed_consign_follower(
+                        ai_data, 
+                        goalie_linear_position, 
+                        goalie_angular_position
+                    )
+                )
+            );
+        }
+
         int nb_players = get_player_ids().size();
         for( int i=0; i<nb_players; i++ ){
             int id = player_id(i);
@@ -79,12 +95,11 @@ void Placer::set_goalie_positions(
     const rhoban_geometry::Point & linear_position,
     const ContinuousAngle & angular_position
 ){
-    // TODO
+    this->goalie_linear_position = linear_position;
+    this->goalie_angular_position = angular_position;
 }
 
-void Placer::ignore_goalie(){
-    // TODO
-}
+
 
 }
 }

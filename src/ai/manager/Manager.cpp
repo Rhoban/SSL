@@ -67,22 +67,34 @@ void Manager::clear_strategy_assignement(){
 
 void Manager::assign_strategy(
     const std::string & strategy_name,
-    double time, const std::vector<int> & robot_ids
+    double time, const std::vector<int> & robot_ids, 
+    bool assign_goalie
 ){
-    assert( strategies.find(strategy_name) != strategies.end() );
+    assert( strategies.find(strategy_name) != strategies.end() ); // The name of the strategy is not declared. Please register them with register_strategy() (during the initialisation of your manager for example).
+    assert(
+        not(assign_goalie) or (
+            assign_goalie and 
+            std::find(
+                robot_ids.begin(), robot_ids.end(), goalie_id
+            ) == robot_ids.end()
+        )
+    );// If you declare that you are assigning a goal, you should not declar the goal id inside the list of field robots.
 
     current_strategy_names.push_front( strategy_name );
     Strategy::Strategy & strategy = get_strategy( strategy_name );
 
     assert( static_cast<unsigned int>(strategy.min_robots()) <= robot_ids.size() );
 
-    strategy.set_goalie( goalie_id );
+    strategy.set_goalie( goalie_id, assign_goalie );
     strategy.set_goalie_opponent( goalie_opponent_id );
     strategy.set_robot_affectation( robot_ids );
     strategy.start(time);
 
-    std::cout << "Manager: Assigning " << strategy.get_robot_ids() << " to " <<
-        robot_ids.size() << " robots : " << "(goalie : "<< strategy.get_goalie() << ")" << std::endl;
+    std::cout << "Manager: Assigning " << strategy.get_player_ids() << " to " <<
+        robot_ids.size() << " robots as robots field." << 
+        " Goalie id is " << strategy.get_goalie() <<" and is "
+            << (assign_goalie ? "" : "not ")
+            << "assigned to the strategy as goalie." << std::endl;
 }
 
 Strategy::Strategy & Manager::get_strategy( const std::string & strategy_name ) {
@@ -312,14 +324,36 @@ void Manager::aggregate_all_starting_position_of_all_strategies(){
         // For the goalie
         rhoban_geometry::Point goalie_linear_position;
         ContinuousAngle goalie_angular_position;
-        if(
-            get_strategy(strategy_name).get_starting_position_for_goalie(
-                goalie_linear_position, goalie_angular_position
+        bool strategy_needs_a_goal = (
+            get_strategy(strategy_name).needs_goalie()
+            ==
+            Strategy::Goalie_need::YES
+        ) or (
+            (
+                get_strategy(strategy_name).needs_goalie()
+                ==
+                Strategy::Goalie_need::IF_POSSIBLE
+            ) and (
+                goal_has_to_be_placed
             )
-        ){
+        );
+        if( strategy_needs_a_goal ){
             assert( not(goal_has_to_be_placed) ); // Two goal is defined, check you are not assigning two stratgies with a goal ! 
-            this->goalie_linear_position = goalie_linear_position;
-            this->goalie_angular_position = goalie_angular_position;
+            if(
+                get_strategy(strategy_name).get_starting_position_for_goalie(
+                    goalie_linear_position, goalie_angular_position
+                )
+            ){
+                DEBUG("DEFINED GOALIE !");
+                this->goalie_linear_position = goalie_linear_position;
+                this->goalie_angular_position = goalie_angular_position;
+            }else{
+                DEBUG("DEFAULT !");
+                this->goalie_linear_position = rhoban_geometry::Point(
+                    -ai_data.field.fieldLength/2.0, 0.0
+                );
+                this->goalie_angular_position = ContinuousAngle(0.0);
+            }
             goal_has_to_be_placed = true;
         }
     }
@@ -333,11 +367,10 @@ void Manager::declare_robot_positions_in_the_placer(){
             goalie_linear_position,
             goalie_angular_position
         );
-    }else{
-        get_strategy_<
-            Strategy::Placer
-        >().ignore_goalie();
     }
+    //else{
+    // TODO : should we declare in the strategy that goalie have to be ignored ?
+    //}
 
     assert( starting_positions.size() <=  get_valid_team_ids().size() );
 
@@ -353,7 +386,7 @@ void Manager::place_all_the_robots(
     declare_robot_positions_in_the_placer();
     assign_strategy( 
         Strategy::Placer::name, time, 
-        get_valid_team_ids()
+        get_valid_player_ids(), goal_has_to_be_placed
     );
 }
 
@@ -469,21 +502,17 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position(){
         ];
     }
 
-
-    // TODO : have a better default placer !
+    // We place the other robot outsde the field.
     std::list<int>::const_iterator it = not_choosen_robot.begin();
     for( unsigned int i=starting_positions.size(); i<get_valid_player_ids().size(); i++ ){
         robot_consigns[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
             rhoban_geometry::Point(
-                -2.0, 
-                (
-                    2*ai_data.constants.robot_radius 
-                    +
-                    8*ai_data.constants.radius_ball/2.0
-                )*(
-                    (i-starting_positions.size()) - 
-                    (get_valid_player_ids().size()-starting_positions.size())*.5
-                )
+                -(
+                    (5.0*ai_data.constants.robot_radius ) *
+                        (i - starting_positions.size())
+                    + 1.5*ai_data.constants.robot_radius
+                ),
+                -ai_data.field.fieldWidth/2.0 + ai_data.constants.robot_radius
             ),
             ContinuousAngle(0.0)
         ); 

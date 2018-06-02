@@ -16,6 +16,16 @@ class From_robot_behavior: public Strategy {
         > robot_behavior_allocator;
         bool behavior_has_been_assigned;
         bool is_goalie;
+    
+        struct StartingPosition {
+            bool is_defined;
+            rhoban_geometry::Point linear_position; 
+            ContinuousAngle angular_position;
+            StartingPosition() : is_defined(false) {};
+        };
+        StartingPosition starting_position;
+
+        
 
     public:
 
@@ -29,10 +39,17 @@ class From_robot_behavior: public Strategy {
         virtual int min_robots() const;
         virtual int max_robots() const;
 
+        void set_starting_position(
+            const rhoban_geometry::Point & linear_position, 
+            const ContinuousAngle & angular_position
+        );  
+
         static const std::string name;
 
         virtual void start(double time);
         virtual void stop(double time);
+
+        virtual Goalie_need needs_goalie() const;
         
         virtual void assign_behavior_to_robots(
             std::function<
@@ -40,6 +57,16 @@ class From_robot_behavior: public Strategy {
             > assign_behavior,
             double time, double dt
         );
+
+
+        virtual std::list<
+            std::pair<rhoban_geometry::Point,ContinuousAngle>
+        > get_starting_positions( int number_of_avalaible_robots ) const;  
+        virtual bool get_starting_position_for_goalie(
+            rhoban_geometry::Point & linear_position, 
+            ContinuousAngle & angular_position
+        ) const;  
+
 
         virtual ~From_robot_behavior();
 }; 
