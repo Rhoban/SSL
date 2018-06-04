@@ -56,8 +56,7 @@ public slots:
 
     // Commands a robot
     void robotCommand(int id,
-        double xSpeed=0, double ySpeed=0, double thetaSpeed=0,
-        int kick=0, bool spin=false, bool charge=false);
+        double xSpeed=0, double ySpeed=0, double thetaSpeed=0);
 
     // Enable or disable the charge for a robot
     void robotCharge(int id, bool charge=false);

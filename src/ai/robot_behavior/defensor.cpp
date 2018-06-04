@@ -24,7 +24,6 @@ void Defensor::update(
     RobotBehavior::update_time_and_position( time, robot, ball );
     // Now 
     //  this->robot_linear_position
-    //  this->ball_position
     //  this->robot_angular_position 
     // are all avalaible
     
@@ -35,38 +34,43 @@ void Defensor::update(
     const rhoban_geometry::Point & robot_position_point = robot.get_movement().linear_position( ai_data.time );
     
 
-    double target_rotation = M_PI/2.0; // radian
     rhoban_geometry::Point ally_goal_point = ally_goal_center();
-    Vector2d direction = ally_goal_point - this->ball_position;
+    Vector2d direction = Vector2d(ally_goal_point) - Vector2d(ball_position());
     direction = direction/direction.norm();
 
+    //Vector2d robot_ball_vector = robot_position_point - this->ball_position;
+
+    //double target_rotation = std::atan2( robot_ball_vector.getY(), robot_ball_vector.getX() );
+    double target_rotation = std::atan2( direction.getY(), direction.getX() );
     double target_radius_from_ball = 0.0;
     double error = 0.03;
-    Vector2d target_position = this->ball_position + direction * (
-         ai_data.constants.robot_radius + ai_data.constants.radius_ball + target_radius_from_ball + error
-    );    
 
-    // if ( robot_position_point.getX() < this->ball_position.getX() ) {
-    if ( scalar_product(robot_position_point - ball_position, target_position - ball_position) > 0 ) {
+    Vector2d target_position = Vector2d(ball_position()) + direction * (
+         ai_data.constants.robot_radius + ai_data.constants.radius_ball + target_radius_from_ball + error
+    );
+    
+
+    rhoban_geometry::Point waiting_position = rhoban_geometry::Point(0.0, 0.0) + ally_goal_point / 2 ;
+
+    if(
+        scalar_product(
+            robot_position_point - Vector2d(ball_position()),
+            target_position - Vector2d(ball_position())
+        ) > 0
+    ) {
         follower->avoid_the_ball(false);
     } else {
         follower->avoid_the_ball(true);
     }
 
-    follower->set_following_position(target_position, target_rotation);
+
+    if ( ball_position().getX() < 0 ) {
+        follower->set_following_position(target_position, target_rotation);
+    } else {
+        follower->set_following_position(waiting_position, target_rotation);
+    }
     
 
-    #if 0    
-
-    else {
-        if (robot_position_point.getY() < this->ball_position.getY()) {
-        follower->set_following_position(defender_pos, goal_rotation );
-        }
-        else {
-        follower->set_following_position(defender_pos, goal_rotation );
-        }
-    }
-#endif
     follower->update(time, robot, ball);   
 }
 

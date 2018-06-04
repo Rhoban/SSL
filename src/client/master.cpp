@@ -9,7 +9,7 @@
 using namespace RhobanSSL;
 using namespace rhoban_geometry;
 
-#define ROBOT   1
+#define ROBOT   0
 
 int main()
 {
@@ -44,8 +44,8 @@ int main()
     params.kp = 10.0;
     params.ki = 0.8;
     params.kd = 0.0;
-    master.addParamPacket(ROBOT, params);
-    master.send();
+    // master.addParamPacket(ROBOT, params);
+    // master.send();
 
 #if 0
     // master.setParams(400, 3, 0);
@@ -103,16 +103,17 @@ int main()
             float voltage = master.robots[ROBOT].status.cap_volt;
             // std::cout << "Robot OK, capacitor: " << master.statuses[ROBOT].cap_volt/10.0 << "V" << std::endl;
 
-            std::cout << "X: " << speed.x << ", Y: " << speed.y << ", T: " << thetaSpeed << ", Volts: " << voltage << std::endl;
+            // std::cout << "X: " << speed.x << ", Y: " << speed.y << ", T: " << thetaSpeed << ", Volts: " << voltage << std::endl;
             robot.x_speed = speed.x*1000;
             robot.y_speed = speed.y*1000;
             robot.t_speed = thetaSpeed*1000;
-            std::cout << "-" << std::endl;
+            // std::cout << "-" << std::endl;
         } else {
-            std::cout << "Robot missing!" << std::endl;
+            // std::cout << "Robot missing!" << std::endl;
         }
 
         master.addRobotPacket(ROBOT, robot);
         master.send();
+        usleep(20000);
     }
 }

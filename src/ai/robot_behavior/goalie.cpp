@@ -6,13 +6,13 @@ namespace RhobanSSL {
 namespace Robot_behavior {
 
 Vector2d Goalie::calculate_goal_position(
-    const Vector2d & ball_position,
+    const rhoban_geometry::Point & ball_position,
     const Vector2d & poteau_droit,
     const Vector2d & poteau_gauche,
     double goalie_radius
 ){
     rhoban_geometry::Point defender_position = rhoban_geometry::center_of_cone_incircle(
-        vector2point(ball_position),
+        ball_position,
         vector2point(poteau_droit), 
         vector2point(poteau_gauche), 
         goalie_radius
@@ -67,15 +67,14 @@ void Goalie::update(
     RobotBehavior::update_time_and_position( time, robot, ball );
     // Now 
     //  this->robot_linear_position
-    //  this->ball_position
     //  this->robot_angular_position 
     // are all avalaible
     
 
-    double goal_rotation = detail::vec2angle(ball_position - robot_linear_position);
+    double goal_rotation = detail::vec2angle(Vector2d(ball_position()) - robot_linear_position);
 
     Vector2d defender_pos = calculate_goal_position(
-        ball_position, right_post_position, left_post_position,
+        ball_position(), right_post_position, left_post_position,
         goalie_radius
     );
 
