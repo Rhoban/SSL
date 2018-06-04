@@ -11,13 +11,20 @@
 namespace RhobanSSL {
 namespace Strategy {
 
+enum Goalie_need {
+    YES,
+    IF_POSSIBLE,
+    NO
+};
+
 class Strategy {
     protected:
     Ai::AiData & ai_data;
     private:
     int goalie_id;
+    bool manage_a_goalie;
+
     int goalie_opponent_id;
-    std::vector<int> robot_ids;
     std::vector<int> player_ids;
 
     void update_player_ids();
@@ -26,7 +33,7 @@ class Strategy {
 
     Strategy(Ai::AiData & ai_data);
 
-    void set_goalie( int id );
+    void set_goalie( int id, bool to_be_managed );
     void set_goalie_opponent( int id );
     
     // Get the goalie id. If id<0 then no goalie is declared 
@@ -34,9 +41,13 @@ class Strategy {
     // Get the opponent goalie id. If id<0 then no opponent goalie is declared  
     int get_goalie_opponent() const;   
 
+    /* 
+     * This function is called by the manager to affect robot to the stratgey.
+     * Here only robot for field player are affected.
+     * The robot id for the goal can only be obtained from the function get_goalie().
+     */
     void set_robot_affectation( const std::vector<int> & robot_ids );
     
-    const std::vector<int> & get_robot_ids() const;
     const std::vector<int> & get_player_ids() const;
 
     int robot_id( int id ) const;
@@ -71,17 +82,21 @@ class Strategy {
     ) const;  
 
     /*
-     * This function give the minimal numer of robot 
-     * that strategy command.
+     * This function give the minimal numer of non goalie robot 
+     * that the strategy commands.
      */
     virtual int min_robots() const = 0;
     /*
-     * This function give the maximal numer of robot 
-     * that strategy command.
+     * This function give the maximal numer of non goalie robot 
+     * that strategy commands.
      * if it is set to -1, then the strategy can command any number of robot.
      */
     virtual int max_robots() const = 0;
 
+    /*
+     * Say if the strategy need a goalie.
+     */
+    virtual Goalie_need needs_goalie() const = 0;
 
     virtual void assign_behavior_to_robots(
         std::function<
@@ -91,6 +106,9 @@ class Strategy {
     ) = 0;
 
     virtual ~Strategy();
+
+    bool have_to_manage_the_goalie() const;
+
 };
 
 };

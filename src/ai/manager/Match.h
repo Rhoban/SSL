@@ -10,9 +10,10 @@ namespace Manager {
 class Match : public Manager {
     private:
     const Referee & referee;
-    std::vector<int> enseirb_robots;
 
     unsigned int last_referee_changement;
+            
+    std::list<std::string> future_strats;
     
     public:
 

@@ -19,6 +19,9 @@ int Prepare_kickoff::min_robots() const {
 int Prepare_kickoff::max_robots() const {
     return -1;
 }
+Goalie_need Prepare_kickoff::needs_goalie() const {
+    return Goalie_need::YES;
+}
 void Prepare_kickoff::start(double time){
     DEBUG("START PREPARE KICKOFF");
     behavior_has_been_assigned = false;
@@ -46,16 +49,16 @@ void Prepare_kickoff::assign_behavior_to_robots(
     double time, double dt
 ){
     if( ! behavior_has_been_assigned ){
-        int goalie_id = get_goalie();
-        assign_behavior(
-            goalie_id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                 Prepare_kickoff::create_follower(
-                     Vector2d(-2.0, 0.0), ContinuousAngle(M_PI/2.0),
-                     time, dt
-                 )
-            )
-        );
-
+        if( have_to_manage_the_goalie() ){
+            assign_behavior(
+                get_goalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(
+                     Prepare_kickoff::create_follower(
+                         Vector2d(-4.0, 0.0), ContinuousAngle(M_PI/2.0),
+                         time, dt
+                     )
+                )
+            );
+        }
         int nb_robots = get_player_ids().size();
         //double fieldWidth = ai_data.field.fieldwidth;
         double robot_radius = ai_data.constants.robot_radius;
@@ -83,7 +86,6 @@ Prepare_kickoff::~Prepare_kickoff(){
 void Prepare_kickoff::set_kicking( bool value ){
     is_kicking = value;
 }
-
 
 }
 }

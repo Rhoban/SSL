@@ -12,22 +12,42 @@ void clear( std::ostringstream & o ){
 
 
 TEST(test_print_collection, print_list){
-    std::ostringstream s;
-    std::list<std::string> l;
-   
-    s << l;
-    EXPECT_TRUE( s.str() == "<>" );
-    clear(s);
- 
-    l.push_back( "voiture" );
-    s << l;
-    EXPECT_TRUE( s.str() == "<voiture, >" );
-    clear(s);
+    {
+        std::ostringstream s;
+        std::list<std::string> l;
+       
+        s << l;
+        EXPECT_TRUE( s.str() == "<>" );
+        clear(s);
+     
+        l.push_back( "voiture" );
+        s << l;
+        EXPECT_TRUE( s.str() == "<voiture, >" );
+        clear(s);
 
-    l.push_back( "maison" );
-    s << l;
-    EXPECT_TRUE( s.str() == "<voiture, maison, >" );
-    clear(s);
+        l.push_back( "maison" );
+        s << l;
+        EXPECT_TRUE( s.str() == "<voiture, maison, >" );
+        clear(s);
+    }
+    {
+        std::ostringstream s;
+        std::list<unsigned int> l;
+       
+        s << l;
+        EXPECT_TRUE( s.str() == "<>" );
+        clear(s);
+     
+        l.push_back( 3 );
+        s << l;
+        EXPECT_TRUE( s.str() == "<3, >" );
+        clear(s);
+
+        l.push_back( 1 );
+        s << l;
+        EXPECT_TRUE( s.str() == "<3, 1, >" );
+        clear(s);
+    }
 }
 
 TEST(test_print_collection, print_set){

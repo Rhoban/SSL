@@ -16,15 +16,18 @@ class Placer : public Strategy {
             int,
             std::pair<rhoban_geometry::Point, ContinuousAngle>
         > player_positions;
-        std::vector< 
-            std::pair<rhoban_geometry::Point, ContinuousAngle> 
-        > wished_robot_positions;
+
+    rhoban_geometry::Point goalie_linear_position;
+    ContinuousAngle goalie_angular_position;
+
+
     public:
 
         Placer(Ai::AiData & ai_data);
         bool behavior_has_been_assigned;
         int min_robots() const;
         int max_robots() const;
+        virtual Goalie_need needs_goalie() const;
 
         // Try to place one robot at each given position.
         // This function return which robot id have been placed. 
@@ -39,7 +42,6 @@ class Placer : public Strategy {
             const rhoban_geometry::Point & linear_position,
             const ContinuousAngle & angular_position
         );
-        void ignore_goalie();
 
         static const std::string name;
 
@@ -58,6 +60,7 @@ class Placer : public Strategy {
         );
         virtual ~Placer();
 }; 
+
 
 };
 };

@@ -34,6 +34,7 @@ class Union : public Strategy {
 
     virtual int min_robots() const;
     virtual int max_robots() const;
+    virtual Goalie_need needs_goalie() const;
 
     virtual void assign_behavior_to_robots(
         std::function<

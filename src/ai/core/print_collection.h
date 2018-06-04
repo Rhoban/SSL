@@ -27,7 +27,7 @@ std::ostream & operator<<(
     std::ostream & out, const std::list<T> & list
 ){
     out << "<";
-    for( const std::string & elem : list ){
+    for( const T & elem : list ){
         out << elem << ", ";
     }
     out << ">";
