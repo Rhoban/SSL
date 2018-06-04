@@ -45,8 +45,13 @@ class Strategy {
      * This function is called by the manager to affect robot to the stratgey.
      * Here only robot for field player are affected.
      * The robot id for the goal can only be obtained from the function get_goalie().
+     * 
+     * IMPORTANT : 
+     * If you overload this function do not forgive to call this base function.
+     * The implementation of set_robot_affectation, is important to calculate 
+     * get_player_ids(). 
      */
-    void set_robot_affectation( const std::vector<int> & robot_ids );
+    virtual void set_robot_affectation( const std::vector<int> & robot_ids );
     
     const std::vector<int> & get_player_ids() const;
 
@@ -107,6 +112,11 @@ class Strategy {
 
     virtual ~Strategy();
 
+    /*
+     * This function return true when the 
+     * the strategie have to manage the 
+     * goalie.
+     */
     bool have_to_manage_the_goalie() const;
 
 };

@@ -63,6 +63,7 @@ set (SOURCES
     math/curve.cpp
     math/tangents.cpp
     math/vector2d.cpp
+    math/position.cpp
     math/matrix2d.cpp
     math/frame_changement.cpp
     core/export_to_plot.cpp

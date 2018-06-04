@@ -126,35 +126,21 @@ void Match::choose_a_strategy(double time){
                 if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
                 }else{
-                    future_strats = {
-                        GOALIE
-                        , DEFENSOR1, STRIKER
-                    };
-                    place_all_the_robots(time, future_strats );
+                    place_all_the_robots(time, future_strats);
                 }
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
-            bool have_a_goalie = true;
-            assign_strategy( Strategy::Prepare_kickoff::name, time, get_valid_player_ids(), have_a_goalie );
             if( get_team() == referee.kickoff_team() ){
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
             }else{
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
             }
+            future_strats = {Strategy::Prepare_kickoff::name};
+            declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-
-            declare_next_strategies(future_strats); //This is needed to comput robot affectation
-            for( const std::string & strategy_name : future_strats ){
-                bool have_a_goalie = (get_next_strategy_with_goalie() == strategy_name);
-                assign_strategy(
-                    strategy_name,
-                    time, 
-                    get_robot_affectations(
-                        strategy_name
-                    ), have_a_goalie
-                );
-            }
+            future_strats = { GOALIE, DEFENSOR1, STRIKER };
+            declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }

@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <functional>
 
 template <typename DATA>
 std::vector<DATA> list2vector(
@@ -61,6 +62,30 @@ map2set(
     std::set< std::pair<KEY, VALUE> > result;
     for( const std::pair<KEY,VALUE> & assoc : map ){
         result.insert( assoc );
+    }
+    return result;
+}
+
+template <typename DATA_SRC, typename DATA_DEST>
+std::vector<DATA_DEST> map2vector(
+    const std::vector<DATA_SRC> & source,
+    std::function< void (const DATA_SRC &, DATA_DEST& ) > transformation
+){
+    std::vector<DATA_DEST> result(source.size());
+    for( unsigned int i=0; i<source.size(); i++ ){
+        transformation( source[i], result[i] );
+    }
+    return result;
+}
+
+template <typename DATA_SRC, typename DATA_DEST>
+std::list<DATA_DEST> map2list(
+    const std::vector<DATA_SRC> & source,
+    std::function< DATA_DEST (const DATA_SRC &) > transformation
+){
+    std::list<DATA_DEST> result;
+    for( unsigned int i=0; i<source.size(); i++ ){
+        result.push_back( transformation( source[i] ) );
     }
     return result;
 }

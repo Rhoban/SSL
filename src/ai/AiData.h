@@ -10,6 +10,7 @@
 #include <vision/VisionData.h>
 #include <physic/Movement.h>
 #include <math/frame_changement.h>
+#include <math/position.h>
 
 // Comment the following line if you are working with the real robot.
 // If you are working with the grSim simulator, don't comment.
@@ -17,6 +18,21 @@
 
 namespace RhobanSSL {
 namespace Ai {
+
+struct RobotPlacement {
+    bool goal_is_placed;
+    std::vector< Position > field_robot_position;
+    Position goalie_position;
+
+    RobotPlacement();
+    RobotPlacement(
+        std::vector< Position > field_robot_position,
+        Position goalie_position
+    );
+    RobotPlacement(
+        std::vector< Position > field_robot_position
+    );
+};
 
 typedef enum {
     Yellow, Blue, Unknown
@@ -145,6 +161,17 @@ public:
     
     Ball ball;
     Field field;
+
+    RobotPlacement default_attacking_kickoff_placement() const;
+    RobotPlacement default_defending_kickoff_placement() const;
+
+    /*
+     * convert a linear position [x,y] in the inetrval [-1,1]X[-1,1] 
+     * to an absolute position in the field.
+     */
+    rhoban_geometry::Point relative2absolute( double x, double y ) const;
+    rhoban_geometry::Point relative2absolute( const rhoban_geometry::Point & point ) const;
+
 
     // the key is a pair of robot identifeds.
     typedef std::map< std::pair<int, int>, double > Collision_times_table;

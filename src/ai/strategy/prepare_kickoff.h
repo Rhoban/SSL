@@ -4,6 +4,7 @@
 #include "Strategy.h"
 #include <string>
 #include <robot_behavior/robot_behavior.h>
+#include "placer.h"
 
 namespace RhobanSSL {
 namespace Strategy {
@@ -12,38 +13,61 @@ namespace Strategy {
 class Prepare_kickoff : public Strategy {
     private:
         bool is_kicking;
-    public:
+        bool strategy_is_active;
+        Ai::RobotPlacement attacking_placement;
+        Ai::RobotPlacement defending_placement;
+        Placer placer_when_kicking;
+        Placer placer_when_no_kicking;
+        
 
+   public:
         Prepare_kickoff(Ai::AiData & ai_data);
-        bool behavior_has_been_assigned;
-        int min_robots() const;
-        int max_robots() const;
+        virtual ~Prepare_kickoff();
+        
+        virtual int min_robots() const;
+        virtual int max_robots() const;
         virtual Goalie_need needs_goalie() const;
 
         static const std::string name;
 
-        Robot_behavior::RobotBehavior* create_follower(
-            const Vector2d & follower_position,
-            const ContinuousAngle& angle,
-            double time, double dt
-        ) const;
+        virtual void start(double time);
+        virtual void stop(double time);
 
-        void set_starting_position(
-            const std::vector< rhoban_geometry::Point > & starting_position
-        );
-
-        void start(double time);
-        void stop(double time);
-
-        void set_kicking( bool value = true );
+        virtual void update(double time);
+        void update_starting_positions();
         
-        void assign_behavior_to_robots(
+        virtual void assign_behavior_to_robots(
             std::function<
                 void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
             > assign_behavior,
             double time, double dt
         );
-        virtual ~Prepare_kickoff();
+
+        void set_positions(
+            const std::vector<int> & robot_affectations,
+            const std::vector<
+                std::pair<rhoban_geometry::Point, ContinuousAngle>
+            > & robot_consigns,
+            bool allly_have_the_kickoff
+        );
+        void set_goalie_positions(
+            const rhoban_geometry::Point & linear_position,
+            const ContinuousAngle & angular_position,
+            bool allly_have_the_kickoff
+        );
+
+        void set_kicking( bool value = true );
+
+        virtual void set_robot_affectation( const std::vector<int> & robot_ids );
+
+        virtual std::list<
+            std::pair<rhoban_geometry::Point,ContinuousAngle>
+        > get_starting_positions( int number_of_avalaible_robots ) ;  
+        virtual bool get_starting_position_for_goalie(
+            rhoban_geometry::Point & linear_position, 
+            ContinuousAngle & angular_position
+        ) ;  
+
 }; 
 
 };

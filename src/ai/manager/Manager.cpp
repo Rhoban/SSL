@@ -90,11 +90,11 @@ void Manager::assign_strategy(
     strategy.set_robot_affectation( robot_ids );
     strategy.start(time);
 
-    std::cout << "Manager: Assigning " << strategy.get_player_ids() << " to " <<
-        robot_ids.size() << " robots as robots field." << 
-        " Goalie id is " << strategy.get_goalie() <<" and is "
-            << (assign_goalie ? "" : "not ")
-            << "assigned to the strategy as goalie." << std::endl;
+    std::cout << "Manager: we assign '" << strategy_name << "' with " << robot_ids.size() 
+        << " field robots : " << strategy.get_player_ids() << "." 
+        << " Goalie id is " << strategy.get_goalie() <<" and is "
+        << (assign_goalie ? "" : "not ")
+        << "assigned to the strategy as goalie." << std::endl;
 }
 
 Strategy::Strategy & Manager::get_strategy( const std::string & strategy_name ) {
@@ -140,20 +140,22 @@ void Manager::assign_behavior_to_robots(
                 int id, 
                 std::shared_ptr<Robot_behavior::RobotBehavior> behavior
             ){
-                #if 0 // HACK : TODO  -- quick fix
-                DEBUG("Strategy : " << name);
-                DEBUG("Current assignation : " << id);
                 #ifndef NDEBUG
                 bool id_is_present = false;
-                for( int robot_id : this->get_strategy(name).get_robot_ids() ){
+                for( int robot_id : this->get_strategy(name).get_player_ids() ){
                     if( robot_id == id ){
                         id_is_present = true;
                         break;
                     }
                 }
-                DEBUG("Robot presence : " << id_is_present);
+                if(  
+                    this->get_strategy(name).have_to_manage_the_goalie()
+                    and
+                    get_goalie_id() == id 
+                ){
+                    id_is_present = true;
+                }
                 assert( id_is_present );
-                #endif
                 #endif
                 return robot_behaviors[id] = behavior; 
             }, time, dt
@@ -302,7 +304,9 @@ std::vector<std::string> Manager::get_available_strategies()
     return strategyNames;
 }
 
-void Manager::aggregate_all_starting_position_of_all_strategies(){
+void Manager::aggregate_all_starting_position_of_all_strategies(
+    const std::list<std::string> & next_strategies
+){
     starting_positions.clear();
     repartitions_of_starting_positions.clear();
 
@@ -314,8 +318,7 @@ void Manager::aggregate_all_starting_position_of_all_strategies(){
             std::pair<rhoban_geometry::Point,ContinuousAngle>
         > starts = get_strategy(
             strategy_name
-        ).get_starting_positions( get_valid_team_ids().size() );
-        
+        ).get_starting_positions( get_valid_player_ids().size() );
         starting_positions.insert( starting_positions.end(), starts.begin(), starts.end() );
         
         repartitions_of_starting_positions.push_back(
@@ -345,11 +348,9 @@ void Manager::aggregate_all_starting_position_of_all_strategies(){
                     goalie_linear_position, goalie_angular_position
                 )
             ){
-                DEBUG("DEFINED GOALIE !");
                 this->goalie_linear_position = goalie_linear_position;
                 this->goalie_angular_position = goalie_angular_position;
             }else{
-                DEBUG("DEFAULT !");
                 this->goalie_linear_position = rhoban_geometry::Point(
                     -ai_data.field.fieldLength/2.0, 0.0
                 );
@@ -401,8 +402,7 @@ const std::vector<int> & Manager::get_robot_affectations( const std::string & st
 }
 
 void Manager::declare_next_strategies(const std::list<std::string> & next_strategies){
-    this->next_strategies = next_strategies;
-    aggregate_all_starting_position_of_all_strategies();
+    aggregate_all_starting_position_of_all_strategies(next_strategies);
     determine_the_robot_needs_for_the_strategies();
     sort_robot_ordered_by_the_distance_with_starting_position();
     compute_robot_affectations_to_strategies();
@@ -556,6 +556,21 @@ const std::string & Manager::get_next_strategy_with_goalie() const
 {
     return strategy_with_goal;
 }
+
+void Manager::declare_and_assign_next_strategies(const std::list<std::string> & future_strats){
+    declare_next_strategies(future_strats); //This is needed to comput robot affectation
+    for( const std::string & strategy_name : future_strats ){
+        bool have_a_goalie = (get_next_strategy_with_goalie() == strategy_name);
+        assign_strategy(
+            strategy_name,
+            ai_data.time, 
+            get_robot_affectations(
+                strategy_name
+            ), have_a_goalie
+        );
+    }
+}
+
 
 };
 };

@@ -86,6 +86,7 @@ class Manager {
         const std::string & strategy_name, double time,
         const std::vector<int> & robot_ids, bool assign_goalie=false
     );
+    void declare_and_assign_next_strategies(const std::list<std::string> & future_strats);
 
     virtual void update(double time) = 0;
 
@@ -110,7 +111,9 @@ class Manager {
     private:
 
 
-    void aggregate_all_starting_position_of_all_strategies();
+    void aggregate_all_starting_position_of_all_strategies(
+        const std::list<std::string> & next_strategies
+    );
         std::list<
             std::pair<rhoban_geometry::Point,ContinuousAngle>
         > starting_positions;
@@ -142,8 +145,6 @@ class Manager {
     
     protected:
     void declare_next_strategies(const std::list<std::string> & next_strategies);
-    private:
-        std::list<std::string> next_strategies;
 
     public:
     void place_all_the_robots(
