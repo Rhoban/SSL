@@ -179,7 +179,7 @@ bool Prepare_kickoff::get_starting_position_for_goalie(
 
 
 void Prepare_kickoff::set_robot_affectation( const std::vector<int> & robot_ids ){
-    Strategy::set_robot_affectation( robot_ids );
+    Strategy::Strategy::set_robot_affectation( robot_ids );
     if(is_kicking){
         placer_when_kicking.set_robot_affectation( robot_ids );
     }else{
