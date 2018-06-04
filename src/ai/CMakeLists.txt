@@ -40,6 +40,7 @@ set (SOURCES
     manager/Manager.cpp
     manager/Match.cpp
     manager/Manual.cpp
+    manager/example.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
     strategy/union.cpp
@@ -47,6 +48,7 @@ set (SOURCES
     strategy/from_robot_behavior.cpp
     strategy/placer.cpp
     strategy/prepare_kickoff.cpp
+    strategy/example.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp

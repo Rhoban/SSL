@@ -68,6 +68,9 @@ bool Strategy::get_starting_position_for_goalie(
     return false;
 }  
 
+rhoban_geometry::Point Strategy::ally_goal_center() const {
+    return  rhoban_geometry::Point( - ai_data.field.fieldLength/2.0, 0.0 );
+}
 
 Strategy::~Strategy(){ }
 

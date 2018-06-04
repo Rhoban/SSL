@@ -119,6 +119,8 @@ class Strategy {
      */
     bool have_to_manage_the_goalie() const;
 
+    rhoban_geometry::Point ally_goal_center() const;
+    
 };
 
 };
