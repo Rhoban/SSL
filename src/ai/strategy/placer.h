@@ -12,16 +12,43 @@ namespace Strategy {
 
 class Placer : public Strategy {
     private:
-        std::map<
-            int,
-            std::pair<rhoban_geometry::Point, ContinuousAngle>
-        > player_positions;
+    std::map<
+        int,
+        std::pair<rhoban_geometry::Point, ContinuousAngle>
+    > player_positions;
 
-    rhoban_geometry::Point goalie_linear_position;
-    ContinuousAngle goalie_angular_position;
-
+    std::list<
+        std::pair<rhoban_geometry::Point,ContinuousAngle>
+    > starting_positions;
 
     public:
+    virtual std::list<
+        std::pair<rhoban_geometry::Point,ContinuousAngle>
+    > get_starting_positions( int number_of_avalaible_robots ) const;
+    void set_starting_position(
+        const std::vector< rhoban_geometry::Point > & starting_position
+    );
+
+
+    private:
+    rhoban_geometry::Point goalie_linear_position;
+    ContinuousAngle goalie_angular_position;
+    std::pair<rhoban_geometry::Point,ContinuousAngle> starting_position_for_goalie;
+    bool goalie_is_defined;
+
+    public:
+
+    virtual bool get_starting_position_for_goalie(
+        rhoban_geometry::Point & linear_position, 
+        ContinuousAngle & angular_position
+    ) const;  
+
+    void set_starting_position_for_goalie(
+        const rhoban_geometry::Point & linear_position, 
+        const ContinuousAngle & angular_position
+    );  
+
+
 
         Placer(Ai::AiData & ai_data);
         bool behavior_has_been_assigned;
@@ -45,9 +72,6 @@ class Placer : public Strategy {
 
         static const std::string name;
 
-        void set_starting_position(
-            const std::vector< rhoban_geometry::Point > & starting_position
-        );
 
         void start(double time);
         void stop(double time);
@@ -59,8 +83,13 @@ class Placer : public Strategy {
             double time, double dt
         );
         virtual ~Placer();
-}; 
 
+        void set_starting_positions(
+            const std::list<
+                std::pair<rhoban_geometry::Point,ContinuousAngle>
+            > & starting_positions 
+        );
+};
 
 };
 };

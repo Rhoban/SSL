@@ -8,6 +8,24 @@
 namespace RhobanSSL {
 namespace Ai {
 
+    RobotPlacement::RobotPlacement():
+        goal_is_placed(false)
+    { };
+    RobotPlacement::RobotPlacement(
+        std::vector< Position > field_robot_position,
+        Position goalie_position
+    ):
+        goal_is_placed(true),
+        field_robot_position(field_robot_position),
+        goalie_position(goalie_position)
+    { }
+    RobotPlacement::RobotPlacement(
+        std::vector< Position > field_robot_position
+    ):
+        goal_is_placed(false),
+        field_robot_position(field_robot_position)
+    { }
+
     Object::Object( const Object& object ):
         vision_data(object.vision_data), movement( object.movement->clone() )
     { }
@@ -108,6 +126,7 @@ namespace Ai {
         ball.set_movement(
             physic::Factory::ball_movement(*this)
         );
+        
     }
 
 
@@ -284,5 +303,69 @@ namespace Ai {
             }
         }
     }
+
+    rhoban_geometry::Point AiData::relative2absolute(
+        double x, double y 
+    ) const {
+        return rhoban_geometry::Point(
+           field.fieldLength/2.0*x, field.fieldWidth/2.0*y 
+        );
+    }
+    rhoban_geometry::Point AiData::relative2absolute(
+        const rhoban_geometry::Point & point
+    ) const {
+        return relative2absolute( point.getX(), point.getY() );
+    }
+
+
+    RobotPlacement AiData::default_attacking_kickoff_placement() const {
+        //
+        //     A.     
+        // B         C
+        //      D
+        //   E     F
+        //      G
+        //   
+        return RobotPlacement(
+            {
+                Position( 0.0, constants.radius_ball+constants.robot_radius, 0.0 ), // A
+                Position( relative2absolute(-1.0/3.0, 2.0/3.0), 0.0), // B
+                Position( relative2absolute(-1.0/3.0, -2.0/3.0), 0.0), // C
+                Position( relative2absolute(-2.0/3.0, 1.0/2.0), 0.0), // D
+                Position( relative2absolute(-2.0/3.0, -1.0/2.0), 0.0), // E
+                Position( relative2absolute(-1.5/3.0, 0.0), 0.0), // F
+                Position( relative2absolute(-2.5/3.0, 0.0), 0.0), // G
+            },
+            Position(
+                relative2absolute(-1.0, 0.0), 0.0  // G
+            )
+        );
+    }
+
+    RobotPlacement AiData::default_defending_kickoff_placement() const {
+        //
+        //      .     
+        // B    A    C
+        //      F
+        //   D     E
+        //      G
+        //   
+        return RobotPlacement(
+            {
+                Position( relative2absolute(-1.0/3.0, 0.0), 0.0 ), // A
+                Position( relative2absolute(-1.0/3.0, 2.0/3.0), 0.0), // B
+                Position( relative2absolute(-1.0/3.0, -2.0/3.0), 0.0), // C
+                Position( relative2absolute(-2.0/3.0, 1.0/2.0), 0.0), // D
+                Position( relative2absolute(-2.0/3.0, -1.0/2.0), 0.0), // E
+                Position( relative2absolute(-1.5/3.0, 0.0), 0.0), // F
+                Position( relative2absolute(-2.5/3.0, 0.0), 0.0), // G
+            },
+            Position(
+                relative2absolute(-1.0, 0.0), 0.0  // G
+            )
+        );
+    }
+
+
  
 } } //Namespace
