@@ -58,6 +58,14 @@ class Prepare_kickoff : public Strategy {
 
         void set_kicking( bool value = true );
 
+        virtual void set_robot_affectation( const std::vector<int> & robot_ids ){
+            if(is_kicking){
+                placer_when_kicking.set_robot_affectation( robot_ids );
+            }else{
+                placer_when_no_kicking.set_robot_affectation( robot_ids );
+            }
+        }
+
         virtual std::list<
             std::pair<rhoban_geometry::Point,ContinuousAngle>
         > get_starting_positions( int number_of_avalaible_robots ) ;  

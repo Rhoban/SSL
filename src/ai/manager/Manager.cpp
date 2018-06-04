@@ -140,20 +140,22 @@ void Manager::assign_behavior_to_robots(
                 int id, 
                 std::shared_ptr<Robot_behavior::RobotBehavior> behavior
             ){
-                #if 0 // HACK : TODO  -- quick fix
-                DEBUG("Strategy : " << name);
-                DEBUG("Current assignation : " << id);
                 #ifndef NDEBUG
                 bool id_is_present = false;
-                for( int robot_id : this->get_strategy(name).get_robot_ids() ){
+                for( int robot_id : this->get_strategy(name).get_player_ids() ){
                     if( robot_id == id ){
                         id_is_present = true;
                         break;
                     }
                 }
-                DEBUG("Robot presence : " << id_is_present);
+                if(  
+                    this->get_strategy(name).have_to_manage_the_goalie()
+                    and
+                    get_goalie_id() == id 
+                ){
+                    id_is_present = true;
+                }
                 assert( id_is_present );
-                #endif
                 #endif
                 return robot_behaviors[id] = behavior; 
             }, time, dt

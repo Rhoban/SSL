@@ -65,7 +65,6 @@ void Prepare_kickoff::start(double time){
     rhoban_geometry::Point linear_position; 
     ContinuousAngle angular_position;
     if(is_kicking){
-        placer_when_kicking.set_robot_affectation( get_player_ids() );
         placer_when_kicking.set_positions(
             get_player_ids(),
             list2vector(
@@ -85,7 +84,6 @@ void Prepare_kickoff::start(double time){
         }
         placer_when_kicking.start(time);
     }else{
-        placer_when_no_kicking.set_robot_affectation( get_player_ids() );
         placer_when_no_kicking.set_positions(
             get_player_ids(),
             list2vector(
@@ -176,6 +174,16 @@ bool Prepare_kickoff::get_starting_position_for_goalie(
         return placer_when_no_kicking.get_starting_position_for_goalie(
             linear_position, angular_position
         );
+    }
+}
+
+
+void Prepare_kickoff::set_robot_affectation( const std::vector<int> & robot_ids ){
+    Strategy::set_robot_affectation( robot_ids );
+    if(is_kicking){
+        placer_when_kicking.set_robot_affectation( robot_ids );
+    }else{
+        placer_when_no_kicking.set_robot_affectation( robot_ids );
     }
 }
 
