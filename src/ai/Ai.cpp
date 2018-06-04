@@ -179,8 +179,8 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             );
 
             int kick = 0;
-            if (ctrl.kick) kick = 1;
-            else if (ctrl.chipKick) kick = 2;
+            if (ctrl.kick) kick = 2;
+            else if (ctrl.chipKick) kick = 1;
 
             commander->set(
                 map_id, true,
