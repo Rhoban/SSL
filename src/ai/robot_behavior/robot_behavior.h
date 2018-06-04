@@ -33,6 +33,7 @@ namespace Robot_behavior {
 class RobotBehavior {
     protected:
         const Ai::Robot* robot_ptr;
+        const Ai::Ball* ball_ptr;
         double birthday;
         double lastUpdate;
 
@@ -40,7 +41,6 @@ class RobotBehavior {
         ContinuousAngle robot_angular_position;
         Vector2d robot_linear_velocity;
         ContinuousAngle robot_angular_velocity;
-        Vector2d ball_position;
 
         Ai::AiData & ai_data;
     public:
@@ -63,6 +63,11 @@ class RobotBehavior {
         virtual Control control() const = 0;
 
         const Ai::Robot & robot() const ;
+        const Ai::Ball & ball() const ;
+        rhoban_geometry::Point ball_position() const ;
+        rhoban_geometry::Point ally_goal_center() const ;
+        rhoban_geometry::Point oponent_goal_center() const ;
+        rhoban_geometry::Point center_mark() const ;
 };
 
 namespace detail {

@@ -179,8 +179,8 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             );
 
             int kick = 0;
-            if (ctrl.kick) kick = 1;
-            else if (ctrl.chipKick) kick = 2;
+            if (ctrl.kick) kick = 2;
+            else if (ctrl.chipKick) kick = 1;
 
             commander->set(
                 map_id, true,
@@ -299,6 +299,11 @@ void AI::setManager(std::string managerName)
     std::cout << "Setting the manager to: " << managerName << std::endl;
     if (managerName == "Manual") {
         strategy_manager = manual_manager;
+        dynamic_cast<Manager::Manual&>(
+            *manual_manager
+        ).change_team_and_point_of_view(
+            ai_data.team_color, true
+        );
     } else if (managerName == "Match") {
         strategy_manager = std::shared_ptr<Manager::Manager>(
             new Manager::Match(ai_data, referee)

@@ -1,14 +1,30 @@
 #include "AiData.h"
 #include <assert.h>
-#include <physic/movement_predicted_by_integration.h>
-#include <physic/movement_with_no_prediction.h>
-#include <physic/movement_on_new_frame.h>
-#include <physic/movement_with_temporal_shift.h>
+#include <physic/factory.h>
 #include <debug.h>
 #include <physic/collision.h>
+#include <physic/movement_on_new_frame.h>
 
 namespace RhobanSSL {
 namespace Ai {
+
+    RobotPlacement::RobotPlacement():
+        goal_is_placed(false)
+    { };
+    RobotPlacement::RobotPlacement(
+        std::vector< Position > field_robot_position,
+        Position goalie_position
+    ):
+        goal_is_placed(true),
+        field_robot_position(field_robot_position),
+        goalie_position(goalie_position)
+    { }
+    RobotPlacement::RobotPlacement(
+        std::vector< Position > field_robot_position
+    ):
+        goal_is_placed(false),
+        field_robot_position(field_robot_position)
+    { }
 
     Object::Object( const Object& object ):
         vision_data(object.vision_data), movement( object.movement->clone() )
@@ -92,11 +108,7 @@ namespace Ai {
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
                 robots[team][k].set_movement(
-                    new Movement_with_temporal_shift(
-                        //new Movement_with_no_prediction()
-                        new Movement_predicted_by_integration()
-                        , [this](){ return this->time_shift_with_vision; }
-                    )
+                    physic::Factory::robot_movement(*this)
                 );
                 nb_robots++;
             }
@@ -112,12 +124,9 @@ namespace Ai {
             }
         }
         ball.set_movement(
-            new Movement_with_temporal_shift(
-                //new Movement_with_no_prediction()
-                new Movement_predicted_by_integration()
-                , [this](){ return this->time_shift_with_vision; }
-            )
+            physic::Factory::ball_movement(*this)
         );
+        
     }
 
 
@@ -141,9 +150,9 @@ namespace Ai {
         DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
 
         security_acceleration_ratio = .5;
-        obstacle_avoidance_ratio = .5/10; // should be lessr than security_acceleration_ratio
-        radius_security_for_collision = 0.03;    
-        radius_security_for_avoidance = 0.06;  // should be greatear than  radius_security_for_collision  
+        obstacle_avoidance_ratio = .5/50; // should be lessr than security_acceleration_ratio
+        radius_security_for_collision = 0.02;    
+        radius_security_for_avoidance = 0.04;  // should be greatear than  radius_security_for_collision  
         
         //translation_velocity_limit = 8.0;
         //rotation_velocity_limit = 4.0;
@@ -157,14 +166,7 @@ namespace Ai {
             
             front_size = .06;
             
-            left_post_position = Vector2d( -4.5, -0.5 );
-            right_post_position = Vector2d( -4.50, 0.5 );
-            goal_center = (
-                left_post_position + right_post_position
-            )/2;
-            waiting_goal_position = (
-                goal_center + Vector2d(0.0, 0.0)
-            );
+            waiting_goal_position = Vector2d(0.3, 0.0);
             // PID for translation
             p_translation = 0.05; 
             //p_translation = 0.0; 
@@ -197,14 +199,7 @@ namespace Ai {
 
             front_size = .06;
 
-            left_post_position = Vector2d( 0., -0.29 );
-            right_post_position = Vector2d( 0., 0.29 );
-            goal_center = (
-                left_post_position + right_post_position
-            )/2;
-            waiting_goal_position = (
-                goal_center + Vector2d(0.3, 0.0)
-            );
+            waiting_goal_position = Vector2d(0.3, 0.0);
             // PID for translation
             p_translation = 0.02; 
             i_translation = .001;
@@ -308,5 +303,69 @@ namespace Ai {
             }
         }
     }
+
+    rhoban_geometry::Point AiData::relative2absolute(
+        double x, double y 
+    ) const {
+        return rhoban_geometry::Point(
+           field.fieldLength/2.0*x, field.fieldWidth/2.0*y 
+        );
+    }
+    rhoban_geometry::Point AiData::relative2absolute(
+        const rhoban_geometry::Point & point
+    ) const {
+        return relative2absolute( point.getX(), point.getY() );
+    }
+
+
+    RobotPlacement AiData::default_attacking_kickoff_placement() const {
+        //
+        //     A.     
+        // B        C
+        //      D
+        //   E     F
+        //      G
+        //   
+        return RobotPlacement(
+            {
+                Position( 0.0, 1.0, 0.0 ), // A
+                Position( relative2absolute(-1.0/3.0, 2.0/3.0), 0.0), // B
+                Position( relative2absolute(-1.0/3.0, -2.0/3.0), 0.0), // C
+                Position( relative2absolute(-2.0/3.0, 1.0/2.0), 0.0), // D
+                Position( relative2absolute(-2.0/3.0, -1.0/2.0), 0.0), // E
+                Position( relative2absolute(-1.5/3.0, 0.0), 0.0), // F
+                Position( relative2absolute(-2.5/3.0, 0.0), 0.0), // G
+            },
+            Position(
+                relative2absolute(-1.0, 0.0), 0.0  // G
+            )
+        );
+    }
+
+    RobotPlacement AiData::default_defending_kickoff_placement() const {
+        //
+        //      .     
+        // B    A    C
+        //      F
+        //   D     E
+        //      G
+        //   
+        return RobotPlacement(
+            {
+                Position( relative2absolute(-1.0/3.0, 0.0), 0.0 ), // A
+                Position( relative2absolute(-1.0/3.0, 2.0/3.0), 0.0), // B
+                Position( relative2absolute(-1.0/3.0, -2.0/3.0), 0.0), // C
+                Position( relative2absolute(-2.0/3.0, 1.0/2.0), 0.0), // D
+                Position( relative2absolute(-2.0/3.0, -1.0/2.0), 0.0), // E
+                Position( relative2absolute(-1.5/3.0, 0.0), 0.0), // F
+                Position( relative2absolute(-2.5/3.0, 0.0), 0.0), // G
+            },
+            Position(
+                relative2absolute(-1.0, 0.0), 0.0  // G
+            )
+        );
+    }
+
+
  
 } } //Namespace

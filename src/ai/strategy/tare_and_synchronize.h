@@ -27,6 +27,7 @@ class Tare_and_synchronize : public Strategy {
 
         int min_robots() const;
         int max_robots() const;
+        virtual Goalie_need needs_goalie() const;
 
         bool is_tared_and_synchronized() const;
 

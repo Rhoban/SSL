@@ -8,7 +8,7 @@ namespace Robot_behavior {
 A_star_path::A_star_path(
     Ai::AiData & ai_data, double time, double dt
 ):
-    RobotBehavior(ai_data), 
+    ConsignFollower(ai_data), 
     navigation(ai_data, time, dt),
     target_position(0.0, 0.0), target_angle(0.0)
 {

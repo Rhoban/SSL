@@ -2,12 +2,14 @@
 #define __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
 
 #include "robot_behavior.h"
+#include "consign_follower.h"
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class PositionFollower : public RobotBehavior {
+
+class PositionFollower : public ConsignFollower {
     private:
         Vector2d position;
         ContinuousAngle angle;
@@ -27,7 +29,7 @@ class PositionFollower : public RobotBehavior {
             double rotation_acceleration_limit
         );
 
-        void set_following_position(
+        virtual void set_following_position(
             const Vector2d & position_to_follow,
             const ContinuousAngle & angle
         );

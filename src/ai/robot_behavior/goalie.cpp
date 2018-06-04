@@ -6,18 +6,34 @@ namespace RhobanSSL {
 namespace Robot_behavior {
 
 Vector2d Goalie::calculate_goal_position(
-    const Vector2d & ball_position,
+    const rhoban_geometry::Point & ball_position,
     const Vector2d & poteau_droit,
     const Vector2d & poteau_gauche,
     double goalie_radius
 ){
     rhoban_geometry::Point defender_position = rhoban_geometry::center_of_cone_incircle(
-        vector2point(ball_position),
+        ball_position,
         vector2point(poteau_droit), 
         vector2point(poteau_gauche), 
         goalie_radius
     );
     return Vector2d( defender_position );
+}
+
+
+Goalie::Goalie(
+    Ai::AiData & ai_data
+):
+	Goalie::Goalie(
+		ai_data,
+		Vector2d(-ai_data.field.fieldLength/2.0, ai_data.field.goalWidth/2.0),
+		Vector2d(-ai_data.field.fieldLength/2.0, -ai_data.field.goalWidth/2.0),
+        Vector2d(-ai_data.field.fieldLength/2.0, 0.0 ) + ai_data.constants.waiting_goal_position,
+		ai_data.field.penaltyAreaDepth,
+		ai_data.constants.robot_radius,
+		ai_data.time, ai_data.dt
+	)
+{
 }
 
 
@@ -30,7 +46,8 @@ Goalie::Goalie(
     double goalie_radius,
     double time, double dt
 ):
-    PositionFollower(ai_data, time, dt)
+    RobotBehavior(ai_data),
+    follower( Factory::fixed_consign_follower(ai_data) )
 {
     this->left_post_position = left_post_position;
     this->right_post_position = right_post_position;
@@ -50,15 +67,14 @@ void Goalie::update(
     RobotBehavior::update_time_and_position( time, robot, ball );
     // Now 
     //  this->robot_linear_position
-    //  this->ball_position
     //  this->robot_angular_position 
     // are all avalaible
     
 
-    double goal_rotation = detail::vec2angle(ball_position - robot_linear_position);
+    double goal_rotation = detail::vec2angle(Vector2d(ball_position()) - robot_linear_position);
 
     Vector2d defender_pos = calculate_goal_position(
-        ball_position, right_post_position, left_post_position,
+        ball_position(), right_post_position, left_post_position,
         goalie_radius
     );
 
@@ -66,9 +82,19 @@ void Goalie::update(
         defender_pos = waiting_goal_position;
     }
 
-    this->set_following_position(defender_pos, goal_rotation );
+    follower->set_following_position(defender_pos, goal_rotation );
+    follower->avoid_the_ball(false);
+    
+    follower->update(time, robot, ball);   
+}
 
-    PositionFollower::update_control(time);   
+
+Control Goalie::control() const {
+    return follower->control();
+}
+
+Goalie::~Goalie(){
+    delete follower;
 }
 
 }

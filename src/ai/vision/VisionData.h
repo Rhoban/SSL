@@ -59,6 +59,8 @@ struct Field
     float goalWidth;
     float goalDepth;
     float boundaryWidth;
+    float penaltyAreaDepth;
+    float penaltyAreaWidth;
 };
 
 class VisionData {

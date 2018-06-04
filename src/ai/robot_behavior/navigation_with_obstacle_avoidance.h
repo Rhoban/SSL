@@ -12,8 +12,12 @@ namespace Robot_behavior {
  * This is an implementation of the article : 
  * "Orbital Obstavle Avoidance Algorithm for reliable and on-line mobile robot navigation", Lounis Adouane, LASMEA.
  */
-class Navigation_with_obstacle_avoidance : public RobotBehavior {
+class Navigation_with_obstacle_avoidance :
+    public ConsignFollower 
+{
     private:
+        bool ignore_the_ball;
+        bool ball_is_the_obstacle;
         PositionFollower position_follower;
 
         Vector2d target_position;
@@ -38,8 +42,15 @@ class Navigation_with_obstacle_avoidance : public RobotBehavior {
 
         void determine_the_closest_obstacle();
         void compute_the_radius_of_limit_cycle();
+        void compute_the_limit_cycle_direction_for_obstacle(
+            const rhoban_geometry::Point & obstacle_linear_position,
+            const Vector2d & obstacle_linear_velocity
+        );
+        void compute_the_limit_cycle_direction_for_robot();
+        void compute_the_limit_cycle_direction_for_ball();
         void compute_the_limit_cycle_direction();
         void convert_cycle_direction_to_linear_and_angular_velocity();
+
 
     public:
         Navigation_with_obstacle_avoidance(
@@ -71,10 +82,11 @@ class Navigation_with_obstacle_avoidance : public RobotBehavior {
             double rotation_acceleration_limit
         );
 
-        void set_following_position(
+        virtual void set_following_position(
             const Vector2d & position_to_follow,
             const ContinuousAngle & angle
         );
+        virtual void avoid_the_ball(bool value = true);
 
 };
 

@@ -3,13 +3,19 @@
 // The different strategies
 #include <strategy/halt.h>
 #include <strategy/tare_and_synchronize.h>
-#include <strategy/sandbox.h>
+#include <strategy/placer.h>
 #include <strategy/prepare_kickoff.h>
-#include <strategy/prepare_to_run.h>
 #include <strategy/from_robot_behavior.h>
-#include <strategy/enseirb_project_wrapper.h>
 #include <robot_behavior/goalie.h>
+#include <robot_behavior/defensor.h>
+#include <robot_behavior/striker.h>
+#include <core/collection.h>
 #include <core/print_collection.h>
+
+#define GOALIE "Goalie" 
+#define DEFENSOR1 "Defensor1" 
+#define DEFENSOR2 "Defensor2" 
+#define STRIKER "Striker" 
 
 namespace RhobanSSL {
 namespace Manager {
@@ -41,21 +47,59 @@ Match::Match(
         )
     );
     register_strategy(
-        Strategy::Prepare_to_run::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Prepare_to_run(ai_data)
+        GOALIE, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                }, true //it is a goal
+            )
         )
     );
     register_strategy(
-        Strategy::Enseirb_project_wrapper::name,
+        DEFENSOR1, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
+        DEFENSOR2, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
+        STRIKER, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
+        Strategy::Placer::name,
         std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Enseirb_project_wrapper(ai_data)
+            new Strategy::Placer(ai_data)
         )
     );
     assign_strategy(
         Strategy::Halt::name, 0.0, 
         get_team_ids()
-   ); // TODO TIME !
+    ); // TODO TIME !
 }
 
 void Match::analyse_data(double time){
@@ -69,6 +113,8 @@ void Match::analyse_data(double time){
         referee.yellow_goalie_id()
     );
 }
+    
+
 void Match::choose_a_strategy(double time){
     if( referee.edge_entropy() > last_referee_changement ){
         clear_strategy_assignement();
@@ -76,19 +122,25 @@ void Match::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
-            if( get_valid_team_ids().size() > 0  ){
-                assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_team_ids() );
+            if(get_valid_team_ids().size() > 0){
+                if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
+                    assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
+                }else{
+                    place_all_the_robots(time, future_strats);
+                }
             }
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
-            assign_strategy( Strategy::Prepare_kickoff::name, time, get_valid_team_ids() );
             if( get_team() == referee.kickoff_team() ){
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
             }else{
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
             }
+            future_strats = {Strategy::Prepare_kickoff::name};
+            declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            assign_strategy( Strategy::Enseirb_project_wrapper::name, time, get_valid_team_ids() );
+            future_strats = { GOALIE, DEFENSOR1, STRIKER };
+            declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }

@@ -50,6 +50,18 @@ namespace RhobanSSL
             visionData.field.goalWidth = geometry.field().goal_width()/1000.0;
             visionData.field.goalDepth = geometry.field().goal_depth()/1000.0;
             visionData.field.boundaryWidth = geometry.field().boundary_width()/1000.0;
+            for( int i=0; i< geometry.field().field_lines_size(); i++ ){
+                if(  geometry.field().field_lines(i).name()  ==  "LeftFieldLeftPenaltyStretch"  ){
+                    visionData.field.penaltyAreaDepth =  std::fabs(
+                        geometry.field().field_lines(i).p1().x()
+                        -
+                        geometry.field().field_lines(i).p2().x()
+                    )/1000.0;
+                    visionData.field.penaltyAreaWidth =  std::fabs(
+                        2*geometry.field().field_lines(i).p1().y()
+                    )/1000.0;
+                }
+            }
             // XXX: Receive other data?
         }
 

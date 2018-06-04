@@ -8,11 +8,10 @@ body {
 }
 
 .main-container {
-    display: flex;
-    flex-direction: row;
 }
 
 .field-zone {
+    float:left;
     width:70%;
     height:100vh;
     border-right:1px solid #333;
@@ -28,6 +27,7 @@ canvas.field {
 }
 
 .panel-right {
+    float:left;
     padding:5px;
     width:30%;
     height:100vh;
@@ -67,7 +67,7 @@ canvas.field {
 }
 
 .robot-id {
-    width:100%;
+   float:left; 
 }
 
 .status {
@@ -85,6 +85,14 @@ canvas.field {
     cursor:pointer;
 }
 
+.robot-statuses {
+    float:right;
+}
+
+.robot-statuses div {
+    display: inline;
+}
+
 .warning {
     color:#ecb76b;
     font-size:50%;
@@ -100,8 +108,8 @@ canvas.field {
 }
 
 .robot-row {
-    display:flex;
     width:100%;
+    clear:both;
 }
 
 .robot-tag {
@@ -193,7 +201,6 @@ body select {
 }
 
 .manager-cols {
-    display: flex;
     justify-content: space-between;;
 }
 

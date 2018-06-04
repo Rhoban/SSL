@@ -24,13 +24,16 @@ set (SOURCES
     com/AICommander.cpp
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp
+    robot_behavior/factory.cpp
     robot_behavior/goalie.cpp
+    robot_behavior/defensor.cpp
+    robot_behavior/striker.cpp
     robot_behavior/position_follower.cpp
     robot_behavior/shooter.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/a_star_path.cpp
+    robot_behavior/consign_follower.cpp
     robot_behavior/robot_behavior.cpp
-    robot_behavior/apply_enseirb_project_action.cpp
     robot_behavior/navigation_with_obstacle_avoidance.cpp
     Ai.cpp
     AiData.cpp
@@ -39,14 +42,11 @@ set (SOURCES
     manager/Manual.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
-    strategy/sandbox.cpp
     strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
+    strategy/placer.cpp
     strategy/prepare_kickoff.cpp
-    strategy/prepare_to_run.cpp
-    strategy/enseirb_project_wrapper.cpp
-    strategy/enseirb_projects/example.c
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
@@ -57,11 +57,13 @@ set (SOURCES
     physic/movement_with_temporal_shift.cpp
     physic/MovementSample.cpp
     physic/Movement.cpp
+    physic/factory.cpp
     physic/collision.cpp
     math/ContinuousAngle.cpp
     math/curve.cpp
     math/tangents.cpp
     math/vector2d.cpp
+    math/position.cpp
     math/matrix2d.cpp
     math/frame_changement.cpp
     core/export_to_plot.cpp
@@ -88,10 +90,12 @@ if(CATKIN_ENABLE_TESTING)
 
   set (TEST_SOURCES
     core/test_machine_state.cpp
+    core/test_collection.cpp
     core/test_print_collection.cpp
     math/test_curve.cpp
     math/test_circular_vector.cpp
     math/test_frame_changement.cpp
+    math/test_matching.cpp
     physic/test_MovementSample.cpp
     physic/test_movement_with_no_prediction.cpp
     physic/test_movement_predicted_by_integration.cpp

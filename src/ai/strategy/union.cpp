@@ -30,6 +30,13 @@ int Union::min_robots() const {
 int Union::max_robots() const {
     return max;
 }
+Goalie_need Union::needs_goalie() const {
+    if( strategy_with_goal ){
+        return Goalie_need::YES;
+    }else{
+        return Goalie_need::NO;
+    }
+};
 
 Union::~Union(){
 }
@@ -104,7 +111,6 @@ void Union::assign_behavior_to_robots(
         );
     }
 }
-
 
 
 }

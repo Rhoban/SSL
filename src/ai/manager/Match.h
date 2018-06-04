@@ -12,6 +12,8 @@ class Match : public Manager {
     const Referee & referee;
 
     unsigned int last_referee_changement;
+            
+    std::list<std::string> future_strats;
     
     public:
 
@@ -25,6 +27,7 @@ class Match : public Manager {
     void choose_a_strategy(double time);
 
     virtual ~Match();
+
 };
 
 };

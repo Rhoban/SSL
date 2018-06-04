@@ -68,13 +68,11 @@ void RobotBehavior::update_time_and_position(
     double time, 
     const Ai::Robot & robot, const Ai::Ball & ball
 ){
-    this->robot_ptr = &robot; 
+    this->robot_ptr = &robot;
+    this->ball_ptr = &ball; 
     lastUpdate = time;
     this->robot_linear_position = Vector2d(
         robot.get_movement().linear_position(time)
-    );
-    this->ball_position = Vector2d( 
-        ball.get_movement().linear_position(time)
     );
     this->robot_angular_position = robot.get_movement().angular_position(
         time
@@ -87,11 +85,31 @@ const Ai::Robot & RobotBehavior::robot() const {
     return *robot_ptr;
 }
 
+const Ai::Ball & RobotBehavior::ball() const {
+    return *ball_ptr;
+}
+
 double RobotBehavior::time() const {
     return ai_data.time;
 
 }
 
+rhoban_geometry::Point RobotBehavior::ally_goal_center() const {
+    return  rhoban_geometry::Point( - ai_data.field.fieldLength/2.0, 0.0 );
+    
+}
+
+rhoban_geometry::Point RobotBehavior::oponent_goal_center() const {
+    return rhoban_geometry::Point( ai_data.field.fieldLength/2.0, 0.0 );
+}
+
+rhoban_geometry::Point RobotBehavior::center_mark() const {
+    return rhoban_geometry::Point( 0.0, 0.0 );
+}
+
+rhoban_geometry::Point RobotBehavior::ball_position() const {
+    return ball().get_movement().linear_position(time());
+}
 
 }
 }
