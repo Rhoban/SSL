@@ -23,7 +23,7 @@ class Goalie : public RobotBehavior  {
         double penalty_rayon;
 
         static Vector2d calculate_goal_position(
-            const Vector2d & ball_position,
+            const rhoban_geometry::Point & ball_position,
             const Vector2d & poteau_droit,
             const Vector2d & poteau_gauche,
             double goalie_radius

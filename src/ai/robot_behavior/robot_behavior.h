@@ -41,7 +41,6 @@ class RobotBehavior {
         ContinuousAngle robot_angular_position;
         Vector2d robot_linear_velocity;
         ContinuousAngle robot_angular_velocity;
-        Vector2d ball_position;
 
         Ai::AiData & ai_data;
     public:
@@ -65,9 +64,10 @@ class RobotBehavior {
 
         const Ai::Robot & robot() const ;
         const Ai::Ball & ball() const ;
-        const rhoban_geometry::Point ally_goal_center() const ;
-        const rhoban_geometry::Point oponent_goal_center() const ;
-        const rhoban_geometry::Point center_mark() const ;
+        rhoban_geometry::Point ball_position() const ;
+        rhoban_geometry::Point ally_goal_center() const ;
+        rhoban_geometry::Point oponent_goal_center() const ;
+        rhoban_geometry::Point center_mark() const ;
 };
 
 namespace detail {

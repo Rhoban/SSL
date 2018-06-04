@@ -321,14 +321,14 @@ namespace Ai {
     RobotPlacement AiData::default_attacking_kickoff_placement() const {
         //
         //     A.     
-        // B         C
+        // B        C
         //      D
         //   E     F
         //      G
         //   
         return RobotPlacement(
             {
-                Position( 0.0, constants.radius_ball+constants.robot_radius, 0.0 ), // A
+                Position( 0.0, 1.0, 0.0 ), // A
                 Position( relative2absolute(-1.0/3.0, 2.0/3.0), 0.0), // B
                 Position( relative2absolute(-1.0/3.0, -2.0/3.0), 0.0), // C
                 Position( relative2absolute(-2.0/3.0, 1.0/2.0), 0.0), // D
