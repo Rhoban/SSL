@@ -185,9 +185,6 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             int kick = 0;
             if (ctrl.kick) kick = 2;
             else if (ctrl.chipKick) kick = 1;
-
-            DEBUG( "robot " << map_id << ", control : " << ctrl );
-
             commander->set(
                 map_id, true,
                 velocity_translation[0], velocity_translation[1],

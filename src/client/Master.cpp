@@ -182,11 +182,13 @@ namespace RhobanSSL
                         temp[pos++] = c;
                     } else {
                         if (c == 0xff) {
+                            /*
                             if (nb_robots == 0) {
                                 std::cout << "- No robots in answer!" << std::endl;
                             } else {
                                 std::cout << "- Robots in answer!" << std::endl;
                             }
+                            */
                             /*
                             if (nb_robots > 0) {
                                 static int packets = 0;
