@@ -159,14 +159,13 @@ namespace Ai {
         //translation_acceleration_limit = -1.0;
         //rotation_acceleration_limit = -1.0;
 
+        waiting_goal_position = Vector2d(0.3, 0.0);
+        penalty_rayon = 1.0; // penalty rayon for the goalie
 
         #ifdef SSL_SIMU
             DEBUG("SIMULATION MODE ACTIVATED");
             // SSL SIMUL
             
-            front_size = .06;
-            
-            waiting_goal_position = Vector2d(0.3, 0.0);
             // PID for translation
             p_translation = 0.05; 
             //p_translation = 0.0; 
@@ -182,24 +181,12 @@ namespace Ai {
             d_orientation = 0.000;
             //d_orientation = 0.0005;
 
+            enable_kicking = true;
 
-
-            translation_velocity = 2.0;
-            translation_acceleration = 1.0;
-            angular_velocity = 1.0*M_PI;  
-            angular_acceleration = 1*M_PI;
-
-            calculus_step = 0.00005;
-            enable_kicking = false;
-
-            penalty_rayon = 1.0; // penalty rayon for the goalie
         #else
             DEBUG("REAL MODE ACTIVATED");
             // SSL QUALIF
 
-            front_size = .06;
-
-            waiting_goal_position = Vector2d(0.3, 0.0);
             // PID for translation
             p_translation = 0.02; 
             i_translation = .001;
@@ -209,14 +196,8 @@ namespace Ai {
             i_orientation = 0.001;
             d_orientation = 0.0;
 
-            translation_velocity = 0.5;
-            translation_acceleration = 1.;
-            angular_velocity = 1.0;  
-            angular_acceleration = 5.;
-            calculus_step = 0.001;
             enable_kicking = true;
 
-            penalty_rayon = 10.0; // For the goalie
         #endif
     }
 

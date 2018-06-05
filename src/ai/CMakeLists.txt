@@ -29,7 +29,6 @@ set (SOURCES
     robot_behavior/defensor.cpp
     robot_behavior/striker.cpp
     robot_behavior/position_follower.cpp
-    robot_behavior/shooter.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/a_star_path.cpp
     robot_behavior/consign_follower.cpp

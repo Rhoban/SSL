@@ -156,6 +156,7 @@ static MovementSample debug_mov(4);
 
 void AI::send_control( int robot_id, const Control & ctrl ){
 
+#if 0
     #ifdef SSL_SIMU
         int map_id;
         map_id = robot_id;
@@ -167,7 +168,10 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             map_id = 0;
         }
     #endif
-
+#else
+        int map_id;
+        map_id = robot_id;
+#endif
     if ( !ctrl.ignore) {
         if( ! ctrl.active ){
             commander->set(
@@ -181,6 +185,8 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             int kick = 0;
             if (ctrl.kick) kick = 2;
             else if (ctrl.chipKick) kick = 1;
+
+            DEBUG( "robot " << map_id << ", control : " << ctrl );
 
             commander->set(
                 map_id, true,
@@ -290,11 +296,13 @@ void AI::setManager(std::string managerName)
     }
 
     // XXX: This should be in another place
+#if 1
     #ifdef SSL_SIMU
     int goalie_id = 5;
     #else
     int goalie_id = 8;
     #endif
+#endif
 
     std::cout << "Setting the manager to: " << managerName << std::endl;
     if (managerName == "Manual") {

@@ -6,6 +6,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/position_follower.h>
+#include <robot_behavior/striker.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -36,6 +37,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Striker", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
                 }, false // we don't want to define a goal here !
             )
         )

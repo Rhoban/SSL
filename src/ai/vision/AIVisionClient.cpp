@@ -26,7 +26,7 @@ namespace RhobanSSL
         }
 
         mutex.lock();
-        Vision::Robot &robot = visionData.robots[visionTeam][id];
+        Vision::Robot &robot = visionData.robots.at(visionTeam).at(id);
         double t = robot.movement.time() + 0.01;
         Angle angle(rad2deg(orientation));
         robot.update(t, Point(x, y), angle);
@@ -115,7 +115,7 @@ namespace RhobanSSL
         SSL_DetectionRobot &robotFrame, bool ally
     ){
         Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
-        Vision::Robot &robot = visionData.robots[team][robotFrame.robot_id()];
+        Vision::Robot &robot = visionData.robots.at(team).at(robotFrame.robot_id());
 
         Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 

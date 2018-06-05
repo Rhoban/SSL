@@ -39,7 +39,7 @@ typedef enum {
 } Team;
 
 class Object {
-private: 
+public:
     Vision::Object vision_data;
     RhobanSSL::Movement * movement;
 
@@ -89,7 +89,11 @@ struct Constants {
 
     static constexpr double WHEEL_RADIUS = 0.03; // In meter
     static constexpr double WHEEL_EXCENTRICITY = 0.08; // In meter
+#ifdef SSL_SIMU
     static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 100.0; // TODO : SET TO 10 turn by second
+#else
+    static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 10.0; // TODO : SET TO 10 turn by second
+#endif
     static constexpr double TRANSLATION_ACCELERATION_LIMIT = WHEEL_NB_TURNS_ACCELERATION_LIMIT*WHEEL_RADIUS*2.0*M_PI; // 10 tours * 0.03 m * 2*PI  m/s^-2
     static constexpr double ROTATION_ACCELERATION_LIMIT = 2.0*M_PI*(WHEEL_RADIUS/WHEEL_EXCENTRICITY)*WHEEL_NB_TURNS_ACCELERATION_LIMIT; //
 
@@ -101,7 +105,6 @@ struct Constants {
 
     double robot_radius;
     double radius_ball;
-    double front_size;
     Vector2d waiting_goal_position;
     // PID for translation
     double p_translation;
@@ -112,12 +115,6 @@ struct Constants {
     double i_orientation;
     double d_orientation;
 
-    double translation_velocity;
-    double translation_acceleration;
-    double angular_velocity;
-    double angular_acceleration;
-
-    double calculus_step;
     bool enable_kicking;
 
     double penalty_rayon;

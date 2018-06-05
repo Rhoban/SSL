@@ -19,12 +19,14 @@ protected:
     virtual void packetReceived();
 
     Data & shared_data;
-    Ai::Team myTeam;
-    Vision::VisionData visionData;
 
     void updateRobotInformation(
         SSL_DetectionFrame &detection,
         SSL_DetectionRobot &robot, bool ally
     );
+    
+    private:
+    Vision::VisionData visionData;
+    Ai::Team myTeam;
 };
 }
