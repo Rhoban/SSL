@@ -90,12 +90,6 @@ Example_for_testing_robot_behaviors::Example_for_testing_robot_behaviors(
             )
         )
     );
-    register_strategy(
-        Strategy::Placer::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Placer(ai_data)
-        )
-    );
     assign_strategy(
         Strategy::Halt::name, 0.0, 
         get_team_ids()
