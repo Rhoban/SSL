@@ -1,6 +1,7 @@
 #include "striker.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
+#include <debug.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
@@ -31,58 +32,60 @@ void Striker::update(
     //const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
     //const Ai::Robot & robot = robot_table.at(robot_id);
     
-    const rhoban_geometry::Point & robot_position_point = robot.get_movement().linear_position( ai_data.time );
+    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     
-
     rhoban_geometry::Point oponent_goal_point = oponent_goal_center();
-    Vector2d direction = oponent_goal_point - ball_position();
-    direction = direction/direction.norm();
-
-    Vector2d robot_ball_vector = robot_position_point - ball_position();
-    //double strik_rotation = std::atan2( -direction.getY(), -direction.getX() );
-    //double ball_toward_ball = std::atan2( robot_ball_vector.getY(), robot_ball_vector.getX() );
-
-    //double target_rotation = std::atan2( robot_ball_vector.getY(), robot_ball_vector.getX() );
-
-//    if ( robot_ball_vector.norm() > 0.5 ) {
-//        target_radius_from_ball = 0.1;
-//    } else {
-//        target_radius_from_ball = -0.1;
-//    }
+    rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
+    rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
 
 
-    double target_rotation = std::atan2( -direction.getY(), -direction.getX() );
+    Vector2d ball_goal_vector = oponent_goal_point - ball_position();
+    Vector2d ball_robot_vector = robot_position - ball_position();
+    Vector2d ball_l_post_vector = left_post_position - ball_position();
+    Vector2d ball_r_post_vector = right_post_position - ball_position();
+
+    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+    ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
+    ball_l_post_vector = ball_l_post_vector / ball_l_post_vector.norm();
+    ball_r_post_vector = ball_r_post_vector / ball_r_post_vector.norm();
+
+
+
+    double cos_60 = 0.5000;
+    double cos_45 = 0.7071;
+    double cos_25 = 0.9006;
+    double cos_15 = 0.9659;
+    double cos_10 = 0.9848;
+    double cos_5  = 0.9961;
+
+
+
+    double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
+
     double target_radius_from_ball;
+    double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_goal_vector );
 
-    //double strik_rotation = std::atan2( -direction.getY(), -direction.getX() );
-    //double robot_toward_ball = std::atan2( robot_ball_vector.getY(), robot_ball_vector.getX() );
-
-    if ( robot_ball_vector.norm() > 0.5 ) {
-        target_radius_from_ball = 0.1;
-    } else {
-        target_radius_from_ball = -0.1;
-    }
-            
-    double error = 0.03;
-
-    Vector2d target_position = Vector2d(ball_position()) - direction * (
-         ai_data.constants.robot_radius + ai_data.constants.radius_ball + target_radius_from_ball + error
-    );
-
-    //rhoban_geometry::Point waiting_position = rhoban_geometry::Point(0.0, 0.0) + oponent_goal_point / 2 ;
-
-    if ( scalar_product( robot_position_point - Vector2d(ball_position()), target_position - Vector2d(ball_position())) > 0 ) {
-        follower->avoid_the_ball(false);
-    } else {
+    if ( scalar_ball_robot < 0 ) {
         follower->avoid_the_ball(true);
+        target_radius_from_ball = 1.5;
+    } else {
+        follower->avoid_the_ball(false);
+        target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
+        //if ( scalar_ball_robot < goal_visible_angle) {
+        //    target_radius_from_ball = 1.0;
+        //} else {
+        //    target_radius_from_ball = -0.3;
+        //}
+        //
     }
 
-//    if ( ball_position.getX() > 0 ) {
-//        follower->set_following_position(target_position, target_rotation);
-//    } else {
-//        follower->set_following_position(waiting_position, target_rotation);
-//    }
-    
+
+
+    Vector2d target_position = Vector2d(ball_position()) - ball_goal_vector * (target_radius_from_ball);
+
+
+    double target_rotation = std::atan2( -ball_goal_vector.getY(), -ball_goal_vector.getX() );
+
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);   
 }
@@ -101,3 +104,52 @@ Striker::~Striker(){
 
 }
 }
+
+
+//Trash ZONE
+
+
+
+//    if ( robot_ball_vector.norm() > 0.5 ) {
+//        target_radius_from_ball = 0.1;
+//    } else {
+//        target_radius_from_ball = -0.1;
+//    }
+
+
+
+    //rhoban_geometry::Point waiting_position = rhoban_geometry::Point(0.0, 0.0) + oponent_goal_point / 2 ;
+    //double strik_rotation = std::atan2( -direction.getY(), -direction.getX() );
+    //double robot_toward_ball = std::atan2( robot_ball_vector.getY(), robot_ball_vector.getX() );
+
+
+//if ( scalar_product( robot_position - Vector2d(ball_position()), target_position - Vector2d(ball_position())) > 0 ) {
+    
+
+
+//    if ( ball_position.getX() > 0 ) {
+//        follower->set_following_position(target_position, target_rotation);
+//    } else {
+//        follower->set_following_position(waiting_position, target_rotation);
+//    }
+
+
+
+
+//    if ( std::abs(strik_rotation - robot_toward_ball) > (M_PI) ) {
+//        follower->avoid_the_ball(true);
+//        target_radius_from_ball = 1.5;
+//    } else {
+//        follower->avoid_the_ball(false);
+        //target_radius_from_ball = 1 / (1 + std::pow(2,std::abs((strik_rotation - robot_toward_ball) / M_PI - 2 ))) * 3 - 0.8;
+
+        //if ( std::abs(strik_rotation - robot_toward_ball) > (M_PI / 4) ) {
+//            target_radius_from_ball = 0.5;
+        //} else {
+        //    target_radius_from_ball = -0.3;
+        //}
+//    }
+
+
+
+
