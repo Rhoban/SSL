@@ -62,8 +62,21 @@ int main(int argc, char **argv)
         cmd
     );
 
+
     TCLAP::SwitchArg em("e", "em", "Stop all", cmd, false);
     cmd.parse(argc, argv);
+
+
+    const std::list<std::string> & avalaible_managers = Manager::Factory::avalaible_managers();
+    if(
+        std::find( avalaible_managers.begin(), avalaible_managers.end(), manager_name.getValue() )
+        == avalaible_managers.end()
+    ){
+        std::cerr << "The manager '" << manager_name.getValue() 
+            << "' doesn't exist. Valid manager names are : " 
+            << avalaible_managers << "." << std::endl;
+        return 1;
+    };
 
     DEBUG("The name of the team have been set to : " << team_name.getValue() );
     DEBUG("The manager have been set to : " << manager_name.getValue() );

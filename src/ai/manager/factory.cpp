@@ -26,11 +26,11 @@ std::shared_ptr<Manager> Factory::construct_manager(
 ){
     std::shared_ptr<Manager> manager;
 
-    #ifdef NDEBUG
+    #ifndef NDEBUG
     const std::list<std::string> & l = Factory::avalaible_managers();
     assert(
         std::find( l.begin(), l.end(), manager_name )
-        != Factory::avalaible_managers().end()
+        != l.end()
     ); // the manager doesn't exist !
     #endif
 
