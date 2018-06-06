@@ -5,6 +5,7 @@
 #include <annotations/Annotations.h>
 #include <manager/Manual.h>
 #include <com/AICommanderReal.h>
+#include <manager/factory.h>
 
 using namespace RhobanSSL;
 
@@ -44,6 +45,7 @@ API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, Rhoban
 
     // Instanciating AI
     ai = new RhobanSSL::AI(
+        Manager::names::match,
         teamName,
         team,
         data,
@@ -659,7 +661,7 @@ void API::setManager(QString manager)
 
 void API::managerStop()
 {
-    ai->setManager("Manual");
+    ai->setManager(Manager::names::manual);
     clearAssignments();
 }
 

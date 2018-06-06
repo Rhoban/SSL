@@ -9,6 +9,8 @@
 #include <com/AICommanderSimulation.h>
 #include "Ai.h"
 #include "Data.h"
+#include <core/print_collection.h>
+#include <manager/factory.h>
 
 #define TEAM_NAME "AMC"
 
@@ -46,11 +48,25 @@ int main(int argc, char **argv)
         "string", // short description of the expected value.
         cmd
     );
+    
+    std::stringstream manager_names;
+    manager_names << Manager::Factory::avalaible_managers();
+    TCLAP::ValueArg<std::string> manager_name(
+        "m", // short argument name  (with one character)
+        "manager", // long argument name
+        "The manager to use. The default value is '" + std::string(Manager::names::match) + "'. "
+        "The manger that can be used are " + manager_names.str() + ".",
+        false, // Flag is not required
+        Manager::names::match, // Default value
+        "string", // short description of the expected value.
+        cmd
+    );
 
     TCLAP::SwitchArg em("e", "em", "Stop all", cmd, false);
     cmd.parse(argc, argv);
 
     DEBUG("The name of the team have been set to : " << team_name.getValue() );
+    DEBUG("The manager have been set to : " << manager_name.getValue() );
 
     Data data;
 
@@ -75,6 +91,7 @@ int main(int argc, char **argv)
         commander->flush();
     } else {
         ai = new AI(
+            manager_name.getValue(),
             team_name.getValue(),
             yellow.getValue() ?
                 Ai::Yellow : Ai::Blue,

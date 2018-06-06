@@ -39,7 +39,9 @@ set (SOURCES
     manager/Manager.cpp
     manager/Match.cpp
     manager/Manual.cpp
+    manager/factory.cpp
     manager/example.cpp
+    manager/example_for_testing_robot_behaviors.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
     strategy/union.cpp

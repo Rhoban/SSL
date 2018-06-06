@@ -144,6 +144,7 @@ namespace Ai {
         translation_acceleration_limit = TRANSLATION_ACCELERATION_LIMIT;
         rotation_acceleration_limit = ROTATION_ACCELERATION_LIMIT;
 
+        DEBUG("");
         DEBUG( "translation_velocity_limit : " << translation_velocity_limit );
         DEBUG( "rotation_velocity_limit : " << rotation_velocity_limit );
         DEBUG( "translation_acceleration_limit : " << translation_acceleration_limit );

@@ -9,6 +9,8 @@
 #include <math/vector2d.h>
 #include <physic/constants.h>
 #include <core/print_collection.h>
+#include <core/collection.h>
+#include <manager/factory.h>
 
 namespace RhobanSSL
 {
@@ -253,6 +255,7 @@ void AI::init_robot_behaviors(){
 
 
 AI::AI(
+    std::string manager_name,
     std::string team_name,
     Ai::Team default_team,
     Data& data,
@@ -271,16 +274,16 @@ AI::AI(
     ai_data.change_team_color(default_team);
     ai_data.team_name = team_name;
 
-    manual_manager = std::shared_ptr<Manager::Manager>(
-        new Manager::Manual(ai_data)
+    manual_manager = Manager::Factory::construct_manager(
+        Manager::names::manual, ai_data, referee
     );
 
-    setManager("Match");
+    setManager( manager_name );
 }
 
 std::vector<std::string> AI::getAvailableManagers()
 {
-    return {"Manual", "Match"};
+    return list2vector( Manager::Factory::avalaible_managers() );
 }
 
 void AI::setManager(std::string managerName)
@@ -302,21 +305,13 @@ void AI::setManager(std::string managerName)
 #endif
 
     std::cout << "Setting the manager to: " << managerName << std::endl;
-    if (managerName == "Manual") {
+    if( managerName == Manager::names::manual ){
         strategy_manager = manual_manager;
-        dynamic_cast<Manager::Manual&>(
-            *manual_manager
-        ).change_team_and_point_of_view(
-            ai_data.team_color, true
+    }else{
+        strategy_manager = Manager::Factory::construct_manager(
+            managerName, ai_data, referee
         );
-    } else if (managerName == "Match") {
-        strategy_manager = std::shared_ptr<Manager::Manager>(
-            new Manager::Match(ai_data, referee)
-        );
-    } else {
-        std::cerr << "Unknown manager: " << managerName << std::endl;
     }
-
     strategy_manager->declare_goalie_id( goalie_id );
     strategy_manager->declare_team_ids( robot_ids );
 }

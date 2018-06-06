@@ -20,6 +20,7 @@ namespace RhobanSSL
     public:
 
         AI(
+            std::string manager_name,
             std::string team_name,
             Ai::Team default_team,
             Data & data,
