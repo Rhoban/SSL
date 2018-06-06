@@ -38,7 +38,6 @@ void Striker::update(
     rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
     rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
 
-
     Vector2d ball_goal_vector = oponent_goal_point - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
     Vector2d ball_l_post_vector = left_post_position - ball_position();
@@ -51,12 +50,12 @@ void Striker::update(
 
 
 
-    double cos_60 = 0.5000;
-    double cos_45 = 0.7071;
-    double cos_25 = 0.9006;
-    double cos_15 = 0.9659;
-    double cos_10 = 0.9848;
-    double cos_5  = 0.9961;
+    //double cos_60 = 0.5000;
+    //double cos_45 = 0.7071;
+    //double cos_25 = 0.9006;
+    //double cos_15 = 0.9659;
+    //double cos_10 = 0.9848;
+    //double cos_5  = 0.9961;
 
 
 
@@ -71,6 +70,8 @@ void Striker::update(
     } else {
         follower->avoid_the_ball(false);
         target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
+        //target_radius_from_ball = 1.0 /(2.0 *(scalar_ball_robot - (goal_visible_angle + 0.21))) + 1.0 / (goal_visible_angle + 0.21) + 2.0 * goal_visible_angle - 0.8;
+
         //if ( scalar_ball_robot < goal_visible_angle) {
         //    target_radius_from_ball = 1.0;
         //} else {
@@ -82,8 +83,6 @@ void Striker::update(
 
 
     Vector2d target_position = Vector2d(ball_position()) - ball_goal_vector * (target_radius_from_ball);
-
-
     double target_rotation = std::atan2( -ball_goal_vector.getY(), -ball_goal_vector.getX() );
 
     follower->set_following_position(target_position, target_rotation);

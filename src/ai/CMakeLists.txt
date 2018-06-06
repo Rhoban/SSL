@@ -37,6 +37,7 @@ set (SOURCES
     Ai.cpp
     AiData.cpp
     manager/Manager.cpp
+    manager/thomas.cpp
     manager/Match.cpp
     manager/Manual.cpp
     manager/factory.cpp

@@ -13,6 +13,7 @@ struct names {
     static constexpr const char* example_for_testing_robot_behaviors = "example_for_testing_robot_behaviors";
     static constexpr const char* manual = "manual";
     static constexpr const char* match = "match";
+    static constexpr const char* thomas = "thomas";
 };
 
 class Factory {
