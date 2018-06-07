@@ -71,10 +71,6 @@ bool Strategy::get_starting_position_for_goalie(
 
 Strategy::~Strategy(){ }
 
-const Ai::Robot & Strategy::get_robot( int robot_id ) const {
-    return ai_data.robots.at(Vision::Team::Ally).at( robot_id );
-} 
-
 
 }
 }
