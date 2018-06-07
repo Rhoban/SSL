@@ -1,0 +1,11 @@
+-I.
+-I../rhoban/geometry/include
+-I../rhoban/graphs/include
+-I../rhoban/utils/include
+-I../client
+-I../rhobandeps/serial/include
+-I../rhobandeps/tclap/include
+-I../rhobandeps/jsoncpp/include
+-I../rhobandeps/eigen/src
+-I/usr/include/eigen3/
+-std=c++11
