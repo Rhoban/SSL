@@ -68,6 +68,8 @@ class RobotBehavior {
         rhoban_geometry::Point ally_goal_center() const ;
         rhoban_geometry::Point oponent_goal_center() const ;
         rhoban_geometry::Point center_mark() const ;
+        const Ai::Robot & get_robot( int robot_id, Vision::Team team = Vision::Team::Ally ) const ;
+        
 };
 
 namespace detail {

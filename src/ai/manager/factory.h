@@ -14,6 +14,7 @@ struct names {
     static constexpr const char* manual = "manual";
     static constexpr const char* match = "match";
     static constexpr const char* thomas = "thomas";
+    static constexpr const char* adrien = "adrien";
 };
 
 class Factory {

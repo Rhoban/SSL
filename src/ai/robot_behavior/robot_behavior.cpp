@@ -111,5 +111,9 @@ rhoban_geometry::Point RobotBehavior::ball_position() const {
     return ball().get_movement().linear_position(time());
 }
 
+const Ai::Robot & RobotBehavior::get_robot( int robot_id, Vision::Team team ) const {
+    return ai_data.robots.at(team).at(robot_id);
+}
+
 }
 }
