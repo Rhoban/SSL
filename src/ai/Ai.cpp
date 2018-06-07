@@ -386,7 +386,7 @@ void AI::run(){
         ai_data.update( visionData );
 
         #ifndef NDEBUG
-        check_time_is_coherent();
+        //check_time_is_coherent();
         #endif
 
         referee.update(current_time);

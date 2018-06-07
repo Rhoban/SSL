@@ -366,7 +366,7 @@ void Manager::declare_robot_positions_in_the_placer(){
     if(goal_has_to_be_placed){
         get_strategy_<
             Strategy::Placer
-        >().set_goalie_positions(
+        >(MANAGER__PLACER).set_goalie_positions(
             goalie_linear_position,
             goalie_angular_position
         );
@@ -377,7 +377,7 @@ void Manager::declare_robot_positions_in_the_placer(){
 
     assert( starting_positions.size() <=  get_valid_team_ids().size() );
 
-    get_strategy_<Strategy::Placer>().set_positions(
+    get_strategy_<Strategy::Placer>(MANAGER__PLACER).set_positions(
         robot_affectations, robot_consigns
     );
 }
@@ -388,7 +388,7 @@ void Manager::place_all_the_robots(
     declare_next_strategies(next_strategies);
     declare_robot_positions_in_the_placer();
     assign_strategy( 
-        Strategy::Placer::name, time, 
+        MANAGER__PLACER, time, 
         get_valid_player_ids(), goal_has_to_be_placed
     );
 }
