@@ -74,5 +74,10 @@ rhoban_geometry::Point Strategy::ally_goal_center() const {
 
 Strategy::~Strategy(){ }
 
+const Ai::Robot & Strategy::get_robot( int robot_id ) const {
+    return ai_data.robots.at(Vision::Team::Ally).at( robot_id );
+} 
+
+
 }
 }

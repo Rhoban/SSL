@@ -45,6 +45,7 @@ set (SOURCES
     manager/example_for_testing_robot_behaviors.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
+    strategy/mur.cpp
     strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp

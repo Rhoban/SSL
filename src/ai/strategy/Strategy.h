@@ -120,6 +120,7 @@ class Strategy {
     bool have_to_manage_the_goalie() const;
 
     rhoban_geometry::Point ally_goal_center() const;
+    const Ai::Robot & get_robot( int robot_id ) const; 
     
 };
 
