@@ -1,5 +1,5 @@
-#ifndef __MANAGER__EXAMPLE_FOR_TESTING_ROBOT_BEHAVIOR__H__
-#define __MANAGER__EXAMPLE_FOR_TESTING_ROBOT_BEHAVIOR__H__
+#ifndef __MANAGER__SEBASTIEN__H__
+#define __MANAGER__SEBASTIEN__H__
 
 #include <manager/Manager.h>
 #include <referee/Referee.h>
@@ -7,7 +7,7 @@
 namespace RhobanSSL {
 namespace Manager {
 
-class Example_for_testing_robot_behaviors : public Manager {
+class Sebastien : public Manager {
     private:
     const Referee & referee;
 
@@ -17,7 +17,7 @@ class Example_for_testing_robot_behaviors : public Manager {
     
     public:
 
-    Example_for_testing_robot_behaviors(
+    Sebastien(
         Ai::AiData & ai_data,
         const Referee & referee
     );
@@ -26,7 +26,7 @@ class Example_for_testing_robot_behaviors : public Manager {
     void analyse_data(double time);
     void choose_a_strategy(double time);
 
-    virtual ~Example_for_testing_robot_behaviors();
+    virtual ~Sebastien();
 
 };
 

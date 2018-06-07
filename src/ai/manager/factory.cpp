@@ -3,6 +3,7 @@
 #include "Manual.h"
 #include "Match.h"
 #include "thomas.h"
+#include "sebastien/sebastien.h"
 #include "adrien/adrien.h"
 #include "example.h"
 #include "example_for_testing_robot_behaviors.h"
@@ -16,7 +17,8 @@ std::list<std::string> Factory::list_of_avalaible_managers ={
     names::example,
     names::example_for_testing_robot_behaviors,
     names::thomas,
-    names::adrien
+    names::adrien,
+    names::sebastien
 };
 
 const std::list<std::string> & Factory::avalaible_managers(){
@@ -61,6 +63,11 @@ std::shared_ptr<Manager> Factory::construct_manager(
     if( manager_name == names::adrien ){
         manager = std::shared_ptr<Manager>(
             new Adrien(ai_data, referee)
+        );
+    }
+    if( manager_name == names::sebastien ){
+        manager = std::shared_ptr<Manager>(
+            new Sebastien(ai_data, referee)
         );
     }
     if( manager_name == names::example ){

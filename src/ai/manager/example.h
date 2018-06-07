@@ -1,7 +1,7 @@
 #ifndef __MANAGER__EXAMPLE__H__
 #define __MANAGER__EXAMPLE__H__
 
-#include "Manager.h"
+#include <manager/Manager.h>
 #include <referee/Referee.h>
 
 namespace RhobanSSL {

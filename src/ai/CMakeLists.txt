@@ -28,6 +28,7 @@ set (SOURCES
     robot_behavior/factory.cpp
     robot_behavior/goalie.cpp
     robot_behavior/defensor.cpp
+    robot_behavior/passive_defensor.cpp
     robot_behavior/robot_follower.cpp
     robot_behavior/striker.cpp
     robot_behavior/position_follower.cpp
@@ -41,6 +42,7 @@ set (SOURCES
     manager/Manager.cpp
     manager/thomas.cpp
     manager/adrien/adrien.cpp
+    manager/sebastien/sebastien.cpp
     manager/Match.cpp
     manager/Manual.cpp
     manager/factory.cpp

@@ -46,7 +46,7 @@ double Object::age() const {
 }
 
 bool Object::isOk() const {
-    return present && age() < 1;
+    return present && age() < 2.0;
 }
 
 Object::Object(): movement(history_size) {
