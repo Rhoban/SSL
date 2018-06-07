@@ -19,6 +19,7 @@ include_directories(${catkin_INCLUDE_DIRS} .)
 
 set (SOURCES
     Data.cpp
+    game_informations.cpp
     vision/AIVisionClient.cpp
     vision/VisionData.cpp
     com/AICommander.cpp

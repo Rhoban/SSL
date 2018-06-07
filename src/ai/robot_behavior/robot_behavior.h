@@ -1,6 +1,7 @@
 #ifndef __ROBOT_BEHAVIOR__ROBOT_BEHAVIOR__H__
 #define __ROBOT_BEHAVIOR__ROBOT_BEHAVIOR__H__
 
+#include <game_informations.h>
 #include <control/robot_control_with_position_following.h>
 #include <control/robot_control_with_curve.h>
 #include <rhoban_utils/angle.h>
@@ -30,7 +31,7 @@ std::ostream& operator << ( std::ostream &, const Control& control  );
 
 namespace Robot_behavior {
 
-class RobotBehavior {
+class RobotBehavior : public GameInformations {
     protected:
         const Ai::Robot* robot_ptr;
         const Ai::Ball* ball_ptr;
@@ -46,7 +47,6 @@ class RobotBehavior {
     public:
         RobotBehavior( Ai::AiData & ia_data );
 
-        double time() const;
         double age() const;
         bool is_born() const;
         void set_birthday( double birthday );
@@ -65,11 +65,6 @@ class RobotBehavior {
         const Ai::Robot & robot() const ;
         const Ai::Ball & ball() const ;
         rhoban_geometry::Point ball_position() const ;
-        rhoban_geometry::Point ally_goal_center() const ;
-        rhoban_geometry::Point oponent_goal_center() const ;
-        rhoban_geometry::Point center_mark() const ;
-        const Ai::Robot & get_robot( int robot_id, Vision::Team team = Vision::Team::Ally ) const ;
-        
 };
 
 namespace detail {

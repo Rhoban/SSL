@@ -215,6 +215,7 @@ void Manager::change_team_and_point_of_view( Ai::Team team, bool blue_have_it_s_
 }
 
 Manager::Manager( Ai::AiData& ai_data ):
+    GameInformations(ai_data),
     blueIsNotSet(true),
     goalie_id(-1),
     goalie_opponent_id(-1),
@@ -464,7 +465,7 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position(){
     ){
         return Vector2d(
             pos.first -
-            this->robot(robot_id).get_movement().linear_position(time())
+            this->get_robot(robot_id).get_movement().linear_position(time())
         ).norm_square();
     };
 
@@ -479,7 +480,7 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position(){
     ){
         return Vector2d(
             pos.first -
-            this->robot(robot_id).get_movement().linear_position(time())
+            this->get_robot(robot_id).get_movement().linear_position(time())
         ).norm_square();
     };
 
@@ -545,11 +546,6 @@ void Manager::compute_robot_affectations_to_strategies(){
         cpt_robot += nb_robots;
         cpt_extra_robot += extra_robots;
     }
-}
-
-
-Ai::Robot& Manager::robot( int robot_number) const {
-    return ai_data.robots.at( Vision::Team::Ally ).at( robot_number );
 }
 
 const std::string & Manager::get_next_strategy_with_goalie() const

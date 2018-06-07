@@ -54,6 +54,7 @@ double vec2angle( Vector2d direction ){
 
 
 RobotBehavior::RobotBehavior( Ai::AiData & ai_data ) :
+    GameInformations(ai_data),
     birthday(-1.0), ai_data(ai_data)
 { };
 
@@ -89,30 +90,8 @@ const Ai::Ball & RobotBehavior::ball() const {
     return *ball_ptr;
 }
 
-double RobotBehavior::time() const {
-    return ai_data.time;
-
-}
-
-rhoban_geometry::Point RobotBehavior::ally_goal_center() const {
-    return  rhoban_geometry::Point( - ai_data.field.fieldLength/2.0, 0.0 );
-    
-}
-
-rhoban_geometry::Point RobotBehavior::oponent_goal_center() const {
-    return rhoban_geometry::Point( ai_data.field.fieldLength/2.0, 0.0 );
-}
-
-rhoban_geometry::Point RobotBehavior::center_mark() const {
-    return rhoban_geometry::Point( 0.0, 0.0 );
-}
-
 rhoban_geometry::Point RobotBehavior::ball_position() const {
     return ball().get_movement().linear_position(time());
-}
-
-const Ai::Robot & RobotBehavior::get_robot( int robot_id, Vision::Team team ) const {
-    return ai_data.robots.at(team).at(robot_id);
 }
 
 }

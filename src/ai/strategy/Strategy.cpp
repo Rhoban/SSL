@@ -4,6 +4,7 @@ namespace RhobanSSL {
 namespace Strategy {
 
 Strategy::Strategy(Ai::AiData & ai_data):
+    GameInformations(ai_data),
     ai_data(ai_data),
     goalie_id(-1),
     goalie_opponent_id(-1)
@@ -67,10 +68,6 @@ bool Strategy::get_starting_position_for_goalie(
 ) const {
     return false;
 }  
-
-rhoban_geometry::Point Strategy::ally_goal_center() const {
-    return  rhoban_geometry::Point( - ai_data.field.fieldLength/2.0, 0.0 );
-}
 
 Strategy::~Strategy(){ }
 

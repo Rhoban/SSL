@@ -1,6 +1,7 @@
 #ifndef __STRATEGY__STRATEGY__H__
 #define __STRATEGY__STRATEGY__H__
 
+#include <game_informations.h>
 #include <robot_behavior/robot_behavior.h>
 #include <map>
 #include <utility>
@@ -17,7 +18,7 @@ enum Goalie_need {
     NO
 };
 
-class Strategy {
+class Strategy : public GameInformations {
     protected:
     Ai::AiData & ai_data;
     private:
@@ -118,9 +119,6 @@ class Strategy {
      * goalie.
      */
     bool have_to_manage_the_goalie() const;
-
-    rhoban_geometry::Point ally_goal_center() const;
-    
 };
 
 };

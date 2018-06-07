@@ -1,6 +1,7 @@
 #ifndef __MANAGER__MANAGER__H__
 #define __MANAGER__MANAGER__H__
 
+#include <game_informations.h>
 #include <strategy/Strategy.h>
 #include <robot_behavior/robot_behavior.h>
 #include <map>
@@ -12,7 +13,7 @@
 namespace RhobanSSL {
 namespace Manager {
 
-class Manager {
+class Manager : public GameInformations {
     public:
 
         static constexpr const char* MANAGER__REMOVE_ROBOTS = "manager__remove_robots";
@@ -151,10 +152,6 @@ class Manager {
         double time, const std::list<std::string> & next_strategies
     );
     const std::vector<int> & get_robot_affectations( const std::string & strategy_name ) const;
-
-    // Return the ally robot whose number is 
-    // `̀robot_number'.
-    Ai::Robot& robot( int robot_number) const;
 
 
 };
