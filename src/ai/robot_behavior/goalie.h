@@ -17,12 +17,12 @@ class Goalie : public RobotBehavior  {
         Vector2d left_post_position; 
         Vector2d right_post_position;
         Vector2d goal_center;
-        Vector2d waiting_goal_position;
+        rhoban_geometry::Point waiting_goal_position;
 
         double goalie_radius;
         double penalty_rayon;
 
-        static Vector2d calculate_goal_position(
+        static rhoban_geometry::Point calculate_goal_position(
             const rhoban_geometry::Point & ball_position,
             const Vector2d & poteau_droit,
             const Vector2d & poteau_gauche,
@@ -36,7 +36,7 @@ class Goalie : public RobotBehavior  {
             Ai::AiData& ai_data,
             const Vector2d & left_post_position,
             const Vector2d & right_post_position,
-            const Vector2d & waiting_goal_position,
+            const rhoban_geometry::Point & waiting_goal_position,
             double penalty_rayon,
             double goalie_radius,
             double time, double dt

@@ -5,19 +5,19 @@
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-Vector2d Goalie::calculate_goal_position(
+rhoban_geometry::Point Goalie::calculate_goal_position(
     const rhoban_geometry::Point & ball_position,
     const Vector2d & poteau_droit,
     const Vector2d & poteau_gauche,
     double goalie_radius
 ){
-    rhoban_geometry::Point defender_position = rhoban_geometry::center_of_cone_incircle(
+        rhoban_geometry::Point defender_position = rhoban_geometry::center_of_cone_incircle(
         ball_position,
         vector2point(poteau_droit), 
         vector2point(poteau_gauche), 
         goalie_radius
     );
-    return Vector2d( defender_position );
+    return defender_position;
 }
 
 
@@ -28,7 +28,7 @@ Goalie::Goalie(
 		ai_data,
 		Vector2d(-ai_data.field.fieldLength/2.0, ai_data.field.goalWidth/2.0),
 		Vector2d(-ai_data.field.fieldLength/2.0, -ai_data.field.goalWidth/2.0),
-        Vector2d(-ai_data.field.fieldLength/2.0, 0.0 ) + ai_data.constants.waiting_goal_position,
+        rhoban_geometry::Point(-ai_data.field.fieldLength/2.0, 0.0 ) + ai_data.constants.waiting_goal_position,
 		ai_data.field.penaltyAreaDepth,
 		ai_data.constants.robot_radius,
 		ai_data.time, ai_data.dt
@@ -41,7 +41,7 @@ Goalie::Goalie(
     Ai::AiData & ai_data,
     const Vector2d & left_post_position,
     const Vector2d & right_post_position,
-    const Vector2d & waiting_goal_position,
+    const rhoban_geometry::Point & waiting_goal_position,
     double penalty_rayon,
     double goalie_radius,
     double time, double dt
@@ -69,20 +69,21 @@ void Goalie::update(
     //  this->robot_linear_position
     //  this->robot_angular_position 
     // are all avalaible
-    
 
-    double goal_rotation = detail::vec2angle(Vector2d(ball_position()) - robot_linear_position);
-
-    Vector2d defender_pos = calculate_goal_position(
+    rhoban_geometry::Point target_position = calculate_goal_position(
         ball_position(), right_post_position, left_post_position,
         goalie_radius
     );
 
-    if( norm_2(defender_pos - goal_center) > penalty_rayon ){
-        defender_pos = waiting_goal_position;
+    if( Vector2d(target_position - goal_center).norm() > penalty_rayon ){
+        target_position = waiting_goal_position;
     }
 
-    follower->set_following_position(defender_pos, goal_rotation );
+    Vector2d target_ball_vector = ball_position() - target_position;
+
+    double target_rotation = detail::vec2angle(target_ball_vector);
+
+    follower->set_following_position(Vector2d(target_position), target_rotation );
     follower->avoid_the_ball(false);
     
     follower->update(time, robot, ball);   
