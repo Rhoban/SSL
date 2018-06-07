@@ -35,18 +35,18 @@ void Striker::update(
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     
     rhoban_geometry::Point oponent_goal_point = oponent_goal_center();
-    rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
-    rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
+    //rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
+    //rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
 
     Vector2d ball_goal_vector = oponent_goal_point - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
-    Vector2d ball_l_post_vector = left_post_position - ball_position();
-    Vector2d ball_r_post_vector = right_post_position - ball_position();
+    //Vector2d ball_l_post_vector = left_post_position - ball_position();
+    //Vector2d ball_r_post_vector = right_post_position - ball_position();
 
     ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
-    ball_l_post_vector = ball_l_post_vector / ball_l_post_vector.norm();
-    ball_r_post_vector = ball_r_post_vector / ball_r_post_vector.norm();
+    //ball_l_post_vector = ball_l_post_vector / ball_l_post_vector.norm();
+    //ball_r_post_vector = ball_r_post_vector / ball_r_post_vector.norm();
 
 
 
@@ -59,7 +59,7 @@ void Striker::update(
 
 
 
-    double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
+    //double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
 
     double target_radius_from_ball;
     double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_goal_vector );
@@ -83,7 +83,7 @@ void Striker::update(
 
 
     Vector2d target_position = Vector2d(ball_position()) - ball_goal_vector * (target_radius_from_ball);
-    double target_rotation = std::atan2( -ball_goal_vector.getY(), -ball_goal_vector.getX() );
+    double target_rotation = detail::vec2angle(ball_goal_vector);
 
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);   

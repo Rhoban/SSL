@@ -119,6 +119,7 @@ class Strategy : public GameInformations {
      * goalie.
      */
     bool have_to_manage_the_goalie() const;
+
 };
 
 };
