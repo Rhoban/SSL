@@ -266,7 +266,7 @@ namespace Ai {
         for( unsigned int i=0; i<all_robots.size(); i++ ){
             const Robot * robot_2 = all_robots[i].second;
             if( not( robot_2->is_present_in_vision() ) ){
-                return {};
+                continue;
             }
             if( robot_1->id() != robot_2->id() or all_robots[i].first != Vision::Team::Ally ){
                 double radius_error = constants.radius_security_for_collision;
