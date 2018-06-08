@@ -15,8 +15,12 @@ class API : public QObject
     Q_OBJECT
 
 public:
-    API(std::string teamName, bool simulation,
-        RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander);
+    API(
+        std::string teamName, bool simulation,
+        RhobanSSL::Ai::Team team, 
+        RhobanSSL::AICommander *commander,
+        const std::string & config_path
+    );
     virtual ~API();
 
     bool simulation;

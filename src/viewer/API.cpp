@@ -17,7 +17,7 @@ static QString js(Json::Value &json)
     return QString::fromStdString(writer.write(json));
 }
 
-API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander)
+API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander, const std::string & config_path)
 :
     simulation(simulation),
     teamName(teamName),
@@ -49,7 +49,7 @@ API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, Rhoban
         teamName,
         team,
         data,
-        commander
+        commander, config_path, simulation
     );
 
     /*

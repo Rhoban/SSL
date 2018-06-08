@@ -4,6 +4,9 @@
 #include <debug.h>
 #include <physic/collision.h>
 #include <physic/movement_on_new_frame.h>
+#include <json/json.h>
+#include <json/reader.h>
+#include <fstream>
 
 namespace RhobanSSL {
 namespace Ai {
@@ -101,8 +104,9 @@ namespace Ai {
         this->team_color = team_color;
     }
 
-    AiData::AiData():
-        time_shift_with_vision(0.0)
+    AiData::AiData( const std::string & config_path, bool is_in_simulation ):
+        time_shift_with_vision(0.0),
+        constants(config_path, is_in_simulation)
     {
         int nb_robots = 0;
         for( auto team : {Vision::Ally, Vision::Opponent} ){
@@ -135,71 +139,80 @@ namespace Ai {
         return vision_data.isOk(); 
     }
 
-    void Constants::init(){
-        robot_radius = 0.09;
-        radius_ball = 0.04275/2.0;
-        
-        translation_velocity_limit = TRANSLATION_VELOCITY_LIMIT;
-        rotation_velocity_limit = ROTATION_VELOCITY_LIMIT;
-        translation_acceleration_limit = TRANSLATION_ACCELERATION_LIMIT;
-        rotation_acceleration_limit = ROTATION_ACCELERATION_LIMIT;
+    Constants::Constants( const std::string & config_path, bool is_in_simulation ):
+        is_in_simulation( is_in_simulation )
+    {
+        load( config_path );
+    }
 
-        DEBUG("");
+    void Constants::load( const std::string & config_path ){
+        DEBUG( "We load constants from the configuration file : " << config_path << "." );
+        Json::Value root;
+
+        std::ifstream config_doc(config_path, std::ifstream::binary);
+
+        Json::Reader reader;
+        bool parsingSuccessful = reader.parse( config_doc, root );
+        if ( !parsingSuccessful ){
+            std::cerr  << "Failed to parse configuration\n"
+                       << reader.getFormattedErrorMessages();
+            std::exit(EXIT_FAILURE);
+        }
+      
+        auto robot_conf = root["robot"]; 
+        robot_radius = robot_conf["robot_radius"].asDouble();
+        
+        wheel_radius = robot_conf["wheel_radius"].asDouble();
+        wheel_excentricity = robot_conf["wheel_excentricity"].asDouble();
+        if( is_in_simulation ){
+            DEBUG("SIMULATION MODE ACTIVATED");
+            wheel_nb_turns_acceleration_limit = robot_conf["wheel_nb_turns_acceleration_limit"]["simu"].asDouble();
+            rotation_velocity_limit = robot_conf["rotation_velocity_limit"]["simu"].asDouble();
+            translation_velocity_limit = robot_conf["translation_velocity_limit"]["simu"].asDouble();
+            p_translation = robot_conf["p_translation"]["simu"].asDouble();
+            i_translation = robot_conf["i_translation"]["simu"].asDouble();
+            d_translation = robot_conf["d_translation"]["simu"].asDouble();
+            p_orientation = robot_conf["p_orientation"]["simu"].asDouble();
+            i_orientation = robot_conf["i_orientation"]["simu"].asDouble();
+            d_orientation = robot_conf["d_orientation"]["simu"].asDouble();
+        }else{
+            DEBUG("REAL MODE ACTIVATED");
+            wheel_nb_turns_acceleration_limit = robot_conf["wheel_nb_turns_acceleration_limit"]["real"].asDouble();
+            rotation_velocity_limit = robot_conf["rotation_velocity_limit"]["real"].asDouble();
+            translation_velocity_limit = robot_conf["translation_velocity_limit"]["real"].asDouble();
+            p_translation = robot_conf["p_translation"]["real"].asDouble();
+            i_translation = robot_conf["i_translation"]["real"].asDouble();
+            d_translation = robot_conf["d_translation"]["real"].asDouble();
+            p_orientation = robot_conf["p_orientation"]["real"].asDouble();
+            i_orientation = robot_conf["i_orientation"]["real"].asDouble();
+            d_orientation = robot_conf["d_orientation"]["real"].asDouble();
+        }
+        translation_acceleration_limit = wheel_nb_turns_acceleration_limit*wheel_radius*2.0*M_PI;
+        rotation_acceleration_limit = 2.0*M_PI*(wheel_radius/wheel_excentricity)*wheel_nb_turns_acceleration_limit;
+
         DEBUG( "translation_velocity_limit : " << translation_velocity_limit );
         DEBUG( "rotation_velocity_limit : " << rotation_velocity_limit );
         DEBUG( "translation_acceleration_limit : " << translation_acceleration_limit );
         DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
 
-        security_acceleration_ratio = .5;
-        obstacle_avoidance_ratio = .5/50; // should be lessr than security_acceleration_ratio
-        radius_security_for_collision = 0.02;    
-        radius_security_for_avoidance = 0.04;  // should be greatear than  radius_security_for_collision  
         
-        //translation_velocity_limit = 8.0;
-        //rotation_velocity_limit = 4.0;
-        //translation_acceleration_limit = -1.0;
-        //rotation_acceleration_limit = -1.0;
+        radius_ball = root["team"]["radius_ball"].asDouble();
 
-        waiting_goal_position = Vector2d(0.3, 0.0);
-        penalty_rayon = 1.0; // penalty rayon for the goalie
+        auto nav = root["navigation_with_obstacle"];
+        security_acceleration_ratio = nav["security_acceleration_ratio"].asDouble();
+        obstacle_avoidance_ratio = nav["obstacle_avoidance_ratio"].asDouble(); // should be lessr than security_acceleration_ratio
+        assert( obstacle_avoidance_ratio < security_acceleration_ratio ); 
+        radius_security_for_collision = nav["radius_security_for_collision"].asDouble();
+        radius_security_for_avoidance = nav["radius_security_for_avoidance"].asDouble();  // should be greatear than  radius_security_for_collision  
+        assert( radius_security_for_collision < radius_security_for_avoidance );
 
-        #ifdef SSL_SIMU
-            DEBUG("SIMULATION MODE ACTIVATED");
-            // SSL SIMUL
+        waiting_goal_position = Vector2d( 
+            root["goalie"]["waiting_goal_position"][0].asDouble(),
+            root["goalie"]["waiting_goal_position"][1].asDouble()
+        );
+        penalty_rayon = root["goalie"]["penalty_rayon"].asDouble(); // penalty rayon for the goalie
             
-            // PID for translation
-            p_translation = 0.05; 
-            //p_translation = 0.0; 
-            //i_translation = .0001;
-            i_translation = .000;
-            //d_translation = .0005;
-            d_translation = .000;
-            // PID for orientation
-            p_orientation = 0.05;
-            //p_orientation = 0.0;
-            //i_orientation = 0.0001;
-            i_orientation = 0.000;
-            d_orientation = 0.000;
-            //d_orientation = 0.0005;
-
-            enable_kicking = true;
-
-        #else
-            DEBUG("REAL MODE ACTIVATED");
-            // SSL QUALIF
-
-            // PID for translation
-            p_translation = 0.02; 
-            i_translation = .001;
-            d_translation = .0;
-            // PID for orientation
-            p_orientation = 0.02;
-            i_orientation = 0.001;
-            d_orientation = 0.0;
-
-            enable_kicking = true;
-
-        #endif
+        enable_kicking = true;
     }
 
     bool AiData::robot_is_inside_the_field( int robot_id ) const {

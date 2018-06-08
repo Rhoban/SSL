@@ -13,6 +13,7 @@
 #include <manager/factory.h>
 
 #define TEAM_NAME "AMC"
+#define CONFIG_PATH "./src/ai/config.json"
 
 using namespace RhobanSSL;
 AI *ai = NULL;
@@ -62,6 +63,15 @@ int main(int argc, char **argv)
         cmd
     );
 
+    TCLAP::ValueArg<std::string> config_path(
+        "c", // short argument name  (with one character)
+        "config", // long argument name
+        "The config path to the json configuration of AI. The default value is '" CONFIG_PATH "'. ",
+        false, // Flag is not required
+        CONFIG_PATH, // Default value
+        "string", // short description of the expected value.
+        cmd
+    );
 
     TCLAP::SwitchArg em("e", "em", "Stop all", cmd, false);
     cmd.parse(argc, argv);
@@ -108,7 +118,9 @@ int main(int argc, char **argv)
             team_name.getValue(),
             yellow.getValue() ?
                 Ai::Yellow : Ai::Blue,
-            data, commander
+            data, commander,
+            config_path.getValue(),
+            simulation.getValue()
         ),
         ai->run();
         delete ai;

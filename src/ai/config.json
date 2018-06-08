@@ -1,0 +1,59 @@
+{
+    "robot" : {
+        "robot_radius" : 0.09,
+        "wheel_radius" : 0.03,
+        "wheel_excentricity" : 0.08,
+        "wheel_nb_turns_acceleration_limit" : { 
+            "simu" : 100.0,
+            "real" : 10.0
+        },
+        "rotation_velocity_limit" : {
+            "simu" : 3.0,
+            "real" : 3.0
+        },
+        "translation_velocity_limit" : {
+            "simu" : 8.0,
+            "real" : 8.0
+        },
+        "p_translation" : {
+            "simu" : 0.05,
+            "real" : 0.02
+        },
+        "i_translation" : {
+            "simu" : 0.0,
+            "real" : 0.001
+        },
+        "d_translation" : {
+            "simu" : 0.0,
+            "real" : 0.0
+        },
+        "p_orientation":{
+            "simu" : 0.05,
+            "real" : 0.02
+        },
+        "i_orientation":{
+            "simu" : 0.0,
+            "real" : 0.001
+        },
+        "d_orientation":{
+            "simu" : 0.0,
+            "real" : 0.0
+        }
+    },
+    "team" : {
+        "nb_of_robots_by_team" : 8
+    },
+    "ball" : {
+        "radius_ball" : 0.021375
+    },
+    "navigation_with_obstacle" : {
+        "security_acceleration_ratio" : 0.5,
+        "obstacle_avoidance_ratio" : 0.01,
+        "radius_security_for_collision" : 0.02,    
+        "radius_security_for_avoidance" : 0.04
+    },
+    "goalie" : {
+        "penalty_rayon" : 1.0,
+        "waiting_goal_position" : [0.3,0.0]
+    }
+}

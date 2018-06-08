@@ -24,7 +24,9 @@ namespace RhobanSSL
             std::string team_name,
             Ai::Team default_team,
             Data & data,
-            AICommander *commander
+            AICommander *commander,
+            const std::string & config_path,
+            bool is_in_simulation
         );
 
         void run();

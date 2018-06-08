@@ -7,6 +7,7 @@
 #include "API.h"
 
 #define TEAM_NAME "AMC"
+#define CONFIG_PATH "./src/ai/config.json"
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +30,16 @@ int main(int argc, char *argv[])
         cmd
     );
 
+    TCLAP::ValueArg<std::string> config_path(
+        "c", // short argument name  (with one character)
+        "config", // long argument name
+        "The config path to the json configuration of AI. The default value is '" CONFIG_PATH "'. ",
+        false, // Flag is not required
+        CONFIG_PATH, // Default value
+        "string", // short description of the expected value.
+        cmd
+    );
+
     cmd.parse(argc, argv);
 
     // Instantiating the commander
@@ -42,7 +53,7 @@ int main(int argc, char *argv[])
     // Viewer API
     API api(team_name.getValue(), simulation.getValue(), yellow.getValue() ?
         RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
-        commander);
+        commander, config_path.getValue());
 
     // Running Qt application
     QApplication a(argc, argv);

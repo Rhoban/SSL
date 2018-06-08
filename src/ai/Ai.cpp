@@ -259,11 +259,14 @@ AI::AI(
     std::string team_name,
     Ai::Team default_team,
     Data& data,
-    AICommander *commander
+    AICommander *commander,
+    const std::string & config_path,
+    bool is_in_simulation
 ):
     team_name(team_name),
     default_team(default_team),
     running(true),
+    ai_data( config_path, is_in_simulation ),
     commander(commander),
     current_dt(0.0),
     data(data)

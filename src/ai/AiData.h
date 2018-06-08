@@ -84,24 +84,9 @@ struct Field : Vision::Field {
 };
 
 struct Constants {
-
     static constexpr int NB_OF_ROBOTS_BY_TEAM = 8;
 
-    static constexpr double WHEEL_RADIUS = 0.03; // In meter
-    static constexpr double WHEEL_EXCENTRICITY = 0.08; // In meter
-#ifdef SSL_SIMU
-    static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 100.0; // TODO : SET TO 10 turn by second
-#else
-    static constexpr double WHEEL_NB_TURNS_ACCELERATION_LIMIT = 10.0; // TODO : SET TO 10 turn by second
-#endif
-    static constexpr double TRANSLATION_ACCELERATION_LIMIT = WHEEL_NB_TURNS_ACCELERATION_LIMIT*WHEEL_RADIUS*2.0*M_PI; // 10 tours * 0.03 m * 2*PI  m/s^-2
-    static constexpr double ROTATION_ACCELERATION_LIMIT = 2.0*M_PI*(WHEEL_RADIUS/WHEEL_EXCENTRICITY)*WHEEL_NB_TURNS_ACCELERATION_LIMIT; //
-
-#ifdef SSL_SIMU
-    static constexpr double ROTATION_VELOCITY_LIMIT = 3.0;
-    static constexpr double TRANSLATION_VELOCITY_LIMIT = 8.0;
-#else
-#endif
+    bool is_in_simulation;
 
     double robot_radius;
     double radius_ball;
@@ -130,12 +115,13 @@ struct Constants {
     double radius_security_for_collision;    
     double radius_security_for_avoidance;
 
-    void init();
+    double wheel_radius;
+    double wheel_excentricity;
+    double wheel_nb_turns_acceleration_limit;
 
-    Constants(){ 
-        init();
-    }
+    void load( const std::string & config_path );
 
+    Constants( const std::string & config_path, bool is_in_simulation );
 };
 
 class AiData {
@@ -147,8 +133,7 @@ public:
     std::string team_name;
     Ai::Team team_color;
 
-    AiData();
-
+    AiData( const std::string & config_path, bool is_in_simulation );
 
     typedef std::map<int, Robot> Robots_table;
     typedef std::map<Vision::Team, Robots_table> Robots_table_by_team;
