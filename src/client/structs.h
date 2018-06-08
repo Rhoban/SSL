@@ -16,7 +16,7 @@
      #define ACTION_KICK1   (1<<1)   // Kick on kicker 1 (transition from 0 to 1 trigger kick)
      #define ACTION_KICK2   (1<<2)   // Kick on kicker 2 (transition from 0 to 1 trigger kick)
      #define ACTION_DRIBBLE (1<<3)   // Enable/disable the dribbler
-     #define ACTION_CHARGE  (1<<4)   // Enable/disable the capacitor charge
+     #define ACTION_CHARGE  (1<<5)   // Enable/disable the capacitor charge
      uint8_t actions;
 
      int16_t x_speed;                // Kinematic orders (mm/s and mrad/s)
