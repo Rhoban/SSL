@@ -163,16 +163,12 @@ void AI::send_control( int robot_id, const Control & ctrl ){
                 robot_id, true, 0.0, 0.0, 0.0
             );
         }else{
-            Vector2d velocity_translation = ai_data.team_point_of_view.from_basis(
-                ctrl.velocity_translation
-            );
-
             int kick = 0;
             if (ctrl.kick) kick = 2;
             else if (ctrl.chipKick) kick = 1;
             commander->set(
                 robot_id, true,
-                velocity_translation[0], velocity_translation[1],
+                ctrl.velocity_translation[0], ctrl.velocity_translation[1],
                 ctrl.velocity_rotation.value(),
                 kick,
                 ctrl.spin,

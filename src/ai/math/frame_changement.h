@@ -2,6 +2,7 @@
 #define __MATH__FRAME_CHANGEMENT__H__
 
 #include "vector2d.h"
+#include "ContinuousAngle.h"
 #include <math/matrix2d.h>
 
 class Frame_changement {
@@ -9,6 +10,7 @@ class Frame_changement {
     rhoban_geometry::Point origin;
     Matrix2d basis;
     Matrix2d basisChangement;
+    ContinuousAngle rotation_angle_from_basis;
 
     public:
     Frame_changement();
@@ -31,6 +33,12 @@ class Frame_changement {
     
     // Convert a vector in the basis of the frame coordinate to a vector in the absolute    // basis
     Vector2d from_basis( const Vector2d & vector ) const;
+
+    ContinuousAngle from_frame(const ContinuousAngle & angle) const;
+    ContinuousAngle from_basis(const ContinuousAngle & angle) const;
+
+    ContinuousAngle to_frame(const ContinuousAngle & angle) const;
+    ContinuousAngle to_basis(const ContinuousAngle & angle) const;
 
 };
 

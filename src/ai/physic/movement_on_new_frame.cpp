@@ -48,7 +48,7 @@ double Movement_on_new_frame::last_time() const {
  
 ContinuousAngle
 Movement_on_new_frame::angular_position( double time ) const {
-    return movement->angular_position(time);
+    return frame.to_frame(movement->angular_position(time));
 }
        
 Vector2d

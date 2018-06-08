@@ -43,3 +43,13 @@ bool operator==(const Vector2d & v1, const Vector2d & v2){
 bool operator!=(const Vector2d & v1, const Vector2d & v2){
     return (v1[0] != v2[0]) or (v1[1] != v2[1]);
 }
+
+ContinuousAngle vector2angle( Vector2d direction ){
+    double norm = direction.norm();
+    if( norm == 0.0 ) return 0.0;
+    direction /= norm;
+    double res = std::acos( direction[0] );
+    if( direction[1] < 0 ) return -res;
+    return ContinuousAngle(res);
+}
+

@@ -1,9 +1,11 @@
 #include "frame_changement.h"
+#include <debug.h>
 
 Frame_changement::Frame_changement():
     origin(0.0,0.0),
     basis(boost::numeric::ublas::identity_matrix<double>(2)),
-    basisChangement(boost::numeric::ublas::identity_matrix<double>(2))
+    basisChangement(boost::numeric::ublas::identity_matrix<double>(2)),
+    rotation_angle_from_basis(0.0)
 {
 }
 
@@ -20,6 +22,7 @@ void Frame_changement::set_frame(
     basis(1,0) = v1.getY(); 
     basis(1,1) = v2.getY();
     basisChangement = basis.inverse();
+    rotation_angle_from_basis = vector2angle(v1);
 }
 
 // Convert a point in absolute coordiante to frame coordiante
@@ -41,4 +44,18 @@ rhoban_geometry::Point Frame_changement::from_frame( const rhoban_geometry::Poin
 // Convert a vector in the basis of the frame coordinate to a vector in the absolute    // basis
 Vector2d Frame_changement::from_basis( const Vector2d & vector ) const {
     return basis * vector;
+}
+
+ContinuousAngle Frame_changement::from_frame(const ContinuousAngle & angle) const {
+    return from_basis(angle);
+}
+ContinuousAngle Frame_changement::from_basis(const ContinuousAngle & angle) const {
+    return angle + rotation_angle_from_basis;
+}
+
+ContinuousAngle Frame_changement::to_frame(const ContinuousAngle & angle) const {
+    return to_basis(angle);
+}
+ContinuousAngle Frame_changement::to_basis(const ContinuousAngle & angle) const {
+    return angle - rotation_angle_from_basis;
 }

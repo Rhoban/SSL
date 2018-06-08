@@ -1,6 +1,7 @@
 #ifndef __TOOLS__VECTOR_H__
 #define __TOOLS__VECTOR_H__
 
+#include <math/ContinuousAngle.h>
 #include <rhoban_geometry/point.h>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/storage.hpp>
@@ -62,5 +63,7 @@ double scalar_product( const Vector2d & v1, const Vector2d & v2 );
 
 double norm( const Vector2d & v1 );
 Vector2d normalized( const Vector2d & v1 );
+
+ContinuousAngle vector2angle( Vector2d direction );
 
 #endif
