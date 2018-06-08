@@ -59,7 +59,7 @@ public:
         const Vector2d & v1, const Vector2d & v2
     );
 
-    bool isOk() const ;
+    bool is_present_in_vision() const;
 
     const RhobanSSL::Movement & get_movement() const; 
     virtual ~Object();

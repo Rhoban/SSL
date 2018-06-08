@@ -99,6 +99,20 @@ namespace RhobanSSL
             }
         }
 
+        // We set to not present all robot that is too old
+        for( unsigned int i = 0; i< visionData.robots.at(Vision::Team::Ally).size(); i++ ){
+            Vision::Robot & robot =  visionData.robots.at(Vision::Team::Ally).at(i);
+            if(robot.is_too_old()){
+                robot.present = false;
+            }
+        }
+        for( unsigned int i = 0; i< visionData.robots.at(Vision::Team::Opponent).size(); i++ ){
+            Vision::Robot & robot =  visionData.robots.at(Vision::Team::Opponent).at(i);
+            if(robot.is_too_old()){
+                robot.present = false;
+            }
+        }
+
         // Robots informations
         for (auto robot : detection.robots_blue()) {
             updateRobotInformation(detection, robot, myTeam == Ai::Blue);

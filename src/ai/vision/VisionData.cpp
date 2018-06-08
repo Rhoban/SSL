@@ -45,6 +45,10 @@ double Object::age() const {
     return diffSec(lastUpdate, rhoban_utils::TimeStamp::now());
 }
 
+bool Object::is_too_old() const {
+    return not(present) or age() > 4.0;
+}
+
 bool Object::isOk() const {
     return present && age() < 2.0;
 }

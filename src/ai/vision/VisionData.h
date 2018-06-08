@@ -41,6 +41,7 @@ struct Object {
 
     double age() const;
     bool isOk() const;
+    bool is_too_old() const;
 
     Object();
     void checkAssert( double time ) const;

@@ -212,7 +212,7 @@ Control AI::update_robot(
     Robot_behavior::RobotBehavior & robot_behavior,
     double time, Ai::Robot & robot, Ai::Ball & ball
 ){
-    if( robot.isOk() ){
+    if( robot.is_present_in_vision() ){
         robot_behavior.update(time, robot, ball);
         Control ctrl = robot_behavior.control();
         return ctrl;
@@ -366,6 +366,7 @@ void AI::run(){
 
         referee.update(current_time);
         strategy_manager->remove_invalid_robots();
+        
         strategy_manager->update(current_time);
         strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
         share_data();

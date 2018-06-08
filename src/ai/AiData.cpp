@@ -71,6 +71,12 @@ namespace Ai {
         movement(0)
     { }
 
+    bool Object::is_present_in_vision() const {
+        return vision_data.isOk(); 
+    }
+
+
+
     void AiData::update( const Vision::VisionData vision_data ){
         if( vision_data.field.present ){
             static_cast<Vision::Field&>(field) = vision_data.field;
@@ -133,11 +139,6 @@ namespace Ai {
         
     }
 
-
-    bool Ai::Object::isOk() const {
-        //TODO
-        return vision_data.isOk(); 
-    }
 
     Constants::Constants( const std::string & config_path, bool is_in_simulation ):
         is_in_simulation( is_in_simulation )
@@ -223,7 +224,7 @@ namespace Ai {
 
     bool AiData::robot_is_valid( int robot_id ) const {
         return (
-            robots.at(Vision::Team::Ally).at(robot_id).isOk()
+            robots.at(Vision::Team::Ally).at(robot_id).is_present_in_vision()
             and
             robot_is_inside_the_field(robot_id)
         ); 
@@ -256,10 +257,17 @@ namespace Ai {
         int robot_id, const Vector2d & velocity_translation
     ) const {
         std::list< std::pair< int, double> > result;
-        
         const Robot * robot_1 = &( robots.at(Vision::Team::Ally).at(robot_id) );
+        
+        if( not( robot_1->is_present_in_vision() ) ){
+            return {};
+        }
+
         for( unsigned int i=0; i<all_robots.size(); i++ ){
             const Robot * robot_2 = all_robots[i].second;
+            if( not( robot_2->is_present_in_vision() ) ){
+                return {};
+            }
             if( robot_1->id() != robot_2->id() or all_robots[i].first != Vision::Team::Ally ){
                 double radius_error = constants.radius_security_for_collision;
                 std::pair<bool, double> collision = collision_time(
