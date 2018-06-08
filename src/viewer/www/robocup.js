@@ -760,9 +760,8 @@ function Manager(viewer)
 
             button('.spin', function(robot) {
                 if (robot.enabled) {
-                    robot.spin = !robot.spin;
+                    api.setSpin(robot.id, !robot.spin);
                 }
-                api.robotCommand(robot.id, 0.0, 0.0, 0.0);
             });
 
             button('.pid', function(robot) {

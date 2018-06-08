@@ -192,11 +192,13 @@ QString API::robotsStatus()
                 jsonRobot["active"] = control.active;
                 jsonRobot["manual"] = final_control.is_manually_controled_by_viewer;
                 jsonRobot["charge"] = control.charge;
+                jsonRobot["spin"] = control.spin;
             } else {
                 jsonRobot["team"] = opponentColor();
                 jsonRobot["enabled"] = false;
                 jsonRobot["charge"] = false;
                 jsonRobot["ir"] = false;
+                jsonRobot["spin"] = false;
             }
 
             json.append(jsonRobot);
@@ -350,6 +352,20 @@ void API::kick(int id, int kick)
         if (kick == 2) {
             control.chipKick = true;
         }
+    }
+    data << shared;
+    mutex.unlock();
+}
+
+void API::setSpin(int id, bool spin)
+{
+    mutex.lock();
+    RhobanSSL::Shared_data shared;
+    data >> shared;
+    RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+
+    if (!control.ignore) {
+        control.spin = spin;
     }
     data << shared;
     mutex.unlock();

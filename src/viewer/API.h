@@ -67,6 +67,9 @@ public slots:
 
     // Run a kick
     void kick(int id, int kick);
+    
+    // Set spin
+    void setSpin(int id, bool spin);
 
     // Emergency stop
     void emergencyStop();
