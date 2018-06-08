@@ -370,6 +370,10 @@ namespace Ai {
         );
     }
 
+    std::ostream& operator<<(std::ostream& out, const Object& object){
+        out << "visible : " << object.is_present_in_vision() << ", vision : " << object.vision_data;
+        return out;
+    }
 
  
 } } //Namespace

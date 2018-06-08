@@ -129,10 +129,15 @@ std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::VisionData&
 std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::Object& object){
     out << " id : " << object.id << std::endl;
     out << " present : " << object.present << std::endl;
+    out << " age : " << object.age() << std::endl;
     out << " lastUpdate : " << object.lastUpdate.getTimeMS()/1000.0 << std::endl;
     out << " movement : " << object.movement << std::endl;
     return out;
 }
 
+std::ostream& operator<<(std::ostream& out, const Field& field){
+    out << "field -- len. " << field.fieldLength  << " , width " << field.fieldWidth;
+    return out;
+}
 
 } } //Namespace

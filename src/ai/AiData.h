@@ -65,6 +65,10 @@ public:
     virtual ~Object();
 };
 
+
+std::ostream& operator<<(std::ostream& out, const Object& object);
+
+
 class Robot : public Object { };
 class Ball : public Object { };
 

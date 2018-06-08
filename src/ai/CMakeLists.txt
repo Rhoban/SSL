@@ -39,6 +39,7 @@ set (SOURCES
     robot_behavior/navigation_with_obstacle_avoidance.cpp
     Ai.cpp
     AiData.cpp
+    debug.cpp
     manager/Manager.cpp
     manager/thomas.cpp
     manager/adrien/adrien.cpp

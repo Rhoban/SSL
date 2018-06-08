@@ -11,6 +11,7 @@
 #include <core/print_collection.h>
 #include <core/collection.h>
 #include <manager/factory.h>
+#include <debug.h>
 
 namespace RhobanSSL
 {
@@ -349,6 +350,10 @@ void AI::run(){
 
         ai_data.time = current_time,
         ai_data.dt = current_dt;
+
+        #ifndef NDEBUG
+        update_periodic_debug( current_time, 10.0 );
+        #endif
 
         data >> visionData;
 

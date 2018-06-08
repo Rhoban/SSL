@@ -63,6 +63,9 @@ struct Field
     float penaltyAreaDepth;
     float penaltyAreaWidth;
 };
+std::ostream& operator<<(std::ostream& out, const Field& field);
+
+
 
 class VisionData {
 public:

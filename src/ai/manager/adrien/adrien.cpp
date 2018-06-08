@@ -14,7 +14,8 @@
 #include <core/print_collection.h>
 
 #define SUPPORT "support" 
-#define STRIKER "Striker" 
+#define STRIKER "striker" 
+#define GOALIE "goalie" 
 
 namespace RhobanSSL {
 namespace Manager {
@@ -46,13 +47,24 @@ Adrien::Adrien(
         )
     );
     register_strategy(
+        GOALIE, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
         STRIKER, std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
                     Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
-                }, true // it is not a goal
+                }, false // it is not a goal
             )
         )
     );
@@ -111,7 +123,7 @@ void Adrien::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { SUPPORT, STRIKER };
+            future_strats = { GOALIE };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
