@@ -211,6 +211,7 @@ namespace Ai {
             root["goalie"]["waiting_goal_position"][1].asDouble()
         );
         penalty_rayon = root["goalie"]["penalty_rayon"].asDouble(); // penalty rayon for the goalie
+        default_goalie_id = root["goalie"]["default_id"].asInt(); // penalty rayon for the goalie
             
         enable_kicking = true;
     }

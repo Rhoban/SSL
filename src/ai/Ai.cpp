@@ -157,27 +157,10 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
 static MovementSample debug_mov(4);
 
 void AI::send_control( int robot_id, const Control & ctrl ){
-
-#if 0
-    #ifdef SSL_SIMU
-        int map_id;
-        map_id = robot_id;
-    #else
-        int map_id;
-        if( robot_id == 8 ){
-            map_id = 1;
-        }else{
-            map_id = 0;
-        }
-    #endif
-#else
-        int map_id;
-        map_id = robot_id;
-#endif
     if ( !ctrl.ignore) {
         if( ! ctrl.active ){
             commander->set(
-                map_id, true, 0.0, 0.0, 0.0
+                robot_id, true, 0.0, 0.0, 0.0
             );
         }else{
             Vector2d velocity_translation = ai_data.team_point_of_view.from_basis(
@@ -188,7 +171,7 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             if (ctrl.kick) kick = 2;
             else if (ctrl.chipKick) kick = 1;
             commander->set(
-                map_id, true,
+                robot_id, true,
                 velocity_translation[0], velocity_translation[1],
                 ctrl.velocity_rotation.value(),
                 kick,
@@ -298,14 +281,7 @@ void AI::setManager(std::string managerName)
         i++;
     }
 
-    // XXX: This should be in another place
-#if 1
-    #ifdef SSL_SIMU
-    int goalie_id = 5;
-    #else
-    int goalie_id = 8;
-    #endif
-#endif
+    int goalie_id = ai_data.constants.default_goalie_id;
 
     std::cout << "Setting the manager to: " << managerName << std::endl;
     if( managerName == Manager::names::manual ){

@@ -12,10 +12,6 @@
 #include <math/frame_changement.h>
 #include <math/position.h>
 
-// Comment the following line if you are working with the real robot.
-// If you are working with the grSim simulator, don't comment.
-#define SSL_SIMU
-
 namespace RhobanSSL {
 namespace Ai {
 
@@ -91,6 +87,8 @@ struct Constants {
     double robot_radius;
     double radius_ball;
     Vector2d waiting_goal_position;
+    int default_goalie_id;
+
     // PID for translation
     double p_translation;
     double i_translation;
