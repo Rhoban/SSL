@@ -16,12 +16,13 @@ struct names {
     static constexpr const char* thomas = "thomas";
     static constexpr const char* adrien = "adrien";
     static constexpr const char* sebastien = "sebastien";
+    static constexpr const char* jeremy = "jeremy";
 };
 
 class Factory {
     private:
     static std::list<std::string> list_of_avalaible_managers;
-    
+
     public:
     static const std::list<std::string> & avalaible_managers();
 

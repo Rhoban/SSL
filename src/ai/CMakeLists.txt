@@ -27,6 +27,8 @@ set (SOURCES
     com/AICommanderReal.cpp
     robot_behavior/factory.cpp
     robot_behavior/goalie.cpp
+    robot_behavior/pass.cpp
+    robot_behavior/protect_ball.cpp
     robot_behavior/defensor.cpp
     robot_behavior/passive_defensor.cpp
     robot_behavior/robot_follower.cpp
@@ -44,6 +46,7 @@ set (SOURCES
     manager/thomas.cpp
     manager/adrien/adrien.cpp
     manager/sebastien/sebastien.cpp
+    manager/jeremy/jeremy.cpp
     manager/Match.cpp
     manager/Manual.cpp
     manager/factory.cpp
