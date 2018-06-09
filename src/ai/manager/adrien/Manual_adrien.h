@@ -1,12 +1,12 @@
-#ifndef __MANAGER__MANUAL__H__
-#define __MANAGER__MANUAL__H__
+#ifndef __MANAGER__MANUAL_ADRIEN__H__
+#define __MANAGER__MANUAL_ADRIEN__H__
 
 #include <manager/Manager.h>
 
 namespace RhobanSSL {
 namespace Manager {
 
-class Manual : public Manager {
+class Manual_adrien : public Manager {
     private:
     
     bool strategy_was_assigned;
@@ -20,14 +20,14 @@ class Manual : public Manager {
 
     
     public:
-    Manual( Ai::AiData & ai_data );
+    Manual_adrien( Ai::AiData & ai_data );
 
     void set_team_color( Ai::Team team_color );
     void define_goal_to_positive_axis(bool value = true);
 
     void update(double time);
 
-    virtual ~Manual();
+    virtual ~Manual_adrien();
 };
 
 };

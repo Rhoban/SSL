@@ -7,8 +7,10 @@
 #include <strategy/prepare_kickoff.h>
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
+#include <robot_behavior/example.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/striker.h>
+#include <robot_behavior/concept_proof_spinner.h>
 #include <robot_behavior/robot_follower.h>
 #include <core/collection.h>
 #include <core/print_collection.h>
@@ -16,6 +18,8 @@
 #define SUPPORT "support" 
 #define STRIKER "striker" 
 #define GOALIE "goalie" 
+#define CONCEPT "concept"
+#define EXAMPLE "concept"
 
 namespace RhobanSSL {
 namespace Manager {
@@ -47,12 +51,34 @@ Adrien::Adrien(
         )
     );
     register_strategy(
+        EXAMPLE, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Example* example = new Robot_behavior::Example(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(example);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
         GOALIE, std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
+        CONCEPT, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Concept_proof_spinner* cpt = new Robot_behavior::Concept_proof_spinner(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(cpt);
                 }, false // it is not a goal
             )
         )
@@ -123,7 +149,7 @@ void Adrien::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { GOALIE };
+            future_strats = { EXAMPLE };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );

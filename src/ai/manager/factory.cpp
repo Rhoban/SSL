@@ -5,6 +5,7 @@
 #include "thomas.h"
 #include "sebastien/sebastien.h"
 #include "adrien/adrien.h"
+#include "adrien/Manual_adrien.h"
 #include "example.h"
 #include "example_for_testing_robot_behaviors.h"
 
@@ -18,6 +19,7 @@ std::list<std::string> Factory::list_of_avalaible_managers ={
     names::example_for_testing_robot_behaviors,
     names::thomas,
     names::adrien,
+    names::manual_adrien,
     names::sebastien
 };
 
@@ -45,6 +47,16 @@ std::shared_ptr<Manager> Factory::construct_manager(
             new Manual(ai_data)
         );
         dynamic_cast<Manual&>(
+            *manager
+        ).change_team_and_point_of_view(
+            ai_data.team_color, true
+        );
+    }
+    if( manager_name == names::manual_adrien ){
+        manager = std::shared_ptr<Manager>(
+            new Manual_adrien(ai_data)
+        );
+        dynamic_cast<Manual_adrien&>(
             *manager
         ).change_team_and_point_of_view(
             ai_data.team_color, true
