@@ -1,11 +1,10 @@
-#include "Manual.h"
+#include "Manual_adrien.h"
 
 // The different strategies
 #include <strategy/halt.h>
 #include <strategy/tare_and_synchronize.h>
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
-#include <robot_behavior/example.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/passive_defensor.h>
 #include <robot_behavior/position_follower.h>
@@ -14,7 +13,7 @@
 namespace RhobanSSL {
 namespace Manager {
 
-Manual::Manual( Ai::AiData & ai_data ):
+Manual_adrien::Manual_adrien( Ai::AiData & ai_data ):
     Manager(ai_data),
     team_color(ai_data.team_color),
     goal_to_positive_axis(true),
@@ -40,17 +39,6 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
-                }, false // we don't want to define a goal here !
-            )
-        )
-    );
-    register_strategy(
-        "Example", std::shared_ptr<Strategy::Strategy>(
-            new Strategy::From_robot_behavior(
-                ai_data,
-                [&](double time, double dt){
-                    Robot_behavior::Example* example = new Robot_behavior::Example(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(example);
                 }, false // we don't want to define a goal here !
             )
         )
@@ -109,23 +97,23 @@ Manual::Manual( Ai::AiData & ai_data ):
 }
 
     
-void Manual::assign_point_of_view_and_goalie(){
+void Manual_adrien::assign_point_of_view_and_goalie(){
     change_team_and_point_of_view(
         team_color,
         goal_to_positive_axis
     );
 }
 
-void Manual::set_team_color( Ai::Team team_color ){
+void Manual_adrien::set_team_color( Ai::Team team_color ){
     this->team_color = team_color;
 }
 
-void Manual::define_goal_to_positive_axis(bool value){
+void Manual_adrien::define_goal_to_positive_axis(bool value){
     this->goal_to_positive_axis = goal_to_positive_axis;
 }
 
 
-void Manual::update(double time){
+void Manual_adrien::update(double time){
     //update_strategies(time);
     update_current_strategies(time);
     assign_point_of_view_and_goalie();
@@ -139,7 +127,7 @@ void Manual::update(double time){
     //}
 }
 
-Manual::~Manual(){ }
+Manual_adrien::~Manual_adrien(){ }
 
 };
 };

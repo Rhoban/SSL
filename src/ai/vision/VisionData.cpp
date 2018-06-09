@@ -53,7 +53,12 @@ bool Object::isOk() const {
     return present && age() < 2.0;
 }
 
-Object::Object(): movement(history_size) {
+Object::Object():
+    movement(history_size),
+    present(false),
+    id(-1),
+    lastUpdate(rhoban_utils::TimeStamp::now())
+{
     for( int i=0; i<history_size; i++ ){
         movement[i].time = -i;
     }

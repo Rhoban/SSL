@@ -128,16 +128,20 @@ namespace RhobanSSL
         SSL_DetectionFrame &detection,
         SSL_DetectionRobot &robotFrame, bool ally
     ){
-        Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
-        Vision::Robot &robot = visionData.robots.at(team).at(robotFrame.robot_id());
+        if(robotFrame.robot_id() < Ai::Constants::NB_OF_ROBOTS_BY_TEAM  ){
+            Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
+            Vision::Robot &robot = visionData.robots.at(team).at(robotFrame.robot_id());
 
-        Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
+            Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
-        if (robotFrame.has_orientation()) {
-            Angle orientation(rad2deg( robotFrame.orientation() ));
-            robot.update( detection.t_capture(), position, orientation );
+            if (robotFrame.has_orientation()) {
+                Angle orientation(rad2deg( robotFrame.orientation() ));
+                robot.update( detection.t_capture(), position, orientation );
+            }else{
+                robot.update( detection.t_capture(), position );
+            }
         }else{
-            robot.update( detection.t_capture(), position );
+            DEBUG("Warnings : Vision have detected a robot with id " << robotFrame.robot_id() << "." );
         }
     }
 
