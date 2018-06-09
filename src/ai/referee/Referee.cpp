@@ -95,7 +95,7 @@ bool command_is_one_of_(
 
 
 Referee::Referee():
-    blueTeamOnPositiveHalfi(false),
+    blueTeamOnPositiveHalf(false),
     edge_entropy_number(0),
     machine_state(referee_data, referee_data)
 {
