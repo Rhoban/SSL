@@ -12,8 +12,8 @@ Concept_proof_spinner::Concept_proof_spinner(
 ):
     RobotBehavior(ai_data),
     follower( Factory::fixed_consign_follower(ai_data) ),
-    save_ball_position(false),
-    go_to_home(false)
+    go_to_home(false),
+    save_ball_position(false)
 {
 }
 
@@ -45,6 +45,7 @@ void Concept_proof_spinner::update(
     if( not(go_to_home) && save_ball_position && norm( Vector2d( ball_pos )  - Vector2d( pos ) ) < get_robot_radius() ){
         go_to_home = true;   
     }
+
 
     if( not(go_to_home) ){
         target_position = (
