@@ -36,6 +36,14 @@ namespace RhobanSSLAnnotation
         Json::Value toJson() const;
         std::string toJsonString() const;
 
+        void map_positions(
+            std::function< 
+                rhoban_geometry::Point (
+                    const rhoban_geometry::Point & p 
+                ) 
+            > fct
+        );
+
     protected:
         Json::Value json;
     };

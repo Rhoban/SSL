@@ -432,6 +432,15 @@ RhobanSSLAnnotation::Annotations AI::get_annotations() const {
     annotations.addAnnotations( 
         get_robot_behavior_annotations()
     );
+
+    std::function< 
+        rhoban_geometry::Point (
+            const rhoban_geometry::Point & p 
+        ) 
+    > fct = [this]( const rhoban_geometry::Point & p ) {
+        return this->ai_data.team_point_of_view.from_frame( p );
+    };
+    annotations.map_positions(fct);
     return annotations; 
 }
 

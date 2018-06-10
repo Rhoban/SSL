@@ -2,6 +2,43 @@
 
 namespace RhobanSSLAnnotation
 {
+
+    void Annotations::map_positions(
+        std::function< 
+            rhoban_geometry::Point (
+                const rhoban_geometry::Point & p 
+            ) 
+        > fct
+    ) {
+        for( unsigned int i=0; i< json.size(); i++ ){
+            Json::Value & annotation = json[i];
+            std::string type = annotation["type"].asString();
+            rhoban_geometry::Point point;
+            if( type == "arrow" ){
+                point = fct(
+                    rhoban_geometry::Point( annotation["x"].asDouble(), annotation["y"].asDouble() )
+                );
+                annotation["x"] = point.getX();
+                annotation["y"] = point.getY();
+                point = fct(
+                    rhoban_geometry::Point( annotation["toX"].asDouble(), annotation["toY"].asDouble() ) 
+                );
+                annotation["toX"] = point.getX();
+                annotation["toY"] = point.getY();
+            }else if( type == "cross" or type == "circle" ){
+                point = fct(
+                    rhoban_geometry::Point( annotation["x"].asDouble(), annotation["y"].asDouble() )
+                );
+                annotation["x"] = point.getX();
+                annotation["y"] = point.getY();
+            }else{
+                std::cerr << "Unknown annotation type : " << type 
+                    << "." << std::endl;
+                assert(false);
+            }
+        }
+    }
+
     Annotations::Annotations()
     : json(Json::arrayValue)
     {
