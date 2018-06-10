@@ -53,5 +53,11 @@ Example::~Example(){
     delete follower;
 }
 
+RhobanSSLAnnotation::Annotations Example::get_annotations() const {
+    return follower->get_annotations();
+}
+
+
+
 }
 }

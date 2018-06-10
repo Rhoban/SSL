@@ -88,6 +88,7 @@ class Navigation_with_obstacle_avoidance :
         );
         virtual void avoid_the_ball(bool value = true);
 
+        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 };
 
 };

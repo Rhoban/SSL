@@ -8,7 +8,7 @@
 #include <math/ContinuousAngle.h>
 #include <memory>
 #include <AiData.h>
-
+#include <annotations/Annotations.h>
 namespace RhobanSSL {
 namespace Strategy {
 
@@ -110,6 +110,24 @@ class Strategy : public GameInformations {
         > assign_behavior,
         double time, double dt
     ) = 0;
+
+    //
+    // This function is used to draw annotations in the viewer.
+    // You can use it to print what you want.
+    //
+    // For example :
+    //
+    // 
+    //  RhobanSSLAnnotation::Annotations get_annotations() const{
+    //      RhobanSSLAnnotation::Annotations annotations;
+    //      static double d = 0;
+    //      d += 0.01;
+    //
+    //      annotations.addCircle(3, 3, 1, "cyan");
+    //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+    //      return annotations;
+    //  }
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
     virtual ~Strategy();
 

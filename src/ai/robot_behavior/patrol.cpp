@@ -74,6 +74,9 @@ Patrol* Patrol::tour_of_the_field( Ai::AiData& ai_data ){
     return res;
 }
 
+RhobanSSLAnnotation::Annotations Patrol::get_annotations() const {
+    return follower->get_annotations();
+}
 
 }
 }

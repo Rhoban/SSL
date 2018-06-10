@@ -9,6 +9,7 @@
 #include <vector>
 #include <AiData.h>
 #include <strategy/placer.h>
+#include <annotations/Annotations.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -153,6 +154,23 @@ class Manager : public GameInformations {
     );
     const std::vector<int> & get_robot_affectations( const std::string & strategy_name ) const;
 
+    //
+    // This function is used to draw annotations in the viewer.
+    // You can use it to print what you want.
+    //
+    // For example :
+    //
+    // 
+    //  RhobanSSLAnnotation::Annotations get_annotations() const{
+    //      RhobanSSLAnnotation::Annotations annotations;
+    //      static double d = 0;
+    //      d += 0.01;
+    //
+    //      annotations.addCircle(3, 3, 1, "cyan");
+    //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+    //      return annotations;
+    //  }
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 };
 
