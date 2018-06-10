@@ -25,6 +25,8 @@ class GameInformations {
     rhoban_geometry::Point center_opponent_field() const ;
     double get_robot_radius() const;
     double get_ball_radius() const;
+    double field_width() const;
+    double field_length() const;
 
 };
 
