@@ -7,6 +7,7 @@ Strategy::Strategy(Ai::AiData & ai_data):
     GameInformations(ai_data),
     ai_data(ai_data),
     goalie_id(-1),
+    manage_a_goalie(false),
     goalie_opponent_id(-1)
 { }
 

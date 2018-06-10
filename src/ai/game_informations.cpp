@@ -39,4 +39,45 @@ const Ai::Robot & GameInformations::get_robot( int robot_id, Vision::Team team )
 }
 
 
+
+
+
+
+
+rhoban_geometry::Point GameInformations::center_ally_field() const {
+    return rhoban_geometry::Point( -ai_data.field.fieldLength/4.0, 0.0 );
+}
+rhoban_geometry::Point GameInformations::center_opponent_field() const {
+    return rhoban_geometry::Point( ai_data.field.fieldLength/4.0, 0.0 );
+}
+
+double GameInformations::get_robot_radius() const {
+    return ai_data.constants.robot_radius;
+}
+
+double GameInformations::get_ball_radius() const {
+    return ai_data.constants.radius_ball;
+}
+
+std::vector<rhoban_geometry::Point> GameInformations::center_quarter_field() const {
+    return std::vector<rhoban_geometry::Point>(
+        {
+            rhoban_geometry::Point( ai_data.field.fieldLength/4.0, ai_data.field.fieldWidth/4.0 ),
+            rhoban_geometry::Point( ai_data.field.fieldLength/4.0, -ai_data.field.fieldWidth/4.0 ),
+            rhoban_geometry::Point( -ai_data.field.fieldLength/4.0, -ai_data.field.fieldWidth/4.0 ),
+            rhoban_geometry::Point( -ai_data.field.fieldLength/4.0, ai_data.field.fieldWidth/4.0 ),
+        }
+    );
+}
+
+
+
+
+
+
+
+
+
+
+
 };

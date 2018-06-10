@@ -91,7 +91,7 @@ int main(int argc, char **argv)
     DEBUG("The name of the team have been set to : " << team_name.getValue() );
     DEBUG("The manager have been set to : " << manager_name.getValue() );
 
-    Data data;
+    Data data(yellow.getValue() ? Ai::Yellow : Ai::Blue);
 
     // Instantiationg the vision
     AIVisionClient vision(

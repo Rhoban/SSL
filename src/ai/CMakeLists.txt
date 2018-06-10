@@ -26,13 +26,16 @@ set (SOURCES
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp
     robot_behavior/factory.cpp
+    robot_behavior/example.cpp
     robot_behavior/goalie.cpp
+    robot_behavior/patrol.cpp
     robot_behavior/pass.cpp
     robot_behavior/protect_ball.cpp
     # robot_behavior/search_shoot_area.cpp
     robot_behavior/defensor.cpp
     robot_behavior/passive_defensor.cpp
     robot_behavior/robot_follower.cpp
+    robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
     robot_behavior/position_follower.cpp
     robot_behavior/do_nothing.cpp
@@ -46,6 +49,7 @@ set (SOURCES
     manager/Manager.cpp
     manager/thomas.cpp
     manager/adrien/adrien.cpp
+    manager/adrien/Manual_adrien.cpp 
     manager/sebastien/sebastien.cpp
     manager/jeremy/jeremy.cpp
     manager/Match.cpp

@@ -75,6 +75,9 @@ class Ball : public Object { };
 struct Field : Vision::Field {
 
     bool is_inside( const rhoban_geometry::Point & point ) const {
+        if( not(present) ){
+            return false;
+        }
         return (
             std::fabs( point.getX() ) < (fieldLength/2.0 + boundaryWidth)
             and
@@ -135,7 +138,7 @@ public:
     std::string team_name;
     Ai::Team team_color;
 
-    AiData( const std::string & config_path, bool is_in_simulation );
+    AiData( const std::string & config_path, bool is_in_simulation, Ai::Team team_color );
 
     typedef std::map<int, Robot> Robots_table;
     typedef std::map<Vision::Team, Robots_table> Robots_table_by_team;

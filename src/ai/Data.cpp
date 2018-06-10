@@ -2,6 +2,10 @@
 
 namespace RhobanSSL {
 
+Data::Data( Ai::Team initial_team_color ){
+    data_from_ai.team_color = initial_team_color;
+}
+
 Shared_data::Final_control::Final_control():
     hardware_is_responding(false),
     is_disabled_by_viewer(false),

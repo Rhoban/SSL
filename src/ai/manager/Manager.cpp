@@ -83,6 +83,14 @@ void Manager::assign_strategy(
     current_strategy_names.push_front( strategy_name );
     Strategy::Strategy & strategy = get_strategy( strategy_name );
 
+    if( not( static_cast<unsigned int>(strategy.min_robots()) <= robot_ids.size() ) ){
+        DEBUG( 
+            "We have not enough robot for the strategy : " << 
+            strategy_name << ". Number of robot requested : " << 
+            static_cast<unsigned int>(strategy.min_robots()) << 
+            ", number or avalaible robot : " << robot_ids.size() << "."
+        );
+    }
     assert( static_cast<unsigned int>(strategy.min_robots()) <= robot_ids.size() );
 
     strategy.set_goalie( goalie_id, assign_goalie );
@@ -343,6 +351,12 @@ void Manager::aggregate_all_starting_position_of_all_strategies(
             )
         );
         if( strategy_needs_a_goal ){
+            if( goal_has_to_be_placed ){
+                DEBUG(
+                    "In strategy : " << strategy_name << ", a goalie is yet defined but the strategy : " 
+                    << strategy_with_goal << " is also assigned and have to contain a goal too."
+                );
+            }
             assert( not(goal_has_to_be_placed) ); // Two goal is defined, check you are not assigning two stratgies with a goal ! 
             if(
                 get_strategy(strategy_name).get_starting_position_for_goalie(

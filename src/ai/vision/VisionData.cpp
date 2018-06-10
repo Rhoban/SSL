@@ -8,6 +8,17 @@ using namespace rhoban_utils;
 namespace RhobanSSL {
 namespace Vision {
 
+Field::Field():
+    present(false),
+    fieldLength(0.0),
+    fieldWidth(0.0),
+    goalWidth(0.0),
+    goalDepth(0.0),
+    boundaryWidth(0.0),
+    penaltyAreaDepth(0.0),
+    penaltyAreaWidth(0.0)
+{ }
+
 void Object::update(
     double time, const Point & linear_position
 ){
@@ -53,7 +64,12 @@ bool Object::isOk() const {
     return present && age() < 2.0;
 }
 
-Object::Object(): movement(history_size) {
+Object::Object():
+    movement(history_size),
+    present(false),
+    id(-1),
+    lastUpdate(rhoban_utils::TimeStamp::now())
+{
     for( int i=0; i<history_size; i++ ){
         movement[i].time = -i;
     }
