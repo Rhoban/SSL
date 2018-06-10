@@ -57,6 +57,6 @@
     "goalie" : {
         "penalty_rayon" : 1.0,
         "waiting_goal_position" : [0.3,0.0],
-        "default_id" : 8
+        "default_id" : 7
     }
 }

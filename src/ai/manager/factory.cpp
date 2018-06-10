@@ -14,15 +14,15 @@ namespace RhobanSSL {
 namespace Manager {
 
 std::list<std::string> Factory::list_of_avalaible_managers ={
-    names::adrien,
-    names::example,
-    names::example_for_testing_robot_behaviors,
-    names::match,
     names::manual,
-    names::manual_adrien,
+    names::match,
+    names::adrien,
     names::jeremy,
     names::sebastien,
-    names::thomas
+    names::thomas,
+    names::manual_adrien,
+    names::example,
+    names::example_for_testing_robot_behaviors
 };
 
 const std::list<std::string> & Factory::avalaible_managers(){

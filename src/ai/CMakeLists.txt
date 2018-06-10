@@ -28,6 +28,7 @@ set (SOURCES
     robot_behavior/factory.cpp
     robot_behavior/example.cpp
     robot_behavior/goalie.cpp
+    robot_behavior/patrol.cpp
     robot_behavior/pass.cpp
     robot_behavior/protect_ball.cpp
     robot_behavior/defensor.cpp

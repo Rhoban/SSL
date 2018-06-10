@@ -26,21 +26,23 @@ void Concept_proof_spinner::update(
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
 
+
     rhoban_geometry::Point pos = robot.get_movement().linear_position(time);
     Vector2d direction = Vector2d(ball_position()) - Vector2d(pos);
     direction = direction / direction.norm();
     
     rhoban_geometry::Point target_position;
 
+
     if(
         not(save_ball_position) && (
-            norm( Vector2d( ball_position()) - Vector2d(pos ) ) < 5*ai_data.constants.radius_ball  
+            norm( Vector2d( ball_position()) - Vector2d(pos ) ) < ( 2*get_ball_radius() + get_robot_radius() )
         )
     ){
         save_ball_position = true;
         ball_pos = ball_position();
     }
-    if( save_ball_position && norm( Vector2d( ball_pos )  - Vector2d( pos ) ) < ai_data.constants.radius_ball/2.0 ){
+    if( not(go_to_home) && save_ball_position && norm( Vector2d( ball_pos )  - Vector2d( pos ) ) < get_robot_radius() ){
         go_to_home = true;   
     }
 
@@ -50,7 +52,7 @@ void Concept_proof_spinner::update(
             direction * ai_data.constants.robot_radius
         );
     }else{
-        target_position = ally_goal_center();
+        target_position = center_mark();
     }
     ContinuousAngle angle = vector2angle( direction  );
 
