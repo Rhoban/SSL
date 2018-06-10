@@ -581,6 +581,17 @@ void Manager::declare_and_assign_next_strategies(const std::list<std::string> & 
     }
 }
 
+RhobanSSLAnnotation::Annotations Manager::get_annotations() const{
+    RhobanSSLAnnotation::Annotations annotations;
+    
+    for( const std::string & strategy_name :  current_strategy_names ){
+        annotations.addAnnotations(
+            get_strategy( strategy_name ).get_annotations()
+        );
+    };
+    
+    return annotations;
+}
 
 };
 };

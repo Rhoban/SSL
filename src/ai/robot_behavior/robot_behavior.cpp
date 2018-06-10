@@ -94,5 +94,19 @@ rhoban_geometry::Point RobotBehavior::ball_position() const {
     return ball().get_movement().linear_position(time());
 }
 
+rhoban_geometry::Point RobotBehavior::linear_position() const {
+    return robot().get_movement().linear_position(time());
+}
+
+ContinuousAngle RobotBehavior::angular_position() const {
+    return robot().get_movement().angular_position(time());
+}
+
+RhobanSSLAnnotation::Annotations RobotBehavior::get_annotations() const {
+    return RhobanSSLAnnotation::Annotations();
+}
+
+
+
 }
 }

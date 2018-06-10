@@ -72,6 +72,10 @@ bool Strategy::get_starting_position_for_goalie(
 
 Strategy::~Strategy(){ }
 
+RhobanSSLAnnotation::Annotations Strategy::get_annotations() const {
+    return RhobanSSLAnnotation::Annotations();
+}
+
 
 }
 }

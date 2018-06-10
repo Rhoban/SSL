@@ -600,21 +600,9 @@ QString API::availableJoysticks()
 
 QString API::getAnnotations()
 {
-    static double d = 0;
-    d += 0.01;
-    RhobanSSLAnnotation::Annotations annotations;
-
-
-    // XXX: Annotations examples, this should be later wired to come from the AI
-    // strategy
-    // annotations.addCircle(3, 3, 1, "cyan");
-    // annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
-    // annotations.addCross(-3, 0, "red");
-    // XXX: Texte
-    // XXX: Segment
-
-
-    return QString::fromStdString(annotations.toJsonString());
+    return QString::fromStdString(
+        ai->get_annotations().toJsonString()
+    );
 }
 
 void API::updateAssignments()

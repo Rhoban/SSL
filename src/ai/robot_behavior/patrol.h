@@ -29,8 +29,11 @@ class Patrol : public RobotBehavior  {
     void set_traject( const std::vector< rhoban_geometry::Point > & traject );
 
 	virtual Control control() const;
+    
+    RhobanSSLAnnotation::Annotations get_annotations() const;
 
 	virtual ~Patrol();
+
 };
 
 };

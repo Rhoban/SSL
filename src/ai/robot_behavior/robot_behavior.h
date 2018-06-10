@@ -6,6 +6,7 @@
 #include <control/robot_control_with_curve.h>
 #include <rhoban_utils/angle.h>
 #include <AiData.h>
+#include <annotations/Annotations.h>
 
 namespace RhobanSSL {
 
@@ -62,8 +63,30 @@ class RobotBehavior : public GameInformations {
         ) = 0;
         virtual Control control() const = 0;
 
+        //
+        // This function is used to draw annotations in the viewer.
+        // You can use it to print what you want.
+        //
+        // For example :
+        //
+        // 
+        //  RhobanSSLAnnotation::Annotations get_annotations() const{
+        //      RhobanSSLAnnotation::Annotations annotations;
+        //      static double d = 0;
+        //      d += 0.01;
+        //
+        //      annotations.addCircle(3, 3, 1, "cyan");
+        //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+        //      return annotations;
+        //  }
+        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
         const Ai::Robot & robot() const ;
         const Ai::Ball & ball() const ;
+
+        rhoban_geometry::Point linear_position() const ;
+        ContinuousAngle angular_position() const;
+
         rhoban_geometry::Point ball_position() const ;
 };
 

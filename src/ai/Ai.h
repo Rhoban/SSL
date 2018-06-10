@@ -8,6 +8,7 @@
 #include <referee/Referee.h>
 #include <core/machine_state.h>
 #include <manager/Manager.h>
+#include <annotations/Annotations.h>
 
 namespace RhobanSSL
 {
@@ -34,7 +35,7 @@ namespace RhobanSSL
 
         std::vector<std::string> getAvailableManagers();
         void setManager(std::string manager);
-        std::shared_ptr<Manager::Manager> getManager();
+        std::shared_ptr<Manager::Manager> getManager() const;
         std::shared_ptr<Manager::Manager> getManualManager();
 
         Referee &getReferee();
@@ -81,6 +82,9 @@ namespace RhobanSSL
 
         void share_data();
         void prevent_collision( int robot_id, Control & ctrl );
+        RhobanSSLAnnotation::Annotations get_robot_behavior_annotations() const;
+        public:
+        RhobanSSLAnnotation::Annotations get_annotations() const;
 
     };
 };

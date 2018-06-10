@@ -292,7 +292,7 @@ void AI::setManager(std::string managerName)
     strategy_manager->declare_team_ids( robot_ids );
 }
 
-std::shared_ptr<Manager::Manager> AI::getManager()
+std::shared_ptr<Manager::Manager> AI::getManager() const
 {
     return strategy_manager;
 }
@@ -412,5 +412,28 @@ double AI::getCurrentTime()
 {
     return ai_data.time;
 }
+
+        
+RhobanSSLAnnotation::Annotations AI::get_robot_behavior_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations; 
+    for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
+        const Robot_behavior::RobotBehavior & robot_behavior = *(
+            robot_behaviors.at(robot_id)
+        );
+        annotations.addAnnotations( robot_behavior.get_annotations() );
+    }
+    return annotations;
+}
+
+        
+RhobanSSLAnnotation::Annotations AI::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
+    annotations.addAnnotations( getManager()->get_annotations() );
+    annotations.addAnnotations( 
+        get_robot_behavior_annotations()
+    );
+    return annotations; 
+}
+
 
 }
