@@ -21,6 +21,7 @@ API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, Rhoban
 :
     simulation(simulation),
     teamName(teamName),
+    data(team),
     team(team),
     visionClient(data, team, simulation),
     commander(commander),

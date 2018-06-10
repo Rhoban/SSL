@@ -8,6 +8,17 @@ using namespace rhoban_utils;
 namespace RhobanSSL {
 namespace Vision {
 
+Field::Field():
+    present(false),
+    fieldLength(0.0),
+    fieldWidth(0.0),
+    goalWidth(0.0),
+    goalDepth(0.0),
+    boundaryWidth(0.0),
+    penaltyAreaDepth(0.0),
+    penaltyAreaWidth(0.0)
+{ }
+
 void Object::update(
     double time, const Point & linear_position
 ){

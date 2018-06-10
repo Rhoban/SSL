@@ -110,8 +110,9 @@ namespace Ai {
         this->team_color = team_color;
     }
 
-    AiData::AiData( const std::string & config_path, bool is_in_simulation ):
+    AiData::AiData( const std::string & config_path, bool is_in_simulation, Ai::Team team_color ):
         time_shift_with_vision(0.0),
+        team_color(team_color),
         constants(config_path, is_in_simulation)
     {
         int nb_robots = 0;

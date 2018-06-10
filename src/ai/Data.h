@@ -45,7 +45,8 @@ private: // Do not remove !
     Shared_data shared_data;
 
 public:
-    
+    Data( Ai::Team initial_team_color );   
+ 
     Data& operator<<( const Vision::VisionData & vision_data );
     Data& operator>>( Vision::VisionData & vision_data );
     void edit_vision_data( // Use that function if you ha no choice. Prefer << and >> operator.

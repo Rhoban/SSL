@@ -246,7 +246,7 @@ AI::AI(
     team_name(team_name),
     default_team(default_team),
     running(true),
-    ai_data( config_path, is_in_simulation ),
+    ai_data( config_path, is_in_simulation, default_team ),
     commander(commander),
     current_dt(0.0),
     data(data)

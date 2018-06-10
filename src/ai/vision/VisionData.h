@@ -62,6 +62,8 @@ struct Field
     float boundaryWidth;
     float penaltyAreaDepth;
     float penaltyAreaWidth;
+
+    Field();
 };
 std::ostream& operator<<(std::ostream& out, const Field& field);
 
