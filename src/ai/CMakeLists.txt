@@ -29,6 +29,7 @@ set (SOURCES
     robot_behavior/goalie.cpp
     robot_behavior/pass.cpp
     robot_behavior/protect_ball.cpp
+    # robot_behavior/search_shoot_area.cpp
     robot_behavior/defensor.cpp
     robot_behavior/passive_defensor.cpp
     robot_behavior/robot_follower.cpp
@@ -55,6 +56,7 @@ set (SOURCES
     strategy/Strategy.cpp
     strategy/halt.cpp
     strategy/mur.cpp
+    strategy/striker_with_support.cpp
     strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
