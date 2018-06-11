@@ -5,7 +5,7 @@
         "wheel_excentricity" : 0.08,
         "wheel_nb_turns_acceleration_limit" : { 
             "simu" : 100.0,
-            "real" : 500.0
+            "real" : 200.0
         },
         "rotation_velocity_limit" : {
             "simu" : 3.0,

@@ -28,6 +28,7 @@
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/passive_defensor.h>
 #include <robot_behavior/concept_proof_spinner.h>
+#include <robot_behavior/test_kicker.h>
 #include <robot_behavior/patrol.h>
 #include <robot_behavior/position_follower.h>
 #include <robot_behavior/striker.h>
@@ -117,6 +118,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Patrol* tour_of_the_field = Robot_behavior::Patrol::tour_of_the_field(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(tour_of_the_field);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_kicker", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_kicker* pt = new Robot_behavior::Test_kicker(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
                 }, false // we don't want to define a goal here !
             )
         )

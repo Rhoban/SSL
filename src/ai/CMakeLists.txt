@@ -37,6 +37,7 @@ set (SOURCES
     robot_behavior/robot_follower.cpp
     robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
+    robot_behavior/test_kicker.cpp
     robot_behavior/position_follower.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/a_star_path.cpp
