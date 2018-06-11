@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Name Surname (mail)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -26,6 +26,7 @@
 #include <strategy/prepare_kickoff.h>
 #include <strategy/from_robot_behavior.h>
 #include <strategy/striker_with_support.h>
+#include <strategy/indirect.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/striker.h>
@@ -74,6 +75,12 @@ Jeremy::Jeremy(
     );
     register_strategy(
         Strategy::StrikerWithSupport::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::StrikerWithSupport(ai_data)
+        )
+    );
+    register_strategy(
+        Strategy::Indirect::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::StrikerWithSupport(ai_data)
         )
@@ -130,7 +137,6 @@ Jeremy::Jeremy(
                 ai_data,
                 [&](double time, double dt){
                     Robot_behavior::ProtectBall* guard = new Robot_behavior::ProtectBall(ai_data);
-                    guard->declare_radius(1);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(guard);
                 }, false // it is not a goal
             )

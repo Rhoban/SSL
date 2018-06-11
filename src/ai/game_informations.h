@@ -40,6 +40,9 @@ class GameInformations {
     rhoban_geometry::Point oponent_corner_left() const ;
     const Ai::Robot & get_robot( int robot_id, Vision::Team team = Vision::Team::Ally ) const ;
 
+    const Ai::Ball & ball() const ;
+    rhoban_geometry::Point ball_position() const ;
+
     std::vector<rhoban_geometry::Point> center_quarter_field() const ;
 
     rhoban_geometry::Point center_ally_field() const ;
