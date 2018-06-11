@@ -25,12 +25,14 @@
 #include <strategy/placer.h>
 #include <strategy/prepare_kickoff.h>
 #include <strategy/from_robot_behavior.h>
+#include <strategy/striker_with_support.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/striker.h>
 #include <robot_behavior/robot_follower.h>
 #include <robot_behavior/pass.h>
 #include <robot_behavior/protect_ball.h>
+#include <robot_behavior/search_shoot_area.h>
 #include <core/collection.h>
 #include <core/print_collection.h>
 
@@ -39,6 +41,7 @@
 #define GOALIE "goalie"
 #define PASS "pass"
 #define PROTECTBALL "protect_ball"
+#define SEARCHSHOOTAREA "search_shoot_area"
 
 namespace RhobanSSL {
 namespace Manager {
@@ -67,6 +70,12 @@ Jeremy::Jeremy(
         Strategy::Prepare_kickoff::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Prepare_kickoff(ai_data)
+        )
+    );
+    register_strategy(
+        Strategy::StrikerWithSupport::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::StrikerWithSupport(ai_data)
         )
     );
     register_strategy(
@@ -127,6 +136,17 @@ Jeremy::Jeremy(
             )
         )
     );
+    register_strategy(
+        SEARCHSHOOTAREA, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::SearchShootArea* f = new Robot_behavior::SearchShootArea(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(f);
+                }, false // it is not a goal
+            )
+        )
+    );
     assign_strategy(
         Strategy::Halt::name, 0.0,
         get_team_ids()
@@ -166,11 +186,11 @@ void Jeremy::choose_a_strategy(double time){
             }else{
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
             }
-            future_strats = {Strategy::Prepare_kickoff::name};
+            future_strats = { Strategy::Prepare_kickoff::name};//SEARCHSHOOTAREA };
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { PROTECTBALL };
+            future_strats = { GOALIE, SEARCHSHOOTAREA, PROTECTBALL };//Strategy::StrikerWithSupport::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
