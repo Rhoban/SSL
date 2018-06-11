@@ -17,36 +17,28 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
+#ifndef __VISION__PRINT_PROTOBUF__H__
+#define __VISION__PRINT_PROTOBUF__H__
 
-#pragma once
+#include "AIVisionClient.h"
+#include <iostream>
 
-#include <VisionClient.h>
-#include "VisionData.h"
-#include <Data.h>
-#include <AiData.h>
+//namespace RhobanSSL {
+//namespace vision {
 
-namespace RhobanSSL
-{
-class AIVisionClient : public VisionClient
-{
-public:
+std::ostream& operator<<(
+    std::ostream& out, const SSL_DetectionRobot & robot 
+);
 
-    AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation = false);
+std::ostream& operator<<(
+    std::ostream& out, const SSL_DetectionBall & ball 
+);
 
-    void setRobotPos(Ai::Team team, int id, double x, double y, double orientation);
+std::ostream& operator<<(
+    std::ostream& out, const SSL_DetectionFrame & detection 
+);
 
-protected:
-    virtual void packetReceived();
+//};
+//};
 
-    Data & shared_data;
-
-    void updateRobotInformation(
-        const SSL_DetectionFrame & detection,
-        const SSL_DetectionRobot & robot, bool ally
-    );
-    
-    private:
-    Vision::VisionData visionData;
-    Ai::Team myTeam;
-};
-}
+#endif

@@ -22,6 +22,7 @@ set (SOURCES
     game_informations.cpp
     vision/AIVisionClient.cpp
     vision/VisionData.cpp
+    vision/print_protobuf.cpp
     com/AICommander.cpp
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp

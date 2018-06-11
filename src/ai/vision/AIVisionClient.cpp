@@ -85,7 +85,7 @@ namespace RhobanSSL
             // XXX: Receive other data?
         }
 
-        auto detection = data.detection();
+        const SSL_DetectionFrame & detection = data.detection();
 
         // Ball informations
         if (detection.balls().size()) {
@@ -145,8 +145,8 @@ namespace RhobanSSL
     }
 
     void AIVisionClient::updateRobotInformation(
-        SSL_DetectionFrame &detection,
-        SSL_DetectionRobot &robotFrame, bool ally
+        const SSL_DetectionFrame & detection,
+        const SSL_DetectionRobot & robotFrame, bool ally
     ){
         if(robotFrame.robot_id() < Ai::Constants::NB_OF_ROBOTS_BY_TEAM  ){
             Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
