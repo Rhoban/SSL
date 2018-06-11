@@ -30,6 +30,8 @@
 namespace RhobanSSL {
 
 struct Control : PidControl {
+    static const constexpr int power_max = 255;
+
     bool kick;
     bool chipKick;
     int kickPower;

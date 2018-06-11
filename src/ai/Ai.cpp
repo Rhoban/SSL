@@ -185,8 +185,8 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             );
         }else{
             int kick = 0;
-            if (ctrl.kick) kick = 2;
-            else if (ctrl.chipKick) kick = 1;
+            if (ctrl.kick) kick = 1;
+            else if (ctrl.chipKick) kick = 2;
             commander->set(
                 robot_id, true,
                 ctrl.velocity_translation[0], ctrl.velocity_translation[1],
@@ -223,7 +223,7 @@ void AI::prepare_to_send_control( int robot_id, Control & ctrl ){
 #endif
 
     prevent_collision( robot_id, ctrl );
-    ctrl = ctrl.relative_control(
+    static_cast<PidControl &>(ctrl) = ctrl.relative_control(
         ai_data.robots[Vision::Ally][robot_id].get_movement().angular_position( ai_data.time ), ai_data.dt
     );
     limits_velocity(ctrl);

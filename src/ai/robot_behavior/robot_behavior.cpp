@@ -24,21 +24,30 @@ namespace RhobanSSL {
 
 
 Control::Control():
-    PidControl(), kick(false), chipKick(false), spin(false), charge(false), active(true), ignore(false)
+    PidControl(), kick(false),
+    chipKick(false), kickPower(Control::power_max),
+    spin(false), charge(false), 
+    active(true), ignore(false)
 { }
 
 
 Control::Control(bool kick, bool active, bool ignore):
-    PidControl(), kick(kick), chipKick(false), spin(false), charge(false), active(active), ignore(ignore)
+    PidControl(), kick(kick), 
+    chipKick(false), kickPower(Control::power_max),
+    spin(false), charge(false),
+    active(active), ignore(ignore)
 { }
 
 Control::Control(const PidControl & c):
-    PidControl(c), kick(false), chipKick(false), spin(false), charge(false), active(true), ignore(false)
+    PidControl(c), kick(false), 
+    chipKick(false), kickPower(Control::power_max),
+    spin(false), charge(false), 
+    active(true), ignore(false)
 { }
 
 std::ostream& operator << ( std::ostream & out, const Control& control  ){
     out << "{ctrl : " << static_cast<PidControl>(control)
-        << ", kick : " << control.kick << ", acitve : " << control.active << ", ignore : " << control.ignore <<"}";
+        << ", kick : " << control.kick << ", chip kick : " << control.chipKick << ", kickPower : " << control.kickPower << ", spin : " << control.spin  << ", charge : " << control.charge << ", acitve : " << control.active << ", ignore : " << control.ignore <<"}";
     return out;
 }
 

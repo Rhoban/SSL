@@ -111,7 +111,7 @@ void Striker::update(
 Control Striker::control() const {
     Control ctrl = follower->control();
     ctrl.charge = true;
-    ctrl.chipKick = true;
+    ctrl.kick = true;
     // ctrl.spin = true; // We active the dribler ! 
     return ctrl; 
 }
