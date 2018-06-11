@@ -1,3 +1,23 @@
+/*
+    This file is part of SSL.
+
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 TO COMPLETE -> Gregwar
+
+    SSL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SSL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "Ai.h"
 #include <rhoban_utils/timing/time_stamp.h>
 #include <cmath>
@@ -432,6 +452,15 @@ RhobanSSLAnnotation::Annotations AI::get_annotations() const {
     annotations.addAnnotations( 
         get_robot_behavior_annotations()
     );
+
+    std::function< 
+        rhoban_geometry::Point (
+            const rhoban_geometry::Point & p 
+        ) 
+    > fct = [this]( const rhoban_geometry::Point & p ) {
+        return this->ai_data.team_point_of_view.from_frame( p );
+    };
+    annotations.map_positions(fct);
     return annotations; 
 }
 

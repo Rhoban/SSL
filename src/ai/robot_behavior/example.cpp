@@ -1,3 +1,22 @@
+/*
+    This file is part of SSL.
+
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+
+    SSL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SSL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "example.h"
 #include <math/vector2d.h>
 
@@ -21,19 +40,16 @@ void Example::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now 
-    //  this->robot_linear_position
-    //  this->robot_angular_position 
-    // are all avalaible
     
-    //int robot_id = 2;
-    //const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
-    //const Ai::Robot & robot = robot_table.at(robot_id);
+    annotations.clear();
     
-    //const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     const rhoban_geometry::Point & target_position = center_mark();
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
+
+    // On ajoute un text à la position du robot.
+    //annotations.addText("Exemple :)", robot_position, "blue");
+
     Vector2d direction = ball_position() - robot_position;
     ContinuousAngle target_rotation = vector2angle( direction );
     
@@ -54,7 +70,10 @@ Example::~Example(){
 }
 
 RhobanSSLAnnotation::Annotations Example::get_annotations() const {
-    return follower->get_annotations();
+    RhobanSSLAnnotation::Annotations annotations;
+    annotations.addAnnotations( this->annotations );
+    annotations.addAnnotations( follower->get_annotations() );
+    return annotations;
 }
 
 

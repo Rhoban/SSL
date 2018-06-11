@@ -434,15 +434,16 @@ function Viewer()
                 ctx.setLineDash([]);
             }
 
-            ctx.beginPath();
             switch (annotation.type) {
                 case "circle": {
+                    ctx.beginPath();
                     ctx.arc(annotation.x, annotation.y, annotation.r, 0, Math.PI*2);
                     ctx.stroke();
                 }
                 break;
                 case "arrow": {
                     ctx.save();
+                    ctx.beginPath();
                     ctx.moveTo(annotation.x, annotation.y);
                     ctx.lineTo(annotation.toX, annotation.toY);
 
@@ -461,11 +462,20 @@ function Viewer()
                 }
                 break;
                 case "cross": {
+                    ctx.beginPath();
                     ctx.moveTo(annotation.x - 0.1, annotation.y - 0.1);
                     ctx.lineTo(annotation.x + 0.1, annotation.y + 0.1);
                     ctx.moveTo(annotation.x - 0.1, annotation.y + 0.1);
                     ctx.lineTo(annotation.x + 0.1, annotation.y - 0.1);
                     ctx.stroke();
+                }
+                break;
+                case "text":{
+                    ctx.save();
+                    //ctx.font = '12pt sans';
+                    ctx.font = '8pt sans';
+                    ctx.fillText( annotation.text, annotation.x, annotation.y);
+                    ctx.restore();
                 }
                 break;
             }

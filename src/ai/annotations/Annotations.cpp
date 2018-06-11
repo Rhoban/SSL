@@ -1,7 +1,64 @@
+/*
+    This file is part of SSL.
+
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 TO COMPLETE -> Gregwar
+
+    SSL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SSL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "Annotations.h"
 
 namespace RhobanSSLAnnotation
 {
+
+    void Annotations::map_positions(
+        std::function< 
+            rhoban_geometry::Point (
+                const rhoban_geometry::Point & p 
+            ) 
+        > fct
+    ) {
+        for( unsigned int i=0; i< json.size(); i++ ){
+            Json::Value & annotation = json[i];
+            std::string type = annotation["type"].asString();
+            rhoban_geometry::Point point;
+            if( type == "arrow" ){
+                point = fct(
+                    rhoban_geometry::Point( annotation["x"].asDouble(), annotation["y"].asDouble() )
+                );
+                annotation["x"] = point.getX();
+                annotation["y"] = point.getY();
+                point = fct(
+                    rhoban_geometry::Point( annotation["toX"].asDouble(), annotation["toY"].asDouble() ) 
+                );
+                annotation["toX"] = point.getX();
+                annotation["toY"] = point.getY();
+            }else if( type == "text" or type == "cross" or type == "circle" ){
+                point = fct(
+                    rhoban_geometry::Point( annotation["x"].asDouble(), annotation["y"].asDouble() )
+                );
+                annotation["x"] = point.getX();
+                annotation["y"] = point.getY();
+            }else{
+                std::cerr << "Unknown annotation type : " << type 
+                    << "." << std::endl;
+                assert(false);
+            }
+        }
+    }
+
     Annotations::Annotations()
     : json(Json::arrayValue)
     {
@@ -94,4 +151,38 @@ namespace RhobanSSLAnnotation
             color, dashed
         );
     }
+
+    void Annotations::addText(
+        const std::string & text, double x, double y, 
+        std::string color
+    ){
+        Json::Value annotation;
+
+        annotation["type"] = "text";
+        annotation["text"] = text;
+        annotation["color"] = color;
+        annotation["dashed"] = false;
+
+        annotation["x"] = x;
+        annotation["y"] = y;
+
+        json.append(annotation);
+    }
+    void Annotations::addText(
+        const std::string & text, const rhoban_geometry::Point & point,
+        std::string color
+    ){
+        addText(
+            text, point.getX(), point.getY(), color
+        );
+    };
+    void Annotations::addText(
+        const std::string & text, const Vector2d & point,
+        std::string color
+    ){
+        addText(
+            text, point.getX(), point.getY(), color
+        );
+    }
+
 }

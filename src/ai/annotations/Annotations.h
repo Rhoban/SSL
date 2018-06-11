@@ -1,4 +1,24 @@
-#pragma once
+/*
+    This file is part of SSL.
+
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+
+    SSL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SSL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#ifndef __ANNOTATIONS__ANNOTATIONS_H__
+#define __ANNOTATIONS__ANNOTATIONS_H__ 
 
 #include <json/json.h>
 #include <vector>
@@ -14,6 +34,19 @@ namespace RhobanSSLAnnotation
         void clear();
         void addCircle(double x, double y, double r,
             std::string color = "white", bool dashed = false);
+
+        void addText(
+            const std::string & text, double x, double y, 
+            std::string color = "white"
+        );
+        void addText(
+            const std::string & text, const rhoban_geometry::Point & point,
+            std::string color = "white"
+        );
+        void addText(
+            const std::string & text, const Vector2d & point,
+            std::string color = "white"
+        );
 
         void addArrow(
             double x, double y, double toX, double toY,
@@ -36,7 +69,17 @@ namespace RhobanSSLAnnotation
         Json::Value toJson() const;
         std::string toJsonString() const;
 
+        void map_positions(
+            std::function< 
+                rhoban_geometry::Point (
+                    const rhoban_geometry::Point & p 
+                ) 
+            > fct
+        );
+
     protected:
         Json::Value json;
     };
 }
+
+#endif
