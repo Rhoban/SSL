@@ -13,7 +13,7 @@
 #include <robot_behavior/robot_follower.h>
 #include <robot_behavior/pass.h>
 #include <robot_behavior/protect_ball.h>
-// #include <robot_behavior/search_shoot_area.h>
+#include <robot_behavior/search_shoot_area.h>
 #include <core/collection.h>
 #include <core/print_collection.h>
 
@@ -117,18 +117,17 @@ Jeremy::Jeremy(
             )
         )
     );
-    // register_strategy(
-    //     SEARCHSHOOTAREA, std::shared_ptr<Strategy::Strategy>(
-    //         new Strategy::From_robot_behavior(
-    //             ai_data,
-    //             [&](double time, double dt){
-    //                 Robot_behavior::SearchShootArea* f = new Robot_behavior::SearchShootArea(ai_data);
-    //                 f->declare_area();
-    //                 return std::shared_ptr<Robot_behavior::RobotBehavior>(f);
-    //             }, false // it is not a goal
-    //         )
-    //     )
-    // );
+    register_strategy(
+        SEARCHSHOOTAREA, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::SearchShootArea* f = new Robot_behavior::SearchShootArea(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(f);
+                }, false // it is not a goal
+            )
+        )
+    );
     assign_strategy(
         Strategy::Halt::name, 0.0,
         get_team_ids()
@@ -172,7 +171,7 @@ void Jeremy::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { Strategy::StrikerWithSupport::name };
+            future_strats = { GOALIE, SEARCHSHOOTAREA };//Strategy::StrikerWithSupport::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
