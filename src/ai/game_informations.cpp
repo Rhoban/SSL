@@ -95,8 +95,13 @@ std::vector<rhoban_geometry::Point> GameInformations::center_quarter_field() con
     );
 }
 
+double GameInformations::field_width() const{
+ return ai_data.field.fieldWidth;
+}
 
-
+double GameInformations::field_length() const{
+ return ai_data.field.fieldLength;
+}
 
 
 

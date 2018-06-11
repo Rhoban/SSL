@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__PATROL__H__
-#define __ROBOT_BEHAVIOR__PATROL__H__
+#ifndef __ROBOT_BEHAVIOR__TEST_KICKER__H__
+#define __ROBOT_BEHAVIOR__TEST_KICKER__H__
 
 #include "robot_behavior.h"
 #include "factory.h"
@@ -27,20 +27,13 @@ namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class Patrol : public RobotBehavior  {
+class Test_kicker : public RobotBehavior  {
     private:
-    ConsignFollower* follower;
-    int zone;
-    bool _see_the_ball;
-    std::vector< std::pair<rhoban_geometry::Point, ContinuousAngle> > traject;
-    double waiting_time;
-    double last_time;
-    bool it_s_time_to_change_the_zone;
+	ConsignFollower* follower;
+    RhobanSSLAnnotation::Annotations annotations;
 
     public:
-    Patrol(Ai::AiData& ai_data);
-
-    void see_the_ball(bool value);
+    Test_kicker(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -48,20 +41,11 @@ class Patrol : public RobotBehavior  {
         const Ai::Ball & ball
     );
 
-    static Patrol* two_way_trip( Ai::AiData& ai_data );
-    static Patrol* tour_of_the_field( Ai::AiData& ai_data );
-    static Patrol* test_translation_for_pid( Ai::AiData& ai_data );	
-    static Patrol* test_rotation_for_pid( Ai::AiData& ai_data );	
+	virtual Control control() const;
 
-    void set_traject( const std::vector< std::pair<rhoban_geometry::Point, ContinuousAngle> > & traject );
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-    virtual Control control() const;
-    void set_waiting_time( double time );
-    
-    RhobanSSLAnnotation::Annotations get_annotations() const;
-
-    virtual ~Patrol();
-
+	virtual ~Test_kicker();
 };
 
 };
