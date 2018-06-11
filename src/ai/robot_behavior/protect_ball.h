@@ -23,9 +23,12 @@ class ProtectBall : public RobotBehavior  {
             const Ai::Ball & ball
         );
 
-        void declare_radius( double radius = 0.5 );
+        void declare_radius( double radius = 0.2 );
+
+        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 	virtual Control control() const;
+
 
 
 	virtual ~ProtectBall();

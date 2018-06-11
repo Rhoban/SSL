@@ -1,3 +1,22 @@
+/*
+    This file is part of SSL.
+
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+
+    SSL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SSL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "navigation_with_obstacle_avoidance.h"
 #include <rhoban_geometry/segment.h>
 #include <physic/constants.h>
@@ -249,6 +268,11 @@ RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotat
     );
     annotations.addArrow(
         target_position, target_position + Vector2d( std::cos(target_angle.value()), std::sin(target_angle.value()) ), "magenta", dashed
+    );
+    Control ctrl = control();
+    annotations.addArrow(
+        linear_position(), linear_position() + ctrl.velocity_translation
+        , "orange", false
     );
     return annotations;
 }

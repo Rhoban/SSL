@@ -1,3 +1,22 @@
+/*
+    This file is part of SSL.
+
+    Copyright 2018 Name Surname (mail)
+
+    SSL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SSL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "protect_ball.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
@@ -30,16 +49,16 @@ void ProtectBall::update(
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
     const rhoban_geometry::Point & oponent_goal_point = oponent_goal_center();
 
-    Vector2d ball_goal_vector = oponent_goal_point - ball_position();
+    // Vector2d ball_goal_vector = oponent_goal_point - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
     Vector2d target_position;
-    if(ball_goal_vector.norm() > radius){
+    if(ball_robot_vector.norm() > radius){
       target_position = ball_position();
     }else{
       target_position = ball_position() + radius*Vector2d(cos( time ), sin( time ));
     }
 
-    double target_rotation = detail::vec2angle(ball_goal_vector);
+    double target_rotation = detail::vec2angle(ball_robot_vector);
 
     follower->avoid_the_ball(true);
     follower->set_following_position(target_position, target_rotation);
@@ -57,6 +76,10 @@ void ProtectBall::declare_radius( double radius ){
 
 ProtectBall::~ProtectBall(){
     delete follower;
+}
+
+RhobanSSLAnnotation::Annotations ProtectBall::get_annotations() const {
+    return follower->get_annotations();
 }
 
 }

@@ -1,3 +1,23 @@
+/*
+    This file is part of SSL.
+
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 TO COMPLETE -> Gregwar
+
+    SSL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SSL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include "Ai.h"
 #include <rhoban_utils/timing/time_stamp.h>
 #include <cmath>
@@ -165,8 +185,8 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             );
         }else{
             int kick = 0;
-            if (ctrl.kick) kick = 2;
-            else if (ctrl.chipKick) kick = 1;
+            if (ctrl.kick) kick = 1;
+            else if (ctrl.chipKick) kick = 2;
             commander->set(
                 robot_id, true,
                 ctrl.velocity_translation[0], ctrl.velocity_translation[1],
@@ -203,7 +223,7 @@ void AI::prepare_to_send_control( int robot_id, Control & ctrl ){
 #endif
 
     prevent_collision( robot_id, ctrl );
-    ctrl = ctrl.relative_control(
+    static_cast<PidControl &>(ctrl) = ctrl.relative_control(
         ai_data.robots[Vision::Ally][robot_id].get_movement().angular_position( ai_data.time ), ai_data.dt
     );
     limits_velocity(ctrl);
@@ -432,6 +452,15 @@ RhobanSSLAnnotation::Annotations AI::get_annotations() const {
     annotations.addAnnotations( 
         get_robot_behavior_annotations()
     );
+
+    std::function< 
+        rhoban_geometry::Point (
+            const rhoban_geometry::Point & p 
+        ) 
+    > fct = [this]( const rhoban_geometry::Point & p ) {
+        return this->ai_data.team_point_of_view.from_frame( p );
+    };
+    annotations.map_positions(fct);
     return annotations; 
 }
 
