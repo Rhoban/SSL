@@ -47,7 +47,11 @@ void Patrol::update(
         if( it_s_time_to_change_the_zone and time - last_time > waiting_time  ){
              zone = (zone+1)%traject.size();
              it_s_time_to_change_the_zone = false;            
-	}
+	    }
+        if( it_s_time_to_change_the_zone ){
+            DEBUG("Erreur angulaire :" << target_rotation - angular_position());
+            DEBUG("Erreur translation :" << target_position - linear_position());      
+        }
     }
     if( _see_the_ball ){
         Vector2d direction = ball_position() - robot_position;
@@ -100,11 +104,11 @@ Patrol* Patrol::test_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_width()/4.0, -res->field_length()/4.0 ),
+                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( -res->field_width()/4.0, +res->field_length()/4.0 ),        
+                rhoban_geometry::Point( -res->field_length()/4.0, +res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -119,12 +123,12 @@ Patrol* Patrol::test_rotation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_width()/4.0, -res->field_length()/4.0 ),
+                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(0.0)
             }, 
             {
-                rhoban_geometry::Point( -res->field_width()/4.0, -res->field_length()/4.0 ),        
-                ContinuousAngle(M_PI/2.0)
+                rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI)
             }, 
         }
     );
