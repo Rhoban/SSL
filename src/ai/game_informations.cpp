@@ -58,7 +58,13 @@ const Ai::Robot & GameInformations::get_robot( int robot_id, Vision::Team team )
 }
 
 
+const Ai::Ball & GameInformations::ball() const {
+  return ai_data.ball;
+}
 
+rhoban_geometry::Point GameInformations::ball_position() const{
+  return ball().get_movement().linear_position(time());
+}
 
 
 

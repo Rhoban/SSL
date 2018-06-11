@@ -85,11 +85,11 @@ void RobotBehavior::set_birthday( double birthday ){
 };
 
 void RobotBehavior::update_time_and_position(
-    double time, 
+    double time,
     const Ai::Robot & robot, const Ai::Ball & ball
 ){
     this->robot_ptr = &robot;
-    this->ball_ptr = &ball; 
+    this->ball_ptr = &ball;
     lastUpdate = time;
     this->robot_linear_position = Vector2d(
         robot.get_movement().linear_position(time)
@@ -105,13 +105,13 @@ const Ai::Robot & RobotBehavior::robot() const {
     return *robot_ptr;
 }
 
-const Ai::Ball & RobotBehavior::ball() const {
-    return *ball_ptr;
-}
-
-rhoban_geometry::Point RobotBehavior::ball_position() const {
-    return ball().get_movement().linear_position(time());
-}
+// const Ai::Ball & RobotBehavior::ball() const {
+//     return *ball_ptr;
+// }
+//
+// rhoban_geometry::Point RobotBehavior::ball_position() const {
+//     return ball().get_movement().linear_position(time());
+// }
 
 rhoban_geometry::Point RobotBehavior::linear_position() const {
     return robot().get_movement().linear_position(time());

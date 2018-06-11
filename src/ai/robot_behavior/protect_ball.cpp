@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Name Surname (mail)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -29,7 +29,6 @@ ProtectBall::ProtectBall(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    radius(-1),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
 }
@@ -46,17 +45,20 @@ void ProtectBall::update(
     //  this->robot_linear_position
     //  this->robot_angular_position
     // are all avalaible
+    // annotations.clear();
+
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
-    const rhoban_geometry::Point & oponent_goal_point = oponent_goal_center();
+    // const rhoban_geometry::Point & oponent_goal_point = oponent_goal_center();
 
     // Vector2d ball_goal_vector = oponent_goal_point - ball_position();
-    Vector2d ball_robot_vector = robot_position - ball_position();
-    Vector2d target_position;
-    if(ball_robot_vector.norm() > radius){
-      target_position = ball_position();
-    }else{
-      target_position = ball_position() + radius*Vector2d(cos( time ), sin( time ));
-    }
+    Vector2d ball_robot_vector = ball_position() - robot_position;
+    // Vector2d target_position;
+
+    // annotations.addCircle( ball_position().x, ball_position().y , radius );
+    // annotations.addAnnotations(follower->get_annotations());
+
+
+    Vector2d target_position = ball_position();
 
     double target_rotation = detail::vec2angle(ball_robot_vector);
 
@@ -68,10 +70,6 @@ void ProtectBall::update(
 Control ProtectBall::control() const {
     Control ctrl = follower->control();
     return ctrl;
-}
-
-void ProtectBall::declare_radius( double radius ){
-    this->radius = radius;
 }
 
 ProtectBall::~ProtectBall(){
