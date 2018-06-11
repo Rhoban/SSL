@@ -27,6 +27,8 @@ class Concept_proof_spinner : public RobotBehavior  {
 
 	virtual Control control() const;
 
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
 	virtual ~Concept_proof_spinner();
 };
 

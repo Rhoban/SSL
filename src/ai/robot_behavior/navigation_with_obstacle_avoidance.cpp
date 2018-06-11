@@ -250,6 +250,11 @@ RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotat
     annotations.addArrow(
         target_position, target_position + Vector2d( std::cos(target_angle.value()), std::sin(target_angle.value()) ), "magenta", dashed
     );
+    Control ctrl = control();
+    annotations.addArrow(
+        linear_position(), linear_position() + ctrl.velocity_translation
+        , "orange", false
+    );
     return annotations;
 }
 

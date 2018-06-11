@@ -30,6 +30,8 @@ class Passive_defensor : public RobotBehavior  {
 
 	virtual Control control() const;
 
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
 	virtual ~Passive_defensor();
 };
 

@@ -15,6 +15,19 @@ namespace RhobanSSLAnnotation
         void addCircle(double x, double y, double r,
             std::string color = "white", bool dashed = false);
 
+        void addText(
+            const std::string & text, double x, double y, 
+            std::string color = "white"
+        );
+        void addText(
+            const std::string & text, const rhoban_geometry::Point & point,
+            std::string color = "white"
+        );
+        void addText(
+            const std::string & text, const Vector2d & point,
+            std::string color = "white"
+        );
+
         void addArrow(
             double x, double y, double toX, double toY,
             std::string color = "white", bool dashed = false

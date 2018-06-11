@@ -23,6 +23,8 @@ class Striker : public RobotBehavior  {
 
 	virtual Control control() const;
 
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
 	virtual ~Striker();
 };
 

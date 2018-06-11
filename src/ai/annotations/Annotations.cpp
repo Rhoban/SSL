@@ -25,7 +25,7 @@ namespace RhobanSSLAnnotation
                 );
                 annotation["toX"] = point.getX();
                 annotation["toY"] = point.getY();
-            }else if( type == "cross" or type == "circle" ){
+            }else if( type == "text" or type == "cross" or type == "circle" ){
                 point = fct(
                     rhoban_geometry::Point( annotation["x"].asDouble(), annotation["y"].asDouble() )
                 );
@@ -131,4 +131,38 @@ namespace RhobanSSLAnnotation
             color, dashed
         );
     }
+
+    void Annotations::addText(
+        const std::string & text, double x, double y, 
+        std::string color
+    ){
+        Json::Value annotation;
+
+        annotation["type"] = "text";
+        annotation["text"] = text;
+        annotation["color"] = color;
+        annotation["dashed"] = false;
+
+        annotation["x"] = x;
+        annotation["y"] = y;
+
+        json.append(annotation);
+    }
+    void Annotations::addText(
+        const std::string & text, const rhoban_geometry::Point & point,
+        std::string color
+    ){
+        addText(
+            text, point.getX(), point.getY(), color
+        );
+    };
+    void Annotations::addText(
+        const std::string & text, const Vector2d & point,
+        std::string color
+    ){
+        addText(
+            text, point.getX(), point.getY(), color
+        );
+    }
+
 }

@@ -98,5 +98,9 @@ Goalie::~Goalie(){
     delete follower;
 }
 
+RhobanSSLAnnotation::Annotations Goalie::get_annotations() const {
+    return follower->get_annotations();
+}
+
 }
 }

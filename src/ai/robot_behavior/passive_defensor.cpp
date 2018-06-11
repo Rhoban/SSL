@@ -61,5 +61,9 @@ void Passive_defensor::set_barycenter( double barycenter ){
     this->barycenter = barycenter;
 }
 
+RhobanSSLAnnotation::Annotations Passive_defensor::get_annotations() const {
+    return follower->get_annotations();
+}
+
 }
 }

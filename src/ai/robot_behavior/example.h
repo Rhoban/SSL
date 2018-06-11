@@ -11,6 +11,7 @@ namespace Robot_behavior {
 class Example : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
+    RhobanSSLAnnotation::Annotations annotations;
 
     public:
     Example(Ai::AiData& ai_data);

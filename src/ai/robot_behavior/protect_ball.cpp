@@ -59,5 +59,9 @@ ProtectBall::~ProtectBall(){
     delete follower;
 }
 
+RhobanSSLAnnotation::Annotations ProtectBall::get_annotations() const {
+    return follower->get_annotations();
+}
+
 }
 }

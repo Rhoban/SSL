@@ -101,6 +101,10 @@ Striker::~Striker(){
     delete follower;
 }
 
+RhobanSSLAnnotation::Annotations Striker::get_annotations() const {
+    return follower->get_annotations();
+}
+
 }
 }
 

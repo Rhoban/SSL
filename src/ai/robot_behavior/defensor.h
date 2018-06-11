@@ -23,6 +23,7 @@ class Defensor : public RobotBehavior  {
 
 	virtual Control control() const;
 
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 	virtual ~Defensor();
 };
 

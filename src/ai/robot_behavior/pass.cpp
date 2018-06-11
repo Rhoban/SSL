@@ -74,5 +74,10 @@ Pass::~Pass(){
     delete follower;
 }
 
+RhobanSSLAnnotation::Annotations Pass::get_annotations() const {
+    return follower->get_annotations();
+}
+
+
 }
 }
