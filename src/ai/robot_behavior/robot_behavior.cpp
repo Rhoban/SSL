@@ -26,22 +26,22 @@ namespace RhobanSSL {
 Control::Control():
     PidControl(), kick(false),
     chipKick(false), kickPower(Control::power_max),
-    spin(false), charge(false), 
+    spin(false), charge(false),
     active(true), ignore(false)
 { }
 
 
 Control::Control(bool kick, bool active, bool ignore):
-    PidControl(), kick(kick), 
+    PidControl(), kick(kick),
     chipKick(false), kickPower(Control::power_max),
     spin(false), charge(false),
     active(active), ignore(ignore)
 { }
 
 Control::Control(const PidControl & c):
-    PidControl(c), kick(false), 
+    PidControl(c), kick(false),
     chipKick(false), kickPower(Control::power_max),
-    spin(false), charge(false), 
+    spin(false), charge(false),
     active(true), ignore(false)
 { }
 
@@ -83,6 +83,8 @@ double vec2angle( Vector2d direction ){
 
 RobotBehavior::RobotBehavior( Ai::AiData & ai_data ) :
     GameInformations(ai_data),
+    robot_ptr(0),
+    ball_ptr(0),
     birthday(-1.0), ai_data(ai_data)
 { };
 
@@ -111,16 +113,12 @@ void RobotBehavior::update_time_and_position(
 };
 
 const Ai::Robot & RobotBehavior::robot() const {
+    #ifndef NDEBUG
+    DEBUG("if you have this assert, that mean you have probably call a function using robot() before an update that lunch an update_time_and_position()");
+    #endif
+    assert(robot_ptr);
     return *robot_ptr;
 }
-
-// const Ai::Ball & RobotBehavior::ball() const {
-//     return *ball_ptr;
-// }
-//
-// rhoban_geometry::Point RobotBehavior::ball_position() const {
-//     return ball().get_movement().linear_position(time());
-// }
 
 rhoban_geometry::Point RobotBehavior::linear_position() const {
     return robot().get_movement().linear_position(time());

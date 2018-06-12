@@ -103,12 +103,10 @@ class RobotBehavior : public GameInformations {
         virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
         const Ai::Robot & robot() const ;
-        // const Ai::Ball & ball() const ;
 
         rhoban_geometry::Point linear_position() const ;
         ContinuousAngle angular_position() const;
 
-        // rhoban_geometry::Point ball_position() const ;
 };
 
 namespace detail {

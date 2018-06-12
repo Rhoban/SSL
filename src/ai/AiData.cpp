@@ -64,7 +64,7 @@ namespace Ai {
     }
     void Object::set_movement( Movement * movement ){
         if( this->movement ){
-            assert( movement != static_cast<Movement_on_new_frame*>(this->movement)->get_original_movement() ); 
+            assert( movement != static_cast<Movement_on_new_frame*>(this->movement)->get_original_movement() );
             delete this->movement;
         }
         // We change the frame according referee informatiosns
@@ -79,7 +79,7 @@ namespace Ai {
 
     const RhobanSSL::Movement & Object::get_movement() const {
         return *movement;
-    }    
+    }
 
     Object::~Object(){
         delete movement;
@@ -90,7 +90,7 @@ namespace Ai {
     { }
 
     bool Object::is_present_in_vision() const {
-        return vision_data.isOk(); 
+        return vision_data.isOk();
     }
 
 
@@ -98,7 +98,7 @@ namespace Ai {
     void AiData::update( const Vision::VisionData vision_data ){
         if( vision_data.field.present ){
             static_cast<Vision::Field&>(field) = vision_data.field;
-        }; 
+        };
 
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
@@ -155,7 +155,7 @@ namespace Ai {
         ball.set_movement(
             physic::Factory::ball_movement(*this)
         );
-        
+
     }
 
 
@@ -178,15 +178,15 @@ namespace Ai {
                        << reader.getFormattedErrorMessages();
             std::exit(EXIT_FAILURE);
         }
-      
-        auto robot_conf = root["robot"]; 
+
+        auto robot_conf = root["robot"];
 
         robot_radius = robot_conf["robot_radius"].asDouble();
         assert( robot_radius > 0.0 );
 
         wheel_radius = robot_conf["wheel_radius"].asDouble();
         assert( wheel_radius > 0.0 );
-        
+
         wheel_excentricity = robot_conf["wheel_excentricity"].asDouble();
         assert( wheel_excentricity > 0.0 );
 
@@ -222,7 +222,7 @@ namespace Ai {
         assert( p_orientation >= 0.0 );
         assert( i_orientation >= 0.0 );
         assert( d_orientation >= 0.0 );
-        
+
         translation_acceleration_limit = wheel_nb_turns_acceleration_limit*wheel_radius*2.0*M_PI;
         assert( translation_acceleration_limit > 0.0 );
 
@@ -234,7 +234,7 @@ namespace Ai {
         DEBUG( "translation_acceleration_limit : " << translation_acceleration_limit );
         DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
 
-        
+
         radius_ball = root["ball"]["radius_ball"].asDouble();
         assert( radius_ball > 0.0 );
 
@@ -244,15 +244,15 @@ namespace Ai {
 
         obstacle_avoidance_ratio = nav["obstacle_avoidance_ratio"].asDouble(); // should be lessr than security_acceleration_ratio
         assert( obstacle_avoidance_ratio >=0.0 );
-        assert( obstacle_avoidance_ratio < security_acceleration_ratio ); 
-        
+        assert( obstacle_avoidance_ratio < security_acceleration_ratio );
+
         radius_security_for_collision = nav["radius_security_for_collision"].asDouble();
         assert( radius_security_for_collision > 0.0 );
-        radius_security_for_avoidance = nav["radius_security_for_avoidance"].asDouble();  // should be greatear than  radius_security_for_collision  
+        radius_security_for_avoidance = nav["radius_security_for_avoidance"].asDouble();  // should be greatear than  radius_security_for_collision
         assert( radius_security_for_avoidance > 0.0 );
         assert( radius_security_for_collision < radius_security_for_avoidance );
 
-        waiting_goal_position = Vector2d( 
+        waiting_goal_position = Vector2d(
             root["goalie"]["waiting_goal_position"][0].asDouble(),
             root["goalie"]["waiting_goal_position"][1].asDouble()
         );
@@ -261,7 +261,7 @@ namespace Ai {
         default_goalie_id = root["goalie"]["default_id"].asInt(); // penalty rayon for the goalie
         assert( default_goalie_id >= 0 );
         assert( default_goalie_id < Constants::NB_OF_ROBOTS_BY_TEAM );
-            
+
         enable_kicking = true;
     }
 
@@ -275,10 +275,10 @@ namespace Ai {
             robots.at(Vision::Team::Ally).at(robot_id).is_present_in_vision()
             and
             robot_is_inside_the_field(robot_id)
-        ); 
+        );
     }
 
-    const AiData::Collision_times_table & AiData::get_table_of_collision_times() const 
+    const AiData::Collision_times_table & AiData::get_table_of_collision_times() const
     {
         return table_of_collision_times;
     }
@@ -287,7 +287,7 @@ namespace Ai {
         std::function <
             void (
                 Vision::Team robot_team_1, Robot & robot_1,
-                Vision::Team robot_team_2, Robot & robot_2 
+                Vision::Team robot_team_2, Robot & robot_2
             )
         > visitor
     ){
@@ -306,7 +306,7 @@ namespace Ai {
     ) const {
         std::list< std::pair< int, double> > result;
         const Robot * robot_1 = &( robots.at(Vision::Team::Ally).at(robot_id) );
-        
+
         if( not( robot_1->is_present_in_vision() ) ){
             return {};
         }
@@ -319,10 +319,10 @@ namespace Ai {
             if( robot_1->id() != robot_2->id() or all_robots[i].first != Vision::Team::Ally ){
                 double radius_error = constants.radius_security_for_collision;
                 std::pair<bool, double> collision = collision_time(
-                    constants.robot_radius, 
+                    constants.robot_radius,
                     robot_1->get_movement().linear_position( robot_1->get_movement().last_time() ),
                     velocity_translation,
-                    constants.robot_radius, 
+                    constants.robot_radius,
                     robot_2->get_movement().linear_position( robot_2->get_movement().last_time() ),
                     robot_2->get_movement().linear_velocity( robot_2->get_movement().last_time() ),
                     radius_error
@@ -333,7 +333,7 @@ namespace Ai {
             }
         }
         return result;
-    } 
+    }
 
     void AiData::compute_table_of_collision_times(){
         table_of_collision_times.clear();
@@ -343,9 +343,9 @@ namespace Ai {
                 Robot & robot_2 = *all_robots[j].second;
                 double radius_error = constants.radius_security_for_collision;
                 std::pair<bool, double> collision = collision_time(
-                    constants.robot_radius, 
+                    constants.robot_radius,
                     robot_1.get_movement(),
-                    constants.robot_radius, 
+                    constants.robot_radius,
                     robot_2.get_movement(),
                     radius_error, time
                 );
@@ -357,10 +357,10 @@ namespace Ai {
     }
 
     rhoban_geometry::Point AiData::relative2absolute(
-        double x, double y 
+        double x, double y
     ) const {
         return rhoban_geometry::Point(
-           field.fieldLength/2.0*x, field.fieldWidth/2.0*y 
+           field.fieldLength/2.0*x, field.fieldWidth/2.0*y
         );
     }
     rhoban_geometry::Point AiData::relative2absolute(
@@ -372,12 +372,12 @@ namespace Ai {
 
     RobotPlacement AiData::default_attacking_kickoff_placement() const {
         //
-        //     A.     
+        //     A.
         // B        C
         //      D
         //   E     F
         //      G
-        //   
+        //
         return RobotPlacement(
             {
                 Position( 0.0, 1.0, 0.0 ), // A
@@ -396,12 +396,12 @@ namespace Ai {
 
     RobotPlacement AiData::default_defending_kickoff_placement() const {
         //
-        //      .     
+        //      .
         // B    A    C
         //      F
         //   D     E
         //      G
-        //   
+        //
         return RobotPlacement(
             {
                 Position( relative2absolute(-1.0/3.0, 0.0), 0.0 ), // A
@@ -423,5 +423,5 @@ namespace Ai {
         return out;
     }
 
- 
+
 } } //Namespace

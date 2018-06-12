@@ -67,6 +67,17 @@ void Indirect::stop(double time){
 }
 
 void Indirect::update(double time){
+  int seuil = 0.4;
+  int pass = player_id(1); // we get the first if in get_player_ids()
+  const Ai::Robot & robot_pass = get_robot( pass );
+  const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
+
+  Vector2d ball_robot_vector_pass = ball_position() - robot_pass_position;
+
+  std::cout << "yeeeeeah " << state<< "mpyteozur " << ball_robot_vector_pass.norm()<< '\n';
+  if(ball_robot_vector_pass.norm() <= seuil){
+    state = 1;
+  }
 }
 
 void Indirect::assign_behavior_to_robots(
@@ -82,17 +93,7 @@ void Indirect::assign_behavior_to_robots(
         int wait_pass = player_id(0); // we get the first if in get_player_ids()
         int pass = player_id(1); // we get the first if in get_player_ids()
 
-        const Ai::Robot & robot_wait_pass = get_robot( wait_pass );
-        const Ai::Robot & robot_pass = get_robot( pass );
-        const rhoban_geometry::Point & robot_wait_pass_position = robot_wait_pass.get_movement().linear_position( time );
-        const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
-
-        Vector2d ball_robot_vector_wait_pass = ball_position() - robot_wait_pass_position;
-        Vector2d ball_robot_vector_pass = ball_position() - robot_pass_position;
-
-        int seuil = 0.4;
-
-        if(ball_robot_vector_pass.norm() >= seuil && state == 0){
+        if( state == 0 ){
           assign_behavior(
               wait_pass, std::shared_ptr<Robot_behavior::SearchShootArea>(
                   new Robot_behavior::SearchShootArea(ai_data)
@@ -104,6 +105,7 @@ void Indirect::assign_behavior_to_robots(
           );
           pass_behavior->declare_robot_to_pass(wait_pass, Vision::Team::Ally);
           assign_behavior( pass, pass_behavior );
+          std::cout << "stat aaaaaaaaaa " << state << '\n';
 
         }else{
           assign_behavior(
@@ -117,7 +119,7 @@ void Indirect::assign_behavior_to_robots(
           );
           support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), Vision::Team::Ally);
           assign_behavior( pass, support );
-          state = 1;
+            std::cout << "stat bbbbbbbb " << state << '\n';
         }
 
 
@@ -144,6 +146,10 @@ std::list<
     return {
         std::pair<rhoban_geometry::Point,ContinuousAngle>(
             ball_position(),
+            0.0
+        ),
+        std::pair<rhoban_geometry::Point,ContinuousAngle>(
+            oponent_goal_center(),
             0.0
         )
     };

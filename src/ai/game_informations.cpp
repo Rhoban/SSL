@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by

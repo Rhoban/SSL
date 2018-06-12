@@ -27,6 +27,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <strategy/striker_with_support.h>
 #include <strategy/indirect.h>
+#include <strategy/indirect_lob.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/striker.h>
@@ -82,7 +83,13 @@ Jeremy::Jeremy(
     register_strategy(
         Strategy::Indirect::name,
         std::shared_ptr<Strategy::Strategy>(
-            new Strategy::StrikerWithSupport(ai_data)
+            new Strategy::Indirect(ai_data)
+        )
+    );
+    register_strategy(
+        Strategy::IndirectLob::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::IndirectLob(ai_data)
         )
     );
     register_strategy(
@@ -192,11 +199,11 @@ void Jeremy::choose_a_strategy(double time){
             }else{
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
             }
-            future_strats = { Strategy::Prepare_kickoff::name};//SEARCHSHOOTAREA };
+            future_strats = { Strategy::Prepare_kickoff::name};
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { GOALIE, SEARCHSHOOTAREA, PROTECTBALL };//Strategy::StrikerWithSupport::name };
+            future_strats = { Strategy::Indirect::name };//Strategy::StrikerWithSupport::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );

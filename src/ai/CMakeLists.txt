@@ -64,6 +64,7 @@ set (SOURCES
     strategy/mur.cpp
     strategy/striker_with_support.cpp
     strategy/indirect.cpp
+    strategy/indirect_lob.cpp
     strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp

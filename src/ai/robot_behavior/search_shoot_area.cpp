@@ -59,6 +59,7 @@ void SearchShootArea::update(
 
     annotations.clear();
 
+
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
     Vector2d ball_robot_vector = ball_position() - robot_position;
 
@@ -95,7 +96,10 @@ SearchShootArea::~SearchShootArea(){
 
 
 RhobanSSLAnnotation::Annotations SearchShootArea::get_annotations() const {
-        return annotations;
+  RhobanSSLAnnotation::Annotations annotations;
+  annotations.addAnnotations( this->annotations );
+  annotations.addAnnotations( follower->get_annotations() );
+  return annotations;
 }
 
 }
