@@ -24,9 +24,11 @@
 #include <strategy/tare_and_synchronize.h>
 #include <strategy/placer.h>
 #include <strategy/prepare_kickoff.h>
+#include <strategy/base.h>
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
+#include <robot_behavior/mur_defensor.h>
 #include <robot_behavior/striker.h>
 #include <core/collection.h>
 #include <core/print_collection.h>
@@ -34,7 +36,8 @@
 #define GOALIE "Goalie" 
 #define DEFENSOR1 "Defensor1" 
 #define DEFENSOR2 "Defensor2" 
-#define STRIKER "Striker" 
+#define STRIKER "Striker"
+#define MUR_DEFENSOR "Mur_defensor"
 
 namespace RhobanSSL {
 namespace Manager {
@@ -63,6 +66,12 @@ Thomas::Thomas(
         Strategy::Prepare_kickoff::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Prepare_kickoff(ai_data)
+        )
+    );
+    register_strategy(
+        Strategy::Base::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Base(ai_data)
         )
     );
     register_strategy(
@@ -105,6 +114,17 @@ Thomas::Thomas(
                 [&](double time, double dt){
                     Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
+        MUR_DEFENSOR, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Mur_defensor* mur_defensor = new Robot_behavior::Mur_defensor(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(mur_defensor);
                 }, false // it is not a goal
             )
         )
@@ -152,7 +172,8 @@ void Thomas::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { GOALIE, DEFENSOR1 };
+            //future_strats = { GOALIE, MUR_DEFENSOR };
+            future_strats = { Strategy::Base::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );

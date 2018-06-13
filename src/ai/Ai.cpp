@@ -234,7 +234,6 @@ Control AI::update_robot(
     double time, Ai::Robot & robot, Ai::Ball & ball
 ){
     if( robot.is_present_in_vision() ){
-        robot_behavior.update(time, robot, ball);
         Control ctrl = robot_behavior.control();
         return ctrl;
     }else{
@@ -332,6 +331,12 @@ void AI::update_robots( ){
     auto team = Vision::Ally;
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
         Shared_data::Final_control & final_control = shared_data.final_control_for_robots[robot_id];
+
+        Ai::Robot & robot = ai_data.robots[team][robot_id];
+        Robot_behavior::RobotBehavior & robot_behavior = *(
+            robot_behaviors[robot_id]
+        );
+        robot_behavior.update(time, robot, ball);
         if( final_control.is_disabled_by_viewer  ){
             final_control.control = Control::make_desactivated();
         }else if( ! final_control.is_manually_controled_by_viewer ){
@@ -406,6 +411,13 @@ void AI::run(){
 
         data << shared_data;
 
+        data.edit_data_for_viewer(
+            [this]( Data_for_viewer & data_for_viewer ){
+                data_for_viewer.annotations.clear();
+                this->get_annotations( data_for_viewer.annotations );
+            }
+        );
+
         // XXX: Flushing takes some time in real mode, and should be done in parallel
         // along with the computing of the AI
         commander->flush();
@@ -446,8 +458,7 @@ RhobanSSLAnnotation::Annotations AI::get_robot_behavior_annotations() const {
 }
 
         
-RhobanSSLAnnotation::Annotations AI::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
+void AI::get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const {
     annotations.addAnnotations( getManager()->get_annotations() );
     annotations.addAnnotations( 
         get_robot_behavior_annotations()
@@ -461,7 +472,6 @@ RhobanSSLAnnotation::Annotations AI::get_annotations() const {
         return this->ai_data.team_point_of_view.from_frame( p );
     };
     annotations.map_positions(fct);
-    return annotations; 
 }
 
 

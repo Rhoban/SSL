@@ -104,7 +104,8 @@ namespace RhobanSSL
         void prevent_collision( int robot_id, Control & ctrl );
         RhobanSSLAnnotation::Annotations get_robot_behavior_annotations() const;
         public:
-        RhobanSSLAnnotation::Annotations get_annotations() const;
+         
+        void get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const;
 
     };
 };

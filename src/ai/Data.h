@@ -31,6 +31,11 @@ struct Data_from_ai {
     Ai::Team team_color;
 };
 
+struct Data_for_viewer {
+    RhobanSSLAnnotation::Annotations annotations;
+};
+
+
 struct Shared_data {
     struct Final_control {
         bool hardware_is_responding;  // Wrie access by AICommander only
@@ -63,6 +68,9 @@ private: // Do not remove !
     std::mutex mutex_for_shared_data;
     Shared_data shared_data;
 
+    std::mutex mutex_for_viewer_data;
+    Data_for_viewer data_for_viewer;
+
 public:
     Data( Ai::Team initial_team_color );   
  
@@ -77,6 +85,14 @@ public:
     void edit_data_from_ai( // Use that function if you ha no choice. Prefer << and >> operator.
         std::function< void (Data_from_ai & data_from_ai) > data_from_ai_editor 
     );
+
+    Data& operator<<( const Data_for_viewer & data_for_viewer );
+    Data& operator>>( Data_for_viewer & data_for_viewer );
+    void edit_data_for_viewer( // Use that function if you ha no choice. Prefer << and >> operator.
+        std::function< void (Data_for_viewer & data_for_viewer) > data_for_viewer_editor 
+    );
+
+
 
     Data& operator<<( const Shared_data & shared_data );
     Data& operator>>( Shared_data & shared_data );

@@ -600,8 +600,12 @@ QString API::availableJoysticks()
 
 QString API::getAnnotations()
 {
+
+    Data_for_viewer data_for_viewer;
+    data >> data_for_viewer;
+
     return QString::fromStdString(
-        ai->get_annotations().toJsonString()
+        data_for_viewer.annotations.toJsonString()
     );
 }
 

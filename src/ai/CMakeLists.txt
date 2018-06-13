@@ -37,6 +37,7 @@ set (SOURCES
     robot_behavior/search_shoot_area.cpp
     robot_behavior/defensor.cpp
     robot_behavior/passive_defensor.cpp
+    robot_behavior/mur_defensor.cpp
     robot_behavior/robot_follower.cpp
     robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
@@ -65,6 +66,7 @@ set (SOURCES
     strategy/halt.cpp
     strategy/mur.cpp
     strategy/striker_with_support.cpp
+    strategy/base.cpp
     strategy/indirect.cpp
     strategy/indirect_lob.cpp
     strategy/union.cpp
