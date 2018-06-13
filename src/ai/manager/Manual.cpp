@@ -112,11 +112,66 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
+        "two_way_on_width_trip_ally", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* two_way_trip = Robot_behavior::Patrol::two_way_trip_on_width(ai_data, true);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(two_way_trip);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "two_way_on_width_trip_opponent", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* two_way_trip = Robot_behavior::Patrol::two_way_trip_on_width(ai_data, false);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(two_way_trip);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "two_way_trip_right", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* two_way_trip = Robot_behavior::Patrol::two_way_trip_on_border(ai_data, false);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(two_way_trip);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "two_way_trip_left", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* two_way_trip = Robot_behavior::Patrol::two_way_trip_on_border(ai_data, true);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(two_way_trip);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
         "tour_of_the_field", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
                     Robot_behavior::Patrol* tour_of_the_field = Robot_behavior::Patrol::tour_of_the_field(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(tour_of_the_field);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "inverse_tour_of_the_field", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* tour_of_the_field = Robot_behavior::Patrol::tour_of_the_field(ai_data, true);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(tour_of_the_field);
                 }, false // we don't want to define a goal here !
             )

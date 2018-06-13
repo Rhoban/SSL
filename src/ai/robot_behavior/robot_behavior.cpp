@@ -83,8 +83,7 @@ double vec2angle( Vector2d direction ){
 
 RobotBehavior::RobotBehavior( Ai::AiData & ai_data ) :
     GameInformations(ai_data),
-    robot_ptr(0),
-    ball_ptr(0),
+    robot_ptr(0), 
     birthday(-1.0), ai_data(ai_data)
 { };
 
@@ -100,7 +99,6 @@ void RobotBehavior::update_time_and_position(
     const Ai::Robot & robot, const Ai::Ball & ball
 ){
     this->robot_ptr = &robot;
-    this->ball_ptr = &ball;
     lastUpdate = time;
     this->robot_linear_position = Vector2d(
         robot.get_movement().linear_position(time)
@@ -114,7 +112,9 @@ void RobotBehavior::update_time_and_position(
 
 const Ai::Robot & RobotBehavior::robot() const {
     #ifndef NDEBUG
-    DEBUG("if you have this assert, that mean you have probably call a function using robot() before an update that lunch an update_time_and_position()");
+    if( not(robot_ptr) ){
+        DEBUG("if you have this assert, that mean you have probably call a function using robot() before an update that lunch an update_time_and_position()");
+    }
     #endif
     assert(robot_ptr);
     return *robot_ptr;

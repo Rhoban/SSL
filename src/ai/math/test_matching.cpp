@@ -23,6 +23,7 @@
 #include "matching.h"
 #include <iostream>
 #include <core/collection.h>
+#include <cmath>
 
 using namespace RhobanSSL;
 
