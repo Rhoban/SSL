@@ -33,7 +33,8 @@ Patrol::Patrol(
     _see_the_ball(false),
     waiting_time(0.0),
     last_time(ai_data.time),
-    it_s_time_to_change_the_zone(false)
+    it_s_time_to_change_the_zone(false),
+    reverse_circuit(false)
 {
 }
 
@@ -64,13 +65,13 @@ void Patrol::update(
              last_time = time;
         }
         if( it_s_time_to_change_the_zone and time - last_time > waiting_time  ){
-             zone = (zone+1)%traject.size();
+             zone = (zone+ ( reverse_circuit ? -1:1) )%traject.size();
              it_s_time_to_change_the_zone = false;            
 	    }
-        if( it_s_time_to_change_the_zone ){
-            DEBUG("Erreur angulaire :" << target_rotation - angular_position());
-            DEBUG("Erreur translation :" << target_position - linear_position());      
-        }
+        //if( it_s_time_to_change_the_zone ){
+        //    DEBUG("Erreur angulaire :" << target_rotation - angular_position());
+        //    DEBUG("Erreur translation :" << target_position - linear_position());      
+        //}
     }
     if( _see_the_ball ){
         Vector2d direction = ball_position() - robot_position;
@@ -97,6 +98,40 @@ void Patrol::set_traject( const std::vector< std::pair<rhoban_geometry::Point, C
     this->traject = traject;
 }
 
+
+void Patrol::set_traject( const std::vector< rhoban_geometry::Point > & traject ){
+    this->traject = std::vector< std::pair<rhoban_geometry::Point, ContinuousAngle> >(
+        traject.size()
+    );
+    for( unsigned int i=0; i < traject.size(); i++ ){
+        assert( norm( traject[(i+1)%traject.size()] - traject[i] ) != 0.0 );
+        this->traject[i] = {
+            traject[i],
+            vector2angle( traject[(i+1)%traject.size()] - traject[i] )
+        };
+    }
+}
+
+Patrol* Patrol::two_way_trip_on_border( Ai::AiData& ai_data, bool left ){
+    double sign = left ? -1.0:1.0;
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject(
+       {
+           {
+                rhoban_geometry::Point( -res->field_length()/4.0, sign*res->field_width()/4.0 ),
+                ContinuousAngle(0.0)
+            },
+            {
+                rhoban_geometry::Point( +res->field_length()/4.0, sign*res->field_width()/4.0 ),
+                ContinuousAngle(0.0)
+            }
+       } 
+    );
+    res->set_waiting_time(0.7);
+    res->see_the_ball(true);
+    return res;
+}
+
 Patrol* Patrol::two_way_trip( Ai::AiData& ai_data ){
     Patrol * res = new Patrol(ai_data);
     auto ally_center = res->center_ally_field();
@@ -107,15 +142,26 @@ Patrol* Patrol::two_way_trip( Ai::AiData& ai_data ){
            {opp_center, ContinuousAngle(0.0)}
        } 
     );
+    res->set_waiting_time(1.0);
     res->see_the_ball(true);
     return res;
 }
 
-Patrol* Patrol::tour_of_the_field( Ai::AiData& ai_data ){
+Patrol* Patrol::tour_of_the_field(
+    Ai::AiData& ai_data, bool reverse_circuit 
+){
     Patrol * res = new Patrol(ai_data);
-    //res->set_traject( res->center_quarter_field() );
+    res->set_traject( res->center_quarter_field() );
+    res->set_reverse(reverse_circuit);
     res->see_the_ball(true);
+    res->set_waiting_time(1.0);
     return res;
+}
+
+
+    
+void Patrol::set_reverse( bool reverse_circuit ){
+    this->reverse_circuit = reverse_circuit;
 }
 
 Patrol* Patrol::test_translation_for_pid( Ai::AiData& ai_data ){
