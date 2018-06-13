@@ -406,6 +406,13 @@ void AI::run(){
 
         data << shared_data;
 
+        data.edit_data_for_viewer(
+            [this]( Data_for_viewer & data_for_viewer ){
+                data_for_viewer.annotations.clear();
+                this->get_annotations( data_for_viewer.annotations );
+            }
+        );
+
         // XXX: Flushing takes some time in real mode, and should be done in parallel
         // along with the computing of the AI
         commander->flush();
@@ -446,8 +453,7 @@ RhobanSSLAnnotation::Annotations AI::get_robot_behavior_annotations() const {
 }
 
         
-RhobanSSLAnnotation::Annotations AI::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
+void AI::get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const {
     annotations.addAnnotations( getManager()->get_annotations() );
     annotations.addAnnotations( 
         get_robot_behavior_annotations()
@@ -461,7 +467,6 @@ RhobanSSLAnnotation::Annotations AI::get_annotations() const {
         return this->ai_data.team_point_of_view.from_frame( p );
     };
     annotations.map_positions(fct);
-    return annotations; 
 }
 
 

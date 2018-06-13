@@ -114,4 +114,27 @@ void Data::edit_shared_data( // Use that function if you ha no choice. Prefer <<
 
 
 
+Data& Data::operator<<( const Data_for_viewer & data_for_viewer ){
+    mutex_for_viewer_data.lock();
+    this->data_for_viewer = data_for_viewer;
+    mutex_for_viewer_data.unlock();
+    return *this;
+}
+
+Data& Data::operator>>( Data_for_viewer & data_for_viewer ){
+    mutex_for_viewer_data.lock();
+    data_for_viewer = this->data_for_viewer;
+    mutex_for_viewer_data.unlock();
+    return *this;
+}
+
+void Data::edit_data_for_viewer( // Use that function if you ha no choice. Prefer << and >> operator.
+    std::function< void (Data_for_viewer & data_for_viewer) > data_for_viewer_editor
+){
+    mutex_for_viewer_data.lock();
+    data_for_viewer_editor(data_for_viewer);
+    mutex_for_viewer_data.unlock();
+}
+
+
 } //Namespace
