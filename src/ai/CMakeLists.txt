@@ -53,6 +53,8 @@ set (SOURCES
     debug.cpp
     manager/Manager.cpp
     manager/thomas.cpp
+    manager/base_3_gds.cpp
+    manager/base_3_gms.cpp
     manager/adrien/adrien.cpp
     manager/adrien/Manual_adrien.cpp
     manager/sebastien/sebastien.cpp
@@ -67,6 +69,8 @@ set (SOURCES
     strategy/mur.cpp
     strategy/striker_with_support.cpp
     strategy/base.cpp
+    strategy/base_3_gds.cpp
+    strategy/base_3_gms.cpp
     strategy/indirect.cpp
     strategy/indirect_lob.cpp
     strategy/union.cpp
