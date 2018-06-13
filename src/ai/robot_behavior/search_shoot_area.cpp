@@ -29,7 +29,8 @@ SearchShootArea::SearchShootArea(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    random(rand()),
+    period(5),
+    last_time_changement(0),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
   p1 = vector2point(
@@ -63,13 +64,14 @@ void SearchShootArea::update(
     Vector2d ball_robot_vector = ball_position() - robot_position;
 
     // Vector2d robot_goal_vector = robot_position - ball_position();
-    int t = fmod(time,5);
-    if(t == 0 ){
-      random = rand();
+    if( time > last_time_changement + period ){
+        std::uniform_real_distribution<double> distribution_x(p1.x, p2.x);
+        std::uniform_real_distribution<double> distribution_y(p1.y, p2.y);
+        target_position = rhoban_geometry::Point( 
+            distribution_x(generator), distribution_y(generator)
+        );
+        last_time_changement = time;
     }
-
-    srand(std::time(nullptr)); // use current time as seed for random generator
-    rhoban_geometry::Point target_position = rhoban_geometry::Point(random%abs(p1.x - p2.x) + std::min(p1.x,p2.x) ,random%abs(p1.y - p2.y) + std::min(p1.y,p2.y));
 
     annotations.addCross( target_position.x, target_position.y );
 
