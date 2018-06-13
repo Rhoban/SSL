@@ -52,6 +52,7 @@ class Patrol : public RobotBehavior  {
     void set_reverse( bool reverse_circuit );
 
     static Patrol* two_way_trip( Ai::AiData& ai_data );
+    static Patrol* two_way_trip_on_width( Ai::AiData& ai_data, bool ally_side );
     static Patrol* two_way_trip_on_border( Ai::AiData& ai_data, bool left);
     static Patrol* tour_of_the_field( Ai::AiData& ai_data, bool reverse_circuit = false );
     static Patrol* triangle( Ai::AiData& ai_data );

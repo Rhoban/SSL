@@ -22,6 +22,7 @@
 #include "AIVisionClient.h"
 #include <debug.h>
 #include "factory.h"
+#include <core/print_collection.h>
 
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
@@ -54,6 +55,7 @@ namespace RhobanSSL
         mutex.unlock();
 
         shared_data << visionData;
+        oldVisionData = visionData;
     }
 
     void AIVisionClient::packetReceived()
@@ -165,9 +167,10 @@ namespace RhobanSSL
                 std::pair<
                     rhoban_geometry::Point,
                     ContinuousAngle
-                > position = vision::Factory::filter(
-                    robotFrame.robot_id(), team_color, camera_detections,
-                    orientation_is_defined
+                > position = Vision::Factory::filter(
+                    robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
+                    orientation_is_defined, 
+                    oldVisionData
                 );
 //                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 

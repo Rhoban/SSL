@@ -54,6 +54,7 @@ protected:
     );
     
     private:
+    Vision::VisionData oldVisionData;
     Vision::VisionData visionData;
     Ai::Team myTeam;
     std::map<int, SSL_DetectionFrame> historic;

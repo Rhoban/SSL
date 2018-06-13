@@ -128,7 +128,7 @@ Patrol* Patrol::two_way_trip_on_border( Ai::AiData& ai_data, bool left ){
        } 
     );
     res->set_waiting_time(0.7);
-    res->see_the_ball(true);
+    res->see_the_ball(false);
     return res;
 }
 
@@ -143,9 +143,32 @@ Patrol* Patrol::two_way_trip( Ai::AiData& ai_data ){
        } 
     );
     res->set_waiting_time(1.0);
-    res->see_the_ball(true);
+    res->see_the_ball(false);
     return res;
 }
+
+Patrol* Patrol::two_way_trip_on_width( Ai::AiData& ai_data, bool ally_side ){
+    Patrol * res = new Patrol(ai_data);
+    double sign = ally_side ? -1 : 1;
+    auto ally_center = res->center_ally_field();
+    auto opp_center = res->center_opponent_field();
+    res->set_traject(
+       {
+            { 
+                 rhoban_geometry::Point( sign*res->field_length()/4.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( sign*res->field_length()/4.0, +res->field_width()/4.0 ),        
+                ContinuousAngle(-M_PI/2.0)
+            } 
+       } 
+    );
+    res->set_waiting_time(1.0);
+    res->see_the_ball(false);
+    return res;
+}
+
 
 Patrol* Patrol::tour_of_the_field(
     Ai::AiData& ai_data, bool reverse_circuit 
@@ -153,7 +176,7 @@ Patrol* Patrol::tour_of_the_field(
     Patrol * res = new Patrol(ai_data);
     res->set_traject( res->center_quarter_field() );
     res->set_reverse(reverse_circuit);
-    res->see_the_ball(true);
+    res->see_the_ball(false);
     res->set_waiting_time(1.0);
     return res;
 }
