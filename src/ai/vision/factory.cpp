@@ -12,12 +12,12 @@ Factory::filter(
     const std::map<int, SSL_DetectionFrame> & camera_detections,
     bool & orientation_is_defined, const Vision::VisionData & old_vision_data
 ){
-    //return Robot_position_filter::average_filter(
-    //    robot_id, robotFrame, team_color, ally, camera_detections, orientation_is_defined, old_vision_data
-    //);
-    return Robot_position_filter::exponential_degression_filter(
+    return Robot_position_filter::average_filter(
         robot_id, robotFrame, team_color, ally, camera_detections, orientation_is_defined, old_vision_data
     );
+    //return Robot_position_filter::exponential_degression_filter(
+    //    robot_id, robotFrame, team_color, ally, camera_detections, orientation_is_defined, old_vision_data
+    //);
     //return Robot_position_filter::no_filter(
     //    robot_id, robotFrame, team_color, ally, camera_detections, orientation_is_defined, old_vision_data
     //);

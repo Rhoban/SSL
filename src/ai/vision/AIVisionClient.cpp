@@ -23,6 +23,7 @@
 #include <debug.h>
 #include "factory.h"
 #include <core/print_collection.h>
+#include "print_protobuf.h"
 
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
@@ -35,8 +36,9 @@ namespace RhobanSSL
     {
     }
 
-    void AIVisionClient::setRobotPos(Ai::Team team, int id, double x, double y, double orientation)
-    {
+    void AIVisionClient::setRobotPos(
+        Ai::Team team, int id, double x, double y, double orientation
+    ){
         Data_from_ai data_from_ai;
         shared_data >> data_from_ai;
 
@@ -90,6 +92,8 @@ namespace RhobanSSL
 
         const SSL_DetectionFrame & detection = data.detection();
 
+        //DEBUG("DETECTION : " << detection);
+
         // Update the historic of camera detections
         auto it = camera_detections.find( detection.camera_id() );
         if( it == camera_detections.end() or it->second.t_capture() < detection.t_capture() ){
@@ -103,7 +107,7 @@ namespace RhobanSSL
                 // one in the frame
                 double x = detection.balls().Get(0).x()/1000.0;
                 double y = detection.balls().Get(0).y()/1000.0;
-                visionData.ball.update(detection.t_capture(), Point(x,y));
+                visionData.ball.update(detection.t_sent(), Point(x,y)); // TODO HACK : IL FAUT METTRE t_send() ?
             } else {
                 // Else, we accept the ball which is the nearest from the previous one
                 // we already had
@@ -124,7 +128,8 @@ namespace RhobanSSL
                         bestBall = pos;
                     }
                 }
-                visionData.ball.update(detection.t_capture(), bestBall);
+                visionData.ball.update(detection.t_sent(), bestBall); // TODO HACK : IL FAUT METTRE t_send() ?
+
             }
         }
 
@@ -176,9 +181,10 @@ namespace RhobanSSL
 
                 if ( orientation_is_defined ) {
                     Angle orientation(rad2deg( position.second.value() ));
-                    robot.update( detection.t_capture(), position.first, orientation );
+                    robot.update( detection.t_sent(), position.first, orientation ); // TODO HACK : IL FAUT METTRE t_send() ?
+
                 }else{
-                    robot.update( detection.t_capture(), position.first );
+                    robot.update( detection.t_sent(), position.first );
                 }
             }else{
                 DEBUG("Warnings : Vision have detected a robot with id " << robotFrame.robot_id() << "." );
