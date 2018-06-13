@@ -56,7 +56,6 @@ namespace Robot_behavior {
 class RobotBehavior : public GameInformations {
     protected:
         const Ai::Robot* robot_ptr;
-        const Ai::Ball* ball_ptr;
         double birthday;
         double lastUpdate;
 

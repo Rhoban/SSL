@@ -1,8 +1,8 @@
 /*
     This file is part of SSL.
 
+    Copyright 2018 Gréagoire Passault (gregoire.passault@u-bordeaux.fr)
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -21,6 +21,7 @@
 #include <iostream>
 #include "AIVisionClient.h"
 #include <debug.h>
+#include "factory.h"
 
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
@@ -87,6 +88,12 @@ namespace RhobanSSL
 
         const SSL_DetectionFrame & detection = data.detection();
 
+        // Update the historic of camera detections
+        auto it = camera_detections.find( detection.camera_id() );
+        if( it == camera_detections.end() or it->second.t_capture() < detection.t_capture() ){
+            camera_detections[ detection.camera_id() ] = detection;
+        }
+
         // Ball informations
         if (detection.balls().size()) {
             if (!visionData.ball.present || visionData.ball.age() > 1) {
@@ -135,10 +142,10 @@ namespace RhobanSSL
 
         // Robots informations
         for (auto robot : detection.robots_blue()) {
-            updateRobotInformation(detection, robot, myTeam == Ai::Blue);
+            updateRobotInformation(detection, robot, myTeam == Ai::Blue, Ai::Blue);
         }
         for (auto robot : detection.robots_yellow()) {
-            updateRobotInformation(detection, robot, myTeam == Ai::Yellow);
+            updateRobotInformation(detection, robot, myTeam == Ai::Yellow, Ai::Yellow);
         }
 
         shared_data << visionData;
@@ -146,22 +153,33 @@ namespace RhobanSSL
 
     void AIVisionClient::updateRobotInformation(
         const SSL_DetectionFrame & detection,
-        const SSL_DetectionRobot & robotFrame, bool ally
+        const SSL_DetectionRobot & robotFrame, bool ally,
+        Ai::Team team_color
     ){
-        if(robotFrame.robot_id() < Ai::Constants::NB_OF_ROBOTS_BY_TEAM  ){
-            Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
-            Vision::Robot &robot = visionData.robots.at(team).at(robotFrame.robot_id());
+        if(robotFrame.has_robot_id()){
+            if(robotFrame.robot_id() < Ai::Constants::NB_OF_ROBOTS_BY_TEAM  ){
+                Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
+                Vision::Robot &robot = visionData.robots.at(team).at(robotFrame.robot_id());
 
-            Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
+                bool orientation_is_defined;
+                std::pair<
+                    rhoban_geometry::Point,
+                    ContinuousAngle
+                > position = vision::Factory::filter(
+                    robotFrame.robot_id(), team_color, camera_detections,
+                    orientation_is_defined
+                );
+//                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
-            if (robotFrame.has_orientation()) {
-                Angle orientation(rad2deg( robotFrame.orientation() ));
-                robot.update( detection.t_capture(), position, orientation );
+                if ( orientation_is_defined ) {
+                    Angle orientation(rad2deg( position.second.value() ));
+                    robot.update( detection.t_capture(), position.first, orientation );
+                }else{
+                    robot.update( detection.t_capture(), position.first );
+                }
             }else{
-                robot.update( detection.t_capture(), position );
+                DEBUG("Warnings : Vision have detected a robot with id " << robotFrame.robot_id() << "." );
             }
-        }else{
-            DEBUG("Warnings : Vision have detected a robot with id " << robotFrame.robot_id() << "." );
         }
     }
 

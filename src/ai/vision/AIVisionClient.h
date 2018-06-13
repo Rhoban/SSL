@@ -1,8 +1,8 @@
 /*
     This file is part of SSL.
 
+    Copyright 2018 Grégoire Passault (gregoire.passault@u-bordeaux.fr)
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +24,8 @@
 #include "VisionData.h"
 #include <Data.h>
 #include <AiData.h>
-
+#include "factory.h"
+ 
 namespace RhobanSSL
 {
 class AIVisionClient : public VisionClient
@@ -40,13 +41,21 @@ protected:
 
     Data & shared_data;
 
+    std::map<
+        int,
+        SSL_DetectionFrame
+    > camera_detections;
+
+
     void updateRobotInformation(
         const SSL_DetectionFrame & detection,
-        const SSL_DetectionRobot & robot, bool ally
+        const SSL_DetectionRobot & robot, bool ally,
+        Ai::Team team_color
     );
     
     private:
     Vision::VisionData visionData;
     Ai::Team myTeam;
+    std::map<int, SSL_DetectionFrame> historic;
 };
 }
