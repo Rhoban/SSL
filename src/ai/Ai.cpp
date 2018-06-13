@@ -92,6 +92,9 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
         if( time_before_collision <= time_to_stop and ctrl_velocity_norm > EPSILON_VELOCITY ){
             collision_is_detected = true;
         }
+        if( time_before_collision <= 0.1 ){
+            collision_is_detected = false; //We try to desengage
+        }
     }
 
     /* Prevent real collision */
@@ -116,14 +119,16 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
     if( collision_is_detected ){
         double robot_velocity_norm = robot_velocity.norm();
         double velocity_increase = 0.0;
-        if( robot_velocity_norm > 0 ){
-            double velocity_increase = ( 1 - ai_data.dt * ai_data.constants.translation_acceleration_limit/robot_velocity_norm );
+        double err = 0.01;
+        if( robot_velocity_norm > err ){
+            velocity_increase = ( 1 - ai_data.dt * ai_data.constants.translation_acceleration_limit/robot_velocity_norm );
             if( velocity_increase < 0.0 ){
                 velocity_increase = 0.0;
-            }else{
             }
+            ctrl.velocity_translation = robot_velocity * velocity_increase;
+        }else{
+            // We want to go out the blockage situation
         }
-        ctrl.velocity_translation = robot_velocity * velocity_increase;
     }
 
 #if 0
