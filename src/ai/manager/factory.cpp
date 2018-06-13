@@ -22,6 +22,8 @@
 #include "Manual.h"
 #include "Match.h"
 #include "thomas.h"
+#include "base_3_gds.h"
+#include "base_3_gms.h"
 #include "sebastien/sebastien.h"
 #include "adrien/adrien.h"
 #include "jeremy/jeremy.h"
@@ -39,6 +41,8 @@ std::list<std::string> Factory::list_of_avalaible_managers ={
     names::jeremy,
     names::sebastien,
     names::thomas,
+    names::base_3_gds,
+    names::base_3_gms,
     names::manual_adrien,
     names::example,
     names::example_for_testing_robot_behaviors
@@ -91,6 +95,16 @@ std::shared_ptr<Manager> Factory::construct_manager(
     if( manager_name == names::thomas ){
         manager = std::shared_ptr<Manager>(
             new Thomas(ai_data, referee)
+        );
+    }
+    if( manager_name == names::base_3_gms ){
+        manager = std::shared_ptr<Manager>(
+            new Base_3_gms(ai_data, referee)
+        );
+    }
+    if( manager_name == names::base_3_gds ){
+        manager = std::shared_ptr<Manager>(
+            new Base_3_gds(ai_data, referee)
         );
     }
     if( manager_name == names::adrien ){

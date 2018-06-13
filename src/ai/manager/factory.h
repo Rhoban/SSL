@@ -33,6 +33,8 @@ struct names {
     static constexpr const char* manual = "manual";
     static constexpr const char* match = "match";
     static constexpr const char* thomas = "thomas";
+    static constexpr const char* base_3_gds = "base_3_gds";
+    static constexpr const char* base_3_gms = "base_3_gms";
     static constexpr const char* adrien = "adrien";
     static constexpr const char* manual_adrien = "manual_adrien";
     static constexpr const char* sebastien = "sebastien";
