@@ -23,6 +23,8 @@ set (SOURCES
     vision/AIVisionClient.cpp
     vision/VisionData.cpp
     vision/print_protobuf.cpp
+    vision/robot_position_filter.cpp
+    vision/factory.cpp
     com/AICommander.cpp
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp

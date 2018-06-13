@@ -22,6 +22,7 @@
 
 #include "robot_behavior.h"
 #include "factory.h"
+#include <random>
 
 namespace RhobanSSL
 {
@@ -31,8 +32,14 @@ class SearchShootArea : public RobotBehavior  {
     private:
       rhoban_geometry::Point p1;
       rhoban_geometry::Point p2;
-      int random;
       int obstructed_view;
+      
+      std::default_random_engine generator;
+
+      double period;
+      double last_time_changement;
+
+      rhoban_geometry::Point target_position;
 
       ConsignFollower* follower;
       RhobanSSLAnnotation::Annotations annotations;
@@ -44,6 +51,10 @@ class SearchShootArea : public RobotBehavior  {
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
+
+        void set_period( double period ){
+            this->period = period;
+        }
 
         void declare_area( rhoban_geometry::Point p1 ,
                                             rhoban_geometry::Point p2 );

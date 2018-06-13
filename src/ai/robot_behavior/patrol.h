@@ -36,6 +36,7 @@ class Patrol : public RobotBehavior  {
     double waiting_time;
     double last_time;
     bool it_s_time_to_change_the_zone;
+    bool reverse_circuit;
 
     public:
     Patrol(Ai::AiData& ai_data);
@@ -48,12 +49,18 @@ class Patrol : public RobotBehavior  {
         const Ai::Ball & ball
     );
 
+    void set_reverse( bool reverse_circuit );
+
     static Patrol* two_way_trip( Ai::AiData& ai_data );
-    static Patrol* tour_of_the_field( Ai::AiData& ai_data );
+    static Patrol* two_way_trip_on_width( Ai::AiData& ai_data, bool ally_side );
+    static Patrol* two_way_trip_on_border( Ai::AiData& ai_data, bool left);
+    static Patrol* tour_of_the_field( Ai::AiData& ai_data, bool reverse_circuit = false );
+    static Patrol* triangle( Ai::AiData& ai_data );
     static Patrol* test_translation_for_pid( Ai::AiData& ai_data );	
     static Patrol* test_rotation_for_pid( Ai::AiData& ai_data );	
 
     void set_traject( const std::vector< std::pair<rhoban_geometry::Point, ContinuousAngle> > & traject );
+    void set_traject( const std::vector< rhoban_geometry::Point > & traject );
 
     virtual Control control() const;
     void set_waiting_time( double time );
