@@ -32,6 +32,7 @@ class SearchShootArea : public RobotBehavior  {
       rhoban_geometry::Point p1;
       rhoban_geometry::Point p2;
       int random;
+      int obstructed_view;
 
       ConsignFollower* follower;
       RhobanSSLAnnotation::Annotations annotations;

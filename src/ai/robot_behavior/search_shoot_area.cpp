@@ -30,6 +30,7 @@ SearchShootArea::SearchShootArea(
 ):
     RobotBehavior(ai_data),
     random(rand()),
+    obstructed_view(1),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
   p1 = vector2point(
@@ -59,11 +60,27 @@ void SearchShootArea::update(
 
     annotations.clear();
 
-
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
+    Vector2d opponent_goal_robot_vector = robot_position - oponent_goal_center();
+    annotations.addArrow( robot_position, oponent_goal_center(), "red" );
+    std::cout << "opponent_goal_robot_vector "<< opponent_goal_robot_vector << '\n';
+
+    int seuil = 0.2;
+    for (size_t i = 0; i <= 5; i++) {
+      const Ai::Robot & robot_opponent = get_robot( i,  Vision::Team::Opponent );
+      const rhoban_geometry::Point & robot_position_opponent = robot_opponent.get_movement().linear_position( time );
+      // Vector2d opponent_goal_robot_opponent_vector = robot_position_opponent - oponent_goal_center();
+
+      // std::cout << "opponent_goal_robot_opponent_vector "<< opponent_goal_robot_opponent_vector << '\n';
+      // annotations.addArrow( robot_position_opponent, oponent_goal_center(), "green" );
+      double eq_droite = robot_position_opponent[1] - opponent_goal_robot_vector[0]/opponent_goal_robot_vector[1]*robot_position_opponent[0];
+      if (eq_droite <= seuil) {
+        std::cout << "yesssssssssssssssssssssssssssssssssssssssssssssssssssssssssss" << '\n';
+      }
+    }
+
     Vector2d ball_robot_vector = ball_position() - robot_position;
 
-    // Vector2d robot_goal_vector = robot_position - ball_position();
     int t = fmod(time,5);
     if(t == 0 ){
       random = rand();
