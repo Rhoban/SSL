@@ -3,7 +3,7 @@
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
     Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
-    
+
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
@@ -40,6 +40,8 @@ class GameInformations {
     rhoban_geometry::Point oponent_corner_right() const ;
     rhoban_geometry::Point oponent_corner_left() const ;
     const Ai::Robot & get_robot( int robot_id, Vision::Team team = Vision::Team::Ally ) const ;
+    std::vector<int> get_robot_in_line( const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team = Vision::Team::Opponent, double seuil = 0.4 ) const ;
+
 
     const Ai::Ball & ball() const ;
     rhoban_geometry::Point ball_position() const ;

@@ -64,30 +64,37 @@ void SearchShootArea::update(
     annotations.clear();
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
+
     Vector2d opponent_goal_robot_vector = robot_position - oponent_goal_center();
     annotations.addArrow( robot_position, oponent_goal_center(), "red" );
 
     double seuil = 0.4;
     obstructed_view = 0;
-    for (size_t i = 0; i <= 7; i++) {
-      const Ai::Robot & robot_opponent = get_robot( i,  Vision::Team::Opponent );
-      if(robot_opponent.is_present_in_vision()){
-        const rhoban_geometry::Point & robot_position_opponent = robot_opponent.get_movement().linear_position( time );
-
-        double a = opponent_goal_robot_vector[1]/opponent_goal_robot_vector[0];
-        double b = robot_position.getY() - a * robot_position.getX();
-        double eq_droite = robot_position_opponent.getY() - a*robot_position_opponent.getX() - b;
-
-        double robot_opponent_goal = (Vector2d(robot_position_opponent - oponent_goal_center())).norm();
-        double robot_goal = (Vector2d(robot_position - oponent_goal_center())).norm();
-        double diff = robot_opponent_goal - robot_goal;
-
-
-        if (fabs(eq_droite) <= seuil && diff < 0 ) {
-          obstructed_view += 1;
-        }
-      }
+    const std::vector<int> v_obstruct = get_robot_in_line( robot_position, oponent_goal_center(), Vision::Team::Opponent, seuil);
+    if(!v_obstruct.empty()){
+      obstructed_view = 1;
     }
+    // double seuil = 0.4;
+    // obstructed_view = 0;
+    // for (size_t i = 0; i <= 7; i++) {
+    //   const Ai::Robot & robot_opponent = get_robot( i,  Vision::Team::Opponent );
+    //   if(robot_opponent.is_present_in_vision()){
+    //     const rhoban_geometry::Point & robot_position_opponent = robot_opponent.get_movement().linear_position( time );
+    //
+    //     double a = opponent_goal_robot_vector[1]/opponent_goal_robot_vector[0];
+    //     double b = robot_position.getY() - a * robot_position.getX();
+    //     double eq_droite = robot_position_opponent.getY() - a*robot_position_opponent.getX() - b;
+    //
+    //     double robot_opponent_goal = (Vector2d(robot_position_opponent - oponent_goal_center())).norm();
+    //     double robot_goal = (Vector2d(robot_position - oponent_goal_center())).norm();
+    //     double diff = robot_opponent_goal - robot_goal;
+    //
+    //
+    //     if (fabs(eq_droite) <= seuil && diff < 0 ) {
+    //       obstructed_view += 1;
+    //     }
+    //   }
+    // }
 
     double pos_x = robot_position.getX();
     double pos_y = robot_position.getY();
@@ -95,9 +102,9 @@ void SearchShootArea::update(
     ContinuousAngle target_rotation = vector2angle( ball_robot_vector  );
 
     if (obstructed_view == 0 && pos_x <= std::max(p1.x, p2.x) && pos_x > std::min(p1.x, p2.x) && pos_y <= std::max(p1.y, p2.y) && pos_y > std::min(p1.y, p2.y))  {
-      DEBUG( "robot_position : " << robot_position );
+      // DEBUG( "robot_position : " << robot_position );
       target_position = robot_position;
-      DEBUG( "target_position : " << target_position );
+      // DEBUG( "target_position : " << target_position );
     }
     else{
       if( time > last_time_changement + period ){

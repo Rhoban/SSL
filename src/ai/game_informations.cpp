@@ -58,6 +58,30 @@ const Ai::Robot & GameInformations::get_robot( int robot_id, Vision::Team team )
     return ai_data.robots.at(team).at(robot_id);
 }
 
+std::vector<int> GameInformations::get_robot_in_line( const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team, double seuil ) const{
+  std::vector<int> v;
+  Vector2d vect = p1 - p2;
+  for (size_t i = 0; i <= 7; i++) {
+    const Ai::Robot & robot = get_robot( i,  team );
+    if(robot.is_present_in_vision()){
+      const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
+
+      double a = vect[1]/vect[0];
+      double b = p1.getY() - a * p1.getX();
+      double eq_droite = robot_position.getY() - a*robot_position.getX() - b;
+
+      double robot_line = (Vector2d(robot_position - p2)).norm();
+      double p1_line = (Vector2d(p1 - p2)).norm();
+      double diff = robot_line - p1_line;
+
+      if (fabs(eq_droite) <= seuil && diff < 0 ) {
+        v.push_back(i);
+      }
+    }
+  }
+  return v;
+}
+
 
 const Ai::Ball & GameInformations::ball() const {
   return ai_data.ball;
