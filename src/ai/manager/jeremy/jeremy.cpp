@@ -203,7 +203,7 @@ void Jeremy::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { Strategy::Indirect::name };//Strategy::StrikerWithSupport::name };
+            future_strats = { GOALIE,SEARCHSHOOTAREA };//Strategy::StrikerWithSupport::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
