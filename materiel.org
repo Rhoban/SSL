@@ -1,114 +1,121 @@
-* Mecanique
- - visserie 
-   Vis fraisée : M3_5 M3_8 M3_10 M3_20
-   Vis à tête cylindrique : M3_5 M3_8 M3_10 M3_20
-   Ecrou nylon 3MM
-   Ecrou acier 3mm
- - entretoise noir plastique M3_10 Male-Femelle
- - entretoise metal M3_50 Male-Femelle
- - entretoise metal M3_10 Male-Femelle
- - entretoise metal M3_12 Femelle-Femelle
- - entretoise acier M3_5 Femelle-Femelle 
-  vis nylon M3_8
-  vis metal M2_5 tête cylindique
- - Ecrou de 8mm
- - vis des roues : tête bombé M3_6 (et M3_8)
- - bague en plastique pour kicker
- - rondelle M3 
- - entretoises carée
+* Mecanique : CHECK
+ - visserie CHECK 
+   Vis fraisée : M3_5 M3_8 M3_20 CHECK
+   Vis à tête cylindrique : M3_5 M3_8 M3_10 M3_18 M3_20 CHECK
+   Ecrou nylon 3MM  CHECK
+   Ecrou acier 3mm  CHECK
+ - entretoise noir plastique M3_10 Male-Femelle CHECK
+ - entretoise metal M3_50 Male-Femelle CHECK
+ - entretoise metal M3_10 Male-Femelle   CHECK
+ - entretoise metal M3_12 Femelle-Femelle CHECK
+ - entretoise acier M3_5 Femelle-Femelle CHECK
+  vis nylon M3_6  CHECK
+  vis metal M2_5 tête cylindique CHECK
+ - Ecrou de 8mm CHECK
+ - vis des roues : tête bombé M3_6 (et M3_8) CHECK
+ - bague en plastique pour kicker CHECK
+ - rondelle M3  CHECK
+ - entretoises carée CHECK
 
-* t-shirt eirlab à côté du bureau de julien
+* t-shirt eirlab à côté du bureau de julien : CHECK
 
-* Outils
- - tournevis 2mm 2.5MM
- - taraud 3mm
- - taraud 2.5mm
- - clé allène (1.5mm 2mm 2.5mm 3mm) X 2 
- - pinces coupante
- - pinces plates 
- - cutter
- - pistocole 
- - ciseaux
- - pince étault
- - étau
- - dremel
- - foret à metal
- - fraise
- - pied à coulisse
- - marteau
+* Outils : 2 /!\
+ - tournevis 2mm 2.5MM CHECK
+ - taraud 3mm  CHECK
+ - taraud 2.5mm  CHECK
+ - clé allène (1.5mm 2mm 2.5mm 3mm) X 2 CHECK
+ - pinces coupante CHECK
+ - pinces plates CHECK
+ - cutter CHECK
+ - pistocole CHECK
+ - ciseaux CHECK
+ - pince étault CHECK
+ - dremel XXX =(
+ - foret à metal CHECK
+ - fraise XXX =(
+ - pied à coulisse CHECK
+ - lime CHECK
 
-* Divers : 
- - règles
+* Divers : CHECK
+ - règles CHECK
+ - balle  CHECK
 
-Robot:
- - coque Numero 6 et 7
- - capot 0-6 en jaune et futur bleu
- - cercle de couleurs
- - materiel pour faire une roue : 
-   * roulement
-   * petite rondelle
-   * joint torique 
-   * petit axe
-   * piece en metal qu maintient tout 
- - gabarit ie toutes les pièces. 
- - solenoides en rab
- - tiges kicker
- - tiges dribler
- - plaques bases supplémentaires
- - Moteur brushless
- - encodeur magnétiques
- - cartes de communications pour PCs ( 3 ? ) 
+Robot: CHECK
+ - coque Numero 6 et 7 CHECK
+ - 2 Facade robot CHECK
+ - capot 0-6 en jaune et futur bleu CHECK
+ - cercle de couleurs CHECK
+ - materiel pour faire une roue : (2) CHECK
+   * roulement  CHECK
+   * petite rondelle CHECK
+   * joint torique CHECK
+   * petit axe CHECK
+   * piece en metal qu maintient tout CHECK
+ - gabarit de toutes les pièces CHECK
+ - solenoides en rab CHECK
+ - tiges kicker CHECK
+ - tiges dribler CHECK
+ - plaques bases supplémentaires CHECK
+ - Moteur brushless CHECK
+ - encodeur magnétiques CHECK
+ - cartes de communications pour PCs ( 3 ) CHECK
 
-* consommable :
- - shaterton
- - scotch NOIR !
- - captant
- - scotch cuivre
- - frin filet
- - colle forte (bi-composante)
- - feutre blanc pour marquer les capots
+* consommable : CHECK
+ - shaterton CHECK
+ - captant CHECK
+ - scotch cuivre CHECK
+ - frin filet CHECK
+ - colle forte (bi-composante) CHECK
+ - feutre blanc pour marquer les capots CHECK
 
 
-* Electronique 
- - fer à souder (110 V)
- - pinces à dénuder
- - multimètre
- - étain 
- - flux
- - tresse
- - fil émaillé 0.8, 0.4, 0.1
- - gaines termo
- - leds infrarouge emetrices
- - leds infrarouge receptrices
- - cares à trou
- - coffrets main boerad
- - coffrets kicker
- - coffret brushles
- - antennes radios de rechanges
- - capacités en plus
- - cable d'interconnextion (les différents fils)
- - resistance saignée + relai (voir les commande arrivée)
- - connecteurs noirs kicker
+* Electronique : 2 /!\
+ - fer à souder (110 V) XXX =(
+ - pinces à dénuder CHECK
+ - multimètre CHECK
+ - étain CHECK
+ - flux CHECK
+ - tresse CHECK
+ - fil émaillé 0.8, 0.4, 0.1  CHECK
+ - gaines termo CHECK
+ - leds infrarouge emetrices CHECK
+ - leds infrarouge receptrices CHECK
+ - cartes à trou CHECK
+ - coffrets main board CHECK
+ - coffrets kicker CHECK
+ - coffret brushless CHECK
+ - antennes radios de rechanges CHECK
+ - capacités en plus CHECK
+ - cable d'interconnextion (les différents fils) CHECK
+ - resistance saignée + relais (voir les commandes arrivées) CHECK
+ - connecteurs noirs kicker XXX =(
 
-* Communication
- - USB -> mini USB
- - USB -> micro usb
- - cartes routeurs switch
- - cables réseaux  : 
-  * chacun un cable réseau)
-  * Un pour ordi - vision 
+* Communication : CHECK
+ - USB -> mini USB  CHECK
+ - USB -> micro usb CHECK
+ - switch CHECK
+ - routeur CHECK
+ - cables réseaux  : CHECK
+  * chacun un cable réseau (3 ) CHECK
+  * Un pour ordi - vision CHECK
 
 * Meca
- - ressort du dribler 
- - ressort kicker
- - les cales pour le dribler !
+ - ressort du dribler CHECK
+ - ressort kicker CHECK
+ - les cales pour le dribler CHECK
  
-* Energie
- - batterie 16 Lipos 
- - chargeurs lipos (3 à 4 ?)
- - poches pour batteries
+* Energie CHECK
+ - batterie 22 Lipos CHECK
+ - chargeurs lipos 6  CHECK
+ - poches pour batteries CHECK
+ - buzzers 13 CHECK
 
-* Alim : 
- - multiprises
- - adapteur canadien
+* Alim : 1 /!\
+ - multiprises CHECK
+ - adaptateur canadien XXX =(
+ - alim stable CHECK
+ 
+ * Protections: CHECK
+ - lunettes CHECK
+ - gants CHECK
   
