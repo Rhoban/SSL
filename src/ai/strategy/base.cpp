@@ -84,7 +84,6 @@ void Base::assign_behavior_to_robots(
                 new Robot_behavior::Goalie(ai_data)
          );
         
-
         std::shared_ptr<Robot_behavior::RobotBehavior> striker(
                 new Robot_behavior::Striker(ai_data)
         );
@@ -108,9 +107,6 @@ void Base::assign_behavior_to_robots(
         );
 
 
-
-
-
         assign_behavior( get_goalie(), goalie );
 
         //we assign now all the other behavior 
@@ -121,7 +117,6 @@ void Base::assign_behavior_to_robots(
         assign_behavior( player_id(2), dp1);
         assign_behavior( player_id(3), dp2);
         assign_behavior( player_id(4), defensor);
-
 
         behaviors_are_assigned = true;
     }
