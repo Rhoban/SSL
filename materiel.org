@@ -1,0 +1,113 @@
+* Mecanique
+ - visserie 
+   Vis fraisée : M3_5 M3_8 M3_10 M3_20
+   Vis à tête cylindrique : M3_5 M3_8 M3_10 M3_20
+   Ecrou nylon 3MM
+   Ecrou acier 3mm
+ - entretoise noir plastique M3_10 Male-Femelle
+ - entretoise metal M3_50 Male-Femelle
+ - entretoise metal M3_10 Male-Femelle
+ - entretoise metal M3_12 Femelle-Femelle
+ - entretoise acier M3_5 Femelle-Femelle 
+  vis nylon M3_8
+  vis metal M2_5 tête cylindique
+ - Ecrou de 8mm
+ - vis des roues : tête bombé M3_6 (et M3_8)
+ - bague en plastique pour kicker
+ - rondelle M3 
+ - entretoises carée
+
+* t-shirt eirlab à côté du bureau de julien
+
+* Outils
+ - tournevis 2mm 2.5MM
+ - taraud 3mm
+ - taraud 2.5mm
+ - clé allène (1.5mm 2mm 2.5mm 3mm) X 2 
+ - pinces coupante
+ - pinces plates 
+ - cutter
+ - pistocole 
+ - ciseaux
+ - pince étault
+ - étau
+ - dremel
+ - foret à metal
+ - fraise
+ - pied à coulisse
+ - marteau
+
+* Divers : 
+ - règles
+
+Robot:
+ - coque Numero 6 et 7
+ - capot 0-6 en jaune et futur bleu
+ - cercle de couleurs
+ - materiel pour faire une roue : 
+   * roulement
+   * petite rondelle
+   * joint torique 
+   * petit axe
+   * piece en metal qu maintient tout 
+ - gabarit ie toutes les pièces. 
+ - solenoides en rab
+ - tiges kicker
+ - tiges dribler
+ - plaques bases supplémentaires
+ - Moteur brushless
+ - encodeur magnétiques
+ - cartes de communications pour PCs ( 3 ? ) 
+
+* consommable :
+ - shaterton
+ - scotch NOIR !
+ - captant
+ - scotch cuivre
+ - frin filet
+ - colle forte (bi-composante)
+ - feutre blanc pour marquer les capots
+
+
+* Electronique 
+ - fer à souder (110 V)
+ - pinces à dénuder
+ - multimètre
+ - étain 
+ - flux
+ - tresse
+ - fil émaillé 0.8, 0.4, 0.1
+ - gaines termo
+ - leds infrarouge emetrices
+ - leds infrarouge receptrices
+ - cares à trou
+ - coffrets main boerad
+ - coffrets kicker
+ - coffret brushles
+ - antennes radios de rechanges
+ - capacités en plus
+ - cable d'interconnextion (les différents fils)
+ - resistance saignée + relai (voir les commande arrivée)
+ - connecteurs noirs kicker
+
+* Communication
+ - USB -> mini USB
+ - USB -> micro usb
+ - cartes routeurs switch
+ - cables réseaux  : 
+  * chacun un cable réseau)
+  * Un pour ordi - vision 
+
+* Meca
+ - ressort du dribler 
+ - ressort kicker
+ - les cales pour le dribler !
+ 
+* Energie
+ - batterie 16 Lipos 
+ - chargeurs lipos (3 à 4 ?)
+
+* Alim : 
+ - multiprises
+ - adapteur canadien
+  
