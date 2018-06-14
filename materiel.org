@@ -106,6 +106,7 @@ Robot:
 * Energie
  - batterie 16 Lipos 
  - chargeurs lipos (3 à 4 ?)
+ - poches pour batteries
 
 * Alim : 
  - multiprises
