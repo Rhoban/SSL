@@ -17,52 +17,43 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__SEARCHSHOOTAREA__H__
-#define __ROBOT_BEHAVIOR__SEARCHSHOOTAREA__H__
+#ifndef __ROBOT_BEHAVIOR__PASS_DRIBBLER__H__
+#define __ROBOT_BEHAVIOR__PASS_DRIBBLER__H__
 
 #include "robot_behavior.h"
 #include "factory.h"
-#include <random>
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class SearchShootArea : public RobotBehavior  {
+class Pass_dribbler : public RobotBehavior  {
     private:
-      rhoban_geometry::Point p1;
-      rhoban_geometry::Point p2;
-      int obstructed_view;
-      
-      std::default_random_engine generator;
+        rhoban_geometry::Point point_to_pass;
+        bool need_to_kick;
+        int kick_power;
+        
 
-      double period;
-      double last_time_changement;
+        ConsignFollower* follower;
 
-      rhoban_geometry::Point target_position;
-
-      ConsignFollower* follower;
-      RhobanSSLAnnotation::Annotations annotations;
     public:
-        SearchShootArea(Ai::AiData& ai_data);
+        Pass_dribbler(Ai::AiData& ai_data);
 
         virtual void update(
             double time,
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
-
-        void set_period( double period ){
-            this->period = period;
-        }
-
-        void declare_area( rhoban_geometry::Point p1 ,
-                                            rhoban_geometry::Point p2 );
+        //TODO: portée des variables ?
+        void declare_point_to_pass( rhoban_geometry::Point point );
+        int calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end );
 
 
 	virtual Control control() const;
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const ;
-	virtual ~SearchShootArea();
+
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
+	virtual ~Pass_dribbler();
 };
 
 };

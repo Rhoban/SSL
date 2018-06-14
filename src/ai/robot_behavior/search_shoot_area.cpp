@@ -20,6 +20,8 @@
 #include "search_shoot_area.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
+#include <debug.h>
+#include <core/print_collection.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
@@ -29,8 +31,9 @@ SearchShootArea::SearchShootArea(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    period(5),
+    period(3),
     last_time_changement(0),
+    obstructed_view(-1),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
   p1 = vector2point(
@@ -60,23 +63,58 @@ void SearchShootArea::update(
 
     annotations.clear();
 
-
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
-    Vector2d ball_robot_vector = ball_position() - robot_position;
+    Vector2d opponent_goal_robot_vector = robot_position - oponent_goal_center();
+    annotations.addArrow( robot_position, oponent_goal_center(), "red" );
 
-    // Vector2d robot_goal_vector = robot_position - ball_position();
-    if( time > last_time_changement + period ){
+    double seuil = 0.4;
+    obstructed_view = 0;
+    for (size_t i = 0; i <= 7; i++) {
+      const Ai::Robot & robot_opponent = get_robot( i,  Vision::Team::Opponent );
+      if(robot_opponent.is_present_in_vision()){
+        const rhoban_geometry::Point & robot_position_opponent = robot_opponent.get_movement().linear_position( time );
+
+        double a = opponent_goal_robot_vector[1]/opponent_goal_robot_vector[0];
+        double b = robot_position.getY() - a * robot_position.getX();
+        double eq_droite = robot_position_opponent.getY() - a*robot_position_opponent.getX() - b;
+
+        double robot_opponent_goal = (Vector2d(robot_position_opponent - oponent_goal_center())).norm();
+        double robot_goal = (Vector2d(robot_position - oponent_goal_center())).norm();
+        double diff = robot_opponent_goal - robot_goal;
+
+
+        if (fabs(eq_droite) <= seuil && diff < 0 ) {
+          obstructed_view += 1;
+        }
+      }
+    }
+
+    double pos_x = robot_position.getX();
+    double pos_y = robot_position.getY();
+    Vector2d ball_robot_vector = ball_position() - robot_position;
+    ContinuousAngle target_rotation = vector2angle( ball_robot_vector  );
+
+    if (obstructed_view == 0 && pos_x <= std::max(p1.x, p2.x) && pos_x > std::min(p1.x, p2.x) && pos_y <= std::max(p1.y, p2.y) && pos_y > std::min(p1.y, p2.y))  {
+      DEBUG( "robot_position : " << robot_position );
+      target_position = robot_position;
+      DEBUG( "target_position : " << target_position );
+    }
+    else{
+      if( time > last_time_changement + period ){
         std::uniform_real_distribution<double> distribution_x(p1.x, p2.x);
         std::uniform_real_distribution<double> distribution_y(p1.y, p2.y);
-        target_position = rhoban_geometry::Point( 
-            distribution_x(generator), distribution_y(generator)
+        target_position = rhoban_geometry::Point(
+          distribution_x(generator), distribution_y(generator)
         );
         last_time_changement = time;
+      }
     }
+
+    // target_position = robot_position;
+    // target_position = robot_position;
 
     annotations.addCross( target_position.x, target_position.y );
 
-    ContinuousAngle target_rotation = vector2angle( ball_robot_vector  );
     follower->avoid_the_ball(true);
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);

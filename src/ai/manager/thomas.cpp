@@ -28,6 +28,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
+#include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/mur_defensor.h>
 #include <robot_behavior/striker.h>
 #include <core/collection.h>
@@ -37,6 +38,7 @@
 #define DEFENSOR1 "Defensor1" 
 #define DEFENSOR2 "Defensor2" 
 #define STRIKER "Striker"
+#define PASS_DRIBBLER "Pass_dribbler"
 #define MUR_DEFENSOR "Mur_defensor"
 
 namespace RhobanSSL {
@@ -129,6 +131,17 @@ Thomas::Thomas(
             )
         )
     );
+    register_strategy(
+        PASS_DRIBBLER, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Pass_dribbler* pass_dribbler = new Robot_behavior::Pass_dribbler(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pass_dribbler);
+                }, false // it is not a goal
+            )
+        )
+    );
     assign_strategy(
         Strategy::Halt::name, 0.0, 
         get_team_ids()
@@ -172,8 +185,8 @@ void Thomas::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            //future_strats = { GOALIE, MUR_DEFENSOR };
-            future_strats = { Strategy::Base::name };
+            future_strats = { STRIKER };
+            //future_strats = { Strategy::Base::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
