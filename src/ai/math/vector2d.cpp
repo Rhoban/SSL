@@ -43,6 +43,10 @@ double norm( const Vector2d & v ){
     return std::sqrt( scalar_product(v,v) );
 }
 
+double norm_square( const Vector2d & v ){
+    return scalar_product(v,v);
+}
+
 Vector2d normalized( const Vector2d & v ){
     return v/norm(v);
 }

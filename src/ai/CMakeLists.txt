@@ -48,6 +48,7 @@ set (SOURCES
     robot_behavior/consign_follower.cpp
     robot_behavior/robot_behavior.cpp
     robot_behavior/navigation_with_obstacle_avoidance.cpp
+    robot_behavior/navigation_inside_the_field.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp
@@ -98,6 +99,8 @@ set (SOURCES
     math/position.cpp
     math/matrix2d.cpp
     math/frame_changement.cpp
+    math/intersection.cpp
+    math/box.cpp
     core/export_to_plot.cpp
     core/logger.cpp
     referee/Referee.cpp
