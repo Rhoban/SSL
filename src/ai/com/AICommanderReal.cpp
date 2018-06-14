@@ -2,7 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
+    Copyright 2018 Grégoire Passault (gregoire.passault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -22,8 +22,10 @@
 
 namespace RhobanSSL
 {
-    AICommanderReal::AICommanderReal(bool yellow)
-    : AICommander(yellow), kicking(false), master("/dev/ttyACM0", 1000000)
+    AICommanderReal::AICommanderReal(bool yellow):
+        AICommander(yellow), kicking(false), 
+        master("/dev/ttyACM0", 1000000)
+        //master("/dev/ttyACM1", 1000000)
     {
     }
 
