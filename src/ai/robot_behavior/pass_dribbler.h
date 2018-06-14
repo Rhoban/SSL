@@ -30,13 +30,13 @@ namespace Robot_behavior {
 class Pass_dribbler : public RobotBehavior  {
     private:
         rhoban_geometry::Point point_to_pass;
-        bool need_to_kick;
         int kick_power;
-        
+
 
         ConsignFollower* follower;
 
     public:
+        bool need_to_kick;
         Pass_dribbler(Ai::AiData& ai_data);
 
         virtual void update(

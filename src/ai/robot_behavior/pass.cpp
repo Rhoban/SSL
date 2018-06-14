@@ -80,7 +80,8 @@ void Pass::update(
 Control Pass::control() const {
     Control ctrl = follower->control();
     ctrl.charge = true;
-    ctrl.chipKick = true;
+    ctrl.kickPower = 1;
+    ctrl.kick = true;
     return ctrl;
 }
 

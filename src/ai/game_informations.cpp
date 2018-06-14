@@ -64,7 +64,7 @@ std::vector<int> GameInformations::get_robot_in_line( const rhoban_geometry::Poi
   for (size_t i = 0; i <= 7; i++) {
     const Ai::Robot & robot = get_robot( i,  team );
     if(robot.is_present_in_vision()){
-      const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
+      const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
 
       double a = vect[1]/vect[0];
       double b = p1.getY() - a * p1.getX();

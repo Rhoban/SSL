@@ -20,6 +20,7 @@
 #include "pass_dribbler.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
+#include <debug.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
@@ -61,8 +62,9 @@ void Pass_dribbler::update(
     rhoban_geometry::Point target_position;
     double target_rotation;
 
-    double position_error = 0.15;
-    double angle_error = 0.035;
+    double position_error = 0.14;
+    double angle_error = 0.090;
+
 
     if ( std::abs(Vector2d(robot_position - ball_position()).norm()) > position_error ) {
         target_position = ball_position();
@@ -75,10 +77,11 @@ void Pass_dribbler::update(
         } else {
             need_to_kick = true;
         }
+
     }
 
     Pass_dribbler::calc_kick_power(robot_position, target_position);
-
+    follower->avoid_the_ball(false);
     follower->set_following_position(Vector2d(target_position), target_rotation);
     follower->update(time, robot, ball);
 }
@@ -93,17 +96,17 @@ Control Pass_dribbler::control() const {
         ctrl.spin = false;
         ctrl.kickPower = kick_power;
         ctrl.kick = true;
-        
+
     }
     return ctrl;
 }
 
 void Pass_dribbler::declare_point_to_pass( rhoban_geometry::Point point ){
-    rhoban_geometry::Point point_to_pass = point;
+    point_to_pass = point;
 }
 
 int Pass_dribbler::calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end ){
-    int kick_power = 255;
+    int kick_power = 5;
 }
 
 Pass_dribbler::~Pass_dribbler(){

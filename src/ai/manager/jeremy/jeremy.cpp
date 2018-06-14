@@ -38,6 +38,7 @@
 #include <core/collection.h>
 #include <core/print_collection.h>
 
+
 #define SUPPORT "support"
 #define STRIKER "striker"
 #define GOALIE "goalie"

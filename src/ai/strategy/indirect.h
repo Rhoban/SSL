@@ -21,6 +21,8 @@
 #define __STRATEGY__INDIRECT__H__
 
 #include "Strategy.h"
+#include <robot_behavior/pass_dribbler.h>
+#include <memory>
 
 namespace RhobanSSL {
 namespace Strategy {
@@ -29,6 +31,7 @@ class Indirect : public Strategy {
     private:
     bool behaviors_are_assigned;
     int state;
+    std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
 
     public:
 

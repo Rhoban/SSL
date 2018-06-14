@@ -18,7 +18,7 @@
 */
 
 #include "indirect.h"
-
+#include <debug.h>
 #include <robot_behavior/pass.h>
 #include <robot_behavior/search_shoot_area.h>
 #include <robot_behavior/striker.h>
@@ -67,65 +67,68 @@ void Indirect::stop(double time){
 }
 
 void Indirect::update(double time){
-  int seuil = 0.4;
-  int pass = player_id(1); // we get the first if in get_player_ids()
-  const Ai::Robot & robot_pass = get_robot( pass );
-  const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
-
-  Vector2d ball_robot_vector_pass = ball_position() - robot_pass_position;
-
-  std::cout << "yeeeeeah " << state<< "mpyteozur " << ball_robot_vector_pass.norm()<< '\n';
-  if(ball_robot_vector_pass.norm() <= seuil){
-    state = 1;
-  }
 }
 
 void Indirect::assign_behavior_to_robots(
-    std::function<
-        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-    > assign_behavior,
-    double time, double dt
+  std::function<
+  void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
+  > assign_behavior,
+  double time, double dt
 ){
-    if( not(behaviors_are_assigned) ){
-        //we assign now all the other behavior
-        assert( get_player_ids().size() == 2 );
+  assert( get_player_ids().size() == 2 );
 
-        int wait_pass = player_id(0); // we get the first if in get_player_ids()
-        int pass = player_id(1); // we get the first if in get_player_ids()
+  int wait_pass = player_id(0); // we get the first if in get_player_ids()
+  int pass = player_id(1); // we get the first if in get_player_ids()
+  double seuil = 0.2;
+  const Ai::Robot & robot_pass = get_robot( pass );
+  const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
 
-        if( state == 0 ){
-          assign_behavior(
-              wait_pass, std::shared_ptr<Robot_behavior::SearchShootArea>(
-                  new Robot_behavior::SearchShootArea(ai_data)
-              )
-          );
+  // Vector2d ball_robot_vector_pass = ball_position() - robot_pass_position;
+  // double d = ball_robot_vector_pass.norm();
+  // if( d <= seuil){
+  //   state = 1;
+  // }
 
-          std::shared_ptr<Robot_behavior::Pass> pass_behavior(
-              new Robot_behavior::Pass(ai_data)
-          );
-          pass_behavior->declare_robot_to_pass(wait_pass, Vision::Team::Ally);
-          assign_behavior( pass, pass_behavior );
-          std::cout << "stat aaaaaaaaaa " << state << '\n';
-
-        }else{
-          assign_behavior(
-              wait_pass, std::shared_ptr<Robot_behavior::Striker>(
-                  new Robot_behavior::Striker(ai_data)
-              )
-          );
-
-          std::shared_ptr<Robot_behavior::RobotFollower> support(
-              new Robot_behavior::RobotFollower(ai_data)
-          );
-          support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), Vision::Team::Ally);
-          assign_behavior( pass, support );
-            std::cout << "stat bbbbbbbb " << state << '\n';
-        }
-
-
-
-        behaviors_are_assigned = true;
+  if( state == 0){
+    // DEBUG("STATE "  << state);
+    if (not(behaviors_are_assigned)) {
+        assign_behavior(
+            wait_pass, std::shared_ptr<Robot_behavior::SearchShootArea>(
+              new Robot_behavior::SearchShootArea(ai_data)
+            )
+        );
+        pass_behavior = std::shared_ptr<Robot_behavior::Pass_dribbler>(
+            new Robot_behavior::Pass_dribbler(ai_data)
+        );
+        pass_behavior->declare_point_to_pass(get_robot(wait_pass, Vision::Team::Ally).get_movement().linear_position( time ));
+        assign_behavior( pass, pass_behavior );
     }
+
+    // DEBUG("NEED TO KICK before " << pass_behavior->need_to_kick);
+    assert( pass_behavior.get() );
+    if (pass_behavior->need_to_kick) {
+      // DEBUG("NEED TO KICK");
+      state = 1;
+    }
+
+  }else if( state == 1 ){
+    // DEBUG("STATE "  << state);
+    assign_behavior(
+      wait_pass, std::shared_ptr<Robot_behavior::Striker>(
+        new Robot_behavior::Striker(ai_data)
+      )
+    );
+
+    std::shared_ptr<Robot_behavior::RobotFollower> support(
+      new Robot_behavior::RobotFollower(ai_data)
+    );
+    support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), Vision::Team::Ally);
+    assign_behavior( pass, support );
+  }
+
+
+
+  behaviors_are_assigned = true;
 }
 
 // We declare here the starting positions that are used to :
