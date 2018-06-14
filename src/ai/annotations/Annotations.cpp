@@ -84,6 +84,13 @@ namespace RhobanSSLAnnotation
         json.append(annotation);
     }
 
+    void Annotations::addArrow(
+        const rhoban_geometry::Segment & s,
+        std::string color, bool dashed
+    ){
+        addArrow( s.A, s.B, color, dashed );
+    }
+
     void Annotations::addArrow(double x, double y, double toX, double toY,
         std::string color, bool dashed)
     {
@@ -120,6 +127,27 @@ namespace RhobanSSLAnnotation
         annotation["y"] = y;
 
         json.append(annotation);
+    }
+
+    void Annotations::addCross(
+        const rhoban_geometry::Point & position,
+        std::string color, bool dashed
+    ){
+        addCross(
+            position.getX(), position.getY(),
+            color, 
+            dashed
+        );
+    }
+    void Annotations::addCross(
+        const Vector2d & position,
+        std::string color, bool dashed
+    ){
+        addCross(
+            position.getX(), position.getY(),
+            color, 
+            dashed
+        );
     }
 
     Json::Value Annotations::toJson() const
@@ -183,6 +211,17 @@ namespace RhobanSSLAnnotation
         addText(
             text, point.getX(), point.getY(), color
         );
+    }
+
+
+    void Annotations::addBox(
+        const RhobanSSL::Box & box,
+        std::string color, bool dashed
+    ){
+        addArrow( box.get_W_segment(), color, dashed);
+        addArrow( box.get_E_segment(), color, dashed);
+        addArrow( box.get_N_segment(), color, dashed);
+        addArrow( box.get_S_segment(), color, dashed);
     }
 
 }

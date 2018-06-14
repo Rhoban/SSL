@@ -95,5 +95,23 @@ void PositionFollower::set_limits(
     );
 }
 
+RhobanSSLAnnotation::Annotations PositionFollower::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
+    bool dashed = true;
+    annotations.addArrow(
+        linear_position(), position, "magenta", dashed
+    );
+    annotations.addArrow(
+        position, position + Vector2d( std::cos(angle.value()), std::sin(angle.value()) ), "magenta", dashed
+    );
+    Control ctrl = control();
+    annotations.addArrow(
+        linear_position(), linear_position() + ctrl.velocity_translation
+        , "orange", false
+    );
+    return annotations;
+}
+
+
 }
 }

@@ -21,6 +21,7 @@
 
 #include "position_follower.h"
 #include "navigation_with_obstacle_avoidance.h"
+#include "navigation_inside_the_field.h"
 #include "a_star_path.h"
 
 namespace RhobanSSL {
@@ -44,7 +45,8 @@ ConsignFollower* Factory::fixed_consign_follower_without_repsecting_authorized_l
     bool ignore_the_ball
 ){
     //A_star_path* follower = new A_star_path(ai_data, ai_data.time, ai_data.dt); 
-    Navigation_with_obstacle_avoidance* follower = new Navigation_with_obstacle_avoidance(ai_data, ai_data.time, ai_data.dt); 
+    Navigation_inside_the_field* follower = new Navigation_inside_the_field(ai_data, ai_data.time, ai_data.dt); 
+    //Navigation_with_obstacle_avoidance* follower = new Navigation_with_obstacle_avoidance(ai_data, ai_data.time, ai_data.dt); 
     // PositionFollower* follower = new PositionFollower(ai_data, ai_data.time, ai_data.dt); 
     follower->set_translation_pid(
         ai_data.constants.p_translation,

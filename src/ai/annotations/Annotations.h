@@ -23,6 +23,8 @@
 #include <json/json.h>
 #include <vector>
 #include <math/vector2d.h>
+#include <rhoban_geometry/segment.h>
+#include <math/box.h>
 
 namespace RhobanSSLAnnotation
 {
@@ -34,6 +36,11 @@ namespace RhobanSSLAnnotation
         void clear();
         void addCircle(double x, double y, double r,
             std::string color = "white", bool dashed = false);
+
+        void addBox(
+            const RhobanSSL::Box & box,
+            std::string color = "white", bool dashed = false
+        );
 
         void addText(
             const std::string & text, double x, double y, 
@@ -60,9 +67,23 @@ namespace RhobanSSLAnnotation
                 const Vector2d & origin, const Vector2d & end,
                 std::string color = "white", bool dashed = false
         );
+        void addArrow(
+                const rhoban_geometry::Segment & s,
+                std::string color = "white", bool dashed = false
+        );
 
-        void addCross(double x, double y,
-            std::string color = "white", bool dashed = false);
+        void addCross(
+            double x, double y,
+            std::string color = "white", bool dashed = false
+        );
+        void addCross(
+            const rhoban_geometry::Point & position,
+            std::string color = "white", bool dashed = false
+        );
+        void addCross(
+            const Vector2d & position,
+            std::string color = "white", bool dashed = false
+        );
 
         void addAnnotations(const Annotations& annotations );
 

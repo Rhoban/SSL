@@ -22,6 +22,7 @@
 #define __GAME_INFORMATIONS__H__
 
 #include <AiData.h>
+#include <math/box.h>
 
 namespace RhobanSSL {
 
@@ -54,6 +55,15 @@ class GameInformations {
     double get_ball_radius() const;
     double field_width() const;
     double field_length() const;
+
+    rhoban_geometry::Point field_SW() const;
+    rhoban_geometry::Point field_NW() const;
+    rhoban_geometry::Point field_NE() const;
+    rhoban_geometry::Point field_SE() const;
+
+    Box field() const;
+    Box ally_penalty_area() const;
+    Box opponent_penalty_area() const;
 
 };
 

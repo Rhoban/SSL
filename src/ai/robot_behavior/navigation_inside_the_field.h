@@ -17,26 +17,52 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
-#define __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
+#ifndef __ROBOT_BEHAVIOR__NAVIGATION_INSIDE_THE_FIELD__H__
+#define __ROBOT_BEHAVIOR__NAVIGATION_INSIDE_THE_FIELD__H__
 
 #include "robot_behavior.h"
-#include "consign_follower.h"
+#include "navigation_with_obstacle_avoidance.h"
+#include <AiData.h>
 
-namespace RhobanSSL
-{
+namespace RhobanSSL {
 namespace Robot_behavior {
 
-
-class PositionFollower : public ConsignFollower {
+/*
+ * This is an implementation of the article : 
+ * "Orbital Obstavle Avoidance Algorithm for reliable and on-line mobile robot navigation", Lounis Adouane, LASMEA.
+ */
+class Navigation_inside_the_field :
+    public ConsignFollower 
+{
     private:
-        Vector2d position;
-        ContinuousAngle angle;
+        bool following_position_wad_updated;
+        Navigation_with_obstacle_avoidance position_follower;
 
-        RobotControlWithPositionFollowing robot_control;
+        Vector2d target_position;
+        ContinuousAngle target_angle;
+        rhoban_geometry::Point deviation_position;
+
+        RhobanSSLAnnotation::Annotations annotations;
 
     public:
-        PositionFollower( Ai::AiData& ai_data, double time, double dt ); 
+        Navigation_inside_the_field(
+            Ai::AiData & ai_data, double time, double dt
+        ); 
+
+    protected:
+        void update_control(
+            double time, 
+            const Ai::Robot & robot, const Ai::Ball & ball
+        );
+
+    public:
+        virtual void update(
+            double time, 
+            const Ai::Robot & robot, const Ai::Ball & ball
+        );
+
+
+        virtual Control control() const;
 
         void set_translation_pid( double kp, double ki, double kd );
         void set_orientation_pid( double kp, double ki, double kd );
@@ -52,17 +78,8 @@ class PositionFollower : public ConsignFollower {
             const Vector2d & position_to_follow,
             const ContinuousAngle & angle
         );
+        virtual void avoid_the_ball(bool value = true);
 
-    protected:
-        void update_control(double time);
-
-    public:
-        virtual void update(
-            double time, 
-            const Ai::Robot & robot, const Ai::Ball & ball
-        );
-
-        virtual Control control() const;
         virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 };
 

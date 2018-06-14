@@ -130,9 +130,47 @@ double GameInformations::field_length() const{
 
 
 
+rhoban_geometry::Point GameInformations::field_SW() const{
+    return rhoban_geometry::Point( -ai_data.field.fieldLength/2.0, -ai_data.field.fieldWidth/2.0  );
+}
+rhoban_geometry::Point GameInformations::field_NW() const{
+    return rhoban_geometry::Point( ai_data.field.fieldLength/2.0, -ai_data.field.fieldWidth/2.0  );
+}
+rhoban_geometry::Point GameInformations::field_NE() const{
+    return rhoban_geometry::Point( ai_data.field.fieldLength/2.0, ai_data.field.fieldWidth/2.0  );
+}
+rhoban_geometry::Point GameInformations::field_SE() const{
+    return rhoban_geometry::Point( -ai_data.field.fieldLength/2.0, ai_data.field.fieldWidth/2.0  );
+}
 
+Box GameInformations::field() const {
+    return Box ( field_SW(), field_NE() );
+}
 
+Box GameInformations::ally_penalty_area() const {
+    return Box(
+        {
+            - ai_data.field.fieldLength/2.0,
+            - ai_data.field.penaltyAreaWidth/2.0
+        },
+        {
+            - ( ai_data.field.fieldLength/2.0 - ai_data.field.penaltyAreaDepth ),
+            ai_data.field.penaltyAreaWidth/2.0
+        }
+    );
+}
 
-
+Box GameInformations::opponent_penalty_area() const {
+    return Box(
+        {
+            ( ai_data.field.fieldLength/2.0 - ai_data.field.penaltyAreaDepth ),
+            - ai_data.field.penaltyAreaWidth/2.0
+        },
+        {
+            ai_data.field.fieldLength/2.0,
+            ai_data.field.penaltyAreaWidth/2.0
+        }
+    );
+}
 
 };

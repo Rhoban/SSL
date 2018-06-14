@@ -261,20 +261,7 @@ void Navigation_with_obstacle_avoidance::set_limits(
 }
 
 RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    bool dashed = true;
-    annotations.addArrow(
-        linear_position(), target_position, "magenta", dashed
-    );
-    annotations.addArrow(
-        target_position, target_position + Vector2d( std::cos(target_angle.value()), std::sin(target_angle.value()) ), "magenta", dashed
-    );
-    Control ctrl = control();
-    annotations.addArrow(
-        linear_position(), linear_position() + ctrl.velocity_translation
-        , "orange", false
-    );
-    return annotations;
+    return position_follower.get_annotations();
 }
 
 
