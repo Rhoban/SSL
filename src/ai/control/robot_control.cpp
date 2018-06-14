@@ -152,75 +152,82 @@ PidControl RobotControl::limited_control(
     PidControl res = no_limited_control(
         robot_position, robot_orientation
     );
-
-    double max_angular_velocity;
-    if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
-        max_angular_velocity = robot_angular_velocity.value() + get_dt() * rotation_acceleration_limit.value();
-        if( rotation_velocity_limit >= 0 ){
-            max_angular_velocity = std::min( rotation_velocity_limit.value(), max_angular_velocity );
+    if( res.velocity_rotation.value() != 0.0 ){
+        double max_angular_velocity;
+        if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
+            max_angular_velocity = robot_angular_velocity.value() + get_dt() * rotation_acceleration_limit.value();
+            if( rotation_velocity_limit >= 0 ){
+                max_angular_velocity = std::min( rotation_velocity_limit.value(), max_angular_velocity );
+            }
+        }else{
+            max_angular_velocity = rotation_velocity_limit.value();
         }
-    }else{
-        max_angular_velocity = rotation_velocity_limit.value();
-    }
-    double min_angular_velocity = -1;
-    if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
-        min_angular_velocity = std::max( 0.0,  robot_angular_velocity.value() - get_dt() * rotation_acceleration_limit.value() );
-    }
-
-
-    if( max_angular_velocity > 0.0 ){ 
-        if( res.velocity_rotation.abs() >= max_angular_velocity ){
-            res.velocity_rotation *= (
-                max_angular_velocity / (
-                    std::fabs( res.velocity_rotation.value() )/security_margin
-                ) 
-            );
+        double min_angular_velocity = -1;
+        if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
+            min_angular_velocity = std::max( 0.0,  robot_angular_velocity.value() - get_dt() * rotation_acceleration_limit.value() );
         }
-    }
-    if( min_angular_velocity > 0.0 ){ 
-        if( res.velocity_rotation.abs() < min_angular_velocity ){
-            res.velocity_rotation *= (
-                min_angular_velocity / (
-                    std::fabs( res.velocity_rotation.value() )*security_margin
-                ) 
-            );
+
+
+        if( max_angular_velocity > 0.0 ){ 
+            if( res.velocity_rotation.abs() >= max_angular_velocity ){
+                assert( res.velocity_rotation.value() != 0 );
+                res.velocity_rotation *= (
+                    max_angular_velocity / (
+                        std::fabs( res.velocity_rotation.value() )/security_margin
+                    ) 
+                );
+            }
         }
-    }
-
-    double max_linear_velocity;
-    if( translation_acceleration_limit >= 0.0 ){ 
-        max_linear_velocity = robot_linear_velocity.norm() + translation_acceleration_limit * get_dt();
-        if( translation_velocity_limit >= 0 ){
-            max_linear_velocity = std::min( translation_velocity_limit, max_linear_velocity );
-        }
-    }else{
-        max_linear_velocity = translation_velocity_limit;
-    }
-    double min_linear_velocity = - 1.0;
-    if( translation_acceleration_limit >= 0.0 ){ 
-        min_linear_velocity = std::max( 0.0, robot_linear_velocity.norm() - get_dt()*this->translation_acceleration_limit );
-    }
-
-
-    if( max_linear_velocity > 0.0 ){
-        if( res.velocity_translation.norm() >= max_linear_velocity ){
-            res.velocity_translation *= ( 
-                max_linear_velocity /
-                (res.velocity_translation.norm()/security_margin)
-            );
+        if( min_angular_velocity > 0.0 ){ 
+            if( res.velocity_rotation.abs() < min_angular_velocity ){
+                assert( res.velocity_rotation.value() != 0 );
+                res.velocity_rotation *= (
+                    min_angular_velocity / (
+                        std::fabs( res.velocity_rotation.value() )*security_margin
+                    ) 
+                );
+            }
         }
     }
+    if( res.velocity_translation.norm() !=0 ){
+        double max_linear_velocity;
+        if( translation_acceleration_limit >= 0.0 ){ 
+            max_linear_velocity = robot_linear_velocity.norm() + translation_acceleration_limit * get_dt();
+            if( translation_velocity_limit >= 0 ){
+                max_linear_velocity = std::min( translation_velocity_limit, max_linear_velocity );
+            }
+        }else{
+            max_linear_velocity = translation_velocity_limit;
+        }
+        double min_linear_velocity = - 1.0;
+        if( translation_acceleration_limit >= 0.0 ){ 
+            min_linear_velocity = std::max( 0.0, robot_linear_velocity.norm() - get_dt()*this->translation_acceleration_limit );
+        }
 
 
-    if( min_linear_velocity > 0.0 ){
-        if( res.velocity_translation.norm() < min_linear_velocity ){
-            res.velocity_translation *= ( 
-                min_linear_velocity /
-                (res.velocity_translation.norm() * security_margin)
-            );
+        if( max_linear_velocity > 0.0 ){
+            if( res.velocity_translation.norm() >= max_linear_velocity ){
+
+                assert( res.velocity_translation.norm() != 0 );
+                res.velocity_translation *= ( 
+                    max_linear_velocity /
+                    (res.velocity_translation.norm()/security_margin)
+                );
+            }
+        }
+
+
+        if( min_linear_velocity > 0.0 ){
+            if( res.velocity_translation.norm() < min_linear_velocity ){
+
+                assert( res.velocity_translation.norm() != 0 );
+                res.velocity_translation *= ( 
+                    min_linear_velocity /
+                    (res.velocity_translation.norm() * security_margin)
+                );
+            }
         }
     }
-
     return res;
 }
 
