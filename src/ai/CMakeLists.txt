@@ -33,6 +33,7 @@ set (SOURCES
     robot_behavior/goalie.cpp
     robot_behavior/patrol.cpp
     robot_behavior/pass.cpp
+    robot_behavior/pass_dribbler.cpp
     robot_behavior/protect_ball.cpp
     robot_behavior/search_shoot_area.cpp
     robot_behavior/defensor.cpp
