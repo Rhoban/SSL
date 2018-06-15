@@ -92,8 +92,6 @@ rhoban_geometry::Point GameInformations::ball_position() const{
 }
 
 
-
-
 rhoban_geometry::Point GameInformations::center_ally_field() const {
     return rhoban_geometry::Point( -ai_data.field.fieldLength/4.0, 0.0 );
 }
