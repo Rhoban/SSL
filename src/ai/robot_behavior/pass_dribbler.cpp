@@ -30,7 +30,9 @@ Pass_dribbler::Pass_dribbler(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    point_to_pass(),
+    point_to_pass(66,66),
+    robot_to_pass_id(-1),
+    robot_to_pass_team(Vision::Team::Ally),
     need_to_kick(false),
     kick_power(255),
     follower( Factory::fixed_consign_follower(ai_data) )
@@ -52,6 +54,11 @@ void Pass_dribbler::update(
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
     const ContinuousAngle & robot_angle = robot.get_movement().angular_position( time );
+    
+    if ( (point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id != -1) ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.   
+        const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );
+        point_to_pass = robot_to_pass.get_movement().linear_position( time );
+    }
 
     Vector2d robot_point_to_pass_vector = point_to_pass - robot_position;
     Vector2d ball_robot_vector = robot_position - ball_position();
@@ -64,7 +71,6 @@ void Pass_dribbler::update(
 
     double position_error = 0.14;
     double angle_error = 0.090;
-
 
     if ( std::abs(Vector2d(robot_position - ball_position()).norm()) > position_error ) {
         target_position = ball_position();
@@ -105,9 +111,15 @@ void Pass_dribbler::declare_point_to_pass( rhoban_geometry::Point point ){
     point_to_pass = point;
 }
 
+void Pass_dribbler::declare_robot_to_pass( int robot_id, Vision::Team team ){
+    robot_to_pass_id = robot_id;
+    robot_to_pass_team = team;
+}
+
 int Pass_dribbler::calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end ){
     int kick_power = 5;
 }
+
 
 Pass_dribbler::~Pass_dribbler(){
     delete follower;
