@@ -37,12 +37,26 @@ int Manager::get_goalie_opponent_id() const {
 void Manager::declare_goalie_opponent_id(
     int goalie_opponent_id
 ){
+    if( goalie_opponent_id >= Ai::Constants::NB_OF_ROBOTS_BY_TEAM ) return;
+    if( this->goalie_opponent_id >= 0 ){
+        ai_data.robots[Vision::Opponent][this->goalie_opponent_id].is_goalie = false;
+    }
     this->goalie_opponent_id = goalie_opponent_id;
+    if( goalie_opponent_id >= 0 ){
+        ai_data.robots[Vision::Opponent][goalie_opponent_id].is_goalie = true;
+    }
 }
 void Manager::declare_goalie_id(
     int goalie_id
 ){
+    if( goalie_id >= Ai::Constants::NB_OF_ROBOTS_BY_TEAM ) return;
+    if( this->goalie_id >= 0 ){
+        ai_data.robots[Vision::Ally][this->goalie_id].is_goalie = false;
+    }
     this->goalie_id = goalie_id;
+    if( goalie_id >= 0 ){
+        ai_data.robots[Vision::Ally][this->goalie_id].is_goalie = true;
+    }
 }
 int Manager::get_goalie_id() const {
     return goalie_id;

@@ -423,5 +423,8 @@ namespace Ai {
         return out;
     }
 
+    
+Robot::Robot(): is_goalie(false) {}
+
 
 } } //Namespace

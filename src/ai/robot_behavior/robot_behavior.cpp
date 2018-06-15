@@ -128,6 +128,10 @@ ContinuousAngle RobotBehavior::angular_position() const {
     return robot().get_movement().angular_position(time());
 }
 
+bool RobotBehavior::is_goalie() const {
+    return robot().is_goalie;
+}
+
 RhobanSSLAnnotation::Annotations RobotBehavior::get_annotations() const {
     return RhobanSSLAnnotation::Annotations();
 }

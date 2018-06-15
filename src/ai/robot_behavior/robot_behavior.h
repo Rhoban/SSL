@@ -105,6 +105,7 @@ class RobotBehavior : public GameInformations {
 
         rhoban_geometry::Point linear_position() const ;
         ContinuousAngle angular_position() const;
+        bool is_goalie() const;
 
 };
 

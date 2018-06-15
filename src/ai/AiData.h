@@ -88,7 +88,11 @@ public:
 std::ostream& operator<<(std::ostream& out, const Object& object);
 
 
-class Robot : public Object { };
+class Robot : public Object {
+    public:
+    bool is_goalie;
+    Robot();
+};
 class Ball : public Object { };
 
 struct Field : Vision::Field {

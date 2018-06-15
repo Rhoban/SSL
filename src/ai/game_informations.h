@@ -55,6 +55,8 @@ class GameInformations {
     double get_ball_radius() const;
     double field_width() const;
     double field_length() const;
+    double penalty_area_width() const;
+    double penalty_area_depth() const;
 
     rhoban_geometry::Point field_SW() const;
     rhoban_geometry::Point field_NW() const;

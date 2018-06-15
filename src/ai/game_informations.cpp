@@ -173,4 +173,12 @@ Box GameInformations::opponent_penalty_area() const {
     );
 }
 
+double GameInformations::penalty_area_width() const{
+    return ai_data.field.penaltyAreaWidth;
+}
+
+double GameInformations::penalty_area_depth() const {
+    return ai_data.field.penaltyAreaDepth;
+}
+
 };

@@ -68,34 +68,45 @@ void Navigation_inside_the_field::update_control(
             field_SW() + Vector2d( get_robot_radius(), get_robot_radius() ),
             field_NE() - Vector2d( get_robot_radius(), get_robot_radius() )
         );
-
-        if( cropped_field.is_inside( vector2point( target_position ) ) ){
-            this->deviation_position = vector2point( target_position );
-        }else{
-            cropped_field.closest_segment_intersection(
-                linear_position(), vector2point( target_position ),
-                this->deviation_position
-            );
-        }
-
-#if  0 // TODO       
         Box opponent_penalty = opponent_penalty_area().increase(get_robot_radius());
-        if( opponent_penalty.is_inside( vector2point( this->deviation_position ) ) ){
-            opponent_penalty.closest_segment_intersection(
-                linear_position(), this->deviation_position,
-                this->deviation_position
-            );
-        }
-
         Box ally_penalty = ally_penalty_area().increase(get_robot_radius());
-        if( ally_penalty.is_inside( vector2point( this->deviation_position ) ) ){
-            ally_penalty.closest_segment_intersection(
-                linear_position(), this->deviation_position,
-                this->deviation_position
-            );
+
+        rhoban_geometry::Point robot_position = linear_position();
+        double error = get_robot_radius()/2.0;
+
+        if( opponent_penalty.is_inside(robot_position) ){
+            deviation_position = rhoban_geometry::Point( opponent_penalty.get_SW().getX() - error, robot_position.getY() );
+        }else if( not(is_goalie()) and ally_penalty.is_inside(robot_position) ){
+            deviation_position = rhoban_geometry::Point( ally_penalty.get_NE().getX() + error, robot_position.getY() );
+        }else{
+            if( cropped_field.is_inside( vector2point(target_position) ) ){
+                deviation_position = vector2point( target_position );
+            }else{
+                cropped_field.closest_segment_intersection(
+                    robot_position, vector2point( target_position ),
+                    deviation_position
+                );
+            }
+
+            if( not( is_goalie() ) and ally_penalty.is_inside( deviation_position ) ){
+                ally_penalty.closest_segment_intersection(
+                    robot_position, vector2point( deviation_position ),
+                    deviation_position
+                );
+                if( not(cropped_field.is_inside( deviation_position)) ){
+                    deviation_position = deviation_position + Vector2d( penalty_area_depth(), 0.0 );
+                }
+            }else if( opponent_penalty.is_inside( deviation_position ) ){
+                opponent_penalty.closest_segment_intersection(
+                    robot_position, vector2point( deviation_position ),
+                    deviation_position
+                );
+                if( not(cropped_field.is_inside( deviation_position)) ){
+                    deviation_position = deviation_position - Vector2d( penalty_area_depth(), 0.0 );
+                }
+            }
         }
-#endif
-        this->position_follower.set_following_position( this->deviation_position, target_angle );
+        this->position_follower.set_following_position( deviation_position, target_angle );
         following_position_wad_updated = false;
     }
     position_follower.update( time, robot, ball );
