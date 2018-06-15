@@ -31,9 +31,9 @@ SearchShootArea::SearchShootArea(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
+    obstructed_view(-1),
     period(4),
     last_time_changement(0),
-    obstructed_view(-1),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
   p1 = vector2point(
