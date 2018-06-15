@@ -50,9 +50,9 @@
     },
     "navigation_with_obstacle" : {
         "security_acceleration_ratio" : 0.5,
-        "obstacle_avoidance_ratio" : 0.01,
-        "radius_security_for_collision" : 0.02,    
-        "radius_security_for_avoidance" : 0.04
+        "obstacle_avoidance_ratio" : 0.05,
+        "radius_security_for_collision" : 0.015,    
+        "radius_security_for_avoidance" : 0.03
     },
     "goalie" : {
         "penalty_rayon" : 1.0,
