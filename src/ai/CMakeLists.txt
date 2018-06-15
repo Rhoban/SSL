@@ -51,6 +51,7 @@ set (SOURCES
     robot_behavior/robot_behavior.cpp
     robot_behavior/navigation_with_obstacle_avoidance.cpp
     robot_behavior/navigation_inside_the_field.cpp
+    robot_behavior/obstructor.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp

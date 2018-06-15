@@ -32,6 +32,7 @@
 #include <robot_behavior/patrol.h>
 #include <robot_behavior/position_follower.h>
 #include <robot_behavior/striker.h>
+#include <robot_behavior/obstructor.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -228,6 +229,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Example* example = new Robot_behavior::Example(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(example);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Obstructor", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Obstructor* obstructor = new Robot_behavior::Obstructor(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(obstructor);
                 }, false // we don't want to define a goal here !
             )
         )
