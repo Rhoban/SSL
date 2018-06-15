@@ -20,6 +20,7 @@
 
 #include "AICommanderSimulation.h"
 #include <rhoban_utils/angle.h>
+#include <robot_behavior/robot_behavior.h>
 
 namespace RhobanSSL
 {
@@ -41,7 +42,7 @@ namespace RhobanSSL
 
             double kickX = 0;
             double kickY = 0;
-            double kickRatio = command.kickPower/255.0;
+            double kickRatio = command.kickPower/Control::power_max;
 
             // XXX: These values should be realistic depending on what we do on the real robot!
             if (command.enabled) {
