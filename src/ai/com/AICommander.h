@@ -40,7 +40,7 @@ public:
         double ySpeed;
         double thetaSpeed;
         int kick;
-        int kickPower;
+        float kickPower;
         bool spin;
         bool charge;
     };

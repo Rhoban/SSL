@@ -61,7 +61,7 @@ namespace RhobanSSL
                 packet.actions = 0;
             }
             
-            packet.kickPower = command.kickPower;
+            packet.kickPower = 120*command.kickPower;
 
             packet.x_speed = command.xSpeed*1000;
             packet.y_speed = command.ySpeed*1000;
