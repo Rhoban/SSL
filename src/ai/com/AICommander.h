@@ -40,6 +40,7 @@ public:
         double ySpeed;
         double thetaSpeed;
         int kick;
+        int kickPower;
         bool spin;
         bool charge;
     };
@@ -51,7 +52,7 @@ public:
      * Set the speed of the robot robot_id to the given speed
      */
     void set(uint8_t robot_id, bool enabled,
-        double xSpeed, double ySpeed, double thetaSpeed, int kick=false, bool spin=false, bool charge=false);
+        double xSpeed, double ySpeed, double thetaSpeed, int kick=false, int kickPower=0, bool spin=false, bool charge=false);
 
     /**
      * Stop all the robots

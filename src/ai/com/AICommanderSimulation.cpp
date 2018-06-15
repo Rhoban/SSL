@@ -41,15 +41,16 @@ namespace RhobanSSL
 
             double kickX = 0;
             double kickY = 0;
+            double kickRatio = command.kickPower/255.0;
 
             // XXX: These values should be realistic depending on what we do on the real robot!
             if (command.enabled) {
                 if (command.kick == 1) {
-                    kickX = 4;
+                    kickX = 6*kickRatio;
                     kickY = 0;
                 } else if (command.kick == 2) {
-                    kickX = 2;
-                    kickY = 2;
+                    kickX = 4*kickRatio;
+                    kickY = 4*kickRatio;
                 }
             }
 
