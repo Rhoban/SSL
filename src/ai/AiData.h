@@ -115,6 +115,9 @@ struct Constants {
 
     bool is_in_simulation;
 
+    int frame_per_second;
+    double period;
+
     double robot_radius;
     double radius_ball;
     Vector2d waiting_goal_position;
