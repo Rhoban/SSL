@@ -27,6 +27,7 @@
 #include "sebastien/sebastien.h"
 #include "adrien/adrien.h"
 #include "jeremy/jeremy.h"
+#include "plan_veschambres.h"
 #include "adrien/Manual_adrien.h"
 #include "example.h"
 #include "example_for_testing_robot_behaviors.h"
@@ -45,7 +46,8 @@ std::list<std::string> Factory::list_of_avalaible_managers ={
     names::base_3_gms,
     names::manual_adrien,
     names::example,
-    names::example_for_testing_robot_behaviors
+    names::example_for_testing_robot_behaviors,
+    names::plan_veschambres
 };
 
 const std::list<std::string> & Factory::avalaible_managers(){
@@ -130,6 +132,11 @@ std::shared_ptr<Manager> Factory::construct_manager(
     if( manager_name == names::example_for_testing_robot_behaviors ){
         manager = std::shared_ptr<Manager>(
             new Example_for_testing_robot_behaviors(ai_data, referee)
+        );
+    }
+    if( manager_name == names::plan_veschambres ){
+        manager = std::shared_ptr<Manager>(
+            new PlanVeschambres(ai_data, referee)
         );
     }
     return manager;

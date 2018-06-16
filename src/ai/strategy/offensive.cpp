@@ -30,14 +30,14 @@ Offensive::Offensive(Ai::AiData & ai_data):
     is_closest(false)
 {
 }
-    
+
 Offensive::~Offensive(){
-}        
+}
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
- */ 
+ */
 int Offensive::min_robots() const {
     return 1;
 }
@@ -45,7 +45,7 @@ int Offensive::min_robots() const {
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
- */ 
+ */
 int Offensive::max_robots() const {
     return 1;
 }
@@ -65,10 +65,6 @@ void Offensive::stop(double time){
 }
 
 void Offensive::update(double time){
-
-    DEBUG("start");
-    DEBUG(GameInformations::get_nearest_ball( Vision::Team::Ally ));
-    DEBUG(player_id(0));
 
     if ( GameInformations::get_nearest_ball( Vision::Team::Ally ) == player_id(0) ) {
         is_closest = true;
@@ -103,14 +99,14 @@ void Offensive::assign_behavior_to_robots(
 
         } else {
             assign_behavior( player_id(0), search );
-        }    
+        }
     }
 }
 
 // We declare here the starting positions that are used to :
 //   - place the robot during STOP referee state
 //   - to compute the robot order of get_player_ids(),
-//     we minimize the distance between 
+//     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<
@@ -119,7 +115,7 @@ std::list<
     assert( min_robots() <= number_of_avalaible_robots );
     assert(
         max_robots()==-1 or
-        number_of_avalaible_robots <= max_robots() 
+        number_of_avalaible_robots <= max_robots()
     );
 
     return {
@@ -131,18 +127,18 @@ std::list<
 }
 
 //
-// This function return false if you don't want to 
-// give a staring position. So the manager will chose 
+// This function return false if you don't want to
+// give a staring position. So the manager will chose
 // a default position for you.
-// 
+//
 bool Offensive::get_starting_position_for_goalie(
-    rhoban_geometry::Point & linear_position, 
+    rhoban_geometry::Point & linear_position,
     ContinuousAngle & angular_position
 ){
     linear_position =  ally_goal_center();
     angular_position = ContinuousAngle(0.0);
     return true;
-} 
+}
 
 
 

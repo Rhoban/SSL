@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "jeremy.h"
+#include "plan_veschambres.h"
 
 // The different strategies
 #include <strategy/halt.h>
@@ -25,36 +25,29 @@
 #include <strategy/placer.h>
 #include <strategy/prepare_kickoff.h>
 #include <strategy/from_robot_behavior.h>
-#include <strategy/striker_with_support.h>
-#include <strategy/indirect.h>
-#include <strategy/indirect_lob.h>
-#include <strategy/attaque_with_support.h>
+
+#include <strategy/offensive.h>
 #include <strategy/defensive.h>
 #include <strategy/defensive_2.h>
+#include <strategy/mur.h>
+#include <strategy/mur_2.h>
+#include <strategy/attaque_with_support.h>
+
+
+
 #include <robot_behavior/goalie.h>
-#include <robot_behavior/defensor.h>
-#include <robot_behavior/striker.h>
-#include <robot_behavior/robot_follower.h>
-#include <robot_behavior/pass.h>
-#include <robot_behavior/degageur.h>
-#include <robot_behavior/protect_ball.h>
-#include <robot_behavior/search_shoot_area.h>
+
 #include <core/collection.h>
 #include <core/print_collection.h>
 
 
-#define SUPPORT "support"
-#define STRIKER "striker"
 #define GOALIE "goalie"
-#define PASS "pass"
-#define PROTECTBALL "protect_ball"
-#define SEARCHSHOOTAREA "search_shoot_area"
-#define DEGAGEUR "degageur"
+
 
 namespace RhobanSSL {
 namespace Manager {
 
-Jeremy::Jeremy(
+PlanVeschambres::PlanVeschambres(
     Ai::AiData & ai_data,
     const Referee & referee
 ):
@@ -81,27 +74,20 @@ Jeremy::Jeremy(
         )
     );
     register_strategy(
-        Strategy::StrikerWithSupport::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::StrikerWithSupport(ai_data)
+        GOALIE, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                }, true
+            )
         )
     );
     register_strategy(
-        Strategy::Indirect::name,
+        Strategy::Offensive::name,
         std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Indirect(ai_data)
-        )
-    );
-    register_strategy(
-        Strategy::IndirectLob::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::IndirectLob(ai_data)
-        )
-    );
-    register_strategy(
-        Strategy::AttaqueWithSupport::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::AttaqueWithSupport(ai_data)
+            new Strategy::Offensive(ai_data)
         )
     );
     register_strategy(
@@ -117,82 +103,21 @@ Jeremy::Jeremy(
         )
     );
     register_strategy(
-        GOALIE, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::From_robot_behavior(
-                ai_data,
-                [&](double time, double dt){
-                    Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
-                }, true
-            )
+        Strategy::Mur::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Mur(ai_data)
         )
     );
     register_strategy(
-        STRIKER, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::From_robot_behavior(
-                ai_data,
-                [&](double time, double dt){
-                    Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
-                }, false // it is not a goal
-            )
+        Strategy::Mur_2::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Mur_2(ai_data)
         )
     );
     register_strategy(
-        SUPPORT, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::From_robot_behavior(
-                ai_data,
-                [&](double time, double dt){
-                    Robot_behavior::RobotFollower* f = new Robot_behavior::RobotFollower(ai_data);
-                    f->declare_robot_to_follow(1, Vector2d(1.0, 1.0), Vision::Team::Ally);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(f);
-                }, false // it is not a goal
-            )
-        )
-    );
-    register_strategy(
-        PASS, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::From_robot_behavior(
-                ai_data,
-                [&](double time, double dt){
-                    Robot_behavior::Pass* f = new Robot_behavior::Pass(ai_data);
-                    f->declare_robot_to_pass(2, Vision::Team::Ally);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(f);
-                }, false // it is not a goal
-            )
-        )
-    );
-    register_strategy(
-        PROTECTBALL, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::From_robot_behavior(
-                ai_data,
-                [&](double time, double dt){
-                    Robot_behavior::ProtectBall* guard = new Robot_behavior::ProtectBall(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(guard);
-                }, false // it is not a goal
-            )
-        )
-    );
-    register_strategy(
-        DEGAGEUR, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::From_robot_behavior(
-                ai_data,
-                [&](double time, double dt){
-                    Robot_behavior::Degageur* d = new Robot_behavior::Degageur(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(d);
-                }, false // it is not a goal
-            )
-        )
-    );
-    register_strategy(
-        SEARCHSHOOTAREA, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::From_robot_behavior(
-                ai_data,
-                [&](double time, double dt){
-                    Robot_behavior::SearchShootArea* f = new Robot_behavior::SearchShootArea(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(f);
-                }, false // it is not a goal
-            )
+        Strategy::AttaqueWithSupport::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::AttaqueWithSupport(ai_data)
         )
     );
     assign_strategy(
@@ -201,7 +126,7 @@ Jeremy::Jeremy(
     ); // TODO TIME !
 }
 
-void Jeremy::analyse_data(double time){
+void PlanVeschambres::analyse_data(double time){
     // We change the point of view of the team
     change_team_and_point_of_view(
         referee.get_team_color( get_team_name() ),
@@ -214,7 +139,7 @@ void Jeremy::analyse_data(double time){
 }
 
 
-void Jeremy::choose_a_strategy(double time){
+void PlanVeschambres::choose_a_strategy(double time){
     if( referee.edge_entropy() > last_referee_changement ){
         clear_strategy_assignement();
         if( referee.get_state() == Referee_Id::STATE_INIT ){
@@ -238,23 +163,48 @@ void Jeremy::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { Strategy::Defensive2::name };//Strategy::StrikerWithSupport::name };
+            if (ball_position().getX() <= 0) {
+              //DEFENSIVE
+              future_strats = { Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+              is_in_offensive_mode = false;
+            }else{
+              //OFFENSIVE
+              future_strats = { Strategy::Mur::name, Strategy::Defensive::name, Strategy::AttaqueWithSupport::name };
+              is_in_offensive_mode = true;
+            }
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }
         last_referee_changement = referee.edge_entropy();
+    }else{
+      if ( is_in_offensive_mode and ball_position().getX() <= 0 ) {
+        //DEFENSIVE
+          DEBUG("defensive !!!! ");
+        future_strats = { Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+        is_in_offensive_mode = false;
+        clear_strategy_assignement();
+        declare_and_assign_next_strategies(future_strats);
+      }
+      if( not(is_in_offensive_mode) and ball_position().getX() > 0 ){
+        //OFFENSIVE
+        DEBUG("offensive !!!! ");
+        future_strats = { Strategy::Mur::name, Strategy::Defensive::name, Strategy::AttaqueWithSupport::name };
+        is_in_offensive_mode = false;
+        clear_strategy_assignement();
+        declare_and_assign_next_strategies(future_strats);
+      }
     }
 }
 
-void Jeremy::update(double time){
+void PlanVeschambres::update(double time){
     //update_strategies(time);
     update_current_strategies(time);
     analyse_data(time);
     choose_a_strategy(time);
 }
 
-Jeremy::~Jeremy(){ }
+PlanVeschambres::~PlanVeschambres(){ }
 
 };
 };

@@ -28,10 +28,12 @@ namespace Strategy {
 class Mur_2 : public Strategy {
     private:
     bool behaviors_are_assigned;
+    bool is_closest_0;
+    bool is_closest_1;
 
     public:
     Mur_2(Ai::AiData & ai_data);
-    virtual ~Mur_2();        
+    virtual ~Mur_2();
 
     virtual int min_robots() const;
     virtual int max_robots() const;
@@ -53,11 +55,11 @@ class Mur_2 : public Strategy {
 
     virtual std::list<
         std::pair<rhoban_geometry::Point,ContinuousAngle>
-    > get_starting_positions( int number_of_avalaible_robots ) ;  
+    > get_starting_positions( int number_of_avalaible_robots ) ;
     virtual bool get_starting_position_for_goalie(
-        rhoban_geometry::Point & linear_position, 
+        rhoban_geometry::Point & linear_position,
         ContinuousAngle & angular_position
-    ) ;  
+    ) ;
 
 
 };

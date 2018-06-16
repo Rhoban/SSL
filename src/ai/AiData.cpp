@@ -131,7 +131,8 @@ namespace Ai {
     AiData::AiData( const std::string & config_path, bool is_in_simulation, Ai::Team team_color ):
         time_shift_with_vision(0.0),
         team_color(team_color),
-        constants(config_path, is_in_simulation)
+        constants(config_path, is_in_simulation),
+        dt(constants.period)
     {
         int nb_robots = 0;
         for( auto team : {Vision::Ally, Vision::Opponent} ){
@@ -180,6 +181,10 @@ namespace Ai {
         }
 
         auto robot_conf = root["robot"];
+
+        frame_per_second = root["time"]["frame_per_second"].asInt();
+        assert( frame_per_second > 0 );
+        period = 1.0/frame_per_second;
 
         robot_radius = robot_conf["robot_radius"].asDouble();
         assert( robot_radius > 0.0 );

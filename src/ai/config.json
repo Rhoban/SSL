@@ -1,4 +1,7 @@
 {
+    "time" : {
+        "frame_per_second" : 60
+    },
     "robot" : {
         "robot_radius" : 0.09,
         "wheel_radius" : 0.03,
