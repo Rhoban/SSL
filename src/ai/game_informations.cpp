@@ -179,4 +179,8 @@ double GameInformations::penalty_area_depth() const {
     return ai_data.field.penaltyAreaDepth;
 }
 
+bool GameInformations::infra_red( int robot_id, Vision::Team team ) const{
+    return get_robot( robot_id, team ).infra_red;
+}
+
 };

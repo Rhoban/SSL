@@ -43,6 +43,7 @@ class GameInformations {
     const Ai::Robot & get_robot( int robot_id, Vision::Team team = Vision::Team::Ally ) const ;
     std::vector<int> get_robot_in_line( const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team = Vision::Team::Opponent, double seuil = 0.4 ) const ;
 
+    bool infra_red(  int robot_id, Vision::Team team = Vision::Team::Ally ) const;
 
     const Ai::Ball & ball() const ;
     rhoban_geometry::Point ball_position() const ;
