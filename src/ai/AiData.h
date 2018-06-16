@@ -91,6 +91,7 @@ std::ostream& operator<<(std::ostream& out, const Object& object);
 class Robot : public Object {
     public:
     bool is_goalie;
+    bool infra_red;
     Robot();
 };
 class Ball : public Object { };
