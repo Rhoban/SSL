@@ -19,7 +19,8 @@ public:
         std::string teamName, bool simulation,
         RhobanSSL::Ai::Team team, 
         RhobanSSL::AICommander *commander,
-        const std::string & config_path
+        const std::string & config_path,
+        RhobanSSL::AIVisionClient::Part_of_the_field part_of_the_field_used
     );
     virtual ~API();
 

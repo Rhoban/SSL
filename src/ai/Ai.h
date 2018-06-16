@@ -40,6 +40,7 @@ namespace RhobanSSL
         Ai::Team default_team;
     public:
 
+        bool is_in_simulation;
         AI(
             std::string manager_name,
             std::string team_name,

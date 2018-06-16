@@ -271,6 +271,7 @@ AI::AI(
 ):
     team_name(team_name),
     default_team(default_team),
+    is_in_simulation(is_in_simulation),
     running(true),
     ai_data( config_path, is_in_simulation, default_team ),
     commander(commander),
@@ -397,8 +398,9 @@ void AI::run(){
         //DEBUG("");
 
         ai_data.update( visionData );
-        update_electronic_informations();
-    
+        if( not(is_in_simulation) ){
+            update_electronic_informations();
+        }
         //print_electronic_info();
 
         #ifndef NDEBUG
