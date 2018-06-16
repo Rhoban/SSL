@@ -275,7 +275,7 @@ AI::AI(
     running(true),
     ai_data( config_path, is_in_simulation, default_team ),
     commander(commander),
-    current_dt(0.0),
+    current_dt(ai_data.constants.period),
     data(data)
 {
     init_robot_behaviors();
@@ -365,7 +365,7 @@ void AI::update_robots( ){
 }
 
 void AI::run(){
-    double period = 1/60.0;    // 100 hz
+    double period = ai_data.constants.period;
     auto lastTick = rhoban_utils::TimeStamp::now();
 
     while (running) {
