@@ -37,7 +37,9 @@ Dijkstra_pathfinding::Dijkstra_pathfinding(
 void Dijkstra_pathfinding::compute_next_position(){
     // TODO ! !
     // TODO update graph + compute closest path and point control 
-    rhoban_geometry::Point next_position; //TODO
+    rhoban_geometry::Point next_position = 
+    	vector2point( this->target_position )// TODO !!
+    ; //TODO
     rhoban_geometry::Point current_robot_position = linear_position();
     
     this->follower->set_following_position( next_position, target_angle );
@@ -71,6 +73,10 @@ void Dijkstra_pathfinding::update(
 
 Control Dijkstra_pathfinding::control() const {
     return follower->control();
+}
+
+Dijkstra_pathfinding::~Dijkstra_pathfinding(){
+    delete follower;
 }
 
 }

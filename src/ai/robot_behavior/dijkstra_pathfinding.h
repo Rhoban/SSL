@@ -59,6 +59,7 @@ class Dijkstra_pathfinding : public ConsignFollower  {
             const ContinuousAngle & angle
         );
 
+	virtual ~Dijkstra_pathfinding();
 };
 
 };
