@@ -22,6 +22,7 @@
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/striker.h>
 #include <robot_behavior/mur_defensor.h>
+#include <robot_behavior/degageur.h>
 
 namespace RhobanSSL {
 namespace Strategy {
@@ -86,17 +87,21 @@ void Mur_2::assign_behavior_to_robots(
     > assign_behavior,
     double time, double dt
 ){
+
+    std::shared_ptr<Robot_behavior::RobotBehavior> mur1(
+            new Robot_behavior::Mur_defensor(ai_data)
+    );
+    static_cast<Robot_behavior::Mur_defensor*>( mur1.get() )->declare_mur_robot_id( 0, 2 );
+ 
+    std::shared_ptr<Robot_behavior::RobotBehavior> mur2(
+            new Robot_behavior::Mur_defensor(ai_data)
+    );
+    static_cast<Robot_behavior::Mur_defensor*>( mur2.get() )->declare_mur_robot_id( 1, 2 );
+    std::shared_ptr<Robot_behavior::RobotBehavior> deg1(
+            new Robot_behavior::Degageur(ai_data)
+    );
+
     if( not(behaviors_are_assigned) ){
-
-        std::shared_ptr<Robot_behavior::RobotBehavior> mur1(
-                new Robot_behavior::Mur_defensor(ai_data)
-        );
-        static_cast<Robot_behavior::Mur_defensor*>( mur1.get() )->declare_mur_robot_id( 0, 2 );
-
-        std::shared_ptr<Robot_behavior::RobotBehavior> mur2(
-                new Robot_behavior::Mur_defensor(ai_data)
-        );
-        static_cast<Robot_behavior::Mur_defensor*>( mur2.get() )->declare_mur_robot_id( 1, 2 );
 
         assert( get_player_ids().size() == 2 );
 
@@ -105,7 +110,19 @@ void Mur_2::assign_behavior_to_robots(
 
         behaviors_are_assigned = true;
     } else {
-
+        if ( is_closest_0 == true ) {
+            assign_behavior( player_id(0), deg1 );
+            assign_behavior( player_id(1), mur2 );
+        } else {
+            if ( is_closest_1 == true ) {
+                assign_behavior( player_id(0), mur1 );
+                assign_behavior( player_id(1), deg1 );
+            } else {
+                assign_behavior( player_id(0), mur1 );
+                assign_behavior( player_id(1), mur2 );
+            }
+            
+        } 
     }
 }
 
