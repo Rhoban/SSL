@@ -65,8 +65,8 @@ void Navigation_inside_the_field::update_control(
 ){
     if( following_position_wad_updated ){
         Box cropped_field(
-            field_SW() + Vector2d( get_robot_radius(), get_robot_radius() ),
-            field_NE() - Vector2d( get_robot_radius(), get_robot_radius() )
+            field_SW(), // + Vector2d( get_robot_radius(), get_robot_radius() ),
+            field_NE() // - Vector2d( get_robot_radius(), get_robot_radius() )
         );
         Box opponent_penalty = opponent_penalty_area().increase(get_robot_radius());
         Box ally_penalty = ally_penalty_area().increase(get_robot_radius());
