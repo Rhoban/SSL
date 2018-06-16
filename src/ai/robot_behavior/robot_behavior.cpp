@@ -25,7 +25,7 @@ namespace RhobanSSL {
 
 Control::Control():
     PidControl(), kick(false),
-    chipKick(false), kickPower(Control::power_max),
+    chipKick(false), kickPower(1.0),
     spin(false), charge(false),
     active(true), ignore(false)
 { }
@@ -33,14 +33,14 @@ Control::Control():
 
 Control::Control(bool kick, bool active, bool ignore):
     PidControl(), kick(kick),
-    chipKick(false), kickPower(Control::power_max),
+    chipKick(false), kickPower(1.0),
     spin(false), charge(false),
     active(active), ignore(ignore)
 { }
 
 Control::Control(const PidControl & c):
     PidControl(c), kick(false),
-    chipKick(false), kickPower(Control::power_max),
+    chipKick(false), kickPower(1.0),
     spin(false), charge(false),
     active(true), ignore(false)
 { }

@@ -20,6 +20,7 @@
 
 #include "AICommanderSimulation.h"
 #include <rhoban_utils/angle.h>
+#include <robot_behavior/robot_behavior.h>
 
 namespace RhobanSSL
 {
@@ -45,11 +46,11 @@ namespace RhobanSSL
             // XXX: These values should be realistic depending on what we do on the real robot!
             if (command.enabled) {
                 if (command.kick == 1) {
-                    kickX = 4;
+                    kickX = 6*command.kickPower;
                     kickY = 0;
                 } else if (command.kick == 2) {
-                    kickX = 2;
-                    kickY = 2;
+                    kickX = 4*command.kickPower;
+                    kickY = 4*command.kickPower;
                 }
             }
 

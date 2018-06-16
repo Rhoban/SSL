@@ -68,27 +68,20 @@ void Striker::update(
     //ball_r_post_vector = ball_r_post_vector / ball_r_post_vector.norm();
 
 
-
-    //double cos_60 = 0.5000;
-    //double cos_45 = 0.7071;
-    //double cos_25 = 0.9006;
-    //double cos_15 = 0.9659;
-    //double cos_10 = 0.9848;
-    //double cos_5  = 0.9961;
-
-
-
     //double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
 
     double target_radius_from_ball;
     double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_goal_vector );
+    
 
     if ( scalar_ball_robot < 0 ) {
         follower->avoid_the_ball(true);
         target_radius_from_ball = 1.5;
     } else {
         follower->avoid_the_ball(false);
-        target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
+        //target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
+        target_radius_from_ball = 1 / ( 4*(scalar_ball_robot - 1.2) ) + 1;
+
         //target_radius_from_ball = 1.0 /(2.0 *(scalar_ball_robot - (goal_visible_angle + 0.21))) + 1.0 / (goal_visible_angle + 0.21) + 2.0 * goal_visible_angle - 0.8;
 
         //if ( scalar_ball_robot < goal_visible_angle) {

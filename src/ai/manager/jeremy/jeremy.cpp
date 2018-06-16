@@ -28,11 +28,13 @@
 #include <strategy/striker_with_support.h>
 #include <strategy/indirect.h>
 #include <strategy/indirect_lob.h>
+#include <strategy/attaque_with_support.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/striker.h>
 #include <robot_behavior/robot_follower.h>
 #include <robot_behavior/pass.h>
+#include <robot_behavior/degageur.h>
 #include <robot_behavior/protect_ball.h>
 #include <robot_behavior/search_shoot_area.h>
 #include <core/collection.h>
@@ -45,6 +47,7 @@
 #define PASS "pass"
 #define PROTECTBALL "protect_ball"
 #define SEARCHSHOOTAREA "search_shoot_area"
+#define DEGAGEUR "degageur"
 
 namespace RhobanSSL {
 namespace Manager {
@@ -94,13 +97,19 @@ Jeremy::Jeremy(
         )
     );
     register_strategy(
+        Strategy::AttaqueWithSupport::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::AttaqueWithSupport(ai_data)
+        )
+    );
+    register_strategy(
         GOALIE, std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
-                }, false // it is not a goal
+                }, true
             )
         )
     );
@@ -146,6 +155,17 @@ Jeremy::Jeremy(
                 [&](double time, double dt){
                     Robot_behavior::ProtectBall* guard = new Robot_behavior::ProtectBall(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(guard);
+                }, false // it is not a goal
+            )
+        )
+    );
+    register_strategy(
+        DEGAGEUR, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Degageur* d = new Robot_behavior::Degageur(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(d);
                 }, false // it is not a goal
             )
         )
@@ -204,7 +224,7 @@ void Jeremy::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { Strategy::Indirect::name };//Strategy::StrikerWithSupport::name };
+            future_strats = { Strategy::AttaqueWithSupport::name };//Strategy::StrikerWithSupport::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );

@@ -17,39 +17,41 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__MUR_DEFENSOR__H__
-#define __ROBOT_BEHAVIOR__MUR_DEFENSOR__H__
+#ifndef __ROBOT_BEHAVIOR__OBSTRUCTOR__H__
+#define __ROBOT_BEHAVIOR__OBSTRUCTOR__H__
 
 #include "robot_behavior.h"
 #include "factory.h"
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
 
-class Mur_defensor : public RobotBehavior  {
-    private:
-    int mur_robot_id;
-    int mur_nb_robot;
-	ConsignFollower* follower;
+class Obstructor : public RobotBehavior
+{
+  private:
+    rhoban_geometry::Point point_to_obstruct;
+    int robot_to_obstruct_id;
+    Vision::Team robot_to_obstruct_team;
 
-    public:
-        Mur_defensor(Ai::AiData& ai_data);
+    ConsignFollower *follower;
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
-    void declare_mur_robot_id( int id, int mur_nb_robots );
+  public:
+    Obstructor(Ai::AiData &ai_data);
 
-	virtual Control control() const;
+    virtual void update(
+        double time,
+        const Ai::Robot &robot,
+        const Ai::Ball &ball);
+
+    virtual Control control() const;
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-	virtual ~Mur_defensor();
+    virtual ~Obstructor();
 };
 
-};
-}; //Namespace Rhoban
+}; // namespace Robot_behavior
+}; // namespace RhobanSSL
 
 #endif

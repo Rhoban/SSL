@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 TO COMPLETE
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__MUR_DEFENSOR__H__
-#define __ROBOT_BEHAVIOR__MUR_DEFENSOR__H__
+#ifndef __ROBOT_BEHAVIOR__DEGAGEUR__H__
+#define __ROBOT_BEHAVIOR__DEGAGEUR__H__
 
 #include "robot_behavior.h"
 #include "factory.h"
@@ -27,26 +27,29 @@ namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class Mur_defensor : public RobotBehavior  {
+class Degageur : public RobotBehavior  {
     private:
-    int mur_robot_id;
-    int mur_nb_robot;
-	ConsignFollower* follower;
+        rhoban_geometry::Point point_to_pass;
+
+
+        ConsignFollower* follower;
 
     public:
-        Mur_defensor(Ai::AiData& ai_data);
+        Degageur(Ai::AiData& ai_data);
 
         virtual void update(
             double time,
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
-    void declare_mur_robot_id( int id, int mur_nb_robots );
+        // void declare_point_to_pass( rhoban_geometry::Point point );
+
 
 	virtual Control control() const;
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-	virtual ~Mur_defensor();
+
+	virtual ~Degageur();
 };
 
 };

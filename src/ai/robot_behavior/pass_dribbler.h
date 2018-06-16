@@ -30,6 +30,8 @@ namespace Robot_behavior {
 class Pass_dribbler : public RobotBehavior  {
     private:
         rhoban_geometry::Point point_to_pass;
+        int robot_to_pass_id;
+        Vision::Team robot_to_pass_team;
         int kick_power;
 
 
@@ -46,6 +48,7 @@ class Pass_dribbler : public RobotBehavior  {
         );
         //TODO: portée des variables ?
         void declare_point_to_pass( rhoban_geometry::Point point );
+        void declare_robot_to_pass( int robot_id, Vision::Team team = Vision::Team::Ally );
         int calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end );
 
 

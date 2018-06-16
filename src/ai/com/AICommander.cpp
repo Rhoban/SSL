@@ -37,8 +37,10 @@ namespace RhobanSSL
     AICommander::~AICommander(){ }
 
     void AICommander::set(uint8_t robot_id, bool enabled,
-        double xSpeed, double ySpeed, double thetaSpeed, int kick, bool spin, bool charge)
+        double xSpeed, double ySpeed, double thetaSpeed, int kick, int kickPower, bool spin, bool charge)
     {
+        assert(kickPower >= 0.0 && kickPower <= 1.0);
+        
         Command command;
         command.enabled = enabled;
         command.robot_id = robot_id;
@@ -48,6 +50,7 @@ namespace RhobanSSL
         command.kick = kick;
         command.spin = spin;
         command.charge = charge;
+        command.kickPower = kickPower;
 
         commands.push_back(command);
     }
