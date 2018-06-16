@@ -34,9 +34,9 @@ PidControl PidControl::relative_control(
 
     if( std::fabs(a_r.value()) > CALCULUS_ERROR ){
         rotation_matrix = Matrix2d(
-            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value()), 
+            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value()),
             std::cos((a_r*dt+robot_orientation).value()) - std::cos(robot_orientation.value()),
-          - std::cos((a_r*dt+robot_orientation).value()) + std::cos(robot_orientation.value()), 
+          - std::cos((a_r*dt+robot_orientation).value()) + std::cos(robot_orientation.value()),
             std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value())
         );
         rotation_matrix = (a_r*dt).value()*( rotation_matrix.inverse() );
@@ -71,8 +71,8 @@ PidController::PidController():
     PidController(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
 { }
 PidController::PidController(
-    double p_t, double i_t, double d_t, 
-    double p_o, double i_o, double d_o 
+    double p_t, double i_t, double d_t,
+    double p_o, double i_o, double d_o
 ):
     kp_t(p_t), ki_t(i_t), kd_t(d_t),
     kp_o(p_o), ki_o(i_o), kd_o(d_o),
@@ -124,7 +124,7 @@ double PidController::get_time() const {
 }
 
 Vector2d PidController::no_limited_translation_control(
-    const Vector2d & robot_position, 
+    const Vector2d & robot_position,
     const ContinuousAngle & robot_orientation
 ) const {
     assert(dt>0);
@@ -135,8 +135,8 @@ Vector2d PidController::no_limited_translation_control(
 
     Vector2d error = robot_position - xt;
 
-    if( 
-        std::fabs( error[0] ) < CALCULUS_ERROR and 
+    if(
+        std::fabs( error[0] ) < CALCULUS_ERROR and
         std::fabs( error[1] ) < CALCULUS_ERROR
     ){
         error = Vector2d(0.0,0.0);
@@ -148,32 +148,32 @@ Vector2d PidController::no_limited_translation_control(
         robot_position, robot_orientation
     );
     if( a_r != 0 ){
-        rotation_matrix << 
-            std::sin(a_r*dt+robot_orientation.value()) - std::sin(robot_orientation.value()), 
+        rotation_matrix <<
+            std::sin(a_r*dt+robot_orientation.value()) - std::sin(robot_orientation.value()),
             std::cos(a_r*dt+robot_orientation.value()) - std::cos(robot_orientation.value()),
-          - std::cos(a_r*dt+robot_orientation.value()) + std::cos(robot_orientation.value()), 
+          - std::cos(a_r*dt+robot_orientation.value()) + std::cos(robot_orientation.value()),
             std::sin(a_r*dt+robot_orientation.value()) - std::sin(robot_orientation.value())
         ;
         rotation_matrix = (a_r*dt)*( rotation_matrix.inverse() );
     }else{
-        rotation_matrix << 
+        rotation_matrix <<
             std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
           - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
         ;
     }
     error /= std::fabs( rotation_matrix.determinant() );
     #endif
-    
+
     Vector2d absolute_command = (
-        velocity - kp_t*error/dt - ki_t*error - kd_t*error/(dt*dt) 
+        velocity - kp_t*error/dt - ki_t*error - kd_t*error/(dt*dt)
     );
 
 
-    return  absolute_command; 
+    return  absolute_command;
 }
 
 double PidController::no_limited_angular_control(
-    const Vector2d & robot_position, 
+    const Vector2d & robot_position,
     const ContinuousAngle & robot_orientation
 ) const {
     if( is_static() ) return 0.0;
@@ -187,14 +187,14 @@ double PidController::no_limited_angular_control(
     //DEBUG("theta_t: " << theta_t );
     //DEBUG("robot_orientation: " << robot_orientation );
     //DEBUG("error: " << error );
- 
+
     if( std::fabs( error.value() ) <= CALCULUS_ERROR ){
         //DEBUG("ERROR SET TO 0");
         error = 0.0;
     }
 
     double absolute_command = (
-        velocity - error*kp_o/dt - error*ki_o - error*kd_o/(dt*dt) 
+        velocity - error*kp_o/dt - error*ki_o - error*kd_o/(dt*dt)
     ).value();
 
     //DEBUG( "absolute command : " << absolute_command );
@@ -202,8 +202,8 @@ double PidController::no_limited_angular_control(
 }
 
 PidControl PidController::no_limited_control(
-    const Vector2d & robot_position, 
-    const ContinuousAngle & robot_orientation 
+    const Vector2d & robot_position,
+    const ContinuousAngle & robot_orientation
 ) const {
     return PidControl(
         no_limited_translation_control(
