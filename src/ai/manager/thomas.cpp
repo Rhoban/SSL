@@ -25,6 +25,7 @@
 #include <strategy/placer.h>
 #include <strategy/prepare_kickoff.h>
 #include <strategy/base.h>
+#include <strategy/mur_2.h>
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
@@ -56,6 +57,11 @@ Thomas::Thomas(
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
             new Strategy::Halt(ai_data) 
+        )
+    );
+    register_strategy(
+        Strategy::Mur_2::name, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Mur_2(ai_data) 
         )
     );
     register_strategy(
@@ -185,8 +191,8 @@ void Thomas::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { STRIKER };
-            //future_strats = { Strategy::Base::name };
+            //future_strats = { MUR_DEFENSOR };
+            future_strats = { Strategy::Mur_2::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );

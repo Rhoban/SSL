@@ -29,6 +29,8 @@ Mur_defensor::Mur_defensor(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
+    mur_robot_id(0),
+    mur_nb_robot(1),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
 }
@@ -69,16 +71,36 @@ void Mur_defensor::update(
         follower->avoid_the_ball(false);
     }
 
-    double distance_defense_line = 1.2;
+    double distance_defense_line = 1.5;
 
     double target_rotation = detail::vec2angle(-ball_goal_vector);
     rhoban_geometry::Point target_position;
 
-    
-    if (std::abs(target_rotation) > 0.7071) {
-        target_position = ally_goal_point - ball_goal_vector * (std::abs(distance_defense_line / std::sin(target_rotation)) + ai_data.constants.robot_radius);
+    double multiple_robot_offset = ai_data.constants.robot_radius * 2 + 0.08;
+
+    if ( mur_nb_robot == 2 ) {
+        if ( mur_robot_id == 0 ) {
+            multiple_robot_offset = multiple_robot_offset;
+        } else {
+            multiple_robot_offset = -multiple_robot_offset;
+        }
     } else {
-        target_position = ally_goal_point - ball_goal_vector * (distance_defense_line / std::cos(target_rotation) + ai_data.constants.robot_radius);
+        multiple_robot_offset = 0;
+    }
+
+    
+    if (target_rotation < -0.7071) {
+        target_position = ally_goal_point - ball_goal_vector * (std::abs(distance_defense_line / std::sin(target_rotation)) + ai_data.constants.robot_radius);
+        target_position += rhoban_geometry::Point(multiple_robot_offset,0);
+    } else {
+        if (target_rotation < 0.7071) {
+            target_position = ally_goal_point - ball_goal_vector * (distance_defense_line / std::cos(target_rotation) + ai_data.constants.robot_radius);
+            target_position += rhoban_geometry::Point(0,multiple_robot_offset);
+        } else {
+            target_position = ally_goal_point - ball_goal_vector * (std::abs(distance_defense_line / std::sin(target_rotation)) + ai_data.constants.robot_radius);
+            target_position += rhoban_geometry::Point(-multiple_robot_offset,0);
+    }
+        
     }
 
     follower->set_following_position(Vector2d(target_position), target_rotation);
@@ -91,6 +113,13 @@ Control Mur_defensor::control() const {
     ctrl.kick = false; 
     return ctrl; 
 }
+
+
+void Mur_defensor::declare_mur_robot_id( int id, int mur_nb_robots ){
+    mur_robot_id = id;
+    mur_nb_robot = mur_nb_robots;
+}
+
 
 Mur_defensor::~Mur_defensor(){
     delete follower;
