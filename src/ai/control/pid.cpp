@@ -22,6 +22,7 @@
 #include <math/matrix2d.h>
 
 #define CALCULUS_ERROR 0.000
+#define LIMITE 200.0
 
 PidControl PidControl::relative_control(
     const ContinuousAngle & robot_orientation,
@@ -68,7 +69,7 @@ std::ostream& operator << ( std::ostream & out, const PidControl& control  ){
 }
 
 PidController::PidController():
-    PidController(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
+    PidController(1.0, 0.0, 0.0, 1.0, 0.0, 0.0 )
 { }
 PidController::PidController(
     double p_t, double i_t, double d_t,
@@ -117,6 +118,8 @@ void PidController::update(double current_time){
         this->dt = (current_time - start_time) - this->time;
         this->time = (current_time - start_time);
     }
+    Vector2d acc_dt;
+    Vector2d acc;
 }
 
 double PidController::get_time() const {
@@ -163,9 +166,30 @@ Vector2d PidController::no_limited_translation_control(
     }
     error /= std::fabs( rotation_matrix.determinant() );
     #endif
+    acc_dt[0] = acc[0] + ki_t*error[0]*dt;
+    if (acc_dt[0] > LIMITE){
+      acc[0] = LIMITE;
+    }
+    else if(acc_dt[0] < -LIMITE){
+      acc[0] = -LIMITE;
+    }
+    else{
+      acc[0] = acc_dt[0];
+    }
 
-    Vector2d absolute_command = (
-        velocity - kp_t*error/dt - ki_t*error - kd_t*error/(dt*dt)
+    acc_dt[1] = acc[1] + ki_t*error[1]*dt;
+    if (acc_dt[1] > LIMITE){
+      acc[1] = LIMITE;
+    }
+    else if(acc_dt < -LIMITE){
+      acc[1] = -LIMITE;
+    }
+    else{
+      acc[1] = acc_dt[1];
+    }
+
+    absolute_command = (
+        kp_t*error + acc + kd_t*velocity
     );
 
 
@@ -192,9 +216,19 @@ double PidController::no_limited_angular_control(
         //DEBUG("ERROR SET TO 0");
         error = 0.0;
     }
+    acc_dt = acc + ki_o*error*dt;
+    if (acc_dt > LIMITE){
+      acc = LIMITE;
+    }
+    else if(acc_dt < -LIMITE){
+      acc = -LIMITE;
+    }
+    else{
+      acc = acc_dt;
+    }
 
     double absolute_command = (
-        velocity - error*kp_o/dt - error*ki_o - error*kd_o/(dt*dt)
+        kp_o*error + acc + kd_o*velocity
     ).value();
 
     //DEBUG( "absolute command : " << absolute_command );

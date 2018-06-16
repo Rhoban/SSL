@@ -44,8 +44,7 @@ std::ostream& operator << ( std::ostream &, const PidControl& control );
 struct PidController {
     double kp_t,ki_t,kd_t;
     double kp_o,ki_o,kd_o;
-    fifo err;
-    fifo cmd;
+
 
     bool static_robot;
 
