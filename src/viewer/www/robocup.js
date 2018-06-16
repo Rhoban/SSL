@@ -662,6 +662,8 @@ function Manager(viewer)
             this.field.goalWidth = fieldStatus.goalWidth;
             this.field.goalDepth = fieldStatus.goalDepth;
             this.field.boundaryWidth = fieldStatus.boundaryWidth;
+            this.field.penaltyAreaWidth = fieldStatus.penaltyAreaWidth;
+            this.field.penaltyAreaDepth = fieldStatus.penaltyAreaDepth;
         }
 
         // Getting robots position from the API and update it

@@ -237,7 +237,8 @@ QString API::fieldStatus()
     json["goalWidth"] = field.goalWidth;
     json["goalDepth"] = field.goalDepth;
     json["boundaryWidth"] = field.boundaryWidth;
-
+    json["penaltyAreaWidth"] = field.penaltyAreaWidth;
+    json["penaltyAreaDepth"] = field.penaltyAreaDepth;
     return js(json);
 }
 
