@@ -45,7 +45,7 @@ void PositionFollower::set_following_position(
 
 void PositionFollower::update_control(double time){
     robot_control.set_goal( position, angle );
-    robot_control.update( time );
+    robot_control.update( time, linear_position(), angular_position() );
 }
 
 void PositionFollower::update(

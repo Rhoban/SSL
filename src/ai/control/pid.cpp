@@ -111,24 +111,37 @@ void PidController::set_translation_pid( double kp, double ki=0.0, double kd=0.0
     this->kd_t = kd;
 }
 
-void PidController::update(double current_time){
+void PidController::update(
+    double current_time,
+    const Vector2d & robot_position, 
+    const ContinuousAngle & robot_orientation
+){
     double dt = (current_time - start_time) - this->time;
     if( dt > 0.0 ){
         this->dt = (current_time - start_time) - this->time;
         this->time = (current_time - start_time);
     }
+
+    compute_no_limited_translation_control( robot_position );
+    compute_no_limited_angular_control(robot_orientation);
 }
 
 double PidController::get_time() const {
     return this->time;
 }
 
-Vector2d PidController::no_limited_translation_control(
-    const Vector2d & robot_position, 
-    const ContinuousAngle & robot_orientation
-) const {
+Vector2d PidController::no_limited_translation_control() const {
+    return no_limited_translation_control_value;
+}
+
+void PidController::compute_no_limited_translation_control(
+    const Vector2d & robot_position 
+){
     assert(dt>0);
-    if( is_static() ) return Vector2d(0.0, 0.0);
+    if( is_static() ){
+        no_limited_translation_control_value = Vector2d(0.0, 0.0);
+        return;
+    }
     Vector2d xt = goal_position(time);
     Vector2d xt_dt = goal_position(time+dt);
     Vector2d velocity = (xt_dt - xt )/dt;
@@ -164,19 +177,18 @@ Vector2d PidController::no_limited_translation_control(
     error /= std::fabs( rotation_matrix.determinant() );
     #endif
     
-    Vector2d absolute_command = (
+    no_limited_translation_control_value = (
         velocity - kp_t*error/dt - ki_t*error - kd_t*error/(dt*dt) 
     );
-
-
-    return  absolute_command; 
 }
 
-double PidController::no_limited_angular_control(
-    const Vector2d & robot_position, 
+void PidController::compute_no_limited_angular_control(
     const ContinuousAngle & robot_orientation
-) const {
-    if( is_static() ) return 0.0;
+){
+    if( is_static() ){
+        no_limited_angular_control_value = 0.0;
+        return;
+    };
     ContinuousAngle theta_t = goal_orientation(time);
     ContinuousAngle theta_t_dt = goal_orientation(time+dt);
     //DEBUG( "theta_t : " << theta_t );
@@ -193,24 +205,20 @@ double PidController::no_limited_angular_control(
         error = 0.0;
     }
 
-    double absolute_command = (
+    no_limited_angular_control_value = (
         velocity - error*kp_o/dt - error*ki_o - error*kd_o/(dt*dt) 
     ).value();
 
     //DEBUG( "absolute command : " << absolute_command );
-    return absolute_command;
 }
 
-PidControl PidController::no_limited_control(
-    const Vector2d & robot_position, 
-    const ContinuousAngle & robot_orientation 
-) const {
+double PidController::no_limited_angular_control() const {
+    return no_limited_angular_control_value; 
+}
+
+PidControl PidController::no_limited_control() const {
     return PidControl(
-        no_limited_translation_control(
-            robot_position, robot_orientation
-        ),
-        no_limited_angular_control(
-            robot_position, robot_orientation
-        )
+        no_limited_translation_control(),
+        no_limited_angular_control()
     );
 }

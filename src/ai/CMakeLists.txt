@@ -148,8 +148,6 @@ if(CATKIN_ENABLE_TESTING)
     math/test_tangents.cpp
     math/test_vector2d.cpp
     math/test_matrix2d.cpp
-    control/test_pid.cpp
-    control/test_robot_control.cpp
     robot_behavior/test_robot_behavior.cpp
   )
 
