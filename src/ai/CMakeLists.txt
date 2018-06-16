@@ -63,6 +63,7 @@ set (SOURCES
     manager/adrien/Manual_adrien.cpp
     manager/sebastien/sebastien.cpp
     manager/jeremy/jeremy.cpp
+    manager/plan_veschambres.cpp
     manager/Match.cpp
     manager/Manual.cpp
     manager/factory.cpp
