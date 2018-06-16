@@ -86,6 +86,7 @@ namespace RhobanSSL
 
         Data & data;
         Referee referee;
+        std::string manager_name;
         std::shared_ptr<Manager::Manager> strategy_manager;
         std::shared_ptr<Manager::Manager> manual_manager;
 

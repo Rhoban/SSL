@@ -313,6 +313,7 @@ void AI::setManager(std::string managerName)
             managerName, ai_data, referee
         );
     }
+    manager_name = managerName;
     strategy_manager->declare_goalie_id( goalie_id );
     strategy_manager->declare_team_ids( robot_ids );
 }
@@ -402,10 +403,18 @@ void AI::run(){
 
         referee.update(current_time);
 
-        strategy_manager->change_team_and_point_of_view(
-            referee.get_team_color( strategy_manager->get_team_name() ),
-            referee.blue_have_it_s_goal_on_positive_x_axis()
-        );
+        if( manager_name != Manager::names::manual  ) { // HACK TOT REMOVEE !
+            strategy_manager->change_team_and_point_of_view(
+                referee.get_team_color( strategy_manager->get_team_name() ),
+                referee.blue_have_it_s_goal_on_positive_x_axis()
+            );
+        }else{
+            dynamic_cast<Manager::Manual*>(
+                strategy_manager.get() 
+            )->define_goal_to_positive_axis(
+                not( referee.blue_have_it_s_goal_on_positive_x_axis() )
+            );
+        }
         strategy_manager->change_ally_and_opponent_goalie_id(
             referee.blue_goalie_id(),
             referee.yellow_goalie_id()
