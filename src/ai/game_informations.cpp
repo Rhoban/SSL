@@ -82,6 +82,56 @@ std::vector<int> GameInformations::get_robot_in_line( const rhoban_geometry::Poi
   return v;
 }
 
+int GameInformations::get_nearest_ball() const{
+    int id = -1;
+    double distance_max = 666;
+    for (size_t i = 0; i <= 7; i++) {
+      const Ai::Robot & robot = get_robot( i,  Vision::Team::Ally );
+      if(robot.is_present_in_vision()){
+        const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
+        Vector2d ball_robot = robot_position - ball_position();
+
+        double distance = ball_robot.norm();
+        if (distance < distance_max) {
+          distance_max = distance;
+          id = i;
+        }
+      }
+    }
+    for (size_t i = 8; i <= 15; i++) {
+      const Ai::Robot & robot = get_robot( i-8,  Vision::Team::Opponent );
+      if(robot.is_present_in_vision()){
+        const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
+        Vector2d ball_robot = robot_position - ball_position();
+
+        double distance = ball_robot.norm();
+        if (distance < distance_max) {
+          distance_max = distance;
+          id = i;
+        }
+      }
+    }
+    return id;
+}
+
+int GameInformations::get_nearest_ball( Vision::Team team ) const{
+    int id = -1;
+    double distance_max = 666;
+    for (size_t i = 0; i < 7; i++) {
+      const Ai::Robot & robot = get_robot( i,  team );
+      if(robot.is_present_in_vision()){
+        const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
+        Vector2d ball_robot = robot_position - ball_position();
+
+        double distance = ball_robot.norm();
+        if (distance < distance_max) {
+          distance_max = distance;
+          id = i;
+        }
+      }
+    }
+    return id;
+}
 
 const Ai::Ball & GameInformations::ball() const {
   return ai_data.ball;
@@ -177,6 +227,10 @@ double GameInformations::penalty_area_width() const{
 
 double GameInformations::penalty_area_depth() const {
     return ai_data.field.penaltyAreaDepth;
+}
+
+bool GameInformations::infra_red( int robot_id, Vision::Team team ) const{
+    return get_robot( robot_id, team ).infra_red;
 }
 
 };

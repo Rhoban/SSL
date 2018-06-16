@@ -79,9 +79,9 @@ void Indirect::assign_behavior_to_robots(
 
   int wait_pass = player_id(0); // we get the first if in get_player_ids()
   int pass = player_id(1); // we get the first if in get_player_ids()
-  double seuil = 0.2;
-  const Ai::Robot & robot_pass = get_robot( pass );
-  const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
+  //double seuil = 0.2;
+  //const Ai::Robot & robot_pass = get_robot( pass );
+  //const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
 
   // Vector2d ball_robot_vector_pass = ball_position() - robot_pass_position;
   // double d = ball_robot_vector_pass.norm();

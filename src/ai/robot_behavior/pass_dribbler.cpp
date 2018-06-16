@@ -33,9 +33,9 @@ Pass_dribbler::Pass_dribbler(
     point_to_pass(66,66),
     robot_to_pass_id(-1),
     robot_to_pass_team(Vision::Team::Ally),
-    need_to_kick(false),
-    kick_power(255),
-    follower( Factory::fixed_consign_follower(ai_data) )
+    kick_power(1.0),
+    follower( Factory::fixed_consign_follower(ai_data) ),
+    need_to_kick(false)
 {
 }
 
@@ -116,8 +116,11 @@ void Pass_dribbler::declare_robot_to_pass( int robot_id, Vision::Team team ){
     robot_to_pass_team = team;
 }
 
-int Pass_dribbler::calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end ){
-    int kick_power = 5;
+void Pass_dribbler::calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end ){
+    Vector2d target_vector = end - start;
+
+    //Just a prototype before we actually try on the field how much kick_power affect distance
+    kick_power = target_vector.norm() / 10;
 }
 
 
