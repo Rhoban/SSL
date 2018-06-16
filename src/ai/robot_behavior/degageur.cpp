@@ -74,12 +74,12 @@ void Degageur::update(
 
     if ( scalar_ball_robot < 0 ) {
         follower->avoid_the_ball(true);
-        target_radius_from_ball = 1.5;
+        target_radius_from_ball = 0.4;
     } else {
         follower->avoid_the_ball(false);
 
         if ( scalar_ball_robot < goal_visible_angle) {
-           target_radius_from_ball = 1.0;
+           target_radius_from_ball = 0.2;
         } else {
            target_radius_from_ball = -0.3;
         }

@@ -26,9 +26,9 @@ namespace RhobanSSL
 namespace Robot_behavior
 {
 
-Obstructor::Obstructor(Ai::AiData &ai_data) : 
+Obstructor::Obstructor(Ai::AiData &ai_data) :
     RobotBehavior(ai_data),
-    robot_to_obstruct_id(2),
+    robot_to_obstruct_id(-1),
     robot_to_obstruct_team(Vision::Team::Opponent),
     follower(Factory::fixed_consign_follower(ai_data))
 {
@@ -51,6 +51,7 @@ void Obstructor::update(
     //const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
     //const Ai::Robot & robot = robot_table.at(robot_id);
 
+    assert( robot_to_obstruct_id != -1 );
     const rhoban_geometry::Point &robot_position = robot.get_movement().linear_position(ai_data.time);
 
     rhoban_geometry::Point ally_goal_point = ally_goal_center();
@@ -108,6 +109,11 @@ Control Obstructor::control() const
     // ctrl.spin = true; // We active the dribler !
     ctrl.kick = false;
     return ctrl;
+}
+
+void Obstructor::declare_robot_to_obstruct( int robot_id, Vision::Team team ){
+    robot_to_obstruct_id = robot_id;
+    robot_to_obstruct_team = team;
 }
 
 Obstructor::~Obstructor()

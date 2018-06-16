@@ -46,6 +46,13 @@ class GameInformations {
     int get_nearest_ball() const ;
     int get_nearest_ball( Vision::Team team ) const ;
 
+    double threat_robot( int id_robot, Vision::Team team = Vision::Team::Opponent) const ;
+    std::vector<double> threat(  Vision::Team team = Vision::Team::Opponent ) const ;
+    int id_threat_max( Vision::Team team ) const;
+    int id_threat_max_2( Vision::Team team ) const; // second threat max
+    int id_threat_max( ) const;
+
+
     const Ai::Ball & ball() const ;
     rhoban_geometry::Point ball_position() const ;
 

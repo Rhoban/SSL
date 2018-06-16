@@ -78,6 +78,8 @@ set (SOURCES
     strategy/indirect.cpp
     strategy/indirect_lob.cpp
     strategy/attaque_with_support.cpp
+    strategy/defensive.cpp
+    strategy/defensive_2.cpp
     strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp

@@ -46,6 +46,7 @@ class Obstructor : public RobotBehavior
         const Ai::Ball &ball);
 
     virtual Control control() const;
+    void declare_robot_to_obstruct( int robot_id, Vision::Team team = Vision::Team::Opponent );
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
     virtual ~Obstructor();

@@ -116,7 +116,7 @@ int GameInformations::get_nearest_ball() const{
 
 int GameInformations::get_nearest_ball( Vision::Team team ) const{
     int id = -1;
-    double distance_max = -1;
+    double distance_max = 666;
     for (size_t i = 0; i < 7; i++) {
       const Ai::Robot & robot = get_robot( i,  team );
       if(robot.is_present_in_vision()){
@@ -124,7 +124,7 @@ int GameInformations::get_nearest_ball( Vision::Team team ) const{
         Vector2d ball_robot = robot_position - ball_position();
 
         double distance = ball_robot.norm();
-        if (distance > distance_max) {
+        if (distance < distance_max) {
           distance_max = distance;
           id = i;
         }
@@ -132,6 +132,99 @@ int GameInformations::get_nearest_ball( Vision::Team team ) const{
     }
     return id;
 }
+
+
+double GameInformations::threat_robot( int id_robot, Vision::Team team ) const{
+  double distance = -1;
+  const Ai::Robot & robot = get_robot( id_robot,  team );
+  if(robot.is_present_in_vision()){
+    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
+    Vector2d goal_center_robot = robot_position - ally_goal_center();
+    distance = goal_center_robot.norm();
+    distance = (ai_data.field.fieldLength - distance)/ai_data.field.fieldLength;
+  }
+  return distance;
+}
+
+std::vector<double> GameInformations::threat( Vision::Team team ) const{
+  std::vector<double> v_threat;
+  for (size_t i = 0; i <= 7; i++) {
+    double threat = threat_robot(i, team);
+    v_threat.push_back(threat);
+  }
+  return v_threat;
+}
+
+int GameInformations::id_threat_max( Vision::Team team ) const{
+  int id = -1;
+  double threat_max = -1;
+
+  std::vector<double> v_threat = threat( team );
+  for (size_t i = 0; i < v_threat.size(); i++) {
+    double threat = v_threat[i];
+    if (threat > threat_max) {
+      threat_max = threat;
+      id = i;
+    }
+  }
+  return id;
+}
+
+int GameInformations::id_threat_max_2( Vision::Team team ) const{ // second threat max
+  int id_1 = -1;
+  int id_2 = -1;
+  double threat_max = -1;
+  double threat_max_2 = -1;
+
+  std::vector<double> v_threat = threat( team );
+  for (size_t i = 0; i < v_threat.size(); i++) {
+    double threat = v_threat[i];
+    if (threat > threat_max) {
+      threat_max_2 = threat_max;
+      threat_max = threat;
+      id_2 = id_1;
+      id_1 = i;
+    }
+    else if( threat > threat_max_2){
+      threat_max_2 = threat;
+      id_2 = i;
+    }
+  }
+  return id_2;
+}
+
+int GameInformations::id_threat_max( ) const{
+  int id_1 = -1;
+  int id_2 = -1;
+  double threat_max_1 = -1;
+  double threat_max_2 = -1;
+
+  std::vector<double> v_threat = threat( Vision::Team::Ally );
+  for (size_t i = 0; i < v_threat.size(); i++) {
+    double threat = v_threat[i];
+    if (threat > threat_max_1) {
+      threat_max_1 = threat;
+      id_1 = i;
+    }
+  }
+
+  v_threat = threat( Vision::Team::Opponent );
+  for (size_t i = 0; i < v_threat.size(); i++) {
+    double threat = v_threat[i];
+    if (threat > threat_max_2) {
+      threat_max_2 = threat;
+      id_2 = i;
+    }
+  }
+
+  if (threat_max_1 > threat_max_2) {
+    return id_1;
+  }
+  else{
+    return id_2;
+  }
+}
+
 
 const Ai::Ball & GameInformations::ball() const {
   return ai_data.ball;
