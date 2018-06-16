@@ -81,6 +81,7 @@ set (SOURCES
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
     strategy/placer.cpp
+    strategy/mur_2.cpp
     strategy/prepare_kickoff.cpp
     strategy/example.cpp
     control/robot_control.cpp

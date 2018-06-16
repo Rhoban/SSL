@@ -29,6 +29,8 @@ namespace Robot_behavior {
 
 class Mur_defensor : public RobotBehavior  {
     private:
+    int mur_robot_id;
+    int mur_nb_robot;
 	ConsignFollower* follower;
 
     public:
@@ -39,6 +41,7 @@ class Mur_defensor : public RobotBehavior  {
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
+    void declare_mur_robot_id( int id, int mur_nb_robots );
 
 	virtual Control control() const;
 
