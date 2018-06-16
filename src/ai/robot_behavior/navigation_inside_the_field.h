@@ -35,7 +35,7 @@ class Navigation_inside_the_field :
     public ConsignFollower 
 {
     private:
-        bool following_position_wad_updated;
+        bool following_position_was_updated;
         Navigation_with_obstacle_avoidance position_follower;
 
         Vector2d target_position;
