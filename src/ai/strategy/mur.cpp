@@ -64,7 +64,7 @@ void Mur::stop(double time){
 }
 
 void Mur::update(double time){
-    const std::vector<int> & players = get_player_ids();
+    //const std::vector<int> & players = get_player_ids();
     //int nb_robots = players.size();
     //for( int robot_id : players){
     //	const Ai::Robot & robot = get_robot( robot_id );
