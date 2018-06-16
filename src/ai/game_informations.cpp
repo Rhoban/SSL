@@ -116,7 +116,7 @@ int GameInformations::get_nearest_ball() const{
 
 int GameInformations::get_nearest_ball( Vision::Team team ) const{
     int id = -1;
-    double distance_max = -1;
+    double distance_max = 666;
     for (size_t i = 0; i < 7; i++) {
       const Ai::Robot & robot = get_robot( i,  team );
       if(robot.is_present_in_vision()){
@@ -124,7 +124,7 @@ int GameInformations::get_nearest_ball( Vision::Team team ) const{
         Vector2d ball_robot = robot_position - ball_position();
 
         double distance = ball_robot.norm();
-        if (distance > distance_max) {
+        if (distance < distance_max) {
           distance_max = distance;
           id = i;
         }

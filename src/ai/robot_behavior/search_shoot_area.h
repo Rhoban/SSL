@@ -56,8 +56,7 @@ class SearchShootArea : public RobotBehavior  {
             this->period = period;
         }
 
-        void declare_area( rhoban_geometry::Point p1 ,
-                                            rhoban_geometry::Point p2 );
+        void declare_area( rhoban_geometry::Point p1, rhoban_geometry::Point p2 );
 
 
 	virtual Control control() const;
