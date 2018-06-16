@@ -20,7 +20,6 @@
 #include "striker.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
-#include <debug.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
@@ -46,10 +45,6 @@ void Striker::update(
     //  this->robot_linear_position
     //  this->robot_angular_position 
     // are all avalaible
-    
-    //int robot_id = 2;
-    //const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
-    //const Ai::Robot & robot = robot_table.at(robot_id);
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     
@@ -104,8 +99,7 @@ void Striker::update(
 Control Striker::control() const {
     Control ctrl = follower->control();
     ctrl.charge = true;
-    ctrl.kick = true;
-    // ctrl.spin = true; // We active the dribler ! 
+    ctrl.kick = true; 
     return ctrl; 
 }
 
@@ -119,52 +113,3 @@ RhobanSSLAnnotation::Annotations Striker::get_annotations() const {
 
 }
 }
-
-
-//Trash ZONE
-
-
-
-//    if ( robot_ball_vector.norm() > 0.5 ) {
-//        target_radius_from_ball = 0.1;
-//    } else {
-//        target_radius_from_ball = -0.1;
-//    }
-
-
-
-    //rhoban_geometry::Point waiting_position = rhoban_geometry::Point(0.0, 0.0) + oponent_goal_point / 2 ;
-    //double strik_rotation = std::atan2( -direction.getY(), -direction.getX() );
-    //double robot_toward_ball = std::atan2( robot_ball_vector.getY(), robot_ball_vector.getX() );
-
-
-//if ( scalar_product( robot_position - Vector2d(ball_position()), target_position - Vector2d(ball_position())) > 0 ) {
-    
-
-
-//    if ( ball_position.getX() > 0 ) {
-//        follower->set_following_position(target_position, target_rotation);
-//    } else {
-//        follower->set_following_position(waiting_position, target_rotation);
-//    }
-
-
-
-
-//    if ( std::abs(strik_rotation - robot_toward_ball) > (M_PI) ) {
-//        follower->avoid_the_ball(true);
-//        target_radius_from_ball = 1.5;
-//    } else {
-//        follower->avoid_the_ball(false);
-        //target_radius_from_ball = 1 / (1 + std::pow(2,std::abs((strik_rotation - robot_toward_ball) / M_PI - 2 ))) * 3 - 0.8;
-
-        //if ( std::abs(strik_rotation - robot_toward_ball) > (M_PI / 4) ) {
-//            target_radius_from_ball = 0.5;
-        //} else {
-        //    target_radius_from_ball = -0.3;
-        //}
-//    }
-
-
-
-
