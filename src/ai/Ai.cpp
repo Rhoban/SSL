@@ -32,6 +32,7 @@
 #include <core/collection.h>
 #include <manager/factory.h>
 #include <debug.h>
+#include <com/AICommanderReal.h>
 
 namespace RhobanSSL
 {
@@ -270,6 +271,7 @@ AI::AI(
 ):
     team_name(team_name),
     default_team(default_team),
+    is_in_simulation(is_in_simulation),
     running(true),
     ai_data( config_path, is_in_simulation, default_team ),
     commander(commander),
@@ -396,6 +398,10 @@ void AI::run(){
         //DEBUG("");
 
         ai_data.update( visionData );
+        if( not(is_in_simulation) ){
+            update_electronic_informations();
+        }
+        //print_electronic_info();
 
         #ifndef NDEBUG
         //check_time_is_coherent();
@@ -499,5 +505,22 @@ void AI::get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const
     annotations.map_positions(fct);
 }
 
+        
+void AI::update_electronic_informations(){
+    RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+    for( unsigned int id=0; id<MAX_ROBOTS; id++ ){
+        auto robot = master->robots[id];
+        if( robot.isOk() ){
+            ai_data.robots.at(Vision::Team::Ally).at(id).infra_red = (robot.status.status & STATUS_IR) ? true : false;
+        }
+    }
+}
+
+void AI::print_electronic_info(){
+    std::cout << "Electronic : " << std::endl;
+    for( unsigned int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++ ){
+        std::cout << "robot id : " << id << " IR : " << ai_data.robots.at(Vision::Team::Ally).at(id).infra_red << std::endl;
+    }
+}
 
 }

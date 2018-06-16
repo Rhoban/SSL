@@ -31,8 +31,11 @@ using namespace rhoban_utils;
 namespace RhobanSSL
 {
     AIVisionClient::AIVisionClient(
-        Data& shared_data, Ai::Team myTeam, bool simulation
-    ): VisionClient(simulation), shared_data(shared_data), myTeam(myTeam)
+        Data& shared_data, Ai::Team myTeam, bool simulation, 
+        Part_of_the_field part_of_the_field
+    ): 
+        VisionClient(simulation), shared_data(shared_data), 
+        part_of_the_field_used(part_of_the_field), myTeam(myTeam)
     {
     }
 
@@ -105,9 +108,14 @@ namespace RhobanSSL
             if (!visionData.ball.present || visionData.ball.age() > 1) {
                 // If the ball is outdated (> 1s) or not present, taking the first
                 // one in the frame
-                double x = detection.balls().Get(0).x()/1000.0;
-                double y = detection.balls().Get(0).y()/1000.0;
-                visionData.ball.update(detection.t_sent(), Point(x,y)); // TODO HACK : IL FAUT METTRE t_send() ?
+                for (auto ball : detection.balls()) {
+                    double x = ball.x()/1000.0;
+                    double y = ball.y()/1000.0;
+                    if( object_coordonate_is_valid(x,y) ){
+                        visionData.ball.update(detection.t_sent(), Point(x,y)); // TODO HACK : IL FAUT METTRE t_send() ?
+                        break;
+                    }
+                }
             } else {
                 // Else, we accept the ball which is the nearest from the previous one
                 // we already had
@@ -118,6 +126,9 @@ namespace RhobanSSL
                 for (auto ball : detection.balls()) {
                     double x = ball.x()/1000.0;
                     double y = ball.y()/1000.0;
+                    if( not( object_coordonate_is_valid(x,y) ) ){
+                        continue;
+                    }
                     Point pos(x, y);
 
                     double distance = pos.getDist(
@@ -163,6 +174,9 @@ namespace RhobanSSL
         const SSL_DetectionRobot & robotFrame, bool ally,
         Ai::Team team_color
     ){
+        if( not( object_coordonate_is_valid(robotFrame.x(), robotFrame.y()) ) ){
+            return;
+        }
         if(robotFrame.has_robot_id()){
             if(robotFrame.robot_id() < Ai::Constants::NB_OF_ROBOTS_BY_TEAM  ){
                 Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
@@ -191,5 +205,25 @@ namespace RhobanSSL
             }
         }
     }
+
+    bool AIVisionClient::object_coordonate_is_valid(int x,int y) const {
+        switch(part_of_the_field_used){
+            case Part_of_the_field::POSIVE_HALF_FIELD : {
+                    return x>0;
+                }
+                break;
+            case Part_of_the_field::NEGATIVE_HALF_FIELD : {
+                    return x<0;
+                }
+                break;
+            case Part_of_the_field::ALL_FIELD: {
+                    return true;
+                }
+                break;
+            default:;
+        }
+        return false;
+    }
+
 
 }

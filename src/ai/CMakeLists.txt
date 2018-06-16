@@ -81,6 +81,7 @@ set (SOURCES
     strategy/defensive.cpp
     strategy/defensive_2.cpp
     strategy/union.cpp
+    strategy/offensive.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
     strategy/placer.cpp

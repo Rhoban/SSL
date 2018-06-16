@@ -424,7 +424,10 @@ namespace Ai {
     }
 
     
-Robot::Robot(): is_goalie(false) {}
+Robot::Robot():
+    is_goalie(false),
+    infra_red(false)
+{}
 
 
 } } //Namespace

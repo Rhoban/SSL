@@ -150,8 +150,8 @@ Patrol* Patrol::two_way_trip( Ai::AiData& ai_data ){
 Patrol* Patrol::two_way_trip_on_width( Ai::AiData& ai_data, bool ally_side ){
     Patrol * res = new Patrol(ai_data);
     double sign = ally_side ? -1 : 1;
-    auto ally_center = res->center_ally_field();
-    auto opp_center = res->center_opponent_field();
+    //auto ally_center = res->center_ally_field();
+    //auto opp_center = res->center_opponent_field();
     res->set_traject(
        {
             { 

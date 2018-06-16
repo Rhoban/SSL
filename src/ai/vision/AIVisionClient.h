@@ -31,8 +31,16 @@ namespace RhobanSSL
 class AIVisionClient : public VisionClient
 {
 public:
+    enum Part_of_the_field {
+        POSIVE_HALF_FIELD,
+        NEGATIVE_HALF_FIELD,
+        ALL_FIELD
+    };
 
-    AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation = false);
+    AIVisionClient(
+        Data& shared_data, Ai::Team myTeam, bool simulation = false,
+        Part_of_the_field part_of_the_field_used = Part_of_the_field::ALL_FIELD
+    );
 
     void setRobotPos(Ai::Team team, int id, double x, double y, double orientation);
 
@@ -40,6 +48,8 @@ protected:
     virtual void packetReceived();
 
     Data & shared_data;
+
+    Part_of_the_field part_of_the_field_used;
 
     std::map<
         int,
@@ -54,6 +64,9 @@ protected:
     );
     
     private:
+
+    bool object_coordonate_is_valid(int x, int y) const ;
+
     Vision::VisionData oldVisionData;
     Vision::VisionData visionData;
     Ai::Team myTeam;

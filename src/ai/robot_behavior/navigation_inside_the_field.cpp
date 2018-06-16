@@ -24,6 +24,11 @@
 #include <math/box.h>
 #include <math/intersection.h>
 
+#include <debug.h>
+#include <core/print_collection.h>
+#include <core/collection.h>
+
+
 namespace RhobanSSL {
 namespace Robot_behavior {
 
@@ -31,7 +36,7 @@ Navigation_inside_the_field::Navigation_inside_the_field(
     Ai::AiData & ai_data, double time, double dt
 ):
     ConsignFollower(ai_data), 
-    following_position_wad_updated(true),
+    following_position_was_updated(true),
     position_follower(ai_data, time, dt),
     target_position(0.0, 0.0), target_angle( 0.0),
     deviation_position(0.0, 0.0)
@@ -42,7 +47,7 @@ void Navigation_inside_the_field::set_following_position(
     const Vector2d & position_to_follow,
     const ContinuousAngle & target_angle
 ){
-    following_position_wad_updated = true;
+    following_position_was_updated = true;
     this->target_position = position_to_follow;
     this->target_angle = target_angle;
 }
@@ -63,51 +68,64 @@ void Navigation_inside_the_field::update(
 void Navigation_inside_the_field::update_control(
     double time, const Ai::Robot & robot, const Ai::Ball & ball
 ){
-    if( following_position_wad_updated ){
+    if( following_position_was_updated ){
         Box cropped_field(
-            field_SW(), // + Vector2d( get_robot_radius(), get_robot_radius() ),
-            field_NE() // - Vector2d( get_robot_radius(), get_robot_radius() )
+            field_SW() + Vector2d( get_robot_radius(), get_robot_radius() ),
+            field_NE() - Vector2d( get_robot_radius(), get_robot_radius() )
         );
+        float radius_margin_factor=2.0;
         Box opponent_penalty = opponent_penalty_area().increase(get_robot_radius());
         Box ally_penalty = ally_penalty_area().increase(get_robot_radius());
+        
+        Box opponent_penalty_large = opponent_penalty_area().increase(get_robot_radius()*radius_margin_factor);
+        Box ally_penalty_large = ally_penalty_area().increase(get_robot_radius()*radius_margin_factor);
 
         rhoban_geometry::Point robot_position = linear_position();
-        double error = get_robot_radius()/2.0;
+        double error = get_robot_radius();
 
         if( opponent_penalty.is_inside(robot_position) ){
+            // If we're in their penalty
             deviation_position = rhoban_geometry::Point( opponent_penalty.get_SW().getX() - error, robot_position.getY() );
         }else if( not(is_goalie()) and ally_penalty.is_inside(robot_position) ){
+            // If we're in our penalty
             deviation_position = rhoban_geometry::Point( ally_penalty.get_NE().getX() + error, robot_position.getY() );
         }else{
             if( cropped_field.is_inside( vector2point(target_position) ) ){
+                // Normal case, the goal position is in the field
                 deviation_position = vector2point( target_position );
             }else{
+                // Changing the target position to match the closest segment
                 cropped_field.closest_segment_intersection(
                     robot_position, vector2point( target_position ),
                     deviation_position
                 );
             }
-
+            //Here, deviation_position should be inside the field, but it could still be in a penalty area.
             if( not( is_goalie() ) and ally_penalty.is_inside( deviation_position ) ){
-                ally_penalty.closest_segment_intersection(
+                ally_penalty_large.closest_segment_intersection(
                     robot_position, vector2point( deviation_position ),
                     deviation_position
                 );
                 if( not(cropped_field.is_inside( deviation_position)) ){
-                    deviation_position = deviation_position + Vector2d( penalty_area_depth(), 0.0 );
+                    deviation_position = deviation_position + Vector2d( penalty_area_depth() + error, 0.0 );
                 }
             }else if( opponent_penalty.is_inside( deviation_position ) ){
-                opponent_penalty.closest_segment_intersection(
+                opponent_penalty_large.closest_segment_intersection(
                     robot_position, vector2point( deviation_position ),
                     deviation_position
                 );
                 if( not(cropped_field.is_inside( deviation_position)) ){
-                    deviation_position = deviation_position - Vector2d( penalty_area_depth(), 0.0 );
+                    deviation_position = deviation_position - Vector2d( penalty_area_depth() + error, 0.0 );
                 }
             }
         }
+        
+        if ((not( is_goalie() ) && ally_penalty.is_inside( deviation_position )) || opponent_penalty.is_inside( deviation_position )) {
+            DEBUG("Damn, deviation_position is still inside a penalty (this is a bug)...");        
+        }
+
         this->position_follower.set_following_position( deviation_position, target_angle );
-        following_position_wad_updated = false;
+        following_position_was_updated = false;
     }
     position_follower.update( time, robot, ball );
 }

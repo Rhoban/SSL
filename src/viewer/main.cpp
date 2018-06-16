@@ -7,6 +7,7 @@
 #include "API.h"
 
 #define TEAM_NAME "AMC"
+#define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 
 int main(int argc, char *argv[])
@@ -26,6 +27,19 @@ int main(int argc, char *argv[])
         "we use the default color provided by the yellow argument.", // long Description of the argument
         false, // Flag is not required
         TEAM_NAME, // Default value
+        "string", // short description of the expected value.
+        cmd
+    );
+
+    TCLAP::ValueArg<std::string> zone_name(
+        "z", // short argument name  (with one character)
+        "zone", // long argument name
+        "Define A zone to watch. All vision event outside the zone are ignored."
+        "It is used to work with another team in the same field."
+        "Avalaible values are : 'positive', 'negative' and 'all'."
+        "The default value is '" ZONE_NAME  "'. ",
+        false, // Flag is not required
+        ZONE_NAME, // Default value
         "string", // short description of the expected value.
         cmd
     );
@@ -50,10 +64,25 @@ int main(int argc, char *argv[])
         commander = new RhobanSSL::AICommanderReal(yellow.getValue());
     }
 
+    RhobanSSL::AIVisionClient::Part_of_the_field part_of_the_field_used;
+    if( zone_name.getValue() == "all" ){
+        part_of_the_field_used = RhobanSSL::AIVisionClient::Part_of_the_field::ALL_FIELD;
+    }else if( zone_name.getValue() == "positive" ){
+        part_of_the_field_used = RhobanSSL::AIVisionClient::Part_of_the_field::POSIVE_HALF_FIELD;
+    }else if( zone_name.getValue() == "negative" ){
+        part_of_the_field_used = RhobanSSL::AIVisionClient::Part_of_the_field::NEGATIVE_HALF_FIELD;
+    }else{
+        std::cerr << "Unknonw zone !"  << std::endl;
+        assert(false);
+    }
     // Viewer API
-    API api(team_name.getValue(), simulation.getValue(), yellow.getValue() ?
-        RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
-        commander, config_path.getValue());
+    API api(
+        team_name.getValue(), simulation.getValue(), 
+        yellow.getValue() ?
+            RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
+        commander, config_path.getValue(),
+        part_of_the_field_used
+    );
 
     // Running Qt application
     QApplication a(argc, argv);

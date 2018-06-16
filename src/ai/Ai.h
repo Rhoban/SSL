@@ -40,6 +40,7 @@ namespace RhobanSSL
         Ai::Team default_team;
     public:
 
+        bool is_in_simulation;
         AI(
             std::string manager_name,
             std::string team_name,
@@ -94,6 +95,8 @@ namespace RhobanSSL
             Robot_behavior::RobotBehavior & robot_behavior,
             double time, Ai::Robot & robot, Ai::Ball & ball
         );
+        void update_electronic_informations();
+        void print_electronic_info();
 
         void send_control( int robot_id, const Control & control );
         void prepare_to_send_control( int robot_id, Control & control );
