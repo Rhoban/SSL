@@ -28,6 +28,7 @@ set (SOURCES
     com/AICommander.cpp
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp
+    robot_behavior/dijkstra_pathfinding.cpp
     robot_behavior/factory.cpp
     robot_behavior/example.cpp
     robot_behavior/goalie.cpp

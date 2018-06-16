@@ -33,7 +33,22 @@ class Factory {
         Ai::AiData & ai_data,
         const rhoban_geometry::Point & position = rhoban_geometry::Point(0.0, 0.0), 
         const ContinuousAngle & angle = ContinuousAngle(0.0),
-        bool ignore_the_ball = false
+        bool ignore_the_ball = false,
+        bool enable_pathfinding = true
+    );
+
+    static ConsignFollower* fixed_consign_follower_with_pathfinding(
+        Ai::AiData & ai_data,
+        const rhoban_geometry::Point & position,
+        const ContinuousAngle & angle,
+        bool ignore_the_ball
+    );
+
+    static ConsignFollower* fixed_consign_follower_without_pathfinding(
+        Ai::AiData & ai_data,
+        const rhoban_geometry::Point & position,
+        const ContinuousAngle & angle,
+        bool ignore_the_ball
     );
     
     static ConsignFollower* fixed_consign_follower_without_repsecting_authorized_location(

@@ -21,6 +21,7 @@
 
 #include "position_follower.h"
 #include "navigation_with_obstacle_avoidance.h"
+#include "dijkstra_pathfinding.h"
 #include "navigation_inside_the_field.h"
 #include "a_star_path.h"
 
@@ -31,8 +32,73 @@ ConsignFollower* Factory::fixed_consign_follower(
     Ai::AiData & ai_data,
     const rhoban_geometry::Point & position,
     const ContinuousAngle & angle,
+    bool ignore_the_ball,
+    bool enable_pathfinding
+){
+    if(enable_pathfinding){
+        return fixed_consign_follower_with_pathfinding(
+            ai_data,
+            position,
+            angle,
+            ignore_the_ball
+        );
+    }else{
+        return fixed_consign_follower_without_pathfinding(
+            ai_data,
+            position,
+            angle,
+            ignore_the_ball
+        );
+    }
+}
+
+ConsignFollower* Factory::fixed_consign_follower_with_pathfinding(
+    Ai::AiData & ai_data,
+    const rhoban_geometry::Point & position,
+    const ContinuousAngle & angle,
     bool ignore_the_ball
 ){
+    Dijkstra_pathfinding* follower = new Dijkstra_pathfinding(
+        ai_data, ai_data.time, ai_data.dt, 
+        fixed_consign_follower_without_pathfinding(
+            ai_data,
+            position,
+            angle,
+            ignore_the_ball
+        )
+    );
+    return follower;
+}
+
+ConsignFollower* Factory::fixed_consign_follower_without_pathfinding(
+    Ai::AiData & ai_data,
+    const rhoban_geometry::Point & position,
+    const ContinuousAngle & angle,
+    bool ignore_the_ball
+){
+        //Navigation_inside_the_field* follower = new Navigation_inside_the_field(ai_data, ai_data.time, ai_data.dt); 
+    Navigation_with_obstacle_avoidance* follower = new Navigation_with_obstacle_avoidance(ai_data, ai_data.time, ai_data.dt); 
+    // PositionFollower* follower = new PositionFollower(ai_data, ai_data.time, ai_data.dt); 
+    follower->set_translation_pid(
+        ai_data.constants.p_translation,
+        ai_data.constants.i_translation, 
+        ai_data.constants.d_translation
+    );
+    follower->set_orientation_pid(
+        ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
+        ai_data.constants.d_orientation
+    );
+    follower->set_limits(
+        ai_data.constants.translation_velocity_limit,
+        ai_data.constants.rotation_velocity_limit,
+        ai_data.constants.translation_acceleration_limit,
+        ai_data.constants.rotation_acceleration_limit
+    );
+    follower->set_following_position(position, angle);
+    follower->avoid_the_ball(not(ignore_the_ball));    
+    return follower;
+
+
     return Factory::fixed_consign_follower_without_repsecting_authorized_location(
         ai_data, position, angle, ignore_the_ball
     );
@@ -44,9 +110,8 @@ ConsignFollower* Factory::fixed_consign_follower_without_repsecting_authorized_l
     const ContinuousAngle & angle,
     bool ignore_the_ball
 ){
-    //A_star_path* follower = new A_star_path(ai_data, ai_data.time, ai_data.dt); 
-    Navigation_inside_the_field* follower = new Navigation_inside_the_field(ai_data, ai_data.time, ai_data.dt); 
-    //Navigation_with_obstacle_avoidance* follower = new Navigation_with_obstacle_avoidance(ai_data, ai_data.time, ai_data.dt); 
+    //A_star_path* follower = new A_star_path(ai_data, ai_data.time, ai_data.dt);  
+    Navigation_with_obstacle_avoidance* follower = new Navigation_with_obstacle_avoidance(ai_data, ai_data.time, ai_data.dt); 
     // PositionFollower* follower = new PositionFollower(ai_data, ai_data.time, ai_data.dt); 
     follower->set_translation_pid(
         ai_data.constants.p_translation,
