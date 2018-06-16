@@ -8,6 +8,5 @@
 - Mur(faire avec 1 ou 2 car seulement 1 actuellement)
 
 #Behavior:
-- degageur
 - obstructeur
 - goalie (améliorer)

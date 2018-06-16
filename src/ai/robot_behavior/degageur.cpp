@@ -50,7 +50,7 @@ void Degageur::update(
 
     // //TODO: Viser un autre robot
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
-  
+
     Vector2d ball_robot_vector = robot_position - ball_position();
 
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
@@ -96,7 +96,7 @@ void Degageur::update(
 Control Degageur::control() const {
     Control ctrl = follower->control();
     ctrl.charge = true;
-    ctrl.kickPower = 1;
+    ctrl.kickPower = 1.0;
     ctrl.chipKick = true;
     return ctrl;
 }

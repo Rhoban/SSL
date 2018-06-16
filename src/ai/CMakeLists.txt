@@ -76,6 +76,7 @@ set (SOURCES
     strategy/base_3_gms.cpp
     strategy/indirect.cpp
     strategy/indirect_lob.cpp
+    strategy/attaque_with_support.cpp
     strategy/union.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
