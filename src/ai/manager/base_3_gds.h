@@ -42,7 +42,6 @@ class Base_3_gds : public Manager {
     );
 
     void update(double time);
-    void analyse_data(double time);
     void choose_a_strategy(double time);
 
     virtual ~Base_3_gds();

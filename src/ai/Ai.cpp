@@ -400,6 +400,16 @@ void AI::run(){
         #endif
 
         referee.update(current_time);
+
+        strategy_manager->change_team_and_point_of_view(
+            referee.get_team_color( strategy_manager->get_team_name() ),
+            referee.blue_have_it_s_goal_on_positive_x_axis()
+        );
+        strategy_manager->change_ally_and_opponent_goalie_id(
+            referee.blue_goalie_id(),
+            referee.yellow_goalie_id()
+        );
+
         strategy_manager->remove_invalid_robots();
         
         strategy_manager->update(current_time);
