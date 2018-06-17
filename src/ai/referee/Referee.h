@@ -35,6 +35,8 @@ struct Referee_Id {
     static const std::string STATE_STOPPED;
     static const std::string STATE_PREPARE_KICKOFF;
     static const std::string STATE_PREPARE_PENALTY;
+    static const std::string STATE_PREPARE_DIRECT;
+    static const std::string STATE_PREPARE_INDIRECT;
     static const std::string STATE_RUNNING;
     static const std::string STATE_TIMEOUT;
 
@@ -58,8 +60,10 @@ struct Referee_Id {
     static const std::string EDGE_KICKOFF_BLUE;
     static const std::string EDGE_PENALTY_YELLOW;
     static const std::string EDGE_PENALTY_BLUE;
-    static const std::string EDGE_INDIRECT;
-    static const std::string EDGE_DIRECT;
+    static const std::string EDGE_INDIRECT_BLUE;
+    static const std::string EDGE_INDIRECT_YELLOW;
+    static const std::string EDGE_DIRECT_BLUE;
+    static const std::string EDGE_DIRECT_YELLOW;
 
     static const std::string EDGE_NORMAL_START_FOR_KICKOFF;
     static const std::string EDGE_NORMAL_START_FOR_PENALTY;
@@ -106,6 +110,8 @@ private:
 
     Ai::Team team_having_kickoff;
     Ai::Team team_having_penalty;
+    Ai::Team team_having_direct;
+    Ai::Team team_having_indirect;
 public:
     Referee();
 
@@ -116,6 +122,8 @@ public:
 
     Ai::Team kickoff_team() const ;
     Ai::Team penalty_team() const ;
+    Ai::Team direct_team() const ;
+    Ai::Team indirect_team() const ;
 
     bool blue_have_it_s_goal_on_positive_x_axis() const;
     Ai::Team get_team_color( const std::string & team_name ) const;
