@@ -17,77 +17,77 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "attaque_with_support.h"
+#include "goalie_strat.h"
 
 
 namespace RhobanSSL {
 namespace Strategy {
 
-AttaqueWithSupport::AttaqueWithSupport(Ai::AiData & ai_data):
-    Strategy(ai_data)
+GoalieStrat::GoalieStrat(Ai::AiData & ai_data):
+    Strategy(ai_data),
+    degageur(std::shared_ptr<Robot_behavior::Degageur>(
+      new Robot_behavior::Degageur(ai_data)
+    ))
 {
 }
 
-AttaqueWithSupport::~AttaqueWithSupport(){
+GoalieStrat::~GoalieStrat(){
 }
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int AttaqueWithSupport::min_robots() const {
-    return 2;
+int GoalieStrat::min_robots() const {
+    return 0;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int AttaqueWithSupport::max_robots() const {
-    return 2;
+int GoalieStrat::max_robots() const {
+    return 0;
 }
 
-Goalie_need AttaqueWithSupport::needs_goalie() const {
-    return Goalie_need::NO;
+Goalie_need GoalieStrat::needs_goalie() const {
+    return Goalie_need::YES;
 }
 
-const std::string AttaqueWithSupport::name = "attaque_with_support";
+const std::string GoalieStrat::name = "goalie_strat";
 
-void AttaqueWithSupport::start(double time){
+void GoalieStrat::start(double time){
     DEBUG("START PREPARE KICKOFF");
+    goalie = std::shared_ptr<Robot_behavior::Goalie>(
+      new Robot_behavior::Goalie(ai_data)
+    );
     behaviors_are_assigned = false;
 }
-void AttaqueWithSupport::stop(double time){
+void GoalieStrat::stop(double time){
     DEBUG("STOP PREPARE KICKOFF");
 }
 
-void AttaqueWithSupport::update(double time){
+void GoalieStrat::update(double time){
 }
 
-void AttaqueWithSupport::assign_behavior_to_robots(
-    std::function<
-        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-    > assign_behavior,
-    double time, double dt
+void GoalieStrat::assign_behavior_to_robots(
+  std::function<
+  void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
+  > assign_behavior,
+  double time, double dt
 ){
-    if( not(behaviors_are_assigned) ){
-        //we assign now all the other behavior
-        assert( get_player_ids().size() == 2 );
-        int strikerID = player_id(1); // we get the first if in get_player_ids()
-        striker = std::shared_ptr<Robot_behavior::Striker>(
-            new Robot_behavior::Striker(ai_data)
-        );
-        assign_behavior( strikerID, striker );
+  //we assign now all the other behavior
 
-        int supportID = player_id(0);
-        support = std::shared_ptr<Robot_behavior::RobotFollower>(
-            new Robot_behavior::RobotFollower(ai_data)
-        );
-        support->declare_robot_to_follow(strikerID, Vector2d(1.0, 1.0), Vision::Team::Ally);
-        assign_behavior( supportID, support );
+  int goalieID = get_goalie(); // we get the first if in get_player_ids()
 
-        behaviors_are_assigned = true;
-    }
+  if( ally_penalty_area().is_inside(ball_position())){
+    assign_behavior( goalieID, degageur );
+  }
+  else{
+    assign_behavior( goalieID, goalie );
+  }
+
+  behaviors_are_assigned = true;
 }
 
 // We declare here the starting positions that are used to :
@@ -98,7 +98,7 @@ void AttaqueWithSupport::assign_behavior_to_robots(
 //     before the start() or during the STOP referee state.
 std::list<
     std::pair<rhoban_geometry::Point,ContinuousAngle>
-> AttaqueWithSupport::get_starting_positions( int number_of_avalaible_robots ){
+> GoalieStrat::get_starting_positions( int number_of_avalaible_robots ){
     assert( min_robots() <= number_of_avalaible_robots );
     assert(
         max_robots()==-1 or
@@ -107,7 +107,7 @@ std::list<
 
     return {
         std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            ball_position(),
+            ally_goal_center(),
             0.0
         )
     };
@@ -118,7 +118,7 @@ std::list<
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool AttaqueWithSupport::get_starting_position_for_goalie(
+bool GoalieStrat::get_starting_position_for_goalie(
     rhoban_geometry::Point & linear_position,
     ContinuousAngle & angular_position
 ){

@@ -87,6 +87,7 @@ set (SOURCES
     strategy/from_robot_behavior.cpp
     strategy/placer.cpp
     strategy/mur_2.cpp
+    strategy/goalie_strat.cpp
     strategy/prepare_kickoff.cpp
     strategy/example.cpp
     control/robot_control.cpp

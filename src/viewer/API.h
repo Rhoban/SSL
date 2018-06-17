@@ -67,7 +67,7 @@ public slots:
     void robotCharge(int id, bool charge=false);
 
     // Run a kick
-    void kick(int id, int kick);
+    void kick(int id, int kick, float power = 1.0);
     
     // Set spin
     void setSpin(int id, bool spin);

@@ -30,7 +30,10 @@ Degageur::Degageur(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    point_to_pass(),
+    point_to_pass(66,66),
+    robot_to_pass_id(-1),
+    robot_to_pass_team(Vision::Team::Ally),
+    needKick(false),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
 }
@@ -51,42 +54,59 @@ void Degageur::update(
     // //TODO: Viser un autre robot
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
 
+    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
+        //default will be the closest ally robot from the opponent goal center
+        robot_to_pass_id = GameInformations::get_nearest_point( Vision::Team::Ally , oponent_goal_center() );
+    }
+
+
+    if ( (point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id != -1) ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
+        const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );
+        point_to_pass = robot_to_pass.get_movement().linear_position( time );
+    }
+
+
+    if ( robot_position.getX() >  (oponent_goal_center().getX() - 4) ) {
+      needKick = true;
+    } else{
+      needKick = false;
+    }
+
     Vector2d ball_robot_vector = robot_position - ball_position();
 
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
-    rhoban_geometry::Point oponent_goal_point = oponent_goal_center();
-    Vector2d ball_goal_vector = oponent_goal_point - ball_position();
-    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+    Vector2d ball_point_vector = point_to_pass - ball_position();
+    ball_point_vector = ball_point_vector / ball_point_vector.norm();
 
 
-    rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
-    rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
+    //rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
+    //rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
 
-    Vector2d ball_l_post_vector = left_post_position - ball_position();
-    Vector2d ball_r_post_vector = right_post_position - ball_position();
-    ball_l_post_vector = ball_l_post_vector / ball_l_post_vector.norm();
-    ball_r_post_vector = ball_r_post_vector / ball_r_post_vector.norm();
+    //Vector2d ball_l_post_vector = left_post_position - ball_position();
+    //Vector2d ball_r_post_vector = right_post_position - ball_position();
+    //ball_l_post_vector = ball_l_post_vector / ball_l_post_vector.norm();
+    //ball_r_post_vector = ball_r_post_vector / ball_r_post_vector.norm();
 
     double target_radius_from_ball;
-    double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
-    double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_goal_vector );
+    //double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
+    double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_point_vector );
 
     if ( scalar_ball_robot < 0 ) {
         follower->avoid_the_ball(true);
-        target_radius_from_ball = 0.4;
+        target_radius_from_ball = 0.5;
     } else {
         follower->avoid_the_ball(false);
-
-        if ( scalar_ball_robot < goal_visible_angle) {
-           target_radius_from_ball = 0.2;
-        } else {
-           target_radius_from_ball = -0.3;
-        }
+        target_radius_from_ball = 1 / ( 4*(scalar_ball_robot - 1.2) ) + 1;
+        //if ( scalar_ball_robot < goal_visible_angle) {
+        //   target_radius_from_ball = 0.2;
+        //} else {
+        //   target_radius_from_ball = -0.3;
+        //}
     }
 
-    Vector2d target_position = Vector2d(ball_position()) - ball_goal_vector * (target_radius_from_ball);
-    double target_rotation = detail::vec2angle(ball_goal_vector);
+    Vector2d target_position = Vector2d(ball_position()) - ball_point_vector * (target_radius_from_ball);
+    double target_rotation = detail::vec2angle(ball_point_vector);
 
     follower->avoid_the_ball(false);
     follower->set_following_position(Vector2d(target_position), target_rotation);
@@ -97,13 +117,25 @@ Control Degageur::control() const {
     Control ctrl = follower->control();
     ctrl.charge = true;
     ctrl.kickPower = 1.0;
-    ctrl.chipKick = true;
+
+    if( needKick ){
+      ctrl.chipKick = false;
+      ctrl.kick = true;
+    } else{
+      ctrl.chipKick = true;
+      ctrl.kick = false;
+    }
     return ctrl;
 }
 
-// void Degageur::declare_point_to_pass( rhoban_geometry::Point point ){
-//     point_to_pass = point;
-// }
+void Degageur::declare_point_to_pass( rhoban_geometry::Point point ){
+    point_to_pass = point;
+}
+
+void Degageur::declare_robot_to_pass( int robot_id, Vision::Team team ){
+    robot_to_pass_id = robot_id;
+    robot_to_pass_team = team;
+}
 
 
 Degageur::~Degageur(){

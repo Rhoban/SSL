@@ -32,16 +32,19 @@
 #include <strategy/mur.h>
 #include <strategy/mur_2.h>
 #include <strategy/attaque_with_support.h>
+#include <strategy/goalie_strat.h>
 
 
 
 #include <robot_behavior/goalie.h>
+#include <robot_behavior/protect_ball.h>
 
 #include <core/collection.h>
 #include <core/print_collection.h>
 
 
 #define GOALIE "goalie"
+#define PROTECT_BALL "protect_ball"
 
 
 namespace RhobanSSL {
@@ -85,6 +88,17 @@ PlanVeschambres::PlanVeschambres(
         )
     );
     register_strategy(
+        PROTECT_BALL, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::ProtectBall* protect_ball = new Robot_behavior::ProtectBall(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(protect_ball);
+                }, false
+            )
+        )
+    );
+    register_strategy(
         Strategy::Offensive::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Offensive(ai_data)
@@ -118,6 +132,12 @@ PlanVeschambres::PlanVeschambres(
         Strategy::AttaqueWithSupport::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::AttaqueWithSupport(ai_data)
+        )
+    );
+    register_strategy(
+        Strategy::GoalieStrat::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::GoalieStrat(ai_data)
         )
     );
     assign_strategy(
@@ -162,14 +182,21 @@ void PlanVeschambres::choose_a_strategy(double time){
             future_strats = { Strategy::Prepare_kickoff::name};
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
+
+            clear_strategy_assignement();
+            future_strats = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };
+            declare_and_assign_next_strategies(future_strats);
+            last_referee_changement = referee.edge_entropy();
+
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
+            // future_strats = { Strategy::Defensive2::name };
             if (ball_position().getX() <= 0) {
               //DEFENSIVE
-              future_strats = { Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+              future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
               is_in_offensive_mode = false;
             }else{
               //OFFENSIVE
-              future_strats = { Strategy::Mur::name, Strategy::Defensive::name, Strategy::AttaqueWithSupport::name };
+              future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
               is_in_offensive_mode = true;
             }
             declare_and_assign_next_strategies(future_strats);
@@ -177,20 +204,21 @@ void PlanVeschambres::choose_a_strategy(double time){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }
         last_referee_changement = referee.edge_entropy();
-    }else{
-      if ( is_in_offensive_mode and ball_position().getX() <= 0 ) {
+    }
+    else if ( referee.get_state() == Referee_Id::STATE_RUNNING ){
+      if ( is_in_offensive_mode && ball_position().getX() <= 0) {
         //DEFENSIVE
-          DEBUG("defensive !!!! ");
-        future_strats = { Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+        DEBUG("defensive !!!! ");
+        future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
         is_in_offensive_mode = false;
         clear_strategy_assignement();
         declare_and_assign_next_strategies(future_strats);
       }
-      if( not(is_in_offensive_mode) and ball_position().getX() > 0 ){
+      if( not(is_in_offensive_mode) && ball_position().getX() > 0 ){
         //OFFENSIVE
         DEBUG("offensive !!!! ");
-        future_strats = { Strategy::Mur::name, Strategy::Defensive::name, Strategy::AttaqueWithSupport::name };
-        is_in_offensive_mode = false;
+        future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+        is_in_offensive_mode = true;
         clear_strategy_assignement();
         declare_and_assign_next_strategies(future_strats);
       }
