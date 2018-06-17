@@ -46,6 +46,27 @@ mur.h
 - Si le robot est le plus proche de la balle et que la balle est à une distance inférieur à un seuil --> Degageur.
 - Sinon --> ConsignFollower (Pour garder le ou les robot(s) sur la ligne et entre la balle et les cages).
 
+# Ender_FTW:
+## file:
+ender_strategy.h
+## MIN:MAX:
+4:4
+## Behavior needed:
+- ProtectBall
+- BallPusher
+## Affectation:
+- Met en formation rotative 3 robots autour du 4ème qui exécute le behavior BallPusher.
+
+# BallPusher:
+## file:
+ball_pusher.h
+## MIN:MAX:
+4:4
+## Behavior needed:
+- Striker
+## Affectation:
+- Pousse la balle vers les cages sur 1 mètre, attend une fenêtre de tir et tire en direction des cages.
+
 
 # FromStrat<goalie>:
 ## MIN:MAX:
