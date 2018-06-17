@@ -5,3 +5,7 @@ Le mur semble faire des pirouettes
 
 engagement (le manager plan_veschambres tire en touche)
 Arrêter striker pendant le début de la passe ( jusqu'à ce que la balle rentre dans un rayon r autour du robot ? )
+
+
+Si personne sur la ligne de tir alors pas chipKick
+s'arreter quand on fait une passe

@@ -110,6 +110,8 @@ void Goalie::update(
 
 
 Control Goalie::control() const {
+    Control ctrl = follower->control();
+    ctrl.chipKick = true;
     return follower->control();
 }
 

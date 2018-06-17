@@ -201,6 +201,50 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
+        "test_NW_translation_for_pid", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* pt = Robot_behavior::Patrol::test_NW_translation_for_pid(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_NE_translation_for_pid", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* pt = Robot_behavior::Patrol::test_NE_translation_for_pid(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_SW_translation_for_pid", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* pt = Robot_behavior::Patrol::test_SW_translation_for_pid(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_SE_translation_for_pid", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* pt = Robot_behavior::Patrol::test_SE_translation_for_pid(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
         "test_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
@@ -211,6 +255,55 @@ Manual::Manual( Ai::AiData & ai_data ):
             )
         )
     );
+
+    register_strategy(
+        "test_NE_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* pt = Robot_behavior::Patrol::test_NE_rotation_for_pid(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_NW_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* pt = Robot_behavior::Patrol::test_NW_rotation_for_pid(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+    register_strategy(
+        "test_SE_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* pt = Robot_behavior::Patrol::test_SE_rotation_for_pid(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+    register_strategy(
+        "test_SW_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Patrol* pt = Robot_behavior::Patrol::test_SW_rotation_for_pid(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+
     register_strategy(
         "proof_concept_spinner", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
