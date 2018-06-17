@@ -24,9 +24,6 @@ namespace Strategy {
 
 Offensive::Offensive(Ai::AiData & ai_data):
     Strategy(ai_data),
-    search(std::shared_ptr<Robot_behavior::SearchShootArea>(
-      new Robot_behavior::SearchShootArea(ai_data)
-    )),
     striker(std::shared_ptr<Robot_behavior::Striker>(
       new Robot_behavior::Striker(ai_data)
     )),
@@ -61,6 +58,9 @@ const std::string Offensive::name = "offensive";
 
 void Offensive::start(double time){
     DEBUG("START PREPARE KICKOFF");
+    search =std::shared_ptr<Robot_behavior::SearchShootArea>(
+      new Robot_behavior::SearchShootArea(ai_data)
+    );
     behaviors_are_assigned = false;
 }
 void Offensive::stop(double time){
