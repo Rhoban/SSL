@@ -58,6 +58,7 @@ ConsignFollower* Factory::fixed_consign_follower_with_pathfinding(
     const ContinuousAngle & angle,
     bool ignore_the_ball
 ){
+    float dist_for_next_point = 0.3;
     Dijkstra_pathfinding* follower = new Dijkstra_pathfinding(
         ai_data, ai_data.time, ai_data.dt, 
         fixed_consign_follower_without_pathfinding(
@@ -65,7 +66,8 @@ ConsignFollower* Factory::fixed_consign_follower_with_pathfinding(
             position,
             angle,
             ignore_the_ball
-        )
+        ),
+        dist_for_next_point
     );
     return follower;
 }

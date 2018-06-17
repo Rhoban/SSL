@@ -24,6 +24,12 @@
 #include "consign_follower.h"
 #include <AiData.h>
 
+#include "rhoban_graphs/graph.h"
+#include "rhoban_graphs/dijkstra.h"
+#include "rhoban_graphs/obstacle_avoider.h"
+#include "rhoban_geometry/segment.h"
+#include "rhoban_geometry/circle.h"
+
 namespace RhobanSSL {
 namespace Robot_behavior {
 
@@ -37,11 +43,13 @@ class Dijkstra_pathfinding : public ConsignFollower  {
 
         Vector2d target_position;
         ContinuousAngle target_angle;
+        std::vector<rhoban_geometry::Point> list_of_points;
+        float _dist_for_next_point;
 
     public:
         Dijkstra_pathfinding(
             Ai::AiData & ai_data, double time, double dt,
-            ConsignFollower* consign_follower
+            ConsignFollower* consign_follower, float dist_for_next_point
         ); 
 
     public:
@@ -49,6 +57,11 @@ class Dijkstra_pathfinding : public ConsignFollower  {
             double time, 
             const Ai::Robot & robot, const Ai::Ball & ball
         );
+        void update_pathfinding();
+        
+        void update_obstacles(rhoban_graphs::ObstacleAvoider * oa);
+        
+        
 
 	void compute_next_position();
 
