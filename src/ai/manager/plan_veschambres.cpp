@@ -32,6 +32,7 @@
 #include <strategy/mur.h>
 #include <strategy/mur_2.h>
 #include <strategy/attaque_with_support.h>
+#include <strategy/goalie_strat.h>
 
 
 
@@ -120,6 +121,12 @@ PlanVeschambres::PlanVeschambres(
             new Strategy::AttaqueWithSupport(ai_data)
         )
     );
+    register_strategy(
+        Strategy::GoalieStrat::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::GoalieStrat(ai_data)
+        )
+    );
     assign_strategy(
         Strategy::Halt::name, 0.0,
         get_team_ids()
@@ -166,11 +173,11 @@ void PlanVeschambres::choose_a_strategy(double time){
             // future_strats = { Strategy::Defensive2::name };
             if (ball_position().getX() <= 0) {
               //DEFENSIVE
-              future_strats = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+              future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
               is_in_offensive_mode = false;
             }else{
               //OFFENSIVE
-              future_strats = { GOALIE, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+              future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
               is_in_offensive_mode = true;
             }
             declare_and_assign_next_strategies(future_strats);
@@ -183,7 +190,7 @@ void PlanVeschambres::choose_a_strategy(double time){
       if ( is_in_offensive_mode && ball_position().getX() <= 0) {
         //DEFENSIVE
         DEBUG("defensive !!!! ");
-        future_strats = { Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+        future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
         is_in_offensive_mode = false;
         clear_strategy_assignement();
         declare_and_assign_next_strategies(future_strats);
@@ -191,7 +198,7 @@ void PlanVeschambres::choose_a_strategy(double time){
       if( not(is_in_offensive_mode) && ball_position().getX() > 0 ){
         //OFFENSIVE
         DEBUG("offensive !!!! ");
-        future_strats = { Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+        future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
         is_in_offensive_mode = true;
         clear_strategy_assignement();
         declare_and_assign_next_strategies(future_strats);

@@ -19,7 +19,7 @@
 
 #include "tangents.h"
 #include "vector2d.h"
-
+#include <debug.h>
 namespace rhoban_geometry {
 
 Point center_of_cone_incircle(
@@ -31,12 +31,14 @@ Point center_of_cone_incircle(
     Vector2d u = normalized( cone_base_A - cone_vertex );
     Vector2d v = normalized( cone_base_B - cone_vertex );
     double u_vec_v = vectorial_product(u, v);
+    DEBUG(u);
+    DEBUG(v);
     assert( u_vec_v != 0.0 );
     double signe = (u_vec_v>=0)?1:-1;
-    return vector2point( 
+    return vector2point(
         (
-            (u+v)*(signe*circle_radius) + 
-            v*vectorial_product(u, cone_vertex) + 
+            (u+v)*(signe*circle_radius) +
+            v*vectorial_product(u, cone_vertex) +
             u*vectorial_product(cone_vertex, v)
         )/u_vec_v
     );
@@ -49,14 +51,14 @@ std::vector<rhoban_geometry::Segment> tangent_of_two_circle(
 ){
     std::vector<rhoban_geometry::Segment> result(4);
 
-    const rhoban_geometry::Point & A = circle_A.getCenter(); 
+    const rhoban_geometry::Point & A = circle_A.getCenter();
     double r_a = circle_A.getRadius();
-    const rhoban_geometry::Point & B = circle_B.getCenter(); 
+    const rhoban_geometry::Point & B = circle_B.getCenter();
     double r_b = circle_B.getRadius();
     double norm_AB = norm( B-A );
     Vector2d x = normalized( B - A);
     Vector2d y( -x.getY(), x.getX() );
-    
+
     auto fct = [&](double epsilon_1, double epsilon_2){
         double cos_theta = ( r_a - epsilon_1 * r_b  )/norm_AB;
         double sin_theta = epsilon_2 * std::sqrt( 1 - cos_theta*cos_theta );
@@ -65,7 +67,7 @@ std::vector<rhoban_geometry::Segment> tangent_of_two_circle(
         rhoban_geometry::Point N = B + u*(epsilon_1*r_b);
         return rhoban_geometry::Segment(M,N);
     };
-    
+
     result[0] = fct(1.0, 1.0);
     result[1] = fct(1.0, -1.0);
     result[2] = fct(-1.0, 1.0);
