@@ -59,6 +59,16 @@ class Patrol : public RobotBehavior  {
     static Patrol* test_translation_for_pid( Ai::AiData& ai_data );	
     static Patrol* test_rotation_for_pid( Ai::AiData& ai_data );	
 
+    static Patrol* test_NW_rotation_for_pid( Ai::AiData& ai_data );	
+    static Patrol* test_NE_rotation_for_pid( Ai::AiData& ai_data );	
+    static Patrol* test_SW_rotation_for_pid( Ai::AiData& ai_data );	
+    static Patrol* test_SE_rotation_for_pid( Ai::AiData& ai_data );	
+
+    static Patrol* test_NW_translation_for_pid( Ai::AiData& ai_data );
+    static Patrol* test_NE_translation_for_pid( Ai::AiData& ai_data );
+    static Patrol* test_SW_translation_for_pid( Ai::AiData& ai_data );
+    static Patrol* test_SE_translation_for_pid( Ai::AiData& ai_data );
+
     void set_traject( const std::vector< std::pair<rhoban_geometry::Point, ContinuousAngle> > & traject );
     void set_traject( const std::vector< rhoban_geometry::Point > & traject );
 
