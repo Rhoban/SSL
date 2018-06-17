@@ -59,37 +59,32 @@ void Degageur::update(
         robot_to_pass_id = GameInformations::get_nearest_point( Vision::Team::Ally , oponent_goal_center() );
     }
 
-
-    if ( (point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id != -1) ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
+    if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
         const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );
         point_to_pass = robot_to_pass.get_movement().linear_position( time );
     }
 
+    std::vector<int> robot_in_line = GameInformations::get_robot_in_line( robot_position, point_to_pass );
 
     if ( robot_position.getX() >  (oponent_goal_center().getX() - 4) ) {
-      needKick = true;
-    } else{
-      needKick = false;
+        needKick = true;
+    } else {
+        if ( robot_in_line.empty() ) {
+            needKick = true;    
+        } else {
+            needKick = false;
+        }
     }
+    
 
     Vector2d ball_robot_vector = robot_position - ball_position();
-
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
     Vector2d ball_point_vector = point_to_pass - ball_position();
     ball_point_vector = ball_point_vector / ball_point_vector.norm();
 
 
-    //rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
-    //rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
-
-    //Vector2d ball_l_post_vector = left_post_position - ball_position();
-    //Vector2d ball_r_post_vector = right_post_position - ball_position();
-    //ball_l_post_vector = ball_l_post_vector / ball_l_post_vector.norm();
-    //ball_r_post_vector = ball_r_post_vector / ball_r_post_vector.norm();
-
     double target_radius_from_ball;
-    //double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
     double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_point_vector );
 
     if ( scalar_ball_robot < 0 ) {
@@ -97,18 +92,13 @@ void Degageur::update(
         target_radius_from_ball = 0.5;
     } else {
         follower->avoid_the_ball(false);
-        target_radius_from_ball = 1 / ( 4*(scalar_ball_robot - 1.2) ) + 1;
-        //if ( scalar_ball_robot < goal_visible_angle) {
-        //   target_radius_from_ball = 0.2;
-        //} else {
-        //   target_radius_from_ball = -0.3;
-        //}
+        target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.2) ) + 1.0;
     }
 
     Vector2d target_position = Vector2d(ball_position()) - ball_point_vector * (target_radius_from_ball);
     double target_rotation = detail::vec2angle(ball_point_vector);
 
-    follower->avoid_the_ball(false);
+    //follower->avoid_the_ball(false);
     follower->set_following_position(Vector2d(target_position), target_rotation);
     follower->update(time, robot, ball);
 }

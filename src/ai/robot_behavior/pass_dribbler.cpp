@@ -55,7 +55,7 @@ void Pass_dribbler::update(
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
     const ContinuousAngle & robot_angle = robot.get_movement().angular_position( time );
     
-    if ( (point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id != -1) ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.   
+    if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.   
         const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );
         point_to_pass = robot_to_pass.get_movement().linear_position( time );
     }
