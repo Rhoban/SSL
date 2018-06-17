@@ -1,5 +1,6 @@
 #include "SimClient.h"
 #include "client_config.h"
+#include <string>
 
 namespace RhobanSSL
 {
@@ -8,69 +9,74 @@ SimClient::SimClient()
 {
 }
 
+SimClient::SimClient(std::string port)
+  : broadcast(-1, stoi(port))
+{
+}
+
 void SimClient::moveBall(double x, double y, double vx, double vy)
 {
-    grSim_Packet packet;
+  grSim_Packet packet;
 
-    auto replacement = packet.mutable_replacement();
-    auto ball = replacement->mutable_ball();
+  auto replacement = packet.mutable_replacement();
+  auto ball = replacement->mutable_ball();
 
-    ball->set_x(x);
-    ball->set_y(y);
-    ball->set_vx(vx);
-    ball->set_vy(vy);
+  ball->set_x(x);
+  ball->set_y(y);
+  ball->set_vx(vx);
+  ball->set_vy(vy);
 
-    sendPacket(packet);
+  sendPacket(packet);
 }
 
 void SimClient::moveRobot(bool yellow, int id,
-    double x, double y, double theta,
-    bool turnon)
+                          double x, double y, double theta,
+                          bool turnon)
 {
-    grSim_Packet packet;
+  grSim_Packet packet;
 
-    auto replacement = packet.mutable_replacement();
-    auto robot = replacement->add_robots();
+  auto replacement = packet.mutable_replacement();
+  auto robot = replacement->add_robots();
 
-    robot->set_yellowteam(yellow);
-    robot->set_id(id);
-    robot->set_x(x);
-    robot->set_y(y);
-    robot->set_dir(theta);
-    robot->set_turnon(turnon);
+  robot->set_yellowteam(yellow);
+  robot->set_id(id);
+  robot->set_x(x);
+  robot->set_y(y);
+  robot->set_dir(theta);
+  robot->set_turnon(turnon);
 
-    sendPacket(packet);
+  sendPacket(packet);
 }
 
 void SimClient::send(bool yellow, int id,
-    double x, double y, double theta,
-    double kickX, double kickZ, bool spin)
+                     double x, double y, double theta,
+                     double kickX, double kickZ, bool spin)
 {
-    // Building packet
-    grSim_Packet packet;
-    packet.mutable_commands()->set_isteamyellow(yellow);
-    packet.mutable_commands()->set_timestamp(0.0);
-    grSim_Robot_Command *command = packet.mutable_commands()->add_robot_commands();
+                // Building packet
+                grSim_Packet packet;
+                packet.mutable_commands()->set_isteamyellow(yellow);
+                packet.mutable_commands()->set_timestamp(0.0);
+                grSim_Robot_Command *command = packet.mutable_commands()->add_robot_commands();
 
-    // Appending data
-    command->set_id(id);
-    command->set_wheelsspeed(false);
-    command->set_veltangent(x);
-    command->set_velnormal(y);
-    command->set_velangular(theta);
-    command->set_kickspeedx(kickX);
-    command->set_kickspeedz(kickZ);
-    command->set_spinner(spin);
+                // Appending data
+                command->set_id(id);
+                command->set_wheelsspeed(false);
+                command->set_veltangent(x);
+                command->set_velnormal(y);
+                command->set_velangular(theta);
+                command->set_kickspeedx(kickX);
+                command->set_kickspeedz(kickZ);
+                command->set_spinner(spin);
 
-    sendPacket(packet);
-}
+                sendPacket(packet);
+              }
 
-void SimClient::sendPacket(grSim_Packet &packet)
-{
-    // Broadcasting the packet
-    size_t len = packet.ByteSize();
-    unsigned char buffer[len];
-    packet.SerializeToArray(buffer, len);
-    broadcast.broadcastMessage(buffer, len);
-}
-}
+              void SimClient::sendPacket(grSim_Packet &packet)
+              {
+                // Broadcasting the packet
+                size_t len = packet.ByteSize();
+                unsigned char buffer[len];
+                packet.SerializeToArray(buffer, len);
+                broadcast.broadcastMessage(buffer, len);
+              }
+              }

@@ -18,22 +18,19 @@ static QString js(Json::Value &json)
 }
 
 API::API(
-    std::string teamName, bool simulation, RhobanSSL::Ai::Team team, 
-    RhobanSSL::AICommander *commander, const std::string & config_path, 
-    AIVisionClient::Part_of_the_field part_of_the_field_used
-)
-:
-    simulation(simulation),
-    teamName(teamName),
-    data(team),
-    team(team),
-    visionClient(
-        data, team, simulation, 
-        part_of_the_field_used
-    ),
-    commander(commander),
-    joystick(NULL),
-    joystickRobot(0)
+  std::string teamName, bool simulation, RhobanSSL::Ai::Team team, 
+  RhobanSSL::AICommander *commander, const std::string & config_path, 
+  AIVisionClient::Part_of_the_field part_of_the_field_used, std::string addr, std::string port, std::string sim_port
+  )
+  :
+  simulation(simulation),
+  teamName(teamName),
+  data(team),
+  team(team),
+  visionClient(data, team, simulation, addr, port, sim_port,part_of_the_field_used),
+  commander(commander),
+  joystick(NULL),
+  joystickRobot(0)
 {
     // Be sure that the final controls are initalized to no-speed
     RhobanSSL::Shared_data shared;
