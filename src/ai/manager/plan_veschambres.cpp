@@ -55,6 +55,8 @@ PlanVeschambres::PlanVeschambres(
     const Referee & referee
 ):
     Manager(ai_data),
+    offensive_strats(1+Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+    defensive_strats(1+Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
     referee(referee),
     last_referee_changement(0)
 {
@@ -134,12 +136,37 @@ PlanVeschambres::PlanVeschambres(
             new Strategy::AttaqueWithSupport(ai_data)
         )
     );
+<<<<<<< Updated upstream
     register_strategy(
         Strategy::GoalieStrat::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::GoalieStrat(ai_data)
         )
     );
+=======
+
+    offensive_strats[6] = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+    defensive_strats[6] = { GOALIE, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+    
+    offensive_strats[5] = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name};
+    defensive_strats[5] = { GOALIE, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::Offensive::name};
+    
+    offensive_strats[4] = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name};
+    defensive_strats[4] = { GOALIE, Strategy::Mur::name, Strategy::Defensive2::name};
+    
+    offensive_strats[3] = { GOALIE, Strategy::Mur_2::name};
+    defensive_strats[3] = { GOALIE, Strategy::Mur::name, Strategy::Defensive::name};
+    
+    offensive_strats[2] = { GOALIE, Strategy::Mur::name};
+    defensive_strats[2] = { GOALIE, Strategy::Mur::name};
+    
+    offensive_strats[1] = { GOALIE };
+    defensive_strats[1] = { GOALIE };
+
+    offensive_strats[0] = { };
+    defensive_strats[0] = { };
+
+>>>>>>> Stashed changes
     assign_strategy(
         Strategy::Halt::name, 0.0,
         get_team_ids()
@@ -192,11 +219,19 @@ void PlanVeschambres::choose_a_strategy(double time){
             // future_strats = { Strategy::Defensive2::name };
             if (ball_position().getX() <= 0) {
               //DEFENSIVE
+<<<<<<< Updated upstream
               future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
               is_in_offensive_mode = false;
             }else{
               //OFFENSIVE
               future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+=======
+              future_strats = defensive_strats[ get_valid_team_ids().size() ];
+              is_in_offensive_mode = false;
+            }else{
+              //OFFENSIVE
+              future_strats = offensive_strats[ get_valid_team_ids().size() ];
+>>>>>>> Stashed changes
               is_in_offensive_mode = true;
             }
             declare_and_assign_next_strategies(future_strats);
@@ -209,7 +244,11 @@ void PlanVeschambres::choose_a_strategy(double time){
       if ( is_in_offensive_mode && ball_position().getX() <= 0) {
         //DEFENSIVE
         DEBUG("defensive !!!! ");
+<<<<<<< Updated upstream
         future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+=======
+        future_strats = defensive_strats[ get_valid_team_ids().size() ];
+>>>>>>> Stashed changes
         is_in_offensive_mode = false;
         clear_strategy_assignement();
         declare_and_assign_next_strategies(future_strats);
@@ -217,7 +256,11 @@ void PlanVeschambres::choose_a_strategy(double time){
       if( not(is_in_offensive_mode) && ball_position().getX() > 0 ){
         //OFFENSIVE
         DEBUG("offensive !!!! ");
+<<<<<<< Updated upstream
         future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+=======
+        future_strats = offensive_strats[ get_valid_team_ids().size() ];
+>>>>>>> Stashed changes
         is_in_offensive_mode = true;
         clear_strategy_assignement();
         declare_and_assign_next_strategies(future_strats);
