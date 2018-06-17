@@ -35,13 +35,13 @@ namespace Robot_behavior {
 Navigation_inside_the_field::Navigation_inside_the_field(
     Ai::AiData & ai_data, double time, double dt
 ):
-    ConsignFollower(ai_data), 
+    ConsignFollower(ai_data),
     following_position_was_updated(true),
     position_follower(ai_data, time, dt),
     target_position(0.0, 0.0), target_angle( 0.0),
     deviation_position(0.0, 0.0)
 {
-} 
+}
 
 void Navigation_inside_the_field::set_following_position(
     const Vector2d & position_to_follow,
@@ -68,15 +68,16 @@ void Navigation_inside_the_field::update(
 void Navigation_inside_the_field::update_control(
     double time, const Ai::Robot & robot, const Ai::Ball & ball
 ){
+    double marge = get_robot_radius() - 0.2;
     if( following_position_was_updated ){
         Box cropped_field(
-            field_SW() + Vector2d( get_robot_radius(), get_robot_radius() ),
-            field_NE() - Vector2d( get_robot_radius(), get_robot_radius() )
+            field_SW() + Vector2d( marge, marge ),
+            field_NE() - Vector2d( marge, marge)
         );
         float radius_margin_factor=2.0;
         Box opponent_penalty = opponent_penalty_area().increase(get_robot_radius());
         Box ally_penalty = ally_penalty_area().increase(get_robot_radius());
-        
+
         Box opponent_penalty_large = opponent_penalty_area().increase(get_robot_radius()*radius_margin_factor);
         Box ally_penalty_large = ally_penalty_area().increase(get_robot_radius()*radius_margin_factor);
 
@@ -119,9 +120,9 @@ void Navigation_inside_the_field::update_control(
                 }
             }
         }
-        
+
         if ((not( is_goalie() ) && ally_penalty.is_inside( deviation_position )) || opponent_penalty.is_inside( deviation_position )) {
-            DEBUG("Damn, deviation_position is still inside a penalty (this is a bug)...");        
+            DEBUG("Damn, deviation_position is still inside a penalty (this is a bug)...");
         }
 
         this->position_follower.set_following_position( deviation_position, target_angle );

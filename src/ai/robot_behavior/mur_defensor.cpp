@@ -71,7 +71,7 @@ void Mur_defensor::update(
         follower->avoid_the_ball(false);
     }
 
-    double distance_defense_line = 1.5;
+    double distance_defense_line = 1.4;
 
     double target_rotation = detail::vec2angle(-ball_robot_vector);
     rhoban_geometry::Point target_position;
