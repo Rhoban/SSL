@@ -29,8 +29,6 @@
 #include "rhoban_graphs/obstacle_avoider.h"
 #include "rhoban_geometry/segment.h"
 #include "rhoban_geometry/circle.h"
-#include "AStar.hpp"
-
 
 namespace RhobanSSL {
 namespace Robot_behavior {
@@ -45,34 +43,24 @@ class Dijkstra_pathfinding : public ConsignFollower  {
 
         Vector2d target_position;
         ContinuousAngle target_angle;
-        std::vector<AStar::Vec2i> path;
+        std::vector<rhoban_geometry::Point> list_of_points;
         float _dist_for_next_point;
         int _count;
-        AStar::Generator generator;
-        int size_L;
-        int size_l;
-        float steps_per_meter;
 
     public:
-        AStar::Vec2i fieldtomap(Vector2d p);
-
-        Vector2d map2field(AStar::Vec2i p);
-
         Dijkstra_pathfinding(
             Ai::AiData & ai_data, double time, double dt,
             ConsignFollower* consign_follower, float dist_for_next_point
         ); 
 
     public:
-        void add_circle_obstacle(rhoban_geometry::Point center, float radius);
-    
         virtual void update(
             double time, 
             const Ai::Robot & robot, const Ai::Ball & ball
         );
         void update_pathfinding();
         
-        void update_obstacles();
+        void update_obstacles(rhoban_graphs::ObstacleAvoider * oa);
         
         
 

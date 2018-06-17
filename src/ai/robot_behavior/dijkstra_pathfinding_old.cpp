@@ -22,32 +22,10 @@
 #include <physic/constants.h>
 #include <debug.h>
 
+
+
 namespace RhobanSSL {
 namespace Robot_behavior {
-
-AStar::Vec2i Vector2dtoVec2i(Vector2d p) {
-    AStar::Vec2i result;
-    result.x = p[0];
-    result.y = p[1];
-    return result;
-}
-
-Vector2d Vec2itoVector2d(AStar::Vec2i p) {
-    Vector2d result(p.x, p.y);
-    return result;
-}
-
-AStar::Vec2i Dijkstra_pathfinding::fieldtomap(Vector2d p) {
-    AStar::Vec2i result;
-    result.x = p[0]*steps_per_meter + size_L/2;
-    result.y = p[1]*steps_per_meter + size_l/2;
-    return result;
-}
-
-Vector2d Dijkstra_pathfinding::map2field(AStar::Vec2i p) {
-    Vector2d result((p.x - size_L/2)/steps_per_meter, (p.y - size_l/2)/steps_per_meter);
-    return result;
-}
 
 Dijkstra_pathfinding::Dijkstra_pathfinding(
     Ai::AiData & ai_data, double time, double dt,
@@ -57,50 +35,15 @@ Dijkstra_pathfinding::Dijkstra_pathfinding(
     follower(consign_follower),
     target_position(0.0, 0.0), target_angle(0.0), _dist_for_next_point(dist_for_next_point)
 {
-    // A bit weird but at this moment, it's the follower that knows where to go...
+    // A bit weird but at this point, it's the follower that knows where to go...
     Vector2d next_point_vect;
     ContinuousAngle next_angle;
     this->follower->get_following_position(&next_point_vect, &next_angle);
-    DEBUG("INITIAL GOAL = " << next_point_vect);
+    rhoban_geometry::Point next_point = vector2point(next_point_vect);
     target_position = next_point_vect;
     target_angle = next_angle;
     _count = 0;
-
-    // TODO use global parameters for this
-    steps_per_meter = 10;
-    size_L = 9*steps_per_meter;
-    size_l = 6*steps_per_meter;
-    generator.setWorldSize({size_L, size_l});
-    generator.setHeuristic(AStar::Heuristic::euclidean);
-    generator.setDiagonalMovement(true);
-    generator.clearCollisions();
 } 
-
-void Dijkstra_pathfinding::add_circle_obstacle(rhoban_geometry::Point center, float radius) {
-    // We draw a circle inside a square
-    int iradius = radius*steps_per_meter;
-    // north west corner
-    AStar::Vec2i c = fieldtomap(point2vector(center));
-    AStar::Vec2i nw;
-    nw.x = floor(c.x - iradius);
-    nw.y = floor(c.y - iradius);
-
-    for (int i = nw.x; i < 2*iradius; i++) {
-        for (int j = nw.y; j < 2*iradius; j++) {
-            float distance = (c.x - i)*(c.x - i) + (c.y - j)*(c.y - j);
-            if (distance < iradius*iradius) {
-                // We're in the circle
-                AStar::Vec2i p;
-                p.x = i;
-                p.y = j;
-                DEBUG("c at " << p.x << ", " << p.y);
-                generator.addCollision(p);
-            }
-        }
-    }
-    
-}
-
 
 void Dijkstra_pathfinding::set_following_position(
     const Vector2d & position_to_follow,
@@ -119,36 +62,48 @@ void Dijkstra_pathfinding::set_following_position(
 
 // Sets the positions of the robots as obstacles and recalculates the list of obstaclepoints (=path) to get to the destination
 void Dijkstra_pathfinding::update_pathfinding() {
-    update_obstacles();
-    Vector2d current_robot_position = point2vector(linear_position());
+    // There is no current way to clear the obstacles without changing ObstacleAvoider (not done yet cos shared)
+    rhoban_graphs::ObstacleAvoider * oa = new rhoban_graphs::ObstacleAvoider();
+    update_obstacles(oa);
+
+    rhoban_geometry::Point current_robot_position = linear_position();
     // Actual path calculation
     DEBUG("Currrent robot : " << robot_ptr->id());
-    DEBUG("findPath from " << current_robot_position << " to " << this->target_position); 
-    path = generator.findPath(fieldtomap(current_robot_position), fieldtomap(this->target_position));
-    //list_of_points = oa->findPath(current_robot_position, vector2point(this->target_position), accuracy);
+    DEBUG("findPath from " << current_robot_position << " to " << vector2point(this->target_position)); 
     
-    DEBUG("(before) Nb points de passage = " << path.size());
-    for (size_t i = 0; i < path.size(); i++) {
-        DEBUG("(before) path[" << i << "] = " << map2field(path[i]));        
+ 
+    float accuracy = 1.0;          
+    list_of_points = oa->findPath(current_robot_position, vector2point(this->target_position), accuracy);
+    
+    DEBUG("(before) Nb points de passage = " << list_of_points.size());
+    for (size_t i = 0; i < list_of_points.size(); i++) {
+        DEBUG("(before) list_of_points[" << i << "] = " << list_of_points[i]);        
     }
     
-    if (path.size() < 1) {
+    if (list_of_points.size() < 2) {
         // Astuce
-        path.push_back(fieldtomap(this->target_position));
-    }    
+        list_of_points.push_back(vector2point(this->target_position));
+        if (list_of_points.size() < 2) {
+            // Astuce
+            list_of_points.push_back(vector2point(this->target_position));
+        }
+    }
+    list_of_points.erase(list_of_points.begin() + 0);       
+    
     // DEBUG("Nb points de passage = " << list_of_points.size());
 /*     for (size_t i = 0; i < list_of_points.size(); i++) {
         DEBUG("list_of_points[" << i << "] = " << list_of_points[i]);        
     } */
-    this->set_following_position( map2field(path[0]), target_angle );  
+    this->set_following_position( list_of_points[0], target_angle );  
+    
+    delete oa;
 }
 
-void Dijkstra_pathfinding::update_obstacles() {
-    generator.clearCollisions();    
+void Dijkstra_pathfinding::update_obstacles(rhoban_graphs::ObstacleAvoider * oa) {
     // Getting all the positions of the robots
     std::vector<rhoban_geometry::Point> robot_positions;
     float radius = 0.0;
-    for (int i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
+    for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
         const Ai::Robot & robot1 = get_robot( i,  Vision::Team::Opponent );
         if(robot1.is_present_in_vision()){
             robot_positions.push_back(robot1.get_movement().linear_position(time()));
@@ -167,7 +122,7 @@ void Dijkstra_pathfinding::update_obstacles() {
     // Adding each robot as an obstacle
     DEBUG("Nb obstacles " << robot_positions.size());            
     for (size_t i = 0; i < robot_positions.size(); i++) {
-        add_circle_obstacle(robot_positions[i], radius);
+        oa->addObstacle(robot_positions[i], radius);
         DEBUG("Adding obstacle at " << robot_positions[i] << " with radius " << radius);        
     }    
     // TODO add border limits ? Penalty area ?
@@ -175,7 +130,7 @@ void Dijkstra_pathfinding::update_obstacles() {
 
 // Giving a trajectory (list of points), gives the follower a local point to follow
 void Dijkstra_pathfinding::compute_next_position() {
-    if (path.size() < 2) {
+    if (list_of_points.size() < 2) {
         return;
     }
     Vector2d next_point_vect;
@@ -191,8 +146,8 @@ void Dijkstra_pathfinding::compute_next_position() {
     if (dist < _dist_for_next_point) {
         // DEBUG("Going to the next point,  list_of_points.size() = " << list_of_points.size());  
         // The follower will follow this point now
-        this->follower->set_following_position( map2field(path[0]), target_angle );  
-        path.erase(path.begin() + 0); 
+        this->follower->set_following_position( list_of_points[0], target_angle );  
+        list_of_points.erase(list_of_points.begin() + 0); 
     }
 }
 
@@ -217,11 +172,11 @@ void Dijkstra_pathfinding::update(
     // Check if this is not too time consumming...
     if (robot_ptr->id() == 4) {
         _count++;
-        if (_count > 0) {
+        if (_count > 50) {
             _count = 0;
             update_pathfinding();  
-            compute_next_position();        
         }
+        compute_next_position();
     }
     // DEBUG("I'm currently at " << linear_position());            
 

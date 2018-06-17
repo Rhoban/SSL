@@ -99,11 +99,6 @@ ConsignFollower* Factory::fixed_consign_follower_without_pathfinding(
     follower->set_following_position(position, angle);
     follower->avoid_the_ball(not(ignore_the_ball));    
     return follower;
-
-
-    return Factory::fixed_consign_follower_without_repsecting_authorized_location(
-        ai_data, position, angle, ignore_the_ball
-    );
 }
 
 ConsignFollower* Factory::fixed_consign_follower_without_repsecting_authorized_location(
