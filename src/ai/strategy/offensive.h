@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -22,17 +22,22 @@
 
 #include "Strategy.h"
 
+#include <robot_behavior/striker.h>
+#include <robot_behavior/search_shoot_area.h>
+
 namespace RhobanSSL {
 namespace Strategy {
 
 class Offensive : public Strategy {
     private:
+    std::shared_ptr<Robot_behavior::SearchShootArea> search;
+    std::shared_ptr<Robot_behavior::Striker> striker;
     bool behaviors_are_assigned;
     bool is_closest;
 
     public:
     Offensive(Ai::AiData & ai_data);
-    virtual ~Offensive();        
+    virtual ~Offensive();
 
     virtual int min_robots() const;
     virtual int max_robots() const;
@@ -54,11 +59,11 @@ class Offensive : public Strategy {
 
     virtual std::list<
         std::pair<rhoban_geometry::Point,ContinuousAngle>
-    > get_starting_positions( int number_of_avalaible_robots ) ;  
+    > get_starting_positions( int number_of_avalaible_robots ) ;
     virtual bool get_starting_position_for_goalie(
-        rhoban_geometry::Point & linear_position, 
+        rhoban_geometry::Point & linear_position,
         ContinuousAngle & angular_position
-    ) ;  
+    ) ;
 
 
 };

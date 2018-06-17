@@ -32,7 +32,7 @@ SearchShootArea::SearchShootArea(
 ):
     RobotBehavior(ai_data),
     obstructed_view(-1),
-    period(4),
+    period(3),
     last_time_changement(0),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
