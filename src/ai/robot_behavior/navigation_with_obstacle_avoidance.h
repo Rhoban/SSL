@@ -105,6 +105,10 @@ class Navigation_with_obstacle_avoidance :
             const Vector2d & position_to_follow,
             const ContinuousAngle & angle
         );
+        virtual void get_following_position(
+        Vector2d * position_to_follow,
+        ContinuousAngle * angle
+        );
         virtual void avoid_the_ball(bool value = true);
 
         virtual RhobanSSLAnnotation::Annotations get_annotations() const;

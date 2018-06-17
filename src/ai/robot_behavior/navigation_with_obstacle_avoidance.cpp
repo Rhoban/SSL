@@ -47,6 +47,14 @@ void Navigation_with_obstacle_avoidance::set_following_position(
     this->target_angle.set_to_nearest(target_angle); 
 }
 
+void Navigation_with_obstacle_avoidance::get_following_position(
+        Vector2d * position_to_follow,
+        ContinuousAngle * angle
+    ) {
+    *position_to_follow = this->target_position;
+    *angle = this->target_angle;
+}
+
 void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
     // We determine the closest obstaclte in term of time collision.
 
@@ -210,6 +218,7 @@ void Navigation_with_obstacle_avoidance::update(
     //  this->robot_angular_position 
     //  this->robot()
     // are all avalaible
+    DEBUG("In Navigation_with_obstacle_avoidance, this->target_position = " << this->target_position);    
 
     update_control( time, robot, ball );
 }

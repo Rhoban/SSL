@@ -34,6 +34,12 @@ class ConsignFollower : public RobotBehavior {
         const ContinuousAngle & angle
     ) = 0;
 
+    virtual void get_following_position(
+        Vector2d * position_to_follow,
+        ContinuousAngle * angle
+    );
+    
+
     virtual void avoid_the_ball( bool value );
 
     virtual ~ConsignFollower();

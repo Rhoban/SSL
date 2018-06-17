@@ -78,6 +78,7 @@ class Navigation_inside_the_field :
             const Vector2d & position_to_follow,
             const ContinuousAngle & angle
         );
+        
         virtual void avoid_the_ball(bool value = true);
 
         virtual RhobanSSLAnnotation::Annotations get_annotations() const;

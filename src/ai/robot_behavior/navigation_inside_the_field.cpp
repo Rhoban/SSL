@@ -61,7 +61,6 @@ void Navigation_inside_the_field::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-
     update_control( time, robot, ball );
 }
 
