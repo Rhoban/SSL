@@ -1,14 +1,3 @@
-#Plan de jeu:
-- Le manager
-
-#Strats:
-- Attaque
-- Defensive
-
-#Behavior:
-- goalie (améliorer)
-
-
 Pouvoir sortir du terrain
 Goal à finir
 Dégagement sur un robot ou point

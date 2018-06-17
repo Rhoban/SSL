@@ -46,6 +46,7 @@ class GameInformations {
     bool infra_red(  int robot_id, Vision::Team team = Vision::Team::Ally ) const;
     int get_nearest_ball() const ;
     int get_nearest_ball( Vision::Team team ) const ;
+    int get_nearest_point( Vision::Team team, rhoban_geometry::Point point ) const ;
 
     double threat_robot( int id_robot, Vision::Team team = Vision::Team::Opponent) const ;
     std::vector<double> threat(  Vision::Team team = Vision::Team::Opponent ) const ;
