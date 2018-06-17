@@ -67,7 +67,7 @@ void Mur_2::stop(double time){
 
 void Mur_2::update(double time){
 
-  int nearest_ally_robot_from_ball = GameInformations::get_nearest_ball( Vision::Team::Ally );
+  int nearest_ally_robot_from_ball = GameInformations::get_nearest_ball( );
   is_closest_0 = false;
   is_closest_1 = false;
 
@@ -92,7 +92,7 @@ void Mur_2::assign_behavior_to_robots(
             new Robot_behavior::Mur_defensor(ai_data)
     );
     static_cast<Robot_behavior::Mur_defensor*>( mur1.get() )->declare_mur_robot_id( 0, 2 );
- 
+
     std::shared_ptr<Robot_behavior::RobotBehavior> mur2(
             new Robot_behavior::Mur_defensor(ai_data)
     );
@@ -121,8 +121,8 @@ void Mur_2::assign_behavior_to_robots(
                 assign_behavior( player_id(0), mur1 );
                 assign_behavior( player_id(1), mur2 );
             }
-            
-        } 
+
+        }
     }
 }
 

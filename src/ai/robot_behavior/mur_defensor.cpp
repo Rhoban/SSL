@@ -73,7 +73,7 @@ void Mur_defensor::update(
 
     double distance_defense_line = 1.5;
 
-    double target_rotation = detail::vec2angle(-ball_goal_vector);
+    double target_rotation = detail::vec2angle(-ball_robot_vector);
     rhoban_geometry::Point target_position;
 
     double multiple_robot_offset = ai_data.constants.robot_radius * 2 + 0.08;

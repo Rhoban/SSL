@@ -73,13 +73,13 @@ void AttaqueWithSupport::assign_behavior_to_robots(
     if( not(behaviors_are_assigned) ){
         //we assign now all the other behavior
         assert( get_player_ids().size() == 2 );
-        int strikerID = player_id(0); // we get the first if in get_player_ids()
+        int strikerID = player_id(1); // we get the first if in get_player_ids()
         striker = std::shared_ptr<Robot_behavior::Striker>(
             new Robot_behavior::Striker(ai_data)
         );
         assign_behavior( strikerID, striker );
 
-        int supportID = player_id(1);
+        int supportID = player_id(0);
         support = std::shared_ptr<Robot_behavior::RobotFollower>(
             new Robot_behavior::RobotFollower(ai_data)
         );

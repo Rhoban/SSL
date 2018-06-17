@@ -30,6 +30,9 @@ namespace Robot_behavior {
 class Degageur : public RobotBehavior  {
     private:
         rhoban_geometry::Point point_to_pass;
+        int robot_to_pass_id;
+        Vision::Team robot_to_pass_team;
+        bool needKick;
 
 
         ConsignFollower* follower;
@@ -42,7 +45,8 @@ class Degageur : public RobotBehavior  {
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
-        // void declare_point_to_pass( rhoban_geometry::Point point );
+        void declare_point_to_pass( rhoban_geometry::Point point );
+        void declare_robot_to_pass( int robot_id, Vision::Team team = Vision::Team::Ally );
 
 
 	virtual Control control() const;

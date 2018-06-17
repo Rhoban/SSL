@@ -344,7 +344,7 @@ void API::robotCharge(int id, bool charge)
     mutex.unlock();
 }
 
-void API::kick(int id, int kick)
+void API::kick(int id, int kick, float power)
 {
     mutex.lock();
     RhobanSSL::Shared_data shared;
@@ -354,6 +354,7 @@ void API::kick(int id, int kick)
     if (!control.ignore) {
         control.kick = false;
         control.chipKick = false;
+        control.kickPower = power;
 
         if (kick == 1) {
             control.kick = true;

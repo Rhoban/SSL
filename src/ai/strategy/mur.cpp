@@ -19,8 +19,7 @@
 
 #include "mur.h"
 
-#include <robot_behavior/goalie.h>
-#include <robot_behavior/striker.h>
+#include <robot_behavior/mur_defensor.h>
 
 namespace RhobanSSL {
 namespace Strategy {
@@ -50,7 +49,7 @@ int Mur::max_robots() const {
 }
 
 Goalie_need Mur::needs_goalie() const {
-    return Goalie_need::YES;
+    return Goalie_need::NO;
 }
 
 const std::string Mur::name = "mur";
@@ -79,18 +78,13 @@ void Mur::assign_behavior_to_robots(
 ){
     if( not(behaviors_are_assigned) ){
         // We first assign the behhavior of the goalie.
-        assign_behavior(
-            get_goalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::Goalie(ai_data)
-            )
-        );
 
         //we assign now all the other behavior
         assert( get_player_ids().size() == 1 );
         int id = player_id(0); // we get the first if in get_player_ids()
         assign_behavior(
             id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::Striker(ai_data)
+                new Robot_behavior::Mur_defensor(ai_data)
             )
         );
 
