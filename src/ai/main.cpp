@@ -131,7 +131,7 @@ int main(int argc, char **argv)
 
     
     TCLAP::ValueArg<std::string> sim_port(
-      "s", // short argument name  (with one character)
+      "u", // short argument name  (with one character)
       "sim_port", // long argument name
       "Vision client simulator port",
       false, // Flag is not required
