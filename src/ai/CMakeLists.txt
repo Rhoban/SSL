@@ -42,6 +42,7 @@ set (SOURCES
     robot_behavior/robot_follower.cpp
     robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
+    robot_behavior/striker_ai.cpp
     robot_behavior/degageur.cpp
     robot_behavior/test_kicker.cpp
     robot_behavior/position_follower.cpp

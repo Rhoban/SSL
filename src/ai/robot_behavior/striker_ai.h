@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__STRIKER__H__
-#define __ROBOT_BEHAVIOR__STRIKER__H__
+#ifndef __ROBOT_BEHAVIOR__STRIKER_AI__H__
+#define __ROBOT_BEHAVIOR__STRIKER_AI__H__
 
 #include "robot_behavior.h"
 #include "factory.h"
@@ -27,13 +27,12 @@ namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class Striker : public RobotBehavior  {
+class StrikerAi : public RobotBehavior  {
     private:
-    Vector2d striking_vector;
 	ConsignFollower* follower;
 
     public:
-        Striker(Ai::AiData& ai_data);
+        StrikerAi(Ai::AiData& ai_data);
 
         virtual void update(
             double time,
@@ -43,11 +42,9 @@ class Striker : public RobotBehavior  {
 
 	virtual Control control() const;
 
-    void declare_striking_vector( Vector2d vector );
-
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Striker();
+	virtual ~StrikerAi();
 };
 
 };
