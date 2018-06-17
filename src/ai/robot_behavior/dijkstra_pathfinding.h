@@ -45,6 +45,7 @@ class Dijkstra_pathfinding : public ConsignFollower  {
         ContinuousAngle target_angle;
         std::vector<rhoban_geometry::Point> list_of_points;
         float _dist_for_next_point;
+        int _count;
 
     public:
         Dijkstra_pathfinding(

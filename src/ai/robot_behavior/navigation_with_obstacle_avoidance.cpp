@@ -40,7 +40,7 @@ void Navigation_with_obstacle_avoidance::set_following_position(
     const ContinuousAngle & target_angle
 ){
     this->position_follower.set_following_position( position_to_follow, target_angle );
-    
+    // DEBUG("calling set_following_position on Navigation_with_obstacle_avoidance at " << position_to_follow);
     this->target_position = position_to_follow;
     this->target_angle = target_angle;
     this->target_angle = this->robot_angular_position;
@@ -218,8 +218,6 @@ void Navigation_with_obstacle_avoidance::update(
     //  this->robot_angular_position 
     //  this->robot()
     // are all avalaible
-    DEBUG("In Navigation_with_obstacle_avoidance, this->target_position = " << this->target_position);    
-
     update_control( time, robot, ball );
 }
 
