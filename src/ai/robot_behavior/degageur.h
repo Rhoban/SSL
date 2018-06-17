@@ -30,6 +30,7 @@ namespace Robot_behavior {
 class Degageur : public RobotBehavior  {
     private:
         rhoban_geometry::Point point_to_pass;
+        bool needKick;
 
 
         ConsignFollower* follower;

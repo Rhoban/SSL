@@ -31,6 +31,7 @@ Degageur::Degageur(
 ):
     RobotBehavior(ai_data),
     point_to_pass(),
+    needKick(false),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
 }
@@ -50,6 +51,12 @@ void Degageur::update(
 
     // //TODO: Viser un autre robot
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
+
+    if ( robot_position.getX() >  (oponent_goal_center().getX() - 4) ) {
+      needKick = true;
+    } else{
+      needKick = false;
+    }
 
     Vector2d ball_robot_vector = robot_position - ball_position();
 
@@ -97,7 +104,14 @@ Control Degageur::control() const {
     Control ctrl = follower->control();
     ctrl.charge = true;
     ctrl.kickPower = 1.0;
-    ctrl.chipKick = true;
+
+    if( needKick ){
+      ctrl.chipKick = false;
+      ctrl.kick = true;
+    } else{
+      ctrl.chipKick = true;
+      ctrl.kick = false;
+    }
     return ctrl;
 }
 

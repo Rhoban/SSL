@@ -163,13 +163,14 @@ void PlanVeschambres::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
+            // future_strats = { Strategy::Defensive2::name };
             if (ball_position().getX() <= 0) {
               //DEFENSIVE
-              future_strats = { Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+              future_strats = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
               is_in_offensive_mode = false;
             }else{
               //OFFENSIVE
-              future_strats = { Strategy::Mur::name, Strategy::Defensive::name, Strategy::AttaqueWithSupport::name };
+              future_strats = { GOALIE, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
               is_in_offensive_mode = true;
             }
             declare_and_assign_next_strategies(future_strats);
@@ -177,20 +178,21 @@ void PlanVeschambres::choose_a_strategy(double time){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }
         last_referee_changement = referee.edge_entropy();
-    }else{
-      if ( is_in_offensive_mode and ball_position().getX() <= 0 ) {
+    }
+    else if ( referee.get_state() == Referee_Id::STATE_RUNNING ){
+      if ( is_in_offensive_mode && ball_position().getX() <= 0) {
         //DEFENSIVE
-          DEBUG("defensive !!!! ");
+        DEBUG("defensive !!!! ");
         future_strats = { Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
         is_in_offensive_mode = false;
         clear_strategy_assignement();
         declare_and_assign_next_strategies(future_strats);
       }
-      if( not(is_in_offensive_mode) and ball_position().getX() > 0 ){
+      if( not(is_in_offensive_mode) && ball_position().getX() > 0 ){
         //OFFENSIVE
         DEBUG("offensive !!!! ");
-        future_strats = { Strategy::Mur::name, Strategy::Defensive::name, Strategy::AttaqueWithSupport::name };
-        is_in_offensive_mode = false;
+        future_strats = { Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+        is_in_offensive_mode = true;
         clear_strategy_assignement();
         declare_and_assign_next_strategies(future_strats);
       }
