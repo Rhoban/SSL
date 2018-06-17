@@ -17,27 +17,25 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__OFFENSIVE__H__
-#define __STRATEGY__OFFENSIVE__H__
+#ifndef __STRATEGY__GOALIESTRAT__H__
+#define __STRATEGY__GOALIESTRAT__H__
 
 #include "Strategy.h"
-
-#include <robot_behavior/striker.h>
-#include <robot_behavior/search_shoot_area.h>
+#include <robot_behavior/degageur.h>
+#include <robot_behavior/goalie.h>
 
 namespace RhobanSSL {
 namespace Strategy {
 
-class Offensive : public Strategy {
+class GoalieStrat : public Strategy {
     private:
-    std::shared_ptr<Robot_behavior::SearchShootArea> search;
-    std::shared_ptr<Robot_behavior::Striker> striker;
     bool behaviors_are_assigned;
-    bool is_closest;
+    std::shared_ptr<Robot_behavior::Degageur> degageur;
+    std::shared_ptr<Robot_behavior::Goalie> goalie;
 
     public:
-    Offensive(Ai::AiData & ai_data);
-    virtual ~Offensive();
+    GoalieStrat(Ai::AiData & ai_data);
+    virtual ~GoalieStrat();
 
     virtual int min_robots() const;
     virtual int max_robots() const;

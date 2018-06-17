@@ -87,6 +87,7 @@ set (SOURCES
     strategy/from_robot_behavior.cpp
     strategy/placer.cpp
     strategy/mur_2.cpp
+    strategy/goalie_strat.cpp
     strategy/prepare_kickoff.cpp
     strategy/example.cpp
     control/robot_control.cpp
@@ -148,8 +149,6 @@ if(CATKIN_ENABLE_TESTING)
     math/test_tangents.cpp
     math/test_vector2d.cpp
     math/test_matrix2d.cpp
-    control/test_pid.cpp
-    control/test_robot_control.cpp
     robot_behavior/test_robot_behavior.cpp
   )
 

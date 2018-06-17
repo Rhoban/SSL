@@ -149,9 +149,7 @@ PidControl RobotControl::limited_control(
     const Vector2d & robot_linear_velocity, 
     const ContinuousAngle & robot_angular_velocity
 ) const {
-    PidControl res = no_limited_control(
-        robot_position, robot_orientation
-    );
+    PidControl res = no_limited_control();
     if( res.velocity_rotation.value() != 0.0 ){
         double max_angular_velocity;
         if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
@@ -231,13 +229,8 @@ PidControl RobotControl::limited_control(
     return res;
 }
 
-PidControl RobotControlWithPid::no_limited_control(
-    const Vector2d & robot_position, 
-    const ContinuousAngle & robot_orientation
-) const {
-    return PidController::no_limited_control(
-        robot_position, robot_orientation
-    );
+PidControl RobotControlWithPid::no_limited_control() const {
+    return PidController::no_limited_control();
 }
 
 double RobotControlWithPid::get_dt() const {

@@ -60,7 +60,7 @@ void Degageur::update(
     }
 
 
-    if ( (point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id != -1) ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.   
+    if ( (point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id != -1) ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
         const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );
         point_to_pass = robot_to_pass.get_movement().linear_position( time );
     }
@@ -76,7 +76,6 @@ void Degageur::update(
 
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
-    rhoban_geometry::Point oponent_goal_point = oponent_goal_center();
     Vector2d ball_point_vector = point_to_pass - ball_position();
     ball_point_vector = ball_point_vector / ball_point_vector.norm();
 
