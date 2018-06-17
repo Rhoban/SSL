@@ -88,19 +88,21 @@ void Mur_defensor::update(
         multiple_robot_offset = 0;
     }
 
-    
-    if (target_rotation < -0.7071) {
-        target_position = ally_goal_point - ball_goal_vector * (std::abs(distance_defense_line / std::sin(target_rotation)) + ai_data.constants.robot_radius);
-        target_position += rhoban_geometry::Point(multiple_robot_offset,0);
-    } else {
-        if (target_rotation < 0.7071) {
-            target_position = ally_goal_point - ball_goal_vector * (distance_defense_line / std::cos(target_rotation) + ai_data.constants.robot_radius);
-            target_position += rhoban_geometry::Point(0,multiple_robot_offset);
-        } else {
+    if ( Vector2d(ally_goal_point - ball_position()).norm() > distance_defense_line ) {
+        if (target_rotation < -0.7071) {
             target_position = ally_goal_point - ball_goal_vector * (std::abs(distance_defense_line / std::sin(target_rotation)) + ai_data.constants.robot_radius);
-            target_position += rhoban_geometry::Point(-multiple_robot_offset,0);
-    }
-        
+            target_position += rhoban_geometry::Point(multiple_robot_offset,0);
+        } else {
+            if (target_rotation < 0.7071) {
+                target_position = ally_goal_point - ball_goal_vector * (distance_defense_line / std::cos(target_rotation) + ai_data.constants.robot_radius);
+                target_position += rhoban_geometry::Point(0,multiple_robot_offset);
+            } else {
+                target_position = ally_goal_point - ball_goal_vector * (std::abs(distance_defense_line / std::sin(target_rotation)) + ai_data.constants.robot_radius);
+                target_position += rhoban_geometry::Point(-multiple_robot_offset,0);
+            }
+        }
+    } else {
+        target_position = robot_position;
     }
 
     follower->set_following_position(Vector2d(target_position), target_rotation);

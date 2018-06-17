@@ -36,16 +36,8 @@ SearchShootArea::SearchShootArea(
     last_time_changement(0),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
-  p1 = vector2point(
-      Vector2d(
-        oponent_corner_left() - rhoban_geometry::Point(1, 1)
-      )
-  );
-  p2 = vector2point(
-      Vector2d(
-        center_mark() - rhoban_geometry::Point(-1, 2)
-      )
-  );
+  p1 = Vector2d(oponent_goal_center()) + rhoban_geometry::Point(-1, 2);
+  p2 = Vector2d(center_mark()) + rhoban_geometry::Point(1, -2);
 }
 
 void SearchShootArea::update(

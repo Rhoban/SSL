@@ -30,10 +30,10 @@ namespace Strategy {
 
 class Offensive : public Strategy {
     private:
-    std::shared_ptr<Robot_behavior::SearchShootArea> search;
-    std::shared_ptr<Robot_behavior::Striker> striker;
     bool behaviors_are_assigned;
     bool is_closest;
+    std::shared_ptr<Robot_behavior::SearchShootArea> search;
+    std::shared_ptr<Robot_behavior::Striker> striker;
 
     public:
     Offensive(Ai::AiData & ai_data);
