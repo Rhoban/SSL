@@ -26,6 +26,7 @@
 #include <strategy/prepare_kickoff.h>
 #include <strategy/base.h>
 #include <strategy/mur_2.h>
+#include <strategy/offensive.h>
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
@@ -74,6 +75,12 @@ Thomas::Thomas(
         Strategy::Prepare_kickoff::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Prepare_kickoff(ai_data)
+        )
+    );
+    register_strategy(
+        Strategy::Offensive::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Offensive(ai_data)
         )
     );
     register_strategy(

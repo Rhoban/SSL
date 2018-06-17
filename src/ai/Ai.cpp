@@ -190,6 +190,9 @@ void AI::send_control( int robot_id, const Control & ctrl ){
                 robot_id, true, 0.0, 0.0, 0.0
             );
         }else{
+//            if( robot_id == 1 ){
+//                DEBUG( "CTRL : " << ctrl );
+//            } 
             int kick = 0;
             if (ctrl.kick) kick = 1;
             else if (ctrl.chipKick) kick = 2;

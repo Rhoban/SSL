@@ -134,6 +134,27 @@ int GameInformations::get_nearest_ball( Vision::Team team ) const{
 }
 
 
+int GameInformations::get_nearest_point( Vision::Team team, rhoban_geometry::Point point ) const{
+    int id = -1;
+    double distance_max = 666;
+    for (size_t i = 0; i < 7; i++) {
+      const Ai::Robot & robot = get_robot( i,  team );
+      if(robot.is_present_in_vision()){
+        const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
+        Vector2d ball_robot = robot_position - point;
+
+        double distance = ball_robot.norm();
+        if (distance < distance_max) {
+          distance_max = distance;
+          id = i;
+        }
+      }
+    }
+    return id;
+}
+
+
+
 double GameInformations::threat_robot( int id_robot, Vision::Team team ) const{
   double distance = -1;
   const Ai::Robot & robot = get_robot( id_robot,  team );
