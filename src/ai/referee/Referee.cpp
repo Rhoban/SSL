@@ -28,8 +28,6 @@ const std::string Referee_Id::STATE_HALTED = "halted";
 const std::string Referee_Id::STATE_STOPPED = "stopped";
 const std::string Referee_Id::STATE_PREPARE_KICKOFF = "prepare_kickoff";
 const std::string Referee_Id::STATE_PREPARE_PENALTY = "prepare_penalty";
-const std::string Referee_Id::STATE_PREPARE_DIRECT = "prepare_direct";
-const std::string Referee_Id::STATE_PREPARE_INDIRECT = "prepare_indirect";
 const std::string Referee_Id::STATE_RUNNING = "running";
 const std::string Referee_Id::STATE_TIMEOUT = "timeout";
 
@@ -56,11 +54,8 @@ const std::string Referee_Id::EDGE_KICKOFF_BLUE = "kickoff_blue";
 const std::string Referee_Id::EDGE_PENALTY_BLUE = "penalty_blue";
 const std::string Referee_Id::EDGE_PENALTY_YELLOW = "penalty_yellow";
 
-const std::string Referee_Id::EDGE_INDIRECT_BLUE = "indirect_blue";
-const std::string Referee_Id::EDGE_INDIRECT_YELLOW = "indirect_yellow";
-
-const std::string Referee_Id::EDGE_DIRECT_BLUE = "direct_blue";
-const std::string Referee_Id::EDGE_DIRECT_YELLOW = "direct_yellow";
+const std::string Referee_Id::EDGE_INDIRECT = "indirect";
+const std::string Referee_Id::EDGE_DIRECT = "direct";
 
 const std::string Referee_Id::EDGE_NORMAL_START_FOR_KICKOFF = "normal_start_k";
 const std::string Referee_Id::EDGE_NORMAL_START_FOR_PENALTY = "normal_start_p";
@@ -264,54 +259,6 @@ Referee::Referee():
         }
     );
 
-    /* machine_state.add_edge(
-        Referee_Id::EDGE_DIRECT_BLUE,
-        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_DIRECT,
-        command_is_<SSL_Referee::DIRECT_FREE_BLUE>,
-        [&](
-            const Referee_data & referee_data,
-            unsigned int run_number, unsigned int atomic_run_number
-        ){
-            team_having_direct = Ai::Blue;
-        }
-    ); */
-
-    /* machine_state.add_edge(
-        Referee_Id::EDGE_DIRECT_YELLOW,
-        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_DIRECT,
-        command_is_<SSL_Referee::DIRECT_FREE_YELLOW>,
-        [&](
-            const Referee_data & referee_data,
-            unsigned int run_number, unsigned int atomic_run_number
-        ){
-            team_having_direct = Ai::Yellow;
-        }
-    ); */
-
-    /* machine_state.add_edge(
-        Referee_Id::EDGE_INDIRECT_BLUE,
-        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_INDIRECT,
-        command_is_<SSL_Referee::INDIRECT_FREE_BLUE>,
-        [&](
-            const Referee_data & referee_data,
-            unsigned int run_number, unsigned int atomic_run_number
-        ){
-            team_having_indirect = Ai::Blue;
-        }
-    ); */
-
-    /* machine_state.add_edge(
-        Referee_Id::EDGE_INDIRECT_YELLOW,
-        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_INDIRECT,
-        command_is_<SSL_Referee::INDIRECT_FREE_YELLOW>,
-        [&](
-            const Referee_data & referee_data,
-            unsigned int run_number, unsigned int atomic_run_number
-        ){
-            team_having_indirect = Ai::Yellow;
-        }
-    ); */
-
     machine_state.add_edge(
         Referee_Id::EDGE_NORMAL_START_FOR_KICKOFF,
         Referee_Id::STATE_PREPARE_KICKOFF, Referee_Id::STATE_RUNNING,
@@ -401,14 +348,6 @@ Ai::Team Referee::kickoff_team() const {
 
 Ai::Team Referee::penalty_team() const {
     return team_having_penalty;
-}
-
-Ai::Team Referee::direct_team() const {
-    return team_having_direct;
-}
-
-Ai::Team Referee::indirect_team() const {
-    return team_having_indirect;
 }
 
 bool Referee::blue_have_it_s_goal_on_positive_x_axis() const {

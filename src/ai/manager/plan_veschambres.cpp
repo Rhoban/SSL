@@ -194,30 +194,6 @@ void PlanVeschambres::choose_a_strategy(double time){
             
             last_referee_changement = referee.edge_entropy();
 
-        } else if( referee.get_state() == Referee_Id::STATE_PREPARE_DIRECT ){
-
-            clear_strategy_assignement();
-
-            if( get_team() == referee.direct_team() ){
-                
-            } else {
-
-            }
-
-            last_referee_changement = referee.edge_entropy();
-
-        } else if( referee.get_state() == Referee_Id::STATE_PREPARE_INDIRECT ){
-
-            clear_strategy_assignement();
-
-            if( get_team() == referee.indirect_team() ){
-                
-            } else {
-
-            }
-
-            last_referee_changement = referee.edge_entropy();
-
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
             // future_strats = { Strategy::Defensive2::name };
             if (ball_position().getX() <= 0) {
