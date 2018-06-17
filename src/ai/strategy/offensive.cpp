@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,14 +19,17 @@
 
 #include "offensive.h"
 
-#include <robot_behavior/striker.h>
-#include <robot_behavior/search_shoot_area.h>
-
 namespace RhobanSSL {
 namespace Strategy {
 
 Offensive::Offensive(Ai::AiData & ai_data):
     Strategy(ai_data),
+    search(std::shared_ptr<Robot_behavior::SearchShootArea>(
+      new Robot_behavior::SearchShootArea(ai_data)
+    )),
+    striker(std::shared_ptr<Robot_behavior::Striker>(
+      new Robot_behavior::Striker(ai_data)
+    )),
     is_closest(false)
 {
 }
@@ -79,23 +82,14 @@ void Offensive::assign_behavior_to_robots(
     > assign_behavior,
     double time, double dt
 ){
-
-    std::shared_ptr<Robot_behavior::RobotBehavior> search(
-        new Robot_behavior::SearchShootArea(ai_data)
-    );
-    std::shared_ptr<Robot_behavior::RobotBehavior> strick(
-        new Robot_behavior::Striker(ai_data)
-    );
-
     if( not(behaviors_are_assigned) ){
 
         assert( get_player_ids().size() == 1 );
         assign_behavior( player_id(0), search );
 
-        behaviors_are_assigned = true;
     } else {
         if ( is_closest == true ) {
-            assign_behavior( player_id(0), strick );
+            assign_behavior( player_id(0), striker );
 
         } else {
             assign_behavior( player_id(0), search );

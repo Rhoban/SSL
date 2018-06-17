@@ -31,8 +31,6 @@ Point center_of_cone_incircle(
     Vector2d u = normalized( cone_base_A - cone_vertex );
     Vector2d v = normalized( cone_base_B - cone_vertex );
     double u_vec_v = vectorial_product(u, v);
-    DEBUG(u);
-    DEBUG(v);
     assert( u_vec_v != 0.0 );
     double signe = (u_vec_v>=0)?1:-1;
     return vector2point(
