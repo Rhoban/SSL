@@ -56,7 +56,8 @@ struct Referee_Id {
     static const std::string EDGE_FORCE_START;
     static const std::string EDGE_KICKOFF_YELLOW;
     static const std::string EDGE_KICKOFF_BLUE;
-    static const std::string EDGE_PENALTY;
+    static const std::string EDGE_PENALTY_YELLOW;
+    static const std::string EDGE_PENALTY_BLUE;
     static const std::string EDGE_INDIRECT;
     static const std::string EDGE_DIRECT;
 
@@ -104,6 +105,7 @@ private:
     void save_last_time_stamps();
 
     Ai::Team team_having_kickoff;
+    Ai::Team team_having_penalty;
 public:
     Referee();
 
@@ -111,7 +113,9 @@ public:
     const ID & get_state() const ;
 
     void update( double time );
+
     Ai::Team kickoff_team() const ;
+    Ai::Team penalty_team() const ;
 
     bool blue_have_it_s_goal_on_positive_x_axis() const;
     Ai::Team get_team_color( const std::string & team_name ) const;

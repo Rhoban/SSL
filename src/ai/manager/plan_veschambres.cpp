@@ -184,8 +184,14 @@ void PlanVeschambres::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
 
             clear_strategy_assignement();
-            future_strats = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };
-            declare_and_assign_next_strategies(future_strats);
+
+            if( get_team() == referee.penalty_team() ){
+                future_strats = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };
+                declare_and_assign_next_strategies(future_strats);
+            } else {
+            }
+
+            
             last_referee_changement = referee.edge_entropy();
 
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){

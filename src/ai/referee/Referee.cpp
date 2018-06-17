@@ -49,7 +49,8 @@ const std::string Referee_Id::EDGE_TIMEOUT_START = "timeout_start";
 const std::string Referee_Id::EDGE_FORCE_START = "force_start";
 const std::string Referee_Id::EDGE_KICKOFF_YELLOW = "kickoff_yellow";
 const std::string Referee_Id::EDGE_KICKOFF_BLUE = "kickoff_blue";
-const std::string Referee_Id::EDGE_PENALTY = "penalty";
+const std::string Referee_Id::EDGE_PENALTY_BLUE = "penalty_blue";
+const std::string Referee_Id::EDGE_PENALTY_YELLOW = "penalty_yellow";
 const std::string Referee_Id::EDGE_INDIRECT = "indirect";
 const std::string Referee_Id::EDGE_DIRECT = "direct";
 
@@ -231,11 +232,26 @@ Referee::Referee():
         }
     );
     machine_state.add_edge(
-        Referee_Id::EDGE_PENALTY,
+        Referee_Id::EDGE_PENALTY_BLUE,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_PENALTY,
-        command_is_one_of_<
-            SSL_Referee::PREPARE_PENALTY_BLUE, SSL_Referee::PREPARE_PENALTY_YELLOW
-        >
+        command_is_<SSL_Referee::PREPARE_PENALTY_BLUE>,
+        [&](
+            const Referee_data & referee_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_penalty = Ai::Blue;
+        }
+    );
+    machine_state.add_edge(
+        Referee_Id::EDGE_PENALTY_YELLOW,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_PENALTY,
+        command_is_<SSL_Referee::PREPARE_PENALTY_YELLOW>,
+        [&](
+            const Referee_data & referee_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_penalty = Ai::Yellow;
+        }
     );
     machine_state.add_edge(
         Referee_Id::EDGE_INDIRECT,
@@ -337,6 +353,10 @@ const Referee::ID & Referee::get_state() const {
 
 Ai::Team Referee::kickoff_team() const {
     return team_having_kickoff;
+}
+
+Ai::Team Referee::penalty_team() const {
+    return team_having_penalty;
 }
 
 bool Referee::blue_have_it_s_goal_on_positive_x_axis() const {
