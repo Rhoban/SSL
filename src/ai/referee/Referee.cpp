@@ -217,6 +217,7 @@ Referee::Referee():
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
         command_is_<SSL_Referee::FORCE_START>
     );
+    
     machine_state.add_edge(
         Referee_Id::EDGE_KICKOFF_YELLOW,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_KICKOFF,
@@ -263,7 +264,7 @@ Referee::Referee():
         }
     );
 
-    machine_state.add_edge(
+    /* machine_state.add_edge(
         Referee_Id::EDGE_DIRECT_BLUE,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_DIRECT,
         command_is_<SSL_Referee::DIRECT_FREE_BLUE>,
@@ -273,9 +274,9 @@ Referee::Referee():
         ){
             team_having_direct = Ai::Blue;
         }
-    );
+    ); */
 
-    machine_state.add_edge(
+    /* machine_state.add_edge(
         Referee_Id::EDGE_DIRECT_YELLOW,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_DIRECT,
         command_is_<SSL_Referee::DIRECT_FREE_YELLOW>,
@@ -285,9 +286,9 @@ Referee::Referee():
         ){
             team_having_direct = Ai::Yellow;
         }
-    );
+    ); */
 
-    machine_state.add_edge(
+    /* machine_state.add_edge(
         Referee_Id::EDGE_INDIRECT_BLUE,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_INDIRECT,
         command_is_<SSL_Referee::INDIRECT_FREE_BLUE>,
@@ -297,9 +298,9 @@ Referee::Referee():
         ){
             team_having_indirect = Ai::Blue;
         }
-    );
+    ); */
 
-    machine_state.add_edge(
+    /* machine_state.add_edge(
         Referee_Id::EDGE_INDIRECT_YELLOW,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_INDIRECT,
         command_is_<SSL_Referee::INDIRECT_FREE_YELLOW>,
@@ -309,7 +310,7 @@ Referee::Referee():
         ){
             team_having_indirect = Ai::Yellow;
         }
-    );
+    ); */
 
     machine_state.add_edge(
         Referee_Id::EDGE_NORMAL_START_FOR_KICKOFF,
