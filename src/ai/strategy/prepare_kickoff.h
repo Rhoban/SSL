@@ -87,6 +87,7 @@ class Prepare_kickoff : public Strategy {
             ContinuousAngle & angular_position
         ) ;  
 
+        virtual void set_goalie( int id, bool to_be_managed );
 }; 
 
 };
