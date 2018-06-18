@@ -214,7 +214,7 @@ void PlanVeschambres::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
-            set_ball_avoidance_for_all_robots(true);
+            set_ball_avoidance_for_all_robots(false);
             if(get_valid_team_ids().size() > 0){
                 if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
