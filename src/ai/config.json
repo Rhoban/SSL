@@ -29,22 +29,22 @@
             "real" : 0.0
         },
         "d_translation" : {
-            "simu" : 1.5,
+            "simu" : 0,
             "_simu" : 1,
-            "real" : 1.5
+            "real" : 0
         },
 
         "p_orientation":{
             "simu" : 3,
-            "real" : 3.0
+            "real" : 3
         },
         "i_orientation":{
             "simu" : 0.0,
             "real" : 0.0
         },
         "d_orientation":{
-            "simu" : 5.0,
-            "real" : 5.0
+            "simu" : 0.0,
+            "real" : 0
         }
     },
     "team" : {

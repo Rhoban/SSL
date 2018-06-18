@@ -80,7 +80,8 @@ PidController::PidController(
     kp_o(p_o), ki_o(i_o), kd_o(d_o),
     static_robot(true),
     start_time(0.0), time(0.0), dt(0.0),
-    acc_r(0.0), acc(0.0,0.0)
+    acc_r(0.0), acc(0.0,0.0),
+    ancient_pos(0.0,0.0), ancient_orientation(0.0)
 { }
 
 
@@ -147,9 +148,10 @@ void PidController::compute_no_limited_translation_control(
     }
     Vector2d xt = goal_position(time);
     Vector2d xt_dt = goal_position(time+dt);
-    Vector2d velocity = (xt_dt - xt )/dt;
+    Vector2d velocity = (robot_position - ancient_pos )/dt;
 
-    Vector2d error = robot_position - xt;
+
+    Vector2d error =  xt - robot_position;
 
     if(
         std::fabs( error[0] ) < CALCULUS_ERROR and
@@ -157,6 +159,9 @@ void PidController::compute_no_limited_translation_control(
     ){
         error = Vector2d(0.0,0.0);
     }
+    //DEBUG("error: " << error );
+    //std::cout<<time<<" "<<error[0]<<" "<<error[1]<<std::endl;
+
 
     acc_dt[0] = acc[0] - ki_t*error[0]*dt;
     if (acc_dt[0] > LIMITE){
@@ -181,8 +186,12 @@ void PidController::compute_no_limited_translation_control(
     }
 
     no_limited_translation_control_value = (
-        -kp_t*error + acc + kd_t*velocity
+        kp_t*error + acc + kd_t*velocity
     );
+
+    //DEBUG( "PID" << time<<" "<<no_limited_translation_control_value[0]<<" "<<no_limited_translation_control_value[1]);
+
+    ancient_pos = robot_position;
 
 }
 
@@ -197,8 +206,8 @@ void PidController::compute_no_limited_angular_control(
     ContinuousAngle theta_t_dt = goal_orientation(time+dt);
     //DEBUG( "theta_t : " << theta_t );
     //DEBUG( "theta_t_dt : " << theta_t_dt );
-    ContinuousAngle velocity = (theta_t_dt - theta_t )/dt;
-    ContinuousAngle error = robot_orientation - theta_t;
+    ContinuousAngle velocity = (robot_orientation - ancient_orientation )/dt;
+    ContinuousAngle error = theta_t - robot_orientation;
     //DEBUG("velocity : " << velocity );
     //DEBUG("theta_t: " << theta_t );
     //DEBUG("robot_orientation: " << robot_orientation );
@@ -220,8 +229,9 @@ void PidController::compute_no_limited_angular_control(
     }
 
     no_limited_angular_control_value = (
-        -kp_o*error.value() + acc_r + kd_o*velocity.value()
+        kp_o*error.value() + acc_r + kd_o*velocity.value()
     );
+    ancient_orientation = robot_orientation;
 
     //DEBUG( "kpt : " << kp_o );
 }

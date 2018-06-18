@@ -43,6 +43,7 @@ set (SOURCES
     robot_behavior/robot_follower.cpp
     robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
+    robot_behavior/striker_ai.cpp
     robot_behavior/degageur.cpp
     robot_behavior/test_kicker.cpp
     robot_behavior/position_follower.cpp
@@ -53,6 +54,7 @@ set (SOURCES
     robot_behavior/navigation_with_obstacle_avoidance.cpp
     robot_behavior/navigation_inside_the_field.cpp
     robot_behavior/obstructor.cpp
+    robot_behavior/wait_pass.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp

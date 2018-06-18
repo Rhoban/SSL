@@ -29,6 +29,8 @@
 #include "Data.h"
 #include <core/print_collection.h>
 #include <manager/factory.h>
+#include "client_config.h"
+
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -106,6 +108,39 @@ int main(int argc, char **argv)
     );
 
     TCLAP::SwitchArg em("e", "em", "Stop all", cmd, false);
+
+    TCLAP::ValueArg<std::string> addr(
+      "a", // short argument name  (with one character)
+      "address", // long argument name
+      "Vision client address",
+      false, // Flag is not required
+      SSL_VISION_ADDRESS, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+    TCLAP::ValueArg<std::string> port(
+      "p", // short argument name  (with one character)
+      "port", // long argument name
+      "Vision client port",
+      false, // Flag is not required
+      SSL_VISION_PORT, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+    
+    TCLAP::ValueArg<std::string> sim_port(
+      "u", // short argument name  (with one character)
+      "sim_port", // long argument name
+      "Vision client simulator port",
+      false, // Flag is not required
+      SSL_SIMULATION_VISION_PORT, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+
     cmd.parse(argc, argv);
 
 
@@ -137,20 +172,34 @@ int main(int argc, char **argv)
         std::cerr << "Unknonw zone !"  << std::endl;
         assert(false);
     }
+
+
+
+    
+    // // Instantiationg the vision
+    // AIVisionClient vision(
+    //   data,
+    //   yellow.getValue() ? Ai::Yellow : Ai::Blue,
+    //   simulation.getValue(), part_of_the_field_used
+    //   );
+
+    
     // Instantiationg the vision
     AIVisionClient vision(
-        data,
-        yellow.getValue() ? Ai::Yellow : Ai::Blue,
-        simulation.getValue(), part_of_the_field_used
-    );
+      data,
+      yellow.getValue() ? Ai::Yellow : Ai::Blue,
+      simulation.getValue(),
+      addr.getValue(), port.getValue(),sim_port.getValue(), part_of_the_field_used
+      );
 
+    
     // AI Commander to control the robots
     AICommander *commander;
     if (simulation.getValue()) {
-        commander = new AICommanderSimulation(yellow.getValue());
+      commander = new AICommanderSimulation(yellow.getValue());
     } else {
-        // XXX: To test!!
-        commander = new AICommanderReal(yellow.getValue());
+      // XXX: To test!!
+      commander = new AICommanderReal(yellow.getValue());
     }
 
     if (em.getValue()) {

@@ -56,6 +56,9 @@ struct PidController {
     double acc_r;
     double acc_r_dt;
 
+    Vector2d ancient_pos;
+    ContinuousAngle ancient_orientation;
+
     double no_limited_angular_control_value;
     Vector2d no_limited_translation_control_value;
 
