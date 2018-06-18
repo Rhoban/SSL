@@ -30,6 +30,15 @@ class PlanVeschambres : public Manager {
     private:
     const Referee & referee;
 
+    //penalty
+    std::vector< std::list<std::string> >  penalty_strats;
+    //goale
+    std::vector< std::list<std::string> > goalie_strats;
+    //offensiv
+    std::vector< std::list<std::string> > offensive_strats;
+    //defensive
+    std::vector< std::list<std::string> > defensive_strats;
+
     bool is_in_offensive_mode;
 
     bool in_defensive_free_kick;
