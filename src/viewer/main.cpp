@@ -5,6 +5,7 @@
 #include <QApplication>
 #include "mainwindow.h"
 #include "API.h"
+#include "client_config.h"
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -109,19 +110,28 @@ int main(int argc, char *argv[])
         std::cerr << "Unknonw zone !"  << std::endl;
         assert(false);
     }
+
+    std::string theport;
+    if(simulation.getValue())
+    {
+      theport=sim_port.getValue();
+      
+    }
+    else
+      theport=port.getValue();
     // Viewer API
     API api(
         team_name.getValue(), simulation.getValue(), 
         yellow.getValue() ?
-            RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
+        RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
         commander, config_path.getValue(),
         part_of_the_field_used,
         addr.getValue(),
-        port.getValue(),
-        sim_port.getValue()
+        theport,
+        theport
       );
-
-    // Running Qt application
+      
+      // Running Qt application
     QApplication a(argc, argv);
     MainWindow w(&api);
     w.show();

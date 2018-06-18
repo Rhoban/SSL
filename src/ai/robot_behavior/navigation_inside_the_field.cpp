@@ -68,7 +68,7 @@ void Navigation_inside_the_field::update(
 void Navigation_inside_the_field::update_control(
     double time, const Ai::Robot & robot, const Ai::Ball & ball
 ){
-    double marge = get_robot_radius() - 0.2;
+    double marge = get_robot_radius();
     if( following_position_was_updated ){
         Box cropped_field(
             field_SW() + Vector2d( marge, marge ),
