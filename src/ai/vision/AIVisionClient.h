@@ -72,7 +72,7 @@ protected:
     
 private:
 
-  bool object_coordonate_is_valid(int x, int y) const ;
+  bool object_coordonate_is_valid(double x, double y) const ;
 
   Vision::VisionData oldVisionData;
   Vision::VisionData visionData;
