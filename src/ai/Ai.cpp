@@ -49,7 +49,7 @@ void AI::check_time_is_coherent() const {
 }
 
 void AI::limits_velocity( Control & ctrl ) const {
-#if 1
+#if 0
     if( ai_data.constants.translation_velocity_limit > 0.0 ){
         if(
             ctrl.velocity_translation.norm() >
