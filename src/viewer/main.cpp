@@ -98,13 +98,13 @@ int main(int argc, char *argv[])
         commander = new RhobanSSL::AICommanderReal(yellow.getValue());
     }
 
-    RhobanSSL::AIVisionClient::Part_of_the_field part_of_the_field_used;
+    RhobanSSL::Vision::Part_of_the_field part_of_the_field_used;
     if( zone_name.getValue() == "all" ){
-        part_of_the_field_used = RhobanSSL::AIVisionClient::Part_of_the_field::ALL_FIELD;
+        part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::ALL_FIELD;
     }else if( zone_name.getValue() == "positive" ){
-        part_of_the_field_used = RhobanSSL::AIVisionClient::Part_of_the_field::POSIVE_HALF_FIELD;
+        part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::POSIVE_HALF_FIELD;
     }else if( zone_name.getValue() == "negative" ){
-        part_of_the_field_used = RhobanSSL::AIVisionClient::Part_of_the_field::NEGATIVE_HALF_FIELD;
+        part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::NEGATIVE_HALF_FIELD;
     }else{
         std::cerr << "Unknonw zone !"  << std::endl;
         assert(false);

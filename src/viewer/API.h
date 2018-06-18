@@ -21,7 +21,7 @@ public:
     RhobanSSL::Ai::Team team, 
     RhobanSSL::AICommander *commander,
     const std::string & config_path,
-    RhobanSSL::AIVisionClient::Part_of_the_field part_of_the_field_used,
+    RhobanSSL::Vision::Part_of_the_field part_of_the_field_used,
     std::string addr=SSL_VISION_ADDRESS, std::string port=SSL_VISION_PORT, std::string sim_port=SSL_SIMULATION_VISION_PORT
     );
   virtual ~API();

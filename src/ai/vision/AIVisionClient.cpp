@@ -32,7 +32,7 @@ namespace RhobanSSL
 {
 AIVisionClient::AIVisionClient(
   Data& shared_data, Ai::Team myTeam, bool simulation, 
-  Part_of_the_field part_of_the_field
+  Vision::Part_of_the_field part_of_the_field
   ): 
   VisionClient(simulation), shared_data(shared_data), 
   part_of_the_field_used(part_of_the_field), myTeam(myTeam)
@@ -43,7 +43,7 @@ AIVisionClient::AIVisionClient(
 AIVisionClient::AIVisionClient(
   Data& shared_data, Ai::Team myTeam, bool simulation,
   std::string addr, std::string port, std::string sim_port,
-  Part_of_the_field part_of_the_field
+  Vision::Part_of_the_field part_of_the_field
   ): 
   VisionClient(simulation,addr, port, sim_port), shared_data(shared_data), 
   part_of_the_field_used(part_of_the_field), myTeam(myTeam)
@@ -123,7 +123,11 @@ void AIVisionClient::packetReceived()
       for (auto ball : detection.balls()) {
         double x = ball.x()/1000.0;
         double y = ball.y()/1000.0;
-        if( object_coordonate_is_valid(x,y) ){
+        if(
+            object_coordonate_is_valid(
+                x, y, part_of_the_field_used
+            )
+        ){
           visionData.ball.update(detection.t_sent(), Point(x,y)); // TODO HACK : IL FAUT METTRE t_send() ?
           break;
         }
@@ -138,7 +142,11 @@ void AIVisionClient::packetReceived()
       for (auto ball : detection.balls()) {
         double x = ball.x()/1000.0;
         double y = ball.y()/1000.0;
-        if( not( object_coordonate_is_valid(x,y) ) ){
+        if( not( 
+            object_coordonate_is_valid(
+                x,y, part_of_the_field_used
+            )
+        ) ){
           continue;
         }
         Point pos(x, y);
@@ -186,7 +194,12 @@ void AIVisionClient::updateRobotInformation(
   const SSL_DetectionRobot & robotFrame, bool ally,
   Ai::Team team_color
   ){
-  if( not( object_coordonate_is_valid(robotFrame.x()/1000.0, robotFrame.y()/1000.0) ) ){
+  if( not( 
+        object_coordonate_is_valid(
+            robotFrame.x()/1000.0, robotFrame.y()/1000.0
+            , part_of_the_field_used
+        ) 
+  ) ){
     return;
   }
   if(robotFrame.has_robot_id()){
@@ -201,7 +214,7 @@ void AIVisionClient::updateRobotInformation(
         > position = Vision::Factory::filter(
           robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
           orientation_is_defined, 
-          oldVisionData
+          oldVisionData, part_of_the_field_used
           );
 //                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
@@ -217,25 +230,5 @@ void AIVisionClient::updateRobotInformation(
     }
   }
 }
-
-bool AIVisionClient::object_coordonate_is_valid(double x,double y) const {
-  switch(part_of_the_field_used){
-    case Part_of_the_field::POSIVE_HALF_FIELD : {
-      return x>0;
-    }
-      break;
-    case Part_of_the_field::NEGATIVE_HALF_FIELD : {
-      return x<0;
-    }
-      break;
-    case Part_of_the_field::ALL_FIELD: {
-      return true;
-    }
-      break;
-    default:;
-  }
-  return false;
-}
-
 
 }

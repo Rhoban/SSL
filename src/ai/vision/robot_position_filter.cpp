@@ -3,6 +3,31 @@
 namespace RhobanSSL {
 namespace Vision {
 
+#define ERROR_FIELD 0.1
+
+bool object_coordonate_is_valid(
+    double x,double y,
+    Vision::Part_of_the_field part_of_the_field_used
+){
+  switch(part_of_the_field_used){
+    case Part_of_the_field::POSIVE_HALF_FIELD : {
+      return x>ERROR_FIELD;
+    }
+      break;
+    case Part_of_the_field::NEGATIVE_HALF_FIELD : {
+      return x<ERROR_FIELD;
+    }
+      break;
+    case Part_of_the_field::ALL_FIELD: {
+      return true;
+    }
+      break;
+    default:;
+  }
+  return false;
+}
+
+
 std::pair<
     rhoban_geometry::Point,
     ContinuousAngle
@@ -10,7 +35,8 @@ std::pair<
 Robot_position_filter::average_filter(
     int robot_id, const SSL_DetectionRobot & robotFrame, Ai::Team team_color, bool ally, 
     const std::map<int, SSL_DetectionFrame> & camera_detections,
-    bool & orientation_is_defined, const Vision::VisionData & old_vision_data
+    bool & orientation_is_defined, const Vision::VisionData & old_vision_data,
+    Part_of_the_field part_of_the_field_used
 ){
     int n_linear = 0;
     int n_angular = 0;
@@ -27,6 +53,14 @@ Robot_position_filter::average_filter(
             robots = &detection.robots_blue();
         }
         for( auto robot : *robots ){
+            if(
+                ! object_coordonate_is_valid(
+                    robot.x()/1000.0, robot.y()/1000.0,
+                    part_of_the_field_used
+                )
+            ){
+                continue;
+            }
             if(
                 robot.has_robot_id()
                 and (
