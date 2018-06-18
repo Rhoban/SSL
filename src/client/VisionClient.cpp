@@ -24,6 +24,7 @@ VisionClient::VisionClient(bool simulation,std::string addr, std::string port, s
   if (simulation) {
     port = sim_port;
   }
+  std::cout<<"Vision client (simulation="<<((simulation)?"True":"False")<<"): "<<addr<<":"<<port<<std::endl;
 
   init();
 }
