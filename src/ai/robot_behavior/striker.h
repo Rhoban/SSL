@@ -29,7 +29,8 @@ namespace Robot_behavior {
 
 class Striker : public RobotBehavior  {
     private:
-    Vector2d striking_vector;
+    bool use_custom_vector;
+    rhoban_geometry::Point striking_point;
 	ConsignFollower* follower;
 
     public:
@@ -43,7 +44,7 @@ class Striker : public RobotBehavior  {
 
 	virtual Control control() const;
 
-    void declare_striking_vector( Vector2d vector );
+    void declare_point_to_strik( rhoban_geometry::Point point );
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
