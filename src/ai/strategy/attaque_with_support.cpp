@@ -25,9 +25,6 @@ namespace Strategy {
 
 AttaqueWithSupport::AttaqueWithSupport(Ai::AiData & ai_data):
     Strategy(ai_data),
-    striker(std::shared_ptr<Robot_behavior::Striker>(
-        new Robot_behavior::Striker(ai_data)
-    )),
     support(std::shared_ptr<Robot_behavior::RobotFollower>(
         new Robot_behavior::RobotFollower(ai_data)
     )),
@@ -66,12 +63,21 @@ const std::string AttaqueWithSupport::name = "attaque_with_support";
 void AttaqueWithSupport::start(double time){
     DEBUG("START PREPARE KICKOFF");
     behaviors_are_assigned = false;
+
+    striker = std::shared_ptr<Robot_behavior::Striker>(
+      new Robot_behavior::Striker(ai_data)
+    );
+
 }
 void AttaqueWithSupport::stop(double time){
     DEBUG("STOP PREPARE KICKOFF");
 }
 
 void AttaqueWithSupport::update(double time){
+
+    results = GameInformations::find_goal_best_move( ball_position() );
+    striker->declare_point_to_strik(results.first);
+
 }
 
 void AttaqueWithSupport::assign_behavior_to_robots(
@@ -94,12 +100,8 @@ void AttaqueWithSupport::assign_behavior_to_robots(
 
         int strikerID;
         int supportID;
-        std::vector<int> v_obstruct;
-        std::vector<int> v;
+        double seuil = 0.35;
 
-        v_obstruct = get_robot_in_line( ball_position(), oponent_goal_center(), Vision::Team::Opponent );
-        v = get_robot_in_line( ball_position(), oponent_goal_center(), Vision::Team::Ally );
-        v_obstruct.insert( v_obstruct.end(), v.begin(), v.end() );
         if( ball_robot1 < ball_robot2 ){
           strikerID = ID1;
           supportID = ID2;
@@ -109,7 +111,8 @@ void AttaqueWithSupport::assign_behavior_to_robots(
           supportID = ID1;
         }
 
-        if (v_obstruct.empty()) {
+
+        if (results.second > seuil) {
           assign_behavior( strikerID, striker );
           support->declare_robot_to_follow(strikerID, Vector2d(1, 2), Vision::Team::Ally);
           assign_behavior( supportID, support );

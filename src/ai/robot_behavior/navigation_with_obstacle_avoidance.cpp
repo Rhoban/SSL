@@ -30,6 +30,7 @@ Navigation_with_obstacle_avoidance::Navigation_with_obstacle_avoidance(
 ):
     ConsignFollower(ai_data), 
     ignore_the_ball(false),
+    ball_radius_avoidance( ai_data.constants.robot_radius ),
     position_follower(ai_data, time, dt),
     target_position(0.0, 0.0), target_angle(0.0)
 {
@@ -39,8 +40,7 @@ void Navigation_with_obstacle_avoidance::set_following_position(
     const Vector2d & position_to_follow,
     const ContinuousAngle & target_angle
 ){
-    this->position_follower.set_following_position( position_to_follow, target_angle );
-    
+    this->position_follower.set_following_position( position_to_follow, target_angle ); 
     this->target_position = position_to_follow;
     this->target_angle = target_angle;
     this->target_angle = this->robot_angular_position;
@@ -87,7 +87,7 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
             ai_data.constants.robot_radius, 
             robot().get_movement().linear_position( robot().get_movement().last_time() ),
             ctrl.velocity_translation,
-            ai_data.constants.robot_radius, 
+            ball_radius_avoidance, 
             ball().get_movement().linear_position( ball().get_movement().last_time() ),
             ball().get_movement().linear_velocity( ball().get_movement().last_time() ),
             radius_error
@@ -264,6 +264,15 @@ RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotat
     return position_follower.get_annotations();
 }
 
+void Navigation_with_obstacle_avoidance::set_radius_avoidance_for_the_ball(
+    double radius
+){
+    ball_radius_avoidance = radius;
+}
+
+double Navigation_with_obstacle_avoidance::get_radius_avoidance_for_the_ball(){
+    return ball_radius_avoidance;
+}
 
 }
 }

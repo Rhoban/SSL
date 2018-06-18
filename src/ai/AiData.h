@@ -151,6 +151,8 @@ struct Constants {
     double wheel_excentricity;
     double wheel_nb_turns_acceleration_limit;
 
+    double rules_avoidance_distance;
+
     void load( const std::string & config_path );
 
     Constants( const std::string & config_path, bool is_in_simulation );
@@ -162,6 +164,7 @@ public:
     double time; //(Write for Ai)
     double dt; //(Write for Ai)
 
+    bool force_ball_avoidance; // This field is used by rhobot_behavior::Navigaion_inside_the_fiekd. 
     std::string team_name;
     Ai::Team team_color;
 
