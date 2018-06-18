@@ -82,7 +82,7 @@ void Navigation_inside_the_field::update_control(
         this->avoid_the_ball( need_to_avoid_the_ball );
     }
 
-    double marge = get_robot_radius() - 0.2;
+    double marge = get_robot_radius();
     if( following_position_was_updated ){
         Box cropped_field(
             field_SW() + Vector2d( marge, marge ),

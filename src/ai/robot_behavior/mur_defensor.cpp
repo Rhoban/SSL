@@ -26,13 +26,17 @@ namespace Robot_behavior {
 
 
 Mur_defensor::Mur_defensor(
-    Ai::AiData & ai_data
+    Ai::AiData & ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool
 ):
     RobotBehavior(ai_data),
     mur_robot_id(0),
-    mur_nb_robot(1),
-    follower( Factory::fixed_consign_follower(ai_data) )
+    mur_nb_robot(1)
 {
+  if(fixed_consign_follower_without_repsecting_authorized_location_bool == 0){
+    follower = Factory::fixed_consign_follower(ai_data);
+  }else{
+    follower = Factory::fixed_consign_follower_without_repsecting_authorized_location(ai_data);
+  }
 }
 
 void Mur_defensor::update(
@@ -43,17 +47,17 @@ void Mur_defensor::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now 
+    // Now
     //  this->robot_linear_position
-    //  this->robot_angular_position 
+    //  this->robot_angular_position
     // are all avalaible
-    
+
     //int robot_id = 2;
     //const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
     //const Ai::Robot & robot = robot_table.at(robot_id);
-    
+
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
-    
+
     rhoban_geometry::Point ally_goal_point = ally_goal_center();
 
     Vector2d ball_goal_vector = ally_goal_point - ball_position();
@@ -76,7 +80,7 @@ void Mur_defensor::update(
     double target_rotation = detail::vec2angle(-ball_robot_vector);
     rhoban_geometry::Point target_position;
 
-    double multiple_robot_offset = ai_data.constants.robot_radius * 2 + 0.08;
+    double multiple_robot_offset = ai_data.constants.robot_radius + 0.05;
 
     if ( mur_nb_robot == 2 ) {
         if ( mur_robot_id == 0 ) {
@@ -112,8 +116,8 @@ void Mur_defensor::update(
 Control Mur_defensor::control() const {
     Control ctrl = follower->control();
     // ctrl.spin = true; // We active the dribler !
-    ctrl.kick = false; 
-    return ctrl; 
+    ctrl.kick = false;
+    return ctrl;
 }
 
 

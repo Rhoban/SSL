@@ -34,7 +34,7 @@ class Mur_defensor : public RobotBehavior  {
 	ConsignFollower* follower;
 
     public:
-        Mur_defensor(Ai::AiData& ai_data);
+        Mur_defensor(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
         virtual void update(
             double time,

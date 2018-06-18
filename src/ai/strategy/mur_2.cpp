@@ -89,12 +89,12 @@ void Mur_2::assign_behavior_to_robots(
 ){
 
     std::shared_ptr<Robot_behavior::RobotBehavior> mur1(
-            new Robot_behavior::Mur_defensor(ai_data)
+            new Robot_behavior::Mur_defensor(ai_data, 1)
     );
     static_cast<Robot_behavior::Mur_defensor*>( mur1.get() )->declare_mur_robot_id( 0, 2 );
 
     std::shared_ptr<Robot_behavior::RobotBehavior> mur2(
-            new Robot_behavior::Mur_defensor(ai_data)
+            new Robot_behavior::Mur_defensor(ai_data, 1)
     );
     static_cast<Robot_behavior::Mur_defensor*>( mur2.get() )->declare_mur_robot_id( 1, 2 );
     std::shared_ptr<Robot_behavior::RobotBehavior> deg1(
