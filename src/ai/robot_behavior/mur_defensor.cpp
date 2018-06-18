@@ -80,7 +80,7 @@ void Mur_defensor::update(
     double target_rotation = detail::vec2angle(-ball_robot_vector);
     rhoban_geometry::Point target_position;
 
-    double multiple_robot_offset = ai_data.constants.robot_radius + 0.05;
+    double multiple_robot_offset = ai_data.constants.robot_radius + 0.07;
 
     if ( mur_nb_robot == 2 ) {
         if ( mur_robot_id == 0 ) {

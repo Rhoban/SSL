@@ -32,6 +32,7 @@
 #include <strategy/mur.h>
 #include <strategy/mur_2.h>
 #include <strategy/attaque_with_support.h>
+#include <strategy/striker_with_support.h>
 #include <strategy/goalie_strat.h>
 
 
@@ -56,8 +57,49 @@ PlanVeschambres::PlanVeschambres(
 ):
     Manager(ai_data),
     referee(referee),
+    penalty_strats(1+Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+    goalie_strats(1+Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+    offensive_strats(1+Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+    defensive_strats(1+Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
     last_referee_changement(0)
 {
+
+    penalty_strats[8] = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };
+    penalty_strats[7] = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };
+    penalty_strats[6] = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };
+    penalty_strats[5] = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive::name, PROTECT_BALL };
+    penalty_strats[4] = { GOALIE, Strategy::Mur::name, Strategy::Defensive::name, PROTECT_BALL };
+    penalty_strats[3] = { GOALIE, Strategy::Mur::name, Strategy::Defensive::name };
+    penalty_strats[2] = { GOALIE, Strategy::Defensive::name };
+    penalty_strats[1] = { GOALIE };
+
+    goalie_strats[8] = { Strategy::GoalieStrat::name };
+    goalie_strats[7] = { Strategy::GoalieStrat::name };
+    goalie_strats[6] = { Strategy::GoalieStrat::name };
+    goalie_strats[5] = { Strategy::GoalieStrat::name };
+    goalie_strats[4] = { Strategy::GoalieStrat::name };
+    goalie_strats[3] = { Strategy::GoalieStrat::name };
+    goalie_strats[2] = { Strategy::GoalieStrat::name };
+    goalie_strats[1] = { Strategy::GoalieStrat::name };
+
+    offensive_strats[8] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+    offensive_strats[7] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+    offensive_strats[6] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+    offensive_strats[5] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::AttaqueWithSupport::name };
+    offensive_strats[4] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::Offensive::name };
+    offensive_strats[3] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Offensive::name };
+    offensive_strats[2] = { Strategy::GoalieStrat::name, Strategy::Offensive::name };
+    offensive_strats[1] = { Strategy::GoalieStrat::name };
+
+    defensive_strats[8] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+    defensive_strats[7] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+    defensive_strats[6] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+    defensive_strats[5] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive::name, Strategy::Offensive::name };
+    defensive_strats[4] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::Offensive::name };
+    defensive_strats[3] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Offensive::name };
+    defensive_strats[2] = { Strategy::GoalieStrat::name, Strategy::Offensive::name };
+    defensive_strats[1] = { Strategy::GoalieStrat::name };
+
 
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
@@ -135,6 +177,12 @@ PlanVeschambres::PlanVeschambres(
         )
     );
     register_strategy(
+        Strategy::StrikerWithSupport::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::StrikerWithSupport(ai_data)
+        )
+    );
+    register_strategy(
         Strategy::GoalieStrat::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::GoalieStrat(ai_data)
@@ -166,6 +214,7 @@ void PlanVeschambres::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
+            set_ball_avoidance_for_all_robots(true);
             if(get_valid_team_ids().size() > 0){
                 if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
@@ -181,6 +230,8 @@ void PlanVeschambres::choose_a_strategy(double time){
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
             }else{
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
+                in_defensive_free_kick = true;
+                ball_position_in_free_kick = ball_position();
             }
             future_strats = { Strategy::Prepare_kickoff::name};
             declare_and_assign_next_strategies( future_strats );
@@ -189,10 +240,12 @@ void PlanVeschambres::choose_a_strategy(double time){
             clear_strategy_assignement();
 
             if( get_team() == referee.penalty_team() ){
-                future_strats = { GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };
+                //penalty
+                future_strats = penalty_strats[ Manager::get_valid_player_ids().size() ];
                 declare_and_assign_next_strategies(future_strats);
             } else {
-              future_strats = { Strategy::GoalieStrat::name };
+              //goal
+              future_strats = goalie_strats[ Manager::get_valid_player_ids().size() ];
               in_defensive_free_kick = true;
               ball_position_in_free_kick = ball_position();
             }
@@ -201,6 +254,7 @@ void PlanVeschambres::choose_a_strategy(double time){
             last_referee_changement = referee.edge_entropy();
 
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
+            set_ball_avoidance_for_all_robots( false );
 
             clear_strategy_assignement();
 
@@ -209,31 +263,35 @@ void PlanVeschambres::choose_a_strategy(double time){
             if (referee.direct_free_team().second == referee.edge_entropy() - 1) {
                 if (get_team() == referee.direct_free_team().first) {
                     DEBUG("Offensive direct Kick");
-                    future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+                    //offensive
+                    future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
                 } else {
                     DEBUG("Defensive direct Kick");
-                    future_strats = { Strategy::GoalieStrat::name };
+                    //goal
+                    future_strats = goalie_strats[ Manager::get_valid_player_ids().size() ];
                     in_defensive_free_kick = true;
                     ball_position_in_free_kick = ball_position();
                 }
             } else if (referee.indirect_free_team().second == referee.edge_entropy() - 1) {
                 if (get_team() == referee.indirect_free_team().first) {
                     DEBUG("Offensive indirect Kick");
-                    future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+                    //offensive
+                    future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
                 } else {
                     DEBUG("Defensive indirect Kick");
-                    future_strats = { Strategy::GoalieStrat::name };
+                    //goalie
+                    future_strats = goalie_strats[ Manager::get_valid_player_ids().size() ];
                     in_defensive_free_kick = true;
                     ball_position_in_free_kick = ball_position();
                 }
             } else {
                 if (ball_position().getX() <= 0) {
-                 //DEFENSIVE
-                  future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+                 //defensive
+                  future_strats = defensive_strats[ Manager::get_valid_player_ids().size() ];
                   is_in_offensive_mode = false;
                 } else {
-                 //OFFENSIVE
-                  future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+                 //offensive
+                  future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
                   is_in_offensive_mode = true;
                 }
             }
@@ -245,40 +303,53 @@ void PlanVeschambres::choose_a_strategy(double time){
         }
         last_referee_changement = referee.edge_entropy();
     }
-    else if ( referee.get_state() == Referee_Id::STATE_RUNNING ){
+    else if (referee.get_state() == Referee_Id::STATE_RUNNING)
+    {
 
-      if (in_defensive_free_kick) {
+        set_ball_avoidance_for_all_robots(false);
 
-        if ( (ball_position_in_free_kick.getX() != ball_position().getX()) ||
-             (ball_position_in_free_kick.getY() != ball_position().getY()) ) {
-               in_defensive_free_kick = false;
+        if (in_defensive_free_kick)
+        {
+            if (!Box(
+                    {ball_position_in_free_kick.getX() - 0.15 , ball_position_in_free_kick.getY() - 0.15},
+                    {ball_position_in_free_kick.getX() + 0.15 , ball_position_in_free_kick.getY() + 0.15})
+                    .is_inside(ball_position()))
+            {
+                in_defensive_free_kick = false;
 
-               if (ball_position().getX() <= 0) {
-                 //DEFENSIVE
-                  is_in_offensive_mode = true;
-                } else {
-                 //OFFENSIVE
-                  is_in_offensive_mode = false;
+                if (ball_position().getX() <= 0)
+                {
+                    //DEFENSIVE
+                    is_in_offensive_mode = true;
                 }
+                else
+                {
+                    //OFFENSIVE
+                    is_in_offensive_mode = false;
+                }
+            }
         }
-      } else {
-        if ( is_in_offensive_mode && ball_position().getX() <= 0) {
-        //DEFENSIVE
+        else
+        {
+            if (is_in_offensive_mode && ball_position().getX() <= 0)
+            {
+                //DEFENSIVE
           DEBUG("defensive !!!! ");
-          future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
-          is_in_offensive_mode = false;
-          clear_strategy_assignement();
-          declare_and_assign_next_strategies(future_strats);
-        } 
-        if( not(is_in_offensive_mode) && ball_position().getX() >= 0 ){
-        //OFFENSIVE
+          future_strats = defensive_strats[ Manager::get_valid_player_ids().size() ];
+                is_in_offensive_mode = false;
+                clear_strategy_assignement();
+                declare_and_assign_next_strategies(future_strats);
+            }
+            if (not(is_in_offensive_mode) && ball_position().getX() >= 0)
+            {
+                //OFFENSIVE
           DEBUG("offensive !!!! ");
-          future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
-          is_in_offensive_mode = true;
-          clear_strategy_assignement();
-          declare_and_assign_next_strategies(future_strats);
+          future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
+                is_in_offensive_mode = true;
+                clear_strategy_assignement();
+                declare_and_assign_next_strategies(future_strats);
+            }
         }
-      }
     }
 }
 

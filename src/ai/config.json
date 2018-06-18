@@ -36,7 +36,7 @@
 
         "p_orientation":{
             "simu" : 3,
-            "real" : 3
+            "real" : 0.5
         },
         "i_orientation":{
             "simu" : 0.0,
