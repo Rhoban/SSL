@@ -30,5 +30,9 @@ ConsignFollower::~ConsignFollower(){ }
 
 void ConsignFollower::avoid_the_ball( bool value ){ }
 
+void ConsignFollower::set_radius_avoidance_for_the_ball(
+    double radius
+){ }
+
 }
 }
