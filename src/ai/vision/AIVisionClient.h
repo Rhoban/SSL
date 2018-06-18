@@ -41,7 +41,7 @@ public:
 
   AIVisionClient(
     Data& shared_data, Ai::Team myTeam, bool simulation,
-    std::string addr, std::string port, std::string sim_port,
+    std::string addr=SSL_VISION_ADDRESS, std::string port=SSL_VISION_PORT, std::string sim_port=SSL_SIMULATION_VISION_PORT,
     Vision::Part_of_the_field part_of_the_field_used = Vision::Part_of_the_field::ALL_FIELD
     );
   
