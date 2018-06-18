@@ -23,6 +23,8 @@
 #include "Strategy.h"
 #include <robot_behavior/striker.h>
 #include <robot_behavior/robot_follower.h>
+#include <robot_behavior/pass.h>
+#include <robot_behavior/wait_pass.h>
 
 namespace RhobanSSL {
 namespace Strategy {
@@ -32,6 +34,7 @@ class AttaqueWithSupport : public Strategy {
     bool behaviors_are_assigned;
     std::shared_ptr<Robot_behavior::Striker> striker;
     std::shared_ptr<Robot_behavior::RobotFollower> support;
+    std::shared_ptr<Robot_behavior::Pass> pass;
 
     public:
     AttaqueWithSupport(Ai::AiData & ai_data);

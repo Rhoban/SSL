@@ -42,6 +42,8 @@ class GameInformations {
     rhoban_geometry::Point oponent_corner_left() const ;
     const Ai::Robot & get_robot( int robot_id, Vision::Team team = Vision::Team::Ally ) const ;
     std::vector<int> get_robot_in_line( const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team = Vision::Team::Opponent, double seuil = 0.4 ) const ;
+    std::vector<int> get_robot_in_line( const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, double seuil ) const ;
+    std::pair<rhoban_geometry::Point, double> find_goal_best_move( const rhoban_geometry::Point point) const ;
 
     bool infra_red(  int robot_id, Vision::Team team = Vision::Team::Ally ) const;
     int get_nearest_ball() const ;

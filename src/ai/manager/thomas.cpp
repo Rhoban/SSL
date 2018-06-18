@@ -32,6 +32,7 @@
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/mur_defensor.h>
+#include <robot_behavior/striker_ai.h>
 #include <robot_behavior/striker.h>
 #include <core/collection.h>
 #include <core/print_collection.h>
@@ -40,6 +41,7 @@
 #define DEFENSOR1 "Defensor1" 
 #define DEFENSOR2 "Defensor2" 
 #define STRIKER "Striker"
+#define STRIKER_AI "StrikerAi"
 #define PASS_DRIBBLER "Pass_dribbler"
 #define MUR_DEFENSOR "Mur_defensor"
 
@@ -155,6 +157,17 @@ Thomas::Thomas(
             )
         )
     );
+    register_strategy(
+        STRIKER_AI, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::StrikerAi* striker_ai = new Robot_behavior::StrikerAi(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker_ai);
+                }, false // it is not a goal
+            )
+        )
+    );
     assign_strategy(
         Strategy::Halt::name, 0.0, 
         get_team_ids()
@@ -187,7 +200,7 @@ void Thomas::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
             //future_strats = { MUR_DEFENSOR };
-            future_strats = { Strategy::Mur_2::name };
+            future_strats = { STRIKER_AI };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
