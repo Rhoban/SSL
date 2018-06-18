@@ -58,6 +58,14 @@ protected:
     int,
     SSL_DetectionFrame
     > camera_detections;
+  
+    std::map<
+        int, // CMAERA ID
+        std::pair<
+          double, //camera have found a ball at time?
+          rhoban_geometry::Point // detecte ball
+        >
+    > ball_camera_detections;
 
 
   void updateRobotInformation(
@@ -72,5 +80,21 @@ private:
   Vision::VisionData visionData;
   Ai::Team myTeam;
   std::map<int, SSL_DetectionFrame> historic;
+
+
+    rhoban_geometry::Point
+    average_filter(
+        const rhoban_geometry::Point & new_ball,
+        std::map<
+            int, // CMAERA ID
+            std::pair<
+        double, //camera have found a ball
+        rhoban_geometry::Point // detecte ball
+            >
+        > & ball_camera_detections,
+        Vision::Part_of_the_field part_of_the_field_used
+    );
+
+
 };
 }

@@ -84,9 +84,13 @@ void Navigation_inside_the_field::update_control(
 
     double marge = get_robot_radius();
     if( following_position_was_updated ){
+        // Box cropped_field(
+        //     field_SW() + Vector2d( marge, marge ),
+        //     field_NE() - Vector2d( marge, marge)
+        // );
         Box cropped_field(
-            field_SW() + Vector2d( marge, marge ),
-            field_NE() - Vector2d( marge, marge)
+            field_SW(),
+            field_NE()
         );
         float radius_margin_factor=2.0;
         Box opponent_penalty = opponent_penalty_area().increase(get_robot_radius());
@@ -96,7 +100,7 @@ void Navigation_inside_the_field::update_control(
         Box ally_penalty_large = ally_penalty_area().increase(get_robot_radius()*radius_margin_factor);
 
         rhoban_geometry::Point robot_position = linear_position();
-        double error = get_robot_radius();
+        double error = get_robot_radius()*radius_margin_factor;
 
         if( opponent_penalty.is_inside(robot_position) ){
             // If we're in their penalty

@@ -32,6 +32,7 @@
 #include <strategy/mur.h>
 #include <strategy/mur_2.h>
 #include <strategy/attaque_with_support.h>
+#include <strategy/striker_with_support.h>
 #include <strategy/goalie_strat.h>
 
 
@@ -176,6 +177,12 @@ PlanVeschambres::PlanVeschambres(
         )
     );
     register_strategy(
+        Strategy::StrikerWithSupport::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::StrikerWithSupport(ai_data)
+        )
+    );
+    register_strategy(
         Strategy::GoalieStrat::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::GoalieStrat(ai_data)
@@ -207,7 +214,7 @@ void PlanVeschambres::choose_a_strategy(double time){
         } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
-            set_ball_avoidance_for_all_robots( true );
+            set_ball_avoidance_for_all_robots(true);
             if(get_valid_team_ids().size() > 0){
                 if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
@@ -223,6 +230,8 @@ void PlanVeschambres::choose_a_strategy(double time){
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
             }else{
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
+                in_defensive_free_kick = true;
+                ball_position_in_free_kick = ball_position();
             }
             future_strats = { Strategy::Prepare_kickoff::name};
             declare_and_assign_next_strategies( future_strats );
@@ -294,40 +303,53 @@ void PlanVeschambres::choose_a_strategy(double time){
         }
         last_referee_changement = referee.edge_entropy();
     }
-    else if ( referee.get_state() == Referee_Id::STATE_RUNNING ){
+    else if (referee.get_state() == Referee_Id::STATE_RUNNING)
+    {
 
-      if (in_defensive_free_kick) {
+        set_ball_avoidance_for_all_robots(false);
 
-        if ( (ball_position_in_free_kick.getX() != ball_position().getX()) ||
-             (ball_position_in_free_kick.getY() != ball_position().getY()) ) {
-               in_defensive_free_kick = false;
+        if (in_defensive_free_kick)
+        {
+            if (!Box(
+                    {ball_position_in_free_kick.getX() - 0.15 , ball_position_in_free_kick.getY() - 0.15},
+                    {ball_position_in_free_kick.getX() + 0.15 , ball_position_in_free_kick.getY() + 0.15})
+                    .is_inside(ball_position()))
+            {
+                in_defensive_free_kick = false;
 
-               if (ball_position().getX() <= 0) {
-                 //DEFENSIVE
-                  is_in_offensive_mode = true;
-                } else {
-                 //OFFENSIVE
-                  is_in_offensive_mode = false;
+                if (ball_position().getX() <= 0)
+                {
+                    //DEFENSIVE
+                    is_in_offensive_mode = true;
                 }
+                else
+                {
+                    //OFFENSIVE
+                    is_in_offensive_mode = false;
+                }
+            }
         }
-      } else {
-        if ( is_in_offensive_mode && ball_position().getX() <= 0) {
-        //defensive
+        else
+        {
+            if (is_in_offensive_mode && ball_position().getX() <= 0)
+            {
+                //DEFENSIVE
           DEBUG("defensive !!!! ");
           future_strats = defensive_strats[ Manager::get_valid_player_ids().size() ];
-          is_in_offensive_mode = false;
-          clear_strategy_assignement();
-          declare_and_assign_next_strategies(future_strats);
-        } 
-        if( not(is_in_offensive_mode) && ball_position().getX() >= 0 ){
-        //OFFENSIVE
+                is_in_offensive_mode = false;
+                clear_strategy_assignement();
+                declare_and_assign_next_strategies(future_strats);
+            }
+            if (not(is_in_offensive_mode) && ball_position().getX() >= 0)
+            {
+                //OFFENSIVE
           DEBUG("offensive !!!! ");
           future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
-          is_in_offensive_mode = true;
-          clear_strategy_assignement();
-          declare_and_assign_next_strategies(future_strats);
+                is_in_offensive_mode = true;
+                clear_strategy_assignement();
+                declare_and_assign_next_strategies(future_strats);
+            }
         }
-      }
     }
 }
 
