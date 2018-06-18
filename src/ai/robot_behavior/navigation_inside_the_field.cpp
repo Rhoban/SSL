@@ -52,6 +52,13 @@ void Navigation_inside_the_field::set_following_position(
     this->target_angle = target_angle;
 }
 
+void Navigation_inside_the_field::get_following_position(
+    Vector2d * position_to_follow,
+    ContinuousAngle * angle) {
+    *position_to_follow = this->target_position;
+    *angle = this->target_angle;
+}
+
 
 void Navigation_inside_the_field::update(
     double time,
@@ -81,15 +88,20 @@ void Navigation_inside_the_field::update_control(
         Box opponent_penalty_large = opponent_penalty_area().increase(get_robot_radius()*radius_margin_factor);
         Box ally_penalty_large = ally_penalty_area().increase(get_robot_radius()*radius_margin_factor);
 
-        rhoban_geometry::Point robot_position = linear_position();
+        //rhoban_geometry::Point robot_position = linear_position();
+        Vector2d goal_position;
+        ContinuousAngle goal_angle;
+        get_following_position(&goal_position, &goal_angle);
+        rhoban_geometry::Point goal_position_point = vector2point(goal_position);
+
         double error = get_robot_radius();
 
-        if( opponent_penalty.is_inside(robot_position) ){
+        if( opponent_penalty.is_inside(goal_position_point) ){
             // If we're in their penalty
-            deviation_position = rhoban_geometry::Point( opponent_penalty.get_SW().getX() - error, robot_position.getY() );
-        }else if( not(is_goalie()) and ally_penalty.is_inside(robot_position) ){
+            deviation_position = rhoban_geometry::Point( opponent_penalty.get_SW().getX() - error, goal_position_point.getY() );
+        }else if( not(is_goalie()) and ally_penalty.is_inside(goal_position_point) ){
             // If we're in our penalty
-            deviation_position = rhoban_geometry::Point( ally_penalty.get_NE().getX() + error, robot_position.getY() );
+            deviation_position = rhoban_geometry::Point( ally_penalty.get_NE().getX() + error, goal_position_point.getY() );
         }else{
             if( cropped_field.is_inside( vector2point(target_position) ) ){
                 // Normal case, the goal position is in the field
@@ -97,32 +109,22 @@ void Navigation_inside_the_field::update_control(
             }else{
                 // Changing the target position to match the closest segment
                 cropped_field.closest_segment_intersection(
-                    robot_position, vector2point( target_position ),
+                    goal_position_point, vector2point( target_position ),
                     deviation_position
                 );
-            }
-            //Here, deviation_position should be inside the field, but it could still be in a penalty area.
-            if( not( is_goalie() ) and ally_penalty.is_inside( deviation_position ) ){
-                ally_penalty_large.closest_segment_intersection(
-                    robot_position, vector2point( deviation_position ),
-                    deviation_position
-                );
-                if( not(cropped_field.is_inside( deviation_position)) ){
-                    deviation_position = deviation_position + Vector2d( penalty_area_depth() + error, 0.0 );
-                }
-            }else if( opponent_penalty.is_inside( deviation_position ) ){
-                opponent_penalty_large.closest_segment_intersection(
-                    robot_position, vector2point( deviation_position ),
-                    deviation_position
-                );
-                if( not(cropped_field.is_inside( deviation_position)) ){
-                    deviation_position = deviation_position - Vector2d( penalty_area_depth() + error, 0.0 );
+                // The deviation postion could still be in the penalty area...
+                if( opponent_penalty.is_inside(goal_position_point) ){
+                    // If we're in their penalty
+                    deviation_position = rhoban_geometry::Point( opponent_penalty.get_SW().getX() - error, goal_position_point.getY() );
+                }else if( not(is_goalie()) and ally_penalty.is_inside(goal_position_point) ){
+                    // If we're in our penalty
+                    deviation_position = rhoban_geometry::Point( ally_penalty.get_NE().getX() + error, goal_position_point.getY() );
                 }
             }
         }
 
-        if ((not( is_goalie() ) && ally_penalty.is_inside( deviation_position )) || opponent_penalty.is_inside( deviation_position )) {
-            DEBUG("Damn, deviation_position is still inside a penalty (this is a bug)...");
+        if ((not( is_goalie() ) && ally_penalty.is_inside( goal_position_point )) || opponent_penalty.is_inside( goal_position_point )) {
+            DEBUG("Damn, goal_position_point is still inside a penalty (this is a bug)...");
         }
 
         this->position_follower.set_following_position( deviation_position, target_angle );
