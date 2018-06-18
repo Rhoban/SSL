@@ -20,6 +20,7 @@
 #include "placer.h"
 #include <robot_behavior/factory.h>
 #include <core/print_collection.h>
+#include <robot_behavior/consign_follower.h>
 
 namespace RhobanSSL {
 namespace Strategy {
@@ -59,13 +60,15 @@ void Placer::assign_behavior_to_robots(
 ){
     if( ! behavior_has_been_assigned ){
         if( have_to_manage_the_goalie() ){
+            Robot_behavior::ConsignFollower* follower = Robot_behavior::Factory::fixed_consign_follower(
+                ai_data, 
+                goalie_linear_position, 
+                goalie_angular_position
+            );
+            follower->avoid_the_ball(true);
             assign_behavior(
                 get_goalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(
-                    Robot_behavior::Factory::fixed_consign_follower(
-                        ai_data, 
-                        goalie_linear_position, 
-                        goalie_angular_position
-                    )
+                    follower
                 )
             );
         }
@@ -73,13 +76,15 @@ void Placer::assign_behavior_to_robots(
         int nb_players = get_player_ids().size();
         for( int i=0; i<nb_players; i++ ){
             int id = player_id(i);
+            Robot_behavior::ConsignFollower* follower = Robot_behavior::Factory::fixed_consign_follower(
+                ai_data, 
+                player_positions[id].first, 
+                player_positions[id].second
+            );
+            follower->avoid_the_ball(true);
             assign_behavior(
                 id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                    Robot_behavior::Factory::fixed_consign_follower(
-                        ai_data, 
-                        player_positions[id].first, 
-                        player_positions[id].second
-                    )
+                    follower 
                 )
             );
         }
