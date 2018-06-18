@@ -31,7 +31,7 @@ PositionFollower::PositionFollower(
     position(0.0, 0.0), angle(0.0)
 {
     robot_control.init_time( time, dt );
-} 
+}
 
 void PositionFollower::set_following_position(
     const Vector2d & position_to_follow,
@@ -40,7 +40,7 @@ void PositionFollower::set_following_position(
     this->position = position_to_follow;
     this->angle = angle;
     this->angle = this->robot_angular_position;
-    this->angle.set_to_nearest(angle); 
+    this->angle.set_to_nearest(angle);
 }
 
 void PositionFollower::update_control(double time){
@@ -56,9 +56,9 @@ void PositionFollower::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now 
+    // Now
     //  this->robot_linear_position
-    //  this->robot_angular_position 
+    //  this->robot_angular_position
     //  this->robot_linear_velocity
     //  this->robot_angular_velocity
     //  this->ball_position
@@ -66,12 +66,13 @@ void PositionFollower::update(
 
     update_control(time);
 }
-
 Control PositionFollower::control() const {
     Control ctrl = robot_control.limited_control(
         robot_linear_position, robot_angular_position,
         robot_linear_velocity, robot_angular_velocity
     );
+
+    //DEBUG( "CONTROL - " << ai_data.time << " - " << ctrl.velocity_translation );
     return ctrl;
 }
 
