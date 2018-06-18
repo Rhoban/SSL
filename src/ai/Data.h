@@ -1,3 +1,5 @@
+
+
 /*
     This file is part of SSL.
 
@@ -48,7 +50,7 @@ struct Shared_data {
     };
 
     std::vector< Final_control > final_control_for_robots;
-    
+
     Shared_data();
 };
 
@@ -72,24 +74,24 @@ private: // Do not remove !
     Data_for_viewer data_for_viewer;
 
 public:
-    Data( Ai::Team initial_team_color );   
- 
+    Data( Ai::Team initial_team_color );
+
     Data& operator<<( const Vision::VisionData & vision_data );
     Data& operator>>( Vision::VisionData & vision_data );
     void edit_vision_data( // Use that function if you ha no choice. Prefer << and >> operator.
-        std::function< void (Vision::VisionData & vision_data) > vision_data_editor 
+        std::function< void (Vision::VisionData & vision_data) > vision_data_editor
     );
 
     Data& operator<<( const Data_from_ai & data_from_ai );
     Data& operator>>( Data_from_ai & data_from_ai );
     void edit_data_from_ai( // Use that function if you ha no choice. Prefer << and >> operator.
-        std::function< void (Data_from_ai & data_from_ai) > data_from_ai_editor 
+        std::function< void (Data_from_ai & data_from_ai) > data_from_ai_editor
     );
 
     Data& operator<<( const Data_for_viewer & data_for_viewer );
     Data& operator>>( Data_for_viewer & data_for_viewer );
     void edit_data_for_viewer( // Use that function if you ha no choice. Prefer << and >> operator.
-        std::function< void (Data_for_viewer & data_for_viewer) > data_for_viewer_editor 
+        std::function< void (Data_for_viewer & data_for_viewer) > data_for_viewer_editor
     );
 
 
@@ -97,7 +99,7 @@ public:
     Data& operator<<( const Shared_data & shared_data );
     Data& operator>>( Shared_data & shared_data );
     void edit_shared_data( // Use that function if you ha no choice. Prefer << and >> operator.
-        std::function< void (Shared_data & shared_data) > shared_data_editor 
+        std::function< void (Shared_data & shared_data) > shared_data_editor
     );
 };
 
