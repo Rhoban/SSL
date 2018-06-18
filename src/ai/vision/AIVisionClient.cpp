@@ -32,7 +32,7 @@ namespace RhobanSSL
 {
 AIVisionClient::AIVisionClient(
   Data& shared_data, Ai::Team myTeam, bool simulation, 
-  Part_of_the_field part_of_the_field
+  Vision::Part_of_the_field part_of_the_field
   ): 
   VisionClient(simulation), shared_data(shared_data), 
   part_of_the_field_used(part_of_the_field), myTeam(myTeam)
@@ -43,7 +43,7 @@ AIVisionClient::AIVisionClient(
 AIVisionClient::AIVisionClient(
   Data& shared_data, Ai::Team myTeam, bool simulation,
   std::string addr, std::string port, std::string sim_port,
-  Part_of_the_field part_of_the_field
+  Vision::Part_of_the_field part_of_the_field
   ): 
   VisionClient(simulation,addr, port, sim_port), shared_data(shared_data), 
   part_of_the_field_used(part_of_the_field), myTeam(myTeam)
@@ -115,30 +115,52 @@ void AIVisionClient::packetReceived()
     camera_detections[ detection.camera_id() ] = detection;
   }
 
+
   // Ball informations
   if (detection.balls().size()) {
     if (!visionData.ball.present || visionData.ball.age() > 1) {
+      // std::cerr<<"IF"<<std::endl;
       // If the ball is outdated (> 1s) or not present, taking the first
       // one in the frame
+      
+
+      double ball_is_detected = -1.0;
       for (auto ball : detection.balls()) {
         double x = ball.x()/1000.0;
         double y = ball.y()/1000.0;
-        if( object_coordonate_is_valid(x,y) ){
+        if(
+          object_coordonate_is_valid(
+            x, y, part_of_the_field_used
+            )
+          ){
+          ball_is_detected = detection.t_sent();
           visionData.ball.update(detection.t_sent(), Point(x,y)); // TODO HACK : IL FAUT METTRE t_send() ?
+          ball_camera_detections[detection.camera_id()] = {detection.t_sent(), Point(x,y)};
           break;
         }
+        // std::cerr<<"CONFIDENCE IF ("<<detection.camera_id()<<"): "<<ball.confidence()<<" t: "<<detection.t_sent()<<std::endl;
       }
+      ball_camera_detections[detection.camera_id()].first = ball_is_detected;
+      // ball_camera_detections[detection.camera_id()].first = -1.0;
     } else {
+      // std::cerr<<"ELSE"<<std::endl;
       // Else, we accept the ball which is the nearest from the previous one
       // we already had
       bool hasBall = false;
-      Point bestBall;
-      double nearest;
+      Point bestBall(-99999,-99999);
+      double nearest=99999;
 
       for (auto ball : detection.balls()) {
         double x = ball.x()/1000.0;
         double y = ball.y()/1000.0;
-        if( not( object_coordonate_is_valid(x,y) ) ){
+        // std::cerr<<"CONFIDENCE ELSE ("<<detection.camera_id()<<"): "<<ball.confidence()<<" t: "<<detection.t_sent()<<std::endl;
+        if( not( 
+              object_coordonate_is_valid(
+                x,y, part_of_the_field_used
+                )
+                       
+              ) ){
+
           continue;
         }
         Point pos(x, y);
@@ -146,14 +168,39 @@ void AIVisionClient::packetReceived()
         double distance = pos.getDist(
           visionData.ball.movement[0].linear_position
           );
-        if (!hasBall || distance < nearest) {
-          nearest = distance;
-          bestBall = pos;
-        }
-      }
-      visionData.ball.update(detection.t_sent(), bestBall); // TODO HACK : IL FAUT METTRE t_send() ?
 
+        
+
+        
+        if (!hasBall|| distance < nearest) {
+          nearest = distance;
+          bestBall = pos; 
+        }
+        // std::cout<<"BALL: "<<pos<<" dist: "<<distance<<" nearest: "<<bestBall<<" dist: "<<nearest<<std::endl;
+      }
+      if(nearest<99999)
+        hasBall=true;
+      
+
+      if( hasBall ){
+        // std::cout<<"HASBALL"<<std::endl;
+        ball_camera_detections[detection.camera_id()] = {detection.t_sent(), bestBall};
+        auto final_ball = average_filter(
+          bestBall, ball_camera_detections,
+          part_of_the_field_used
+          );
+        // std::cout<<"HASBALL final: "<<final_ball<<std::endl;
+        visionData.ball.update(detection.t_sent(), final_ball); // TODO HACK : IL FAUT METTRE t_send() ?
+      }else{
+        // ball_camera_detections[detection.camera_id()].first = false;
+        ball_camera_detections[detection.camera_id()].first = -1.0;
+        
+      }
     }
+  }else{
+    // ball_camera_detections[detection.camera_id()].first = false;
+    ball_camera_detections[detection.camera_id()].first = -1.0;
+    
   }
 
   // We set to not present all robot that is too old
@@ -186,7 +233,12 @@ void AIVisionClient::updateRobotInformation(
   const SSL_DetectionRobot & robotFrame, bool ally,
   Ai::Team team_color
   ){
-  if( not( object_coordonate_is_valid(robotFrame.x()/1000.0, robotFrame.y()/1000.0) ) ){
+  if( not( 
+        object_coordonate_is_valid(
+          robotFrame.x()/1000.0, robotFrame.y()/1000.0
+          , part_of_the_field_used
+          ) 
+        ) ){
     return;
   }
   if(robotFrame.has_robot_id()){
@@ -201,7 +253,7 @@ void AIVisionClient::updateRobotInformation(
         > position = Vision::Factory::filter(
           robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
           orientation_is_defined, 
-          oldVisionData
+          oldVisionData, part_of_the_field_used
           );
 //                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
@@ -218,23 +270,51 @@ void AIVisionClient::updateRobotInformation(
   }
 }
 
-bool AIVisionClient::object_coordonate_is_valid(double x,double y) const {
-  switch(part_of_the_field_used){
-    case Part_of_the_field::POSIVE_HALF_FIELD : {
-      return x>0;
+
+rhoban_geometry::Point
+AIVisionClient::average_filter(
+  const rhoban_geometry::Point & new_ball,
+  std::map<
+  int, // CMAERA ID
+  std::pair<
+  double, //camera have found a ball
+  rhoban_geometry::Point // detecte ball
+  >
+  > & ball_camera_detections,
+  Vision::Part_of_the_field part_of_the_field_used
+  ){
+  int n_linear = 0;
+  rhoban_geometry::Point linear_average (0.0, 0.0);
+  for(
+    const std::pair<
+      int, // CMAERA ID
+      std::pair<
+      double, //time capture_t
+      rhoban_geometry::Point // detecte ball
+      >
+      > & elem : ball_camera_detections 
+    ){
+    double ball_is_detected = elem.second.first; //TODO
+    double camera_id = elem.first;
+    
+    const rhoban_geometry::Point & ball_pos = elem.second.second;
+    // std::cerr<<"DETECTED: "<<ball_is_detected<<std::endl;
+    if( ball_is_detected>0.0 ){
+      // linear_average += rhoban_geometry::Point(
+      //   new_ball.getX()/1000.0, new_ball.getY()/1000.0
+      //   );
+
+      linear_average += rhoban_geometry::Point(
+        // ball_pos.getX()/1000.0, ball_pos.getY()/1000.0
+        ball_pos.getX(), ball_pos.getY()
+        );
+
+      n_linear ++;
     }
-      break;
-    case Part_of_the_field::NEGATIVE_HALF_FIELD : {
-      return x<0;
-    }
-      break;
-    case Part_of_the_field::ALL_FIELD: {
-      return true;
-    }
-      break;
-    default:;
+    // std::cerr<<"FILTER ("<<camera_id<<"): "<<ball_pos<<std::endl;
   }
-  return false;
+  // std::cerr<<std::endl;
+  return linear_average*(1.0/n_linear);
 }
 
 

@@ -34,6 +34,9 @@ void ConsignFollower::get_following_position(
         Vector2d * position_to_follow,
         ContinuousAngle * angle
     ) { }
+void ConsignFollower::set_radius_avoidance_for_the_ball(
+    double radius
+){ }
 
 }
 }

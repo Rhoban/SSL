@@ -36,6 +36,8 @@ Navigation_inside_the_field::Navigation_inside_the_field(
     Ai::AiData & ai_data, double time, double dt
 ):
     ConsignFollower(ai_data),
+    need_to_avoid_the_ball(true),
+    saving_ball_radius_avoidance(ai_data.constants.robot_radius),
     following_position_was_updated(true),
     position_follower(ai_data, time, dt),
     target_position(0.0, 0.0), target_angle( 0.0),
@@ -67,11 +69,27 @@ void Navigation_inside_the_field::update(
 void Navigation_inside_the_field::update_control(
     double time, const Ai::Robot & robot, const Ai::Ball & ball
 ){
-    double marge = get_robot_radius() - 0.2;
+    if( ai_data.force_ball_avoidance ){
+        this->position_follower.set_radius_avoidance_for_the_ball(
+            get_robot_radius() + get_ball_radius() + ai_data.constants.rules_avoidance_distance
+        );
+        this->avoid_the_ball( true );
+    }else{
+        this->position_follower.set_radius_avoidance_for_the_ball(
+            saving_ball_radius_avoidance   
+        );
+        this->avoid_the_ball( need_to_avoid_the_ball );
+    }
+
+    double marge = get_robot_radius();
     if( following_position_was_updated ){
+        // Box cropped_field(
+        //     field_SW() + Vector2d( marge, marge ),
+        //     field_NE() - Vector2d( marge, marge)
+        // );
         Box cropped_field(
-            field_SW() + Vector2d( marge, marge ),
-            field_NE() - Vector2d( marge, marge)
+            field_SW(),
+            field_NE()
         );
         float radius_margin_factor=2.0;
         Box opponent_penalty = opponent_penalty_area().increase(get_robot_radius());
@@ -81,7 +99,7 @@ void Navigation_inside_the_field::update_control(
         Box ally_penalty_large = ally_penalty_area().increase(get_robot_radius()*radius_margin_factor);
 
         rhoban_geometry::Point robot_position = linear_position();
-        double error = get_robot_radius();
+        double error = get_robot_radius()*radius_margin_factor;
 
         if( opponent_penalty.is_inside(robot_position) ){
             // If we're in their penalty
@@ -142,6 +160,7 @@ void Navigation_inside_the_field::set_orientation_pid( double kp, double ki, dou
 }
 
 void Navigation_inside_the_field::avoid_the_ball(bool value){
+    need_to_avoid_the_ball = value;
     position_follower.avoid_the_ball(value);
 }
 
@@ -168,6 +187,13 @@ RhobanSSLAnnotation::Annotations Navigation_inside_the_field::get_annotations() 
     //annotations.addBox( opponent_penalty_area(), "red" );
     //annotations.addBox( ally_penalty_area(), "red" );
     return annotations;
+}
+
+void Navigation_inside_the_field::set_radius_avoidance_for_the_ball(
+    double radius
+){
+    position_follower.set_radius_avoidance_for_the_ball(radius);
+    saving_ball_radius_avoidance = radius;
 }
 
 

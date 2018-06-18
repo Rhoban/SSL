@@ -78,6 +78,7 @@ set (SOURCES
     strategy/halt.cpp
     strategy/mur.cpp
     strategy/striker_with_support.cpp
+    strategy/striker_v2.cpp
     strategy/base.cpp
     strategy/base_3_gds.cpp
     strategy/base_3_gms.cpp

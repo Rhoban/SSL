@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,29 +17,23 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__ATTAQUEWITHSUPPORT__H__
-#define __STRATEGY__ATTAQUEWITHSUPPORT__H__
+#ifndef __STRATEGY__STRIKER_V2__H__
+#define __STRATEGY__STRIKER_V2__H__
 
-#include "Strategy.h"
 #include <robot_behavior/striker.h>
-#include <robot_behavior/robot_follower.h>
-#include <robot_behavior/pass.h>
-#include <robot_behavior/wait_pass.h>
+#include "Strategy.h"
 
 namespace RhobanSSL {
 namespace Strategy {
 
-class AttaqueWithSupport : public Strategy {
+class StrikerV2 : public Strategy {
     private:
     bool behaviors_are_assigned;
-    std::shared_ptr<Robot_behavior::RobotFollower> support;
-    std::shared_ptr<Robot_behavior::Pass> pass;
     std::shared_ptr<Robot_behavior::Striker> striker;
-    std::pair<rhoban_geometry::Point, double> results;
 
     public:
-    AttaqueWithSupport(Ai::AiData & ai_data);
-    virtual ~AttaqueWithSupport();
+    StrikerV2(Ai::AiData & ai_data);
+    virtual ~StrikerV2();
 
     virtual int min_robots() const;
     virtual int max_robots() const;

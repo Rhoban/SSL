@@ -29,6 +29,7 @@ AStar::Generator::Generator()
 {
     setDiagonalMovement(false);
     setHeuristic(&Heuristic::manhattan);
+
     direction = {
         { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 },
         { -1, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 }

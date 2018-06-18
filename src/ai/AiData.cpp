@@ -240,6 +240,9 @@ namespace Ai {
         DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
 
 
+        rules_avoidance_distance = 0.5 * (1.0+10.0/100.0);
+
+
         radius_ball = root["ball"]["radius_ball"].asDouble();
         assert( radius_ball > 0.0 );
 
@@ -385,7 +388,7 @@ namespace Ai {
         //
         return RobotPlacement(
             {
-                Position( 0.0, 1.0, 0.0 ), // A
+                Position( -0.5, .0, 0.0 ), // A
                 Position( relative2absolute(-1.0/3.0, 2.0/3.0), 0.0), // B
                 Position( relative2absolute(-1.0/3.0, -2.0/3.0), 0.0), // C
                 Position( relative2absolute(-2.0/3.0, 1.0/2.0), 0.0), // D

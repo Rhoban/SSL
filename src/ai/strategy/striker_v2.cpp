@@ -17,9 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mur_2.h"
+#include "striker_v2.h"
 
-#include <robot_behavior/goalie.h>
 #include <robot_behavior/striker.h>
 #include <robot_behavior/mur_defensor.h>
 #include <robot_behavior/degageur.h>
@@ -27,102 +26,67 @@
 namespace RhobanSSL {
 namespace Strategy {
 
-Mur_2::Mur_2(Ai::AiData & ai_data):
+StrikerV2::StrikerV2(Ai::AiData & ai_data):
     Strategy(ai_data)
 {
 }
 
-Mur_2::~Mur_2(){
+StrikerV2::~StrikerV2(){
 }
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2::min_robots() const {
-    return 2;
+int StrikerV2::min_robots() const {
+    return 1;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2::max_robots() const {
-    return 2;
+int StrikerV2::max_robots() const {
+    return 1;
 }
 
-Goalie_need Mur_2::needs_goalie() const {
+Goalie_need StrikerV2::needs_goalie() const {
     return Goalie_need::NO;
 }
 
-const std::string Mur_2::name = "mur_2";
+const std::string StrikerV2::name = "striker_v2";
 
-void Mur_2::start(double time){
+void StrikerV2::start(double time){
     DEBUG("START PREPARE KICKOFF");
     behaviors_are_assigned = false;
+
+    striker = std::shared_ptr<Robot_behavior::Striker>(
+      new Robot_behavior::Striker(ai_data)
+    );
 }
-void Mur_2::stop(double time){
+void StrikerV2::stop(double time){
     DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Mur_2::update(double time){
-
-  int nearest_ally_robot_from_ball = GameInformations::get_nearest_ball( );
-  is_closest_0 = false;
-  is_closest_1 = false;
-
-  if ( nearest_ally_robot_from_ball == player_id(0) ){
-      is_closest_0 = true;
-  } else {
-      if (nearest_ally_robot_from_ball == player_id(1)) {
-        is_closest_1 = true;
-      }
-  }
-
+void StrikerV2::update(double time){
+    std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move( ball_position() );
+    striker->declare_point_to_strik(results.first);
 }
 
-void Mur_2::assign_behavior_to_robots(
+void StrikerV2::assign_behavior_to_robots(
     std::function<
         void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
     > assign_behavior,
     double time, double dt
 ){
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> mur1(
-            new Robot_behavior::Mur_defensor(ai_data, 1)
-    );
-    static_cast<Robot_behavior::Mur_defensor*>( mur1.get() )->declare_mur_robot_id( 0, 2 );
-
-    std::shared_ptr<Robot_behavior::RobotBehavior> mur2(
-            new Robot_behavior::Mur_defensor(ai_data, 1)
-    );
-    static_cast<Robot_behavior::Mur_defensor*>( mur2.get() )->declare_mur_robot_id( 1, 2 );
-    std::shared_ptr<Robot_behavior::RobotBehavior> deg1(
-            new Robot_behavior::Degageur(ai_data)
-    );
-
     if( not(behaviors_are_assigned) ){
 
-        assert( get_player_ids().size() == 2 );
+        assert( get_player_ids().size() == 1 );
 
-        assign_behavior( player_id(0), mur1 );
-        assign_behavior( player_id(1), mur2 );
+        assign_behavior( player_id(0), striker );
 
         behaviors_are_assigned = true;
-    } else {
-        if ( is_closest_0 ) {
-            assign_behavior( player_id(0), deg1 );
-            assign_behavior( player_id(1), mur2 );
-        } else {
-            if ( is_closest_1 ) {
-                assign_behavior( player_id(0), mur1 );
-                assign_behavior( player_id(1), deg1 );
-            } else {
-                assign_behavior( player_id(0), mur1 );
-                assign_behavior( player_id(1), mur2 );
-            }
-
-        }
     }
 }
 
@@ -134,7 +98,7 @@ void Mur_2::assign_behavior_to_robots(
 //     before the start() or during the STOP referee state.
 std::list<
     std::pair<rhoban_geometry::Point,ContinuousAngle>
-> Mur_2::get_starting_positions( int number_of_avalaible_robots ){
+> StrikerV2::get_starting_positions( int number_of_avalaible_robots ){
     assert( min_robots() <= number_of_avalaible_robots );
     assert(
         max_robots()==-1 or
@@ -154,7 +118,7 @@ std::list<
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Mur_2::get_starting_position_for_goalie(
+bool StrikerV2::get_starting_position_for_goalie(
     rhoban_geometry::Point & linear_position,
     ContinuousAngle & angular_position
 ){

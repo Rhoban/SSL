@@ -139,7 +139,7 @@ std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move(
     rhoban_geometry::Point analysed_point;
 
     int nb_valid_path = 0;
-    int max_valid_path = 0;
+    double max_valid_path = 0.0;
     int max_i = 0;
     bool max_valid_combo_begin = false;
 

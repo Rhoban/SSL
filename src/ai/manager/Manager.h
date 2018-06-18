@@ -168,6 +168,8 @@ class Manager : public GameInformations {
     void declare_next_strategies(const std::list<std::string> & next_strategies);
 
     public:
+    void set_ball_avoidance_for_all_robots( bool value );
+
     void place_all_the_robots(
         double time, const std::list<std::string> & next_strategies
     );

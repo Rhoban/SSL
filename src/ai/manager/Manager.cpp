@@ -626,5 +626,9 @@ RhobanSSLAnnotation::Annotations Manager::get_annotations() const{
     return annotations;
 }
 
+void Manager::set_ball_avoidance_for_all_robots( bool value = true ){
+    ai_data.force_ball_avoidance = value;
+}
+
 };
 };
