@@ -194,7 +194,7 @@ void PlanVeschambres::choose_a_strategy(double time){
               ball_position_in_free_kick = ball_position();
             }
 
-            
+
             last_referee_changement = referee.edge_entropy();
 
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
@@ -206,7 +206,7 @@ void PlanVeschambres::choose_a_strategy(double time){
             if (referee.direct_free_team().second == referee.edge_entropy() - 1) {
                 if (get_team() == referee.direct_free_team().first) {
                     DEBUG("Offensive direct Kick");
-                    future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+                    future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name};
                 } else {
                     DEBUG("Defensive direct Kick");
                     future_strats = { Strategy::GoalieStrat::name };
@@ -216,7 +216,7 @@ void PlanVeschambres::choose_a_strategy(double time){
             } else if (referee.indirect_free_team().second == referee.edge_entropy() - 1) {
                 if (get_team() == referee.indirect_free_team().first) {
                     DEBUG("Offensive indirect Kick");
-                    future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+                    future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name };
                 } else {
                     DEBUG("Defensive indirect Kick");
                     future_strats = { Strategy::GoalieStrat::name };
@@ -226,11 +226,11 @@ void PlanVeschambres::choose_a_strategy(double time){
             } else {
                 if (ball_position().getX() <= 0) {
                  //DEFENSIVE
-                  future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+                  future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name };
                   is_in_offensive_mode = false;
                 } else {
                  //OFFENSIVE
-                  future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+                  future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name};
                   is_in_offensive_mode = true;
                 }
             }
@@ -262,15 +262,15 @@ void PlanVeschambres::choose_a_strategy(double time){
         if ( is_in_offensive_mode && ball_position().getX() <= 0) {
         //DEFENSIVE
           DEBUG("defensive !!!! ");
-          future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
+          future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name };
           is_in_offensive_mode = false;
           clear_strategy_assignement();
           declare_and_assign_next_strategies(future_strats);
-        } 
+        }
         if( not(is_in_offensive_mode) && ball_position().getX() >= 0 ){
         //OFFENSIVE
           DEBUG("offensive !!!! ");
-          future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
+          future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name};
           is_in_offensive_mode = true;
           clear_strategy_assignement();
           declare_and_assign_next_strategies(future_strats);
