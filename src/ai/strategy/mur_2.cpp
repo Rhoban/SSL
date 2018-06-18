@@ -110,11 +110,11 @@ void Mur_2::assign_behavior_to_robots(
 
         behaviors_are_assigned = true;
     } else {
-        if ( is_closest_0 == true ) {
+        if ( is_closest_0 ) {
             assign_behavior( player_id(0), deg1 );
             assign_behavior( player_id(1), mur2 );
         } else {
-            if ( is_closest_1 == true ) {
+            if ( is_closest_1 ) {
                 assign_behavior( player_id(0), mur1 );
                 assign_behavior( player_id(1), deg1 );
             } else {

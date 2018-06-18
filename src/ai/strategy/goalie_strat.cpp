@@ -17,84 +17,77 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "offensive.h"
+#include "goalie_strat.h"
+
 
 namespace RhobanSSL {
 namespace Strategy {
 
-Offensive::Offensive(Ai::AiData & ai_data):
+GoalieStrat::GoalieStrat(Ai::AiData & ai_data):
     Strategy(ai_data),
-    is_closest(false)
+    degageur(std::shared_ptr<Robot_behavior::Degageur>(
+      new Robot_behavior::Degageur(ai_data)
+    ))
 {
 }
 
-Offensive::~Offensive(){
+GoalieStrat::~GoalieStrat(){
 }
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Offensive::min_robots() const {
-    return 1;
+int GoalieStrat::min_robots() const {
+    return 0;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Offensive::max_robots() const {
-    return 1;
+int GoalieStrat::max_robots() const {
+    return 0;
 }
 
-Goalie_need Offensive::needs_goalie() const {
-    return Goalie_need::NO;
+Goalie_need GoalieStrat::needs_goalie() const {
+    return Goalie_need::YES;
 }
 
-const std::string Offensive::name = "offensive";
+const std::string GoalieStrat::name = "goalie_strat";
 
-void Offensive::start(double time){
+void GoalieStrat::start(double time){
     DEBUG("START PREPARE KICKOFF");
-    search = std::shared_ptr<Robot_behavior::SearchShootArea>(
-      new Robot_behavior::SearchShootArea(ai_data)
-    );
-    striker = std::shared_ptr<Robot_behavior::Striker>(
-      new Robot_behavior::Striker(ai_data)
+    goalie = std::shared_ptr<Robot_behavior::Goalie>(
+      new Robot_behavior::Goalie(ai_data)
     );
     behaviors_are_assigned = false;
 }
-void Offensive::stop(double time){
+void GoalieStrat::stop(double time){
     DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Offensive::update(double time){
-
-    if ( GameInformations::get_nearest_ball( Vision::Team::Ally ) == player_id(0) ) {
-        is_closest = true;
-    } else {
-        is_closest = false;
-    }
+void GoalieStrat::update(double time){
 }
 
-void Offensive::assign_behavior_to_robots(
-    std::function<
-        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-    > assign_behavior,
-    double time, double dt
+void GoalieStrat::assign_behavior_to_robots(
+  std::function<
+  void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
+  > assign_behavior,
+  double time, double dt
 ){
-    if( not(behaviors_are_assigned) ){
+  //we assign now all the other behavior
 
-        assert( get_player_ids().size() == 1 );
-        assign_behavior( player_id(0), search );
+  int goalieID = get_goalie(); // we get the first if in get_player_ids()
 
-    } else {
-        if ( is_closest == true ) {
-            assign_behavior( player_id(0), striker );
+  if( ally_penalty_area().is_inside(ball_position())){
+    assign_behavior( goalieID, degageur );
+  }
+  else{
+    assign_behavior( goalieID, goalie );
+  }
 
-        } else {
-            assign_behavior( player_id(0), search );
-        }
-    }
+  behaviors_are_assigned = true;
 }
 
 // We declare here the starting positions that are used to :
@@ -105,7 +98,7 @@ void Offensive::assign_behavior_to_robots(
 //     before the start() or during the STOP referee state.
 std::list<
     std::pair<rhoban_geometry::Point,ContinuousAngle>
-> Offensive::get_starting_positions( int number_of_avalaible_robots ){
+> GoalieStrat::get_starting_positions( int number_of_avalaible_robots ){
     assert( min_robots() <= number_of_avalaible_robots );
     assert(
         max_robots()==-1 or
@@ -114,7 +107,7 @@ std::list<
 
     return {
         std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            ai_data.relative2absolute(-1.0/3.0, 0.0),
+            ally_goal_center(),
             0.0
         )
     };
@@ -125,7 +118,7 @@ std::list<
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Offensive::get_starting_position_for_goalie(
+bool GoalieStrat::get_starting_position_for_goalie(
     rhoban_geometry::Point & linear_position,
     ContinuousAngle & angular_position
 ){

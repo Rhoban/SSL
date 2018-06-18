@@ -54,6 +54,40 @@ int main(int argc, char *argv[])
         cmd
     );
 
+    
+    TCLAP::ValueArg<std::string> addr(
+      "a", // short argument name  (with one character)
+      "address", // long argument name
+      "Vision client address",
+      false, // Flag is not required
+      SSL_VISION_ADDRESS, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+    TCLAP::ValueArg<std::string> port(
+      "p", // short argument name  (with one character)
+      "port", // long argument name
+      "Vision client port",
+      false, // Flag is not required
+      SSL_VISION_PORT, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+    
+    TCLAP::ValueArg<std::string> sim_port(
+      "u", // short argument name  (with one character)
+      "sim_port", // long argument name
+      "Vision client simulator port",
+      false, // Flag is not required
+      SSL_SIMULATION_VISION_PORT, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+
+    
     cmd.parse(argc, argv);
 
     // Instantiating the commander
@@ -81,8 +115,11 @@ int main(int argc, char *argv[])
         yellow.getValue() ?
             RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
         commander, config_path.getValue(),
-        part_of_the_field_used
-    );
+        part_of_the_field_used,
+        addr.getValue(),
+        port.getValue(),
+        sim_port.getValue()
+      );
 
     // Running Qt application
     QApplication a(argc, argv);

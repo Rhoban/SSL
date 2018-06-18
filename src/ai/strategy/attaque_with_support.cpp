@@ -24,7 +24,17 @@ namespace RhobanSSL {
 namespace Strategy {
 
 AttaqueWithSupport::AttaqueWithSupport(Ai::AiData & ai_data):
-    Strategy(ai_data)
+    Strategy(ai_data),
+    striker(std::shared_ptr<Robot_behavior::Striker>(
+        new Robot_behavior::Striker(ai_data)
+    )),
+    support(std::shared_ptr<Robot_behavior::RobotFollower>(
+        new Robot_behavior::RobotFollower(ai_data)
+    )),
+    pass(std::shared_ptr<Robot_behavior::Pass>(
+        new Robot_behavior::Pass(ai_data)
+    ))
+
 {
 }
 
@@ -73,20 +83,45 @@ void AttaqueWithSupport::assign_behavior_to_robots(
     if( not(behaviors_are_assigned) ){
         //we assign now all the other behavior
         assert( get_player_ids().size() == 2 );
-        int strikerID = player_id(1); // we get the first if in get_player_ids()
-        striker = std::shared_ptr<Robot_behavior::Striker>(
-            new Robot_behavior::Striker(ai_data)
-        );
-        assign_behavior( strikerID, striker );
+        int ID1 = player_id(0);
+        int ID2 = player_id(1); // we get the first if in get_player_ids()
 
-        int supportID = player_id(0);
-        support = std::shared_ptr<Robot_behavior::RobotFollower>(
-            new Robot_behavior::RobotFollower(ai_data)
-        );
-        support->declare_robot_to_follow(strikerID, Vector2d(1.0, 1.0), Vision::Team::Ally);
+        const rhoban_geometry::Point & robot_position_1 = get_robot(ID1, Vision::Team::Ally).get_movement().linear_position( time );
+        const rhoban_geometry::Point & robot_position_2 = get_robot(ID2, Vision::Team::Ally).get_movement().linear_position( time );
+
+        double ball_robot1 = (Vector2d(robot_position_1 - ball_position())).norm();
+        double ball_robot2 = (Vector2d(robot_position_2 - ball_position())).norm();
+
+        int strikerID;
+        int supportID;
+        std::vector<int> v_obstruct;
+        std::vector<int> v;
+
+        v_obstruct = get_robot_in_line( ball_position(), oponent_goal_center(), Vision::Team::Opponent );
+        v = get_robot_in_line( ball_position(), oponent_goal_center(), Vision::Team::Ally );
+        v_obstruct.insert( v_obstruct.end(), v.begin(), v.end() );
+        if( ball_robot1 < ball_robot2 ){
+          strikerID = ID1;
+          supportID = ID2;
+
+        } else{
+          strikerID = ID2;
+          supportID = ID1;
+        }
+
+        if (v_obstruct.empty()) {
+          assign_behavior( strikerID, striker );
+          support->declare_robot_to_follow(strikerID, Vector2d(1, 2), Vision::Team::Ally);
+          assign_behavior( supportID, support );
+        } else{
+          pass->declare_robot_to_pass( supportID, Vision::Team::Ally );
+          assign_behavior( strikerID, pass );
+        }
+        support->declare_robot_to_follow(strikerID, Vector2d(1, 2), Vision::Team::Ally);
         assign_behavior( supportID, support );
 
-        behaviors_are_assigned = true;
+
+        // behaviors_are_assigned = true;
     }
 }
 

@@ -187,6 +187,85 @@ void Patrol::set_reverse( bool reverse_circuit ){
     this->reverse_circuit = reverse_circuit;
 }
 
+Patrol* Patrol::test_NW_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/6.0, res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( -2*res->field_length()/6.0, res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/2.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}	
+
+Patrol* Patrol::test_NE_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( res->field_length()/6.0, res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( 2*res->field_length()/6.0, res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/2.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}	
+
+Patrol* Patrol::test_SW_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/6.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( -2*res->field_length()/6.0, -res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/2.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}	
+
+Patrol* Patrol::test_SE_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/6.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( -2*res->field_length()/6.0, -res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/2.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}	
+
+
+
+
 Patrol* Patrol::test_translation_for_pid( Ai::AiData& ai_data ){
     Patrol * res = new Patrol(ai_data);
     res->set_traject( 
@@ -225,8 +304,81 @@ Patrol* Patrol::test_rotation_for_pid( Ai::AiData& ai_data ){
     return res; 
 }	
 
+Patrol* Patrol::test_NW_rotation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/4.0, res->field_width()/4.0 ),
+                 ContinuousAngle(0.0)
+            }, 
+            {
+                rhoban_geometry::Point( -res->field_length()/4.0, res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}	
 
+Patrol* Patrol::test_NE_rotation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( res->field_length()/4.0, res->field_width()/4.0 ),
+                 ContinuousAngle(0.0)
+            }, 
+            {
+                rhoban_geometry::Point( res->field_length()/4.0, res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}	
 
+Patrol* Patrol::test_SW_rotation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(0.0)
+            }, 
+            {
+                rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}	
+
+Patrol* Patrol::test_SE_rotation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( res->field_length()/4.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(0.0)
+            }, 
+            {
+                rhoban_geometry::Point( res->field_length()/4.0, -res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}	
 
 RhobanSSLAnnotation::Annotations Patrol::get_annotations() const {
     return follower->get_annotations();
@@ -239,6 +391,122 @@ void Patrol::see_the_ball(bool value){
 void Patrol::set_waiting_time( double time ){
     waiting_time = time;
 }
+
+Patrol* Patrol::test_SW_NW_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/4.0)
+            }, 
+            {
+                rhoban_geometry::Point( +res->field_length()/4.0, +res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/4.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}
+
+Patrol* Patrol::test_NW_SE_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/4.0, res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/4.0)
+            }, 
+            {
+                rhoban_geometry::Point( +res->field_length()/4.0, -res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/4.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}
+
+
+Patrol* Patrol::test_N_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/4.0, res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( +res->field_length()/4.0, res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/2.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}
+
+Patrol* Patrol::test_E_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( res->field_length()/4.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( res->field_length()/4.0, +res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/2.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}
+
+Patrol* Patrol::test_W_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( -res->field_length()/4.0, +res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/2.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}
+
+Patrol* Patrol::test_S_translation_for_pid( Ai::AiData& ai_data ){
+    Patrol * res = new Patrol(ai_data);
+    res->set_traject( 
+	{
+            { 
+                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 ContinuousAngle(M_PI/2.0)
+            }, 
+            {
+                rhoban_geometry::Point( +res->field_length()/4.0, -res->field_width()/4.0 ),        
+                ContinuousAngle(M_PI/2.0)
+            }, 
+        }
+    );
+    res->set_waiting_time(5.0);
+    res->see_the_ball(false);
+    return res; 
+}
+
 
 }
 }

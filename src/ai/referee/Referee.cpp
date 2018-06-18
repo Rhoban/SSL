@@ -26,8 +26,10 @@ namespace RhobanSSL {
 const std::string Referee_Id::STATE_INIT = "init";
 const std::string Referee_Id::STATE_HALTED = "halted";
 const std::string Referee_Id::STATE_STOPPED = "stopped";
+
 const std::string Referee_Id::STATE_PREPARE_KICKOFF = "prepare_kickoff";
 const std::string Referee_Id::STATE_PREPARE_PENALTY = "prepare_penalty";
+
 const std::string Referee_Id::STATE_RUNNING = "running";
 const std::string Referee_Id::STATE_TIMEOUT = "timeout";
 
@@ -47,11 +49,18 @@ const std::string Referee_Id::EDGE_TIMEOUT_TO_HALTED = "halt_game_t";
 
 const std::string Referee_Id::EDGE_TIMEOUT_START = "timeout_start";
 const std::string Referee_Id::EDGE_FORCE_START = "force_start";
+
 const std::string Referee_Id::EDGE_KICKOFF_YELLOW = "kickoff_yellow";
 const std::string Referee_Id::EDGE_KICKOFF_BLUE = "kickoff_blue";
-const std::string Referee_Id::EDGE_PENALTY = "penalty";
-const std::string Referee_Id::EDGE_INDIRECT = "indirect";
-const std::string Referee_Id::EDGE_DIRECT = "direct";
+
+const std::string Referee_Id::EDGE_PENALTY_BLUE = "penalty_blue";
+const std::string Referee_Id::EDGE_PENALTY_YELLOW = "penalty_yellow";
+
+const std::string Referee_Id::EDGE_DIRECT_FREE_BLUE = "direct_free_blue";
+const std::string Referee_Id::EDGE_DIRECT_FREE_YELLOW = "direct_free_yellow";
+
+const std::string Referee_Id::EDGE_INDIRECT_FREE_BLUE = "indirect_free_blue";
+const std::string Referee_Id::EDGE_INDIRECT_FREE_YELLOW = "indirect_free_yellow";
 
 const std::string Referee_Id::EDGE_NORMAL_START_FOR_KICKOFF = "normal_start_k";
 const std::string Referee_Id::EDGE_NORMAL_START_FOR_PENALTY = "normal_start_p";
@@ -208,6 +217,7 @@ Referee::Referee():
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
         command_is_<SSL_Referee::FORCE_START>
     );
+    
     machine_state.add_edge(
         Referee_Id::EDGE_KICKOFF_YELLOW,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_KICKOFF,
@@ -230,26 +240,76 @@ Referee::Referee():
             team_having_kickoff = Ai::Blue;
         }
     );
+
     machine_state.add_edge(
-        Referee_Id::EDGE_PENALTY,
+        Referee_Id::EDGE_PENALTY_BLUE,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_PENALTY,
-        command_is_one_of_<
-            SSL_Referee::PREPARE_PENALTY_BLUE, SSL_Referee::PREPARE_PENALTY_YELLOW
-        >
+        command_is_<SSL_Referee::PREPARE_PENALTY_BLUE>,
+        [&](
+            const Referee_data & referee_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_penalty = Ai::Blue;
+        }
     );
     machine_state.add_edge(
-        Referee_Id::EDGE_INDIRECT,
-        Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
-        command_is_one_of_<
-            SSL_Referee::INDIRECT_FREE_BLUE, SSL_Referee::INDIRECT_FREE_YELLOW
-        >
+        Referee_Id::EDGE_PENALTY_YELLOW,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_PENALTY,
+        command_is_<SSL_Referee::PREPARE_PENALTY_YELLOW>,
+        [&](
+            const Referee_data & referee_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_penalty = Ai::Yellow;
+        }
     );
+
     machine_state.add_edge(
-        Referee_Id::EDGE_DIRECT,
+        Referee_Id::EDGE_DIRECT_FREE_BLUE,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
-        command_is_one_of_<
-            SSL_Referee::DIRECT_FREE_BLUE, SSL_Referee::DIRECT_FREE_YELLOW
-        >
+        command_is_<SSL_Referee::DIRECT_FREE_BLUE>,
+        [&](
+            const Referee_data & referee_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_direct_free = std::make_pair(Ai::Blue, edge_entropy_number);
+        }
+    );
+
+    machine_state.add_edge(
+        Referee_Id::EDGE_DIRECT_FREE_YELLOW,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
+        command_is_<SSL_Referee::DIRECT_FREE_YELLOW>,
+        [&](
+            const Referee_data & referee_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_direct_free = std::make_pair(Ai::Yellow, edge_entropy_number);
+        }
+    );
+
+    machine_state.add_edge(
+        Referee_Id::EDGE_INDIRECT_FREE_BLUE,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
+        command_is_<SSL_Referee::INDIRECT_FREE_BLUE>,
+        [&](
+            const Referee_data & referee_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_indirect_free = std::make_pair(Ai::Blue, edge_entropy_number);
+        }
+    );
+
+    machine_state.add_edge(
+        Referee_Id::EDGE_INDIRECT_FREE_YELLOW,
+        Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
+        command_is_<SSL_Referee::INDIRECT_FREE_YELLOW>,
+        [&](
+            const Referee_data & referee_data,
+            unsigned int run_number, unsigned int atomic_run_number
+        ){
+            team_having_indirect_free = std::make_pair(Ai::Yellow, edge_entropy_number);
+        }
     );
 
     machine_state.add_edge(
@@ -324,6 +384,8 @@ void Referee::update( double time ){
     machine_state.run();
     assert( machine_state.current_states().size() == 1 );
     save_last_time_stamps();
+   
+
 }
 
 
@@ -337,6 +399,18 @@ const Referee::ID & Referee::get_state() const {
 
 Ai::Team Referee::kickoff_team() const {
     return team_having_kickoff;
+}
+
+Ai::Team Referee::penalty_team() const {
+    return team_having_penalty;
+}
+
+std::pair <Ai::Team, int> Referee::direct_free_team() const {
+    return team_having_direct_free;
+}
+
+std::pair <Ai::Team, int> Referee::indirect_free_team() const {
+    return team_having_indirect_free;
 }
 
 bool Referee::blue_have_it_s_goal_on_positive_x_axis() const {

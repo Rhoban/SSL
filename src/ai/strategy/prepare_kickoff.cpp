@@ -206,5 +206,15 @@ void Prepare_kickoff::set_robot_affectation( const std::vector<int> & robot_ids 
     }
 }
 
+void Prepare_kickoff::set_goalie( int id, bool to_be_managed ){
+    Strategy::set_goalie(id, to_be_managed);
+    if(is_kicking){
+        placer_when_kicking.set_goalie(id, to_be_managed );
+    }else{
+        placer_when_no_kicking.set_goalie(id, to_be_managed );
+    }
+}
+
+
 }
 }

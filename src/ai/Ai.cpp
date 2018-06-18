@@ -49,12 +49,13 @@ void AI::check_time_is_coherent() const {
 }
 
 void AI::limits_velocity( Control & ctrl ) const {
+#if 1
     if( ai_data.constants.translation_velocity_limit > 0.0 ){
         if(
             ctrl.velocity_translation.norm() >
             ai_data.constants.translation_velocity_limit
         ){
-            ctrl.velocity_translation = Vector2d(0.0, 0.0);
+            ctrl.velocity_translation = ai_data.constants.translation_velocity_limit;
             std::cerr << "AI WARNING : we reached the "
                 "limit translation velocity !" << std::endl;
         }
@@ -64,11 +65,12 @@ void AI::limits_velocity( Control & ctrl ) const {
             std::fabs( ctrl.velocity_rotation.value() ) >
             ai_data.constants.rotation_velocity_limit
         ){
-            ctrl.velocity_rotation = 0.0;
+            ctrl.velocity_rotation = ai_data.constants.rotation_velocity_limit;
             std::cerr << "AI WARNING : we reached the "
                 "limit rotation velocity !" << std::endl;
         }
     }
+#endif
 }
 
 void AI::prevent_collision( int robot_id, Control & ctrl ){
@@ -190,6 +192,9 @@ void AI::send_control( int robot_id, const Control & ctrl ){
                 robot_id, true, 0.0, 0.0, 0.0
             );
         }else{
+            //if( robot_id == 1 ){
+            //    DEBUG( "CTRL : " << ctrl );
+            //}
             int kick = 0;
             if (ctrl.kick) kick = 1;
             else if (ctrl.chipKick) kick = 2;
@@ -416,7 +421,7 @@ void AI::run(){
             );
         }else{
             dynamic_cast<Manager::Manual*>(
-                strategy_manager.get() 
+                strategy_manager.get()
             )->define_goal_to_positive_axis(
                 not( referee.blue_have_it_s_goal_on_positive_x_axis() )
             );
@@ -427,7 +432,7 @@ void AI::run(){
         );
 
         strategy_manager->remove_invalid_robots();
-        
+
         strategy_manager->update(current_time);
         strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
         share_data();
@@ -476,9 +481,9 @@ double AI::getCurrentTime()
     return ai_data.time;
 }
 
-        
+
 RhobanSSLAnnotation::Annotations AI::get_robot_behavior_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations; 
+    RhobanSSLAnnotation::Annotations annotations;
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
         const Robot_behavior::RobotBehavior & robot_behavior = *(
             robot_behaviors.at(robot_id)
@@ -488,24 +493,24 @@ RhobanSSLAnnotation::Annotations AI::get_robot_behavior_annotations() const {
     return annotations;
 }
 
-        
+
 void AI::get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const {
     annotations.addAnnotations( getManager()->get_annotations() );
-    annotations.addAnnotations( 
+    annotations.addAnnotations(
         get_robot_behavior_annotations()
     );
 
-    std::function< 
+    std::function<
         rhoban_geometry::Point (
-            const rhoban_geometry::Point & p 
-        ) 
+            const rhoban_geometry::Point & p
+        )
     > fct = [this]( const rhoban_geometry::Point & p ) {
         return this->ai_data.team_point_of_view.from_frame( p );
     };
     annotations.map_positions(fct);
 }
 
-        
+
 void AI::update_electronic_informations(){
     RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
     for( unsigned int id=0; id<MAX_ROBOTS; id++ ){

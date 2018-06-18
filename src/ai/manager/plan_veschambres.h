@@ -31,6 +31,10 @@ class PlanVeschambres : public Manager {
     const Referee & referee;
 
     bool is_in_offensive_mode;
+
+    bool in_defensive_free_kick;
+    rhoban_geometry::Point ball_position_in_free_kick;
+
     unsigned int last_referee_changement;
 
     std::list<std::string> future_strats;
