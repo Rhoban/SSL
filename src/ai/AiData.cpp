@@ -240,7 +240,7 @@ namespace Ai {
         DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
 
 
-        rules_avoidance_distance = 0.5;
+        rules_avoidance_distance = 0.5 * (1.0+10.0/100.0);
 
 
         radius_ball = root["ball"]["radius_ball"].asDouble();
