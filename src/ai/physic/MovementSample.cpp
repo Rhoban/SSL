@@ -41,10 +41,11 @@ PositionSample::PositionSample(
 
 void MovementSample::insert( const PositionSample & sample ){
     assert( sample.time >= (*this)[0].time );
-    if( sample.time == (*this)[0].time ){
-        (*this)[0] = sample;
+    // if( sample.time == (*this)[0].time ){
+    if( fabs(sample.time - (*this)[0].time )<0.01){
+      (*this)[0] = sample;
     }else{
-        circular_vector<PositionSample>::insert( sample );
+      circular_vector<PositionSample>::insert( sample );
     }
 }
 
@@ -71,7 +72,18 @@ double MovementSample::time( unsigned int i ) const {
 }
 
 double MovementSample::dt( unsigned int i ) const {
-    return (*this)[i].time - (*this)[i+1].time;
+
+
+
+  double filtered_dt=0.0;
+  int nbgood=0;
+  //small filter
+  for(int it=0;it<(this->size()-1);it++){
+    filtered_dt+=((*this)[it].time - (*this)[it+1].time);
+  }
+
+  return filtered_dt/(this->size()-1);
+
 }
 
 Point MovementSample::linear_position( unsigned int i ) const {
@@ -83,19 +95,21 @@ ContinuousAngle MovementSample::angular_position( unsigned int i ) const{
 }
 
 Vector2d MovementSample::linear_velocity( unsigned int i ) const {
-    return ( linear_position(i) - linear_position(i+1) )/dt(i);
+
+  return ( linear_position(i) - linear_position(i+1) )/dt(i);
 }
 
 ContinuousAngle MovementSample::angular_velocity( unsigned int i ) const{
-    return ( angular_position(i) - angular_position(i+1) )/dt(i);
+
+  return ( angular_position(i) - angular_position(i+1) )/dt(i);
 }
 
 Vector2d MovementSample::linear_acceleration( unsigned int i ) const {
-    return ( linear_velocity(i) - linear_velocity(i+1) )/dt(i);
+  return ( linear_velocity(i) - linear_velocity(i+1) )/dt(i);
 }
 
 ContinuousAngle MovementSample::angular_acceleration( unsigned int i ) const {
-    return ( angular_velocity(i) - angular_velocity(i+1) )/dt(i);
+  return ( angular_velocity(i) - angular_velocity(i+1) )/dt(i);
 }
 
 }

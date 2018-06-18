@@ -186,7 +186,7 @@ void AIVisionClient::updateRobotInformation(
   const SSL_DetectionRobot & robotFrame, bool ally,
   Ai::Team team_color
   ){
-  if( not( object_coordonate_is_valid(robotFrame.x(), robotFrame.y()) ) ){
+  if( not( object_coordonate_is_valid(robotFrame.x()/1000.0, robotFrame.y()/1000.0) ) ){
     return;
   }
   if(robotFrame.has_robot_id()){
@@ -218,7 +218,7 @@ void AIVisionClient::updateRobotInformation(
   }
 }
 
-bool AIVisionClient::object_coordonate_is_valid(int x,int y) const {
+bool AIVisionClient::object_coordonate_is_valid(double x,double y) const {
   switch(part_of_the_field_used){
     case Part_of_the_field::POSIVE_HALF_FIELD : {
       return x>0;
