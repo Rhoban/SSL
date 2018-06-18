@@ -49,13 +49,13 @@ void AI::check_time_is_coherent() const {
 }
 
 void AI::limits_velocity( Control & ctrl ) const {
-#if 0
+#if 1
     if( ai_data.constants.translation_velocity_limit > 0.0 ){
         if(
             ctrl.velocity_translation.norm() >
             ai_data.constants.translation_velocity_limit
         ){
-            ctrl.velocity_translation = ai_data.constants.translation_velocity_limit;
+            ctrl.velocity_translation *= ai_data.constants.translation_velocity_limit/ctrl.velocity_translation.norm();
             std::cerr << "AI WARNING : we reached the "
                 "limit translation velocity !" << std::endl;
         }
@@ -65,7 +65,7 @@ void AI::limits_velocity( Control & ctrl ) const {
             std::fabs( ctrl.velocity_rotation.value() ) >
             ai_data.constants.rotation_velocity_limit
         ){
-            ctrl.velocity_rotation = ai_data.constants.rotation_velocity_limit;
+            ctrl.velocity_rotation = ai_data.constants.rotation_velocity_limit*(ctrl.velocity_rotation.value()/std::fabs( ctrl.velocity_rotation.value()));
             std::cerr << "AI WARNING : we reached the "
                 "limit rotation velocity !" << std::endl;
         }
