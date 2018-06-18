@@ -29,6 +29,7 @@ set (SOURCES
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp
     robot_behavior/factory.cpp
+    robot_behavior/example_machine_state.cpp
     robot_behavior/example.cpp
     robot_behavior/goalie.cpp
     robot_behavior/patrol.cpp

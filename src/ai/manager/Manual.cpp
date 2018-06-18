@@ -25,6 +25,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/example.h>
+#include <robot_behavior/example_machine_state.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/passive_defensor.h>
 #include <robot_behavior/concept_proof_spinner.h>
@@ -62,6 +63,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Example_machine_state", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Example_machine_state* ex = new Robot_behavior::Example_machine_state(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(ex);
                 }, false // we don't want to define a goal here !
             )
         )
