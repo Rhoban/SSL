@@ -29,7 +29,8 @@ Striker::Striker(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    striking_vector( Vector2d(oponent_goal_center() - ball_position()) ),       
+    use_custom_vector(false),
+    striking_point( oponent_goal_center() ),       
     follower( Factory::fixed_consign_follower(ai_data) )
 {
 }
@@ -88,6 +89,7 @@ void Striker::update(
         //
     }
 
+    Vector2d striking_vector = striking_point - ball_position();
 
 
     Vector2d target_position = Vector2d(ball_position()) - striking_vector * (target_radius_from_ball);
@@ -105,8 +107,8 @@ Control Striker::control() const {
 }
 
 
-void Striker::declare_striking_vector( Vector2d vector ){
-    striking_vector = vector;
+void Striker::declare_point_to_strik( rhoban_geometry::Point point ){
+    striking_point = point;
 }
 
 
