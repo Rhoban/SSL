@@ -62,8 +62,8 @@ protected:
     std::map<
         int, // CMAERA ID
         std::pair<
-            bool, //camera have found a ball
-            rhoban_geometry::Point // detecte ball
+          double, //camera have found a ball at time?
+          rhoban_geometry::Point // detecte ball
         >
     > ball_camera_detections;
 
@@ -88,8 +88,8 @@ private:
         std::map<
             int, // CMAERA ID
             std::pair<
-                bool, //camera have found a ball
-                rhoban_geometry::Point // detecte ball
+        double, //camera have found a ball
+        rhoban_geometry::Point // detecte ball
             >
         > & ball_camera_detections,
         Vision::Part_of_the_field part_of_the_field_used
