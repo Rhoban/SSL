@@ -115,54 +115,71 @@ void AIVisionClient::packetReceived()
     camera_detections[ detection.camera_id() ] = detection;
   }
 
-  // Ball informations
-  if (detection.balls().size()) {
-    if (!visionData.ball.present || visionData.ball.age() > 1) {
-      // If the ball is outdated (> 1s) or not present, taking the first
-      // one in the frame
-      for (auto ball : detection.balls()) {
-        double x = ball.x()/1000.0;
-        double y = ball.y()/1000.0;
-        if(
-            object_coordonate_is_valid(
-                x, y, part_of_the_field_used
-            )
-        ){
-          visionData.ball.update(detection.t_sent(), Point(x,y)); // TODO HACK : IL FAUT METTRE t_send() ?
-          break;
-        }
-      }
-    } else {
-      // Else, we accept the ball which is the nearest from the previous one
-      // we already had
-      bool hasBall = false;
-      Point bestBall;
-      double nearest;
 
-      for (auto ball : detection.balls()) {
-        double x = ball.x()/1000.0;
-        double y = ball.y()/1000.0;
-        if( not( 
-            object_coordonate_is_valid(
-                x,y, part_of_the_field_used
-            )
-        ) ){
-          continue;
-        }
-        Point pos(x, y);
+    // Ball informations
+    if (detection.balls().size()) {
+        if (!visionData.ball.present || visionData.ball.age() > 1) {
+            // If the ball is outdated (> 1s) or not present, taking the first
+            // one in the frame
+            bool ball_is_detected = false;
+            for (auto ball : detection.balls()) {
+                double x = ball.x()/1000.0;
+                double y = ball.y()/1000.0;
+                if(
+                    object_coordonate_is_valid(
+                        x, y, part_of_the_field_used
+                    )
+                ){
+                    ball_is_detected = true;
+                    visionData.ball.update(detection.t_sent(), Point(x,y)); // TODO HACK : IL FAUT METTRE t_send() ?
+                    ball_camera_detections[detection.camera_id()] = {true, Point(x,y)};
+                    break;
+                }
+            }
+            ball_camera_detections[detection.camera_id()].first = ball_is_detected;
+        } else {
+            // Else, we accept the ball which is the nearest from the previous one
+            // we already had
+            bool hasBall = false;
+            Point bestBall;
+            double nearest;
 
-        double distance = pos.getDist(
-          visionData.ball.movement[0].linear_position
-          );
-        if (!hasBall || distance < nearest) {
-          nearest = distance;
-          bestBall = pos;
-        }
-      }
-      visionData.ball.update(detection.t_sent(), bestBall); // TODO HACK : IL FAUT METTRE t_send() ?
+            for (auto ball : detection.balls()) {
+                double x = ball.x()/1000.0;
+                double y = ball.y()/1000.0;
+                if( not( 
+                    object_coordonate_is_valid(
+                        x,y, part_of_the_field_used
+                    )
+                       
+                ) ){
+                    continue;
+                }
+                Point pos(x, y);
 
+                double distance = pos.getDist(
+                    visionData.ball.movement[0].linear_position
+                );
+                if (!hasBall || distance < nearest) {
+                    nearest = distance;
+                    bestBall = pos;
+                }
+            }
+
+            if( hasBall ){ 
+                ball_camera_detections[detection.camera_id()] = {true, bestBall};
+                auto final_ball = average_filter(
+                    bestBall, ball_camera_detections,
+                    part_of_the_field_used
+                );
+                visionData.ball.update(detection.t_sent(), final_ball); // TODO HACK : IL FAUT METTRE t_send() ?
+            }else{
+                ball_camera_detections[detection.camera_id()].first = false;
+            }
+        }
+    }else{
+        ball_camera_detections[detection.camera_id()].first = false;
     }
-  }
 
   // We set to not present all robot that is too old
   for( unsigned int i = 0; i< visionData.robots.at(Vision::Team::Ally).size(); i++ ){
@@ -208,14 +225,14 @@ void AIVisionClient::updateRobotInformation(
       Vision::Robot &robot = visionData.robots.at(team).at(robotFrame.robot_id());
 
       bool orientation_is_defined;
-      std::pair<
-        rhoban_geometry::Point,
-        ContinuousAngle
+        std::pair<
+            rhoban_geometry::Point,
+            ContinuousAngle
         > position = Vision::Factory::filter(
-          robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
-          orientation_is_defined, 
-          oldVisionData, part_of_the_field_used
-          );
+            robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
+            orientation_is_defined, 
+            oldVisionData, part_of_the_field_used
+        );
 //                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
       if ( orientation_is_defined ) {
@@ -230,5 +247,43 @@ void AIVisionClient::updateRobotInformation(
     }
   }
 }
+
+
+rhoban_geometry::Point
+AIVisionClient::average_filter(
+    const rhoban_geometry::Point & new_ball,
+    std::map<
+        int, // CMAERA ID
+        std::pair<
+            bool, //camera have found a ball
+            rhoban_geometry::Point // detecte ball
+        >
+    > & ball_camera_detections,
+    Vision::Part_of_the_field part_of_the_field_used
+){
+    int n_linear = 0;
+    rhoban_geometry::Point linear_average (0.0, 0.0);
+    for(
+        const std::pair<
+            int, // CMAERA ID
+            std::pair<
+                bool, //time capture_t
+                rhoban_geometry::Point // detecte ball
+            >
+        > & elem : ball_camera_detections 
+    ){
+        bool ball_is_detected = elem.second.first;
+        double camera_id = elem.first;
+        const rhoban_geometry::Point & ball_pos = elem.second.second;
+        if( ball_is_detected ){
+            linear_average += rhoban_geometry::Point(
+                new_ball.getX()/1000.0, new_ball.getY()/1000.0
+            );
+            n_linear ++;
+        }
+    }
+    return linear_average*(1.0/n_linear);
+}
+
 
 }
