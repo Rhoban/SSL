@@ -170,9 +170,12 @@ void PlanVeschambres::choose_a_strategy(double time){
                 if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
                 }else{
-                    place_all_the_robots(time, future_strats);
+                    get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
+                    future_strats = { Strategy::Prepare_kickoff::name};
+                    declare_and_assign_next_strategies( future_strats );
                 }
             }
+
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
             if( get_team() == referee.kickoff_team() ){
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
