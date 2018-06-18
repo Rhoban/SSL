@@ -76,7 +76,9 @@ std::shared_ptr<Manager> Factory::construct_manager(
         dynamic_cast<Manual&>(
             *manager
         ).change_team_and_point_of_view(
-            ai_data.team_color, true
+            ai_data.team_color, 
+            ai_data.team_color != Ai::Team::Yellow
+            //false //ai_data.team_color != Ai::Team::Yellow
         );
     }
     if( manager_name == names::manual_adrien ){

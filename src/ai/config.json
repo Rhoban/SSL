@@ -6,13 +6,13 @@
         "robot_radius" : 0.09,
         "wheel_radius" : 0.03,
         "wheel_excentricity" : 0.08,
-        "wheel_nb_turns_acceleration_limit" : { 
-            "simu" : 100.0,
-            "real" : 200.0
+        "wheel_nb_turns_acceleration_limit" : {
+            "simu" : 150.0,
+            "real" : 150.0
         },
         "rotation_velocity_limit" : {
-            "simu" : 3.0,
-            "real" : 3.0
+            "simu" : 10.0,
+            "real" : 10.0
         },
         "translation_velocity_limit" : {
             "simu" : 8.0,
@@ -20,21 +20,23 @@
         },
 
         "p_translation" : {
-            "simu" : 0.05,
-            "real" : 0.02
+            "simu" : 1.5,
+            "_simu" : 2,
+            "real" : 1.5
         },
-        "i_translation" : { 
+        "i_translation" : {
             "simu" : 0.0,
             "real" : 0.0
         },
         "d_translation" : {
-            "simu" : 0.0,
-            "real" : 0.0
+            "simu" : 0,
+            "_simu" : 1,
+            "real" : 0
         },
 
         "p_orientation":{
-            "simu" : 0.05,
-            "real" : 0.02
+            "simu" : 3,
+            "real" : 3
         },
         "i_orientation":{
             "simu" : 0.0,
@@ -42,7 +44,7 @@
         },
         "d_orientation":{
             "simu" : 0.0,
-            "real" : 0.0
+            "real" : 0
         }
     },
     "team" : {
@@ -53,13 +55,14 @@
     },
     "navigation_with_obstacle" : {
         "security_acceleration_ratio" : 0.5,
-        "obstacle_avoidance_ratio" : 0.2,
-        "radius_security_for_collision" : 0.015,    
+
+        "obstacle_avoidance_ratio" : 0.04,
+        "radius_security_for_collision" : 0.015,
         "radius_security_for_avoidance" : 0.03
     },
     "goalie" : {
         "penalty_rayon" : 1.0,
         "waiting_goal_position" : [0.3,0.0],
-        "default_id" : 7
+        "default_id" : 5
     }
 }

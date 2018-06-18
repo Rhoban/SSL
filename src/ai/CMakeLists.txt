@@ -31,6 +31,7 @@ set (SOURCES
     robot_behavior/dijkstra_pathfinding.cpp
     robot_behavior/AStar.cpp
     robot_behavior/factory.cpp
+    robot_behavior/example_machine_state.cpp
     robot_behavior/example.cpp
     robot_behavior/goalie.cpp
     robot_behavior/patrol.cpp
@@ -44,6 +45,7 @@ set (SOURCES
     robot_behavior/robot_follower.cpp
     robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
+    robot_behavior/striker_ai.cpp
     robot_behavior/degageur.cpp
     robot_behavior/test_kicker.cpp
     robot_behavior/position_follower.cpp
@@ -54,6 +56,7 @@ set (SOURCES
     robot_behavior/navigation_with_obstacle_avoidance.cpp
     robot_behavior/navigation_inside_the_field.cpp
     robot_behavior/obstructor.cpp
+    robot_behavior/wait_pass.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp
@@ -89,6 +92,7 @@ set (SOURCES
     strategy/from_robot_behavior.cpp
     strategy/placer.cpp
     strategy/mur_2.cpp
+    strategy/goalie_strat.cpp
     strategy/prepare_kickoff.cpp
     strategy/example.cpp
     control/robot_control.cpp
@@ -150,8 +154,6 @@ if(CATKIN_ENABLE_TESTING)
     math/test_tangents.cpp
     math/test_vector2d.cpp
     math/test_matrix2d.cpp
-    control/test_pid.cpp
-    control/test_robot_control.cpp
     robot_behavior/test_robot_behavior.cpp
   )
 

@@ -51,14 +51,29 @@ struct PidController {
     double time;
     double dt;
 
+    Vector2d acc;
+    Vector2d acc_dt;
+    double acc_r;
+    double acc_r_dt;
+
+    Vector2d ancient_pos;
+    ContinuousAngle ancient_orientation;
+
+    double no_limited_angular_control_value;
+    Vector2d no_limited_translation_control_value;
+
     void init_time(double start_time, double dt);
 
-    void update(double current_time);
-   
+    void update(
+        double current_time,
+        const Vector2d & robot_position,
+        const ContinuousAngle & robot_orientation
+    );
+
     PidController();
     PidController(
-        double p_t, double i_t, double d_t, 
-        double p_o, double i_o, double d_o 
+        double p_t, double i_t, double d_t,
+        double p_o, double i_o, double d_o
     );
 
     void set_orientation_pid( double kp, double ki, double kd );
@@ -73,19 +88,17 @@ struct PidController {
     virtual ContinuousAngle goal_orientation( double t ) const =0;
     virtual Vector2d goal_position( double t ) const = 0;
 
-    Vector2d no_limited_translation_control(
-        const Vector2d & robot_position, 
+    void compute_no_limited_translation_control(
+        const Vector2d & robot_position
+    );
+    Vector2d no_limited_translation_control() const;
+
+    void compute_no_limited_angular_control(
         const ContinuousAngle & robot_orientation
-    ) const;
-    double no_limited_angular_control(
-        const Vector2d & robot_position, 
-        const ContinuousAngle & robot_orientation
-    ) const;
-    
-    virtual PidControl no_limited_control(
-        const Vector2d & robot_position, 
-        const ContinuousAngle & robot_orientation
-    ) const;
+    );
+    double no_limited_angular_control() const;
+
+    virtual PidControl no_limited_control() const;
 };
 
 #endif
