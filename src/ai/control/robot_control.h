@@ -36,7 +36,7 @@ namespace robot_control_details {
         fct_wrapper(
             const std::function<double (double u)> & rotation
         ):rotation(rotation){ };
-
+        
         Vector2d operator()(double t){
             return Vector2d( rotation(t), 0.0 );
         };
@@ -66,7 +66,7 @@ class CurveForRobot {
             const std::function<Vector2d (double u)> & translation,
             double translation_velocity, double translation_acceleration,
             const std::function<double (double u)> & rotation,
-            double angular_velocity, double angular_acceleration, 
+            double angular_velocity, double angular_acceleration,
             double calculus_step
         );
         Vector2d translation(double t) const;
@@ -74,7 +74,7 @@ class CurveForRobot {
 
         void print_translation_curve( double dt ) const;
         void print_translation_movment( double dt ) const;
-       
+
         void print_rotation_curve( double dt ) const;
         void print_rotation_movment( double dt ) const;
 };
@@ -91,9 +91,9 @@ class RobotControl {
 
     public:
         PidControl limited_control(
-            const Vector2d & robot_position, 
+            const Vector2d & robot_position,
             const ContinuousAngle & robot_orientation,
-            const Vector2d & robot_linear_velocity, 
+            const Vector2d & robot_linear_velocity,
             const ContinuousAngle & robot_angular_velocity
         ) const;
 
