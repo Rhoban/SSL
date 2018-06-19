@@ -44,6 +44,7 @@ set (SOURCES
     robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
     robot_behavior/striker_ai.cpp
+    robot_behavior/predict_futur.cpp
     robot_behavior/degageur.cpp
     robot_behavior/test_kicker.cpp
     robot_behavior/position_follower.cpp
@@ -84,6 +85,7 @@ set (SOURCES
     strategy/indirect.cpp
     strategy/indirect_lob.cpp
     strategy/attaque_with_support.cpp
+    strategy/attaque_with_support_ms.cpp
     strategy/defensive.cpp
     strategy/defensive_2.cpp
     strategy/union.cpp
