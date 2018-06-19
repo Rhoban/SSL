@@ -88,9 +88,14 @@ void Navigation_inside_the_field::update_control(
         //     field_SW() + Vector2d( marge, marge ),
         //     field_NE() - Vector2d( marge, marge)
         // );
+        // Box cropped_field(
+        //     field_SW(),
+        //     field_NE()
+        // );
+        // Trying agressive margins
         Box cropped_field(
-            field_SW(),
-            field_NE()
+            field_SW() - Vector2d( marge, marge),
+            field_NE() + Vector2d( marge, marge)
         );
         float radius_margin_factor=2.0;
         Box opponent_penalty = opponent_penalty_area().increase(get_robot_radius());

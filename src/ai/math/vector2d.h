@@ -40,7 +40,7 @@ class Vector2d : public Boost_Vector2d {
     }
 
     Vector2d():Vector2d(0.0, 0.0){};
-    
+
     Vector2d(const rhoban_geometry::Point& point):
         Vector2d( point.getX(), point.getY() )
     {
@@ -65,6 +65,8 @@ class Vector2d : public Boost_Vector2d {
     Vector2d( const BOOST_VECTOR & v ){
         static_cast<Boost_Vector2d&>(*this) = v;
     }
+
+    Vector2d perpendicular();
 };
 
 rhoban_geometry::Point vector2point( const Vector2d & v );
@@ -79,6 +81,7 @@ rhoban_geometry::Point operator-(const rhoban_geometry::Point & p, const Vector2
 
 double vectorial_product( const Vector2d & v1, const Vector2d & v2 );
 double scalar_product( const Vector2d & v1, const Vector2d & v2 );
+
 
 double norm( const Vector2d & v1 );
 double norm_square( const Vector2d & v1 );
