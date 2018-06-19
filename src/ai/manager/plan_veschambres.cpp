@@ -241,11 +241,11 @@ void PlanVeschambres::choose_a_strategy(double time){
 
             if( get_team() == referee.penalty_team() ){
                 //penalty
-                future_strats = penalty_strats[ Manager::get_valid_player_ids().size() ];
+                future_strats = penalty_strats[ Manager::get_valid_player_ids().size()+1 ];
                 declare_and_assign_next_strategies(future_strats);
             } else {
               //goal
-              future_strats = goalie_strats[ Manager::get_valid_player_ids().size() ];
+              future_strats = goalie_strats[ Manager::get_valid_player_ids().size()+1 ];
               in_defensive_free_kick = true;
               ball_position_in_free_kick = ball_position();
             }
@@ -264,11 +264,11 @@ void PlanVeschambres::choose_a_strategy(double time){
                 if (get_team() == referee.direct_free_team().first) {
                     DEBUG("Offensive direct Kick");
                     //offensive
-                    future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
+                    future_strats = offensive_strats[ Manager::get_valid_player_ids().size()+1 ];
                 } else {
                     DEBUG("Defensive direct Kick");
                     //goal
-                    future_strats = goalie_strats[ Manager::get_valid_player_ids().size() ];
+                    future_strats = goalie_strats[ Manager::get_valid_player_ids().size()+1 ];
                     in_defensive_free_kick = true;
                     ball_position_in_free_kick = ball_position();
                 }
@@ -276,22 +276,22 @@ void PlanVeschambres::choose_a_strategy(double time){
                 if (get_team() == referee.indirect_free_team().first) {
                     DEBUG("Offensive indirect Kick");
                     //offensive
-                    future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
+                    future_strats = offensive_strats[ Manager::get_valid_player_ids().size()+1 ];
                 } else {
                     DEBUG("Defensive indirect Kick");
                     //goalie
-                    future_strats = goalie_strats[ Manager::get_valid_player_ids().size() ];
+                    future_strats = goalie_strats[ Manager::get_valid_player_ids().size()+1 ];
                     in_defensive_free_kick = true;
                     ball_position_in_free_kick = ball_position();
                 }
             } else {
                 if (ball_position().getX() <= 0) {
                  //defensive
-                  future_strats = defensive_strats[ Manager::get_valid_player_ids().size() ];
+                  future_strats = defensive_strats[ Manager::get_valid_player_ids().size()+1 ];
                   is_in_offensive_mode = false;
                 } else {
                  //offensive
-                  future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
+                  future_strats = offensive_strats[ Manager::get_valid_player_ids().size()+1 ];
                   is_in_offensive_mode = true;
                 }
             }
@@ -335,7 +335,7 @@ void PlanVeschambres::choose_a_strategy(double time){
             {
                 //DEFENSIVE
           DEBUG("defensive !!!! ");
-          future_strats = defensive_strats[ Manager::get_valid_player_ids().size() ];
+          future_strats = defensive_strats[ Manager::get_valid_player_ids().size()+1 ];
                 is_in_offensive_mode = false;
                 clear_strategy_assignement();
                 declare_and_assign_next_strategies(future_strats);
@@ -344,7 +344,7 @@ void PlanVeschambres::choose_a_strategy(double time){
             {
                 //OFFENSIVE
           DEBUG("offensive !!!! ");
-          future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
+          future_strats = offensive_strats[ Manager::get_valid_player_ids().size()+1 ];
                 is_in_offensive_mode = true;
                 clear_strategy_assignement();
                 declare_and_assign_next_strategies(future_strats);
