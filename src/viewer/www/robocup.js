@@ -470,12 +470,13 @@ function Viewer()
                     ctx.stroke();
                 }
                 break;
-                case "text":{
-                    ctx.save();
-                    //ctx.font = '12pt sans';
-                    ctx.font = '8pt sans';
-                    ctx.fillText( annotation.text, annotation.x, annotation.y);
-                    ctx.restore();
+                case "text": {
+                    this.addText(
+                        annotation.text,
+                        annotation.x,
+                        -annotation.y,
+                        { color: '#FFF' }
+                    );
                 }
                 break;
             }

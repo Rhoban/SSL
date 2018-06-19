@@ -56,6 +56,7 @@ class RobotBehavior : public GameInformations {
         const Ai::Robot* robot_ptr;
         double birthday;
         double lastUpdate;
+        std::string name;
 
         Vector2d robot_linear_position;
         ContinuousAngle robot_angular_position;
