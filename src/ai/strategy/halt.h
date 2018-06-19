@@ -47,6 +47,8 @@ class Halt : public Strategy {
             double time, double dt
         );
         virtual ~Halt();
+
+        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 }; 
 
 

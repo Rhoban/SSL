@@ -17,28 +17,29 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mur_2_passif.h"
+#include "mur_stop.h"
 
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/striker.h>
-#include <robot_behavior/mur_defensor.h>
+#include <robot_behavior/mur_def_kick.h>
+#include <robot_behavior/degageur.h>
 
 namespace RhobanSSL {
 namespace Strategy {
 
-Mur_2_passif::Mur_2_passif(Ai::AiData & ai_data):
+Mur_stop::Mur_stop(Ai::AiData & ai_data):
     Strategy(ai_data)
 {
 }
 
-Mur_2_passif::~Mur_2_passif(){
+Mur_stop::~Mur_stop(){
 }
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2_passif::min_robots() const {
+int Mur_stop::min_robots() const {
     return 2;
 }
 
@@ -46,41 +47,29 @@ int Mur_2_passif::min_robots() const {
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2_passif::max_robots() const {
+int Mur_stop::max_robots() const {
     return 2;
 }
 
-Goalie_need Mur_2_passif::needs_goalie() const {
+Goalie_need Mur_stop::needs_goalie() const {
     return Goalie_need::NO;
 }
 
-const std::string Mur_2_passif::name = "Mur_2_passif";
+const std::string Mur_stop::name = "mur_stop";
 
-void Mur_2_passif::start(double time){
+void Mur_stop::start(double time){
     DEBUG("START PREPARE KICKOFF");
     behaviors_are_assigned = false;
 }
-void Mur_2_passif::stop(double time){
+void Mur_stop::stop(double time){
     DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Mur_2_passif::update(double time){
-
-  int nearest_ally_robot_from_ball = GameInformations::get_nearest_ball( );
-  is_closest_0 = false;
-  is_closest_1 = false;
-
-  if ( nearest_ally_robot_from_ball == player_id(0) ){
-      is_closest_0 = true;
-  } else {
-      if (nearest_ally_robot_from_ball == player_id(1)) {
-        is_closest_1 = true;
-      }
-  }
+void Mur_stop::update(double time){
 
 }
 
-void Mur_2_passif::assign_behavior_to_robots(
+void Mur_stop::assign_behavior_to_robots(
     std::function<
         void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
     > assign_behavior,
@@ -88,13 +77,14 @@ void Mur_2_passif::assign_behavior_to_robots(
 ){
 
     std::shared_ptr<Robot_behavior::RobotBehavior> mur1(
-            new Robot_behavior::Mur_defensor(ai_data, 1)
+            new Robot_behavior::Mur_def_kick(ai_data, 1)
     );
-    static_cast<Robot_behavior::Mur_defensor*>( mur1.get() )->declare_mur_robot_id( 0, 2 );
+    static_cast<Robot_behavior::Mur_def_kick*>( mur1.get() )->declare_mur_robot_id( 0, 2 );
 
     std::shared_ptr<Robot_behavior::RobotBehavior> mur2(
-            new Robot_behavior::Mur_defensor(ai_data, 1)
+            new Robot_behavior::Mur_def_kick(ai_data, 1)
     );
+    static_cast<Robot_behavior::Mur_def_kick*>( mur2.get() )->declare_mur_robot_id( 1, 2 );
 
     if( not(behaviors_are_assigned) ){
 
@@ -115,7 +105,7 @@ void Mur_2_passif::assign_behavior_to_robots(
 //     before the start() or during the STOP referee state.
 std::list<
     std::pair<rhoban_geometry::Point,ContinuousAngle>
-> Mur_2_passif::get_starting_positions( int number_of_avalaible_robots ){
+> Mur_stop::get_starting_positions( int number_of_avalaible_robots ){
     assert( min_robots() <= number_of_avalaible_robots );
     assert(
         max_robots()==-1 or
@@ -135,25 +125,13 @@ std::list<
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Mur_2_passif::get_starting_position_for_goalie(
+bool Mur_stop::get_starting_position_for_goalie(
     rhoban_geometry::Point & linear_position,
     ContinuousAngle & angular_position
 ){
     linear_position =  ally_goal_center();
     angular_position = ContinuousAngle(0.0);
     return true;
-}
-
-RhobanSSLAnnotation::Annotations Mur_2_passif::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-
-    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
-    {
-        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
-        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
-    }
-    return annotations;
 }
 
 

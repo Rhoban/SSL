@@ -388,7 +388,7 @@ namespace Ai {
         //
         return RobotPlacement(
             {
-                Position( -0.5, .0, 0.0 ), // A
+                Position( -0.8, .0, 0.0 ), // A
                 Position( relative2absolute(-1.0/3.0, 2.0/3.0), 0.0), // B
                 Position( relative2absolute(-1.0/3.0, -2.0/3.0), 0.0), // C
                 Position( relative2absolute(-2.0/3.0, 1.0/2.0), 0.0), // D

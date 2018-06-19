@@ -20,6 +20,7 @@ struct Box {
     rhoban_geometry::Segment get_N_segment() const;
     rhoban_geometry::Segment get_S_segment() const;
 
+    rhoban_geometry::Point center() const;
     
     Box();
     Box(

@@ -220,9 +220,9 @@ RhobanSSLAnnotation::Annotations Prepare_kickoff::get_annotations() const {
 
     for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
     {
-        const rhoban_geometry::Point & robot_position = get_rstobot(*it).get_movement().linear_position( time() );
+        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
         //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.15, "white");
+        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
     }
     return annotations;
 }

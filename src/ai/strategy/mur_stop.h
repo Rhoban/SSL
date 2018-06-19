@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,23 +17,23 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__INDIRECTLOB__H__
-#define __STRATEGY__INDIRECTLOB__H__
+#ifndef __STRATEGY__MUR_STOP__H__
+#define __STRATEGY__MUR_STOP__H__
 
 #include "Strategy.h"
 
 namespace RhobanSSL {
 namespace Strategy {
 
-class IndirectLob : public Strategy {
+class Mur_stop : public Strategy {
     private:
     bool behaviors_are_assigned;
-    int state;
+    bool is_closest_0;
+    bool is_closest_1;
 
     public:
-
-    IndirectLob(Ai::AiData & ai_data);
-    virtual ~IndirectLob();
+    Mur_stop(Ai::AiData & ai_data);
+    virtual ~Mur_stop();
 
     virtual int min_robots() const;
     virtual int max_robots() const;
@@ -61,8 +61,6 @@ class IndirectLob : public Strategy {
         ContinuousAngle & angular_position
     ) ;
 
-
-virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 };
 

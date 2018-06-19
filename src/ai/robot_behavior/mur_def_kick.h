@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 TO COMPLETE
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,32 +17,36 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__CONSIGN_FOLLOWER__H__
-#define __ROBOT_BEHAVIOR__CONSIGN_FOLLOWER__H__
+#ifndef __ROBOT_BEHAVIOR__MUR_DEF_KICK__H__
+#define __ROBOT_BEHAVIOR__MUR_DEF_KICK__H__
 
 #include "robot_behavior.h"
+#include "factory.h"
 
-namespace RhobanSSL {
+namespace RhobanSSL
+{
 namespace Robot_behavior {
 
-class ConsignFollower : public RobotBehavior {
+class Mur_def_kick : public RobotBehavior  {
+    private:
+    int mur_robot_id;
+    int mur_nb_robot;
+	ConsignFollower* follower;
+
     public:
-    ConsignFollower( Ai::AiData & ai_data );
-    
-    virtual void set_following_position(
-        const Vector2d & position_to_follow,
-        const ContinuousAngle & angle
-    ) = 0;
+        Mur_def_kick(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
-    virtual void avoid_the_ball( bool value );
-    virtual void avoid_ally(bool value);
-    virtual void avoid_opponent(bool value);
-    
-    virtual void set_radius_avoidance_for_the_ball(
-        double radius
-    );
+        virtual void update(
+            double time,
+            const Ai::Robot & robot,
+            const Ai::Ball & ball
+        );
+    void declare_mur_robot_id( int id, int mur_nb_robots );
 
-    virtual ~ConsignFollower();
+	virtual Control control() const;
+
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+	virtual ~Mur_def_kick();
 };
 
 };

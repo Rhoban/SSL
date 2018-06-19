@@ -98,6 +98,9 @@ rhoban_geometry::Segment Box::get_N_segment() const {
 rhoban_geometry::Segment Box::get_S_segment() const {
     return rhoban_geometry::Segment( get_SW(), get_SE() );
 }
+rhoban_geometry::Point Box::center() const {
+    return ( get_SW() + get_NE() )*.5;
+}
 
 bool Box::closest_segment_intersection(
     const rhoban_geometry::Point & origin,

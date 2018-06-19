@@ -170,6 +170,14 @@ void Navigation_inside_the_field::avoid_the_ball(bool value){
     position_follower.avoid_the_ball(value);
 }
 
+void Navigation_inside_the_field::avoid_ally(bool value){
+    position_follower.avoid_ally(value);
+}
+
+void Navigation_inside_the_field::avoid_opponent(bool value){
+    position_follower.avoid_opponent(value);
+}
+
 void Navigation_inside_the_field::set_limits(
     double translation_velocity_limit,
     double rotation_velocity_limit,
