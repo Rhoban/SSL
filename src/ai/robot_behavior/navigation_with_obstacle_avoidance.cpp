@@ -125,12 +125,18 @@ void Navigation_with_obstacle_avoidance::compute_the_radius_of_limit_cycle(){
         ai_data.constants.radius_security_for_avoidance
     );
 
+#if 1
     if ( ball_is_the_obstacle ) {
         assert( not(ignore_the_ball) ); // Normally determine_the_closest_obstacle() set ball_is_the_obstacle to false when we ignore the ball
         radius_of_limit_cycle = ai_data.constants.radius_ball + ai_data.constants.robot_radius + ai_data.constants.radius_security_for_avoidance;
     } else {     
-        radius_of_limit_cycle = 2*ai_data.constants.robot_radius + ai_data.constants.radius_security_for_avoidance;   
+        if( robot().get_movement().linear_velocity(ai_data.time).norm() < ai_data.constants.translation_velocity_limit/4.0 ){
+            radius_of_limit_cycle = 2*ai_data.constants.robot_radius;// + ai_data.constants.radius_security_for_avoidance;   
+        }else{
+            radius_of_limit_cycle = 2*ai_data.constants.robot_radius + ai_data.constants.radius_security_for_avoidance;   
+        }
     }
+#endif
     
 
 }
@@ -275,7 +281,10 @@ void Navigation_with_obstacle_avoidance::set_limits(
 }
 
 RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotations() const {
-    return position_follower.get_annotations();
+    RhobanSSLAnnotation::Annotations annotations;
+//    annotations.addCircle( linear_position(), radius_of_limit_cycle );
+    annotations.addAnnotations(position_follower.get_annotations());
+    return annotations;
 }
 
 void Navigation_with_obstacle_avoidance::set_radius_avoidance_for_the_ball(

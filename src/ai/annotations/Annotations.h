@@ -34,8 +34,18 @@ namespace RhobanSSLAnnotation
         Annotations();
 
         void clear();
-        void addCircle(double x, double y, double r,
-            std::string color = "white", bool dashed = false);
+        void addCircle(
+            double x, double y, double r,
+            std::string color = "white", bool dashed = false
+        );
+        void addCircle(
+            const rhoban_geometry::Point & origin, double r,
+            std::string color = "white", bool dashed = false
+        );
+        void addCircle(
+            const Vector2d & origin, double r,
+            std::string color = "white", bool dashed = false
+        );
 
         void addBox(
             const RhobanSSL::Box & box,

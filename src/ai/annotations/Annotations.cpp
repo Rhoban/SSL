@@ -224,4 +224,17 @@ namespace RhobanSSLAnnotation
         addArrow( box.get_S_segment(), color, dashed);
     }
 
+    void Annotations::addCircle(
+        const rhoban_geometry::Point & origin, double r,
+        std::string color, bool dashed
+    ){
+        addCircle( origin.getX(), origin.getY(), r, color, dashed );
+    }
+    void Annotations::addCircle(
+        const Vector2d & origin, double r,
+        std::string color, bool dashed
+    ){
+        addCircle( origin.getX(), origin.getY(), r, color, dashed );
+    }
+
 }
