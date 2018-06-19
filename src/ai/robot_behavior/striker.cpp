@@ -58,6 +58,7 @@ void Striker::update(
     Vector2d ball_robot_vector = robot_position - ball_position();
     //Vector2d ball_l_post_vector = left_post_position - ball_position();
     //Vector2d ball_r_post_vector = right_post_position - ball_position();
+    double dist_ball_robot = ball_robot_vector.norm();
 
     ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
@@ -80,13 +81,6 @@ void Striker::update(
         //target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.4) ) + 0.55;
         target_radius_from_ball = 1.0 / ( 24.0*(scalar_ball_robot - 1.04) ) + 0.44;
 
-
-        if ( Vector2d(robot_position - ball_position()).norm() < 0.4 ) {
-            follower->avoid_opponent(false);
-        } else {
-            follower->avoid_opponent(true);
-        }
-
         //if ( infra_red() || Vector2d(robot_position - ball_position()).norm() > 0.4 ) {
         //    follower->avoid_opponent(true);
         //}
@@ -100,6 +94,12 @@ void Striker::update(
         //    target_radius_from_ball = -0.3;
         //}
         //
+        if ( dist_ball_robot < 0.4 ) {
+            follower->avoid_opponent(false);
+        } 
+    }
+    if (dist_ball_robot > 0.4) {
+        follower->avoid_opponent(true);
     }
 
     Vector2d target_position = Vector2d(ball_position()) - ball_goal_vector * (target_radius_from_ball);

@@ -54,6 +54,7 @@ void StrikerAi::update(
 
     Vector2d ball_goal_vector = goal_point - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
+    double dist_ball_robot = ball_robot_vector.norm();
 
     ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
@@ -64,19 +65,19 @@ void StrikerAi::update(
 
     if ( scalar_ball_robot < 0 ) {
         follower->avoid_the_ball(true);
-        target_radius_from_ball = 1.5;
+        target_radius_from_ball = 0.4;
     } else {
         follower->avoid_the_ball(false);
         //target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.2) ) + 1.0;
         target_radius_from_ball = 1.0 / ( 24.0*(scalar_ball_robot - 1.04) ) + 0.44;
 
 
-        if ( Vector2d(robot_position - ball_position()).norm() < 0.4 ) {
+        if ( dist_ball_robot < 0.4 ) {
             follower->avoid_opponent(false);
-        } else {
-            follower->avoid_opponent(true);
-        }
-        
+        } 
+    }
+    if (dist_ball_robot > 0.4) {
+        follower->avoid_opponent(true);
     }
 
     Vector2d target_position = Vector2d(ball_position()) - ball_goal_vector * (target_radius_from_ball);
