@@ -32,6 +32,10 @@ class Example : public RobotBehavior  {
 	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
 
+    double period;
+    double last_time;
+    int cpt;
+
     public:
     Example(Ai::AiData& ai_data);
 
