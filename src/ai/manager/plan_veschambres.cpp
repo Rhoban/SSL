@@ -35,6 +35,7 @@
 #include <strategy/mur_2_passif.h>
 #include <strategy/attaque_with_support.h>
 #include <strategy/striker_with_support.h>
+#include <strategy/striker_v2.h>
 #include <strategy/goalie_strat.h>
 
 
@@ -84,10 +85,10 @@ PlanVeschambres::PlanVeschambres(
     goalie_strats[2] = { Strategy::GoalieStrat::name };
     goalie_strats[1] = { Strategy::GoalieStrat::name };
 
-    offensive_strats[8] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
-    offensive_strats[7] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
-    offensive_strats[6] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
-    offensive_strats[5] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::AttaqueWithSupport::name };
+    offensive_strats[8] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name };
+    offensive_strats[7] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name };
+    offensive_strats[6] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::StrikerV2::name };
+    offensive_strats[5] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::StrikerV2::name };
     offensive_strats[4] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::Offensive::name };
     offensive_strats[3] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Offensive::name };
     offensive_strats[2] = { Strategy::GoalieStrat::name, Strategy::Offensive::name };
@@ -106,6 +107,11 @@ PlanVeschambres::PlanVeschambres(
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
             new Strategy::Halt(ai_data)
+        )
+    );
+    register_strategy(
+        Strategy::StrikerV2::name, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::StrikerV2(ai_data)
         )
     );
     register_strategy(
