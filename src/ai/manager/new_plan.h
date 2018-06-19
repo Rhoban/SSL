@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__PLANVESCHAMBRES__H__
-#define __MANAGER__PLANVESCHAMBRES__H__
+#ifndef __MANAGER__NEW_PLAN__H__
+#define __MANAGER__NEW_PLAN__H__
 
 #include <manager/Manager.h>
 #include <referee/Referee.h>
@@ -26,18 +26,9 @@
 namespace RhobanSSL {
 namespace Manager {
 
-class PlanVeschambres : public Manager {
+class NewPlan : public Manager {
     private:
     const Referee & referee;
-
-    //penalty
-    std::vector< std::list<std::string> >  penalty_strats;
-    //goale
-    std::vector< std::list<std::string> > goalie_strats;
-    //offensiv
-    std::vector< std::list<std::string> > offensive_strats;
-    //defensive
-    std::vector< std::list<std::string> > defensive_strats;
 
     bool is_in_offensive_mode;
 
@@ -45,12 +36,14 @@ class PlanVeschambres : public Manager {
     rhoban_geometry::Point ball_position_in_free_kick;
 
     unsigned int last_referee_changement;
+    bool need_to_change_strategies;
+    int last_nb_robot_valid;
 
     std::list<std::string> future_strats;
 
     public:
 
-    PlanVeschambres(
+    NewPlan(
         Ai::AiData & ai_data,
         const Referee & referee
     );
@@ -59,7 +52,7 @@ class PlanVeschambres : public Manager {
     void analyse_data(double time);
     void choose_a_strategy(double time);
 
-    virtual ~PlanVeschambres();
+    virtual ~NewPlan();
 
 };
 

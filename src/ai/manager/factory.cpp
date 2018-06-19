@@ -24,6 +24,7 @@
 #include "thomas.h"
 #include "base_3_gds.h"
 #include "base_3_gms.h"
+#include "new_plan.h"
 #include "sebastien/sebastien.h"
 #include "adrien/adrien.h"
 #include "jeremy/jeremy.h"
@@ -40,6 +41,7 @@ std::list<std::string> Factory::list_of_avalaible_managers ={
     names::match,
     names::adrien,
     names::jeremy,
+    names::new_plan,
     names::sebastien,
     names::thomas,
     names::base_3_gds,
@@ -119,6 +121,11 @@ std::shared_ptr<Manager> Factory::construct_manager(
     if( manager_name == names::sebastien ){
         manager = std::shared_ptr<Manager>(
             new Sebastien(ai_data, referee)
+        );
+    }
+    if( manager_name == names::new_plan ){
+        manager = std::shared_ptr<Manager>(
+            new NewPlan(ai_data, referee)
         );
     }
     if( manager_name == names::jeremy ){

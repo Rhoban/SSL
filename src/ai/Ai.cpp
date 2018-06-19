@@ -33,10 +33,17 @@
 #include <manager/factory.h>
 #include <debug.h>
 #include <com/AICommanderReal.h>
+#include <utility>
 
 namespace RhobanSSL
 {
 
+float sign(float x) {
+    if (x > 0) {
+        return 1.0;
+    }
+    return -1.0;
+}
 
 void AI::check_time_is_coherent() const {
     #ifndef NDEBUG
@@ -65,7 +72,7 @@ void AI::limits_velocity( Control & ctrl ) const {
             std::fabs( ctrl.velocity_rotation.value() ) >
             ai_data.constants.rotation_velocity_limit
         ){
-            ctrl.velocity_rotation = ai_data.constants.rotation_velocity_limit*(ctrl.velocity_rotation.value()/std::fabs( ctrl.velocity_rotation.value()));
+            ctrl.velocity_rotation = ai_data.constants.rotation_velocity_limit*sign(ctrl.velocity_rotation.value());
             std::cerr << "AI WARNING : we reached the "
                 "limit rotation velocity !" << std::endl;
         }

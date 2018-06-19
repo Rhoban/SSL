@@ -44,6 +44,7 @@ set (SOURCES
     robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
     robot_behavior/striker_ai.cpp
+    robot_behavior/predict_futur.cpp
     robot_behavior/degageur.cpp
     robot_behavior/test_kicker.cpp
     robot_behavior/position_follower.cpp
@@ -65,6 +66,7 @@ set (SOURCES
     manager/adrien/adrien.cpp
     manager/adrien/Manual_adrien.cpp
     manager/sebastien/sebastien.cpp
+    manager/new_plan.cpp
     manager/jeremy/jeremy.cpp
     manager/plan_veschambres.cpp
     manager/Match.cpp

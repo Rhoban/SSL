@@ -33,6 +33,7 @@
 #include <robot_behavior/patrol.h>
 #include <robot_behavior/position_follower.h>
 #include <robot_behavior/striker.h>
+#include <robot_behavior/predict_futur.h>
 #include <robot_behavior/obstructor.h>
 
 namespace RhobanSSL {
@@ -418,6 +419,17 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
+        "PredictFutur", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::PredictFutur* p = new Robot_behavior::PredictFutur(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false
+            )
+        )
+    );
+    register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
             new Strategy::Halt(ai_data)
         )
@@ -435,7 +447,7 @@ Manual::Manual( Ai::AiData & ai_data ):
    //strategy_was_assigned = false;
 }
 
-    
+
 void Manual::assign_point_of_view_and_goalie(){
     change_team_and_point_of_view(
         team_color,
