@@ -67,7 +67,16 @@ void StrikerAi::update(
         target_radius_from_ball = 1.5;
     } else {
         follower->avoid_the_ball(false);
-        target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.2) ) + 1.0;
+        //target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.2) ) + 1.0;
+        target_radius_from_ball = 1.0 / ( 24.0*(scalar_ball_robot - 1.04) ) + 0.44;
+
+
+        if ( Vector2d(robot_position - ball_position()).norm() < 0.4 ) {
+            follower->avoid_opponent(false);
+        } else {
+            follower->avoid_opponent(true);
+        }
+        
     }
 
     Vector2d target_position = Vector2d(ball_position()) - ball_goal_vector * (target_radius_from_ball);
