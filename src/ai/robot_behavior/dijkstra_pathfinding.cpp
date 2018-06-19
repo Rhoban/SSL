@@ -201,6 +201,7 @@ void Dijkstra_pathfinding::update(
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
+    annotations.clear();
     Vector2d next_point_vect;
     ContinuousAngle next_angle;
     this->follower->get_following_position(&next_point_vect, &next_angle);
@@ -224,7 +225,7 @@ void Dijkstra_pathfinding::update(
         }
     }
     // DEBUG("I'm currently at " << linear_position());            
-
+    annotations.addArrow( 1,2 , 4, 5, "cyan" );
     follower->update( time, robot, ball );
     // DEBUG("Follower updated... ");               
 }
@@ -235,6 +236,14 @@ Control Dijkstra_pathfinding::control() const {
 
 Dijkstra_pathfinding::~Dijkstra_pathfinding(){
     delete follower;
+}
+
+
+RhobanSSLAnnotation::Annotations Dijkstra_pathfinding::get_annotations() const {
+    RhobanSSLAnnotation::Annotations result;
+    result.addAnnotations(annotations);
+    result.addAnnotations( follower->get_annotations() );
+    return result;
 }
 
 }

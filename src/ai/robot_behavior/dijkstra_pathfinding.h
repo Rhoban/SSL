@@ -53,8 +53,12 @@ class Dijkstra_pathfinding : public ConsignFollower  {
         int size_l;
         float steps_per_meter;
 
+        RhobanSSLAnnotation::Annotations annotations;
+        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+        
+
     public:
-        AStar::Vec2i fieldtomap(Vector2d p);
+        AStar::Vec2i fieldtomap(Vector2d sp);
 
         Vector2d map2field(AStar::Vec2i p);
 

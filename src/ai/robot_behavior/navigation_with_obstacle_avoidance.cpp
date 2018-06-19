@@ -101,7 +101,7 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
             ball().get_movement().linear_velocity( ball().get_movement().last_time() ),
             radius_error
         );
-        if( collision.first ){navigation_with_obstacle_avoidance.cpp
+        if( collision.first ){
             double time_before_collision = collision.second;
             if( time_before_collision <= time_to_stop and ctrl_velocity_norm > EPSILON_VELOCITY ){
                 if(
