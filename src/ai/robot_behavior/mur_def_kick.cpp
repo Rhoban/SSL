@@ -90,7 +90,7 @@ void Mur_def_kick::update(
         multiple_robot_offset = 0;
     }
 
-    double distance_from_ball = 0.6;
+    double distance_from_ball = 1.5;
 
     Vector2d BITE = ball_goal_vector.perpendicular();
     BITE = BITE / BITE.norm();

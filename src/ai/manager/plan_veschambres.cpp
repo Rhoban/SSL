@@ -29,6 +29,7 @@
 #include <strategy/offensive.h>
 #include <strategy/defensive.h>
 #include <strategy/defensive_2.h>
+#include <strategy/mur_stop.h>
 #include <strategy/mur.h>
 #include <strategy/mur_2.h>
 #include <strategy/attaque_with_support.h>
@@ -147,6 +148,12 @@ PlanVeschambres::PlanVeschambres(
         )
     );
     register_strategy(
+        Strategy::Mur_stop::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Mur_stop(ai_data)
+        )
+    );
+    register_strategy(
         Strategy::Defensive::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Defensive(ai_data)
@@ -220,7 +227,7 @@ void PlanVeschambres::choose_a_strategy(double time){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
                 }else{
                     get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
-                    future_strats = { Strategy::Prepare_kickoff::name};
+                    future_strats = {Strategy::Mur_stop::name , Strategy::Prepare_kickoff::name};
                     declare_and_assign_next_strategies( future_strats );
                 }
             }
