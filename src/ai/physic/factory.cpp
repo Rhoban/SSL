@@ -41,6 +41,7 @@ Movement* Factory::robot_movement(Ai::AiData & ai_data){
 }
 
 Movement* Factory::ball_movement(Ai::AiData & ai_data){
+    
     return Factory::movement(ai_data);
 }
 

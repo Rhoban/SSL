@@ -76,3 +76,6 @@ ContinuousAngle vector2angle( Vector2d direction ){
     return ContinuousAngle(res);
 }
 
+Vector2d Vector2d::perpendicular(){
+  return Vector2d(-this->getY(), this->getX());
+}
