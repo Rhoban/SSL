@@ -89,18 +89,21 @@ void Goalie::update(
     //  this->robot_angular_position 
     // are all avalaible
 
-    rhoban_geometry::Point target_position = calculate_goal_position(
-        ball_position(), right_post_position, left_post_position,
-        goalie_radius
-    );
+    double offset_goal = ai_data.constants.robot_radius * 1.5;
+    rhoban_geometry::Point new_goal_center = ally_goal_center() + rhoban_geometry::Point(offset_goal, 0.0); 
 
-    if( Vector2d(target_position - goal_center).norm() > penalty_rayon ){
-        target_position = waiting_goal_position;
+    rhoban_geometry::Point protect_position = ball_position();
+    if (ball_position().getX() < ally_goal_center().getX()) {
+        protect_position = rhoban_geometry::Point(ally_goal_center().getX(), ball_position().getY());
     }
 
-    Vector2d target_ball_vector = ball_position() - target_position;
+    Vector2d ball_goal_vector = new_goal_center - protect_position;
+    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+    double goal_radius = 0.5;
 
-    double target_rotation = detail::vec2angle(target_ball_vector);
+    rhoban_geometry::Point target_position = new_goal_center - ball_goal_vector * goal_radius;
+    double target_rotation = detail::vec2angle(-ball_goal_vector);
+
 
     follower->set_following_position(Vector2d(target_position), target_rotation );
     follower->avoid_the_ball(false);
