@@ -42,44 +42,49 @@ Robot_position_filter::average_filter(
     int n_angular = 0;
     rhoban_geometry::Point linear_average (0.0, 0.0);
     ContinuousAngle angular_average (0.0);
+    double sina=0.0;
+    double cosa=0.0;
     for( const std::pair<int, SSL_DetectionFrame> & elem : camera_detections ){
-        //int camera_id = elem.first;
-        const SSL_DetectionFrame & detection = elem.second;
+      //int camera_id = elem.first;
+      const SSL_DetectionFrame & detection = elem.second;
       
-        const google::protobuf::RepeatedPtrField<SSL_DetectionRobot> * robots;
-        if(team_color == Ai::Team::Yellow){
-            robots = &detection.robots_yellow();
-        }else{
-            robots = &detection.robots_blue();
+      const google::protobuf::RepeatedPtrField<SSL_DetectionRobot> * robots;
+      if(team_color == Ai::Team::Yellow){
+        robots = &detection.robots_yellow();
+      }else{
+        robots = &detection.robots_blue();
+      }
+      for( auto robot : *robots ){
+        if(
+          ! object_coordonate_is_valid(
+            robot.x()/1000.0, robot.y()/1000.0,
+            part_of_the_field_used
+            )
+          ){
+          continue;
         }
-        for( auto robot : *robots ){
-            if(
-                ! object_coordonate_is_valid(
-                    robot.x()/1000.0, robot.y()/1000.0,
-                    part_of_the_field_used
-                )
-            ){
-                continue;
-            }
-            if(
-                robot.has_robot_id()
-                and (
-                    robot.robot_id() == static_cast<unsigned int>( robot_id ) 
-                )
-            ){
-                linear_average += rhoban_geometry::Point(
-                    robot.x()/1000.0, robot.y()/1000.0
-                );
-                n_linear ++;
-                if( robot.has_orientation() ){
-                    angular_average += ContinuousAngle(
-                        robot.orientation()
-                    );
-                    n_angular ++;
-                }
-                break;
-            }
+        if(
+          robot.has_robot_id()
+          and (
+            robot.robot_id() == static_cast<unsigned int>( robot_id ) 
+            )
+          ){
+          linear_average += rhoban_geometry::Point(
+            robot.x()/1000.0, robot.y()/1000.0
+            );
+          n_linear ++;
+          if( robot.has_orientation() ){
+            // angular_average += ContinuousAngle(
+            //   robot.orientation()
+            //   );
+            sina+=sin(robot.orientation());
+            cosa+=cos(robot.orientation());
+            
+            n_angular ++;
+          }
+          break;
         }
+      }
     }
     if( n_angular == 0 ){
         orientation_is_defined = false;
@@ -89,10 +94,12 @@ Robot_position_filter::average_filter(
         };
     }else{
         orientation_is_defined = true;
+        angular_average=atan2(sina,cosa);
+
         return {
-            linear_average*(1.0/n_linear),
-            angular_average*(1.0/n_angular)
-        };
+          linear_average*(1.0/n_linear),
+            angular_average
+            };
     }
 }
 

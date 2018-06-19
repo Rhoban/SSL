@@ -92,7 +92,13 @@ void Degageur::update(
         target_radius_from_ball = 0.5;
     } else {
         follower->avoid_the_ball(false);
-        target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.2) ) + 1.0;
+        target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.4) ) + 0.55;
+        
+        if ( Vector2d(robot_position - ball_position()).norm() < 0.4 ) {
+            follower->avoid_opponent(false);
+        } else {
+            follower->avoid_opponent(true);
+        }
     }
 
     Vector2d target_position = Vector2d(ball_position()) - ball_point_vector * (target_radius_from_ball);

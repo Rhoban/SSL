@@ -73,14 +73,25 @@ void Striker::update(
 
     if ( scalar_ball_robot < 0 ) {
         follower->avoid_the_ball(true);
-        target_radius_from_ball = 1.5;
+        target_radius_from_ball = 0.4;
     } else {
         follower->avoid_the_ball(false);
         //target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
-        target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.2) ) + 1.0;
+        target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.4) ) + 0.55;
+        
+        if ( Vector2d(robot_position - ball_position()).norm() < 0.4 ) {
+            follower->avoid_opponent(false);
+        } else {
+            follower->avoid_opponent(true);
+        }
+
+        //if ( infra_red() || Vector2d(robot_position - ball_position()).norm() > 0.4 ) {
+        //    follower->avoid_opponent(true);
+        //}
+        
 
         //target_radius_from_ball = 1.0 /(2.0 *(scalar_ball_robot - (goal_visible_angle + 0.21))) + 1.0 / (goal_visible_angle + 0.21) + 2.0 * goal_visible_angle - 0.8;
-
+        
         //if ( scalar_ball_robot < goal_visible_angle) {
         //    target_radius_from_ball = 1.0;
         //} else {
