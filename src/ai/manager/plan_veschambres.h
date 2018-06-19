@@ -41,8 +41,8 @@ class PlanVeschambres : public Manager {
 
     bool is_in_offensive_mode;
 
-    bool in_defensive_free_kick;
-    rhoban_geometry::Point ball_position_in_free_kick;
+    bool can_touch_the_ball = true;
+    rhoban_geometry::Point ball_last_position;
 
     unsigned int last_referee_changement;
 

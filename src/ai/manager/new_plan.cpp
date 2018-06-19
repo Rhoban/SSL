@@ -207,7 +207,7 @@ void NewPlan::choose_a_strategy(double time){
             } else {
               future_strats = { Strategy::GoalieStrat::name };
               in_defensive_free_kick = true;
-              ball_position_in_free_kick = ball_position();
+              ball_last_position = ball_position();
             }
 
             
@@ -227,7 +227,7 @@ void NewPlan::choose_a_strategy(double time){
                     DEBUG("Defensive direct Kick");
                     future_strats = { Strategy::GoalieStrat::name };
                     in_defensive_free_kick = true;
-                    ball_position_in_free_kick = ball_position();
+                    ball_last_position = ball_position();
                 }
             } else if (referee.indirect_free_team().second == referee.edge_entropy() - 1) {
                 if (get_team() == referee.indirect_free_team().first) {
@@ -237,7 +237,7 @@ void NewPlan::choose_a_strategy(double time){
                     DEBUG("Defensive indirect Kick");
                     future_strats = { Strategy::GoalieStrat::name };
                     in_defensive_free_kick = true;
-                    ball_position_in_free_kick = ball_position();
+                    ball_last_position = ball_position();
                 }
             } else {
                 if (ball_position().getX() <= 0) {
@@ -278,8 +278,8 @@ void NewPlan::choose_a_strategy(double time){
 
       if (in_defensive_free_kick) {
 
-        if ( (ball_position_in_free_kick.getX() != ball_position().getX()) ||
-             (ball_position_in_free_kick.getY() != ball_position().getY()) ) {
+        if ( (ball_last_position.getX() != ball_position().getX()) ||
+             (ball_last_position.getY() != ball_position().getY()) ) {
                in_defensive_free_kick = false;
 
                if (ball_position().getX() <= 0) {
