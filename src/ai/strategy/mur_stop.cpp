@@ -114,7 +114,7 @@ std::list<
 
     return {
         std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            ally_goal_center(),
+            ball_position(),
             0.0
         )
     };

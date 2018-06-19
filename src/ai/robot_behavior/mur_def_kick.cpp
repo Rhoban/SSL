@@ -78,7 +78,7 @@ void Mur_def_kick::update(
     double target_rotation = detail::vec2angle(-ball_robot_vector);
     rhoban_geometry::Point target_position;
 
-    double multiple_robot_offset = ai_data.constants.robot_radius + 0.05;
+    double multiple_robot_offset = ai_data.constants.robot_radius + 0.02;
 
     if ( mur_nb_robot == 2 ) {
         if ( mur_robot_id == 0 ) {
@@ -90,7 +90,7 @@ void Mur_def_kick::update(
         multiple_robot_offset = 0;
     }
 
-    double distance_from_ball = 1.5;
+    double distance_from_ball = 0.8;
 
     Vector2d BITE = ball_goal_vector.perpendicular();
     BITE = BITE / BITE.norm();
