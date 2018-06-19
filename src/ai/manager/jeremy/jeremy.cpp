@@ -26,6 +26,7 @@
 #include <strategy/prepare_kickoff.h>
 #include <strategy/from_robot_behavior.h>
 #include <strategy/striker_with_support.h>
+#include <strategy/attaque_with_support_ms.h>
 #include <strategy/indirect.h>
 #include <strategy/indirect_lob.h>
 #include <strategy/attaque_with_support.h>
@@ -115,6 +116,12 @@ Jeremy::Jeremy(
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Defensive2(ai_data)
         )
+    );
+    register_strategy(
+      Strategy::AttaqueWithSupportMs::name,
+      std::shared_ptr<Strategy::Strategy>(
+        new Strategy::AttaqueWithSupportMs(ai_data)
+      )
     );
     register_strategy(
         GOALIE, std::shared_ptr<Strategy::Strategy>(
@@ -238,7 +245,7 @@ void Jeremy::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { Strategy::Defensive2::name };//Strategy::StrikerWithSupport::name };
+            future_strats = { Strategy::AttaqueWithSupportMs::name };//Strategy::StrikerWithSupport::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
