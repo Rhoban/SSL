@@ -111,9 +111,11 @@ struct Field : Vision::Field {
 };
 
 struct Constants {
-    static constexpr int NB_OF_ROBOTS_BY_TEAM = 8;
 
-    bool is_in_simulation;
+  static constexpr int NB_OF_ROBOTS_BY_TEAM = 16;
+
+
+  bool is_in_simulation;
 
     int frame_per_second;
     double period;

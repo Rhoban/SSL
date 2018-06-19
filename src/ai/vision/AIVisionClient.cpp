@@ -246,7 +246,9 @@ void AIVisionClient::updateRobotInformation(
       Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
       Vision::Robot &robot = visionData.robots.at(team).at(robotFrame.robot_id());
 
-      bool orientation_is_defined;
+      //FIXME! same as the ball filter
+      bool orientation_is_defined=true;
+
       std::pair<
         rhoban_geometry::Point,
         ContinuousAngle

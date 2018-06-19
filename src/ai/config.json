@@ -48,7 +48,7 @@
         }
     },
     "team" : {
-        "nb_of_robots_by_team" : 8
+        "nb_of_robots_by_team" : 16
     },
     "ball" : {
         "radius_ball" : 0.021375
