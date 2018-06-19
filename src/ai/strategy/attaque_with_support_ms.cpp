@@ -45,6 +45,78 @@ namespace RhobanSSL {
     {
 
 
+      machine.add_state(
+        state_name::strike_search,
+        [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+            DEBUG("STRIKE_SEARCH");
+        }
+      );
+      machine.add_state(state_name::pass_search);
+      machine.add_state(state_name::search_waitpass);
+
+      machine.add_state(state_name::search_strike);
+      machine.add_state(state_name::search_pass);
+      machine.add_state(state_name::waitpass_search);
+
+      machine.add_init_state(state_name::strike_search);
+
+      //edge
+      machine.add_edge(
+        edge_name::db1_sup_db2,
+        state_name::strike_search, state_name::search_strike,
+        [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return is_db1_sup_db2();
+        }
+      );
+      machine.add_edge(
+        edge_name::db1_inf_db2,
+        state_name::search_strike, state_name::strike_search,
+        [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return false;
+        }
+      );
+
+      machine.add_edge(
+        edge_name::fgbm_score_inf_seuil_1,
+        state_name::strike_search, state_name::pass_search
+        , [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return false;
+        }
+      );
+      machine.add_edge(
+        edge_name::fgbm_score_inf_seuil_2, state_name::search_strike,
+        state_name::search_pass
+        , [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return false;
+        }
+      );
+
+      machine.add_edge(
+        edge_name::infra_1,
+        state_name::pass_search, state_name::search_waitpass
+        , [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return false;
+        }
+      );
+      machine.add_edge(
+        edge_name::infra_2,
+        state_name::search_pass, state_name::waitpass_search
+        , [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return false;
+        }
+      );
+
+      // db1 = distance_ball_robot_1
+      // db2 = distance_ball_robot_2
+      machine.add_edge(
+        edge_name::db1_inf_seuil_or_time_inf_tempo,
+        state_name::search_waitpass, state_name::search_strike
+      );
+      machine.add_edge(
+        edge_name::db2_inf_seuil_or_time_inf_tempo,
+        state_name::waitpass_search, state_name::strike_search
+      );
+
 
       machine.export_to_file("/tmp/attaque_with_support_ms.dot");
 
@@ -78,68 +150,7 @@ namespace RhobanSSL {
     void AttaqueWithSupportMs::start(double time){
       DEBUG("START PREPARE KICKOFF");
       //state
-
-      machine = machine_state_infrastructure::MachineState();
-      machine.add_state(
-        state_name::strike_search,
-        [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-            DEBUG("STRIKE_SEARCH");
-        }
-      );
-      machine.add_state(state_name::pass_search);
-      machine.add_state(state_name::search_waitpass);
-
-      machine.add_state(state_name::search_strike);
-      machine.add_state(state_name::search_pass);
-      machine.add_state(state_name::waitpass_search);
-
-      machine.add_init_state(state_name::strike_search);
-
-      //edge
-      machine.add_edge(
-        edge_name::db1_sup_db2,
-        state_name::strike_search, state_name::search_strike,
-        [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-          return is_db1_sup_db2();
-        }
-      );
-      machine.add_edge(
-        edge_name::db1_inf_db2,
-        state_name::search_strike, state_name::strike_search
-      );
-
-      machine.add_edge(
-        edge_name::fgbm_score_inf_seuil_1,
-        state_name::strike_search, state_name::pass_search
-      );
-      machine.add_edge(
-        edge_name::fgbm_score_inf_seuil_2, state_name::search_strike,
-        state_name::search_pass
-      );
-
-      machine.add_edge(
-        edge_name::infra_1,
-        state_name::pass_search, state_name::search_waitpass
-      );
-      machine.add_edge(
-        edge_name::infra_2,
-        state_name::search_pass, state_name::waitpass_search
-      );
-
-      // db1 = distance_ball_robot_1
-      // db2 = distance_ball_robot_2
-      machine.add_edge(
-        edge_name::db1_inf_seuil_or_time_inf_tempo,
-        state_name::search_waitpass, state_name::search_strike
-      );
-      machine.add_edge(
-        edge_name::db2_inf_seuil_or_time_inf_tempo,
-        state_name::waitpass_search, state_name::strike_search
-      );
-
       machine.start();
-
-
 
       behaviors_are_assigned = false;
     }
