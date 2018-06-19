@@ -63,6 +63,8 @@ class Defensive : public Strategy {
         ContinuousAngle & angular_position
     ) ;
 
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
 
 };
 

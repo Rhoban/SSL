@@ -32,6 +32,7 @@
 #include <strategy/mur_stop.h>
 #include <strategy/mur.h>
 #include <strategy/mur_2.h>
+#include <strategy/mur_2_passif.h>
 #include <strategy/attaque_with_support.h>
 #include <strategy/striker_with_support.h>
 #include <strategy/goalie_strat.h>
@@ -178,6 +179,12 @@ PlanVeschambres::PlanVeschambres(
         )
     );
     register_strategy(
+        Strategy::Mur_2_passif::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Mur_2_passif(ai_data)
+        )
+    );
+    register_strategy(
         Strategy::AttaqueWithSupport::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::AttaqueWithSupport(ai_data)
@@ -233,6 +240,7 @@ void PlanVeschambres::choose_a_strategy(double time){
             }
 
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
+            set_ball_avoidance_for_all_robots(false);
             if( get_team() == referee.kickoff_team() ){
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
             }else{
@@ -274,6 +282,7 @@ void PlanVeschambres::choose_a_strategy(double time){
                     future_strats = offensive_strats[ Manager::get_valid_player_ids().size()+1 ];
                 } else {
                     DEBUG("Defensive direct Kick");
+
                     //goal
                     future_strats = goalie_strats[ Manager::get_valid_player_ids().size()+1 ];
                     in_defensive_free_kick = true;
@@ -286,6 +295,7 @@ void PlanVeschambres::choose_a_strategy(double time){
                     future_strats = offensive_strats[ Manager::get_valid_player_ids().size()+1 ];
                 } else {
                     DEBUG("Defensive indirect Kick");
+
                     //goalie
                     future_strats = goalie_strats[ Manager::get_valid_player_ids().size()+1 ];
                     in_defensive_free_kick = true;

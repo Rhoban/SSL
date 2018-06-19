@@ -215,6 +215,18 @@ void Prepare_kickoff::set_goalie( int id, bool to_be_managed ){
     }
 }
 
+RhobanSSLAnnotation::Annotations Prepare_kickoff::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
+
+    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+    {
+        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
+        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+    }
+    return annotations;
+}
+
 
 }
 }

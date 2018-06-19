@@ -32,7 +32,7 @@ class Striker : public RobotBehavior  {
     bool use_custom_vector;
     rhoban_geometry::Point striking_point;
 	ConsignFollower* follower;
-
+    
     public:
         Striker(Ai::AiData& ai_data);
 

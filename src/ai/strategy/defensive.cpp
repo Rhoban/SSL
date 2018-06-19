@@ -131,7 +131,17 @@ bool Defensive::get_starting_position_for_goalie(
     return true;
 }
 
+RhobanSSLAnnotation::Annotations Defensive::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
 
+    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+    {
+        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
+        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+    }
+    return annotations;
+}
 
 }
 }

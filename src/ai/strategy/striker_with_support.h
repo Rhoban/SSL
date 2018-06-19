@@ -60,7 +60,7 @@ class StrikerWithSupport : public Strategy {
         rhoban_geometry::Point & linear_position,
         ContinuousAngle & angular_position
     ) ;
-
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 };
 
