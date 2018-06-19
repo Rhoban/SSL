@@ -54,10 +54,10 @@ void Degageur::update(
     // //TODO: Viser un autre robot
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
 
-    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
+//    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
         //default will be the closest ally robot from the opponent goal center
         robot_to_pass_id = GameInformations::get_nearest_point( Vision::Team::Ally , oponent_goal_center() );
-    }
+//    }
 
     if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
         const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );

@@ -88,18 +88,18 @@ PlanVeschambres::PlanVeschambres(
     offensive_strats[8] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name };
     offensive_strats[7] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name };
     offensive_strats[6] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::StrikerV2::name };
-    offensive_strats[5] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::StrikerV2::name };
-    offensive_strats[4] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::Offensive::name };
-    offensive_strats[3] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Offensive::name };
-    offensive_strats[2] = { Strategy::GoalieStrat::name, Strategy::Offensive::name };
+    offensive_strats[5] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive::name, Strategy::StrikerV2::name };
+    offensive_strats[4] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::StrikerV2::name };
+    offensive_strats[3] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::StrikerV2::name };
+    offensive_strats[2] = { Strategy::GoalieStrat::name, Strategy::StrikerV2::name };
     offensive_strats[1] = { Strategy::GoalieStrat::name };
 
     defensive_strats[8] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
     defensive_strats[7] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
     defensive_strats[6] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name };
-    defensive_strats[5] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive::name, Strategy::Offensive::name };
-    defensive_strats[4] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::Offensive::name };
-    defensive_strats[3] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Offensive::name };
+    defensive_strats[5] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive::name, Strategy::StrikerV2::name };
+    defensive_strats[4] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::StrikerV2::name };
+    defensive_strats[3] = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::StrikerV2::name };
     defensive_strats[2] = { Strategy::GoalieStrat::name, Strategy::Offensive::name };
     defensive_strats[1] = { Strategy::GoalieStrat::name };
 

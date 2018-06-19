@@ -67,7 +67,7 @@ void Mur_2::stop(double time){
 
 void Mur_2::update(double time){
 
-  int nearest_ally_robot_from_ball = GameInformations::get_nearest_ball( );
+  int nearest_ally_robot_from_ball = GameInformations::get_nearest_ball( Vision::Team::Ally );
   is_closest_0 = false;
   is_closest_1 = false;
 
