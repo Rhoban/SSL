@@ -85,7 +85,6 @@ set (SOURCES
     strategy/indirect.cpp
     strategy/indirect_lob.cpp
     strategy/attaque_with_support.cpp
-    strategy/attaque_with_support_ms.cpp
     strategy/defensive.cpp
     strategy/defensive_2.cpp
     strategy/union.cpp
