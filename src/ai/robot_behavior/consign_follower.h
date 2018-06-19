@@ -35,6 +35,8 @@ class ConsignFollower : public RobotBehavior {
     ) = 0;
 
     virtual void avoid_the_ball( bool value );
+    virtual void avoid_ally(bool value);
+    virtual void avoid_opponent(bool value);
     
     virtual void set_radius_avoidance_for_the_ball(
         double radius

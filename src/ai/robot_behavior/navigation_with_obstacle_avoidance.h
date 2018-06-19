@@ -36,6 +36,8 @@ class Navigation_with_obstacle_avoidance :
 {
     private:
         bool ignore_the_ball;
+        bool ignore_ally;
+        bool ignore_opponent;
         double ball_radius_avoidance;
         bool ball_is_the_obstacle;
         PositionFollower position_follower;
@@ -107,6 +109,8 @@ class Navigation_with_obstacle_avoidance :
             const ContinuousAngle & angle
         );
         virtual void avoid_the_ball(bool value = true);
+        virtual void avoid_ally(bool value);
+        virtual void avoid_opponent(bool value);
 
         virtual void set_radius_avoidance_for_the_ball(
             double radius

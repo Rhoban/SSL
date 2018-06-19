@@ -30,6 +30,8 @@ Navigation_with_obstacle_avoidance::Navigation_with_obstacle_avoidance(
 ):
     ConsignFollower(ai_data), 
     ignore_the_ball(false),
+    ignore_ally(false),
+    ignore_opponent(false),
     ball_radius_avoidance( ai_data.constants.robot_radius ),
     position_follower(ai_data, time, dt),
     target_position(0.0, 0.0), target_angle(0.0)
@@ -68,6 +70,12 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
     );
 
     for( const std::pair<int, double> & collision : collisions_with_ctrl ){
+        if( ignore_ally and collision.first < Ai::Constants::NB_OF_ROBOTS_BY_TEAM){
+            continue;
+        }
+        if( ignore_opponent and collision.first >= Ai::Constants::NB_OF_ROBOTS_BY_TEAM){
+            continue;
+        }
         double time_before_collision = collision.second;
         if( time_before_collision <= time_to_stop and ctrl_velocity_norm > EPSILON_VELOCITY ){
             if(
@@ -244,6 +252,12 @@ void Navigation_with_obstacle_avoidance::set_orientation_pid( double kp, double 
 
 void Navigation_with_obstacle_avoidance::avoid_the_ball(bool value){
     ignore_the_ball = not(value);
+}
+void Navigation_with_obstacle_avoidance::avoid_ally(bool value){
+    ignore_ally = not(value);
+}
+void Navigation_with_obstacle_avoidance::avoid_opponent(bool value){
+    ignore_opponent = not(value);
 }
 
 void Navigation_with_obstacle_avoidance::set_limits(
