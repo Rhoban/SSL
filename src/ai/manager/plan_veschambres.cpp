@@ -275,12 +275,10 @@ void PlanVeschambres::choose_a_strategy(double time){
                     future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
                 } else {
                     DEBUG("Defensive direct Kick");
-<<<<<<< HEAD
-                    future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2_passif::name };
-=======
+
                     //goal
                     future_strats = goalie_strats[ Manager::get_valid_player_ids().size() ];
->>>>>>> b6f0cc5dd4b5a3c295574e54ebe6cbcb5f77459a
+
                     in_defensive_free_kick = true;
                     ball_position_in_free_kick = ball_position();
                 }
@@ -291,12 +289,9 @@ void PlanVeschambres::choose_a_strategy(double time){
                     future_strats = offensive_strats[ Manager::get_valid_player_ids().size() ];
                 } else {
                     DEBUG("Defensive indirect Kick");
-<<<<<<< HEAD
-                    future_strats = { Strategy::GoalieStrat::name, Strategy::Mur_2_passif::name };
-=======
+
                     //goalie
                     future_strats = goalie_strats[ Manager::get_valid_player_ids().size() ];
->>>>>>> b6f0cc5dd4b5a3c295574e54ebe6cbcb5f77459a
                     in_defensive_free_kick = true;
                     ball_position_in_free_kick = ball_position();
                 }
