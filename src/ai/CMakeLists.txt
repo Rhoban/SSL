@@ -40,6 +40,7 @@ set (SOURCES
     robot_behavior/defensor.cpp
     robot_behavior/passive_defensor.cpp
     robot_behavior/mur_defensor.cpp
+    robot_behavior/mur_def_kick.cpp
     robot_behavior/robot_follower.cpp
     robot_behavior/concept_proof_spinner.cpp
     robot_behavior/striker.cpp
@@ -94,6 +95,7 @@ set (SOURCES
     strategy/placer.cpp
     strategy/mur_2.cpp
     strategy/mur_2_passif.cpp
+    strategy/mur_stop.cpp
     strategy/goalie_strat.cpp
     strategy/prepare_kickoff.cpp
     strategy/example.cpp

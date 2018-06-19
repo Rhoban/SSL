@@ -30,6 +30,7 @@
 #include <strategy/striker_v2.h>
 #include <strategy/from_robot_behavior.h>
 #include <strategy/attaque_with_support.h>
+#include <strategy/mur_stop.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/pass_dribbler.h>
@@ -38,9 +39,9 @@
 #include <core/collection.h>
 #include <core/print_collection.h>
 
-#define GOALIE "Goalie" 
-#define DEFENSOR1 "Defensor1" 
-#define DEFENSOR2 "Defensor2" 
+#define GOALIE "Goalie"
+#define DEFENSOR1 "Defensor1"
+#define DEFENSOR2 "Defensor2"
 #define STRIKER "Striker"
 #define PASS_DRIBBLER "Pass_dribbler"
 #define MUR_DEFENSOR "Mur_defensor"
@@ -59,27 +60,32 @@ Thomas::Thomas(
 
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt(ai_data) 
+            new Strategy::Halt(ai_data)
+        )
+    );
+    register_strategy(
+        Strategy::Mur_stop::name, std::shared_ptr<Strategy::Strategy>(
+            new Strategy::Mur_stop(ai_data)
         )
     );
     register_strategy(
         Strategy::StrikerV2::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::StrikerV2(ai_data) 
+            new Strategy::StrikerV2(ai_data)
         )
     );
     register_strategy(
         Strategy::Mur_2::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Mur_2(ai_data) 
+            new Strategy::Mur_2(ai_data)
         )
     );
     register_strategy(
         Strategy::AttaqueWithSupport::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::AttaqueWithSupport(ai_data) 
+            new Strategy::AttaqueWithSupport(ai_data)
         )
     );
     register_strategy(
         Strategy::Tare_and_synchronize::name,
-        std::shared_ptr<Strategy::Strategy>( 
+        std::shared_ptr<Strategy::Strategy>(
             new Strategy::Tare_and_synchronize(ai_data)
         )
     );
@@ -168,7 +174,7 @@ Thomas::Thomas(
         )
     );
     assign_strategy(
-        Strategy::Halt::name, 0.0, 
+        Strategy::Halt::name, 0.0,
         get_team_ids()
     ); // TODO TIME !
 }
@@ -198,7 +204,7 @@ void Thomas::choose_a_strategy(double time){
             declare_and_assign_next_strategies( future_strats );
         } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
         } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
-            future_strats = { Strategy::AttaqueWithSupport::name };
+            future_strats = {   Strategy::Mur_stop::name };
             declare_and_assign_next_strategies(future_strats);
         } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
