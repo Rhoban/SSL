@@ -58,9 +58,8 @@ Movement_predicted_by_integration::linear_position( double time ) const {
     assert( samples[0].time <= time );
     double dt = time - samples.time(0);
     return (
-        samples.linear_position(0) + samples.linear_velocity(0) * dt + 
-        samples.linear_acceleration(0) * dt*dt/2.0
-    );
+      samples.linear_position(0) + samples.linear_velocity(0) * dt// + samples.linear_acceleration(0) * dt*dt/2.0
+      );
 }
         
 ContinuousAngle
@@ -71,9 +70,8 @@ Movement_predicted_by_integration::angular_position( double time ) const {
     assert( samples[0].time <= time );
     double dt = time - samples.time(0);
     return (
-        samples.angular_position(0) + (samples.angular_velocity(0) * dt) + 
-        (samples.angular_acceleration(0) * (dt*dt/2.0))
-    );
+      samples.angular_position(0) + (samples.angular_velocity(0) * dt)// + (samples.angular_acceleration(0) * (dt*dt/2.0))
+      );
 }
        
 Vector2d
