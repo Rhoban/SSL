@@ -128,7 +128,7 @@ std::vector<int> GameInformations::get_robot_in_line( const rhoban_geometry::Poi
 
 
 std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move( const rhoban_geometry::Point point) const{
-    
+
     rhoban_geometry::Point oponent_goal_point = oponent_goal_center();
     rhoban_geometry::Point return_point;
     const rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
@@ -146,6 +146,8 @@ std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move(
     for (size_t i = 1; i < nb_analysed_point - 1; i++) {
         analysed_point = right_post_position + rhoban_geometry::Point(0, dist_post / nb_analysed_point * i);
         std::vector<int> robot_in_line = GameInformations::get_robot_in_line( point, analysed_point,Vision::Team::Opponent, 0.15 );
+        std::vector<int> robot_in_line2 = GameInformations::get_robot_in_line( point, analysed_point,Vision::Team::Ally, 0.15 );
+        robot_in_line.insert( robot_in_line.end(), robot_in_line2.begin(), robot_in_line2.end() );
         if (robot_in_line.empty()) {
             nb_valid_path++;
             if (nb_valid_path > max_valid_path) {

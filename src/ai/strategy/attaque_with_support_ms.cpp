@@ -33,12 +33,12 @@ namespace RhobanSSL {
       search_behavior(std::shared_ptr<Robot_behavior::SearchShootArea>(
         new Robot_behavior::SearchShootArea(ai_data)
       )),
-      pass_behavior(std::shared_ptr<Robot_behavior::Pass>(
-        new Robot_behavior::Pass(ai_data)
-      )),
-      // pass_behavior(std::shared_ptr<Robot_behavior::Pass_dribbler>(
-      //   new Robot_behavior::Pass_dribbler(ai_data)
+      // pass_behavior(std::shared_ptr<Robot_behavior::Pass>(
+      //   new Robot_behavior::Pass(ai_data)
       // )),
+      pass_behavior(std::shared_ptr<Robot_behavior::Pass_dribbler>(
+        new Robot_behavior::Pass_dribbler(ai_data)
+      )),
       wait_pass_behavior(std::shared_ptr<Robot_behavior::WaitPass>(
         new Robot_behavior::WaitPass(ai_data)
       )),
@@ -240,13 +240,13 @@ namespace RhobanSSL {
         assign_behavior( ID2, pass_behavior );
         pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
       }else if( state == state_name::search_waitpass ){
-        assign_behavior( ID1, pass_behavior );//search_behavior );
+        assign_behavior( ID1, search_behavior );//pass_behavior );
         pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
-        assign_behavior( ID2, wait_pass_behavior );
+        // assign_behavior( ID2, wait_pass_behavior );
       }else if( state == state_name::waitpass_search ){
         assign_behavior( ID1, wait_pass_behavior );
-        assign_behavior( ID2, pass_behavior );//search_behavior );
-        pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
+        assign_behavior( ID2, search_behavior );//pass_behavior );
+        // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
       }
 
       // std::pair<rhoban_geometry::Point, double> p_best = find_goal_best_move( ball_position() );
@@ -330,29 +330,29 @@ namespace RhobanSSL {
     }
 
     bool AttaqueWithSupportMs::is_infra_1_on(){
-      // return infra_red( ID1, Vision::Team::Ally);
-      double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
-      // DEBUG("DB1 " << db1 );
-      return (db1 < get_robot_radius()+0.1);
+      return infra_red( ID1, Vision::Team::Ally);
+      // double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
+      // // DEBUG("DB1 " << db1 );
+      // return (db1 < get_robot_radius()+0.1);
     }
     bool AttaqueWithSupportMs::is_infra_2_on(){
-      // return infra_red( ID2, Vision::Team::Ally);
-      double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
-      // DEBUG("DB2 " << db2 );
-      return (db2 < get_robot_radius()+0.1);
+      return infra_red( ID2, Vision::Team::Ally);
+      // double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
+      // // DEBUG("DB2 " << db2 );
+      // return (db2 < get_robot_radius()+0.1);
     }
 
     bool AttaqueWithSupportMs::is_db1_inf_seuil_or_time_inf_tempo(){
-      // return infra_red( ID1, Vision::Team::Ally);
-      double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
-      bool t = (time() - begin_time > tempo);
-      return ((db1 < get_robot_radius()+0.1) || t);
+      return infra_red( ID1, Vision::Team::Ally);
+      // double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
+      // bool t = (time() - begin_time > tempo);
+      // return ((db1 < get_robot_radius()+0.1) || t);
     }
     bool AttaqueWithSupportMs::is_db2_inf_seuil_or_time_inf_tempo(){
-      // return infra_red( ID2, Vision::Team::Ally);
-      double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
-      bool t = (time() - begin_time > tempo);
-      return ((db2 < get_robot_radius()+0.1) || t);
+      return infra_red( ID2, Vision::Team::Ally);
+      // double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
+      // bool t = (time() - begin_time > tempo);
+      // return ((db2 < get_robot_radius()+0.1) || t);
     }
 
     void AttaqueWithSupportMs::set_seuil_fgbm(double seuil){

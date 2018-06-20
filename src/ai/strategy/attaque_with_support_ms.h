@@ -76,8 +76,8 @@ namespace RhobanSSL {
       bool behaviors_are_assigned;
       std::shared_ptr<Robot_behavior::StrikerAi> striker_behavior;
       std::shared_ptr<Robot_behavior::SearchShootArea> search_behavior;
-      std::shared_ptr<Robot_behavior::Pass> pass_behavior;
-      // std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
+      // std::shared_ptr<Robot_behavior::Pass> pass_behavior;
+      std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
       std::shared_ptr<Robot_behavior::WaitPass> wait_pass_behavior;
 
       double seuil_fgbm; // fgbm = find_goal_best_move
