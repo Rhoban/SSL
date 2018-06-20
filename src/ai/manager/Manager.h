@@ -171,7 +171,6 @@ class Manager : public GameInformations {
 
     void compute_robot_affectations_to_strategies();
         std::map<std::string, std::vector<int>> robot_affectations_by_strategy;
-        unsigned int extra_robots = 0;
 
 
 

@@ -390,14 +390,9 @@ void Manager::determine_the_robot_needs_for_the_strategies(
             strategy_with_goal = strategy_name;
         }
     }
-    if( strategy_with_arbitrary_number_of_robot != "" ){
-        nb_of_robots_to_be_affected = get_valid_player_ids().size();
-    }else{
-        nb_of_robots_to_be_affected = minimal_nb_of_robots_to_be_affected;
-    }
     nb_of_extra_robots = (
         get_valid_player_ids().size() - 
-        nb_of_robots_to_be_affected    
+        minimal_nb_of_robots_to_be_affected
     );
     if( strategy_with_arbitrary_number_of_robot != "" ){
         robot_affectations_by_strategy[
@@ -408,11 +403,13 @@ void Manager::determine_the_robot_needs_for_the_strategies(
             ].size() + nb_of_extra_robots 
         );
     }
+/*
     if( strategy_with_arbitrary_number_of_robot != "" ){
         nb_of_extra_robots_non_affected = nb_of_extra_robots;
     }else{
         nb_of_extra_robots_non_affected = 0;
     }
+*/
 }
 
 
@@ -611,11 +608,41 @@ const std::vector<int> & Manager::get_robot_affectations( const std::string & st
 }
 
 void Manager::declare_next_strategies(const std::list<std::string> & next_strategies){
+//    DEBUG( "DECLARE NEXT STRATEGIES" );
+//    DEBUG( "next_strategies : " <<  next_strategies );
     
     determine_the_robot_needs_for_the_strategies(next_strategies);
+
+//    DEBUG( "============== determ. ======" );
+//    DEBUG( "nb_of_robots_to_be_affected : " << nb_of_robots_to_be_affected );
+//    DEBUG( "nb_of_extra_robots_non_affected : " << nb_of_extra_robots_non_affected );
+//    DEBUG( "minimal_nb_of_robots_to_be_affected : " << minimal_nb_of_robots_to_be_affected );
+//    DEBUG( "nb_of_extra_robots : " << nb_of_extra_robots );
+//    DEBUG( "strategy_with_arbitrary_number_of_robot : " << strategy_with_arbitrary_number_of_robot );
+//    DEBUG( "goal_has_to_be_placed : " << goal_has_to_be_placed );
+//    DEBUG( "strategy_with_goal : " << strategy_with_goal );
+//    DEBUG( "robot_affectations_by_strategy : " << robot_affectations_by_strategy );
+
+
+//    DEBUG( "============== aggre. ======" );
     aggregate_all_starting_position_of_all_strategies(next_strategies);
+    
+//    DEBUG( "starting_positions : " << starting_positions );
+//    DEBUG( "repartitions_of_starting_positions_in_the_list : "<<repartitions_of_starting_positions_in_the_list );
+    
+//    DEBUG( "goalie_linear_position : " << goalie_linear_position );
+//    DEBUG( "goalie_angular_position : " << goalie_angular_position );
+
+//    DEBUG( "============== sort. ======" );
     sort_robot_ordered_by_the_distance_with_starting_position();
+    
+//    DEBUG( "robot_affectations : " << robot_affectations ); 
+//    DEBUG( "robot_consigns : " << robot_consigns );
+
+//    DEBUG( "============= comp. ======" );
     compute_robot_affectations_to_strategies();
+//    DEBUG( "robot_affectations_by_strategy : " << robot_affectations_by_strategy );
+//    DEBUG( "============= FIN======" );
 }
 
  
