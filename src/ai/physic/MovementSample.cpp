@@ -76,7 +76,7 @@ double MovementSample::dt( unsigned int i ) const {
 
 
   double filtered_dt=0.0;
-  int nbgood=0;
+
   //small filter
   for(int it=0;it<(this->size()-1);it++){
     filtered_dt+=((*this)[it].time - (*this)[it+1].time);
@@ -100,7 +100,7 @@ Vector2d MovementSample::linear_velocity( unsigned int i ) const {
 }
 
 ContinuousAngle MovementSample::angular_velocity( unsigned int i ) const{
-
+  //TODO Check this
   return ( angular_position(i) - angular_position(i+1) )/dt(i);
 }
 
