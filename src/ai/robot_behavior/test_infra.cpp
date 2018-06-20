@@ -47,13 +47,15 @@ void TestInfra::update(
     //  this->robot_angular_position
     // are all avalaible
 
-    // rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
+    rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
 
     bool value = GameInformations::infra_red( robot.id() , Vision::Team::Ally );
     std::cout << "Value infra red : " << value << '\n';
 
     // follower->avoid_the_ball(true);
-    // follower->set_following_position(target_position, target_rotation);
+    double target_rotation = detail::vec2angle(ball_position() - robot_position);
+
+    follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 
