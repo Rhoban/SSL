@@ -329,21 +329,24 @@ void PlanVeschambres::choose_a_strategy(double time)
         }
         else
         {
-            if (ball_position().getX() <= 0)
+            if (ball_position().getX() <= 0 && (strategy_applied == "offensive" || strategy_applied == ""))
             {
                 //DEFENSIVE
                 DEBUG("defensive !!!! ");
                 future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
                 clear_strategy_assignement();
                 declare_and_assign_next_strategies(future_strats);
+                strategy_applied = "defensive";
             }
-            if (ball_position().getX() >= 0)
+            if (ball_position().getX() >= 0 && (strategy_applied == "defensive" || strategy_applied == ""))
             {
                 //OFFENSIVE
                 DEBUG("offensive !!!! ");
                 future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
                 clear_strategy_assignement();
                 declare_and_assign_next_strategies(future_strats);
+                strategy_applied = true;
+                strategy_applied = "offensive";
             }
         }
     }
