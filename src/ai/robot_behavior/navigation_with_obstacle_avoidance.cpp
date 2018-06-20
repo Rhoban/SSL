@@ -220,7 +220,8 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
     // sign_of_avoidance_rotation = 1.0;
     avoidance_convergence=0.2;
   }
-  else{
+
+  {
     if(angle<0.0)
     {
       sign_of_avoidance_rotation=1;
