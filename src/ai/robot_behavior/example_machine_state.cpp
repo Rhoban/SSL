@@ -19,6 +19,8 @@
 
 #include "example_machine_state.h"
 #include <math/vector2d.h>
+#include <debug.h>
+
 
 namespace RhobanSSL {
 namespace Robot_behavior {
@@ -36,7 +38,8 @@ Example_machine_state::Example_machine_state(
     machine.add_state(
         state_name::wait_pass,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-            this->print_are_pass();
+            DEBUG("WAIT PASS");
+            this->print_ball_info();
         }
     );
     machine.add_state( state_name::strike );
@@ -45,9 +48,11 @@ Example_machine_state::Example_machine_state(
         edge_name::can_strike,
         state_name::wait_pass, state_name::strike, //,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+            DEBUG("IS is_closed_to_the_ball "<< this->is_closed_to_the_ball());
             return this->is_closed_to_the_ball();
         },
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+            DEBUG("IS Can_striker FUAZHeuh");
             this->print_ball_info();
         }
     );
@@ -56,9 +61,11 @@ Example_machine_state::Example_machine_state(
         edge_name::strike_is_finished,
         state_name::strike, state_name::wait_pass,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+            DEBUG("strike_is_finished");
             return not( this->is_closed_to_the_ball() );
         },
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+
             this->print_ball_info2();
         }
     );
@@ -81,7 +88,7 @@ void Example_machine_state::update(
     RobotBehavior::update_time_and_position( time, robot, ball );
 
     machine.run();
-    
+
     follower->avoid_the_ball(true);
     //follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
@@ -90,8 +97,8 @@ void Example_machine_state::update(
 Control Example_machine_state::control() const {
     Control ctrl = follower->control();
     // ctrl.spin = true; // We active the dribler !
-    ctrl.kick = false; 
-    return ctrl; 
+    ctrl.kick = false;
+    return ctrl;
 }
 
 Example_machine_state::~Example_machine_state(){
@@ -103,6 +110,7 @@ RhobanSSLAnnotation::Annotations Example_machine_state::get_annotations() const 
 }
 
 bool Example_machine_state::is_closed_to_the_ball() const {
+    DEBUG("is_closed fcttt" << (norm_square( this->linear_position()-this->ball_position() )<0.05));
     return norm_square( this->linear_position()-this->ball_position() )<0.05;
 };
 

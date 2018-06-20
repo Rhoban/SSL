@@ -33,8 +33,8 @@ rhoban_geometry::Point Goalie::calculate_goal_position(
 ){
         rhoban_geometry::Point defender_position = rhoban_geometry::center_of_cone_incircle(
         ball_position,
-        vector2point(poteau_droit), 
-        vector2point(poteau_gauche), 
+        vector2point(poteau_droit),
+        vector2point(poteau_gauche),
         goalie_radius
     );
     return defender_position;
@@ -86,9 +86,9 @@ void Goalie::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now 
+    // Now
     //  this->robot_linear_position
-    //  this->robot_angular_position 
+    //  this->robot_angular_position
     // are all avalaible
 
 
@@ -181,8 +181,8 @@ void Goalie::update(
 
     follower->set_following_position(Vector2d(target_position), target_rotation );
     follower->avoid_the_ball(false);
-    
-    follower->update(time, robot, ball);   
+
+    follower->update(time, robot, ball);
 }
 
 
