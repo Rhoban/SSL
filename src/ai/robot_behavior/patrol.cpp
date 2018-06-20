@@ -249,11 +249,11 @@ Patrol* Patrol::test_SE_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/6.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( res->field_length()/6.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( -2*res->field_length()/6.0, -res->field_width()/4.0 ),        
+                rhoban_geometry::Point( 2*res->field_length()/6.0, -res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
