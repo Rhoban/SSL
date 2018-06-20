@@ -193,6 +193,10 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
 static MovementSample debug_mov(4);
 
 void AI::send_control( int robot_id, const Control & ctrl ){
+    if( robot_id >= 8 ){ //HACK - becaus hardware doesn't support more than 8 robots
+        return; //HACK
+    } //HACK
+    assert( robot_id < 8 ); //HACK !
     if ( !ctrl.ignore) {
         if( ! ctrl.active ){
             commander->set(
@@ -205,6 +209,7 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             int kick = 0;
             if (ctrl.kick) kick = 1;
             else if (ctrl.chipKick) kick = 2;
+            
             commander->set(
                 robot_id, true,
                 ctrl.velocity_translation[0], ctrl.velocity_translation[1],

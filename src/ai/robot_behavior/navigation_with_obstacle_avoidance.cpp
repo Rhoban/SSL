@@ -189,8 +189,9 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
     sign_of_avoidance_rotation=-1;
   }
 #else
-    sign_of_avoidance_rotation=1;
-#endif
+  sign_of_avoidance_rotation = 1.0; // TODO
+#endif    
+    
 /////////////////////////////////////////////////////////////////
 // We compute now the limit cycle rotation
 /////////////////////////////////////////////////////////////////

@@ -48,7 +48,7 @@
         }
     },
     "team" : {
-        "nb_of_robots_by_team" : 8
+        "nb_of_robots_by_team" : 16
     },
     "ball" : {
         "radius_ball" : 0.021375
@@ -58,7 +58,7 @@
         "obstacle_avoidance_ratio" : 0.04,
         "radius_security_for_collision" : 0.015,
         "radius_security_for_avoidance" : 0.03,
-        "coefficient_to_increase_avoidance_convergence" : 2.0
+        "coefficient_to_increase_avoidance_convergence" : 0.1
     },
     "goalie" : {
         "penalty_rayon" : 1.0,
