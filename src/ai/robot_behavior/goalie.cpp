@@ -125,7 +125,7 @@ void Goalie::update(
             hyst_sign = -1;
         }
 
-        double post_offset = 0;//0.7 + hyst * hyst_sign;
+        double post_offset = 0.7 + hyst * hyst_sign;
         const rhoban_geometry::Point new_left_post_position = left_post_position + rhoban_geometry::Point(offset_goal, post_offset); 
         const rhoban_geometry::Point new_right_post_position = right_post_position + rhoban_geometry::Point(offset_goal, -post_offset);
 
