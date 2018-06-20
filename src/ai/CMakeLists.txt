@@ -57,6 +57,7 @@ set (SOURCES
     robot_behavior/navigation_inside_the_field.cpp
     robot_behavior/obstructor.cpp
     robot_behavior/wait_pass.cpp
+    robot_behavior/slow_striker.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp
@@ -86,6 +87,7 @@ set (SOURCES
     strategy/indirect.cpp
     strategy/indirect_lob.cpp
     strategy/attaque_with_support.cpp
+    strategy/striker_kick.cpp
     strategy/defensive.cpp
     strategy/defensive_2.cpp
     strategy/union.cpp

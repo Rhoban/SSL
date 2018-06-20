@@ -34,6 +34,8 @@ class PlanVeschambres : public Manager {
     std::vector< std::list<std::string> >  penalty_strats;
     //goale
     std::vector< std::list<std::string> > goalie_strats;
+    //kick
+    std::vector< std::list<std::string> > kick_strats;
     //offensiv
     std::vector< std::list<std::string> > offensive_strats;
     //defensive
