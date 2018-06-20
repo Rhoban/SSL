@@ -33,6 +33,7 @@
 #include <robot_behavior/patrol.h>
 #include <robot_behavior/position_follower.h>
 #include <robot_behavior/striker.h>
+#include <robot_behavior/striker_ai.h>
 #include <robot_behavior/predict_futur.h>
 #include <robot_behavior/obstructor.h>
 
@@ -41,11 +42,17 @@ namespace Manager {
 
 Manual::Manual( Ai::AiData & ai_data ):
     Manager(ai_data),
-    team_color(ai_data.team_color),
+    team_color(Ai::Team::Unknown),
     goal_to_positive_axis(true),
     ally_goalie_id(0),
     oponnent_goalie_id(0)
 {
+
+    change_team_and_point_of_view(
+        ai_data.team_color,
+        goal_to_positive_axis
+    );
+
     register_strategy(
         "Goalie", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
@@ -419,6 +426,17 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
+        "StrikerAi", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::StrikerAi* striker_ai = new Robot_behavior::StrikerAi(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker_ai);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
         "PredictFutur", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
@@ -449,6 +467,8 @@ Manual::Manual( Ai::AiData & ai_data ):
 
 
 void Manual::assign_point_of_view_and_goalie(){
+    DEBUG(team_color);
+    DEBUG(Ai::Team::Yellow);
     change_team_and_point_of_view(
         team_color,
         goal_to_positive_axis
@@ -460,7 +480,7 @@ void Manual::set_team_color( Ai::Team team_color ){
 }
 
 void Manual::define_goal_to_positive_axis(bool value){
-    this->goal_to_positive_axis = goal_to_positive_axis;
+    this->goal_to_positive_axis = value;
 }
 
 

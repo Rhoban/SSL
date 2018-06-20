@@ -31,6 +31,8 @@ class Goalie : public RobotBehavior  {
     private:
         //PositionFollower follower(); TODO : to remove if not necessary
 
+    RhobanSSLAnnotation::Annotations annotations;
+
 	ConsignFollower* follower;
 
         Vector2d left_post_position; 
@@ -40,6 +42,7 @@ class Goalie : public RobotBehavior  {
 
         double goalie_radius;
         double penalty_rayon;
+        int defensive_approach;
 
         static rhoban_geometry::Point calculate_goal_position(
             const rhoban_geometry::Point & ball_position,
@@ -66,6 +69,8 @@ class Goalie : public RobotBehavior  {
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
+        
+        std::vector<rhoban_geometry::Point> future_ball_positions;
 
 	virtual Control control() const;
 

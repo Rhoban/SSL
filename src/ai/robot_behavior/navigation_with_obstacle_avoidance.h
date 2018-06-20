@@ -1,20 +1,20 @@
 /*
-    This file is part of SSL.
+  This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+  Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
-    SSL is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+  SSL is free software: you can redistribute it and/or modify
+  it under the terms of the GNU Lesser General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-    SSL is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
+  SSL is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public License
-    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+  You should have received a copy of the GNU Lesser General Public License
+  along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef __ROBOT_BEHAVIOR__NAVIGATION_WITH_OBSTACLE_AVOIDANCE__H__
@@ -23,102 +23,106 @@
 #include "robot_behavior.h"
 #include "position_follower.h"
 #include <AiData.h>
+#include <math/circular_vector.h>
+
 
 namespace RhobanSSL {
 namespace Robot_behavior {
 
 /*
  * This is an implementation of the article : 
- * "Orbital Obstavle Avoidance Algorithm for reliable and on-line mobile robot navigation", Lounis Adouane, LASMEA.
+ * "Orbital Obstacle Avoidance Algorithm for reliable and on-line mobile robot navigation", Lounis Adouane, LASMEA.
  */
 class Navigation_with_obstacle_avoidance :
     public ConsignFollower 
 {
-    private:
-        bool ignore_the_ball;
-        bool ignore_ally;
-        bool ignore_opponent;
-        double ball_radius_avoidance;
-        bool ball_is_the_obstacle;
-        PositionFollower position_follower;
+private:
+  bool ignore_the_ball;
+  bool ignore_ally;
+  bool ignore_opponent;
+  double ball_radius_avoidance;
+  bool ball_is_the_obstacle;
+  PositionFollower position_follower;
 
-        Vector2d target_position;
-        ContinuousAngle target_angle;
+  PositionFollower position_follower_avoidance;
 
-        double min_time_collision;
-        int closest_robot;
+  Vector2d target_position;
+  ContinuousAngle target_angle;
+  circular_vector<rhoban_geometry::Point> obst_vec;
+  double min_time_collision;
+  int closest_robot;
 
-        double radius_of_limit_cycle;
-        Vector2d limit_cycle_direction;
+  double radius_of_limit_cycle;
+  Vector2d limit_cycle_direction;
 
-        struct Obstacle_point_of_view {
-            rhoban_geometry::Point robot_linear_position;
-            Vector2d robot_linear_velocity;
-            rhoban_geometry::Point target_linear_position;
+  struct Obstacle_point_of_view {
+    rhoban_geometry::Point robot_linear_position;
+    Vector2d robot_linear_velocity;
+    rhoban_geometry::Point target_linear_position;
             
-            Vector2d limit_cycle_direction;
-        };
-        Obstacle_point_of_view obstacle_point_of_view;
-        double sign_of_avoidance_rotation;
-        Control avoidance_control;
+    Vector2d limit_cycle_direction;
+  };
+  Obstacle_point_of_view obstacle_point_of_view;
+  double sign_of_avoidance_rotation;
+  Control avoidance_control;
 
-        void determine_the_closest_obstacle();
-        void compute_the_radius_of_limit_cycle();
-        void compute_the_limit_cycle_direction_for_obstacle(
-            const rhoban_geometry::Point & obstacle_linear_position,
-            const Vector2d & obstacle_linear_velocity
-        );
-        void compute_the_limit_cycle_direction_for_robot();
-        void compute_the_limit_cycle_direction_for_ball();
-        void compute_the_limit_cycle_direction();
-        void convert_cycle_direction_to_linear_and_angular_velocity();
-
-
-    public:
-        Navigation_with_obstacle_avoidance(
-            Ai::AiData & ai_data, double time, double dt
-        ); 
-
-    protected:
-        void update_control(
-            double time, 
-            const Ai::Robot & robot, const Ai::Ball & ball
-        );
-
-    public:
-        virtual void update(
-            double time, 
-            const Ai::Robot & robot, const Ai::Ball & ball
-        );
+  void determine_the_closest_obstacle();
+  void compute_the_radius_of_limit_cycle();
+  void compute_the_limit_cycle_direction_for_obstacle(
+    const rhoban_geometry::Point & obstacle_linear_position,
+    const Vector2d & obstacle_linear_velocity
+    );
+  void compute_the_limit_cycle_direction_for_robot();
+  void compute_the_limit_cycle_direction_for_ball();
+  void compute_the_limit_cycle_direction();
+  void convert_cycle_direction_to_linear_and_angular_velocity();
 
 
-        virtual Control control() const;
+public:
+  Navigation_with_obstacle_avoidance(
+    Ai::AiData & ai_data, double time, double dt
+    ); 
 
-        void set_translation_pid( double kp, double ki, double kd );
-        void set_orientation_pid( double kp, double ki, double kd );
+protected:
+  void update_control(
+    double time, 
+    const Ai::Robot & robot, const Ai::Ball & ball
+    );
 
-        void set_limits(
-            double translation_velocity_limit,
-            double rotation_velocity_limit,
-            double translation_acceleration_limit,
-            double rotation_acceleration_limit
-        );
+public:
+  virtual void update(
+    double time, 
+    const Ai::Robot & robot, const Ai::Ball & ball
+    );
 
-        virtual void set_following_position(
-            const Vector2d & position_to_follow,
-            const ContinuousAngle & angle
-        );
-        virtual void avoid_the_ball(bool value = true);
-        virtual void avoid_ally(bool value);
-        virtual void avoid_opponent(bool value);
 
-        virtual void set_radius_avoidance_for_the_ball(
-            double radius
-        );
-        double get_radius_avoidance_for_the_ball(
-        );
+  virtual Control control() const;
 
-        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  void set_translation_pid( double kp, double ki, double kd );
+  void set_orientation_pid( double kp, double ki, double kd );
+
+  void set_limits(
+    double translation_velocity_limit,
+    double rotation_velocity_limit,
+    double translation_acceleration_limit,
+    double rotation_acceleration_limit
+    );
+
+  virtual void set_following_position(
+    const Vector2d & position_to_follow,
+    const ContinuousAngle & angle
+    );
+  virtual void avoid_the_ball(bool value = true);
+  virtual void avoid_ally(bool value);
+  virtual void avoid_opponent(bool value);
+
+  virtual void set_radius_avoidance_for_the_ball(
+    double radius
+    );
+  double get_radius_avoidance_for_the_ball(
+    );
+
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 };
 
 };

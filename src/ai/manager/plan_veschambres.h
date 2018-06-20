@@ -41,7 +41,7 @@ class PlanVeschambres : public Manager {
     //defensive
     std::vector< std::list<std::string> > defensive_strats;
 
-    bool is_in_offensive_mode;
+    std::string strategy_applied = "";
 
     bool can_touch_the_ball = true;
     rhoban_geometry::Point ball_last_position;
