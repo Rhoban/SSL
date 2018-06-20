@@ -28,7 +28,7 @@ namespace Robot_behavior {
 Navigation_with_obstacle_avoidance::Navigation_with_obstacle_avoidance(
   Ai::AiData & ai_data, double time, double dt
   ):
-  ConsignFollower(ai_data), 
+  ConsignFollower(ai_data),
   ignore_the_ball(false),
   ignore_ally(false),
   ignore_opponent(false),
@@ -36,17 +36,17 @@ Navigation_with_obstacle_avoidance::Navigation_with_obstacle_avoidance(
   position_follower(ai_data, time, dt),    position_follower_avoidance(ai_data, time, dt),
   target_position(0.0, 0.0), target_angle(0.0)
 {
-} 
+}
 
 void Navigation_with_obstacle_avoidance::set_following_position(
   const Vector2d & position_to_follow,
   const ContinuousAngle & target_angle
   ){
-  this->position_follower.set_following_position( position_to_follow, target_angle ); 
+  this->position_follower.set_following_position( position_to_follow, target_angle );
   this->target_position = position_to_follow;
   this->target_angle = target_angle;
   this->target_angle = this->robot_angular_position;
-  this->target_angle.set_to_nearest(target_angle); 
+  this->target_angle.set_to_nearest(target_angle);
 }
 
 void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
@@ -80,9 +80,9 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
     double time_before_collision = collision.second;
     if( time_before_collision <= time_to_stop and ctrl_velocity_norm > EPSILON_VELOCITY ){
       if(
-        ( min_time_collision == -1 ) 
+        ( min_time_collision == -1 )
         or
-        ( min_time_collision > time_before_collision ) 
+        ( min_time_collision > time_before_collision )
         ){
         min_time_collision = time_before_collision;
         closest_robot = collision.first;
@@ -116,13 +116,13 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
   
   
   ball_is_the_obstacle = false;
-  if( not(ignore_the_ball) ){      
+  if( not(ignore_the_ball) ){
     double radius_error = ai_data.constants.radius_security_for_collision;
     std::pair<bool, double> collision = collision_time(
-      ai_data.constants.robot_radius, 
+      ai_data.constants.robot_radius,
       robot().get_movement().linear_position( robot().get_movement().last_time() ),
       ctrl.velocity_translation,
-      ball_radius_avoidance, 
+      ball_radius_avoidance,
       ball().get_movement().linear_position( ball().get_movement().last_time() ),
       ball().get_movement().linear_velocity( ball().get_movement().last_time() ),
       radius_error
@@ -131,9 +131,9 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
       double time_before_collision = collision.second;
       if( time_before_collision <= time_to_stop and ctrl_velocity_norm > EPSILON_VELOCITY ){
         if(
-          ( min_time_collision == -1 ) 
+          ( min_time_collision == -1 )
           or
-          ( min_time_collision > time_before_collision ) 
+          ( min_time_collision > time_before_collision )
           ){
           min_time_collision = time_before_collision;
           ball_is_the_obstacle = true;
@@ -147,8 +147,8 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
 void Navigation_with_obstacle_avoidance::compute_the_radius_of_limit_cycle(){
   //Is yet constructed at construction
   assert(
-    ai_data.constants.radius_security_for_collision 
-    < 
+    ai_data.constants.radius_security_for_collision
+    <
     ai_data.constants.radius_security_for_avoidance
     );
 
@@ -156,15 +156,15 @@ void Navigation_with_obstacle_avoidance::compute_the_radius_of_limit_cycle(){
   if ( ball_is_the_obstacle ) {
     assert( not(ignore_the_ball) ); // Normally determine_the_closest_obstacle() set ball_is_the_obstacle to false when we ignore the ball
     radius_of_limit_cycle = ai_data.constants.radius_ball + ai_data.constants.robot_radius + ai_data.constants.radius_security_for_avoidance;
-  } else {     
+  } else {
     if( robot().get_movement().linear_velocity(ai_data.time).norm() < ai_data.constants.translation_velocity_limit/4.0 ){
-      radius_of_limit_cycle = 2*ai_data.constants.robot_radius;// + ai_data.constants.radius_security_for_avoidance;   
+      radius_of_limit_cycle = 2*ai_data.constants.robot_radius;// + ai_data.constants.radius_security_for_avoidance;
     }else{
-      radius_of_limit_cycle = 2*ai_data.constants.robot_radius + ai_data.constants.radius_security_for_avoidance;   
+      radius_of_limit_cycle = 2*ai_data.constants.robot_radius + ai_data.constants.radius_security_for_avoidance;
     }
   }
 #endif
-    
+
 
 }
 
@@ -172,7 +172,7 @@ void Navigation_with_obstacle_avoidance::convert_cycle_direction_to_linear_and_a
   // avoidance_control.kick = false;
   // avoidance_control.ignore = false;
 
-    
+
   // Control follower_control = position_follower.control();
   // avoidance_control.velocity_rotation = follower_control.velocity_rotation;
   // avoidance_control.velocity_translation = limit_cycle_direction*(
@@ -190,23 +190,22 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
   const rhoban_geometry::Point & obstacle_linear_position,
   const Vector2d & obstacle_linear_velocity
   ){
-  obstacle_point_of_view.robot_linear_position = 
+  obstacle_point_of_view.robot_linear_position =
     vector2point( robot_linear_position - Vector2d( obstacle_linear_position ) )
     ;
   obstacle_point_of_view.target_linear_position =
     vector2point( target_position - Vector2d( obstacle_linear_position ) )
     ;
-   
+
   /////////////////////////////////////////////////////////////////
   // We compute the sens of avoidance rotatiion
   /////////////////////////////////////////////////////////////////
-  // sign_of_avoidance_rotation = 1.0; // TODO
+  sign_of_avoidance_rotation = 1.0; // TODO
 
   Ai::Robot & obstacle = *( ai_data.all_robots[closest_robot].second );
   Vector2d obstacle_to_goal=vector2point(target_position)-obstacle_linear_position;
   Vector2d current_to_goal=vector2point(target_position)-linear_position();
   double angle=vector2angle(current_to_goal).value()-vector2angle(obstacle_to_goal).value();
-
 
   // if(second_closest_distance<0.2) //TODO parameter
   // {
@@ -242,7 +241,7 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
   double delta_radius;
 
   if( (XX+YY)==0.0 )
-    delta_radius=0.5; 
+    delta_radius=0.5;
   else
     delta_radius = ( radius_of_limit_cycle*radius_of_limit_cycle - XX - YY )/(XX+YY)*avoidance_convergence;
   obstacle_point_of_view.limit_cycle_direction = Vector2d(
@@ -258,8 +257,8 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_r
   //We change the frame from absolute to frame relative to obstacle
   /////////////////////////////////////////////////////////////////
   Ai::Robot & obstacle = *( ai_data.all_robots[closest_robot].second );
-  rhoban_geometry::Point obstacle_linear_position = obstacle.get_movement().linear_position( time() ); 
-  Vector2d obstacle_linear_velocity = obstacle.get_movement().linear_velocity( time() ); 
+  rhoban_geometry::Point obstacle_linear_position = obstacle.get_movement().linear_position( time() );
+  Vector2d obstacle_linear_velocity = obstacle.get_movement().linear_velocity( time() );
 
   compute_the_limit_cycle_direction_for_obstacle( obstacle_linear_position, obstacle_linear_velocity );
 }
@@ -268,8 +267,8 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_b
   /////////////////////////////////////////////////////////////////
   //We change the frame from absolute to frame relative to obstacle
   /////////////////////////////////////////////////////////////////
-  rhoban_geometry::Point obstacle_linear_position = ball().get_movement().linear_position( time() ); 
-  Vector2d obstacle_linear_velocity = ball().get_movement().linear_velocity( time() ); 
+  rhoban_geometry::Point obstacle_linear_position = ball().get_movement().linear_position( time() );
+  Vector2d obstacle_linear_velocity = ball().get_movement().linear_velocity( time() );
 
   compute_the_limit_cycle_direction_for_obstacle( obstacle_linear_position, obstacle_linear_velocity );
 }
@@ -291,10 +290,10 @@ void Navigation_with_obstacle_avoidance::update(
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position( time, robot, ball );
-  // Now 
+  // Now
   //  this->robot_linear_position
   //  this->ball_position
-  //  this->robot_angular_position 
+  //  this->robot_angular_position
   //  this->robot()
   // are all avalaible
 
@@ -322,7 +321,7 @@ Control Navigation_with_obstacle_avoidance::control() const {
   }else{
     return position_follower.control();
   }
-    
+
 }
 
 void Navigation_with_obstacle_avoidance::set_translation_pid( double kp, double ki, double kd ){
@@ -361,7 +360,7 @@ RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotat
 //    annotations.addCircle( linear_position(), radius_of_limit_cycle );
 
   if( min_time_collision >= 0 ){
-    annotations.addArrow(linear_position(),linear_position()+limit_cycle_direction*(limit_cycle_direction.norm())*10,"red");      
+    annotations.addArrow(linear_position(),linear_position()+limit_cycle_direction*(limit_cycle_direction.norm())*10,"red");
     if(closest_robot==-1){
       annotations.addCircle(ball().get_movement().linear_position(ai_data.time),radius_of_limit_cycle);
     } else {
