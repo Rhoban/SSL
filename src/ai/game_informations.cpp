@@ -127,9 +127,15 @@ std::vector<int> GameInformations::get_robot_in_line( const rhoban_geometry::Poi
 
 
 
-std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move( const rhoban_geometry::Point point) const{
+std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move( const rhoban_geometry::Point point, const rhoban_geometry::Point goal ) const {
 
-    rhoban_geometry::Point oponent_goal_point = oponent_goal_center();
+    rhoban_geometry::Point oponent_goal_point;
+    if ( goal == rhoban_geometry::Point(66,66) ) {
+        oponent_goal_point = oponent_goal_center();
+    } else {
+        oponent_goal_point = goal;
+    }
+
     rhoban_geometry::Point return_point;
     const rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
     const rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );

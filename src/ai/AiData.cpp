@@ -251,6 +251,7 @@ namespace Ai {
         assert( security_acceleration_ratio >= 0.0 );
 
         obstacle_avoidance_ratio = nav["obstacle_avoidance_ratio"].asDouble(); // should be lessr than security_acceleration_ratio
+        coefficient_to_increase_avoidance_convergence = nav["coefficient_to_increase_avoidance_convergence"].asDouble(); // should be lessr than security_acceleration_ratio
         assert( obstacle_avoidance_ratio >=0.0 );
         assert( obstacle_avoidance_ratio < security_acceleration_ratio );
 

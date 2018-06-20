@@ -152,6 +152,8 @@ struct Constants {
     double wheel_nb_turns_acceleration_limit;
 
     double rules_avoidance_distance;
+    double convergence_coefficient;
+    double coefficient_to_increase_avoidance_convergence;
 
     void load( const std::string & config_path );
 
