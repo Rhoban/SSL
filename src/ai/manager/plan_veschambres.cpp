@@ -290,6 +290,9 @@ void PlanVeschambres::choose_a_strategy(double time)
                     //offensive
                     future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
                     can_touch_the_ball = false;
+                    strategy_applied = "";
+                    ball_last_position = ball_position();
+
                 }
                 else
                 {
@@ -309,6 +312,7 @@ void PlanVeschambres::choose_a_strategy(double time)
                     //offensive
                     future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
                     can_touch_the_ball = false;
+                    strategy_applied = "";
                     ball_last_position = ball_position();
                 }
                 else
@@ -343,6 +347,7 @@ void PlanVeschambres::choose_a_strategy(double time)
                      .is_inside(ball_position()))
             {
                 can_touch_the_ball = true;
+                strategy_applied = "";
             }
         }
         else

@@ -72,6 +72,7 @@ void SlowStriker::update(
             follower->avoid_opponent(false);
         }
     }
+    //TODO Add hysteresis
     if (dist_ball_robot > target_radius_from_ball ) {
         follower->avoid_opponent(true);
     }
@@ -87,9 +88,9 @@ void SlowStriker::update(
     }
 
 
-    if( Vector2d(target_position - robot_position).norm() > position_margin ) {
-        tempo = 0.0;
-    }
+    // if( Vector2d(target_position - robot_position).norm() > position_margin ) {
+    //     tempo = 0.0;
+    // }
 
     if((Vector2d(target_position - robot_position).norm() < position_margin) && (tempo != 0.0)){
         if(std::abs(time - tempo) >= waiting_time){

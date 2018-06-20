@@ -56,6 +56,7 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
 
   min_time_collision = -1;
   closest_robot = -1;
+  second_closest_robot=-1;
   std::list< std::pair<int, double> > collisions_with_ctrl = ai_data.get_collisions(
     robot().id(), ctrl.velocity_translation
     );
@@ -88,6 +89,32 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
       }
     }
   }
+
+  //second closest robot
+  double mdist=9999;
+  for( unsigned int j = 0; j < ai_data.all_robots.size(); j++ ){
+    Ai::Robot* r=ai_data.all_robots.at(j).second;
+    
+    if(r->id()!=robot().id() && r->id()!=closest_robot)
+    {
+      rhoban_geometry::Point rpos=r->get_movement().linear_position( r->get_movement().last_time() );
+      Vector2d v= (rpos-robot().get_movement().linear_position( robot().get_movement().last_time() ));
+      double d=v.norm();
+      if(d<mdist)
+      {
+        mdist=d;
+        second_closest_robot=r->id();
+        second_closest_distance=d;
+      }
+    }
+ 
+  }
+
+ 
+    
+ 
+  
+  
   ball_is_the_obstacle = false;
   if( not(ignore_the_ball) ){
     double radius_error = ai_data.constants.radius_security_for_collision;
@@ -180,28 +207,43 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
   Vector2d current_to_goal=vector2point(target_position)-linear_position();
   double angle=vector2angle(current_to_goal).value()-vector2angle(obstacle_to_goal).value();
 
-  /*
-  if(angle<0.0)
-  {
-    sign_of_avoidance_rotation=1;
-  }
-  else
-    sign_of_avoidance_rotation=-1;
-    
-    */
-/////////////////////////////////////////////////////////////////
-// We compute now the limit cycle rotation
-/////////////////////////////////////////////////////////////////
+  // if(second_closest_distance<0.2) //TODO parameter
+  // {
+  //   Ai::Robot & second_obstacle = *( ai_data.all_robots[second_closest_robot].second );
+  //   Vector2d second_obstacle_to_goal=vector2point(target_position)-second_obstacle.;    
+  // }
+
+
   const rhoban_geometry::Point & s = obstacle_point_of_view.robot_linear_position;
 
   double XX=s.getX()*s.getX();
   double YY=s.getY()*s.getY();
+
+  double avoidance_convergence=ai_data.constants.coefficient_to_increase_avoidance_convergence;
+  if(ai_data.all_robots[closest_robot].first == ai_data.all_robots[robot().id()].first)
+  {
+    // sign_of_avoidance_rotation = 1.0;
+    avoidance_convergence=(XX+YY)*(XX+YY);
+  }
+
+  {
+    if(angle<0.0)
+    {
+      sign_of_avoidance_rotation=1;
+    }
+    else
+      sign_of_avoidance_rotation=-1;
+  }
+    
+/////////////////////////////////////////////////////////////////
+// We compute now the limit cycle rotation
+/////////////////////////////////////////////////////////////////
   double delta_radius;
 
   if( (XX+YY)==0.0 )
     delta_radius=0.5;
   else
-    delta_radius = ( radius_of_limit_cycle*radius_of_limit_cycle - XX - YY )/(XX+YY)*ai_data.constants.coefficient_to_increase_avoidance_convergence;
+    delta_radius = ( radius_of_limit_cycle*radius_of_limit_cycle - XX - YY )/(XX+YY)*avoidance_convergence;
   obstacle_point_of_view.limit_cycle_direction = Vector2d(
     sign_of_avoidance_rotation * s.getY() + s.getX() * delta_radius,
     - sign_of_avoidance_rotation * s.getX() + s.getY() * delta_radius
