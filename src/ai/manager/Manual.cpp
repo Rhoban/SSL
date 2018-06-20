@@ -36,6 +36,9 @@
 #include <robot_behavior/striker_ai.h>
 #include <robot_behavior/predict_futur.h>
 #include <robot_behavior/obstructor.h>
+#include <robot_behavior/test_infra.h>
+#include <robot_behavior/pass_dribbler.h>
+#include <robot_behavior/wait_pass.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -448,6 +451,40 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
+        "TestInfra", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::TestInfra* p = new Robot_behavior::TestInfra(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false
+            )
+        )
+    );
+    register_strategy(
+        "TestPassDribbler", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Pass_dribbler* p = new Robot_behavior::Pass_dribbler(ai_data);
+                    p->declare_point_to_pass(ally_goal_center());
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false
+            )
+        )
+    );
+    register_strategy(
+        "WaitPass", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::WaitPass* p = new Robot_behavior::WaitPass(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false
+            )
+        )
+    );
+    register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
             new Strategy::Halt(ai_data)
         )
@@ -485,6 +522,9 @@ void Manual::define_goal_to_positive_axis(bool value){
 
 
 void Manual::update(double time){
+    // if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
+    //   assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
+    // }
     //update_strategies(time);
     update_current_strategies(time);
     assign_point_of_view_and_goalie();

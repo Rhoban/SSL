@@ -58,6 +58,7 @@ set (SOURCES
     robot_behavior/obstructor.cpp
     robot_behavior/wait_pass.cpp
     robot_behavior/slow_striker.cpp
+    robot_behavior/test_infra.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp

@@ -52,6 +52,7 @@ void Pass_dribbler::update(
     //  this->robot_angular_position
     // are all avalaible
 
+
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
     const ContinuousAngle & robot_angle = robot.get_movement().angular_position( time );
 
@@ -69,10 +70,13 @@ void Pass_dribbler::update(
     rhoban_geometry::Point target_position;
     double target_rotation;
 
-    double position_error = 0.14;
+    // double position_error = 0.14;
     double angle_error = 0.090;
 
-    if ( std::abs(Vector2d(robot_position - ball_position()).norm()) > position_error ) {
+    bool value_infra_red = GameInformations::infra_red(robot.id());
+    DEBUG("robot id " << value_infra_red);
+    // if ( std::abs(Vector2d(robot_position - ball_position()).norm()) > position_error )
+    if(!value_infra_red){
         target_position = ball_position();
         target_rotation = detail::vec2angle(-ball_robot_vector);
     } else {
