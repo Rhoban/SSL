@@ -91,7 +91,7 @@ void Mur_def_kick::update(
     }
 
 
-    double distance_from_ball = 0.8;
+    double distance_from_ball = 1.1;
 
 
     Vector2d BITE = ball_goal_vector.perpendicular();

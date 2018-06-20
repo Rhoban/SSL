@@ -66,7 +66,7 @@ double Tare_and_synchronize::get_temporal_shift_between_vision() const {
     double propagation_time_of_command = ai_time_associated_to_vision_time_command - ai_time_command;
     double estimated_time_of_command_application = ai_time_command + propagation_time_of_command/2.0;
     double temporal_shift = estimated_time_of_command_application - vision_time_command;
-    return temporal_shift; 
+    return temporal_shift;
 }
 
 void Tare_and_synchronize::set_temporal_shift_between_vision(){
@@ -80,7 +80,7 @@ void Tare_and_synchronize::assign_behavior_to_robots(
     > assign_behavior,
     double time, double dt
 ){
-    const Movement & movement = ai_data.robots[Vision::Ally][robot_id(0)].get_movement(); 
+    const Movement & movement = ai_data.robots[Vision::Ally][robot_id(0)].get_movement();
     if( ! halt_behavior_was_assigned ){
         assign_behavior(
             robot_id(0), std::shared_ptr<Robot_behavior::RobotBehavior>(
@@ -91,20 +91,20 @@ void Tare_and_synchronize::assign_behavior_to_robots(
         return;
     }
     if( halt_behavior_was_assigned and ! move_behavior_was_assigned ){
-        if( movement.angular_velocity( movement.last_time() ).abs().value() <= 0.0001 ){
+        if( movement.angular_velocity( movement.last_time() ).abs().value() <= 0.05 ){
 
             Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(ai_data, time, dt);
             follower->set_following_position(
-                movement.linear_position( movement.last_time() ), 
+                movement.linear_position( movement.last_time() ),
                 movement.angular_position( movement.last_time() ) + M_PI/2.0
             );
             follower->set_translation_pid(
                 ai_data.constants.p_translation,
-                ai_data.constants.i_translation, 
+                ai_data.constants.i_translation,
                 ai_data.constants.d_translation
             );
             follower->set_orientation_pid(
-                ai_data.constants.p_orientation, ai_data.constants.i_orientation, 
+                ai_data.constants.p_orientation, ai_data.constants.i_orientation,
                 ai_data.constants.d_orientation
             );
             follower->set_limits(
@@ -125,7 +125,7 @@ void Tare_and_synchronize::assign_behavior_to_robots(
         }
     }
     if( halt_behavior_was_assigned and move_behavior_was_assigned and ! time_is_synchro ){
-        if( movement.angular_velocity( movement.last_time() ).abs().value() >= 0.001 ){
+        if( movement.angular_velocity( movement.last_time() ).abs().value() >= 0.05 ){
             vision_time_command = movement.get_sample().time();
             ai_time_associated_to_vision_time_command = time;
             assign_behavior(
@@ -143,6 +143,6 @@ void Tare_and_synchronize::assign_behavior_to_robots(
 Tare_and_synchronize::~Tare_and_synchronize(){
 }
 
-        
+
 }
 }
