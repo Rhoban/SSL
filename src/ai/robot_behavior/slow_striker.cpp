@@ -80,7 +80,7 @@ void SlowStriker::update(
     double target_rotation = detail::vec2angle(ball_striking_vector);
 
     double position_margin = 0.05;
-    double waiting_time = 5.0;
+    double waiting_time = 3.0;
 
     if((Vector2d(target_position - robot_position).norm() < position_margin) && (tempo == 0.0)){
         tempo = time;
