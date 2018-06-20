@@ -346,7 +346,9 @@ std::vector<std::string> Manager::get_available_strategies()
     return strategyNames;
 }
 
-void Manager::determine_the_robot_needs_for_the_strategies(){
+void Manager::determine_the_robot_needs_for_the_strategies(
+    const std::list<std::string> & next_strategies
+){
     int minimal_nb_of_robots_to_be_affected = 0;
     strategy_with_arbitrary_number_of_robot = "";
     robot_affectations_by_strategy.clear();
@@ -538,26 +540,33 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position(){
 }
 
 void Manager::compute_robot_affectations_to_strategies(){
-    // TODO MANAGE THE CASE OF THE GOAL !
     unsigned int cpt_robot = 0;
     unsigned int cpt_extra_robot = 0;
     for(
         const std::pair<std::string, int> & elem : 
-        repartitions_of_starting_positions
+        repartitions_of_starting_positions_in_the_list
     ){
         const std::string & strategy_name = elem.first; 
         const int nb_robots = elem.second;
         for( int i=0; i<nb_robots; i++ ){
             robot_affectations_by_strategy[strategy_name][i] = robot_affectations.at(cpt_robot+i);
         }
-        unsigned int extra_robots = number_of_extra_robot_by_strategy.at( strategy_name );
 
-        for( unsigned int i=0; i<extra_robots; i++ ){
-            unsigned int offset = starting_positions.size();
-            robot_affectations_by_strategy[strategy_name][nb_robots+i] = robot_affectations.at(i + offset + cpt_extra_robot);
+        int nb_robots_with_no_startings = ( 
+            robot_affectations_by_strategy.at( strategy_name ).size()
+            -
+            nb_robots
+        );
+
+        for( unsigned int i=0; i< nb_robots_with_no_startings ; i++ ){
+            robot_affectations_by_strategy[
+                strategy_name
+            ][nb_robots+i] = robot_affectations.at(
+                starting_positions.size() + cpt_extra_robot + i
+            );
         }
         cpt_robot += nb_robots;
-        cpt_extra_robot += extra_robots;
+        cpt_extra_robot += nb_robots_with_no_startings;
     }
 }
 
@@ -603,7 +612,7 @@ const std::vector<int> & Manager::get_robot_affectations( const std::string & st
 
 void Manager::declare_next_strategies(const std::list<std::string> & next_strategies){
     
-    determine_the_robot_needs_for_the_strategies();
+    determine_the_robot_needs_for_the_strategies(next_strategies);
     aggregate_all_starting_position_of_all_strategies(next_strategies);
     sort_robot_ordered_by_the_distance_with_starting_position();
     compute_robot_affectations_to_strategies();

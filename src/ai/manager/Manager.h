@@ -131,8 +131,11 @@ class Manager : public GameInformations {
 
     private:
 
-    void determine_the_robot_needs_for_the_strategies();
+    void determine_the_robot_needs_for_the_strategies(
+        const std::list<std::string> & next_strategies
+    );
         unsigned int nb_of_robots_to_be_affected;
+        unsigned int nb_of_extra_robots_non_affected;
         unsigned int minimal_nb_of_robots_to_be_affected;
         unsigned int nb_of_extra_robots;
         std::string strategy_with_arbitrary_number_of_robot;
