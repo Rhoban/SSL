@@ -21,10 +21,12 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 #define __STRATEGY__ATTAQUEWITHSUPPORTMS__H__
 
 #include "Strategy.h"
-#include <robot_behavior/striker.h>
 // #include <robot_behavior/robot_follower.h>
+#include <robot_behavior/striker.h>
+#include <robot_behavior/striker_ai.h>
 #include <robot_behavior/search_shoot_area.h>
 #include <robot_behavior/pass.h>
+#include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
 #include <core/machine_state.h>
 
@@ -55,8 +57,8 @@ namespace RhobanSSL {
         static const constexpr char* fgbm_score_inf_seuil_1 = "fgbm_score_inf_seuil_1" ; //if striker is robot 1
         static const constexpr char* fgbm_score_inf_seuil_2 = "fgbm_score_inf_seuil_2" ; //if striker is robot 2
 
-        static const constexpr char* infra_1 = "infra_1" ;
-        static const constexpr char* infra_2 = "infra_2" ;
+        static const constexpr char* infra_1_on = "infra_1_on" ;
+        static const constexpr char* infra_2_on = "infra_2_on" ;
 
         // db1 = distance_ball_robot_1
         // db2 = distance_ball_robot_2
@@ -72,19 +74,20 @@ namespace RhobanSSL {
       machine_state_infrastructure::MachineState machine;
 
       bool behaviors_are_assigned;
-      std::shared_ptr<Robot_behavior::Striker> striker_behavior;
+      std::shared_ptr<Robot_behavior::StrikerAi> striker_behavior;
       std::shared_ptr<Robot_behavior::SearchShootArea> search_behavior;
       std::shared_ptr<Robot_behavior::Pass> pass_behavior;
+      // std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
       std::shared_ptr<Robot_behavior::WaitPass> wait_pass_behavior;
 
       double seuil_fgbm; // fgbm = find_goal_best_move
       double tempo;
 
-      double fgbm_score;
-      
       double begin_time;
-      Ai::Robot robot_1;
-      Ai::Robot robot_2;
+      int ID1;
+      int ID2;
+      rhoban_geometry::Point robot_1_position;
+      rhoban_geometry::Point robot_2_position;
 
 
 
@@ -119,6 +122,22 @@ namespace RhobanSSL {
       ) ;
 
       bool is_db1_sup_db2();
+      bool is_db1_inf_db2();
+
+      bool is_fgbm_score_inf_seuil_1();
+      bool is_fgbm_score_inf_seuil_2();
+
+      bool is_infra_1_on();
+      bool is_infra_2_on();
+
+      bool is_db1_inf_seuil_or_time_inf_tempo();
+      bool is_db2_inf_seuil_or_time_inf_tempo();
+
+      void set_seuil_fgbm(double seuil);
+
+
+
+
 
 
     };

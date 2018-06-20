@@ -33,7 +33,7 @@ Pass_dribbler::Pass_dribbler(
     point_to_pass(66,66),
     robot_to_pass_id(-1),
     robot_to_pass_team(Vision::Team::Ally),
-    kick_power(1.0),
+    kick_power(0.5),
     follower( Factory::fixed_consign_follower(ai_data) ),
     need_to_kick(false)
 {
@@ -54,8 +54,8 @@ void Pass_dribbler::update(
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
     const ContinuousAngle & robot_angle = robot.get_movement().angular_position( time );
-    
-    if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.   
+
+    if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
         const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );
         point_to_pass = robot_to_pass.get_movement().linear_position( time );
     }

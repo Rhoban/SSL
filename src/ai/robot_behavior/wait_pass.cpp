@@ -47,8 +47,10 @@ void WaitPass::update(
     //  this->robot_angular_position
     // are all avalaible
 
-    rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
-
+    annotations.clear();
+    // rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
+    const rhoban_geometry::Point & target_position = ball.get_movement().linear_position( time + 1 );
+    annotations.addCross( target_position.x, target_position.y, "red");
     rhoban_geometry::Point robot_position = robot.get_movement().linear_position( time );
     double target_rotation = detail::vec2angle(ball_position() - robot_position);
 
@@ -59,7 +61,7 @@ void WaitPass::update(
 
 Control WaitPass::control() const {
     Control ctrl = follower->control();
-    // ctrl.spin = true; // We active the dribler !
+    ctrl.spin = true; // We active the dribler !
     return ctrl;
 }
 
@@ -67,6 +69,12 @@ WaitPass::~WaitPass(){
     delete follower;
 }
 
+RhobanSSLAnnotation::Annotations WaitPass::get_annotations() const {
+  RhobanSSLAnnotation::Annotations annotations;
+  annotations.addAnnotations( this->annotations );
+  annotations.addAnnotations( follower->get_annotations() );
+  return annotations;;
+}
 
 }
 }

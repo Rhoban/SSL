@@ -34,6 +34,7 @@ class WaitPass : public RobotBehavior  {
     Vision::Team team;
 
     ConsignFollower* follower;
+    RhobanSSLAnnotation::Annotations annotations;
 
     public:
     WaitPass(Ai::AiData& ai_data);
@@ -45,6 +46,8 @@ class WaitPass : public RobotBehavior  {
     );
 
 	virtual Control control() const;
+  
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 	virtual ~WaitPass();
 };
