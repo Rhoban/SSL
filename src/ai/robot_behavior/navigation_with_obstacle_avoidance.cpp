@@ -214,11 +214,17 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
   //   Vector2d second_obstacle_to_goal=vector2point(target_position)-second_obstacle.;    
   // }
 
+
+  const rhoban_geometry::Point & s = obstacle_point_of_view.robot_linear_position;
+
+  double XX=s.getX()*s.getX();
+  double YY=s.getY()*s.getY();
+
   double avoidance_convergence=ai_data.constants.coefficient_to_increase_avoidance_convergence;
   if(ai_data.all_robots[closest_robot].first == ai_data.all_robots[robot().id()].first)
   {
     // sign_of_avoidance_rotation = 1.0;
-    avoidance_convergence=0.2;
+    avoidance_convergence=(XX+YY)*(XX+YY);
   }
 
   {
@@ -233,10 +239,6 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
 /////////////////////////////////////////////////////////////////
 // We compute now the limit cycle rotation
 /////////////////////////////////////////////////////////////////
-  const rhoban_geometry::Point & s = obstacle_point_of_view.robot_linear_position;
-
-  double XX=s.getX()*s.getX();
-  double YY=s.getY()*s.getY();
   double delta_radius;
 
   if( (XX+YY)==0.0 )
