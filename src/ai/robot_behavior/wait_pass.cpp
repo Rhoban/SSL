@@ -29,6 +29,7 @@ namespace Robot_behavior {
 WaitPass::WaitPass(
     Ai::AiData & ai_data
 ):
+    distance_ball(12),
     RobotBehavior(ai_data),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
@@ -49,19 +50,47 @@ void WaitPass::update(
 
     annotations.clear();
     // rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
-    const rhoban_geometry::Point & target_position = ball.get_movement().linear_position( time + 1 );
-    annotations.addCross( target_position.x, target_position.y, "red");
+    const rhoban_geometry::Point & ball_position_now = ball.get_movement().linear_position( time );
+    const rhoban_geometry::Point & ball_position_future = ball.get_movement().linear_position( time + 1 );
+    annotations.addCross( ball_position_future.x, ball_position_future.y, "red");
+    rhoban_geometry::Point target_position;
     rhoban_geometry::Point robot_position = robot.get_movement().linear_position( time );
     double target_rotation = detail::vec2angle(ball_position() - robot_position);
+    distance_ball = (Vector2d(ball_position() - robot_position)).norm();
 
-    follower->avoid_the_ball(true);
+    if((Vector2d(ball_position_future - ball_position_now)).norm() > 0.5){
+
+
+      Vector2d vect = ball_position_future - ball_position_now;
+      double a = vect[1]/vect[0];
+      double b = ball_position_future.getY() - a * ball_position_future.getX();
+      // double eq_droite = robot_position.getY() - a*robot_position.getX() - b;
+
+      if(vect[0] == 0 && vect[1] == 0){
+        target_position = robot_position;
+      }else{
+        target_position.x = (-b * vect[1])/(vect[0] + a*vect[1]);
+        target_position.y = a*target_position.x + b;
+      }
+    }else{
+      target_position = robot_position;
+    }
+
+
+
+    follower->avoid_the_ball(false);
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 
 Control WaitPass::control() const {
     Control ctrl = follower->control();
-    ctrl.spin = true; // We active the dribler !
+
+    if (distance_ball < 0.8) {
+      ctrl.spin = true; // We active the dribler !
+    }else{
+      ctrl.spin = false;
+    }
     return ctrl;
 }
 

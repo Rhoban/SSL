@@ -32,6 +32,7 @@ class WaitPass : public RobotBehavior  {
 
     Vector2d translation;
     Vision::Team team;
+    double distance_ball;
 
     ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
@@ -46,7 +47,7 @@ class WaitPass : public RobotBehavior  {
     );
 
 	virtual Control control() const;
-  
+
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 	virtual ~WaitPass();
