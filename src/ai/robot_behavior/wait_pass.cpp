@@ -51,14 +51,14 @@ void WaitPass::update(
     annotations.clear();
     // rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
     const rhoban_geometry::Point & ball_position_now = ball.get_movement().linear_position( time );
-    const rhoban_geometry::Point & ball_position_future = ball.get_movement().linear_position( time + 1 );
+    const rhoban_geometry::Point & ball_position_future = ball.get_movement().linear_position( time + 0.5 );
     annotations.addCross( ball_position_future.x, ball_position_future.y, "red");
     rhoban_geometry::Point target_position;
     rhoban_geometry::Point robot_position = robot.get_movement().linear_position( time );
     double target_rotation = detail::vec2angle(ball_position() - robot_position);
     distance_ball = (Vector2d(ball_position() - robot_position)).norm();
 
-    if((Vector2d(ball_position_future - ball_position_now)).norm() > 0.5){
+    if((Vector2d(ball_position_future - ball_position_now)).norm() > 0.3){
 
 
       Vector2d vect = ball_position_future - ball_position_now;
@@ -69,7 +69,7 @@ void WaitPass::update(
       if(vect[0] == 0 && vect[1] == 0){
         target_position = robot_position;
       }else{
-        target_position.x = (-b * vect[1])/(vect[0] + a*vect[1]);
+        target_position.x = ( 1 / ( a + ( vect[0] / vect[1] ) ) ) * ( vect[0] / vect[1] * robot_position.x + robot_position.y - b );
         target_position.y = a*target_position.x + b;
       }
     }else{

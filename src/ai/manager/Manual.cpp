@@ -39,6 +39,7 @@
 #include <robot_behavior/test_infra.h>
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
+#include <robot_behavior/pass.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -468,6 +469,19 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Pass_dribbler* p = new Robot_behavior::Pass_dribbler(ai_data);
                     p->declare_point_to_pass(ally_goal_center());
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false
+            )
+        )
+    );
+    register_strategy(
+        "TestPass", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Pass* p = new Robot_behavior::Pass(ai_data);
+                    // p->declare_point_to_pass(ally_goal_center());
+                    p->declare_robot_to_pass(1, Vision::Team::Ally);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
                 }, false
             )
