@@ -180,14 +180,16 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
   Vector2d current_to_goal=vector2point(target_position)-linear_position();
   double angle=vector2angle(current_to_goal).value()-vector2angle(obstacle_to_goal).value();
 
-    
+#if 0    
   if(angle<0.0)
   {
     sign_of_avoidance_rotation=1;
   }
   else
     sign_of_avoidance_rotation=-1;
-    
+#else
+  sign_of_avoidance_rotation = 1.0; // TODO
+#endif    
     
 /////////////////////////////////////////////////////////////////
 // We compute now the limit cycle rotation
