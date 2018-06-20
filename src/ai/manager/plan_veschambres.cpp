@@ -219,9 +219,8 @@ void PlanVeschambres::choose_a_strategy(double time)
         }
         else if (referee.get_state() == Referee_Id::STATE_STOPPED)
         {
-            set_ball_avoidance_for_all_robots(false);
+            set_ball_avoidance_for_all_robots(true);
             can_touch_the_ball = false;
-            ball_last_position = ball_position();
             if (get_valid_team_ids().size() > 0)
             {
                 if (not(get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized()))

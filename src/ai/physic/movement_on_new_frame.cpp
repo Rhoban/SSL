@@ -64,33 +64,33 @@ double Movement_on_new_frame::last_time() const {
 }
 
 
- 
+
 ContinuousAngle
 Movement_on_new_frame::angular_position( double time ) const {
     return frame.to_frame(movement->angular_position(time));
 }
-       
+
 Vector2d
 Movement_on_new_frame::linear_velocity( double time ) const {
     return frame.to_basis(movement->linear_velocity(time));
 }
-        
+
 ContinuousAngle
 Movement_on_new_frame::angular_velocity( double time ) const {
     return movement->angular_velocity(time);
 }
-        
+
 Vector2d
 Movement_on_new_frame::linear_acceleration( double time ) const {
     return frame.to_basis(movement->linear_acceleration(time));
 }
-       
+
 ContinuousAngle
 Movement_on_new_frame::angular_acceleration( double time ) const {
     return movement->angular_acceleration(time);
 }
 
-Movement * 
+Movement *
 Movement_on_new_frame::clone() const {
     Movement_on_new_frame* mov = new Movement_on_new_frame( movement->clone() );
     mov->frame = this->frame;

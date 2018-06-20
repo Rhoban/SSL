@@ -80,11 +80,11 @@ void SlowStriker::update(
     double target_rotation = detail::vec2angle(-ball_robot_vector);
 
 
-    if((Vector2d(target_position - robot_position).norm() < 0.01) && (tempo == 0.0)){
+    if((Vector2d(target_position - robot_position).norm() < 0.05) && (tempo == 0.0)){
         tempo = time;
     }
     if((Vector2d(target_position - robot_position).norm() < 0.01) && (tempo != 0.0)){
-        if((tempo - time) >= 5.0){
+        if((tempo - time) >= 3.0){
           target_radius_from_ball = -0.1;
         }
     }
