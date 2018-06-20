@@ -86,7 +86,7 @@ void WaitPass::update(
 Control WaitPass::control() const {
     Control ctrl = follower->control();
 
-    if (distance_ball < 0.8) {
+    if (distance_ball < 1) {
       ctrl.spin = true; // We active the dribler !
     }else{
       ctrl.spin = false;

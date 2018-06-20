@@ -33,18 +33,19 @@ namespace RhobanSSL {
       search_behavior(std::shared_ptr<Robot_behavior::SearchShootArea>(
         new Robot_behavior::SearchShootArea(ai_data)
       )),
-      // pass_behavior(std::shared_ptr<Robot_behavior::Pass>(
-      //   new Robot_behavior::Pass(ai_data)
-      // )),
-      pass_behavior(std::shared_ptr<Robot_behavior::Pass_dribbler>(
-        new Robot_behavior::Pass_dribbler(ai_data)
+      pass_behavior(std::shared_ptr<Robot_behavior::Pass>(
+        new Robot_behavior::Pass(ai_data)
       )),
+      // pass_behavior(std::shared_ptr<Robot_behavior::Pass_dribbler>(
+      //   new Robot_behavior::Pass_dribbler(ai_data)
+      // )),
       wait_pass_behavior(std::shared_ptr<Robot_behavior::WaitPass>(
         new Robot_behavior::WaitPass(ai_data)
       )),
       seuil_fgbm(0.2),
       tempo(3),
-      begin_time(0)
+      begin_time(0),
+      diff_distance_constante(1.0)
     {
 
       //STATES
@@ -151,6 +152,21 @@ namespace RhobanSSL {
         }
       );
 
+      machine.add_edge(
+        edge_name::db1_sup_db2_plus_constante,
+        state_name::pass_search, state_name::search_strike,
+        [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return is_db1_sup_db2_plus_constante();
+        }
+      );
+      machine.add_edge(
+        edge_name::db1_plus_constante_inf_db2,
+        state_name::search_pass, state_name::strike_search,
+        [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return is_db1_plus_constante_inf_db2();
+        }
+      );
+
 
       machine.export_to_file("/tmp/attaque_with_support_ms.dot");
 
@@ -240,30 +256,14 @@ namespace RhobanSSL {
         assign_behavior( ID2, pass_behavior );
         pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
       }else if( state == state_name::search_waitpass ){
-        assign_behavior( ID1, search_behavior );//pass_behavior );
-        pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
-        // assign_behavior( ID2, wait_pass_behavior );
+        assign_behavior( ID1, search_behavior );
+        // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
+        assign_behavior( ID2, wait_pass_behavior );
       }else if( state == state_name::waitpass_search ){
         assign_behavior( ID1, wait_pass_behavior );
         assign_behavior( ID2, search_behavior );//pass_behavior );
         // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
       }
-
-      // std::pair<rhoban_geometry::Point, double> p_best = find_goal_best_move( ball_position() );
-      // double score = 0;// p_best.second;
-      // double seuil = 0.2;
-      // if ( score > seuil ) {
-      //   // striker_behavior->declare_point_to_strik(p_best.first);
-      //   assign_behavior( strikerID, striker_behavior );
-      //   assign_behavior( supportID, search_behavior );
-      // } else{
-      //   pass_behavior->declare_robot_to_pass( supportID, Vision::Team::Ally );
-      //   assign_behavior( strikerID, pass_behavior );
-      // }
-      // assign_behavior( supportID, search_behavior );
-
-
-      // behaviors_are_assigned = true;
 
     }
 
@@ -353,6 +353,22 @@ namespace RhobanSSL {
       // double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
       // bool t = (time() - begin_time > tempo);
       // return ((db2 < get_robot_radius()+0.1) || t);
+    }
+
+    bool AttaqueWithSupportMs::is_db1_sup_db2_plus_constante(){
+      double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
+      double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
+      // DEBUG("is_db1_sup_db2_plus_constante " << db1 << " " << db2);
+      return (db1 > db2 + diff_distance_constante);
+      // return false;
+    }
+
+
+    bool AttaqueWithSupportMs::is_db1_plus_constante_inf_db2(){
+      double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
+      double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
+      // DEBUG("is_db1_sup_db2_plus_constante " << db1 << " " << db2);
+      return (db1 + diff_distance_constante < db2);
     }
 
     void AttaqueWithSupportMs::set_seuil_fgbm(double seuil){

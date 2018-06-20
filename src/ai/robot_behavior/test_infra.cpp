@@ -53,7 +53,7 @@ void TestInfra::update(
     std::cout << "Value infra red : " << value << '\n';
 
     // follower->avoid_the_ball(true);
-    double target_rotation = detail::vec2angle(ball_position() - robot_position);
+    double target_rotation = detail::vec2angle(ball_position() - target_position );
 
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);

@@ -64,6 +64,9 @@ namespace RhobanSSL {
         // db2 = distance_ball_robot_2
         static const constexpr char* db1_inf_seuil_or_time_inf_tempo = "db1_inf_seuil_or_time_inf_tempo" ;
         static const constexpr char* db2_inf_seuil_or_time_inf_tempo = "db2_inf_seuil_or_time_inf_tempo" ;
+
+        static const constexpr char* db1_sup_db2_plus_constante = "db1_sup_db2_plus_constante" ;
+        static const constexpr char* db1_plus_constante_inf_db2 = "db1_inf_db2_plus_constante" ;
       };
 
       typedef construct_machine_state_infrastructure<
@@ -76,8 +79,8 @@ namespace RhobanSSL {
       bool behaviors_are_assigned;
       std::shared_ptr<Robot_behavior::StrikerAi> striker_behavior;
       std::shared_ptr<Robot_behavior::SearchShootArea> search_behavior;
-      // std::shared_ptr<Robot_behavior::Pass> pass_behavior;
-      std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
+      std::shared_ptr<Robot_behavior::Pass> pass_behavior;
+      // std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
       std::shared_ptr<Robot_behavior::WaitPass> wait_pass_behavior;
 
       double seuil_fgbm; // fgbm = find_goal_best_move
@@ -86,6 +89,7 @@ namespace RhobanSSL {
       double begin_time;
       int ID1;
       int ID2;
+      double diff_distance_constante;
       rhoban_geometry::Point robot_1_position;
       rhoban_geometry::Point robot_2_position;
 
@@ -132,6 +136,9 @@ namespace RhobanSSL {
 
       bool is_db1_inf_seuil_or_time_inf_tempo();
       bool is_db2_inf_seuil_or_time_inf_tempo();
+
+      bool is_db1_sup_db2_plus_constante();
+      bool is_db1_plus_constante_inf_db2();
 
       void set_seuil_fgbm(double seuil);
 
