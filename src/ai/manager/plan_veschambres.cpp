@@ -36,6 +36,8 @@
 #include <strategy/attaque_with_support.h>
 #include <strategy/striker_with_support.h>
 #include <strategy/striker_v2.h>
+#include <strategy/striker_kick.h>
+
 #include <strategy/goalie_strat.h>
 
 #include <robot_behavior/goalie.h>
@@ -60,17 +62,18 @@ PlanVeschambres::PlanVeschambres(
                               goalie_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               offensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               defensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+                              kick_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               last_referee_changement(0)
 {
 
-    penalty_strats[8] = {GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
-    penalty_strats[7] = {GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
-    penalty_strats[6] = {GOALIE, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
-    penalty_strats[5] = {GOALIE, Strategy::Mur_2::name, Strategy::Defensive::name, PROTECT_BALL};
-    penalty_strats[4] = {GOALIE, Strategy::Mur::name, Strategy::Defensive::name, PROTECT_BALL};
-    penalty_strats[3] = {GOALIE, Strategy::Mur::name, Strategy::Defensive::name};
-    penalty_strats[2] = {GOALIE, Strategy::Defensive::name};
-    penalty_strats[1] = {GOALIE};
+    penalty_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
+    penalty_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
+    penalty_strats[6] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
+    penalty_strats[5] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive::name, PROTECT_BALL};
+    penalty_strats[4] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, PROTECT_BALL};
+    penalty_strats[3] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name};
+    penalty_strats[2] = {Strategy::GoalieStrat::name, Strategy::Defensive::name};
+    penalty_strats[1] = {Strategy::GoalieStrat::name};
 
     goalie_strats[8] = {Strategy::GoalieStrat::name};
     goalie_strats[7] = {Strategy::GoalieStrat::name};
@@ -80,6 +83,15 @@ PlanVeschambres::PlanVeschambres(
     goalie_strats[3] = {Strategy::GoalieStrat::name};
     goalie_strats[2] = {Strategy::GoalieStrat::name};
     goalie_strats[1] = {Strategy::GoalieStrat::name};
+
+    kick_strats[8] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Defensive2::name};
+    kick_strats[7] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Defensive::name};
+    kick_strats[6] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name, Strategy::Mur_2::name};
+    kick_strats[5] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name, Strategy::Mur::name};
+    kick_strats[4] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name};
+    kick_strats[3] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur::name};
+    kick_strats[2] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name};
+    kick_strats[1] = {Strategy::GoalieStrat::name};
 
     offensive_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name};
     offensive_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name};
@@ -135,6 +147,10 @@ PlanVeschambres::PlanVeschambres(
         Strategy::Offensive::name,
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Offensive(ai_data)));
+    register_strategy(
+        Strategy::StrikerKick::name,
+        std::shared_ptr<Strategy::Strategy>(
+            new Strategy::StrikerKick(ai_data)));
     register_strategy(
         Strategy::Mur_stop::name,
         std::shared_ptr<Strategy::Strategy>(
@@ -273,7 +289,8 @@ void PlanVeschambres::choose_a_strategy(double time)
                 {
                     DEBUG("Offensive direct Kick");
                     //offensive
-                    future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
+                    future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
+                    can_touch_the_ball = false;
                 }
                 else
                 {
@@ -291,7 +308,9 @@ void PlanVeschambres::choose_a_strategy(double time)
                 {
                     DEBUG("Offensive indirect Kick");
                     //offensive
-                    future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
+                    future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
+                    can_touch_the_ball = false;
+                    ball_last_position = ball_position();
                 }
                 else
                 {
@@ -320,8 +339,8 @@ void PlanVeschambres::choose_a_strategy(double time)
         if (!can_touch_the_ball)
         {
             if (!Box(
-                     {ball_last_position.getX() - 0.15, ball_last_position.getY() - 0.15},
-                     {ball_last_position.getX() + 0.15, ball_last_position.getY() + 0.15})
+                     {ball_last_position.getX() - 0.10, ball_last_position.getY() - 0.10},
+                     {ball_last_position.getX() + 0.10, ball_last_position.getY() + 0.10})
                      .is_inside(ball_position()))
             {
                 can_touch_the_ball = true;
