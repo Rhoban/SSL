@@ -213,9 +213,12 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
   //   Ai::Robot & second_obstacle = *( ai_data.all_robots[second_closest_robot].second );
   //   Vector2d second_obstacle_to_goal=vector2point(target_position)-second_obstacle.;    
   // }
+
+  double avoidance_convergence=ai_data.constants.coefficient_to_increase_avoidance_convergence;
   if(ai_data.all_robots[closest_robot].first == ai_data.all_robots[robot().id()].first)
   {
-    sign_of_avoidance_rotation = 1.0;
+    // sign_of_avoidance_rotation = 1.0;
+    avoidance_convergence=0.2;
   }
   else{
     if(angle<0.0)
@@ -223,7 +226,7 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
       sign_of_avoidance_rotation=1;
     }
     else
-    sign_of_avoidance_rotation=-1;
+      sign_of_avoidance_rotation=-1;
   }
     
 /////////////////////////////////////////////////////////////////
@@ -238,7 +241,7 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
   if( (XX+YY)==0.0 )
     delta_radius=0.5; 
   else
-    delta_radius = ( radius_of_limit_cycle*radius_of_limit_cycle - XX - YY )/(XX+YY)*ai_data.constants.coefficient_to_increase_avoidance_convergence;
+    delta_radius = ( radius_of_limit_cycle*radius_of_limit_cycle - XX - YY )/(XX+YY)*avoidance_convergence;
   obstacle_point_of_view.limit_cycle_direction = Vector2d(
     sign_of_avoidance_rotation * s.getY() + s.getX() * delta_radius,
     - sign_of_avoidance_rotation * s.getX() + s.getY() * delta_radius
