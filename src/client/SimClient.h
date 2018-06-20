@@ -2,6 +2,7 @@
 
 #include <string>
 #include <rhoban_utils/sockets/udp_broadcast.h>
+#include <rhoban_utils/timing/time_stamp.h>
 #include "grSim_Packet.pb.h"
 #include "grSim_Commands.pb.h"
 #include "grSim_Replacement.pb.h"
@@ -59,7 +60,7 @@ public:
     double kickX, double kickZ, bool spin
     );
 
-  void sendPacket(grSim_Packet &packet);
+  double sendPacket(grSim_Packet &packet);
 
 protected:
   rhoban_utils::UDPBroadcast broadcast;

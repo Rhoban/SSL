@@ -88,8 +88,27 @@ Data& Data::operator>>( Shared_data & shared_data ){
     return *this;
 }
 
+
+
+Data& Data::operator<<( const Synchro_data & synchro_data ){
+  mutex_for_synchro_data.lock();
+  this->data_for_synchro = synchro_data;
+  mutex_for_synchro_data.unlock();
+  return *this;
+}
+
+Data& Data::operator>>( Synchro_data & synchro_data ){
+  mutex_for_synchro_data.lock();
+  synchro_data = this->data_for_synchro;
+  mutex_for_synchro_data.unlock();
+  return *this;
+}
+
+
+
+
 void Data::edit_vision_data( // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function< void (Vision::VisionData & vision_data) > vision_data_editor 
+  std::function< void (Vision::VisionData & vision_data) > vision_data_editor 
 ){
     mutex_for_vision_data.lock();
     vision_data_editor(vision_data);
@@ -115,7 +134,7 @@ void Data::edit_shared_data( // Use that function if you ha no choice. Prefer <<
 
 
 Data& Data::operator<<( const Data_for_viewer & data_for_viewer ){
-    mutex_for_viewer_data.lock();
+  mutex_for_viewer_data.lock();
     this->data_for_viewer = data_for_viewer;
     mutex_for_viewer_data.unlock();
     return *this;

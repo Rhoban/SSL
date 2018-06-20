@@ -468,7 +468,8 @@ void AI::run(){
 
         // XXX: Flushing takes some time in real mode, and should be done in parallel
         // along with the computing of the AI
-        commander->flush();
+        
+        ai_data.lastflushtime=commander->flush();
     }
 }
 

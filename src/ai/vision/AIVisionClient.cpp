@@ -276,50 +276,50 @@ void AIVisionClient::updateRobotInformation(
 
 
 rhoban_geometry::Point
-      AIVisionClient::average_filter(
-        const rhoban_geometry::Point & new_ball,
-        std::map<
-        int, // CMAERA ID
-        std::pair<
-        double, //camera have found a ball
-        rhoban_geometry::Point // detecte ball
-        >
-        > & ball_camera_detections,
-        Vision::Part_of_the_field part_of_the_field_used
-        ){
-        int n_linear = 0;
-        rhoban_geometry::Point linear_average (0.0, 0.0);
-        for(
-          const std::pair<
-            int, // CMAERA ID
-            std::pair<
-            double, //time capture_t
-            rhoban_geometry::Point // detecte ball
-            >
-            > & elem : ball_camera_detections 
-          ){
-          double ball_is_detected = elem.second.first; //TODO
-          double camera_id = elem.first;
+AIVisionClient::average_filter(
+  const rhoban_geometry::Point & new_ball,
+  std::map<
+  int, // CMAERA ID
+  std::pair<
+  double, //camera have found a ball
+  rhoban_geometry::Point // detecte ball
+  >
+  > & ball_camera_detections,
+  Vision::Part_of_the_field part_of_the_field_used
+  ){
+  int n_linear = 0;
+  rhoban_geometry::Point linear_average (0.0, 0.0);
+  for(
+    const std::pair<
+      int, // CMAERA ID
+      std::pair<
+      double, //time capture_t
+      rhoban_geometry::Point // detecte ball
+      >
+      > & elem : ball_camera_detections 
+    ){
+    double ball_is_detected = elem.second.first; //TODO
+    double camera_id = elem.first;
     
-          const rhoban_geometry::Point & ball_pos = elem.second.second;
-          // std::cerr<<"DETECTED: "<<ball_is_detected<<std::endl;
-          if( ball_is_detected>0.0 ){
-            // linear_average += rhoban_geometry::Point(
-            //   new_ball.getX()/1000.0, new_ball.getY()/1000.0
-            //   );
+    const rhoban_geometry::Point & ball_pos = elem.second.second;
+    // std::cerr<<"DETECTED: "<<ball_is_detected<<std::endl;
+    if( ball_is_detected>0.0 ){
+      // linear_average += rhoban_geometry::Point(
+      //   new_ball.getX()/1000.0, new_ball.getY()/1000.0
+      //   );
 
-            linear_average += rhoban_geometry::Point(
-              // ball_pos.getX()/1000.0, ball_pos.getY()/1000.0
-              ball_pos.getX(), ball_pos.getY()
-              );
+      linear_average += rhoban_geometry::Point(
+        // ball_pos.getX()/1000.0, ball_pos.getY()/1000.0
+        ball_pos.getX(), ball_pos.getY()
+        );
 
-            n_linear ++;
-          }
-          // std::cerr<<"FILTER ("<<camera_id<<"): "<<ball_pos<<std::endl;
-        }
-        // std::cerr<<std::endl;
-        return linear_average*(1.0/n_linear);
-      }
+      n_linear ++;
+    }
+    // std::cerr<<"FILTER ("<<camera_id<<"): "<<ball_pos<<std::endl;
+  }
+  // std::cerr<<std::endl;
+  return linear_average*(1.0/n_linear);
+}
 
 
-      }
+}
