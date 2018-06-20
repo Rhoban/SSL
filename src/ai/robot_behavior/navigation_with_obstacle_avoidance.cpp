@@ -34,7 +34,7 @@ Navigation_with_obstacle_avoidance::Navigation_with_obstacle_avoidance(
   ignore_opponent(false),
   ball_radius_avoidance( ai_data.constants.robot_radius ),
   position_follower(ai_data, time, dt),    position_follower_avoidance(ai_data, time, dt),
-  target_position(0.0, 0.0), target_angle(0.0), obst_vec(16)
+  target_position(0.0, 0.0), target_angle(0.0)
 {
 } 
 
@@ -155,8 +155,6 @@ void Navigation_with_obstacle_avoidance::convert_cycle_direction_to_linear_and_a
   assert(limit_cycle_direction.norm()!=0.0);
 
   rhoban_geometry::Point pos=linear_position() +  limit_cycle_direction/(limit_cycle_direction.norm())*1.0;
-  obst_vec.insert(pos);
-
 
   position_follower_avoidance.set_following_position(pos , target_angle);
 }
@@ -203,7 +201,7 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_o
   if( (XX+YY)==0.0 )
     delta_radius=0.5; 
   else
-    delta_radius = ( radius_of_limit_cycle*radius_of_limit_cycle - XX - YY )/(XX+YY)*2.0;
+    delta_radius = ( radius_of_limit_cycle*radius_of_limit_cycle - XX - YY )/(XX+YY)*ai_data.constants.coefficient_to_increase_avoidance_convergence;
   obstacle_point_of_view.limit_cycle_direction = Vector2d(
     sign_of_avoidance_rotation * s.getY() + s.getX() * delta_radius,
     - sign_of_avoidance_rotation * s.getX() + s.getY() * delta_radius
@@ -264,9 +262,7 @@ void Navigation_with_obstacle_avoidance::update_control(
   double time, const Ai::Robot & robot, const Ai::Ball & ball
   ){
 
-    
-
-  position_follower.update( time, robot, ball );
+  position_follower.update( time, robot, ball ); // We use the future command to predict collision
   determine_the_closest_obstacle();
   if( min_time_collision >= 0 ){
     compute_the_radius_of_limit_cycle();
@@ -275,14 +271,10 @@ void Navigation_with_obstacle_avoidance::update_control(
 
     position_follower_avoidance.update( time, robot, ball );
   }
-// else
-//   position_follower.update( time, robot, ball );
-
 }
 
 Control Navigation_with_obstacle_avoidance::control() const {
   if( min_time_collision >= 0 ){
-    // return avoidance_control; //ICI
     return position_follower_avoidance.control();
   }else{
     return position_follower.control();
@@ -326,16 +318,12 @@ RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotat
 //    annotations.addCircle( linear_position(), radius_of_limit_cycle );
 
   if( min_time_collision >= 0 ){
-    // return avoidance_control;
-    for(int i=0;i<obst_vec.size();i++)
-    {
-      annotations.addCross(obst_vec[i],"blue");
-      annotations.addArrow(linear_position(),linear_position()+limit_cycle_direction*(limit_cycle_direction.norm())*10,"red");      
-    }
-    if(closest_robot==-1)
+    annotations.addArrow(linear_position(),linear_position()+limit_cycle_direction*(limit_cycle_direction.norm())*10,"red");      
+    if(closest_robot==-1){
       annotations.addCircle(ball().get_movement().linear_position(ai_data.time),radius_of_limit_cycle);
-    else
+    } else {
       annotations.addCircle(ai_data.all_robots.at(closest_robot).second->get_movement().linear_position(ai_data.time),radius_of_limit_cycle);
+    }
     annotations.addAnnotations(position_follower_avoidance.get_annotations());
   }else{
     annotations.clear();

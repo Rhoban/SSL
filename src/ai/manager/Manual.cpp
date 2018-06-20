@@ -41,11 +41,17 @@ namespace Manager {
 
 Manual::Manual( Ai::AiData & ai_data ):
     Manager(ai_data),
-    team_color(ai_data.team_color),
+    team_color(Ai::Team::Unknown),
     goal_to_positive_axis(true),
     ally_goalie_id(0),
     oponnent_goalie_id(0)
 {
+
+    change_team_and_point_of_view(
+        ai_data.team_color,
+        goal_to_positive_axis
+    );
+
     register_strategy(
         "Goalie", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
@@ -449,6 +455,8 @@ Manual::Manual( Ai::AiData & ai_data ):
 
 
 void Manual::assign_point_of_view_and_goalie(){
+    DEBUG(team_color);
+    DEBUG(Ai::Team::Yellow);
     change_team_and_point_of_view(
         team_color,
         goal_to_positive_axis
@@ -460,7 +468,7 @@ void Manual::set_team_color( Ai::Team team_color ){
 }
 
 void Manual::define_goal_to_positive_axis(bool value){
-    this->goal_to_positive_axis = goal_to_positive_axis;
+    this->goal_to_positive_axis = value;
 }
 
 
