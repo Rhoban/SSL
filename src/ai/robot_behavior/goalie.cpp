@@ -96,9 +96,9 @@ void Goalie::update(
 
     future_ball_positions.clear();
     int nb_points = 10;
-    for (int i=0; i < nb_points; i++) {
-        future_ball_positions.push_back( ball.get_movement().linear_position( time + i * 0.2 ) );
-    }
+    // for (int i=0; i < nb_points; i++) {
+    //     future_ball_positions.push_back( ball.get_movement().linear_position( time + i * 0.2 ) );
+    // }
 
 
     rhoban_geometry::Point left_post_position = rhoban_geometry::Point( -ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
@@ -209,10 +209,10 @@ RhobanSSLAnnotation::Annotations Goalie::get_annotations() const {
         annotations_local.addText( annotations_text, linear_position().getX() + 0.15, linear_position().getY() + 0.60, "red" );
 
         //DEBUG("nb_future_ball = " << future_ball_positions.size() );
-        for (int i = 0; i < future_ball_positions.size(); i++) {
-            //DEBUG(future_ball_positions[i].x << " " << future_ball_positions[i].y );
-            annotations_local.addCross(future_ball_positions[i].x, future_ball_positions[i].y, "red" );
-        }
+        // for (int i = 0; i < future_ball_positions.size(); i++) {
+        //     //DEBUG(future_ball_positions[i].x << " " << future_ball_positions[i].y );
+        //     annotations_local.addCross(future_ball_positions[i].x, future_ball_positions[i].y, "red" );
+        // }
 
     }
     annotations_local.addAnnotations( follower->get_annotations() );

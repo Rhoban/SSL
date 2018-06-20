@@ -51,7 +51,8 @@ private:
   circular_vector<rhoban_geometry::Point> obst_vec;
   double min_time_collision;
   int closest_robot;
-
+  int second_closest_robot;
+  double second_closest_distance;
   double radius_of_limit_cycle;
   Vector2d limit_cycle_direction;
 
