@@ -198,7 +198,10 @@ void Manager::assign_behavior_to_robots(
                 }
                 assert( id_is_present );
                 #endif
-                return robot_behaviors[id] = behavior; 
+                if(id == -1)
+                  return ;
+                robot_behaviors[id] = behavior; 
+                return; 
             }, time, dt
         );
     }
