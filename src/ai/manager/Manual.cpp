@@ -481,7 +481,7 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Pass* p = new Robot_behavior::Pass(ai_data);
                     // p->declare_point_to_pass(ally_goal_center());
-                    p->declare_robot_to_pass(1, Vision::Team::Ally);
+                    p->declare_robot_to_pass(2, Vision::Team::Ally);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
                 }, false
             )

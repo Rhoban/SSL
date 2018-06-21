@@ -91,7 +91,7 @@ void SearchShootArea::update(
 
     annotations.addCross( target_position.x, target_position.y );
 
-    follower->avoid_the_ball(true);
+    follower->avoid_the_ball(false);
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }

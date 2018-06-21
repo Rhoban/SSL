@@ -45,8 +45,8 @@ namespace RhobanSSL {
       wait_pass_behavior(std::shared_ptr<Robot_behavior::WaitPass>(
         new Robot_behavior::WaitPass(ai_data)
       )),
-      seuil_fgbm(0.2),
-      tempo(3),
+      seuil_fgbm(0.15),
+      tempo(2),
       begin_time(0),
       diff_distance_constante(1.0)
     {
@@ -327,10 +327,12 @@ namespace RhobanSSL {
 
     bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_1(){
       double fgbm_score = find_goal_best_move( ball_position() ).second;
+      DEBUG(fgbm_score);
       return (fgbm_score < seuil_fgbm);
     }
     bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_2(){
       double fgbm_score = find_goal_best_move( ball_position() ).second;
+      DEBUG(fgbm_score);
       return (fgbm_score < seuil_fgbm);
     }
 
@@ -348,16 +350,16 @@ namespace RhobanSSL {
     }
 
     bool AttaqueWithSupportMs::is_db1_inf_seuil_or_time_inf_tempo(){
-      return infra_red( ID1, Vision::Team::Ally);
-      // double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
-      // bool t = (time() - begin_time > tempo);
-      // return ((db1 < get_robot_radius()+0.1) || t);
+      //return infra_red( ID1, Vision::Team::Ally);
+      double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
+      bool t = (time() - begin_time > tempo);
+      return ((db1 < get_robot_radius()+0.7) || t);
     }
     bool AttaqueWithSupportMs::is_db2_inf_seuil_or_time_inf_tempo(){
-      return infra_red( ID2, Vision::Team::Ally);
-      // double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
-      // bool t = (time() - begin_time > tempo);
-      // return ((db2 < get_robot_radius()+0.1) || t);
+      //return infra_red( ID2, Vision::Team::Ally);
+      double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
+      bool t = (time() - begin_time > tempo);
+      return ((db2 < get_robot_radius()+0.7) || t);
     }
 
     bool AttaqueWithSupportMs::is_db1_sup_db2_plus_constante(){
@@ -367,8 +369,6 @@ namespace RhobanSSL {
       return (db1 > db2 + diff_distance_constante);
       // return false;
     }
-
-
     bool AttaqueWithSupportMs::is_db1_plus_constante_inf_db2(){
       double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
       double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
