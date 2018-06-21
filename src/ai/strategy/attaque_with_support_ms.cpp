@@ -33,12 +33,15 @@ namespace RhobanSSL {
       search_behavior(std::shared_ptr<Robot_behavior::SearchShootArea>(
         new Robot_behavior::SearchShootArea(ai_data)
       )),
-      pass_behavior(std::shared_ptr<Robot_behavior::Pass>(
-        new Robot_behavior::Pass(ai_data)
-      )),
+      // pass_behavior(std::shared_ptr<Robot_behavior::Pass>(
+      //   new Robot_behavior::Pass(ai_data)
+      // )),
       // pass_behavior(std::shared_ptr<Robot_behavior::Pass_dribbler>(
       //   new Robot_behavior::Pass_dribbler(ai_data)
       // )),
+      pass_behavior(std::shared_ptr<Robot_behavior::SlowStriker>(
+        new Robot_behavior::SlowStriker(ai_data)
+      )),
       wait_pass_behavior(std::shared_ptr<Robot_behavior::WaitPass>(
         new Robot_behavior::WaitPass(ai_data)
       )),
@@ -249,11 +252,13 @@ namespace RhobanSSL {
         assign_behavior( ID2, striker_behavior );
       }else if( state == state_name::pass_search ){
         assign_behavior( ID1, pass_behavior );
+        // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
         pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
         assign_behavior( ID2, search_behavior );
       }else if( state == state_name::search_pass ){
         assign_behavior( ID1, search_behavior );
         assign_behavior( ID2, pass_behavior );
+        // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
         pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
       }else if( state == state_name::search_waitpass ){
         assign_behavior( ID1, search_behavior );

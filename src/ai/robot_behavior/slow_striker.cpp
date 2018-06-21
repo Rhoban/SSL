@@ -102,6 +102,11 @@ void SlowStriker::update(
 
 Control SlowStriker::control() const {
     Control ctrl = follower->control();
+    if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
+        ctrl.kickPower = 0.5;
+    }else{
+      ctrl.kickPower = 1;
+    }
     ctrl.charge = true;
     ctrl.kick = true;
     return ctrl;
