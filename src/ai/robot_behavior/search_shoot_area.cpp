@@ -34,6 +34,7 @@ SearchShootArea::SearchShootArea(
     obstructed_view(-1),
     period(3),
     last_time_changement(0),
+    well_positioned(false),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
   p1 = Vector2d(oponent_goal_center()) + rhoban_geometry::Point(-1, 2);
@@ -73,6 +74,7 @@ void SearchShootArea::update(
     if ((results.second > seuil) && pos_x <= std::max(p1.x, p2.x) && pos_x > std::min(p1.x, p2.x) && pos_y <= std::max(p1.y, p2.y) && pos_y > std::min(p1.y, p2.y))  {
       // DEBUG( "robot_position : " << robot_position );
       target_position = robot_position;
+      well_positioned = true;
       // DEBUG( "target_position : " << target_position );
     }
     else{
@@ -83,6 +85,7 @@ void SearchShootArea::update(
           distribution_x(generator), distribution_y(generator)
         );
         last_time_changement = time;
+        well_positioned = false;
       }
     }
 

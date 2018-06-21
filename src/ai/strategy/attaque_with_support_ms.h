@@ -58,6 +58,9 @@ namespace RhobanSSL {
         static const constexpr char* fgbm_score_inf_seuil_1 = "fgbm_score_inf_seuil_1" ; //if striker is robot 1
         static const constexpr char* fgbm_score_inf_seuil_2 = "fgbm_score_inf_seuil_2" ; //if striker is robot 2
 
+        static const constexpr char* fgbm_score_sup_seuil_1_plus_constante = "fgbm_score_sup_seuil_1_plus_constante" ;
+        static const constexpr char* fgbm_score_sup_seuil_2_plus_constante = "fgbm_score_sup_seuil_2_plus_constante" ;
+
         static const constexpr char* infra_1_on = "infra_1_on" ;
         static const constexpr char* infra_2_on = "infra_2_on" ;
 
@@ -82,16 +85,20 @@ namespace RhobanSSL {
       std::shared_ptr<Robot_behavior::SearchShootArea> search_behavior;
       // std::shared_ptr<Robot_behavior::Pass> pass_behavior;
       // std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
-      std::shared_ptr<Robot_behavior::SlowStriker> pass_behavior;
+      // std::shared_ptr<Robot_behavior::SlowStriker> pass_behavior;
+      std::shared_ptr<Robot_behavior::Striker> pass_behavior;
       std::shared_ptr<Robot_behavior::WaitPass> wait_pass_behavior;
 
       double seuil_fgbm; // fgbm = find_goal_best_move
+      double fgbm_score;
       double tempo;
 
       double begin_time;
       int ID1;
       int ID2;
       double diff_distance_constante;
+      double fgbm_constante;
+      
       rhoban_geometry::Point robot_1_position;
       rhoban_geometry::Point robot_2_position;
 
@@ -133,6 +140,9 @@ namespace RhobanSSL {
       bool is_fgbm_score_inf_seuil_1();
       bool is_fgbm_score_inf_seuil_2();
 
+      bool fgbm_score_sup_seuil_1_plus_constante();
+      bool fgbm_score_sup_seuil_2_plus_constante();
+
       bool is_infra_1_on();
       bool is_infra_2_on();
 
@@ -143,9 +153,6 @@ namespace RhobanSSL {
       bool is_db1_plus_constante_inf_db2();
 
       void set_seuil_fgbm(double seuil);
-
-
-
 
 
 

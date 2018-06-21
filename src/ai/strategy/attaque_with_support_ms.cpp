@@ -39,55 +39,60 @@ namespace RhobanSSL {
       // pass_behavior(std::shared_ptr<Robot_behavior::Pass_dribbler>(
       //   new Robot_behavior::Pass_dribbler(ai_data)
       // )),
-      pass_behavior(std::shared_ptr<Robot_behavior::SlowStriker>(
-        new Robot_behavior::SlowStriker(ai_data)
+      // pass_behavior(std::shared_ptr<Robot_behavior::SlowStriker>(
+      //   new Robot_behavior::SlowStriker(ai_data)
+      // )),
+      pass_behavior(std::shared_ptr<Robot_behavior::Striker>(
+        new Robot_behavior::Striker(ai_data)
       )),
       wait_pass_behavior(std::shared_ptr<Robot_behavior::WaitPass>(
         new Robot_behavior::WaitPass(ai_data)
       )),
-      seuil_fgbm(0.15),
+      seuil_fgbm(0.25),
+      fgbm_score(1),
       tempo(2),
       begin_time(0),
-      diff_distance_constante(1.0)
+      diff_distance_constante(0.5),
+      fgbm_constante(0.05)
     {
 
       //STATES
       machine.add_state(
         state_name::strike_search,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-          DEBUG(state_name::strike_search);
+          // DEBUG(state_name::strike_search);
         }
       );
       machine.add_state(
         state_name::search_strike,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-          DEBUG(state_name::search_strike);
+          // DEBUG(state_name::search_strike);
         }
       );
 
       machine.add_state(
         state_name::pass_search,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-          DEBUG(state_name::pass_search);
+          // DEBUG(state_name::pass_search);
         }
       );
       machine.add_state(
         state_name::search_pass,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-          DEBUG(state_name::search_pass);
+          // DEBUG(state_name::search_pass);
         }
       );
 
       machine.add_state(
         state_name::search_waitpass,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-          DEBUG(state_name::search_waitpass);
+          // DEBUG(state_name::search_waitpass);
         }
       );
       machine.add_state(
         state_name::waitpass_search,
         [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-          DEBUG(state_name::waitpass_search);
+          // DEBUG(state_name::waitpass_search);
         }
       );
 
@@ -120,6 +125,21 @@ namespace RhobanSSL {
         state_name::search_strike, state_name::search_pass,
         [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
           return is_fgbm_score_inf_seuil_2();
+        }
+      );
+
+      machine.add_edge(
+        edge_name::fgbm_score_sup_seuil_1_plus_constante,
+        state_name::pass_search, state_name::strike_search,
+        [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return fgbm_score_sup_seuil_1_plus_constante();
+        }
+      );
+      machine.add_edge(
+        edge_name::fgbm_score_sup_seuil_2_plus_constante,
+        state_name::search_pass, state_name::search_strike,
+        [this](const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
+          return fgbm_score_sup_seuil_2_plus_constante();
         }
       );
 
@@ -239,6 +259,7 @@ namespace RhobanSSL {
 
       robot_1_position =  get_robot(ID1, Vision::Team::Ally).get_movement().linear_position( time );
       robot_2_position =  get_robot(ID2, Vision::Team::Ally).get_movement().linear_position( time );
+      fgbm_score = find_goal_best_move( ball_position() ).second;
 
       machine.run();
 
@@ -253,13 +274,13 @@ namespace RhobanSSL {
       }else if( state == state_name::pass_search ){
         assign_behavior( ID1, pass_behavior );
         // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
-        pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
+        pass_behavior->declare_point_to_strik( robot_2_position );
         assign_behavior( ID2, search_behavior );
       }else if( state == state_name::search_pass ){
         assign_behavior( ID1, search_behavior );
         assign_behavior( ID2, pass_behavior );
         // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
-        pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
+        pass_behavior->declare_point_to_strik( robot_1_position );
       }else if( state == state_name::search_waitpass ){
         assign_behavior( ID1, search_behavior );
         // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
@@ -314,26 +335,43 @@ namespace RhobanSSL {
       double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
       double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
       // DEBUG("is_db1_sup_db2 " << db1 << " " << db2);
-      double fgbm_score = find_goal_best_move( ball_position() ).second;
-      return ((db1 >= db2) and (fgbm_score >= seuil_fgbm));
+      // double fgbm_score = find_goal_best_move( ball_position() ).second;
+      return (db1 >= db2);// and (fgbm_score >= seuil_fgbm));
     }
     bool AttaqueWithSupportMs::is_db1_inf_db2(){
       double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
       double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
       // DEBUG("is_db1_inf_db2 " << db1 << " " << db2);
-      double fgbm_score = find_goal_best_move( ball_position() ).second;
-      return ((db1 < db2) and (fgbm_score >= seuil_fgbm));
+      // double fgbm_score = find_goal_best_move( ball_position() ).second;
+      return (db1 < db2);// and (fgbm_score >= seuil_fgbm));
     }
 
     bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_1(){
-      double fgbm_score = find_goal_best_move( ball_position() ).second;
       DEBUG(fgbm_score);
-      return (fgbm_score < seuil_fgbm);
+      std::vector<int> vect_obstruct = get_robot_in_line( robot_1_position, robot_2_position );
+      bool free_for_pass = vect_obstruct.empty();
+      bool ready_for_pass = search_behavior->well_positioned;
+      return (fgbm_score < seuil_fgbm) and free_for_pass and ready_for_pass;
     }
     bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_2(){
-      double fgbm_score = find_goal_best_move( ball_position() ).second;
       DEBUG(fgbm_score);
-      return (fgbm_score < seuil_fgbm);
+      std::vector<int> vect_obstruct = get_robot_in_line( robot_2_position, robot_1_position );
+      bool free_for_pass = vect_obstruct.empty();
+      bool ready_for_pass = search_behavior->well_positioned;
+      return (fgbm_score >= seuil_fgbm + fgbm_constante) and free_for_pass and ready_for_pass;
+    }
+
+    bool AttaqueWithSupportMs::fgbm_score_sup_seuil_1_plus_constante(){
+      std::vector<int> vect_obstruct = get_robot_in_line( robot_1_position, robot_2_position );
+      bool free_for_pass = vect_obstruct.empty();
+      // bool ready_for_pass = search_behavior->well_positioned;
+      return (fgbm_score >= seuil_fgbm + fgbm_constante) or not(free_for_pass);
+    }
+    bool AttaqueWithSupportMs::fgbm_score_sup_seuil_2_plus_constante(){
+      std::vector<int> vect_obstruct = get_robot_in_line( robot_2_position, robot_1_position );
+      bool free_for_pass = vect_obstruct.empty();
+      // bool ready_for_pass = search_behavior->well_positioned;
+      return (fgbm_score >= seuil_fgbm + fgbm_constante) or not(free_for_pass);
     }
 
     bool AttaqueWithSupportMs::is_infra_1_on(){

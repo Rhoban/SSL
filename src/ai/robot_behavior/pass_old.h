@@ -17,53 +17,40 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__SEARCHSHOOTAREA__H__
-#define __ROBOT_BEHAVIOR__SEARCHSHOOTAREA__H__
+#ifndef __ROBOT_BEHAVIOR__PASS__H__
+#define __ROBOT_BEHAVIOR__PASS__H__
 
 #include "robot_behavior.h"
 #include "factory.h"
-#include <random>
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-class SearchShootArea : public RobotBehavior  {
+class Pass : public RobotBehavior  {
     private:
-      rhoban_geometry::Point p1;
-      rhoban_geometry::Point p2;
-      int obstructed_view;
-
-      std::default_random_engine generator;
-
-      double period;
-      double last_time_changement;
-
-      rhoban_geometry::Point target_position;
+      int robot_to_pass_id;
+      Vision::Team robot_to_pass_team;
 
       ConsignFollower* follower;
-      RhobanSSLAnnotation::Annotations annotations;
+
     public:
-      bool well_positioned;
-      
-        SearchShootArea(Ai::AiData& ai_data);
+        Pass(Ai::AiData& ai_data);
 
         virtual void update(
             double time,
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
-
-        void set_period( double period ){
-            this->period = period;
-        }
-
-        void declare_area( rhoban_geometry::Point p1, rhoban_geometry::Point p2 );
+        //TODO: portée des variables ?
+        void declare_robot_to_pass( int robot_id, Vision::Team team = Vision::Team::Ally );
 
 
 	virtual Control control() const;
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const ;
-	virtual ~SearchShootArea();
+
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
+	virtual ~Pass();
 };
 
 };
