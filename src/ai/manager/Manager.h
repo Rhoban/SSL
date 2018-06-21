@@ -131,6 +131,17 @@ class Manager : public GameInformations {
 
     private:
 
+    void determine_the_robot_needs_for_the_strategies(
+        const std::list<std::string> & next_strategies
+    );
+        unsigned int nb_of_robots_to_be_affected;
+        unsigned int nb_of_extra_robots_non_affected;
+        unsigned int minimal_nb_of_robots_to_be_affected;
+        unsigned int nb_of_extra_robots;
+        std::string strategy_with_arbitrary_number_of_robot;
+        //init of robot_affectations_by_strategy;
+        bool goal_has_to_be_placed;
+        std::string strategy_with_goal;
 
     void aggregate_all_starting_position_of_all_strategies(
         const std::list<std::string> & next_strategies
@@ -140,11 +151,31 @@ class Manager : public GameInformations {
         > starting_positions;
         std::list<
             std::pair<std::string, int>
-        > repartitions_of_starting_positions;
-        bool goal_has_to_be_placed;
-        std::string strategy_with_goal;
+        > repartitions_of_starting_positions_in_the_list;
         rhoban_geometry::Point goalie_linear_position;
         ContinuousAngle goalie_angular_position;
+
+    void sort_robot_ordered_by_the_distance_with_starting_position();
+        std::vector<int> robot_affectations; 
+            // this list is a special orrder of get_valid_player_ids(). 
+            // ths starting_posiitons.size() fisrt robots of robot_affectation
+            // correspond a good affectation with respect to the starting position 
+            // of startings position;
+        std::vector<
+            std::pair<rhoban_geometry::Point, ContinuousAngle>
+        > robot_consigns;  
+            // this list contains the starting position of get_valid_player_ids().
+            // the starting_posiitons.size() first position are equals to the position
+            // pf starting_position.
+            // the other are some default placement.
+
+    void compute_robot_affectations_to_strategies();
+        std::map<std::string, std::vector<int>> robot_affectations_by_strategy;
+
+
+
+
+/*
 
     void determine_the_robot_needs_for_the_strategies();
         std::map<std::string, std::vector<int>> robot_affectations_by_strategy;
@@ -154,13 +185,7 @@ class Manager : public GameInformations {
     void compute_robot_affectations_to_strategies();
         unsigned int extra_robots = 0;
 
-    void sort_robot_ordered_by_the_distance_with_starting_position();
-        std::vector<int> robot_affectations;
-        std::vector<
-            std::pair<rhoban_geometry::Point, ContinuousAngle>
-        > robot_consigns;
-        std::pair<rhoban_geometry::Point, ContinuousAngle> goalie_consigns;
-
+*/
 
     void declare_robot_positions_in_the_placer();
     

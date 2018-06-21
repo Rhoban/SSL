@@ -41,6 +41,8 @@ class PlanVeschambres : public Manager {
     //defensive
     std::vector< std::list<std::string> > defensive_strats;
 
+    std::vector< std::list<std::string> >stop_strats;
+
     std::string strategy_applied = "";
 
     bool can_touch_the_ball = true;

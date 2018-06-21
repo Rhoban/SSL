@@ -46,13 +46,13 @@ int Prepare_kickoff::max_robots() const {
     return -1;
 }
 Goalie_need Prepare_kickoff::needs_goalie() const {
-    return Goalie_need::YES;
+    return Goalie_need::NO;
 }
 void Prepare_kickoff::update_starting_positions(){
     attacking_placement = ai_data.default_attacking_kickoff_placement();
     defending_placement = ai_data.default_defending_kickoff_placement();
     std::function< std::pair<rhoban_geometry::Point,ContinuousAngle> (const Position &)  > cvrt = [](const Position & position){
-        return std::pair<rhoban_geometry::Point,ContinuousAngle>( position.linear, position.angular ); 
+        return std::pair<rhoban_geometry::Point,ContinuousAngle>( position.linear, position.angular );
     };
     placer_when_kicking.set_starting_positions(
         map2list(
@@ -76,12 +76,12 @@ void Prepare_kickoff::update_starting_positions(){
 }
 void Prepare_kickoff::start(double time){
     DEBUG("START PREPARE KICKOFF");
-    
+
     update_starting_positions();
 
     strategy_is_active = true;
-    
-    rhoban_geometry::Point linear_position; 
+
+    rhoban_geometry::Point linear_position;
     ContinuousAngle angular_position;
     if(is_kicking){
         placer_when_kicking.set_positions(
@@ -92,7 +92,7 @@ void Prepare_kickoff::start(double time){
                 )
             )
         );
-        if( 
+        if(
             placer_when_kicking.get_starting_position_for_goalie(
                 linear_position, angular_position
             )
@@ -111,7 +111,7 @@ void Prepare_kickoff::start(double time){
                 )
             )
         );
-        if( 
+        if(
             placer_when_no_kicking.get_starting_position_for_goalie(
                 linear_position, angular_position
             )
@@ -182,7 +182,7 @@ std::list<
 }
 
 bool Prepare_kickoff::get_starting_position_for_goalie(
-    rhoban_geometry::Point & linear_position, 
+    rhoban_geometry::Point & linear_position,
     ContinuousAngle & angular_position
 ) {
     if(is_kicking){

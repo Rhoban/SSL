@@ -21,6 +21,8 @@
 #include <math/tangents.h>
 #include <math/vector2d.h>
 #include <math/intersection.h>
+#include "navigation_inside_the_field.h"
+
 
 namespace RhobanSSL {
 namespace Robot_behavior {
@@ -76,6 +78,11 @@ Goalie::Goalie(
     this->penalty_rayon = penalty_rayon;
     this->goalie_radius = goalie_radius;
     defensive_approach = 0;   // 0 arc-de-cercle, 1 dash
+    Navigation_inside_the_field* foll = dynamic_cast<Navigation_inside_the_field*>(follower);
+    foll->set_translation_pid( 3.0, 0.0001, 0);
+    foll->set_orientation_pid( 1.0, 0, 0);
+    
+    
 }
 
 void Goalie::update(
