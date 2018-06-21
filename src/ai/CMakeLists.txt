@@ -48,6 +48,7 @@ set (SOURCES
     robot_behavior/predict_futur.cpp
     robot_behavior/degageur.cpp
     robot_behavior/test_kicker.cpp
+    robot_behavior/test_velocity_consign.cpp
     robot_behavior/position_follower.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/a_star_path.cpp
