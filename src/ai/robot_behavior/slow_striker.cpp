@@ -29,6 +29,8 @@ SlowStriker::SlowStriker(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
+    robot_to_pass_id(-1),
+    robot_to_pass_team(Vision::Team::Ally),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
   tempo = 0.0;
@@ -48,6 +50,12 @@ void SlowStriker::update(
     // are all avalaible
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
+
+    if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
+        const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );
+        striking_point = robot_to_pass.get_movement().linear_position( time );
+    }
+
 
     Vector2d ball_goal_vector = striking_point - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
@@ -101,6 +109,11 @@ Control SlowStriker::control() const {
 
 void SlowStriker::declare_point_to_strik( rhoban_geometry::Point point ){
     striking_point = point;
+}
+
+void SlowStriker::declare_robot_to_pass( int robot_id, Vision::Team team ){
+    robot_to_pass_id = robot_id;
+    robot_to_pass_team = team;
 }
 
 
