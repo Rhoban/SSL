@@ -34,8 +34,8 @@
 #include <strategy/mur_2.h>
 #include <strategy/mur_2_passif.h>
 #include <strategy/attaque_with_support.h>
-#include <strategy/striker_with_support.h>
 #include <strategy/attaque_with_support_ms.h>
+#include <strategy/striker_with_support.h>
 #include <strategy/striker_v2.h>
 #include <strategy/striker_kick.h>
 
@@ -196,9 +196,9 @@ PlanVeschambres::PlanVeschambres(
         std::shared_ptr<Strategy::Strategy>(
             new Strategy::Mur_2_passif(ai_data)));
     register_strategy(
-        Strategy::AttaqueWithSupport::name,
+        Strategy::AttaqueWithSupportMs::name,
         std::shared_ptr<Strategy::Strategy>(
-            new Strategy::AttaqueWithSupport(ai_data)));
+            new Strategy::AttaqueWithSupportMs(ai_data)));
     register_strategy(
         Strategy::StrikerWithSupport::name,
         std::shared_ptr<Strategy::Strategy>(
@@ -309,7 +309,7 @@ void PlanVeschambres::choose_a_strategy(double time)
                     DEBUG("Offensive direct Kick");
                     //offensive
                     future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
-                    can_touch_the_ball = false;
+                    can_touch_the_ball = true;
                     strategy_applied = "";
                     ball_last_position = ball_position();
 
@@ -328,12 +328,12 @@ void PlanVeschambres::choose_a_strategy(double time)
             {
                 if (get_team() == referee.indirect_free_team().first)
                 {
-                    DEBUG("Offensive indirect Kick");
-                    //offensive
-                    future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
-                    can_touch_the_ball = false;
-                    strategy_applied = "";
-                    ball_last_position = ball_position();
+                  DEBUG("Offensive indirect Kick");
+                  //offensive
+                  future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
+                  can_touch_the_ball = true;
+                  strategy_applied = "";
+                  ball_last_position = ball_position();
                 }
                 else
                 {
