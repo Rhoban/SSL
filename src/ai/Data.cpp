@@ -144,6 +144,13 @@ void Data::edit_shared_data( // Use that function if you ha no choice. Prefer <<
   mutex_for_shared_data.unlock();
 }
 
+void Data::edit_synchro_data( // Use that function if you ha no choice. Prefer << and >> operator.
+  std::function< void (Synchro_data & synchro_data) > synchro_data_editor 
+  ){
+  mutex_for_synchro_data.lock();
+  synchro_data_editor(data_for_synchro);
+  mutex_for_synchro_data.unlock();
+}
 
 
 Data& Data::operator<<( const Data_for_viewer & data_for_viewer ){

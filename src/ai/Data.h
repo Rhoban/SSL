@@ -65,6 +65,7 @@ struct Synchro_data{
   int robot_id; 
   bool flag_ready_to_receive; //to trigger time measure by vision
   bool request_synchro; //request from the manager to trigger the synchro
+
   double movement_thresh; //threshold for movement detection
 
   double cam0_offset, cam1_offset, cam2_offset, cam3_offset; //raw offsets from cameras
@@ -122,6 +123,9 @@ public:
     std::function< void (Shared_data & shared_data) > shared_data_editor
     );
 
+  void edit_synchro_data( // Use that function if you ha no choice. Prefer << and >> operator.
+    std::function< void (Synchro_data & synchro_data) > synchro_data_editor 
+    );
 
   Data& operator<<( const Synchro_data & synchro_data );
   Data& operator>>( Synchro_data & synchro_data );

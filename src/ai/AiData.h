@@ -112,7 +112,7 @@ struct Field : Vision::Field {
 
 class AiData {
 public:
-  double time_shift_with_vision;
+
   double time; //(Write for Ai)
   double dt; //(Write for Ai)
 

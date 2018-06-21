@@ -49,6 +49,7 @@ void Tare_and_synchronize::start(double time){
   halt_behavior_was_assigned = false;
   move_behavior_was_assigned = false;
   time_is_synchro = false;
+  ai_data.data_for_thread.edit_synchro_data([](Synchro_data& synchro_data){synchro_data.request_synchro=true;});
 }
 
 bool Tare_and_synchronize::is_tared_and_synchronized() const {
@@ -56,22 +57,13 @@ bool Tare_and_synchronize::is_tared_and_synchronized() const {
 }
 
 void Tare_and_synchronize::update(double time){
+  ai_data.data_for_thread>>synchro_data;
 }
 
 void Tare_and_synchronize::stop(double time){
   DEBUG("STOP TIME SYNCHRONIZATION");
 }
 
-double Tare_and_synchronize::get_temporal_shift_between_vision() const {
-  double propagation_time_of_command = ai_time_associated_to_vision_time_command - ai_time_command;
-  double estimated_time_of_command_application = ai_time_command + propagation_time_of_command/2.0;
-  double temporal_shift = estimated_time_of_command_application - vision_time_command;
-  return temporal_shift;
-}
-
-void Tare_and_synchronize::set_temporal_shift_between_vision(){
-  ai_data.time_shift_with_vision = get_temporal_shift_between_vision();
-}
 
 
 void Tare_and_synchronize::assign_behavior_to_robots(
@@ -80,6 +72,8 @@ void Tare_and_synchronize::assign_behavior_to_robots(
   > assign_behavior,
   double time, double dt
   ){
+
+  
   const Movement & movement = ai_data.robots[Vision::Ally][robot_id(0)].get_movement();
   if( ! halt_behavior_was_assigned ){
     assign_behavior(
@@ -90,6 +84,11 @@ void Tare_and_synchronize::assign_behavior_to_robots(
     halt_behavior_was_assigned = true;
     return;
   }
+
+  if(!synchro_data.flag_ready_to_receive)
+    return;
+  
+  
   if( halt_behavior_was_assigned and ! move_behavior_was_assigned ){
     if( movement.angular_velocity( movement.last_time() ).abs().value() <= 0.05 ){
 
@@ -114,7 +113,7 @@ void Tare_and_synchronize::assign_behavior_to_robots(
         ai_data.constants.rotation_acceleration_limit
         );
 
-      ai_time_command = ai_data.lastflushtime; //may not be perfect due to multithreading
+
       assign_behavior(
         robot_id(0), std::shared_ptr<Robot_behavior::RobotBehavior>(
           follower
@@ -124,16 +123,23 @@ void Tare_and_synchronize::assign_behavior_to_robots(
       return;
     }
   }
+
+  if(synchro_data.send_command_time == 0.0)
+  {
+    ai_time_command = ai_data.lastflushtime; //may not be perfect due to multithreading
+    ai_data.data_for_thread.edit_synchro_data([&](Synchro_data& synchro_data){synchro_data.send_command_time=ai_time_command;});
+  }
+  
   if( halt_behavior_was_assigned and move_behavior_was_assigned and ! time_is_synchro ){
-    if( movement.angular_velocity( movement.last_time() ).abs().value() >= 0.05 ){
-      vision_time_command = movement.get_sample().time();
-      ai_time_associated_to_vision_time_command = time;
+    if( synchro_data.synchro_is_done ){
+
+
       assign_behavior(
         robot_id(0), std::shared_ptr<Robot_behavior::RobotBehavior>(
           new Robot_behavior::DoNothing(ai_data)
           )
         );
-      set_temporal_shift_between_vision();
+
       time_is_synchro = true;
       return;
     }
