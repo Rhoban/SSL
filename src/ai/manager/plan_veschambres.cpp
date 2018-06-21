@@ -62,6 +62,7 @@ PlanVeschambres::PlanVeschambres(
                               penalty_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               goalie_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               offensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+                              stop_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               defensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               kick_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               last_referee_changement(0)
@@ -120,6 +121,15 @@ PlanVeschambres::PlanVeschambres(
     defensive_strats[3] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::StrikerV2::name};
     defensive_strats[2] = {Strategy::GoalieStrat::name, Strategy::Offensive::name};
     defensive_strats[1] = {Strategy::GoalieStrat::name};
+
+    stop_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Prepare_kickoff::name};
+    stop_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Prepare_kickoff::name};
+    stop_strats[6] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Prepare_kickoff::name};
+    stop_strats[5] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name};
+    stop_strats[4] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur::name};
+    stop_strats[3] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name};
+    stop_strats[2] = {Strategy::GoalieStrat::name, Strategy::Mur::name};
+    stop_strats[1] = {Strategy::GoalieStrat::name};
 
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
@@ -240,7 +250,7 @@ void PlanVeschambres::choose_a_strategy(double time)
                 else
                 {
                     get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
-                    future_strats = {Strategy::Mur_stop::name, Strategy::Prepare_kickoff::name};
+                    future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
                     declare_and_assign_next_strategies(future_strats);
                 }
             }
@@ -259,7 +269,7 @@ void PlanVeschambres::choose_a_strategy(double time)
                 can_touch_the_ball = false;
                 ball_last_position = center_mark();
             }
-            future_strats = {Strategy::Prepare_kickoff::name};
+            future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
             declare_and_assign_next_strategies(future_strats);
         }
         else if (referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY)
@@ -299,15 +309,17 @@ void PlanVeschambres::choose_a_strategy(double time)
                     DEBUG("Offensive direct Kick");
                     //offensive
                     future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
-                    can_touch_the_ball = true;
+                    can_touch_the_ball = false;
                     strategy_applied = "";
+                    ball_last_position = ball_position();
+
                 }
                 else
                 {
                     DEBUG("Defensive direct Kick");
 
                     //goal
-                    future_strats = goalie_strats[Manager::get_valid_player_ids().size() + 1];
+                    future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
                     can_touch_the_ball = false;
                     ball_last_position = ball_position();
                 }
@@ -316,19 +328,28 @@ void PlanVeschambres::choose_a_strategy(double time)
             {
                 if (get_team() == referee.indirect_free_team().first)
                 {
+<<<<<<< HEAD
                     DEBUG("Offensive indirect Kick");
                     //offensive
                     future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
                     can_touch_the_ball = true;
                     strategy_applied = "";
                     ball_last_position = ball_position();
+=======
+                  DEBUG("Offensive indirect Kick");
+                  //offensive
+                  future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
+                  can_touch_the_ball = false;
+                  strategy_applied = "";
+                  ball_last_position = ball_position();
+>>>>>>> master
                 }
                 else
                 {
                     DEBUG("Defensive indirect Kick");
 
                     //goalie
-                    future_strats = goalie_strats[Manager::get_valid_player_ids().size() + 1];
+                    future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
                     can_touch_the_ball = false;
                     ball_last_position = ball_position();
                 }

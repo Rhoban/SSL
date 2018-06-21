@@ -57,15 +57,15 @@ void SlowStriker::update(
     }
 
 
-    Vector2d ball_goal_vector = striking_point - ball_position();
+    Vector2d ball_striking_vector = striking_point - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
     double dist_ball_robot = ball_robot_vector.norm();
 
-    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+    ball_striking_vector = ball_striking_vector / ball_striking_vector.norm();
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
     double target_radius_from_ball;
-    double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_goal_vector );
+    double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_striking_vector );
     if(tempo == 0.0){
       target_radius_from_ball = 0.3;
     }
@@ -80,20 +80,29 @@ void SlowStriker::update(
             follower->avoid_opponent(false);
         }
     }
+    //TODO Add hysteresis
     if (dist_ball_robot > target_radius_from_ball ) {
         follower->avoid_opponent(true);
     }
 
-    rhoban_geometry::Point target_position = ball_position() - ball_goal_vector * (target_radius_from_ball);
-    double target_rotation = detail::vec2angle(-ball_robot_vector);
+    rhoban_geometry::Point target_position = ball_position() - ball_striking_vector * (target_radius_from_ball);
+    double target_rotation = detail::vec2angle(ball_striking_vector);
 
+    double position_margin = 0.05;
+    double waiting_time = 3.0;
 
-    if((Vector2d(target_position - robot_position).norm() < 0.1) && (tempo == 0.0)){
+    if((Vector2d(target_position - robot_position).norm() < position_margin) && (tempo == 0.0)){
         tempo = time;
     }
-    if((Vector2d(target_position - robot_position).norm() < 0.1) && (tempo != 0.0)){
-        if((tempo - time) >= 3.0){
-          target_radius_from_ball = -0.1;
+
+
+    // if( Vector2d(target_position - robot_position).norm() > position_margin ) {
+    //     tempo = 0.0;
+    // }
+
+    if((Vector2d(target_position - robot_position).norm() < position_margin) && (tempo != 0.0)){
+        if(std::abs(time - tempo) >= waiting_time){
+          target_radius_from_ball = -0.5;
         }
     }
     follower->set_following_position(Vector2d(target_position), target_rotation);
