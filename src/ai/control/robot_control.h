@@ -27,10 +27,34 @@
 
 #include <math/curve.h>
 #include "pid.h"
+#include <constants.h>
+
+namespace RhobanSSL{
+struct Control : PidControl {
+  bool kick;
+  bool chipKick;
+  float kickPower;
+  bool spin;
+  bool charge;
+  bool active;
+  bool ignore;
+
+  Control();
+  Control(bool kick, bool active, bool ignore);
+  Control(const PidControl& c);
+
+  static Control make_desactivated();
+  static Control make_ignored();
+  static Control make_null();
+};
+
+
+std::ostream& operator << ( std::ostream &, const Control& control  );
+}
 
 
 namespace robot_control_details {
-    struct fct_wrapper {
+struct fct_wrapper {
         std::function<double (double u)> rotation;
 
         fct_wrapper(

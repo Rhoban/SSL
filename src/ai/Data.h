@@ -24,8 +24,11 @@
 
 #include <vision/VisionData.h>
 #include <mutex>
-#include <AiData.h>
-#include <robot_behavior/robot_behavior.h>
+
+
+#include <annotations/Annotations.h>
+#include "team_color.h"
+#include <control/robot_control.h>
 
 namespace RhobanSSL {
 
@@ -65,7 +68,8 @@ struct Synchro_data{
   double movement_thresh; //threshold for movement detection
 
   double cam0_offset, cam1_offset, cam2_offset, cam3_offset; //raw offsets from cameras
-  
+
+  Synchro_data();
 };
 
 /**

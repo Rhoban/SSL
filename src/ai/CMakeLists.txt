@@ -126,6 +126,7 @@ set (SOURCES
     core/logger.cpp
     referee/Referee.cpp
     annotations/Annotations.cpp
+    constants.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)

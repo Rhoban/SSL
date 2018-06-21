@@ -45,47 +45,60 @@ Shared_data::Shared_data():
 }
 
 
+Synchro_data::Synchro_data():
+  synchro_is_done(false),
+  send_command_time(0.0), //sent by the robot behavior (tare)
+  receive_command_time(0.0), //received by the vision
+  robot_id(-1), 
+  flag_ready_to_receive(false), //to trigger time measure by vision
+  request_synchro(false), //request from the manager to trigger the synchro
+  movement_thresh(0.0), //threshold for movement detection
+  cam0_offset(0.0), cam1_offset(0.0), cam2_offset(0.0), cam3_offset(0.0) //raw offsets from cameras
+{
+  
+}
+
 Data& Data::operator<<( const Vision::VisionData & vision_data ){
-    mutex_for_vision_data.lock();
-    this->vision_data = vision_data;
-    mutex_for_vision_data.unlock();
-    return *this;
+  mutex_for_vision_data.lock();
+  this->vision_data = vision_data;
+  mutex_for_vision_data.unlock();
+  return *this;
 }
 
 Data& Data::operator>>( Vision::VisionData & vision_data ){
-    mutex_for_vision_data.lock();
-    vision_data = this->vision_data;
-    mutex_for_vision_data.unlock();
-    return *this;
+  mutex_for_vision_data.lock();
+  vision_data = this->vision_data;
+  mutex_for_vision_data.unlock();
+  return *this;
 }
 
 Data& Data::operator<<( const Data_from_ai & data_from_ai ){
-    mutex_for_ai_data.lock();
-    this->data_from_ai = data_from_ai;
-    mutex_for_ai_data.unlock();
-    return *this;
+  mutex_for_ai_data.lock();
+  this->data_from_ai = data_from_ai;
+  mutex_for_ai_data.unlock();
+  return *this;
 }
 
 Data& Data::operator>>( Data_from_ai & data_from_ai ){
-    mutex_for_ai_data.lock();
-    data_from_ai = this->data_from_ai;
-    mutex_for_ai_data.unlock();
-    return *this;
+  mutex_for_ai_data.lock();
+  data_from_ai = this->data_from_ai;
+  mutex_for_ai_data.unlock();
+  return *this;
 }
 
 
 Data& Data::operator<<( const Shared_data & shared_data ){
-    mutex_for_shared_data.lock();
-    this->shared_data = shared_data;
-    mutex_for_shared_data.unlock();
-    return *this;
+  mutex_for_shared_data.lock();
+  this->shared_data = shared_data;
+  mutex_for_shared_data.unlock();
+  return *this;
 }
 
 Data& Data::operator>>( Shared_data & shared_data ){
-    mutex_for_shared_data.lock();
-    shared_data = this->shared_data;
-    mutex_for_shared_data.unlock();
-    return *this;
+  mutex_for_shared_data.lock();
+  shared_data = this->shared_data;
+  mutex_for_shared_data.unlock();
+  return *this;
 }
 
 
@@ -109,50 +122,50 @@ Data& Data::operator>>( Synchro_data & synchro_data ){
 
 void Data::edit_vision_data( // Use that function if you ha no choice. Prefer << and >> operator.
   std::function< void (Vision::VisionData & vision_data) > vision_data_editor 
-){
-    mutex_for_vision_data.lock();
-    vision_data_editor(vision_data);
-    mutex_for_vision_data.unlock();
+  ){
+  mutex_for_vision_data.lock();
+  vision_data_editor(vision_data);
+  mutex_for_vision_data.unlock();
 }
 
 void Data::edit_data_from_ai( // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function< void (Data_from_ai & data_from_ai) > data_from_ai_editor 
-){
-    mutex_for_ai_data.lock();
-    data_from_ai_editor(data_from_ai);
-    mutex_for_ai_data.unlock();
+  std::function< void (Data_from_ai & data_from_ai) > data_from_ai_editor 
+  ){
+  mutex_for_ai_data.lock();
+  data_from_ai_editor(data_from_ai);
+  mutex_for_ai_data.unlock();
 }
 
 void Data::edit_shared_data( // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function< void (Shared_data & shared_data) > shared_data_editor 
-){
-    mutex_for_shared_data.lock();
-    shared_data_editor(shared_data);
-    mutex_for_shared_data.unlock();
+  std::function< void (Shared_data & shared_data) > shared_data_editor 
+  ){
+  mutex_for_shared_data.lock();
+  shared_data_editor(shared_data);
+  mutex_for_shared_data.unlock();
 }
 
 
 
 Data& Data::operator<<( const Data_for_viewer & data_for_viewer ){
   mutex_for_viewer_data.lock();
-    this->data_for_viewer = data_for_viewer;
-    mutex_for_viewer_data.unlock();
-    return *this;
+  this->data_for_viewer = data_for_viewer;
+  mutex_for_viewer_data.unlock();
+  return *this;
 }
 
 Data& Data::operator>>( Data_for_viewer & data_for_viewer ){
-    mutex_for_viewer_data.lock();
-    data_for_viewer = this->data_for_viewer;
-    mutex_for_viewer_data.unlock();
-    return *this;
+  mutex_for_viewer_data.lock();
+  data_for_viewer = this->data_for_viewer;
+  mutex_for_viewer_data.unlock();
+  return *this;
 }
 
 void Data::edit_data_for_viewer( // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function< void (Data_for_viewer & data_for_viewer) > data_for_viewer_editor
-){
-    mutex_for_viewer_data.lock();
-    data_for_viewer_editor(data_for_viewer);
-    mutex_for_viewer_data.unlock();
+  std::function< void (Data_for_viewer & data_for_viewer) > data_for_viewer_editor
+  ){
+  mutex_for_viewer_data.lock();
+  data_for_viewer_editor(data_for_viewer);
+  mutex_for_viewer_data.unlock();
 }
 
 

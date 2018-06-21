@@ -290,7 +290,7 @@ AI::AI(
     default_team(default_team),
     is_in_simulation(is_in_simulation),
     running(true),
-    ai_data( config_path, is_in_simulation, default_team ),
+    ai_data( data, config_path, is_in_simulation, default_team ),
     commander(commander),
     current_dt(ai_data.constants.period),
     data(data)

@@ -30,6 +30,9 @@
 #include <physic/Movement.h>
 #include <math/frame_changement.h>
 #include <math/position.h>
+#include <Data.h>
+#include "team_color.h"
+#include <constants.h>
 
 namespace RhobanSSL {
 namespace Ai {
@@ -48,10 +51,6 @@ struct RobotPlacement {
     std::vector< Position > field_robot_position
     );
 };
-
-typedef enum {
-  Yellow, Blue, Unknown
-} Team;
 
 class Object {
 public:
@@ -110,57 +109,6 @@ struct Field : Vision::Field {
   }
 };
 
-struct Constants {
-
-  static constexpr int NB_OF_ROBOTS_BY_TEAM = 16;
-
-
-  bool is_in_simulation;
-
-  int frame_per_second;
-  double period;
-
-  double robot_radius;
-  double radius_ball;
-  Vector2d waiting_goal_position;
-  int default_goalie_id;
-
-  // PID for translation
-  double p_translation;
-  double i_translation;
-  double d_translation;
-  // PID for orientation
-  double p_orientation;
-  double i_orientation;
-  double d_orientation;
-
-  bool enable_kicking;
-
-  double penalty_rayon;
-  double translation_velocity_limit;
-  double rotation_velocity_limit;
-  double translation_acceleration_limit;
-  double rotation_acceleration_limit;
-
-  double time_limit_between_collision; 
-  double security_acceleration_ratio;
-  double obstacle_avoidance_ratio;
-
-  double radius_security_for_collision;    
-  double radius_security_for_avoidance;
-
-  double wheel_radius;
-  double wheel_excentricity;
-  double wheel_nb_turns_acceleration_limit;
-
-  double rules_avoidance_distance;
-  double convergence_coefficient;
-  double coefficient_to_increase_avoidance_convergence;
-
-  void load( const std::string & config_path );
-
-  Constants( const std::string & config_path, bool is_in_simulation );
-};
 
 class AiData {
 public:
@@ -172,7 +120,7 @@ public:
   std::string team_name;
   Ai::Team team_color;
 
-  AiData( const std::string & config_path, bool is_in_simulation, Ai::Team team_color );
+  AiData( Data & data,const std::string & config_path, bool is_in_simulation, Ai::Team team_color );
 
   typedef std::map<int, Robot> Robots_table;
   typedef std::map<Vision::Team, Robots_table> Robots_table_by_team;
@@ -231,6 +179,7 @@ public:
   std::list< std::pair<int, double> > get_collisions( int robot_id, const Vector2d & ctrl ) const;
 
   double lastflushtime;
+  Data &data_for_thread;
 };
 
 } }
