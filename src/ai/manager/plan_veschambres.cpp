@@ -65,6 +65,7 @@ PlanVeschambres::PlanVeschambres(
                               stop_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               defensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               kick_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+                              kick_strats_indirect(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               last_referee_changement(0)
 {
 
@@ -385,7 +386,7 @@ void PlanVeschambres::choose_a_strategy(double time)
             {
                 //OFFENSIVE
                 DEBUG("offensive !!!! ");
-                future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
+                future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
                 clear_strategy_assignement();
                 declare_and_assign_next_strategies(future_strats);
                 strategy_applied = true;

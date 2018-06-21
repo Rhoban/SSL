@@ -32,7 +32,6 @@ struct names {
     static constexpr const char* example_for_testing_robot_behaviors = "example_for_testing_robot_behaviors";
     static constexpr const char* manual = "manual";
     static constexpr const char* match = "match";
-    static constexpr const char* new_plan = "new_plan";
     static constexpr const char* thomas = "thomas";
     static constexpr const char* base_3_gds = "base_3_gds";
     static constexpr const char* base_3_gms = "base_3_gms";
