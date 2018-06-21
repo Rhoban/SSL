@@ -35,6 +35,7 @@
 #include <strategy/mur_2_passif.h>
 #include <strategy/attaque_with_support.h>
 #include <strategy/striker_with_support.h>
+#include <strategy/attaque_with_support_ms.h>
 #include <strategy/striker_v2.h>
 #include <strategy/striker_kick.h>
 
@@ -92,6 +93,15 @@ PlanVeschambres::PlanVeschambres(
     kick_strats[3] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur::name};
     kick_strats[2] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name};
     kick_strats[1] = {Strategy::GoalieStrat::name};
+
+    kick_strats_indirect[8] = {Strategy::GoalieStrat::name, Strategy::AttaqueWithSupportMs::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Defensive::name};
+    kick_strats_indirect[7] = {Strategy::GoalieStrat::name, Strategy::AttaqueWithSupportMs::name, Strategy::Mur_stop::name, Strategy::Mur::name, Strategy::Defensive::name};
+    kick_strats_indirect[6] = {Strategy::GoalieStrat::name, Strategy::AttaqueWithSupportMs::name, Strategy::Mur_stop::name, Strategy::Mur::name};
+    kick_strats_indirect[5] = {Strategy::GoalieStrat::name, Strategy::AttaqueWithSupportMs::name, Strategy::Mur_stop::name};
+    kick_strats_indirect[4] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name};
+    kick_strats_indirect[3] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur::name};
+    kick_strats_indirect[2] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name};
+    kick_strats_indirect[1] = {Strategy::GoalieStrat::name};
 
     offensive_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name};
     offensive_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name};
@@ -308,7 +318,7 @@ void PlanVeschambres::choose_a_strategy(double time)
                 {
                     DEBUG("Offensive indirect Kick");
                     //offensive
-                    future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
+                    future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
                     can_touch_the_ball = true;
                     strategy_applied = "";
                     ball_last_position = ball_position();
