@@ -328,21 +328,12 @@ void PlanVeschambres::choose_a_strategy(double time)
             {
                 if (get_team() == referee.indirect_free_team().first)
                 {
-<<<<<<< HEAD
                     DEBUG("Offensive indirect Kick");
                     //offensive
                     future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
-                    can_touch_the_ball = true;
+                    can_touch_the_ball = false;
                     strategy_applied = "";
                     ball_last_position = ball_position();
-=======
-                  DEBUG("Offensive indirect Kick");
-                  //offensive
-                  future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
-                  can_touch_the_ball = false;
-                  strategy_applied = "";
-                  ball_last_position = ball_position();
->>>>>>> master
                 }
                 else
                 {
