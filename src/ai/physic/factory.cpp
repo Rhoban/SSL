@@ -29,11 +29,9 @@ namespace RhobanSSL {
 namespace physic {
 
 Movement* Factory::movement(Ai::AiData & ai_data){
-
   
   //new Movement_with_no_prediction()
-  return new Movement_predicted_by_integration();
-
+  return new Movement_predicted_by_integration(ai_data);
 }
 
 Movement* Factory::robot_movement(Ai::AiData & ai_data){

@@ -132,7 +132,8 @@ AiData::AiData( Data& data_for_thread, const std::string & config_path, bool is_
   team_color(team_color),
   constants(config_path, is_in_simulation),
   dt(constants.period),
-  data_for_thread(data_for_thread)
+  data_for_thread(data_for_thread),
+  disable_movement_prediction(true)
 {
   int nb_robots = 0;
   for( auto team : {Vision::Ally, Vision::Opponent} ){

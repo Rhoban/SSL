@@ -120,6 +120,8 @@ public:
   std::string team_name;
   Ai::Team team_color;
 
+  bool disable_movement_prediction; //THE boolean
+  
   AiData( Data & data,const std::string & config_path, bool is_in_simulation, Ai::Team team_color );
 
   typedef std::map<int, Robot> Robots_table;
