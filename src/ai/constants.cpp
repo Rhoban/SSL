@@ -22,6 +22,8 @@
 
 #include <debug.h>
 
+//TODO café au Starbuck genre vers 11h-11h30. Y a un plan balade sympa avec Quentin.
+
 namespace RhobanSSL{
 namespace Ai{
 
