@@ -43,6 +43,10 @@ double norm( const Vector2d & v ){
     return std::sqrt( scalar_product(v,v) );
 }
 
+double norm_2( const Vector2d & v ){
+    return std::sqrt( scalar_product(v,v) );
+}
+
 double norm_square( const Vector2d & v ){
     return scalar_product(v,v);
 }
@@ -79,3 +83,116 @@ ContinuousAngle vector2angle( Vector2d direction ){
 Vector2d Vector2d::perpendicular(){
   return Vector2d(-this->getY(), this->getX());
 }
+
+
+Vector2d::Vector2d( double x, double y){
+    vec[0] = x;
+    vec[1] = y;
+}
+
+Vector2d::Vector2d():
+    Vector2d(0.0, 0.0)
+{};
+
+Vector2d::Vector2d(const rhoban_geometry::Point& point):
+    Vector2d( point.getX(), point.getY() )
+{
+}
+
+
+
+double Vector2d::getX() const {
+    return vec[0];
+}
+double Vector2d::getY() const {
+    return vec[1];
+}
+
+double Vector2d::norm() const {
+    return std::sqrt( norm_square() );
+}
+
+double Vector2d::norm_square() const {
+    return vec[0]*vec[0] + vec[1]*vec[1];
+}
+
+
+
+Vector2d Vector2d::operator+( const Vector2d& v ) const {
+    return Vector2d( vec[0]+v.vec[0], vec[1]+v.vec[1] );
+}
+
+Vector2d & Vector2d::operator+=( const Vector2d& v ){
+    vec[0] += v[0];
+    vec[1] += v[1];
+    return *this;
+}
+
+Vector2d Vector2d::operator-( const Vector2d& v ) const {
+    return Vector2d( vec[0]-v.vec[0], vec[1]-v.vec[1] );
+}
+
+Vector2d Vector2d::operator-() const {
+    return Vector2d( -vec[0], -vec[1] );
+}
+
+const Vector2d & Vector2d::operator+() const {
+    return *this;
+}
+
+
+Vector2d & Vector2d::operator-=( const Vector2d& v ){
+    vec[0] -= v[0];
+    vec[1] -= v[1];
+    return *this;
+}
+
+Vector2d & Vector2d::operator*=( double alpha ){
+    vec[0] *= alpha;
+    vec[1] *= alpha;
+    return *this;
+}
+
+Vector2d Vector2d::operator*( double alpha ) const {
+    return Vector2d( vec[0]*alpha, vec[1]*alpha );
+}
+
+Vector2d & Vector2d::operator/=( double alpha ){
+    assert( alpha != 0.0 );
+    vec[0] /= alpha;
+    vec[1] /= alpha;
+    return *this;
+}
+
+Vector2d Vector2d::operator/( double alpha ) const {
+    assert( alpha != 0.0 );
+    return Vector2d( vec[0]/alpha, vec[1]/alpha );
+}
+
+double Vector2d::operator[](unsigned int i) const {
+    assert( i<2 ); 
+    return vec[i];
+}
+
+double & Vector2d::operator[](unsigned int i){
+    assert( i<2 ); 
+    return vec[i];
+}
+
+Vector2d & Vector2d::operator=( const Vector2d & v ){
+    if( this != &v ){
+       vec[0] = v.vec[0]; 
+       vec[1] = v.vec[1]; 
+    }
+    return *this;
+}
+
+Vector2d operator*(double alpha, const Vector2d & v){
+    return v*alpha;
+}
+
+std::ostream& operator<<(std::ostream& out, const Vector2d& v){
+    out << "[" << v[0] << ", " << v[1] << "]";
+    return out;
+}
+
