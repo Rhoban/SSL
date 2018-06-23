@@ -97,7 +97,7 @@ void SlowStriker::update(
           target_radius_from_ball = -0.5;
         }
     }
-    follower->set_following_position(Vector2d(target_position), target_rotation);
+    follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 

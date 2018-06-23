@@ -186,7 +186,7 @@ void Goalie::update(
     }
 
 
-    follower->set_following_position(Vector2d(target_position), target_rotation );
+    follower->set_following_position(target_position, target_rotation );
     follower->avoid_the_ball(false);
 
     follower->update(time, robot, ball);

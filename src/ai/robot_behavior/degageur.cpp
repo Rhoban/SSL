@@ -104,11 +104,11 @@ void Degageur::update(
         follower->avoid_opponent(true);
     }
 
-    Vector2d target_position = Vector2d(ball_position()) - ball_point_vector * (target_radius_from_ball);
+    rhoban_geometry::Point target_position = ball_position() - ball_point_vector*target_radius_from_ball;
     double target_rotation = detail::vec2angle(ball_point_vector);
 
     //follower->avoid_the_ball(false);
-    follower->set_following_position(Vector2d(target_position), target_rotation);
+    follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 

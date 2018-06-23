@@ -39,7 +39,7 @@ Navigation_with_obstacle_avoidance::Navigation_with_obstacle_avoidance(
 }
 
 void Navigation_with_obstacle_avoidance::set_following_position(
-  const Vector2d & position_to_follow,
+  const rhoban_geometry::Point & position_to_follow,
   const ContinuousAngle & target_angle
   ){
   this->position_follower.set_following_position( position_to_follow, target_angle );
