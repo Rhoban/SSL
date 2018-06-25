@@ -22,8 +22,8 @@
 
 Frame_changement::Frame_changement():
     origin(0.0,0.0),
-    basis(boost::numeric::ublas::identity_matrix<double>(2)),
-    basisChangement(boost::numeric::ublas::identity_matrix<double>(2)),
+    basis(Matrix2d::identity()),
+    basisChangement(Matrix2d::identity()),
     rotation_angle_from_basis(0.0)
 {
 }

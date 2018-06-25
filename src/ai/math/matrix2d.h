@@ -21,34 +21,38 @@
 #define __TOOLS__MATRIX2D_H__
 
 #include "vector2d.h"
-#include <boost/numeric/ublas/matrix.hpp>
 
-typedef boost::numeric::ublas::matrix<double> Boost_Matrix2d;
-
-class Matrix2d : public Boost_Matrix2d {
+class Matrix2d {
     public:
+    Vector2d mat[2];
+
     Matrix2d( double a, double b, double c , double d);
     Matrix2d();
-
-    template <typename MATRIX_CLASS>
-    Matrix2d( const MATRIX_CLASS & m ):
-        Boost_Matrix2d(m)
-    { }
 
     double det() const;
     Matrix2d inverse() const;
 
-    Matrix2d operator*(const Matrix2d & m2) const {
-        return prec_prod(*this, m2); 
-    }
-    Vector2d operator*(const Vector2d & m2) const {
-        return prec_prod(*this, m2); 
-    }
+    Vector2d & operator[](unsigned int i);
+    const Vector2d & operator[](unsigned int i) const;
+
+    double & operator()(unsigned int i, unsigned int j);
+    double operator()(unsigned int i, unsigned int j) const;
+
+    Matrix2d operator*(const Matrix2d & m2) const;
+    Matrix2d operator*(double alpha ) const;
+    Vector2d operator*(const Vector2d & v) const;
+
+    const Matrix2d & operator+() const;
+    Matrix2d operator+(const Matrix2d & m2) const;
+    Matrix2d operator-() const;
+    Matrix2d operator-(const Matrix2d & m2) const;
+
+    static Matrix2d identity();
+    static Matrix2d null();
 };
 
-template <typename MATRIX_CLASS>
-Matrix2d inverse( const MATRIX_CLASS & m ){
-    return Matrix2d( m ).inverse();
-}
+std::ostream& operator<<(std::ostream& out, const Matrix2d& v);
+Matrix2d operator*( double alpha, const Matrix2d & m );
+
 
 #endif
