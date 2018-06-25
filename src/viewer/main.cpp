@@ -112,13 +112,12 @@ int main(int argc, char *argv[])
     }
 
     std::string theport;
-    if(simulation.getValue())
-    {
+    if(simulation.getValue()){
       theport=sim_port.getValue();
-      
-    }
-    else
+    }else{
       theport=port.getValue();
+    }
+
     // Viewer API
     API api(
         team_name.getValue(), simulation.getValue(), 

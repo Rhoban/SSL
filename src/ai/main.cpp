@@ -183,13 +183,19 @@ int main(int argc, char **argv)
     //   simulation.getValue(), part_of_the_field_used
     //   );
 
+    std::string theport;
+    if(simulation.getValue()){
+      theport=sim_port.getValue();
+    }else{
+      theport=port.getValue();
+    }
     
     // Instantiationg the vision
     AIVisionClient vision(
       data,
       yellow.getValue() ? Ai::Yellow : Ai::Blue,
       simulation.getValue(),
-      addr.getValue(), port.getValue(),sim_port.getValue(), part_of_the_field_used
+      addr.getValue(), theport, theport, part_of_the_field_used
       );
 
     
