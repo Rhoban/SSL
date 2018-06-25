@@ -40,6 +40,7 @@ struct PositionSample {
 };
 
 struct MovementSample : public circular_vector<PositionSample> {
+    circular_vector<double> dts;
 
     MovementSample(unsigned int);
     MovementSample();
