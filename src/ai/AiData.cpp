@@ -132,8 +132,9 @@ namespace Ai {
         time_shift_with_vision(0.0),
         team_color(team_color),
         constants(config_path, is_in_simulation),
-        dt(constants.period)
+        dt(0.0)
     {
+        dt = constants.period;
         int nb_robots = 0;
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
