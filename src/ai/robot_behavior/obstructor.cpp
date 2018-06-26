@@ -99,7 +99,7 @@ void Obstructor::update(
         target_position = ally_goal_point + point_to_obstruct_goal_vector * (-limit_defense_area_radius);
     }
 
-    follower->set_following_position(Vector2d(target_position), target_rotation);
+    follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 

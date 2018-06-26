@@ -88,7 +88,7 @@ void Pass_dribbler::update(
 
     Pass_dribbler::calc_kick_power(robot_position, target_position);
     follower->avoid_the_ball(false);
-    follower->set_following_position(Vector2d(target_position), target_rotation);
+    follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 

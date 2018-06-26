@@ -68,7 +68,7 @@ void Pass::update(
         follower->avoid_the_ball(false);
         target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
     }
-    Vector2d target_position = Vector2d(ball_position()) - ball_robot_to_pass_vector * (target_radius_from_ball);
+    rhoban_geometry::Point target_position = ball_position() - ball_robot_to_pass_vector*target_radius_from_ball;
     double target_rotation = detail::vec2angle(ball_robot_to_pass_vector);
 
 

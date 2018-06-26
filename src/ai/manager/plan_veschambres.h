@@ -45,7 +45,7 @@ class PlanVeschambres : public Manager {
 
     std::string strategy_applied = "";
 
-    bool can_touch_the_ball = true;
+    bool hold_ball_position = true;
     rhoban_geometry::Point ball_last_position;
 
     unsigned int last_referee_changement;

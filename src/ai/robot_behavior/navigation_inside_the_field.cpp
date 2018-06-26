@@ -46,7 +46,7 @@ Navigation_inside_the_field::Navigation_inside_the_field(
 }
 
 void Navigation_inside_the_field::set_following_position(
-    const Vector2d & position_to_follow,
+    const rhoban_geometry::Point & position_to_follow,
     const ContinuousAngle & target_angle
 ){
     following_position_was_updated = true;

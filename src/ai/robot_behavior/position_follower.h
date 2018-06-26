@@ -30,7 +30,7 @@ namespace Robot_behavior {
 
 class PositionFollower : public ConsignFollower {
     private:
-        Vector2d position;
+        rhoban_geometry::Point position;
         ContinuousAngle angle;
 
         RobotControlWithPositionFollowing robot_control;
@@ -49,7 +49,7 @@ class PositionFollower : public ConsignFollower {
         );
 
         virtual void set_following_position(
-            const Vector2d & position_to_follow,
+            const rhoban_geometry::Point & position_to_follow,
             const ContinuousAngle & angle
         );
 

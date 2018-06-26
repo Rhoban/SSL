@@ -34,7 +34,7 @@ A_star_path::A_star_path(
 } 
 
 void A_star_path::set_following_position(
-    const Vector2d & position_to_follow,
+    const rhoban_geometry::Point & position_to_follow,
     const ContinuousAngle & target_angle
 ){
     this->navigation.set_following_position( position_to_follow, target_angle );

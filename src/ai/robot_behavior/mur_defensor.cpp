@@ -109,7 +109,7 @@ void Mur_defensor::update(
         target_position = robot_position;
     }
 
-    follower->set_following_position(Vector2d(target_position), target_rotation);
+    follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 

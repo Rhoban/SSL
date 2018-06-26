@@ -58,7 +58,7 @@ void ProtectBall::update(
     // annotations.addAnnotations(follower->get_annotations());
 
 
-    Vector2d target_position = ball_position();
+    rhoban_geometry::Point target_position = ball_position();
 
     double target_rotation = detail::vec2angle(ball_robot_vector);
 
