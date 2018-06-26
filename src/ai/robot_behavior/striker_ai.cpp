@@ -80,7 +80,7 @@ void StrikerAi::update(
         follower->avoid_opponent(true);
     }
 
-    Vector2d target_position = Vector2d(ball_position()) - ball_goal_vector * (target_radius_from_ball);
+    rhoban_geometry::Point target_position = ball_position() - ball_goal_vector *target_radius_from_ball;
     double target_rotation = detail::vec2angle(ball_goal_vector);
 
     follower->set_following_position(target_position, target_rotation);

@@ -70,7 +70,7 @@ class A_star_path : public ConsignFollower  {
         );
 
         virtual void set_following_position(
-            const Vector2d & position_to_follow,
+            const rhoban_geometry::Point & position_to_follow,
             const ContinuousAngle & angle
         );
 

@@ -123,9 +123,9 @@ PlanVeschambres::PlanVeschambres(
     defensive_strats[2] = {Strategy::GoalieStrat::name, Strategy::Offensive::name};
     defensive_strats[1] = {Strategy::GoalieStrat::name};
 
-    stop_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Prepare_kickoff::name};
-    stop_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Prepare_kickoff::name};
-    stop_strats[6] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Prepare_kickoff::name};
+    stop_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Prepare_kickoff::name};
+    stop_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Prepare_kickoff::name};
+    stop_strats[6] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Prepare_kickoff::name};
     stop_strats[5] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name};
     stop_strats[4] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur::name};
     stop_strats[3] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name};
@@ -235,13 +235,13 @@ void PlanVeschambres::choose_a_strategy(double time)
         else if (referee.get_state() == Referee_Id::STATE_HALTED)
         {
             assign_strategy(Strategy::Halt::name, time, get_valid_team_ids());
-            can_touch_the_ball = false;
+            hold_ball_position = true;
             ball_last_position = ball_position();
         }
         else if (referee.get_state() == Referee_Id::STATE_STOPPED)
         {
             set_ball_avoidance_for_all_robots(true);
-            can_touch_the_ball = false;
+            hold_ball_position = true;
             if (get_valid_team_ids().size() > 0)
             {
                 if (not(get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized()))
@@ -262,12 +262,13 @@ void PlanVeschambres::choose_a_strategy(double time)
             if (get_team() == referee.kickoff_team())
             {
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
-                can_touch_the_ball = true;
+                hold_ball_position = false;
+                strategy_applied = "";
             }
             else
             {
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
-                can_touch_the_ball = false;
+                hold_ball_position = true;
                 ball_last_position = center_mark();
             }
             future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
@@ -275,7 +276,7 @@ void PlanVeschambres::choose_a_strategy(double time)
         }
         else if (referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY)
         {
-
+            set_ball_avoidance_for_all_robots(false);
             clear_strategy_assignement();
 
             if (get_team() == referee.penalty_team())
@@ -283,13 +284,15 @@ void PlanVeschambres::choose_a_strategy(double time)
                 //penalty
                 future_strats = penalty_strats[Manager::get_valid_player_ids().size() + 1];
                 declare_and_assign_next_strategies(future_strats);
+                hold_ball_position = true;
+                ball_last_position = ball_position();
             }
             else
             {
                 //goal
                 future_strats = {Strategy::Prepare_kickoff::name};
                 declare_and_assign_next_strategies(future_strats);
-                can_touch_the_ball = false;
+                hold_ball_position = true;
                 ball_last_position = ball_position();
             }
 
@@ -310,8 +313,7 @@ void PlanVeschambres::choose_a_strategy(double time)
                     DEBUG("Offensive direct Kick");
                     //offensive
                     future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
-                    can_touch_the_ball = true;
-                    strategy_applied = "";
+                    hold_ball_position = true;
                     ball_last_position = ball_position();
 
                 }
@@ -321,7 +323,7 @@ void PlanVeschambres::choose_a_strategy(double time)
 
                     //goal
                     future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
-                    can_touch_the_ball = false;
+                    hold_ball_position = true;
                     ball_last_position = ball_position();
                 }
             }
@@ -331,9 +333,8 @@ void PlanVeschambres::choose_a_strategy(double time)
                 {
                   DEBUG("Offensive indirect Kick");
                   //offensive
-                  future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
-                  can_touch_the_ball = true;
-                  strategy_applied = "";
+                  future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
+                  hold_ball_position = true;
                   ball_last_position = ball_position();
                 }
                 else
@@ -342,7 +343,7 @@ void PlanVeschambres::choose_a_strategy(double time)
 
                     //goalie
                     future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
-                    can_touch_the_ball = false;
+                    hold_ball_position = true;
                     ball_last_position = ball_position();
                 }
             }
@@ -360,14 +361,14 @@ void PlanVeschambres::choose_a_strategy(double time)
 
         set_ball_avoidance_for_all_robots(false);
 
-        if (!can_touch_the_ball)
+        if (hold_ball_position)
         {
             if (!Box(
                      {ball_last_position.getX() - 0.10, ball_last_position.getY() - 0.10},
                      {ball_last_position.getX() + 0.10, ball_last_position.getY() + 0.10})
                      .is_inside(ball_position()))
             {
-                can_touch_the_ball = true;
+                hold_ball_position = false;
                 strategy_applied = "";
             }
         }
@@ -389,7 +390,6 @@ void PlanVeschambres::choose_a_strategy(double time)
                 future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
                 clear_strategy_assignement();
                 declare_and_assign_next_strategies(future_strats);
-                strategy_applied = true;
                 strategy_applied = "offensive";
             }
         }

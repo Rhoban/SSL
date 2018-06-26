@@ -30,6 +30,7 @@
 #include <robot_behavior/passive_defensor.h>
 #include <robot_behavior/concept_proof_spinner.h>
 #include <robot_behavior/test_kicker.h>
+#include <robot_behavior/test_velocity_consign.h>
 #include <robot_behavior/patrol.h>
 #include <robot_behavior/position_follower.h>
 #include <robot_behavior/striker.h>
@@ -451,6 +452,115 @@ Manual::Manual( Ai::AiData & ai_data ):
             )
         )
     );
+
+    int velocity = 2.0;
+    register_strategy(
+        "test_N_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_velocity_consign* pt = Robot_behavior::Test_velocity_consign::get_N_movement(
+                        ai_data, velocity
+                    );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_E_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_velocity_consign* pt = Robot_behavior::Test_velocity_consign::get_E_movement(
+                        ai_data, velocity
+                    );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_W_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_velocity_consign* pt = Robot_behavior::Test_velocity_consign::get_W_movement(
+                        ai_data, velocity
+                    );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_S_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_velocity_consign* pt = Robot_behavior::Test_velocity_consign::get_S_movement(
+                        ai_data, velocity
+                    );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_NW_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_velocity_consign* pt = Robot_behavior::Test_velocity_consign::get_NW_movement(
+                        ai_data, velocity
+                    );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_NE_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_velocity_consign* pt = Robot_behavior::Test_velocity_consign::get_NE_movement(
+                        ai_data, velocity
+                    );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_SW_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_velocity_consign* pt = Robot_behavior::Test_velocity_consign::get_SW_movement(
+                        ai_data, velocity
+                    );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "test_SE_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_velocity_consign* pt = Robot_behavior::Test_velocity_consign::get_SE_movement(
+                        ai_data, velocity
+                    );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(pt);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+
+
     register_strategy(
         "TestInfra", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(

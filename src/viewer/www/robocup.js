@@ -634,7 +634,7 @@ function Viewer()
     this.viewOffset = [0, 0];
     this.startOffset = [0, 0];
     this.reversed = false;
-    this.greenred = true;
+    this.greenred = false;
 
     this.container = document.getElementById('field');
     this.ctx = this.container.getContext('2d');
