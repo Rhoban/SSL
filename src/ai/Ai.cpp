@@ -385,6 +385,10 @@ void AI::run(){
     double period = ai_data.constants.period;
     auto lastTick = rhoban_utils::TimeStamp::now();
 
+    // TODO ; SEE HOW TO REMOVE THE WARMUP
+    double warmup_period = 2 * period * RhobanSSL::Vision::history_size; 
+    double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS()/1000.0;
+
     while (running) {
         auto now = rhoban_utils::TimeStamp::now();
         double elapsed = diffSec(lastTick, now);
@@ -423,6 +427,11 @@ void AI::run(){
         #ifndef NDEBUG
         //check_time_is_coherent();
         #endif
+
+        // We wait some time to update completly ai_data structure.
+        if( warmup_start + warmup_period > current_time ){
+            continue;
+        }
 
         referee.update(current_time);
 

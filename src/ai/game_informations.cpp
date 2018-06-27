@@ -58,71 +58,47 @@ const Ai::Robot & GameInformations::get_robot( int robot_id, Vision::Team team )
     return ai_data.robots.at(team).at(robot_id);
 }
 
-std::vector<int> GameInformations::get_robot_in_line( const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team, double seuil ) const{
-    std::vector<int> v;
+
+void GameInformations::get_robot_in_line(
+    const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team, double seuil, 
+    std::vector<int> & result
+) const{
     Vector2d vect = p1 - p2;
-    for (size_t i = 0; i <= 7; i++) {
+    for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
         const Ai::Robot & robot = get_robot( i,  team );
         if(robot.is_present_in_vision()){
             const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
 
-            double a = vect[1]/vect[0];
-            double b = p1.getY() - a * p1.getX();
-            double eq_droite = robot_position.getY() - a*robot_position.getX() - b;
+
+            // TODO : USE SCALAR PRODUCT INSTEAD OF LINE EQUATION !!
+            double a = vect[1];
+            double b = p1.getY()*vect[0] - a * p1.getX();
+            double eq_droite = robot_position.getY()*vect[0] - a*robot_position.getX() - b;
 
             double robot_line = (Vector2d(robot_position - p2)).norm();
             double p1_line = (Vector2d(p1 - p2)).norm();
             double diff = robot_line - p1_line;
 
-            if (fabs(eq_droite) <= seuil && diff < 0 ) {
-                v.push_back(i);
+            if (fabs(eq_droite) <= fabs(seuil*vect[0]) && diff < 0 ) {
+                result.push_back(i);
             }
         }
     }
-    return v;
 }
 
+std::vector<int> GameInformations::get_robot_in_line(
+    const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team, double seuil
+) const{
+    std::vector<int> result;
+    get_robot_in_line(p1, p2, team, seuil, result);
+    return result;
+}
 
 std::vector<int> GameInformations::get_robot_in_line( const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, double seuil ) const{
-    std::vector<int> v;
-    Vector2d vect = p1 - p2;
-    for (size_t i = 0; i <= 7; i++) {
-        const Ai::Robot & robot = get_robot( i,  Vision::Team::Ally );
-        if(robot.is_present_in_vision()){
-            const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
-
-            double a = vect[1]/vect[0];
-            double b = p1.getY() - a * p1.getX();
-            double eq_droite = robot_position.getY() - a*robot_position.getX() - b;
-
-            double robot_line = (Vector2d(robot_position - p2)).norm();
-            double p1_line = (Vector2d(p1 - p2)).norm();
-            double diff = robot_line - p1_line;
-
-            if (fabs(eq_droite) <= seuil && diff < 0 ) {
-                v.push_back(i);
-            }
-        }
-    }
-    for (size_t i = 0; i <= 7; i++) {
-        const Ai::Robot & robot = get_robot( i,  Vision::Team::Opponent );
-        if(robot.is_present_in_vision()){
-            const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
-
-            double a = vect[1]/vect[0];
-            double b = p1.getY() - a * p1.getX();
-            double eq_droite = robot_position.getY() - a*robot_position.getX() - b;
-
-            double robot_line = (Vector2d(robot_position - p2)).norm();
-            double p1_line = (Vector2d(p1 - p2)).norm();
-            double diff = robot_line - p1_line;
-
-            if (fabs(eq_droite) <= seuil && diff < 0 ) {
-                v.push_back(i);
-            }
-        }
-    }
-    return v;
+    std::vector<int> result;
+    get_robot_in_line(p1, p2, Vision::Team::Ally, seuil, result);
+    get_robot_in_line(p1, p2, Vision::Team::Opponent, seuil, result);
+    return result;
 }
 
 
@@ -184,7 +160,7 @@ std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move(
 int GameInformations::get_nearest_ball() const{
     int id = -1;
     double distance_max = 666;
-    for (size_t i = 0; i <= 7; i++) {
+    for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
       const Ai::Robot & robot = get_robot( i,  Vision::Team::Ally );
       if(robot.is_present_in_vision()){
         const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
@@ -216,7 +192,7 @@ int GameInformations::get_nearest_ball() const{
 int GameInformations::get_nearest_ball( Vision::Team team ) const{
     int id = -1;
     double distance_max = 666;
-    for (size_t i = 0; i < 7; i++) {
+    for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
       const Ai::Robot & robot = get_robot( i,  team );
       if(robot.is_present_in_vision()){
         const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
@@ -236,7 +212,7 @@ int GameInformations::get_nearest_ball( Vision::Team team ) const{
 int GameInformations::get_nearest_point( Vision::Team team, rhoban_geometry::Point point ) const{
     int id = -1;
     double distance_max = 666;
-    for (size_t i = 0; i < 7; i++) {
+    for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
       const Ai::Robot & robot = get_robot( i,  team );
       if(robot.is_present_in_vision()){
         const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
@@ -268,7 +244,7 @@ double GameInformations::threat_robot( int id_robot, Vision::Team team ) const{
 
 std::vector<double> GameInformations::threat( Vision::Team team ) const{
   std::vector<double> v_threat;
-  for (size_t i = 0; i <= 7; i++) {
+  for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
     double threat = threat_robot(i, team);
     v_threat.push_back(threat);
   }
