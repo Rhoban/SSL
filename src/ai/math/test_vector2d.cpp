@@ -120,38 +120,46 @@ TEST(test_vector2d, norm_square){
     {
         Vector2d v(0.0, 0.0);
         EXPECT_EQ( v.norm_square(), 0.0 );
+        EXPECT_EQ( norm_square( v ), 0.0 );
     }
     {
         Vector2d v(1.0, 0.0);
-        EXPECT_EQ( v.norm_square(), 1.0 );
+        EXPECT_EQ( norm_square( v ), 1.0 );
     }
     {
         Vector2d v(0.0, 1.0);
         EXPECT_EQ( v.norm_square(), 1.0 );
+        EXPECT_EQ( norm_square(v), 1.0 );
     }
     {
         Vector2d v(3.0, 4.0);
         EXPECT_EQ( v.norm_square(), 25.0 );
+        EXPECT_EQ( norm_square(v), 25.0 );
     }
     {
         Vector2d v(4.0, 3.0);
         EXPECT_EQ( v.norm_square(), 25.0 );
+        EXPECT_EQ( norm_square(v), 25.0 );
     }
     {
         Vector2d v(0.0, 0.0);
         EXPECT_TRUE( std::fabs(v.norm_square()) < 0.0001 );
+        EXPECT_TRUE( std::fabs(norm_square(v)) < 0.0001 );
     }
     {
         Vector2d v(2.0, 0.0);
         EXPECT_TRUE( std::fabs(v.norm_square() - 4.0) < 0.0001 );
+        EXPECT_TRUE( std::fabs(norm_square(v) - 4.0) < 0.0001 );
     }
     {
         Vector2d v(0.0, 2.0);
         EXPECT_TRUE( std::fabs(v.norm_square() - 4.0) < 0.0001 );
+        EXPECT_TRUE( std::fabs(norm_square(v) - 4.0) < 0.0001 );
     }
     {
         Vector2d v(1.0, 1.0);
         EXPECT_TRUE( std::fabs(v.norm_square() - 2.0) < 0.0001 );
+        EXPECT_TRUE( std::fabs(norm_square(v) - 2.0) < 0.0001 );
     }
 }
 
@@ -209,6 +217,150 @@ TEST(test_vector2d, point2vector){
         EXPECT_EQ( p.getY(), v[1] );
     }
 }
+
+TEST(test_vector2d, operator_crochet){
+    {
+        const Vector2d v(3.0, 42.0);
+        EXPECT_TRUE( std::fabs( v[0] - 3.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v[1] - 42.0 ) < 0.00001 );
+    }
+    {
+        Vector2d v(3.0, 42.0);
+        v[0] = 9.0;
+        v[1] = 26.0;
+        EXPECT_TRUE( std::fabs( v[0] - 9.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v[1] - 26.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_plus){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2(4.0, 5.0);
+        Vector2d v3 = v1 + v2;
+        EXPECT_TRUE( std::fabs( v3[0] - 7.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v3[1] - 47.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_minus){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2(4.0, 5.0);
+        Vector2d v3 = v1 - v2;
+        EXPECT_TRUE( std::fabs( v3[0] - (-1.0) ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v3[1] - 37.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, sign_plus){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2 = +v1;
+        EXPECT_TRUE( std::fabs( v2[0] - (3.0) ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - 42.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, sign_minus){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2 = -v1;
+        EXPECT_TRUE( std::fabs( v2[0] - (-3.0) ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - (-42.0) ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_plus_eq){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2(4.0, 5.0);
+        v2 += v1;
+        EXPECT_TRUE( std::fabs( v2[0] - 7.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - 47.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_minus_eq){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2(4.0, 5.0);
+        v2 -= v1;
+        EXPECT_TRUE( std::fabs( v2[0] - (1.0) ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - (-37.0) ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_eq){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2;
+        v2 = v1;
+        EXPECT_TRUE( std::fabs( v2[0] - (3.0) ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - (42.0) ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_mult){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2 = 3*v1;
+        Vector2d v3 = v1*3;
+        EXPECT_TRUE( std::fabs( v2[0] - 9.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - 126.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v3[0] - 9.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v3[1] - 126.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_mult_eq){
+    {
+        Vector2d v1(3.0, 42.0);
+        v1 *= 3;
+        EXPECT_TRUE( std::fabs( v1[0] - 9.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v1[1] - 126.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_div){
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2 = v1/3;
+        EXPECT_TRUE( std::fabs( v2[0] - 1.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - 14.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, operator_div_eq){
+    {
+        Vector2d v1(3.0, 42.0);
+        v1 /= 3;
+        EXPECT_TRUE( std::fabs( v1[0] - 1.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v1[1] - 14.0 ) < 0.00001 );
+    }
+}
+
+TEST(test_vector2d, perpendicular){
+    {
+        Vector2d v1(1.0, 0.0);
+        Vector2d v2 = v1.perpendicular();
+        EXPECT_TRUE( std::fabs( v2[0] - 0.0 ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - 1.0 ) < 0.00001 );
+    }
+    {
+        Vector2d v1(0.0, 1.0);
+        Vector2d v2 = v1.perpendicular();
+        EXPECT_TRUE( std::fabs( v2[0] - (-1.0) ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - 0.0 ) < 0.00001 );
+    }
+    {
+        Vector2d v1(3.0, 42.0);
+        Vector2d v2 = v1.perpendicular();
+        EXPECT_TRUE( std::fabs( v2[0] - (-42) ) < 0.00001 );
+        EXPECT_TRUE( std::fabs( v2[1] - 3.0 ) < 0.00001 );
+    }
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

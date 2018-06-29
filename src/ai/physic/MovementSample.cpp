@@ -47,18 +47,18 @@ void MovementSample::insert( const PositionSample & sample ){
 
       double filtered_dt=0.0;
       //small filter
-      for(int it=0;it<(this->size()-1);it++){
+      for(int it=0;it<(this->size()-2);it++){
         filtered_dt+=((*this)[it].time - (*this)[it+1].time);
       }
-      this->dts[0] = filtered_dt/(this->size()-1);
+      this->dts[0] = filtered_dt/(this->size()-2);
     }else{
       circular_vector<PositionSample>::insert( sample );
       double filtered_dt=0.0;
       //small filter
-      for(int it=0;it<(this->size()-1);it++){
+      for(int it=0;it<(this->size()-2);it++){
         filtered_dt+=((*this)[it].time - (*this)[it+1].time);
       }
-      this->dts.insert( filtered_dt/(this->size()-1) );
+      this->dts.insert( filtered_dt/(this->size()-2) );
     }
 }
 
@@ -72,9 +72,13 @@ bool MovementSample::is_valid() const {
     return true;
 }
 
-MovementSample::MovementSample(unsigned int size):
+MovementSample::MovementSample(unsigned int size, double default_dt):
     circular_vector<PositionSample>(size), dts(size)
-{ }
+{
+    for(unsigned int i=0; i<size; i++ ){
+        dts[i] = default_dt;
+    }
+}
 
 MovementSample::MovementSample():
     circular_vector<PositionSample>(), dts()
