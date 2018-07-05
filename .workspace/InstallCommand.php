@@ -40,11 +40,11 @@ class InstallCommand extends Command
         }
         if ($args) {
             foreach ($args as $arg) {
-              $this->workspace->install($arg, $https, $default);
+                $this->workspace->install($arg, $https, $default);
             }
         } else {
             foreach ($this->workspace->getRepositories() as $repository) {
-                $this->workspace->install($repository->getName());
+                $this->workspace->install($repository->getName(), $https, $default);
             }
         }
     }
