@@ -79,7 +79,10 @@ class Workspace
 
     protected $installed = array();
 
-    public function install($address)
+    // address -> example: rhoban/utils
+    // https   -> use https rather than ssh
+    // default -> Use default value (optional)
+    public function install($address, $https = false, $default = false)
     {
         $parts = explode(' ', $address);
         $prefix = null;
@@ -103,10 +106,18 @@ class Workspace
         $install = true;
         $ask = "Do you want to install the optional $name package ?";
         if ($prefix == 'optional') {
-            $install = Prompt::ask($ask, false);
+            if ($default) {
+                $install = false;
+            } else {
+                $install = Prompt::ask($ask, false);
+            }
         }
         if ($prefix == 'recommend') {
-            $install = Prompt::ask($ask, true);
+            if ($default) {
+                $install = true;
+            } else {
+                $install = Prompt::ask($ask, true);
+            }
         }
 
         if (!$install) {
@@ -116,7 +127,7 @@ class Workspace
 
         if (!is_dir($repository->getDirectory())) {
             Terminal::success("* Installing $name in $directory\n");
-            $repository->install();
+            $repository->install($https);
             $this->updatePackages();
         } else {
             Terminal::info("* Repository $name already installed\n");
@@ -132,7 +143,7 @@ class Workspace
             }
         }
         foreach ($toInstall as $install) {
-            $this->install($install);
+            $this->install($install, $https, $default);
         }
     }
 

@@ -101,10 +101,15 @@ class Repository
         return $this->name;
     }
 
-    public function install()
+    public function install($https = false)
     {
         if (!$this->isLocal()) {
-            $r = OS::run("cd src/; git clone ".$this->getOrigin()." ".$this->getTarget());
+            $remote = $this->getOrigin();
+            if ($https) {
+              echo "installing from https";
+              $remote = $this->getRemotes()['https'];
+            }
+            $r = OS::run("cd src/; git clone ".$remote." ".$this->getTarget());
             if ($r != 0) {
                 Terminal::error('Unable to clone '.$this->getOrigin()."\n");
                 die();
@@ -112,7 +117,7 @@ class Repository
             OS::run("cd $this->directory; git remote set-branches origin '*'");
             OS::run("cd $this->directory; git fetch");
 
-            $this->updateRemotes();
+//            $this->updateRemotes();
             $this->setUpstream('origin');
         }
     }

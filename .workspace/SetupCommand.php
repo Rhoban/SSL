@@ -21,6 +21,8 @@ class SetupCommand extends Command
         if (!is_dir('src/catkin')) {
             Terminal::info("* Cloning catkin\n");
             OS::run('cd src; git clone --depth=1 https://github.com/ros/catkin.git');
+            // Patching catkin to get tests working
+            OS::run('cd src/catkin/cmake/test/; ln -s ../../python/catkin catkin');
         }
         Terminal::info("* Runnin catkin init\n");
         OS::run('catkin init --workspace .');
