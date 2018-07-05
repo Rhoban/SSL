@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 RUN apt-get update && \
-    apt-get install -y php php-xml python-pip python-empy cmake git nano graphviz doxygen && \
+    apt-get install -y php php-xml python-pip python-empy cmake git nano graphviz doxygen libprotobuf-dev protobuf-compiler libqt5widgets5 qt5-default libqt5webkit-dev && \
     apt-get autoclean -y && \
     pip install catkin_tools
 
