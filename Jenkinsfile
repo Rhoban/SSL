@@ -29,15 +29,15 @@ pipeline {
         stage('build') {
             steps {
                 sh '''
-                    ./workspace build
-                    ./workspace build_tests
+                    ./workspace build --no-color
+                    ./workspace build_tests --no-color
                 '''
            }
         }
         stage('tests') {
             steps {
                 sh '''
-                    ./workspace run_tests
+                    ./workspace run_tests --no-color
                     ./workspace result_tests
                 '''
             }
