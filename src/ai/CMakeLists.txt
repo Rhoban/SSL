@@ -155,7 +155,7 @@ if(CATKIN_ENABLE_TESTING)
     math/test_matching.cpp
     physic/test_MovementSample.cpp
     physic/test_movement_with_no_prediction.cpp
-    physic/test_movement_predicted_by_integration.cpp
+    #physic/test_movement_predicted_by_integration.cpp
     physic/test_collision.cpp
     math/test_ContinuousAngle.cpp
     math/test_tangents.cpp
