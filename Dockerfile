@@ -34,7 +34,7 @@ RUN sed -i 's/jobs = \[\] + list(prebuild_jobs.values())/jobs = \[\] + (list(pre
 
 USER ${USER}
 
-RUN mkdir -p ~/.ssh \
+RUN mkdir -p ~/.ssh && \
     ssh-keyscan -H bitbucket.org github.com > ~/.ssh/known_hosts
 
 ENTRYPOINT [ "/bin/entrypoint.sh" ]
