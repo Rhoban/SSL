@@ -25,8 +25,11 @@ class Workspace
         $this->addCommand(new UpstreamCommand);
         $this->addCommand(new CleanCommand);
         $this->addCommand(new UnshallowCommand);
-        $this->addCommand(new TestCommand);
-        $this->addCommand(new TestsCommand);
+
+        // for testing purposes
+        $this->addCommand(new BuildTestsCommand);
+        $this->addCommand(new RunTestsCommand);
+        $this->addCommand(new ResultTestsCommand);
 
         $this->updatePackages();
         $this->repositories = array();
