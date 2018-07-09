@@ -354,7 +354,7 @@ Referee::Referee():
 
 void Referee::extract_data(){
     SSL_Referee data = referee.getData();
-    DEBUG("SSL REFEREE PROTOBUF : " << data);
+    // DEBUG("SSL REFEREE PROTOBUF : " << data);
         // Use this function just one time if you want to avoir thread
         // issue.
     if( referee_data.last_time < data.packet_timestamp() ){
