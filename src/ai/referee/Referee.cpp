@@ -20,6 +20,7 @@
 #include "Referee.h"
 #include <debug.h>
 #include <core/print_collection.h>
+#include "print_protobuf_referee.h"
 
 namespace RhobanSSL {
 
@@ -217,7 +218,7 @@ Referee::Referee():
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_RUNNING,
         command_is_<SSL_Referee::FORCE_START>
     );
-    
+
     machine_state.add_edge(
         Referee_Id::EDGE_KICKOFF_YELLOW,
         Referee_Id::STATE_STOPPED, Referee_Id::STATE_PREPARE_KICKOFF,
@@ -353,6 +354,7 @@ Referee::Referee():
 
 void Referee::extract_data(){
     SSL_Referee data = referee.getData();
+    DEBUG("SSL REFEREE PROTOBUF : " << data);
         // Use this function just one time if you want to avoir thread
         // issue.
     if( referee_data.last_time < data.packet_timestamp() ){
@@ -384,7 +386,7 @@ void Referee::update( double time ){
     machine_state.run();
     assert( machine_state.current_states().size() == 1 );
     save_last_time_stamps();
-   
+
 
 }
 

@@ -31,10 +31,10 @@ using namespace rhoban_utils;
 namespace RhobanSSL
 {
 AIVisionClient::AIVisionClient(
-  Data& shared_data, Ai::Team myTeam, bool simulation, 
+  Data& shared_data, Ai::Team myTeam, bool simulation,
   Vision::Part_of_the_field part_of_the_field
-  ): 
-  VisionClient(simulation), shared_data(shared_data), 
+  ):
+  VisionClient(simulation), shared_data(shared_data),
   part_of_the_field_used(part_of_the_field), myTeam(myTeam)
 {
 }
@@ -44,8 +44,8 @@ AIVisionClient::AIVisionClient(
   Data& shared_data, Ai::Team myTeam, bool simulation,
   std::string addr, std::string port, std::string sim_port,
   Vision::Part_of_the_field part_of_the_field
-  ): 
-  VisionClient(simulation,addr, port, sim_port), shared_data(shared_data), 
+  ):
+  VisionClient(simulation,addr, port, sim_port), shared_data(shared_data),
   part_of_the_field_used(part_of_the_field), myTeam(myTeam)
 {
 }
@@ -58,7 +58,7 @@ void AIVisionClient::setRobotPos(
   shared_data >> data_from_ai;
 
   myTeam = data_from_ai.team_color;
-        
+
   RhobanSSL::Vision::Team visionTeam = RhobanSSL::Vision::Ally;
   if (team != myTeam) {
     visionTeam = RhobanSSL::Vision::Opponent;
@@ -107,7 +107,7 @@ void AIVisionClient::packetReceived()
 
   const SSL_DetectionFrame & detection = data.detection();
 
-  //DEBUG("DETECTION : " << detection);
+  // DEBUG("DETECTION : " << detection);
 
   // Update the historic of camera detections
   auto it = camera_detections.find( detection.camera_id() );
@@ -122,7 +122,7 @@ void AIVisionClient::packetReceived()
       // std::cerr<<"IF"<<std::endl;
       // If the ball is outdated (> 1s) or not present, taking the first
       // one in the frame
-      
+
 
       double ball_is_detected = -1.0;
       for (auto ball : detection.balls()) {
@@ -154,11 +154,11 @@ void AIVisionClient::packetReceived()
         double x = ball.x()/1000.0;
         double y = ball.y()/1000.0;
         // std::cerr<<"CONFIDENCE ELSE ("<<detection.camera_id()<<"): "<<ball.confidence()<<" t: "<<detection.t_sent()<<std::endl;
-        if( not( 
+        if( not(
               object_coordonate_is_valid(
                 x,y, part_of_the_field_used
                 )
-                       
+
               ) ){
 
           continue;
@@ -169,18 +169,18 @@ void AIVisionClient::packetReceived()
           visionData.ball.movement[0].linear_position
           );
 
-        
 
-        
+
+
         if (!hasBall|| distance < nearest) {
           nearest = distance;
-          bestBall = pos; 
+          bestBall = pos;
         }
         // std::cout<<"BALL: "<<pos<<" dist: "<<distance<<" nearest: "<<bestBall<<" dist: "<<nearest<<std::endl;
       }
       if(nearest<99999)
         hasBall=true;
-      
+
 
       if( hasBall ){
         // std::cout<<"HASBALL"<<std::endl;
@@ -194,13 +194,13 @@ void AIVisionClient::packetReceived()
       }else{
         // ball_camera_detections[detection.camera_id()].first = false;
         ball_camera_detections[detection.camera_id()].first = -1.0;
-        
+
       }
     }
   }else{
     // ball_camera_detections[detection.camera_id()].first = false;
     ball_camera_detections[detection.camera_id()].first = -1.0;
-    
+
   }
 
   // We set to not present all robot that is too old
@@ -233,11 +233,11 @@ void AIVisionClient::updateRobotInformation(
   const SSL_DetectionRobot & robotFrame, bool ally,
   Ai::Team team_color
   ){
-  if( not( 
+  if( not(
         object_coordonate_is_valid(
           robotFrame.x()/1000.0, robotFrame.y()/1000.0
           , part_of_the_field_used
-          ) 
+          )
         ) ){
     return;
   }
@@ -252,13 +252,13 @@ void AIVisionClient::updateRobotInformation(
         ContinuousAngle
         > position = Vision::Factory::filter(
           robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
-          orientation_is_defined, 
+          orientation_is_defined,
           oldVisionData, part_of_the_field_used
           );
 //                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
 
-      
+
       if ( orientation_is_defined ) {
         Angle orientation(rad2deg( position.second.value() ));
         robot.update( detection.t_sent(), position.first, orientation ); // TODO HACK : IL FAUT METTRE t_send() ?
@@ -271,7 +271,7 @@ void AIVisionClient::updateRobotInformation(
     }
 
 
-  } 
+  }
 }
 
 
@@ -296,11 +296,11 @@ rhoban_geometry::Point
             double, //time capture_t
             rhoban_geometry::Point // detecte ball
             >
-            > & elem : ball_camera_detections 
+            > & elem : ball_camera_detections
           ){
           double ball_is_detected = elem.second.first; //TODO
           double camera_id = elem.first;
-    
+
           const rhoban_geometry::Point & ball_pos = elem.second.second;
           // std::cerr<<"DETECTED: "<<ball_is_detected<<std::endl;
           if( ball_is_detected>0.0 ){

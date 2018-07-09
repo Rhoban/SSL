@@ -72,6 +72,7 @@ set (SOURCES
     manager/sebastien/sebastien.cpp
     manager/jeremy/jeremy.cpp
     manager/plan_veschambres.cpp
+    manager/shin_tae_yong.cpp
     manager/Match.cpp
     manager/Manual.cpp
     manager/factory.cpp
@@ -127,6 +128,7 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/Referee.cpp
+    referee/print_protobuf_referee.cpp
     annotations/Annotations.cpp
 )
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include "RefereeClient.h"
 #include "client_config.h"
+#include <google/protobuf/util/json_util.h>
 
 using namespace rhoban_utils;
 

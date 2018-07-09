@@ -17,10 +17,10 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __VISION__PRINT_PROTOBUF__H__
-#define __VISION__PRINT_PROTOBUF__H__
+#ifndef __VISION__PRINT_PROTOBUF_REFEREE__H__
+#define __VISION__PRINT_PROTOBUF_REFEREE__H__
 
-#include "AIVisionClient.h"
+#include "Referee.h"
 #include <iostream>
 #include <google/protobuf/util/json_util.h>
 
@@ -29,15 +29,7 @@
 //namespace vision {
 
 std::ostream& operator<<(
-    std::ostream& out, const SSL_DetectionRobot & robot
-);
-
-std::ostream& operator<<(
-    std::ostream& out, const SSL_DetectionBall & ball
-);
-
-std::ostream& operator<<(
-    std::ostream& out, const SSL_DetectionFrame & detection
+    std::ostream& out, const SSL_Referee & referee
 );
 
 //};

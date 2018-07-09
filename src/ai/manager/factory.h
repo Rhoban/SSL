@@ -40,6 +40,7 @@ struct names {
     static constexpr const char* sebastien = "sebastien";
     static constexpr const char* jeremy = "jeremy";
     static constexpr const char* plan_veschambres = "PlanVeschambres";
+    static constexpr const char* shin_tae_yong = "ShinTaeYong";
 };
 
 class Factory {

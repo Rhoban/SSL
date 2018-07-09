@@ -28,6 +28,7 @@
 #include "adrien/adrien.h"
 #include "jeremy/jeremy.h"
 #include "plan_veschambres.h"
+#include "shin_tae_yong.h"
 #include "adrien/Manual_adrien.h"
 #include "example.h"
 #include "example_for_testing_robot_behaviors.h"
@@ -47,7 +48,8 @@ std::list<std::string> Factory::list_of_avalaible_managers ={
     names::manual_adrien,
     names::example,
     names::example_for_testing_robot_behaviors,
-    names::plan_veschambres
+    names::plan_veschambres,
+    names::shin_tae_yong
 };
 
 const std::list<std::string> & Factory::avalaible_managers(){
@@ -139,6 +141,11 @@ std::shared_ptr<Manager> Factory::construct_manager(
     if( manager_name == names::plan_veschambres ){
         manager = std::shared_ptr<Manager>(
             new PlanVeschambres(ai_data, referee)
+        );
+    }
+    if( manager_name == names::shin_tae_yong ){
+        manager = std::shared_ptr<Manager>(
+            new ShinTaeYong(ai_data, referee)
         );
     }
     return manager;
