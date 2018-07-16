@@ -18,7 +18,7 @@ class API : public QObject
 public:
   API(
     std::string teamName, bool simulation,
-    RhobanSSL::Ai::Team team, 
+    RhobanSSL::Ai::Team team,
     RhobanSSL::AICommander *commander,
     const std::string & config_path,
     RhobanSSL::Vision::Part_of_the_field part_of_the_field_used,
@@ -70,7 +70,7 @@ public slots:
 
   // Run a kick
   void kick(int id, int kick, float power = 1.0);
-    
+
   // Set spin
   void setSpin(int id, bool spin);
 

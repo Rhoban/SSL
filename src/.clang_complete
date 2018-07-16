@@ -31,6 +31,7 @@
 -I./rhobandeps/eigen/
 -I./ai/
 -I./../build_release/ssl_client/
+-I./../build_release/ssl_viewer/
 -I./rhoban/geometry/include/
 -I./rhobandeps/serial/include/
 -fPIC

@@ -9,7 +9,7 @@
 
 using namespace RhobanSSL;
 
-#define NB_ROBOT_ELEC 8 //HACK !! TODO ! Electronic doen't support that number of robots 
+#define NB_ROBOT_ELEC 8 //HACK !! TODO ! Electronic doen't support that number of robots
 
 // Helper, converts a json value to its string representation
 static QString js(Json::Value &json)
@@ -20,8 +20,8 @@ static QString js(Json::Value &json)
 }
 
 API::API(
-  std::string teamName, bool simulation, RhobanSSL::Ai::Team team, 
-  RhobanSSL::AICommander *commander, const std::string & config_path, 
+  std::string teamName, bool simulation, RhobanSSL::Ai::Team team,
+  RhobanSSL::AICommander *commander, const std::string & config_path,
   Vision::Part_of_the_field part_of_the_field_used, std::string addr, std::string port, std::string sim_port
   )
   :
@@ -190,6 +190,11 @@ QString API::robotsStatus()
                     jsonRobot["voltage"] = masterRobot.status.voltage/8.0;
                     jsonRobot["capVoltage"] = masterRobot.status.cap_volt;
                     jsonRobot["driversOk"] = !(masterRobot.status.status & STATUS_DRIVER_ERR);
+
+                    jsonRobot["x_odom"] = masterRobot.status.xpos/1000;
+                    jsonRobot["y_odom"] = masterRobot.status.ypos/1000;
+                    jsonRobot["t_odom"] = (masterRobot.status.ang*180)/M_PI;
+
                     jsonRobot["ir"] = (masterRobot.status.status & STATUS_IR) ? true : false;
                 } else {
                     jsonRobot["ir"] = false;

@@ -190,7 +190,8 @@ namespace RhobanSSL
                             }
                             */
                             /*
-                            if (nb_robots > 0) {
+                            if (nb_robots > 0) {7
+
                                 static int packets = 0;
                                 packets++;
                                 printf("Packets: %d\n", packets);

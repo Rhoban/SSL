@@ -891,6 +891,10 @@ function Manager(viewer)
                 div.find('.pos-x').text(robot.x.toFixed(3));
                 div.find('.pos-y').text(robot.y.toFixed(3));
                 div.find('.pos-orientation').text((normalizeTheta(robot.orientation)*180/Math.PI).toFixed(3));
+
+                div.find('.x_odom').text(robot.xpos.toFixed(3));
+                div.find('.y_odom').text(robot.ypos.toFixed(3));
+                div.find('.t_odom').text((normalizeTheta(robot.ang)*180/Math.PI).toFixed(3));
             } else {
                 div.find('.vision-status').removeClass('ok');
             }
