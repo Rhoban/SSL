@@ -62,6 +62,8 @@ class IndirectLob : public Strategy {
     ) ;
 
 
+virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
 };
 
 };

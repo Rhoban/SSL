@@ -29,16 +29,19 @@ namespace Robot_behavior {
 
 class Mur_defensor : public RobotBehavior  {
     private:
+    int mur_robot_id;
+    int mur_nb_robot;
 	ConsignFollower* follower;
 
     public:
-        Mur_defensor(Ai::AiData& ai_data);
+        Mur_defensor(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
         virtual void update(
             double time,
             const Ai::Robot & robot,
             const Ai::Ball & ball
         );
+    void declare_mur_robot_id( int id, int mur_nb_robots );
 
 	virtual Control control() const;
 

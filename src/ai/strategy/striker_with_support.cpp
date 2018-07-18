@@ -59,12 +59,22 @@ const std::string StrikerWithSupport::name = "striker_with_support";
 void StrikerWithSupport::start(double time){
     DEBUG("START PREPARE KICKOFF");
     behaviors_are_assigned = false;
+
+    striker = std::shared_ptr<Robot_behavior::Striker>(
+      new Robot_behavior::Striker(ai_data)
+    );
+    
 }
 void StrikerWithSupport::stop(double time){
     DEBUG("STOP PREPARE KICKOFF");
 }
 
 void StrikerWithSupport::update(double time){
+
+    //std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move( ball_position() );
+    //rhoban_geometry::Point goal_point = results.first;
+
+    //static_cast<Robot_behavior::Striker*>( striker.get() )->declare_point_to_strik( goal_point );
 }
 
 void StrikerWithSupport::assign_behavior_to_robots(
@@ -76,24 +86,20 @@ void StrikerWithSupport::assign_behavior_to_robots(
     if( not(behaviors_are_assigned) ){
         //we assign now all the other behavior
         assert( get_player_ids().size() == 3 );
-        int striker = player_id(0); // we get the first if in get_player_ids()
-        assign_behavior(
-            striker, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::Striker(ai_data)
-            )
-        );
+
+        assign_behavior( player_id(0), striker );
         int supportLeft = player_id(1); // we get the first if in get_player_ids()
         std::shared_ptr<Robot_behavior::RobotFollower> support_behaviorL(
             new Robot_behavior::RobotFollower(ai_data)
         );
-        support_behaviorL->declare_robot_to_follow(striker, Vector2d(1, 0.5), Vision::Team::Ally);
+        support_behaviorL->declare_robot_to_follow(player_id(0), Vector2d(1, 0.5), Vision::Team::Ally);
         assign_behavior( supportLeft, support_behaviorL );
 
         int supportRight = player_id(2); // we get the first if in get_player_ids()
         std::shared_ptr<Robot_behavior::RobotFollower> support_behaviorR(
           new Robot_behavior::RobotFollower(ai_data)
         );
-        support_behaviorR->declare_robot_to_follow(striker, Vector2d(1, -0.5), Vision::Team::Ally);
+        support_behaviorR->declare_robot_to_follow(player_id(0), Vector2d(1, -0.5), Vision::Team::Ally);
         assign_behavior(supportRight, support_behaviorR);
 
         behaviors_are_assigned = true;
@@ -135,6 +141,18 @@ bool StrikerWithSupport::get_starting_position_for_goalie(
     linear_position =  ally_goal_center();
     angular_position = ContinuousAngle(0.0);
     return true;
+}
+
+RhobanSSLAnnotation::Annotations StrikerWithSupport::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
+
+    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+    {
+        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
+        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+    }
+    return annotations;
 }
 
 

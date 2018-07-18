@@ -33,7 +33,7 @@ class SearchShootArea : public RobotBehavior  {
       rhoban_geometry::Point p1;
       rhoban_geometry::Point p2;
       int obstructed_view;
-      
+
       std::default_random_engine generator;
 
       double period;
@@ -44,6 +44,8 @@ class SearchShootArea : public RobotBehavior  {
       ConsignFollower* follower;
       RhobanSSLAnnotation::Annotations annotations;
     public:
+      bool well_positioned;
+      
         SearchShootArea(Ai::AiData& ai_data);
 
         virtual void update(
@@ -56,8 +58,7 @@ class SearchShootArea : public RobotBehavior  {
             this->period = period;
         }
 
-        void declare_area( rhoban_geometry::Point p1 ,
-                                            rhoban_geometry::Point p2 );
+        void declare_area( rhoban_geometry::Point p1, rhoban_geometry::Point p2 );
 
 
 	virtual Control control() const;

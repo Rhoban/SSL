@@ -32,10 +32,18 @@
 #include <core/collection.h>
 #include <manager/factory.h>
 #include <debug.h>
+#include <com/AICommanderReal.h>
+#include <utility>
 
 namespace RhobanSSL
 {
 
+float sign(float x) {
+    if (x > 0) {
+        return 1.0;
+    }
+    return -1.0;
+}
 
 void AI::check_time_is_coherent() const {
     #ifndef NDEBUG
@@ -48,12 +56,13 @@ void AI::check_time_is_coherent() const {
 }
 
 void AI::limits_velocity( Control & ctrl ) const {
+#if 1
     if( ai_data.constants.translation_velocity_limit > 0.0 ){
         if(
             ctrl.velocity_translation.norm() >
             ai_data.constants.translation_velocity_limit
         ){
-            ctrl.velocity_translation = Vector2d(0.0, 0.0);
+            ctrl.velocity_translation *= ai_data.constants.translation_velocity_limit/ctrl.velocity_translation.norm();
             std::cerr << "AI WARNING : we reached the "
                 "limit translation velocity !" << std::endl;
         }
@@ -63,11 +72,12 @@ void AI::limits_velocity( Control & ctrl ) const {
             std::fabs( ctrl.velocity_rotation.value() ) >
             ai_data.constants.rotation_velocity_limit
         ){
-            ctrl.velocity_rotation = 0.0;
+            ctrl.velocity_rotation = ai_data.constants.rotation_velocity_limit*sign(ctrl.velocity_rotation.value());
             std::cerr << "AI WARNING : we reached the "
                 "limit rotation velocity !" << std::endl;
         }
     }
+#endif
 }
 
 void AI::prevent_collision( int robot_id, Control & ctrl ){
@@ -183,15 +193,23 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
 static MovementSample debug_mov(4);
 
 void AI::send_control( int robot_id, const Control & ctrl ){
+    if( robot_id >= 8 ){ //HACK - becaus hardware doesn't support more than 8 robots
+        return; //HACK
+    } //HACK
+    assert( robot_id < 8 ); //HACK !
     if ( !ctrl.ignore) {
         if( ! ctrl.active ){
             commander->set(
                 robot_id, true, 0.0, 0.0, 0.0
             );
         }else{
+            //if( robot_id == 1 ){
+            //    DEBUG( "CTRL : " << ctrl );
+            //}
             int kick = 0;
             if (ctrl.kick) kick = 1;
             else if (ctrl.chipKick) kick = 2;
+            
             commander->set(
                 robot_id, true,
                 ctrl.velocity_translation[0], ctrl.velocity_translation[1],
@@ -270,10 +288,11 @@ AI::AI(
 ):
     team_name(team_name),
     default_team(default_team),
+    is_in_simulation(is_in_simulation),
     running(true),
     ai_data( config_path, is_in_simulation, default_team ),
     commander(commander),
-    current_dt(0.0),
+    current_dt(ai_data.constants.period),
     data(data)
 {
     init_robot_behaviors();
@@ -313,6 +332,7 @@ void AI::setManager(std::string managerName)
             managerName, ai_data, referee
         );
     }
+    manager_name = managerName;
     strategy_manager->declare_goalie_id( goalie_id );
     strategy_manager->declare_team_ids( robot_ids );
 }
@@ -362,8 +382,12 @@ void AI::update_robots( ){
 }
 
 void AI::run(){
-    double period = 1/60.0;    // 100 hz
+    double period = ai_data.constants.period;
     auto lastTick = rhoban_utils::TimeStamp::now();
+
+    // TODO ; SEE HOW TO REMOVE THE WARMUP
+    double warmup_period = 2 * period * RhobanSSL::Vision::history_size; 
+    double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS()/1000.0;
 
     while (running) {
         auto now = rhoban_utils::TimeStamp::now();
@@ -395,14 +419,41 @@ void AI::run(){
         //DEBUG("");
 
         ai_data.update( visionData );
+        if( not(is_in_simulation) ){
+            update_electronic_informations();
+        }
+        //print_electronic_info();
 
         #ifndef NDEBUG
         //check_time_is_coherent();
         #endif
 
+        // We wait some time to update completly ai_data structure.
+        if( warmup_start + warmup_period > current_time ){
+            continue;
+        }
+
         referee.update(current_time);
+
+        if( manager_name != Manager::names::manual  ) { // HACK TOT REMOVEE !
+            strategy_manager->change_team_and_point_of_view(
+                referee.get_team_color( strategy_manager->get_team_name() ),
+                referee.blue_have_it_s_goal_on_positive_x_axis()
+            );
+        }else{
+            dynamic_cast<Manager::Manual*>(
+                strategy_manager.get()
+            )->define_goal_to_positive_axis(
+                not( referee.blue_have_it_s_goal_on_positive_x_axis() )
+            );
+        }
+        strategy_manager->change_ally_and_opponent_goalie_id(
+            referee.blue_goalie_id(),
+            referee.yellow_goalie_id()
+        );
+
         strategy_manager->remove_invalid_robots();
-        
+
         strategy_manager->update(current_time);
         strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
         share_data();
@@ -451,9 +502,9 @@ double AI::getCurrentTime()
     return ai_data.time;
 }
 
-        
+
 RhobanSSLAnnotation::Annotations AI::get_robot_behavior_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations; 
+    RhobanSSLAnnotation::Annotations annotations;
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
         const Robot_behavior::RobotBehavior & robot_behavior = *(
             robot_behaviors.at(robot_id)
@@ -463,22 +514,39 @@ RhobanSSLAnnotation::Annotations AI::get_robot_behavior_annotations() const {
     return annotations;
 }
 
-        
+
 void AI::get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const {
     annotations.addAnnotations( getManager()->get_annotations() );
-    annotations.addAnnotations( 
+    annotations.addAnnotations(
         get_robot_behavior_annotations()
     );
 
-    std::function< 
+    std::function<
         rhoban_geometry::Point (
-            const rhoban_geometry::Point & p 
-        ) 
+            const rhoban_geometry::Point & p
+        )
     > fct = [this]( const rhoban_geometry::Point & p ) {
         return this->ai_data.team_point_of_view.from_frame( p );
     };
     annotations.map_positions(fct);
 }
 
+
+void AI::update_electronic_informations(){
+    RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+    for( unsigned int id=0; id<MAX_ROBOTS; id++ ){
+        auto robot = master->robots[id];
+        if( robot.isOk() ){
+            ai_data.robots.at(Vision::Team::Ally).at(id).infra_red = (robot.status.status & STATUS_IR) ? true : false;
+        }
+    }
+}
+
+void AI::print_electronic_info(){
+    std::cout << "Electronic : " << std::endl;
+    for( unsigned int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++ ){
+        std::cout << "robot id : " << id << " IR : " << ai_data.robots.at(Vision::Team::Ally).at(id).infra_red << std::endl;
+    }
+}
 
 }

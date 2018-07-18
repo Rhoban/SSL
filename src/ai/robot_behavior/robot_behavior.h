@@ -56,6 +56,7 @@ class RobotBehavior : public GameInformations {
         const Ai::Robot* robot_ptr;
         double birthday;
         double lastUpdate;
+        std::string name;
 
         Vector2d robot_linear_position;
         ContinuousAngle robot_angular_position;
@@ -104,6 +105,8 @@ class RobotBehavior : public GameInformations {
         rhoban_geometry::Point linear_position() const ;
         ContinuousAngle angular_position() const;
         bool is_goalie() const;
+
+        bool infra_red() const;
 
 };
 

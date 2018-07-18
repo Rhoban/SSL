@@ -42,7 +42,6 @@ class Example : public Manager {
     );
 
     void update(double time);
-    void analyse_data(double time);
     void choose_a_strategy(double time);
 
     virtual ~Example();

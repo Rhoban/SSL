@@ -9,121 +9,124 @@
 #include <QObject>
 #include <Data.h>
 #include <Ai.h>
+#include "client_config.h"
 
 class API : public QObject
 {
-    Q_OBJECT
+  Q_OBJECT
 
 public:
-    API(
-        std::string teamName, bool simulation,
-        RhobanSSL::Ai::Team team, 
-        RhobanSSL::AICommander *commander,
-        const std::string & config_path
+  API(
+    std::string teamName, bool simulation,
+    RhobanSSL::Ai::Team team, 
+    RhobanSSL::AICommander *commander,
+    const std::string & config_path,
+    RhobanSSL::Vision::Part_of_the_field part_of_the_field_used,
+    std::string addr=SSL_VISION_ADDRESS, std::string port=SSL_VISION_PORT, std::string sim_port=SSL_SIMULATION_VISION_PORT
     );
-    virtual ~API();
+  virtual ~API();
 
-    bool simulation;
+  bool simulation;
 
 signals:
 
 public slots:
-    bool isSimulation();
-    bool isYellow();
+  bool isSimulation();
+  bool isYellow();
 
-    // Vision communication statistics
-    QString visionStatus();
+  // Vision communication statistics
+  QString visionStatus();
 
-    // Status of the referee
-    QString refereeStatus();
+  // Status of the referee
+  QString refereeStatus();
 
-    // Get the status of all robots
-    QString robotsStatus();
+  // Get the status of all robots
+  QString robotsStatus();
 
-    // Gets the status of the ball
-    QString ballStatus();
+  // Gets the status of the ball
+  QString ballStatus();
 
-    // Gets the geometry of the field
-    QString fieldStatus();
+  // Gets the geometry of the field
+  QString fieldStatus();
 
-    // Scan for robots
-    void scan();
+  // Scan for robots
+  void scan();
 
-    // Enable/disable a robot
-    void enableRobot(int id, bool enabled);
+  // Enable/disable a robot
+  void enableRobot(int id, bool enabled);
 
-    // Manual control a robot
-    void manualControl(int id, bool manual);
+  // Manual control a robot
+  void manualControl(int id, bool manual);
 
-    // Active the robot
-    void activeRobot(int id, bool active);
+  // Active the robot
+  void activeRobot(int id, bool active);
 
-    // Commands a robot
-    void robotCommand(int id,
-        double xSpeed=0, double ySpeed=0, double thetaSpeed=0);
+  // Commands a robot
+  void robotCommand(int id,
+                    double xSpeed=0, double ySpeed=0, double thetaSpeed=0);
 
-    // Enable or disable the charge for a robot
-    void robotCharge(int id, bool charge=false);
+  // Enable or disable the charge for a robot
+  void robotCharge(int id, bool charge=false);
 
-    // Run a kick
-    void kick(int id, int kick);
+  // Run a kick
+  void kick(int id, int kick, float power = 1.0);
     
-    // Set spin
-    void setSpin(int id, bool spin);
+  // Set spin
+  void setSpin(int id, bool spin);
 
-    // Emergency stop
-    void emergencyStop();
+  // Emergency stop
+  void emergencyStop();
 
-    // Setting the position of the ball or of robot
-    void moveBall(double x, double y);
-    void moveRobot(bool yellow, int id, double x, double y, double theta);
+  // Setting the position of the ball or of robot
+  void moveBall(double x, double y);
+  void moveRobot(bool yellow, int id, double x, double y, double theta);
 
-    // Joystick
-    QString availableJoysticks();
-    void openJoystick(int robot, QString name);
-    void stopJoystick();
+  // Joystick
+  QString availableJoysticks();
+  void openJoystick(int robot, QString name);
+  void stopJoystick();
 
-    // Tweak the PID of a robot (currently a hack to send hard-coded PID values)
-    void tweakPid(int id);
+  // Tweak the PID of a robot (currently a hack to send hard-coded PID values)
+  void tweakPid(int id);
 
-    // Get the annotations that needs to be drawn on the screen
-    QString getAnnotations();
+  // Get the annotations that needs to be drawn on the screen
+  QString getAnnotations();
 
-    // Getting the strategies
-    QString getStrategies();
-    void updateAssignments();
-    void applyStrategy(int id, QString name);
-    void clearAssignments();
+  // Getting the strategies
+  QString getStrategies();
+  void updateAssignments();
+  void applyStrategy(int id, QString name);
+  void clearAssignments();
 
-    // Getting managers
-    QString getManagers();
-    void setManager(QString manager);
-    void managerStop();
-    void managerPlay();
+  // Getting managers
+  QString getManagers();
+  void setManager(QString manager);
+  void managerStop();
+  void managerPlay();
 
 protected:
-    std::string teamName;
-    RhobanSSL::AI *ai;
-    RhobanSSL::Data data;
-    RhobanSSL::Ai::Team team;
-    RhobanSSL::AIVisionClient visionClient;
-    RhobanSSL::AICommander *commander;
+  std::string teamName;
+  RhobanSSL::AI *ai;
+  RhobanSSL::Data data;
+  RhobanSSL::Ai::Team team;
+  RhobanSSL::AIVisionClient visionClient;
+  RhobanSSL::AICommander *commander;
 
-    std::map<int, std::string> assignments;
+  std::map<int, std::string> assignments;
 
-    std::string ourColor();
-    std::string opponentColor();
+  std::string ourColor();
+  std::string opponentColor();
 
-    std::thread *comThread;
-    std::thread *aiThread;
+  std::thread *comThread;
+  std::thread *aiThread;
 
-    std::mutex mutex;
+  std::mutex mutex;
 
-    std::thread *joystickThread;
-    RhobanSSL::Joystick *joystick;
-    int joystickRobot;
+  std::thread *joystickThread;
+  RhobanSSL::Joystick *joystick;
+  int joystickRobot;
 
-    // void comThreadExec();
-    void aiThreadExec();
-    void joystickThreadExec();
+  // void comThreadExec();
+  void aiThreadExec();
+  void joystickThreadExec();
 };

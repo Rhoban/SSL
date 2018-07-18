@@ -87,6 +87,9 @@ class Prepare_kickoff : public Strategy {
             ContinuousAngle & angular_position
         ) ;  
 
+        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
+        virtual void set_goalie( int id, bool to_be_managed );
 }; 
 
 };

@@ -5,8 +5,10 @@
 #include <QApplication>
 #include "mainwindow.h"
 #include "API.h"
+#include "client_config.h"
 
 #define TEAM_NAME "AMC"
+#define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 
 int main(int argc, char *argv[])
@@ -30,6 +32,19 @@ int main(int argc, char *argv[])
         cmd
     );
 
+    TCLAP::ValueArg<std::string> zone_name(
+        "z", // short argument name  (with one character)
+        "zone", // long argument name
+        "Define A zone to watch. All vision event outside the zone are ignored."
+        "It is used to work with another team in the same field."
+        "Avalaible values are : 'positive', 'negative' and 'all'."
+        "The default value is '" ZONE_NAME  "'. ",
+        false, // Flag is not required
+        ZONE_NAME, // Default value
+        "string", // short description of the expected value.
+        cmd
+    );
+
     TCLAP::ValueArg<std::string> config_path(
         "c", // short argument name  (with one character)
         "config", // long argument name
@@ -40,6 +55,40 @@ int main(int argc, char *argv[])
         cmd
     );
 
+    
+    TCLAP::ValueArg<std::string> addr(
+      "a", // short argument name  (with one character)
+      "address", // long argument name
+      "Vision client address",
+      false, // Flag is not required
+      SSL_VISION_ADDRESS, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+    TCLAP::ValueArg<std::string> port(
+      "p", // short argument name  (with one character)
+      "port", // long argument name
+      "Vision client port",
+      false, // Flag is not required
+      SSL_VISION_PORT, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+    
+    TCLAP::ValueArg<std::string> sim_port(
+      "u", // short argument name  (with one character)
+      "sim_port", // long argument name
+      "Vision client simulator port",
+      false, // Flag is not required
+      SSL_SIMULATION_VISION_PORT, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+
+    
     cmd.parse(argc, argv);
 
     // Instantiating the commander
@@ -50,12 +99,38 @@ int main(int argc, char *argv[])
         commander = new RhobanSSL::AICommanderReal(yellow.getValue());
     }
 
-    // Viewer API
-    API api(team_name.getValue(), simulation.getValue(), yellow.getValue() ?
-        RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
-        commander, config_path.getValue());
+    RhobanSSL::Vision::Part_of_the_field part_of_the_field_used;
+    if( zone_name.getValue() == "all" ){
+        part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::ALL_FIELD;
+    }else if( zone_name.getValue() == "positive" ){
+        part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::POSIVE_HALF_FIELD;
+    }else if( zone_name.getValue() == "negative" ){
+        part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::NEGATIVE_HALF_FIELD;
+    }else{
+        std::cerr << "Unknonw zone !"  << std::endl;
+        assert(false);
+    }
 
-    // Running Qt application
+    std::string theport;
+    if(simulation.getValue()){
+      theport=sim_port.getValue();
+    }else{
+      theport=port.getValue();
+    }
+
+    // Viewer API
+    API api(
+        team_name.getValue(), simulation.getValue(), 
+        yellow.getValue() ?
+        RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
+        commander, config_path.getValue(),
+        part_of_the_field_used,
+        addr.getValue(),
+        theport,
+        theport
+      );
+      
+      // Running Qt application
     QApplication a(argc, argv);
     MainWindow w(&api);
     w.show();

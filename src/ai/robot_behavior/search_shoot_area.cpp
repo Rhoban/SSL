@@ -32,20 +32,13 @@ SearchShootArea::SearchShootArea(
 ):
     RobotBehavior(ai_data),
     obstructed_view(-1),
-    period(4),
+    period(3),
     last_time_changement(0),
+    well_positioned(false),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
-  p1 = vector2point(
-      Vector2d(
-        oponent_corner_left() - rhoban_geometry::Point(1, 1)
-      )
-  );
-  p2 = vector2point(
-      Vector2d(
-        center_mark() - rhoban_geometry::Point(-1, 2)
-      )
-  );
+  p1 = Vector2d(oponent_goal_center()) + rhoban_geometry::Point(-1, 2);
+  p2 = Vector2d(center_mark()) + rhoban_geometry::Point(1, -2);
 }
 
 void SearchShootArea::update(
@@ -65,22 +58,12 @@ void SearchShootArea::update(
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
     // Vector2d opponent_goal_robot_vector = robot_position - oponent_goal_center();
-    annotations.addArrow( robot_position, oponent_goal_center(), "red" );
+
+    std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move( robot_position );
+
+    annotations.addArrow( robot_position, results.first, "red" );
 
     double seuil = 0.4;
-    obstructed_view = 0;
-    std::vector<int> v_obstruct = get_robot_in_line( robot_position, oponent_goal_center(), Vision::Team::Opponent, seuil );
-    // DEBUG("v_obstruct opponent : " << v_obstruct);
-    if(!v_obstruct.empty()){
-      obstructed_view = 1;
-      // DEBUG("obstructed_view opponent : " << obstructed_view);
-    }
-    v_obstruct = get_robot_in_line( robot_position, oponent_goal_center(), Vision::Team::Ally, seuil );
-    // DEBUG("v_obstruct Ally : " << v_obstruct);
-    if(!v_obstruct.empty()){
-      obstructed_view = 1;
-      // DEBUG("obstructed_view Ally : " << obstructed_view);
-    }
 
     double pos_x = robot_position.getX();
     double pos_y = robot_position.getY();
@@ -88,9 +71,10 @@ void SearchShootArea::update(
     ContinuousAngle target_rotation = vector2angle( ball_robot_vector  );
 
     // DEBUG("obstructed_view AFTER : " << obstructed_view);
-    if (obstructed_view == 0 && pos_x <= std::max(p1.x, p2.x) && pos_x > std::min(p1.x, p2.x) && pos_y <= std::max(p1.y, p2.y) && pos_y > std::min(p1.y, p2.y))  {
+    if ((results.second > seuil) && pos_x <= std::max(p1.x, p2.x) && pos_x > std::min(p1.x, p2.x) && pos_y <= std::max(p1.y, p2.y) && pos_y > std::min(p1.y, p2.y))  {
       // DEBUG( "robot_position : " << robot_position );
       target_position = robot_position;
+      well_positioned = true;
       // DEBUG( "target_position : " << target_position );
     }
     else{
@@ -101,6 +85,7 @@ void SearchShootArea::update(
           distribution_x(generator), distribution_y(generator)
         );
         last_time_changement = time;
+        well_positioned = false;
       }
     }
 
@@ -109,7 +94,7 @@ void SearchShootArea::update(
 
     annotations.addCross( target_position.x, target_position.y );
 
-    follower->avoid_the_ball(true);
+    follower->avoid_the_ball(false);
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }

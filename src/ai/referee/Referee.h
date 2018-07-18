@@ -33,8 +33,10 @@ struct Referee_Id {
     static const std::string STATE_INIT;
     static const std::string STATE_HALTED;
     static const std::string STATE_STOPPED;
+
     static const std::string STATE_PREPARE_KICKOFF;
     static const std::string STATE_PREPARE_PENALTY;
+
     static const std::string STATE_RUNNING;
     static const std::string STATE_TIMEOUT;
 
@@ -54,11 +56,18 @@ struct Referee_Id {
 
     static const std::string EDGE_TIMEOUT_START;
     static const std::string EDGE_FORCE_START;
+
     static const std::string EDGE_KICKOFF_YELLOW;
     static const std::string EDGE_KICKOFF_BLUE;
-    static const std::string EDGE_PENALTY;
-    static const std::string EDGE_INDIRECT;
-    static const std::string EDGE_DIRECT;
+
+    static const std::string EDGE_PENALTY_YELLOW;
+    static const std::string EDGE_PENALTY_BLUE;
+
+    static const std::string EDGE_DIRECT_FREE_BLUE;
+    static const std::string EDGE_DIRECT_FREE_YELLOW;
+
+    static const std::string EDGE_INDIRECT_FREE_BLUE;
+    static const std::string EDGE_INDIRECT_FREE_YELLOW;
 
     static const std::string EDGE_NORMAL_START_FOR_KICKOFF;
     static const std::string EDGE_NORMAL_START_FOR_PENALTY;
@@ -104,6 +113,9 @@ private:
     void save_last_time_stamps();
 
     Ai::Team team_having_kickoff;
+    Ai::Team team_having_penalty;
+    std::pair <Ai::Team, int> team_having_direct_free;
+    std::pair <Ai::Team, int> team_having_indirect_free;
 public:
     Referee();
 
@@ -111,7 +123,11 @@ public:
     const ID & get_state() const ;
 
     void update( double time );
+
     Ai::Team kickoff_team() const ;
+    Ai::Team penalty_team() const ;
+    std::pair <Ai::Team, int> direct_free_team() const ;
+    std::pair <Ai::Team, int> indirect_free_team() const ;
 
     bool blue_have_it_s_goal_on_positive_x_axis() const;
     Ai::Team get_team_color( const std::string & team_name ) const;

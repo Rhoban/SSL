@@ -23,12 +23,15 @@
 namespace RhobanSSL {
 namespace Robot_behavior {
 
+#define PERIOD 10.0
 
 Example::Example(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+    follower( Factory::fixed_consign_follower(ai_data) ),
+    period(PERIOD),
+    last_time(0)
 {
 }
 
@@ -43,7 +46,6 @@ void Example::update(
     
     annotations.clear();
     
-    const rhoban_geometry::Point & target_position = center_mark();
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
 
@@ -52,9 +54,20 @@ void Example::update(
 
     Vector2d direction = ball_position() - robot_position;
     ContinuousAngle target_rotation = vector2angle( direction );
-    
-    follower->avoid_the_ball(true);
-    follower->set_following_position(target_position, target_rotation);
+
+    if( time - last_time > period ){ 
+        rhoban_geometry::Point target;
+        if( cpt%2==0 ){
+            target = center_ally_field();
+        }else{
+            target = center_opponent_field();
+        } 
+        follower->set_following_position( target, target_rotation );
+        cpt = (cpt+1)%2;
+        last_time = time;
+    }
+
+    follower->avoid_the_ball(false);
     follower->update(time, robot, ball);
 }
 

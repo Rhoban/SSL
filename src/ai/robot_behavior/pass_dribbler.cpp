@@ -33,9 +33,9 @@ Pass_dribbler::Pass_dribbler(
     point_to_pass(66,66),
     robot_to_pass_id(-1),
     robot_to_pass_team(Vision::Team::Ally),
-    need_to_kick(false),
-    kick_power(255),
-    follower( Factory::fixed_consign_follower(ai_data) )
+    kick_power(0.5),
+    follower( Factory::fixed_consign_follower(ai_data) ),
+    need_to_kick(false)
 {
 }
 
@@ -52,10 +52,11 @@ void Pass_dribbler::update(
     //  this->robot_angular_position
     // are all avalaible
 
+
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
     const ContinuousAngle & robot_angle = robot.get_movement().angular_position( time );
-    
-    if ( (point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id != -1) ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.   
+
+    if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
         const Ai::Robot & robot_to_pass = get_robot( robot_to_pass_id, robot_to_pass_team );
         point_to_pass = robot_to_pass.get_movement().linear_position( time );
     }
@@ -69,10 +70,13 @@ void Pass_dribbler::update(
     rhoban_geometry::Point target_position;
     double target_rotation;
 
-    double position_error = 0.14;
+    // double position_error = 0.14;
     double angle_error = 0.090;
 
-    if ( std::abs(Vector2d(robot_position - ball_position()).norm()) > position_error ) {
+    bool value_infra_red = GameInformations::infra_red(robot.id());
+    DEBUG("robot id " << value_infra_red);
+    // if ( std::abs(Vector2d(robot_position - ball_position()).norm()) > position_error )
+    if(!value_infra_red){
         target_position = ball_position();
         target_rotation = detail::vec2angle(-ball_robot_vector);
     } else {
@@ -88,7 +92,7 @@ void Pass_dribbler::update(
 
     Pass_dribbler::calc_kick_power(robot_position, target_position);
     follower->avoid_the_ball(false);
-    follower->set_following_position(Vector2d(target_position), target_rotation);
+    follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 
@@ -116,8 +120,11 @@ void Pass_dribbler::declare_robot_to_pass( int robot_id, Vision::Team team ){
     robot_to_pass_team = team;
 }
 
-int Pass_dribbler::calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end ){
-    int kick_power = 5;
+void Pass_dribbler::calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end ){
+    Vector2d target_vector = end - start;
+
+    //Just a prototype before we actually try on the field how much kick_power affect distance
+    kick_power = target_vector.norm() / 10;
 }
 
 

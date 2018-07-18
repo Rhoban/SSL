@@ -9,6 +9,8 @@
 
 using namespace RhobanSSL;
 
+#define NB_ROBOT_ELEC 8 //HACK !! TODO ! Electronic doen't support that number of robots 
+
 // Helper, converts a json value to its string representation
 static QString js(Json::Value &json)
 {
@@ -17,21 +19,25 @@ static QString js(Json::Value &json)
     return QString::fromStdString(writer.write(json));
 }
 
-API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander *commander, const std::string & config_path)
-:
-    simulation(simulation),
-    teamName(teamName),
-    data(team),
-    team(team),
-    visionClient(data, team, simulation),
-    commander(commander),
-    joystick(NULL),
-    joystickRobot(0)
+API::API(
+  std::string teamName, bool simulation, RhobanSSL::Ai::Team team, 
+  RhobanSSL::AICommander *commander, const std::string & config_path, 
+  Vision::Part_of_the_field part_of_the_field_used, std::string addr, std::string port, std::string sim_port
+  )
+  :
+  simulation(simulation),
+  teamName(teamName),
+  data(team),
+  team(team),
+  visionClient(data, team, simulation, addr, port, sim_port,part_of_the_field_used),
+  commander(commander),
+  joystick(NULL),
+  joystickRobot(0)
 {
     // Be sure that the final controls are initalized to no-speed
     RhobanSSL::Shared_data shared;
     data >> shared;
-    for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+    for (int id=0; id<NB_ROBOT_ELEC; id++) {
         RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
 
         control.ignore = true;
@@ -84,7 +90,7 @@ void API::comThreadExec()
     while (true) {
         mutex.lock();
         bool hasRobot = false;
-        for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+        for (int id=0; id<NB_ROBOT_ELEC; id++) {
             auto &robot = robots[id];
             if (robot.enabled) {
                 hasRobot = true;
@@ -237,7 +243,8 @@ QString API::fieldStatus()
     json["goalWidth"] = field.goalWidth;
     json["goalDepth"] = field.goalDepth;
     json["boundaryWidth"] = field.boundaryWidth;
-
+    json["penaltyAreaWidth"] = field.penaltyAreaWidth;
+    json["penaltyAreaDepth"] = field.penaltyAreaDepth;
     return js(json);
 }
 
@@ -260,7 +267,7 @@ void API::moveRobot(bool yellow, int id, double x, double y, double theta)
 void API::enableRobot(int id, bool enabled)
 {
     mutex.lock();
-    if (id >= 0 && id < Ai::Constants::NB_OF_ROBOTS_BY_TEAM) {
+    if (id >= 0 && id < NB_ROBOT_ELEC) {
         RhobanSSL::Shared_data shared;
         data >> shared;
         RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
@@ -280,7 +287,7 @@ void API::enableRobot(int id, bool enabled)
 void API::manualControl(int id, bool manual)
 {
     mutex.lock();
-    if (id >= 0 && id < Ai::Constants::NB_OF_ROBOTS_BY_TEAM) {
+    if (id >= 0 && id < NB_ROBOT_ELEC) {
         RhobanSSL::Shared_data shared;
         data >> shared;
         auto &final_control = shared.final_control_for_robots[id];
@@ -294,7 +301,7 @@ void API::manualControl(int id, bool manual)
 void API::activeRobot(int id, bool active)
 {
     mutex.lock();
-    if (id >= 0 && id < Ai::Constants::NB_OF_ROBOTS_BY_TEAM) {
+    if (id >= 0 && id < NB_ROBOT_ELEC) {
         RhobanSSL::Shared_data shared;
         data >> shared;
         RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
@@ -336,7 +343,7 @@ void API::robotCharge(int id, bool charge)
     mutex.unlock();
 }
 
-void API::kick(int id, int kick)
+void API::kick(int id, int kick, float power)
 {
     mutex.lock();
     RhobanSSL::Shared_data shared;
@@ -346,6 +353,7 @@ void API::kick(int id, int kick)
     if (!control.ignore) {
         control.kick = false;
         control.chipKick = false;
+        control.kickPower = power;
 
         if (kick == 1) {
             control.kick = true;
@@ -381,7 +389,7 @@ void API::emergencyStop()
     RhobanSSL::Shared_data shared;
     data >> shared;
 
-    for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+    for (int id=0; id<NB_ROBOT_ELEC; id++) {
         auto &final_control = shared.final_control_for_robots[id];
         final_control.is_manually_controled_by_viewer = true;
         final_control.control.ignore = true;
@@ -427,7 +435,7 @@ void API::scan()
 
     // Sending a disable packet to all robots
     for (int n=0; n<3; n++) {
-        for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+        for (int id=0; id<NB_ROBOT_ELEC; id++) {
             if (shared_tmp_manual.final_control_for_robots[id].is_manually_controled_by_viewer) {
                 shared_tmp_manual.final_control_for_robots[id].control.active = false;
                 shared_tmp_manual.final_control_for_robots[id].control.ignore = false;
@@ -440,7 +448,7 @@ void API::scan()
     // Restoring the data state
     data << shared;
 
-    for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+    for (int id=0; id<NB_ROBOT_ELEC; id++) {
         RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
         if (simulation) {
             if (id <= 7) {
@@ -679,7 +687,7 @@ void API::managerPlay()
     RhobanSSL::Shared_data shared;
     data >> shared;
 
-    for (int id=0; id<Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++) {
+    for (int id=0; id<NB_ROBOT_ELEC; id++) {
         auto &final_control = shared.final_control_for_robots[id];
         final_control.is_manually_controled_by_viewer = false;
     }

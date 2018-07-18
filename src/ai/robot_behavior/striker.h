@@ -29,8 +29,10 @@ namespace Robot_behavior {
 
 class Striker : public RobotBehavior  {
     private:
+    bool use_custom_vector;
+    rhoban_geometry::Point striking_point;
 	ConsignFollower* follower;
-
+    
     public:
         Striker(Ai::AiData& ai_data);
 
@@ -41,6 +43,8 @@ class Striker : public RobotBehavior  {
         );
 
 	virtual Control control() const;
+
+    void declare_point_to_strik( rhoban_geometry::Point point );
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 

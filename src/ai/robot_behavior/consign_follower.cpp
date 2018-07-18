@@ -29,6 +29,12 @@ ConsignFollower::ConsignFollower( Ai::AiData & ai_data ):
 ConsignFollower::~ConsignFollower(){ }
 
 void ConsignFollower::avoid_the_ball( bool value ){ }
+void ConsignFollower::avoid_ally(bool value){ }
+void ConsignFollower::avoid_opponent(bool value){ }
+
+void ConsignFollower::set_radius_avoidance_for_the_ball(
+    double radius
+){ }
 
 }
 }

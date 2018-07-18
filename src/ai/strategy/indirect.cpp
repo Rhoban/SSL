@@ -79,9 +79,9 @@ void Indirect::assign_behavior_to_robots(
 
   int wait_pass = player_id(0); // we get the first if in get_player_ids()
   int pass = player_id(1); // we get the first if in get_player_ids()
-  double seuil = 0.2;
-  const Ai::Robot & robot_pass = get_robot( pass );
-  const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
+  //double seuil = 0.2;
+  //const Ai::Robot & robot_pass = get_robot( pass );
+  //const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
 
   // Vector2d ball_robot_vector_pass = ball_position() - robot_pass_position;
   // double d = ball_robot_vector_pass.norm();
@@ -170,6 +170,18 @@ bool Indirect::get_starting_position_for_goalie(
     linear_position =  ally_goal_center();
     angular_position = ContinuousAngle(0.0);
     return true;
+}
+
+RhobanSSLAnnotation::Annotations Indirect::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
+
+    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+    {
+        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
+        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+    }
+    return annotations;
 }
 
 

@@ -82,8 +82,8 @@ Matchings gale_shapley_algorithm(
             table_of_man_preferences.at(man_id).begin(),
             table_of_man_preferences.at(man_id).end(),
             [&man_rank_is_increasing](
-                std::pair<unsigned int,MAN_RANK> & a,
-                std::pair<unsigned int,MAN_RANK> & b
+                const std::pair<unsigned int,MAN_RANK> & a,
+                const std::pair<unsigned int,MAN_RANK> & b
             ){
                 return (
                     man_rank_is_increasing ? 

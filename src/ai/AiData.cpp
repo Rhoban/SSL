@@ -131,8 +131,10 @@ namespace Ai {
     AiData::AiData( const std::string & config_path, bool is_in_simulation, Ai::Team team_color ):
         time_shift_with_vision(0.0),
         team_color(team_color),
-        constants(config_path, is_in_simulation)
+        constants(config_path, is_in_simulation),
+        dt(0.0)
     {
+        dt = constants.period;
         int nb_robots = 0;
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
@@ -180,6 +182,10 @@ namespace Ai {
         }
 
         auto robot_conf = root["robot"];
+
+        frame_per_second = root["time"]["frame_per_second"].asInt();
+        assert( frame_per_second > 0 );
+        period = 1.0/frame_per_second;
 
         robot_radius = robot_conf["robot_radius"].asDouble();
         assert( robot_radius > 0.0 );
@@ -235,6 +241,9 @@ namespace Ai {
         DEBUG( "rotation_acceleration_limit : " << rotation_acceleration_limit );
 
 
+        rules_avoidance_distance = 0.5 * (1.0+10.0/100.0);
+
+
         radius_ball = root["ball"]["radius_ball"].asDouble();
         assert( radius_ball > 0.0 );
 
@@ -243,6 +252,7 @@ namespace Ai {
         assert( security_acceleration_ratio >= 0.0 );
 
         obstacle_avoidance_ratio = nav["obstacle_avoidance_ratio"].asDouble(); // should be lessr than security_acceleration_ratio
+        coefficient_to_increase_avoidance_convergence = nav["coefficient_to_increase_avoidance_convergence"].asDouble(); // should be lessr than security_acceleration_ratio
         assert( obstacle_avoidance_ratio >=0.0 );
         assert( obstacle_avoidance_ratio < security_acceleration_ratio );
 
@@ -380,7 +390,7 @@ namespace Ai {
         //
         return RobotPlacement(
             {
-                Position( 0.0, 1.0, 0.0 ), // A
+                Position( -0.8, .0, 0.0 ), // A
                 Position( relative2absolute(-1.0/3.0, 2.0/3.0), 0.0), // B
                 Position( relative2absolute(-1.0/3.0, -2.0/3.0), 0.0), // C
                 Position( relative2absolute(-2.0/3.0, 1.0/2.0), 0.0), // D
@@ -424,7 +434,10 @@ namespace Ai {
     }
 
     
-Robot::Robot(): is_goalie(false) {}
+Robot::Robot():
+    is_goalie(false),
+    infra_red(false)
+{}
 
 
 } } //Namespace

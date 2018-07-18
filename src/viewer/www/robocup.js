@@ -470,12 +470,13 @@ function Viewer()
                     ctx.stroke();
                 }
                 break;
-                case "text":{
-                    ctx.save();
-                    //ctx.font = '12pt sans';
-                    ctx.font = '8pt sans';
-                    ctx.fillText( annotation.text, annotation.x, annotation.y);
-                    ctx.restore();
+                case "text": {
+                    this.addText(
+                        annotation.text,
+                        annotation.x,
+                        -annotation.y,
+                        { color: '#FFF' }
+                    );
                 }
                 break;
             }
@@ -662,6 +663,8 @@ function Manager(viewer)
             this.field.goalWidth = fieldStatus.goalWidth;
             this.field.goalDepth = fieldStatus.goalDepth;
             this.field.boundaryWidth = fieldStatus.boundaryWidth;
+            this.field.penaltyAreaWidth = fieldStatus.penaltyAreaWidth;
+            this.field.penaltyAreaDepth = fieldStatus.penaltyAreaDepth;
         }
 
         // Getting robots position from the API and update it
@@ -785,12 +788,25 @@ function Manager(viewer)
                 api.robotCharge(robot.id, robot.charge);
             });
 
-            button('.kick', function(robot) {
-                api.kick(robot.id, 1);
+            button('.kick100', function(robot) {
+                api.kick(robot.id, 1, 1.0);
+            }, 'mousedown');
+            button('.kick66', function(robot) {
+                //api.kick(robot.id, 1, 0.6666);//66.66/100.0);
+                api.kick(robot.id, 1, 0.6666);//66.66/100.0);
+            }, 'mousedown');
+            button('.kick33', function(robot) {
+                api.kick(robot.id, 1, 0.3333);
             }, 'mousedown');
 
-            button('.kick-chip', function(robot) {
-                api.kick(robot.id, 2);
+            button('.kick-chip100', function(robot) {
+                api.kick(robot.id, 2, 1.0);
+            }, 'mousedown');
+            button('.kick-chip66', function(robot) {
+                api.kick(robot.id, 2, 0.6666);
+            }, 'mousedown');
+            button('.kick-chip33', function(robot) {
+                api.kick(robot.id, 2, 0.3333);
             }, 'mousedown');
 
             button('.joystickize', function(robot) {
@@ -799,8 +815,8 @@ function Manager(viewer)
                 $('.joystick-open').click();
             });
 
-            button('.kick, .kick-chip', function(robot) {
-                api.kick(robot.id, 0);
+            button('.kick100, .kick66, .kick33, .kick-chip100, .kick-chip66, .kick-chip33', function(robot) {
+                api.kick(robot.id, 0, 0.0);
             }, 'mouseup');
 
             button('.left', function(robot) {

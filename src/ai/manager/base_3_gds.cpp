@@ -142,18 +142,6 @@ Base_3_gds::Base_3_gds(
     ); // TODO TIME !
 }
 
-void Base_3_gds::analyse_data(double time){
-    // We change the point of view of the team
-    change_team_and_point_of_view(
-        referee.get_team_color( get_team_name() ),
-        referee.blue_have_it_s_goal_on_positive_x_axis()    
-    );
-    change_ally_and_opponent_goalie_id(
-        referee.blue_goalie_id(),
-        referee.yellow_goalie_id()
-    );
-}
-    
 
 void Base_3_gds::choose_a_strategy(double time){
     if( referee.edge_entropy() > last_referee_changement ){
@@ -192,7 +180,6 @@ void Base_3_gds::choose_a_strategy(double time){
 void Base_3_gds::update(double time){
     //update_strategies(time);
     update_current_strategies(time);
-    analyse_data(time);
     choose_a_strategy(time);
 }
 

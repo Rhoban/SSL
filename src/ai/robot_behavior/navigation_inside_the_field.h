@@ -35,7 +35,10 @@ class Navigation_inside_the_field :
     public ConsignFollower 
 {
     private:
-        bool following_position_wad_updated;
+        bool need_to_avoid_the_ball; 
+        double saving_ball_radius_avoidance;
+
+        bool following_position_was_updated;
         Navigation_with_obstacle_avoidance position_follower;
 
         Vector2d target_position;
@@ -75,14 +78,18 @@ class Navigation_inside_the_field :
         );
 
         virtual void set_following_position(
-            const Vector2d & position_to_follow,
+            const rhoban_geometry::Point & position_to_follow,
             const ContinuousAngle & angle
         );
         virtual void avoid_the_ball(bool value = true);
+        virtual void avoid_ally(bool value = true);
+        virtual void avoid_opponent(bool value = true);
 
         virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-};
-
+        virtual void set_radius_avoidance_for_the_ball(
+            double radius
+        );
+    };
 };
 }; //Namespace Rhoban
 

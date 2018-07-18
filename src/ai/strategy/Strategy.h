@@ -53,7 +53,7 @@ class Strategy : public GameInformations {
 
     Strategy(Ai::AiData & ai_data);
 
-    void set_goalie( int id, bool to_be_managed );
+    virtual void set_goalie( int id, bool to_be_managed );
     void set_goalie_opponent( int id );
     
     // Get the goalie id. If id<0 then no goalie is declared 

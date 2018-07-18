@@ -30,11 +30,17 @@ class ConsignFollower : public RobotBehavior {
     ConsignFollower( Ai::AiData & ai_data );
     
     virtual void set_following_position(
-        const Vector2d & position_to_follow,
+        const rhoban_geometry::Point & position_to_follow,
         const ContinuousAngle & angle
     ) = 0;
 
     virtual void avoid_the_ball( bool value );
+    virtual void avoid_ally(bool value);
+    virtual void avoid_opponent(bool value);
+    
+    virtual void set_radius_avoidance_for_the_ball(
+        double radius
+    );
 
     virtual ~ConsignFollower();
 };

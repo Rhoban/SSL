@@ -44,26 +44,28 @@ void RobotFollower::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now 
+    // Now
     //  this->robot_linear_position
-    //  this->robot_angular_position 
+    //  this->robot_angular_position
     // are all avalaible
-    
-        
+
+
     const Ai::Robot & robot_to_follow = get_robot( robot_to_follow_id, robot_to_follow_team );
     rhoban_geometry::Point position = robot_to_follow.get_movement().linear_position( time );
-    rhoban_geometry::Point target_position = position + translation; 
-    ContinuousAngle target_rotation(0.0);
+    rhoban_geometry::Point target_position = position + translation;
+
+    rhoban_geometry::Point robot_position = robot.get_movement().linear_position( time );
+    double target_rotation = detail::vec2angle(ball_position() - robot_position);
 
     follower->avoid_the_ball(true);
     follower->set_following_position(target_position, target_rotation);
-    follower->update(time, robot, ball);   
+    follower->update(time, robot, ball);
 }
 
 Control RobotFollower::control() const {
     Control ctrl = follower->control();
-    // ctrl.spin = true; // We active the dribler ! 
-    return ctrl; 
+    // ctrl.spin = true; // We active the dribler !
+    return ctrl;
 }
 
 RobotFollower::~RobotFollower(){

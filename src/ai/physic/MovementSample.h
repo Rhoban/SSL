@@ -40,8 +40,9 @@ struct PositionSample {
 };
 
 struct MovementSample : public circular_vector<PositionSample> {
+    circular_vector<double> dts;
 
-    MovementSample(unsigned int);
+    MovementSample(unsigned int, double default_dt = 1.0/60.0);
     MovementSample();
 
     double time( unsigned int i = 0 ) const;

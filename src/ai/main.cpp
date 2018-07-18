@@ -29,8 +29,11 @@
 #include "Data.h"
 #include <core/print_collection.h>
 #include <manager/factory.h>
+#include "client_config.h"
+
 
 #define TEAM_NAME "AMC"
+#define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 
 using namespace RhobanSSL;
@@ -67,6 +70,19 @@ int main(int argc, char **argv)
         "string", // short description of the expected value.
         cmd
     );
+
+    TCLAP::ValueArg<std::string> zone_name(
+        "z", // short argument name  (with one character)
+        "zone", // long argument name
+        "Define A zone to watch. All vision event outside the zone are ignored."
+        "It is used to work with another team in the same field."
+        "Avalaible values are : 'positive', 'negative' and 'all'."
+        "The default value is '" ZONE_NAME  "'. ",
+        false, // Flag is not required
+        ZONE_NAME, // Default value
+        "string", // short description of the expected value.
+        cmd
+    );
     
     std::stringstream manager_names;
     manager_names << Manager::Factory::avalaible_managers();
@@ -92,6 +108,39 @@ int main(int argc, char **argv)
     );
 
     TCLAP::SwitchArg em("e", "em", "Stop all", cmd, false);
+
+    TCLAP::ValueArg<std::string> addr(
+      "a", // short argument name  (with one character)
+      "address", // long argument name
+      "Vision client address",
+      false, // Flag is not required
+      SSL_VISION_ADDRESS, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+    TCLAP::ValueArg<std::string> port(
+      "p", // short argument name  (with one character)
+      "port", // long argument name
+      "Vision client port",
+      false, // Flag is not required
+      SSL_VISION_PORT, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+    
+    TCLAP::ValueArg<std::string> sim_port(
+      "u", // short argument name  (with one character)
+      "sim_port", // long argument name
+      "Vision client simulator port",
+      false, // Flag is not required
+      SSL_SIMULATION_VISION_PORT, // Default value
+      "string", // short description of the expected value.
+      cmd
+      );
+
+
     cmd.parse(argc, argv);
 
 
@@ -111,20 +160,52 @@ int main(int argc, char **argv)
 
     Data data(yellow.getValue() ? Ai::Yellow : Ai::Blue);
 
+
+    Vision::Part_of_the_field part_of_the_field_used;
+    if( zone_name.getValue() == "all" ){
+        part_of_the_field_used = Vision::Part_of_the_field::ALL_FIELD;
+    }else if( zone_name.getValue() == "positive" ){
+        part_of_the_field_used = Vision::Part_of_the_field::POSIVE_HALF_FIELD;
+    }else if( zone_name.getValue() == "negative" ){
+        part_of_the_field_used = Vision::Part_of_the_field::NEGATIVE_HALF_FIELD;
+    }else{
+        std::cerr << "Unknonw zone !"  << std::endl;
+        assert(false);
+    }
+
+
+
+    
+    // // Instantiationg the vision
+    // AIVisionClient vision(
+    //   data,
+    //   yellow.getValue() ? Ai::Yellow : Ai::Blue,
+    //   simulation.getValue(), part_of_the_field_used
+    //   );
+
+    std::string theport;
+    if(simulation.getValue()){
+      theport=sim_port.getValue();
+    }else{
+      theport=port.getValue();
+    }
+    
     // Instantiationg the vision
     AIVisionClient vision(
-        data,
-        yellow.getValue() ? Ai::Yellow : Ai::Blue,
-        simulation.getValue()
-    );
+      data,
+      yellow.getValue() ? Ai::Yellow : Ai::Blue,
+      simulation.getValue(),
+      addr.getValue(), theport, theport, part_of_the_field_used
+      );
 
+    
     // AI Commander to control the robots
     AICommander *commander;
     if (simulation.getValue()) {
-        commander = new AICommanderSimulation(yellow.getValue());
+      commander = new AICommanderSimulation(yellow.getValue());
     } else {
-        // XXX: To test!!
-        commander = new AICommanderReal(yellow.getValue());
+      // XXX: To test!!
+      commander = new AICommanderReal(yellow.getValue());
     }
 
     if (em.getValue()) {

@@ -20,6 +20,7 @@
 #ifndef __STRATEGY__STRIKERWITHSUPPORT__H__
 #define __STRATEGY__STRIKERWITHSUPPORT__H__
 
+#include <robot_behavior/striker.h>
 #include "Strategy.h"
 
 namespace RhobanSSL {
@@ -28,6 +29,7 @@ namespace Strategy {
 class StrikerWithSupport : public Strategy {
     private:
     bool behaviors_are_assigned;
+    std::shared_ptr<Robot_behavior::Striker> striker;
 
     public:
     StrikerWithSupport(Ai::AiData & ai_data);
@@ -58,7 +60,7 @@ class StrikerWithSupport : public Strategy {
         rhoban_geometry::Point & linear_position,
         ContinuousAngle & angular_position
     ) ;
-
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 };
 

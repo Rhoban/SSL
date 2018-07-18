@@ -91,6 +91,7 @@ std::ostream& operator<<(std::ostream& out, const Object& object);
 class Robot : public Object {
     public:
     bool is_goalie;
+    bool infra_red;
     Robot();
 };
 class Ball : public Object { };
@@ -110,9 +111,14 @@ struct Field : Vision::Field {
 };
 
 struct Constants {
-    static constexpr int NB_OF_ROBOTS_BY_TEAM = 8;
 
-    bool is_in_simulation;
+  static constexpr int NB_OF_ROBOTS_BY_TEAM = 16;
+
+
+  bool is_in_simulation;
+
+    int frame_per_second;
+    double period;
 
     double robot_radius;
     double radius_ball;
@@ -147,6 +153,10 @@ struct Constants {
     double wheel_excentricity;
     double wheel_nb_turns_acceleration_limit;
 
+    double rules_avoidance_distance;
+    double convergence_coefficient;
+    double coefficient_to_increase_avoidance_convergence;
+
     void load( const std::string & config_path );
 
     Constants( const std::string & config_path, bool is_in_simulation );
@@ -158,6 +168,7 @@ public:
     double time; //(Write for Ai)
     double dt; //(Write for Ai)
 
+    bool force_ball_avoidance; // This field is used by rhobot_behavior::Navigaion_inside_the_fiekd. 
     std::string team_name;
     Ai::Team team_color;
 

@@ -19,8 +19,7 @@
 
 #include "mur.h"
 
-#include <robot_behavior/goalie.h>
-#include <robot_behavior/striker.h>
+#include <robot_behavior/mur_defensor.h>
 
 namespace RhobanSSL {
 namespace Strategy {
@@ -29,28 +28,28 @@ Mur::Mur(Ai::AiData & ai_data):
     Strategy(ai_data)
 {
 }
-    
+
 Mur::~Mur(){
-}        
+}
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
- */ 
+ */
 int Mur::min_robots() const {
-    return 2;
+    return 1;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
- */ 
+ */
 int Mur::max_robots() const {
-    return 2;
+    return 1;
 }
 
 Goalie_need Mur::needs_goalie() const {
-    return Goalie_need::YES;
+    return Goalie_need::NO;
 }
 
 const std::string Mur::name = "mur";
@@ -64,7 +63,7 @@ void Mur::stop(double time){
 }
 
 void Mur::update(double time){
-    const std::vector<int> & players = get_player_ids();
+    //const std::vector<int> & players = get_player_ids();
     //int nb_robots = players.size();
     //for( int robot_id : players){
     //	const Ai::Robot & robot = get_robot( robot_id );
@@ -79,18 +78,13 @@ void Mur::assign_behavior_to_robots(
 ){
     if( not(behaviors_are_assigned) ){
         // We first assign the behhavior of the goalie.
-        assign_behavior(
-            get_goalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::Goalie(ai_data)
-            )
-        );
 
-        //we assign now all the other behavior 
+        //we assign now all the other behavior
         assert( get_player_ids().size() == 1 );
         int id = player_id(0); // we get the first if in get_player_ids()
         assign_behavior(
             id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::Striker(ai_data)
+                new Robot_behavior::Mur_defensor(ai_data)
             )
         );
 
@@ -101,7 +95,7 @@ void Mur::assign_behavior_to_robots(
 // We declare here the starting positions that are used to :
 //   - place the robot during STOP referee state
 //   - to compute the robot order of get_player_ids(),
-//     we minimize the distance between 
+//     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<
@@ -110,30 +104,42 @@ std::list<
     assert( min_robots() <= number_of_avalaible_robots );
     assert(
         max_robots()==-1 or
-        number_of_avalaible_robots <= max_robots() 
+        number_of_avalaible_robots <= max_robots()
     );
 
     return {
         std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            ai_data.relative2absolute(-1.0/3.0, 0.0),
+            ally_goal_center(),
             0.0
         )
     };
 }
 
 //
-// This function return false if you don't want to 
-// give a staring position. So the manager will chose 
+// This function return false if you don't want to
+// give a staring position. So the manager will chose
 // a default position for you.
-// 
+//
 bool Mur::get_starting_position_for_goalie(
-    rhoban_geometry::Point & linear_position, 
+    rhoban_geometry::Point & linear_position,
     ContinuousAngle & angular_position
 ){
     linear_position =  ally_goal_center();
     angular_position = ContinuousAngle(0.0);
     return true;
-} 
+}
+
+RhobanSSLAnnotation::Annotations Mur::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
+
+    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+    {
+        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
+        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+    }
+    return annotations;
+}
 
 
 
