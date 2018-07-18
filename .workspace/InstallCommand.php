@@ -19,10 +19,10 @@ class InstallCommand extends Command
 
     public function run(array $args)
     {
+        $https = false;
+        $default = false;
         if ($args) {
             // First : try to find flags 
-            $default = false;
-            $https = false;
             $offset = 0;
             foreach ($args as $arg) {
               if (strcmp($arg,"--default") == 0) {
