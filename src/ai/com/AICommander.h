@@ -43,6 +43,7 @@ public:
         float kickPower;
         bool spin;
         bool charge;
+        bool tareOdom;
     };
     AICommander(bool yellow);
 

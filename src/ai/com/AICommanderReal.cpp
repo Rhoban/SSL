@@ -57,6 +57,10 @@ namespace RhobanSSL
                 if (command.spin) {
                     packet.actions |= ACTION_DRIBBLE;
                 }
+                if (command.tareOdom) {
+                    packet.actions |= ACTION_TARE_ODOM;
+                }
+                
             } else {
                 packet.actions = 0;
             }

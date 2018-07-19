@@ -820,6 +820,18 @@ function Manager(viewer)
                 api.kick(robot.id, 0, 0.0);
             }, 'mouseup');
 
+            button('.tare-odom', function(robot) {
+                if (robot.enabled) {
+                    api.tareOdom(robot.id, true);
+                }
+            }, 'mousedown');
+
+            button('.tare-odom', function(robot) {
+                if (robot.enabled) {
+                    api.tareOdom(robot.id, false);
+                }
+            }, 'mouseup');
+
             button('.left', function(robot) {
                 api.robotCommand(robot.id, 0.0, 0.2, 0.0);
             }, 'mousedown');

@@ -37,6 +37,7 @@ struct Control : PidControl {
     bool charge;
     bool active;
     bool ignore;
+    bool tareOdom;
 
     Control();
     Control(bool kick, bool active, bool ignore);

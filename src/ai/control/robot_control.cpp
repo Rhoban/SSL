@@ -32,7 +32,7 @@ CurveForRobot::CurveForRobot(
     const std::function<Vector2d (double u)> & translation,
     double translation_velocity, double translation_acceleration,
     const std::function<double (double u)> & rotation,
-    double angular_velocity, double angular_acceleration, 
+    double angular_velocity, double angular_acceleration,
     double calculus_step
 ):
     rotation_fct(rotation),
@@ -40,11 +40,11 @@ CurveForRobot::CurveForRobot(
     angular_curve( rotation_fct, calculus_step ),
     tranlsation_consign(
         translation_curve.size(),
-        translation_velocity, translation_acceleration 
+        translation_velocity, translation_acceleration
     ),
     angular_consign(
-        angular_curve.size(), 
-        angular_velocity, angular_acceleration 
+        angular_curve.size(),
+        angular_velocity, angular_acceleration
     ),
     calculus_error_for_translation(
         std::min(
@@ -62,7 +62,7 @@ CurveForRobot::CurveForRobot(
     translation_movment(
         translation_curve, tranlsation_consign,
         calculus_step,
-        calculus_error_for_translation        
+        calculus_error_for_translation
     ),
     rotation_movment(
         angular_curve, angular_consign,
@@ -85,7 +85,7 @@ void CurveForRobot::print_translation_movment( double dt ) const {
     std::cout << "   max time : " << max_time;
     for( double t=0; t<max_time; t += dt ){
         Vector2d v = translation_movment(t);
-        std::cout << "   {" << t << " : "  << v[0] << "," << v[1] << "}, " << std::endl; 
+        std::cout << "   {" << t << " : "  << v[0] << "," << v[1] << "}, " << std::endl;
     }
 }
 
@@ -94,7 +94,7 @@ void CurveForRobot::print_translation_curve( double dt ) const {
     std::cout << "------------------- " << std::endl;
     for( double t=0; t<1.0; t += dt ){
         Vector2d v = translation_curve(t);
-        std::cout << "   {" << t << " : " << v[0] << "," << v[1] << "}, " << std::endl; 
+        std::cout << "   {" << t << " : " << v[0] << "," << v[1] << "}, " << std::endl;
     }
 }
 
@@ -105,7 +105,7 @@ void CurveForRobot::print_rotation_movment( double dt ) const {
     std::cout << "   max time : " << max_time;
     for( double t=0; t<max_time; t += dt ){
         Vector2d v = rotation_movment(t);
-        std::cout << "   {" << t << " : " << v[0] << "," << v[1] << "}, " << std::endl; 
+        std::cout << "   {" << t << " : " << v[0] << "," << v[1] << "}, " << std::endl;
     }
 }
 
@@ -114,7 +114,7 @@ void CurveForRobot::print_rotation_curve( double dt ) const {
     std::cout << "------------------- " << std::endl;
     for( double t=0; t<1.0; t += dt ){
         Vector2d v = angular_curve(t);
-        std::cout << "   {" << t << " : " << v[0] << "," << v[1] << "}, " << std::endl; 
+        std::cout << "   {" << t << " : " << v[0] << "," << v[1] << "}, " << std::endl;
     }
 }
 
@@ -133,9 +133,9 @@ void RobotControl::set_limits(
     this->rotation_velocity_limit = ContinuousAngle(rotation_velocity_limit);
     this->translation_acceleration_limit = translation_acceleration_limit;
     this->rotation_acceleration_limit = ContinuousAngle(rotation_acceleration_limit);
-} 
+}
 
-RobotControl::RobotControl(): 
+RobotControl::RobotControl():
     translation_velocity_limit(-1),
     rotation_velocity_limit(-1),
     translation_acceleration_limit(-1),
@@ -144,15 +144,15 @@ RobotControl::RobotControl():
 
 
 PidControl RobotControl::limited_control(
-    const Vector2d & robot_position, 
+    const Vector2d & robot_position,
     const ContinuousAngle & robot_orientation,
-    const Vector2d & robot_linear_velocity, 
+    const Vector2d & robot_linear_velocity,
     const ContinuousAngle & robot_angular_velocity
 ) const {
     PidControl res = no_limited_control();
     if( res.velocity_rotation.value() != 0.0 ){
         double max_angular_velocity;
-        if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
+        if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){
             max_angular_velocity = robot_angular_velocity.value() + get_dt() * rotation_acceleration_limit.value();
             if( rotation_velocity_limit >= 0 ){
                 max_angular_velocity = std::min( rotation_velocity_limit.value(), max_angular_velocity );
@@ -161,35 +161,35 @@ PidControl RobotControl::limited_control(
             max_angular_velocity = rotation_velocity_limit.value();
         }
         double min_angular_velocity = -1;
-        if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
+        if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){
             min_angular_velocity = std::max( 0.0,  robot_angular_velocity.value() - get_dt() * rotation_acceleration_limit.value() );
         }
 
 
-        if( max_angular_velocity > 0.0 ){ 
+        if( max_angular_velocity > 0.0 ){
             if( res.velocity_rotation.abs() >= max_angular_velocity ){
                 assert( res.velocity_rotation.value() != 0 );
                 res.velocity_rotation *= (
                     max_angular_velocity / (
                         std::fabs( res.velocity_rotation.value() )/security_margin
-                    ) 
+                    )
                 );
             }
         }
-        if( min_angular_velocity > 0.0 ){ 
+        if( min_angular_velocity > 0.0 ){
             if( res.velocity_rotation.abs() < min_angular_velocity ){
                 assert( res.velocity_rotation.value() != 0 );
                 res.velocity_rotation *= (
                     min_angular_velocity / (
                         std::fabs( res.velocity_rotation.value() )*security_margin
-                    ) 
+                    )
                 );
             }
         }
     }
     if( res.velocity_translation.norm() !=0 ){
         double max_linear_velocity;
-        if( translation_acceleration_limit >= 0.0 ){ 
+        if( translation_acceleration_limit >= 0.0 ){
             max_linear_velocity = robot_linear_velocity.norm() + translation_acceleration_limit * get_dt();
             if( translation_velocity_limit >= 0 ){
                 max_linear_velocity = std::min( translation_velocity_limit, max_linear_velocity );
@@ -198,7 +198,7 @@ PidControl RobotControl::limited_control(
             max_linear_velocity = translation_velocity_limit;
         }
         double min_linear_velocity = - 1.0;
-        if( translation_acceleration_limit >= 0.0 ){ 
+        if( translation_acceleration_limit >= 0.0 ){
             min_linear_velocity = std::max( 0.0, robot_linear_velocity.norm() - get_dt()*this->translation_acceleration_limit );
         }
 
@@ -207,7 +207,7 @@ PidControl RobotControl::limited_control(
             if( res.velocity_translation.norm() >= max_linear_velocity ){
 
                 assert( res.velocity_translation.norm() != 0 );
-                res.velocity_translation *= ( 
+                res.velocity_translation *= (
                     max_linear_velocity /
                     (res.velocity_translation.norm()/security_margin)
                 );
@@ -219,7 +219,7 @@ PidControl RobotControl::limited_control(
             if( res.velocity_translation.norm() < min_linear_velocity ){
 
                 assert( res.velocity_translation.norm() != 0 );
-                res.velocity_translation *= ( 
+                res.velocity_translation *= (
                     min_linear_velocity /
                     (res.velocity_translation.norm() * security_margin)
                 );
@@ -236,4 +236,3 @@ PidControl RobotControlWithPid::no_limited_control() const {
 double RobotControlWithPid::get_dt() const {
     return PidController::get_dt();
 }
-

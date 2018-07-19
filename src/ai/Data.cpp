@@ -89,7 +89,7 @@ Data& Data::operator>>( Shared_data & shared_data ){
 }
 
 void Data::edit_vision_data( // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function< void (Vision::VisionData & vision_data) > vision_data_editor 
+    std::function< void (Vision::VisionData & vision_data) > vision_data_editor
 ){
     mutex_for_vision_data.lock();
     vision_data_editor(vision_data);
@@ -97,7 +97,7 @@ void Data::edit_vision_data( // Use that function if you ha no choice. Prefer <<
 }
 
 void Data::edit_data_from_ai( // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function< void (Data_from_ai & data_from_ai) > data_from_ai_editor 
+    std::function< void (Data_from_ai & data_from_ai) > data_from_ai_editor
 ){
     mutex_for_ai_data.lock();
     data_from_ai_editor(data_from_ai);
@@ -105,7 +105,7 @@ void Data::edit_data_from_ai( // Use that function if you ha no choice. Prefer <
 }
 
 void Data::edit_shared_data( // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function< void (Shared_data & shared_data) > shared_data_editor 
+    std::function< void (Shared_data & shared_data) > shared_data_editor
 ){
     mutex_for_shared_data.lock();
     shared_data_editor(shared_data);

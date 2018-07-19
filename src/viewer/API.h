@@ -74,6 +74,9 @@ public slots:
   // Set spin
   void setSpin(int id, bool spin);
 
+  //Tare the Odometry at 000
+  void tareOdom(int id, bool tare);
+
   // Emergency stop
   void emergencyStop();
 
