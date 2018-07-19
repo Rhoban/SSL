@@ -196,6 +196,10 @@ QString API::robotsStatus()
                     jsonRobot["t_odom"] = (masterRobot.status.ang*180)/M_PI;
 
                     jsonRobot["ir"] = (masterRobot.status.status & STATUS_IR) ? true : false;
+                    
+                    jsonRobot["x_odom"] = (float)masterRobot.status.xpos/1000;
+                    jsonRobot["y_odom"] = (float)masterRobot.status.ypos/1000;
+                    jsonRobot["t_odom"] = (float)(masterRobot.status.ang);
                 } else {
                     jsonRobot["ir"] = false;
                 }

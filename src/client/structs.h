@@ -43,8 +43,8 @@ struct packet_robot {
     uint8_t cap_volt;                  // Kick capcaitor voltage (V)
 
     uint8_t voltage;                  // Battery 1 voltage (10th of V)
-                                      // Odometry values
-    int16_t xpos;                     // in mm
-    int16_t ypos;
-    int8_t ang;                       //
+
+    int16_t xpos;                     // Data planned by odometry
+    int16_t ypos;                     // In mm
+    int16_t ang;                       // In
 } __attribute__((packed));
