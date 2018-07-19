@@ -28,7 +28,7 @@ Control::Control():
     chipKick(false), kickPower(1.0),
     spin(false), charge(false),
     active(true), ignore(false),
-    tareOdom(true)
+    tareOdom(false)
 { }
 
 
@@ -37,7 +37,7 @@ Control::Control(bool kick, bool active, bool ignore):
     chipKick(false), kickPower(1.0),
     spin(false), charge(false),
     active(active), ignore(ignore),
-    tareOdom(true)
+    tareOdom(false)
 { }
 
 Control::Control(const PidControl & c):
@@ -45,7 +45,7 @@ Control::Control(const PidControl & c):
     chipKick(false), kickPower(1.0),
     spin(false), charge(false),
     active(true), ignore(false),
-    tareOdom(true)
+    tareOdom(false)
 { }
 
 std::ostream& operator << ( std::ostream & out, const Control& control  ){

@@ -37,7 +37,7 @@ struct Control : PidControl {
     bool charge;
     bool active;
     bool ignore;
-    bool tareOdom;
+    bool tareOdom;//Reset references for Odometry robot
 
     Control();
     Control(bool kick, bool active, bool ignore);
