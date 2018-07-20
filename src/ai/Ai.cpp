@@ -217,7 +217,8 @@ void AI::send_control( int robot_id, const Control & ctrl ){
                 kick,
                 ctrl.kickPower,
                 ctrl.spin,
-                ctrl.charge
+                ctrl.charge,
+                ctrl.tareOdom
             );
         }
     }

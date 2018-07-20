@@ -896,8 +896,8 @@ function Manager(viewer)
             }
 
             var div = $('.robot-'+k);
-            div.find('.robot-warning').hide();
             div.find('.robot-warning-text').hide();
+            div.find('.robot-warning').hide();
 
             if (robot.present) {
                 div.find('.vision-status').addClass('ok');
