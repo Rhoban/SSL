@@ -210,7 +210,21 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             if (ctrl.kick) kick = 1;
             else if (ctrl.chipKick) kick = 2;
             
-            commander->set(
+            if(ctrl.tareOdom){
+                commander->set(
+                robot_id, true,
+                ctrl.fix_translation[0], ctrl.fix_translation[1],
+                ctrl.fix_rotation.value(),
+                kick,
+                ctrl.kickPower,
+                ctrl.spin,
+                ctrl.charge,
+                ctrl.tareOdom
+
+            );
+                //DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_translation);
+            }else{
+                commander->set(
                 robot_id, true,
                 ctrl.velocity_translation[0], ctrl.velocity_translation[1],
                 ctrl.velocity_rotation.value(),
@@ -220,6 +234,7 @@ void AI::send_control( int robot_id, const Control & ctrl ){
                 ctrl.charge,
                 ctrl.tareOdom
             );
+            }
         }
     }
 }

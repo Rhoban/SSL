@@ -52,7 +52,8 @@ PidControl PidControl::relative_control(
 }
 
 PidControl::PidControl():
-    velocity_translation(0.0, 0.0), velocity_rotation(0.0)
+    velocity_translation(0.0, 0.0), velocity_rotation(0.0),
+    fix_translation(0.0, 0.0), fix_rotation(0.0)
 { };
 
 PidControl::PidControl(

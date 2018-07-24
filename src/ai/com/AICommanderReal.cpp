@@ -67,9 +67,15 @@ namespace RhobanSSL
 
             packet.kickPower = 120*command.kickPower;
 
-            packet.x_speed = command.xSpeed*1000;
-            packet.y_speed = command.ySpeed*1000;
-            packet.t_speed = command.thetaSpeed*1000;
+            if(command.tareOdom){
+                packet.t_speed = command.thetaSpeed*10;
+            }else{
+                packet.t_speed = command.thetaSpeed*1000;
+            }
+                packet.x_speed = command.xSpeed*1000;
+                packet.y_speed = command.ySpeed*1000;
+
+            //printf("%d , %d, %d, %d\n\r", (packet.actions) , packet.x_speed, packet.y_speed, packet.t_speed);
 
             master.addRobotPacket(command.robot_id, packet);
         }

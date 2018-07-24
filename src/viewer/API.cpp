@@ -386,7 +386,7 @@ void API::setSpin(int id, bool spin)
     mutex.unlock();
 }
 
-void API::tareOdom(int id, bool tare)
+void API::tareOdom(int id, bool tare, double xFix, double yFix, double tFix)
 {
     mutex.lock();
     RhobanSSL::Shared_data shared;
@@ -395,6 +395,11 @@ void API::tareOdom(int id, bool tare)
 
     if (!control.ignore) {
         control.tareOdom = tare;
+        
+        //printf("MIAMMIAM\n\r");
+        control.fix_translation = Vector2d(xFix, yFix);
+        control.fix_rotation = ContinuousAngle(tFix);
+        //printf("%f %f %f", xFix, yFix, tFix);
     }
     data << shared;
     mutex.unlock();

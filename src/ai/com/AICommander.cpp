@@ -52,7 +52,7 @@ namespace RhobanSSL
         command.charge = charge;
         command.kickPower = kickPower;
         command.tareOdom = tareOdom;
-
+        //DEBUG("TARE : " << command.tareOdom << " | " << command.xSpeed);
         commands.push_back(command);
     }
 

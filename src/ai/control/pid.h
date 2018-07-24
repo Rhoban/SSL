@@ -28,6 +28,8 @@
 struct PidControl {
     Vector2d velocity_translation;
     ContinuousAngle velocity_rotation;
+    Vector2d fix_translation; //References for Odometry
+    ContinuousAngle fix_rotation;
 
     PidControl();
     PidControl(

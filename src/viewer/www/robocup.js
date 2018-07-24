@@ -827,13 +827,13 @@ function Manager(viewer)
 
             button('.tare-odom', function(robot) {
                 if (robot.enabled) {
-                    api.tareOdom(robot.id, false);
+                    api.tareOdom(robot.id, false, 0.0, 0.0, 0.0);
                 }
             }, 'mouseup');
 
             button('.tare-odom', function(robot) {
                 if (robot.enabled) {
-                    api.tareOdom(robot.id, true);
+                    api.tareOdom(robot.id, true, xfix, yfix, tfix);
                 }
             }, 'mousedown');
 
@@ -912,7 +912,12 @@ function Manager(viewer)
 
                 div.find('.x_odom').text(robot.x_odom.toFixed(3));
                 div.find('.y_odom').text(robot.y_odom.toFixed(3));
-                div.find('.t_odom').text((normalizeTheta(robot.t_odom/10)*180/Math.PI).toFixed(3));         
+                div.find('.t_odom').text((normalizeTheta(robot.t_odom/10)*180/Math.PI).toFixed(3));
+
+                var xfix = getElementById("xfix").value();
+                var yfix = getElementById("yfix").value();
+                var tfix = getElementById("tfix").value()*Math.PI/180;
+
             } else {
                 div.find('.vision-status').removeClass('ok');
             }
@@ -928,7 +933,12 @@ function Manager(viewer)
                     var charge = (robot.voltage-voltage_min)/(voltage_max-voltage_min);
                     div.find('.x_odom').text(robot.x_odom.toFixed(3));
                     div.find('.y_odom').text(robot.y_odom.toFixed(3));
-                    div.find('.t_odom').text((normalizeTheta(robot.t_odom/10)*180/Math.PI).toFixed(3));                    
+                    div.find('.t_odom').text((normalizeTheta(robot.t_odom/10)*180/Math.PI).toFixed(3)); 
+                    
+                    var xfix = div.find('x_fix').val();
+                    var yfix = div.find('y_fix').val();
+                    var tfix = div.find('t_fix').val()*Math.PI/180;
+                    
                     if (charge < 0) charge = 0;
                     if (charge > 1) charge = 1;
 
