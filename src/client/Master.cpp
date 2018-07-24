@@ -77,6 +77,7 @@ namespace RhobanSSL
                 mutex.lock();
                 if (receivedAnswer) {
                     waiting = false;
+                    
                 } else {
                     // XXX: This timeout should be adjusted
                     if (diffSec(lastSend, rhoban_utils::TimeStamp::now()) > 0.03) {
@@ -210,8 +211,9 @@ namespace RhobanSSL
                                         sizeof(struct packet_robot));
                                     robots[robot_id].present = true;
                                     robots[robot_id].lastUpdate = rhoban_utils::TimeStamp::now();
-                                }
-                            }
+                                    //printf("Timestamp : %d : %d \n\r",robot_id, robots[robot_id].lastUpdate-lastSend); // 2000000 = 2.0ms ?
+                                }   //Which means that for one robot, the travelling time from the master packet to the reception of the status is 2.0ms
+                            }       //It looks linear with the nm of robot. The travelling time is nbRobot*2.0ms
                             mutex.unlock();
                         }
                         state = 0;

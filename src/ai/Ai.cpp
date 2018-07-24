@@ -356,7 +356,10 @@ void AI::update_robots( ){
     Ai::Ball & ball = ai_data.ball;
 
     auto team = Vision::Ally;
+
+    auto timeindice1 = rhoban_utils::TimeStamp::now();
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
+        //auto timeindice0 = rhoban_utils::TimeStamp::now();
         Shared_data::Final_control & final_control = shared_data.final_control_for_robots[robot_id];
 
         Ai::Robot & robot = ai_data.robots[team][robot_id];
@@ -377,8 +380,12 @@ void AI::update_robots( ){
             );
             prepare_to_send_control( robot_id, final_control.control );
         }
+
         send_control( robot_id, final_control.control );
+        //DEBUG("send_control time : " << robot_id << " : " << diffSec(timeindice0, rhoban_utils::TimeStamp::now())); //2.5 us
+        //DEBUG(diffSec(ai_data.all_robots[team][robot_id]->lastUpdate, rhoban_utils::TimeStamp::now()));
     }
+    //DEBUG("send_all_control time : " << diffSec(timeindice1, rhoban_utils::TimeStamp::now())); //15 us
 
 }
 
@@ -390,7 +397,7 @@ void AI::run(){
         auto now = rhoban_utils::TimeStamp::now();
         double elapsed = diffSec(lastTick, now);
         double toSleep = period - elapsed;
-        if (toSleep > 0) {
+        if (toSleep > 0)    {
             usleep(round(toSleep*1000000));
         }else{
             DEBUG("LAG");
@@ -399,6 +406,9 @@ void AI::run(){
         current_dt = current_time;
         current_time = rhoban_utils::TimeStamp::now().getTimeMS()/1000.0;
         current_dt = current_time - current_dt;
+
+        //DEBUG("Current dt : " << current_dt); //16.7 ms, 60Hz
+
 
         ai_data.time = current_time,
         ai_data.dt = current_dt;
@@ -469,7 +479,9 @@ void AI::run(){
 
         // XXX: Flushing takes some time in real mode, and should be done in parallel
         // along with the computing of the AI
+        //auto timeindice0 = rhoban_utils::TimeStamp::now();
         commander->flush();
+        //DEBUG("Flush time : " << diffSec(timeindice0, rhoban_utils::TimeStamp::now())); //180 us 
     }
 }
 

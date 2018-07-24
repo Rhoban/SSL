@@ -355,8 +355,13 @@ function Viewer()
         ctx.beginPath();
         ctx.strokeStyle = '#aaa';
         ctx.fillStyle = this.grColor(robot.team);
-        //ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front);
-        ctx.arc(robot.x_odom, robot.y_odom, 0.1, (robot.t_odom/10)+front, (robot.t_odom/10)+Math.PI*2-front);
+        if(robot.active){
+            ctx.arc(robot.x_odom, robot.y_odom, 0.1, (robot.t_odom/10)+front, (robot.t_odom/10)+Math.PI*2-front);
+        }
+        else{
+            ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front);
+        }
+        
         if (!robot.present) {
             ctx.stroke();
         }
@@ -822,15 +827,15 @@ function Manager(viewer)
 
             button('.tare-odom', function(robot) {
                 if (robot.enabled) {
-                    api.tareOdom(robot.id, true);
-                }
-            }, 'mousedown');
-
-            button('.tare-odom', function(robot) {
-                if (robot.enabled) {
                     api.tareOdom(robot.id, false);
                 }
             }, 'mouseup');
+
+            button('.tare-odom', function(robot) {
+                if (robot.enabled) {
+                    api.tareOdom(robot.id, true);
+                }
+            }, 'mousedown');
 
             button('.left', function(robot) {
                 api.robotCommand(robot.id, 0.0, 0.2, 0.0);
@@ -905,9 +910,9 @@ function Manager(viewer)
                 div.find('.pos-y').text(robot.y.toFixed(3));
                 div.find('.pos-orientation').text((normalizeTheta(robot.orientation)*180/Math.PI).toFixed(3));
 
-                div.find('.x_odom').text(robot.xpos.toFixed(3));
-                div.find('.y_odom').text(robot.ypos.toFixed(3));
-                div.find('.t_odom').text((normalizeTheta(robot.ang)*180/Math.PI).toFixed(3));
+                div.find('.x_odom').text(robot.x_odom.toFixed(3));
+                div.find('.y_odom').text(robot.y_odom.toFixed(3));
+                div.find('.t_odom').text((normalizeTheta(robot.t_odom/10)*180/Math.PI).toFixed(3));         
             } else {
                 div.find('.vision-status').removeClass('ok');
             }

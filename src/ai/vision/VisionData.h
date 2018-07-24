@@ -31,7 +31,7 @@ namespace RhobanSSL {
 namespace Vision {
 
 static const int history_size = 129;
-static const int Robots = 16;
+static const int Robots = 8;
 
 typedef enum {
     Ally,
