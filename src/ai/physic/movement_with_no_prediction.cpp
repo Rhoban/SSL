@@ -33,13 +33,13 @@ Movement_with_no_prediction::print(std::ostream& stream) const {
 }
 
 void
-Movement_with_no_prediction::set_sample( const MovementSample & samples ) {
+Movement_with_no_prediction::set_sample( const MovementSample & samples,unsigned int i ) {
     //TODO
     //assert( samples.is_valid() );
     this->samples = samples;
 }
 
-const MovementSample & Movement_with_no_prediction::get_sample() const {
+const MovementSample & Movement_with_no_prediction::get_sample(unsigned int i) const {
     return samples;
 }
 
@@ -83,4 +83,10 @@ Movement_with_no_prediction::clone() const {
 Movement_with_no_prediction::~Movement_with_no_prediction(){
 }
 
+
+void Movement_with_no_prediction::set_orders_sample( const OrdersSample & samples){
+
 }
+
+}
+

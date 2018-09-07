@@ -46,12 +46,12 @@ Movement_on_new_frame::print(std::ostream& stream) const {
 }
 
 void
-Movement_on_new_frame::set_sample( const MovementSample & samples ) {
-    movement->set_sample(samples);
+Movement_on_new_frame::set_sample( const MovementSample & samples, unsigned int i  ) {
+    movement->set_sample(samples, i);
 }
 
-const MovementSample & Movement_on_new_frame::get_sample() const {
-    return movement->get_sample();
+const MovementSample & Movement_on_new_frame::get_sample(unsigned int i) const {
+    return movement->get_sample(i);
 }
 
 rhoban_geometry::Point
@@ -100,5 +100,10 @@ Movement_on_new_frame::clone() const {
 Movement_on_new_frame::~Movement_on_new_frame(){
     delete movement;
 }
+void Movement_on_new_frame::set_orders_sample( const OrdersSample & samples){
 
 }
+
+}
+
+

@@ -33,8 +33,9 @@ class Movement_predicted_by_integration : public Movement {
     public:
         virtual Movement * clone() const;
 
-        virtual void set_sample( const MovementSample & samples );
-        virtual const MovementSample & get_sample() const;
+        virtual void set_sample( const MovementSample & samples, unsigned int i=0 );
+        virtual void set_orders_sample( const OrdersSample & samples);
+        virtual const MovementSample & get_sample(unsigned int i=0) const;
 
         virtual double last_time() const;
 

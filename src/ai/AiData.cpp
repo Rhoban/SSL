@@ -26,8 +26,13 @@
 #include <json/reader.h>
 #include <fstream>
 
+
+
 namespace RhobanSSL {
 namespace Ai {
+    static const int  odometry_size = 129; //TODO find better namespace and uniformize with Vision::history_size
+    static const int  order_size = 20;
+
 
     RobotPlacement::RobotPlacement():
         goal_is_placed(false)
@@ -435,7 +440,9 @@ namespace Ai {
     
 Robot::Robot():
     is_goalie(false),
-    infra_red(false)
+    infra_red(false),
+    odometrySample(odometry_size),
+    ordersSample(order_size)
 {}
 
 

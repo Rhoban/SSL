@@ -42,11 +42,11 @@ const Movement* Movement_with_temporal_shift::get_original_movement() const {
     return movement;
 }
 
-void Movement_with_temporal_shift::set_sample( const MovementSample & samples ){
-    movement->set_sample( samples );
+void Movement_with_temporal_shift::set_sample( const MovementSample & samples, unsigned int i ){
+    movement->set_sample( samples, i );
 }
-const MovementSample & Movement_with_temporal_shift::get_sample() const {
-    return movement->get_sample();
+const MovementSample & Movement_with_temporal_shift::get_sample(unsigned int i) const {
+    return movement->get_sample(i);
 }
 
 double Movement_with_temporal_shift::last_time() const {
@@ -80,6 +80,10 @@ void Movement_with_temporal_shift::print(std::ostream& stream) const {
 
 Movement_with_temporal_shift::~Movement_with_temporal_shift(){
     delete movement;
+}
+
+void Movement_with_temporal_shift::set_orders_sample( const OrdersSample & samples){
+
 }
 
 

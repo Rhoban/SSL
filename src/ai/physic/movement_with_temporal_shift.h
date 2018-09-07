@@ -44,8 +44,9 @@ class Movement_with_temporal_shift : public Movement {
             std::function< double () > temporal_shift
         );
 
-        virtual void set_sample( const MovementSample & samples );
-        virtual const MovementSample & get_sample() const;
+        virtual void set_sample( const MovementSample & samples, unsigned int i=0 );
+        virtual void set_orders_sample( const OrdersSample & samples);
+        virtual const MovementSample & get_sample(unsigned int i=0) const;
 
         virtual rhoban_geometry::Point linear_position( double time ) const;
         virtual ContinuousAngle angular_position( double time ) const;

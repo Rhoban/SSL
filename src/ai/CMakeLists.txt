@@ -109,7 +109,9 @@ set (SOURCES
     physic/movement_with_no_prediction.cpp
     physic/movement_on_new_frame.cpp
     physic/movement_with_temporal_shift.cpp
+    physic/movement_kalman_filter.cpp
     physic/MovementSample.cpp
+    physic/OrdersSample.cpp
     physic/Movement.cpp
     physic/factory.cpp
     physic/collision.cpp

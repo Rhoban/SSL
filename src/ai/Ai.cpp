@@ -376,12 +376,12 @@ void AI::update_robots( ){
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
         //auto timeindice0 = rhoban_utils::TimeStamp::now();
         Shared_data::Final_control & final_control = shared_data.final_control_for_robots[robot_id];
-
         Ai::Robot & robot = ai_data.robots[team][robot_id];
         Robot_behavior::RobotBehavior & robot_behavior = *(
             robot_behaviors[robot_id]
         );
         robot_behavior.update(time, robot, ball);
+
         if( final_control.is_disabled_by_viewer  ){
             final_control.control = Control::make_desactivated();
         }else if( ! final_control.is_manually_controled_by_viewer ){
@@ -395,7 +395,11 @@ void AI::update_robots( ){
             );
             prepare_to_send_control( robot_id, final_control.control );
         }
-
+        // if(final_control.control.tareOdom == true){
+        //     ai_data.robots[robot_id].lastResetOdom = rhoban_utils::TimeStamp::now();
+        // }
+        robot.ordersSample.insert(SpeedTargetSample(ai_data.time, (int16_t)(commander->commands[robot_id].xSpeed*1000), (int16_t)(commander->commands[robot_id].ySpeed*1000), (int16_t)(commander->commands[robot_id].thetaSpeed*1000)));
+        robot.movement->set_orders_sample(robot.ordersSample);
         send_control( robot_id, final_control.control );
         //DEBUG("send_control time : " << robot_id << " : " << diffSec(timeindice0, rhoban_utils::TimeStamp::now())); //2.5 us
         //DEBUG(diffSec(ai_data.all_robots[team][robot_id]->lastUpdate, rhoban_utils::TimeStamp::now()));
@@ -553,10 +557,15 @@ void AI::get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const
 
 void AI::update_electronic_informations(){
     RhobanSSL::Master *master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+    auto team = Vision::Ally;
     for( unsigned int id=0; id<MAX_ROBOTS; id++ ){
         auto robot = master->robots[id];
         if( robot.isOk() ){
-            ai_data.robots.at(Vision::Team::Ally).at(id).infra_red = (robot.status.status & STATUS_IR) ? true : false;
+            Ai::Robot & robotai = ai_data.robots.at(team).at(id);
+            robotai.infra_red = (robot.status.status & STATUS_IR) ? true : false;
+            robotai.odometrySample.insert(PositionSample(ai_data.time, rhoban_geometry::Point(robot.status.xpos, robot.status.ypos), ContinuousAngle(robot.status.ang))); //ODOME
+            //unsigned int odometry_index = 1; // TODO Faire une enum !
+            robotai.movement->set_sample(robotai.odometrySample, OdomIndex);
         }
     }
 }

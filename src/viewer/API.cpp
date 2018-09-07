@@ -393,10 +393,11 @@ void API::tareOdom(int id, bool tare, double xFix, double yFix, double tFix)
     data >> shared;
     RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
 
+    //robots[id].lastResetOdom = rhoban_utils::TimeStamp::now();
+    //printf("MIAMMIAM\n\r");
+
     if (!control.ignore) {
-        control.tareOdom = tare;
-        
-        //printf("MIAMMIAM\n\r");
+        control.tareOdom = tare; 
         control.fix_translation = Vector2d(xFix, yFix);
         control.fix_rotation = ContinuousAngle(tFix);
         //printf("%f %f %f", xFix, yFix, tFix);

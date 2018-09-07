@@ -26,10 +26,12 @@
 #include <rhoban_utils/angle.h>
 #include <rhoban_utils/timing/time_stamp.h>
 #include <physic/MovementSample.h>
+#include <physic/OrdersSample.h>
 #include <vision/VisionData.h>
 #include <physic/Movement.h>
 #include <math/frame_changement.h>
 #include <math/position.h>
+
 
 namespace RhobanSSL {
 namespace Ai {
@@ -58,7 +60,6 @@ public:
     Vision::Object vision_data;
     RhobanSSL::Movement * movement;
 
-
 public:
 
     int id() const {
@@ -82,6 +83,8 @@ public:
 
     const RhobanSSL::Movement & get_movement() const; 
     virtual ~Object();
+
+
 };
 
 
@@ -93,6 +96,8 @@ class Robot : public Object {
     bool is_goalie;
     bool infra_red;
     Robot();
+    MovementSample odometrySample; //TODO Move to folder "odometry" as vision 
+    OrdersSample ordersSample;     //Contains lasts given orders in the time (in terms of speed)
 };
 class Ball : public Object { };
 
@@ -176,7 +181,7 @@ public:
 
     typedef std::map<int, Robot> Robots_table;
     typedef std::map<Vision::Team, Robots_table> Robots_table_by_team;
-    Robots_table_by_team robots;
+    Robots_table_by_team robots;    
 
     std::vector< std::pair<Vision::Team, Robot*> > all_robots;
     

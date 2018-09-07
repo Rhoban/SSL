@@ -833,6 +833,7 @@ function Manager(viewer)
 
             button('.tare-odom', function(robot) {
                 if (robot.enabled) {
+                    //document.getElementById("bite").innerHTML = "lel";
                     api.tareOdom(robot.id, true, xfix, yfix, tfix);
                 }
             }, 'mousedown');
@@ -914,9 +915,11 @@ function Manager(viewer)
                 div.find('.y_odom').text(robot.y_odom.toFixed(3));
                 div.find('.t_odom').text((normalizeTheta(robot.t_odom/10)*180/Math.PI).toFixed(3));
 
-                var xfix = getElementById("xfix").value();
-                var yfix = getElementById("yfix").value();
-                var tfix = getElementById("tfix").value()*Math.PI/180;
+                var xfix = getElementById("xfix").value
+                var yfix = getElementById("yfix").value;
+                var tfix = getElementById("tfix").value*Math.PI/180;
+                
+                print(xfix);
 
             } else {
                 div.find('.vision-status').removeClass('ok');
@@ -935,9 +938,9 @@ function Manager(viewer)
                     div.find('.y_odom').text(robot.y_odom.toFixed(3));
                     div.find('.t_odom').text((normalizeTheta(robot.t_odom/10)*180/Math.PI).toFixed(3)); 
                     
-                    var xfix = div.find('x_fix').val();
+                    /*var xfix = div.find('x_fix').val();
                     var yfix = div.find('y_fix').val();
-                    var tfix = div.find('t_fix').val()*Math.PI/180;
+                    var tfix = div.find('t_fix').val()*Math.PI/180;*/
                     
                     if (charge < 0) charge = 0;
                     if (charge > 1) charge = 1;

@@ -25,4 +25,9 @@ std::ostream& operator<<(
     movement.print( stream );
     return stream;
 }
+namespace RhobanSSL {
+
+void Movement::set_orders_sample( const OrdersSample & samples){
+    }//Is nothing appart Kalman filter movement
+}
 

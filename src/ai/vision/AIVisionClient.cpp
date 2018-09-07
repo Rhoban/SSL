@@ -245,32 +245,28 @@ void AIVisionClient::updateRobotInformation(
     if(robotFrame.robot_id() < Ai::Constants::NB_OF_ROBOTS_BY_TEAM  ){
       Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
       Vision::Robot &robot = visionData.robots.at(team).at(robotFrame.robot_id());
-
+      
       bool orientation_is_defined=false;
-      std::pair<
-        rhoban_geometry::Point,
-        ContinuousAngle
-        > position = Vision::Factory::filter(
-          robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
-          orientation_is_defined, 
-          oldVisionData, part_of_the_field_used
-          );
+        std::pair<
+          rhoban_geometry::Point,
+          ContinuousAngle
+          > position = Vision::Factory::filter(
+            robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
+            orientation_is_defined, 
+            oldVisionData, part_of_the_field_used
+            );
 //                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
+        if ( orientation_is_defined ) {
+          Angle orientation(rad2deg( position.second.value() ));
+          robot.update( detection.t_sent(), position.first, orientation ); // TODO HACK : IL FAUT METTRE t_send() ?
 
-      
-      if ( orientation_is_defined ) {
-        Angle orientation(rad2deg( position.second.value() ));
-        robot.update( detection.t_sent(), position.first, orientation ); // TODO HACK : IL FAUT METTRE t_send() ?
-
-      }else{
-        robot.update( detection.t_sent(), position.first );
-      }
+        }else{
+          robot.update( detection.t_sent(), position.first );
+        }
     }else{
       DEBUG("Warnings : Vision have detected a robot with id " << robotFrame.robot_id() << "." );
     }
-
-
   } 
 }
 

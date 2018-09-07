@@ -79,8 +79,10 @@ public:
 
     virtual ~AICommander();
 
-protected:
     std::vector<struct Command> commands;
+
+
+protected:
 
     bool yellow;
 };

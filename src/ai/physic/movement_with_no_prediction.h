@@ -33,8 +33,9 @@ class Movement_with_no_prediction : public Movement {
 
         virtual double last_time() const;
 
-        virtual void set_sample( const MovementSample & samples );
-        virtual const MovementSample & get_sample() const;
+        virtual void set_sample( const MovementSample & samples, unsigned int i=0 );
+        virtual const MovementSample & get_sample(unsigned int i=0) const;
+        virtual void set_orders_sample( const OrdersSample & samples);
 
         virtual rhoban_geometry::Point linear_position( double time ) const;
         virtual ContinuousAngle angular_position( double time ) const;

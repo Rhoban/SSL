@@ -37,13 +37,13 @@ Movement_predicted_by_integration::print(std::ostream& stream) const {
 };
 
 void
-Movement_predicted_by_integration::set_sample( const MovementSample & samples ){
+Movement_predicted_by_integration::set_sample( const MovementSample & samples, unsigned int i ){
     assert( samples.is_valid() );
     this->samples = samples;
 }
 
-const MovementSample & Movement_predicted_by_integration::get_sample() const {
-    return samples;
+const MovementSample & Movement_predicted_by_integration::get_sample(unsigned int i) const {
+    return samples; 
 }
 
 double Movement_predicted_by_integration::last_time() const {
@@ -148,4 +148,9 @@ Movement_predicted_by_integration::angular_acceleration( double time ) const {
 Movement_predicted_by_integration::~Movement_predicted_by_integration(){
 }
 
+void Movement_predicted_by_integration::set_orders_sample( const OrdersSample & samples){
 }
+
+}
+
+

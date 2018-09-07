@@ -23,15 +23,23 @@
 #include <math/vector2d.h>
 #include <iostream>
 #include "MovementSample.h"
+#include "OrdersSample.h"
+
 
 namespace RhobanSSL {
+
+typedef enum {
+    VideoIndex, OdomIndex, KalmanIndex
+} IndexSamples;
 
 class Movement {
 public:
     virtual Movement * clone() const = 0;
 
-    virtual void set_sample( const MovementSample & samples ) = 0;
-    virtual const MovementSample & get_sample() const = 0;
+    virtual void set_sample( const MovementSample & samples, unsigned int i=VideoIndex ) = 0;// //TODO find name //i=0 video, i=1 odometry
+    virtual void set_orders_sample( const OrdersSample & samples);//Is nothing appart Kalman filter movement
+    virtual const MovementSample & get_sample(unsigned int i=VideoIndex) const = 0;
+    //TODO Proposer un update_sample (rajoute juste un Sample au lieu de tout copier)
 
     /* Return the last time of the samples */
     virtual double last_time() const = 0;
