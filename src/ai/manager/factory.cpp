@@ -20,36 +20,16 @@
 #include "factory.h"
 
 #include "Manual.h"
-#include "Match.h"
-#include "thomas.h"
-#include "base_3_gds.h"
-#include "base_3_gms.h"
-#include "sebastien/sebastien.h"
-#include "adrien/adrien.h"
-#include "jeremy/jeremy.h"
+// #include "Match.h"
 #include "plan_veschambres.h"
-#include "shin_tae_yong.h"
-#include "adrien/Manual_adrien.h"
-#include "example.h"
-#include "example_for_testing_robot_behaviors.h"
 
 namespace RhobanSSL {
 namespace Manager {
 
 std::list<std::string> Factory::list_of_avalaible_managers ={
     names::manual,
-    names::match,
-    names::adrien,
-    names::jeremy,
-    names::sebastien,
-    names::thomas,
-    names::base_3_gds,
-    names::base_3_gms,
-    names::manual_adrien,
-    names::example,
-    names::example_for_testing_robot_behaviors,
+    // names::match,
     names::plan_veschambres,
-    names::shin_tae_yong
 };
 
 const std::list<std::string> & Factory::avalaible_managers(){
@@ -59,7 +39,7 @@ const std::list<std::string> & Factory::avalaible_managers(){
 std::shared_ptr<Manager> Factory::construct_manager(
     const std::string & manager_name,
     Ai::AiData & ai_data,
-    Referee & referee
+    GameState & game_state
 ){
     std::shared_ptr<Manager> manager;
 
@@ -83,69 +63,14 @@ std::shared_ptr<Manager> Factory::construct_manager(
             //false //ai_data.team_color != Ai::Team::Yellow
         );
     }
-    if( manager_name == names::manual_adrien ){
-        manager = std::shared_ptr<Manager>(
-            new Manual_adrien(ai_data)
-        );
-        dynamic_cast<Manual_adrien&>(
-            *manager
-        ).change_team_and_point_of_view(
-            ai_data.team_color, true
-        );
-    }
-    if( manager_name == names::match ){
-        manager = std::shared_ptr<Manager>(
-            new Match(ai_data, referee)
-        );
-    }
-    if( manager_name == names::thomas ){
-        manager = std::shared_ptr<Manager>(
-            new Thomas(ai_data, referee)
-        );
-    }
-    if( manager_name == names::base_3_gms ){
-        manager = std::shared_ptr<Manager>(
-            new Base_3_gms(ai_data, referee)
-        );
-    }
-    if( manager_name == names::base_3_gds ){
-        manager = std::shared_ptr<Manager>(
-            new Base_3_gds(ai_data, referee)
-        );
-    }
-    if( manager_name == names::adrien ){
-        manager = std::shared_ptr<Manager>(
-            new Adrien(ai_data, referee)
-        );
-    }
-    if( manager_name == names::sebastien ){
-        manager = std::shared_ptr<Manager>(
-            new Sebastien(ai_data, referee)
-        );
-    }
-    if( manager_name == names::jeremy ){
-        manager = std::shared_ptr<Manager>(
-            new Jeremy(ai_data, referee)
-        );
-    }
-    if( manager_name == names::example ){
-        manager = std::shared_ptr<Manager>(
-            new Example(ai_data, referee)
-        );
-    }
-    if( manager_name == names::example_for_testing_robot_behaviors ){
-        manager = std::shared_ptr<Manager>(
-            new Example_for_testing_robot_behaviors(ai_data, referee)
-        );
-    }
+    // if( manager_name == names::match ){
+    //     manager = std::shared_ptr<Manager>(
+    //         new Match(ai_data, game_state)
+    //     );
+    // }
     if( manager_name == names::plan_veschambres ){
         manager = std::shared_ptr<Manager>(
-            new PlanVeschambres(ai_data, referee)
-        );
-    }
-    if( manager_name == names::shin_tae_yong ){
-        manager = std::shared_ptr<Manager>(
-            new ShinTaeYong(ai_data, referee)
+            new PlanVeschambres(ai_data, game_state)
         );
     }
     return manager;

@@ -1,75 +1,85 @@
 /*
-    This file is part of SSL.
+This file is part of SSL.
 
-    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
-    SSL is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+SSL is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    SSL is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
+SSL is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public License
-    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Lesser General Public License
+along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #ifndef __MANAGER__PLANVESCHAMBRES__H__
 #define __MANAGER__PLANVESCHAMBRES__H__
 
-#include <manager/Manager.h>
-#include <referee/Referee.h>
+#include <manager/manager_with_game_state.h>
 
 namespace RhobanSSL {
-namespace Manager {
+  namespace Manager {
 
-class PlanVeschambres : public Manager {
+    class PlanVeschambres : public ManagerWithGameState {
     private:
-    const Referee & referee;
 
-    //penalty
-    std::vector< std::list<std::string> >  penalty_strats;
-    //goale
-    std::vector< std::list<std::string> > goalie_strats;
-    //kick
-    std::vector< std::list<std::string> > kick_strats;
-    //kick_strats_indirect
-    std::vector< std::list<std::string> > kick_strats_indirect;
-    //offensiv
-    std::vector< std::list<std::string> > offensive_strats;
-    //defensive
-    std::vector< std::list<std::string> > defensive_strats;
+      const GameState & game_state;
 
-    std::vector< std::list<std::string> >stop_strats;
+      //penalty
+      std::vector< std::list<std::string> >  penalty_strats;
+      //goale
+      std::vector< std::list<std::string> > goalie_strats;
+      //kick
+      std::vector< std::list<std::string> > kick_strats;
+      //kick_strats_indirect
+      std::vector< std::list<std::string> > kick_strats_indirect;
+      //offensiv
+      std::vector< std::list<std::string> > offensive_strats;
+      //defensive
+      std::vector< std::list<std::string> > defensive_strats;
 
-    std::string strategy_applied = "";
+      std::vector< std::list<std::string> >stop_strats;
 
-    bool hold_ball_position = true;
-    rhoban_geometry::Point ball_last_position;
+      std::string strategy_applied = "";
 
-    unsigned int last_referee_changement;
+      bool hold_ball_position = true;
+      rhoban_geometry::Point ball_last_position;
 
-    std::list<std::string> future_strats;
+      std::list<std::string> future_strats;
 
     public:
 
-    PlanVeschambres(
+      PlanVeschambres(
         Ai::AiData & ai_data,
-        const Referee & referee
-    );
+        const GameState & game_state
+      );
 
-    void update(double time);
-    void analyse_data(double time);
-    void choose_a_strategy(double time);
+      virtual void start_stop();
+      virtual void start_running();
+      virtual void start_halt();
 
-    virtual ~PlanVeschambres();
+      virtual void start_direct_kick_ally();
+      virtual void start_direct_kick_opponent();
 
-};
+      virtual void start_indirect_kick_ally();
+      virtual void start_indirect_kick_opponent();
 
-};
+      virtual void start_kickoff_ally();
+      virtual void start_kickoff_opponent();
+
+      virtual void start_penalty_ally();
+      virtual void start_penalty_opponent();
+
+      virtual ~PlanVeschambres();
+
+    };
+
+  };
 };
 
 #endif

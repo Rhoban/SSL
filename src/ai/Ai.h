@@ -25,7 +25,7 @@
 #include <vision/AIVisionClient.h>
 #include <robot_behavior/robot_behavior.h>
 #include "AiData.h"
-#include <referee/Referee.h>
+#include <referee/game_state.h>
 #include <core/machine_state.h>
 #include <manager/Manager.h>
 #include <annotations/Annotations.h>
@@ -59,7 +59,7 @@ namespace RhobanSSL
         std::shared_ptr<Manager::Manager> getManager() const;
         std::shared_ptr<Manager::Manager> getManualManager();
 
-        Referee &getReferee();
+        GameState &getGameState();
 
         double getCurrentTime();
 
@@ -86,7 +86,7 @@ namespace RhobanSSL
         Shared_data shared_data;
 
         Data & data;
-        Referee referee;
+        GameState game_state;
         std::string manager_name;
         std::shared_ptr<Manager::Manager> strategy_manager;
         std::shared_ptr<Manager::Manager> manual_manager;
@@ -108,7 +108,7 @@ namespace RhobanSSL
         void prevent_collision( int robot_id, Control & ctrl );
         RhobanSSLAnnotation::Annotations get_robot_behavior_annotations() const;
         public:
-         
+
         void get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const;
 
     };

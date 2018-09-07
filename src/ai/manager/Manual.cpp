@@ -628,8 +628,8 @@ Manual::Manual( Ai::AiData & ai_data ):
 
 
 void Manual::assign_point_of_view_and_goalie(){
-    DEBUG(team_color);
-    DEBUG(Ai::Team::Yellow);
+    // DEBUG(team_color);
+    // DEBUG(Ai::Team::Yellow);
     change_team_and_point_of_view(
         team_color,
         goal_to_positive_axis

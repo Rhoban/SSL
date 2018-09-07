@@ -9,7 +9,7 @@
 
 using namespace RhobanSSL;
 
-#define NB_ROBOT_ELEC 8 //HACK !! TODO ! Electronic doen't support that number of robots 
+#define NB_ROBOT_ELEC 8 //HACK !! TODO ! Electronic doen't support that number of robots
 
 // Helper, converts a json value to its string representation
 static QString js(Json::Value &json)
@@ -20,8 +20,8 @@ static QString js(Json::Value &json)
 }
 
 API::API(
-  std::string teamName, bool simulation, RhobanSSL::Ai::Team team, 
-  RhobanSSL::AICommander *commander, const std::string & config_path, 
+  std::string teamName, bool simulation, RhobanSSL::Ai::Team team,
+  RhobanSSL::AICommander *commander, const std::string & config_path,
   Vision::Part_of_the_field part_of_the_field_used, std::string addr, std::string port, std::string sim_port
   )
   :
@@ -52,7 +52,7 @@ API::API(
 
     // Instanciating AI
     ai = new RhobanSSL::AI(
-        Manager::names::match,
+        Manager::names::manual, //avant : match
         teamName,
         team,
         data,
@@ -138,8 +138,8 @@ QString API::refereeStatus()
 {
     Json::Value json;
 
-    auto &referee = ai->getReferee();
-    auto &refereeClient = referee.getRefereeClient();
+    auto &game_state = ai->getGameState();
+    auto &refereeClient = game_state.getRefereeClient();
     SSL_Referee data = refereeClient.getData();
     json["our_color"] = ourColor();
     json["hasData"] = refereeClient.hasData();

@@ -31,31 +31,31 @@
 #include <core/collection.h>
 #include <core/print_collection.h>
 
-#define GOALIE "Goalie" 
-#define DEFENSOR1 "Defensor1" 
-#define DEFENSOR2 "Defensor2" 
-#define STRIKER "Striker" 
+#define GOALIE "Goalie"
+#define DEFENSOR1 "Defensor1"
+#define DEFENSOR2 "Defensor2"
+#define STRIKER "Striker"
 
 namespace RhobanSSL {
 namespace Manager {
 
 Match::Match(
     Ai::AiData & ai_data,
-    const Referee & referee
+    const GameState & game_state
 ):
     Manager(ai_data),
-    referee(referee),
-    last_referee_changement(0)
+    game_state(game_state),
+    last_game_state_changement(0)
 {
 
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Halt(ai_data) 
+            new Strategy::Halt(ai_data)
         )
     );
     register_strategy(
         Strategy::Tare_and_synchronize::name,
-        std::shared_ptr<Strategy::Strategy>( 
+        std::shared_ptr<Strategy::Strategy>(
             new Strategy::Tare_and_synchronize(ai_data)
         )
     );
@@ -110,19 +110,18 @@ Match::Match(
         )
     );
     assign_strategy(
-        Strategy::Halt::name, 0.0, 
+        Strategy::Halt::name, 0.0,
         get_team_ids()
     ); // TODO TIME !
 }
 
 
 void Match::choose_a_strategy(double time){
-    if( referee.edge_entropy() > last_referee_changement ){
+    if( game_state.edge_entropy() > last_game_state_changement ){
         clear_strategy_assignement();
-        if( referee.get_state() == Referee_Id::STATE_INIT ){
-        } else if( referee.get_state() == Referee_Id::STATE_HALTED ){
+        if( game_state.get_state() == state_name::halt ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
-        } else if( referee.get_state() == Referee_Id::STATE_STOPPED ){
+        } else if( game_state.get_state() == state_name::stop ){
             if(get_valid_team_ids().size() > 0){
                 if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
                     assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
@@ -130,22 +129,22 @@ void Match::choose_a_strategy(double time){
                     place_all_the_robots(time, future_strats);
                 }
             }
-        } else if( referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF ){
-            if( get_team() == referee.kickoff_team() ){
+        } else if( game_state.get_state() == state_name::STATE_PREPARE_KICKOFF ){
+            if( get_team() == game_state.kickoff_team() ){
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
             }else{
                 get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
             }
             future_strats = {Strategy::Prepare_kickoff::name};
             declare_and_assign_next_strategies( future_strats );
-        } else if( referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY ){
-        } else if( referee.get_state() == Referee_Id::STATE_RUNNING ){
+        } else if( game_state.get_state() == state_name::STATE_PREPARE_PENALTY ){
+        } else if( game_state.get_state() == state_name::STATE_RUNNING ){
             future_strats = { GOALIE, DEFENSOR1, STRIKER };
             declare_and_assign_next_strategies(future_strats);
-        } else if( referee.get_state() == Referee_Id::STATE_TIMEOUT ){
+        } else if( game_state.get_state() == state_name::STATE_TIMEOUT ){
             assign_strategy( Strategy::Halt::name, time, get_valid_team_ids() );
         }
-        last_referee_changement = referee.edge_entropy();
+        last_game_state_changement = game_state.edge_entropy();
     }
 }
 

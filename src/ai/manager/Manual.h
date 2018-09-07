@@ -27,9 +27,9 @@ namespace Manager {
 
 class Manual : public Manager {
     private:
-    
+
     bool strategy_was_assigned;
-    
+
     Ai::Team team_color;
     bool goal_to_positive_axis;
     int ally_goalie_id;
@@ -37,7 +37,7 @@ class Manual : public Manager {
 
     void assign_point_of_view_and_goalie();
 
-    
+
     public:
     Manual( Ai::AiData & ai_data );
 

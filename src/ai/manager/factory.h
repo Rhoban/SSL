@@ -21,26 +21,16 @@
 #define __MANAGER__FACTORY__H__
 
 #include <AiData.h>
-#include <referee/Referee.h>
+#include <referee/game_state.h>
 #include "Manager.h"
 
 namespace RhobanSSL {
 namespace Manager {
 
 struct names {
-    static constexpr const char* example = "example";
-    static constexpr const char* example_for_testing_robot_behaviors = "example_for_testing_robot_behaviors";
     static constexpr const char* manual = "manual";
-    static constexpr const char* match = "match";
-    static constexpr const char* thomas = "thomas";
-    static constexpr const char* base_3_gds = "base_3_gds";
-    static constexpr const char* base_3_gms = "base_3_gms";
-    static constexpr const char* adrien = "adrien";
-    static constexpr const char* manual_adrien = "manual_adrien";
-    static constexpr const char* sebastien = "sebastien";
-    static constexpr const char* jeremy = "jeremy";
+    // static constexpr const char* match = "match";
     static constexpr const char* plan_veschambres = "PlanVeschambres";
-    static constexpr const char* shin_tae_yong = "ShinTaeYong";
 };
 
 class Factory {
@@ -53,7 +43,7 @@ class Factory {
     static std::shared_ptr<Manager> construct_manager(
         const std::string & manager_name,
         Ai::AiData & ai_data,
-        Referee & referee
+        GameState & game_state
     );
 
 };

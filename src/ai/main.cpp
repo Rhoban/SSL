@@ -83,16 +83,16 @@ int main(int argc, char **argv)
         "string", // short description of the expected value.
         cmd
     );
-    
+
     std::stringstream manager_names;
     manager_names << Manager::Factory::avalaible_managers();
     TCLAP::ValueArg<std::string> manager_name(
         "m", // short argument name  (with one character)
         "manager", // long argument name
-        "The manager to use. The default value is '" + std::string(Manager::names::match) + "'. "
+        // "The manager to use. The default value is '" + std::string(Manager::names::match) + "'. "
         "The manger that can be used are " + manager_names.str() + ".",
         false, // Flag is not required
-        Manager::names::match, // Default value
+        Manager::names::manual, // Default value
         "string", // short description of the expected value.
         cmd
     );
@@ -129,7 +129,7 @@ int main(int argc, char **argv)
       cmd
       );
 
-    
+
     TCLAP::ValueArg<std::string> sim_port(
       "u", // short argument name  (with one character)
       "sim_port", // long argument name
@@ -149,8 +149,8 @@ int main(int argc, char **argv)
         std::find( avalaible_managers.begin(), avalaible_managers.end(), manager_name.getValue() )
         == avalaible_managers.end()
     ){
-        std::cerr << "The manager '" << manager_name.getValue() 
-            << "' doesn't exist. Valid manager names are : " 
+        std::cerr << "The manager '" << manager_name.getValue()
+            << "' doesn't exist. Valid manager names are : "
             << avalaible_managers << "." << std::endl;
         return 1;
     };
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 
 
 
-    
+
     // // Instantiationg the vision
     // AIVisionClient vision(
     //   data,
@@ -189,7 +189,7 @@ int main(int argc, char **argv)
     }else{
       theport=port.getValue();
     }
-    
+
     // Instantiationg the vision
     AIVisionClient vision(
       data,
@@ -198,7 +198,7 @@ int main(int argc, char **argv)
       addr.getValue(), theport, theport, part_of_the_field_used
       );
 
-    
+
     // AI Commander to control the robots
     AICommander *commander;
     if (simulation.getValue()) {

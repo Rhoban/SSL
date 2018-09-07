@@ -21,24 +21,24 @@
 #define __MANAGER__MATCH__H__
 
 #include "Manager.h"
-#include <referee/Referee.h>
+#include <referee/game_state.h>
 
 namespace RhobanSSL {
 namespace Manager {
 
 class Match : public Manager {
     private:
-    const Referee & referee;
+    const GameState & game_state;
 
-    unsigned int last_referee_changement;
-            
+    unsigned int last_game_state_changement;
+
     std::list<std::string> future_strats;
-    
+
     public:
 
     Match(
         Ai::AiData & ai_data,
-        const Referee & referee
+        const GameState & game_state
     );
 
     void update(double time);

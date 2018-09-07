@@ -57,7 +57,7 @@ namespace Manager
 
 PlanVeschambres::PlanVeschambres(
     Ai::AiData &ai_data,
-    const GameState &game_state) : ManagerWithGameState(ai_data, game_state),
+    const GameState &game_state) : Manager(ai_data),
                               game_state(game_state),
                               penalty_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               goalie_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
@@ -65,7 +65,8 @@ PlanVeschambres::PlanVeschambres(
                               stop_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               defensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               kick_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              kick_strats_indirect(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+                              kick_strats_indirect(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+                              last_referee_changement(0)
 {
 
     penalty_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
@@ -212,34 +213,195 @@ PlanVeschambres::PlanVeschambres(
         get_team_ids()); // TODO TIME !
 }
 
-void PlanVeschambres::start_stop(){
+void PlanVeschambres::analyse_data(double time)
+{
+    // We change the point of view of the team
+    change_team_and_point_of_view(
+        referee.get_team_color(get_team_name()),
+        referee.blue_have_it_s_goal_on_positive_x_axis());
+    change_ally_and_opponent_goalie_id(
+        referee.blue_goalie_id(),
+        referee.yellow_goalie_id());
 }
 
-void PlanVeschambres::start_running(){
-  future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-}
-void PlanVeschambres::start_halt(){
+void PlanVeschambres::choose_a_strategy(double time)
+{
+    if (referee.edge_entropy() > last_referee_changement)
+    {
+        clear_strategy_assignement();
+        if (referee.get_state() == Referee_Id::STATE_INIT)
+        {
+        }
+        else if (referee.get_state() == Referee_Id::STATE_HALTED)
+        {
+            assign_strategy(Strategy::Halt::name, time, get_valid_team_ids());
+            hold_ball_position = true;
+            ball_last_position = ball_position();
+        }
+        else if (referee.get_state() == Referee_Id::STATE_STOPPED)
+        {
+            set_ball_avoidance_for_all_robots(true);
+            hold_ball_position = true;
+            if (get_valid_team_ids().size() > 0)
+            {
+                if (not(get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized()))
+                {
+                    assign_strategy(Strategy::Tare_and_synchronize::name, time, get_valid_player_ids());
+                }
+                else
+                {
+                    get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
+                    future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
+                    declare_and_assign_next_strategies(future_strats);
+                }
+            }
+        }
+        else if (referee.get_state() == Referee_Id::STATE_PREPARE_KICKOFF)
+        {
+            set_ball_avoidance_for_all_robots(false);
+            if (get_team() == referee.kickoff_team())
+            {
+                get_strategy_<Strategy::Prepare_kickoff>().set_kicking(true);
+                hold_ball_position = false;
+                strategy_applied = "";
+            }
+            else
+            {
+                get_strategy_<Strategy::Prepare_kickoff>().set_kicking(false);
+                hold_ball_position = true;
+                ball_last_position = center_mark();
+            }
+            future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
+            declare_and_assign_next_strategies(future_strats);
+        }
+        else if (referee.get_state() == Referee_Id::STATE_PREPARE_PENALTY)
+        {
+            set_ball_avoidance_for_all_robots(false);
+            clear_strategy_assignement();
+
+            if (get_team() == referee.penalty_team())
+            {
+                //penalty
+                future_strats = penalty_strats[Manager::get_valid_player_ids().size() + 1];
+                declare_and_assign_next_strategies(future_strats);
+                hold_ball_position = true;
+                ball_last_position = ball_position();
+            }
+            else
+            {
+                //goal
+                future_strats = {Strategy::Prepare_kickoff::name};
+                declare_and_assign_next_strategies(future_strats);
+                hold_ball_position = true;
+                ball_last_position = ball_position();
+            }
+
+            last_referee_changement = referee.edge_entropy();
+        }
+        else if (referee.get_state() == Referee_Id::STATE_RUNNING)
+        {
+            set_ball_avoidance_for_all_robots(false);
+
+            clear_strategy_assignement();
+
+            // check direct and indirect free kick
+
+            if (referee.direct_free_team().second == referee.edge_entropy() - 1)
+            {
+                if (get_team() == referee.direct_free_team().first)
+                {
+                    DEBUG("Offensive direct Kick");
+                    //offensive
+                    future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
+                    hold_ball_position = true;
+                    ball_last_position = ball_position();
+
+                }
+                else
+                {
+                    DEBUG("Defensive direct Kick");
+
+                    //goal
+                    future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
+                    hold_ball_position = true;
+                    ball_last_position = ball_position();
+                }
+            }
+            else if (referee.indirect_free_team().second == referee.edge_entropy() - 1)
+            {
+                if (get_team() == referee.indirect_free_team().first)
+                {
+                  DEBUG("Offensive indirect Kick");
+                  //offensive
+                  future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
+                  hold_ball_position = true;
+                  ball_last_position = ball_position();
+                }
+                else
+                {
+                    DEBUG("Defensive indirect Kick");
+
+                    //goalie
+                    future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
+                    hold_ball_position = true;
+                    ball_last_position = ball_position();
+                }
+            }
+
+            declare_and_assign_next_strategies(future_strats);
+        }
+        else if (referee.get_state() == Referee_Id::STATE_TIMEOUT)
+        {
+            assign_strategy(Strategy::Halt::name, time, get_valid_team_ids());
+        }
+        last_referee_changement = referee.edge_entropy();
+    }
+    else if (referee.get_state() == Referee_Id::STATE_RUNNING)
+    {
+
+        set_ball_avoidance_for_all_robots(false);
+
+        if (hold_ball_position)
+        {
+            if (!Box(
+                     {ball_last_position.getX() - 0.10, ball_last_position.getY() - 0.10},
+                     {ball_last_position.getX() + 0.10, ball_last_position.getY() + 0.10})
+                     .is_inside(ball_position()))
+            {
+                hold_ball_position = false;
+                strategy_applied = "";
+            }
+        }
+        else
+        {
+            if (ball_position().getX() <= 0 && (strategy_applied == "offensive" || strategy_applied == ""))
+            {
+                //DEFENSIVE
+                DEBUG("defensive !!!! ");
+                future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
+                clear_strategy_assignement();
+                declare_and_assign_next_strategies(future_strats);
+                strategy_applied = "defensive";
+            }
+            if (ball_position().getX() >= 0 && (strategy_applied == "defensive" || strategy_applied == ""))
+            {
+                //OFFENSIVE
+                DEBUG("offensive !!!! ");
+                future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
+                clear_strategy_assignement();
+                declare_and_assign_next_strategies(future_strats);
+                strategy_applied = "offensive";
+            }
+        }
+    }
 }
 
-void PlanVeschambres::start_direct_kick_ally(){
-}
-void PlanVeschambres::start_direct_kick_opponent(){
-}
-
-void PlanVeschambres::start_indirect_kick_ally(){
-}
-void PlanVeschambres::start_indirect_kick_opponent(){
-}
-
-void PlanVeschambres::start_kickoff_ally(){
-}
-void PlanVeschambres::start_kickoff_opponent(){
-}
-
-void PlanVeschambres::start_penalty_ally(){
-}
-void PlanVeschambres::start_penalty_opponent(){
+void PlanVeschambres::update(double time)
+{
+    //update_strategies(time);
+    update_current_strategies(time);
+    analyse_data(time);
+    choose_a_strategy(time);
 }
 
 PlanVeschambres::~PlanVeschambres() {}

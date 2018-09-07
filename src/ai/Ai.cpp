@@ -209,7 +209,7 @@ void AI::send_control( int robot_id, const Control & ctrl ){
             int kick = 0;
             if (ctrl.kick) kick = 1;
             else if (ctrl.chipKick) kick = 2;
-            
+
             commander->set(
                 robot_id, true,
                 ctrl.velocity_translation[0], ctrl.velocity_translation[1],
@@ -293,7 +293,8 @@ AI::AI(
     ai_data( config_path, is_in_simulation, default_team ),
     commander(commander),
     current_dt(ai_data.constants.period),
-    data(data)
+    data(data),
+    game_state(ai_data)
 {
     init_robot_behaviors();
 
@@ -302,7 +303,7 @@ AI::AI(
     ai_data.team_name = team_name;
 
     manual_manager = Manager::Factory::construct_manager(
-        Manager::names::manual, ai_data, referee
+        Manager::names::manual, ai_data, game_state
     );
 
     setManager( manager_name );
@@ -329,7 +330,7 @@ void AI::setManager(std::string managerName)
         strategy_manager = manual_manager;
     }else{
         strategy_manager = Manager::Factory::construct_manager(
-            managerName, ai_data, referee
+            managerName, ai_data, game_state
         );
     }
     manager_name = managerName;
@@ -386,7 +387,7 @@ void AI::run(){
     auto lastTick = rhoban_utils::TimeStamp::now();
 
     // TODO ; SEE HOW TO REMOVE THE WARMUP
-    double warmup_period = 2 * period * RhobanSSL::Vision::history_size; 
+    double warmup_period = 2 * period * RhobanSSL::Vision::history_size;
     double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS()/1000.0;
 
     while (running) {
@@ -433,23 +434,23 @@ void AI::run(){
             continue;
         }
 
-        referee.update(current_time);
+        game_state.update(current_time);
 
         if( manager_name != Manager::names::manual  ) { // HACK TOT REMOVEE !
             strategy_manager->change_team_and_point_of_view(
-                referee.get_team_color( strategy_manager->get_team_name() ),
-                referee.blue_have_it_s_goal_on_positive_x_axis()
+                game_state.get_team_color( strategy_manager->get_team_name() ),
+                game_state.blue_have_it_s_goal_on_positive_x_axis()
             );
         }else{
             dynamic_cast<Manager::Manual*>(
                 strategy_manager.get()
             )->define_goal_to_positive_axis(
-                not( referee.blue_have_it_s_goal_on_positive_x_axis() )
+                not( game_state.blue_have_it_s_goal_on_positive_x_axis() )
             );
         }
         strategy_manager->change_ally_and_opponent_goalie_id(
-            referee.blue_goalie_id(),
-            referee.yellow_goalie_id()
+            game_state.blue_goalie_id(),
+            game_state.yellow_goalie_id()
         );
 
         strategy_manager->remove_invalid_robots();
@@ -492,9 +493,9 @@ void AI::share_data(){
     data << data_from_ai;
 }
 
-Referee &AI::getReferee()
+GameState &AI::getGameState()
 {
-    return referee;
+    return game_state;
 }
 
 double AI::getCurrentTime()

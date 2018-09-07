@@ -64,20 +64,11 @@ set (SOURCES
     AiData.cpp
     debug.cpp
     manager/Manager.cpp
-    manager/thomas.cpp
-    manager/base_3_gds.cpp
-    manager/base_3_gms.cpp
-    manager/adrien/adrien.cpp
-    manager/adrien/Manual_adrien.cpp
-    manager/sebastien/sebastien.cpp
-    manager/jeremy/jeremy.cpp
+    manager/manager_with_game_state.cpp
     manager/plan_veschambres.cpp
-    manager/shin_tae_yong.cpp
-    manager/Match.cpp
+    # manager/Match.cpp
     manager/Manual.cpp
     manager/factory.cpp
-    manager/example.cpp
-    manager/example_for_testing_robot_behaviors.cpp
     strategy/Strategy.cpp
     strategy/halt.cpp
     strategy/mur.cpp
@@ -127,8 +118,8 @@ set (SOURCES
     math/box.cpp
     core/export_to_plot.cpp
     core/logger.cpp
-    referee/Referee.cpp
     referee/print_protobuf_referee.cpp
+    referee/game_state.cpp
     annotations/Annotations.cpp
 )
 
