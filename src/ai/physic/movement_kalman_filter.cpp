@@ -304,7 +304,6 @@ void Movement_kalman_filter::kalman_tick(double _time){
     predictPhase(_time);
     fusionSensors(_time);
     updatePhase(_time);
-    //TODO HERE, start kalmantick()
 }
 
 Movement_kalman_filter::~Movement_kalman_filter(){
