@@ -243,7 +243,7 @@ void Movement_kalman_filter::fusionSensors(double _time){
                       samples[OdomIndex].angular_position().value(),
                       samples[OdomIndex].linear_velocity()[0],
                       samples[OdomIndex].linear_velocity()[1],
-                      samples[VideoIndex].angular_velocity();
+                      samples[OdomIndex].angular_velocity();
         
         int i = 0;
         PositionSample extrapolatedVideo;
@@ -278,7 +278,7 @@ void Movement_kalman_filter::fusionSensors(double _time){
         }
     }
 
-    //TODO Calculate Covariance too = find a way to scal it on a timestamps
+    //TODO Calculate Covariance too = find a way to scale it on a timestamps
     chosenOdomCov  = Eigen::MatrixXd::Identity(6,6);
     chosenVideoCov = Eigen::MatrixXd::Identity(6,6);
 
