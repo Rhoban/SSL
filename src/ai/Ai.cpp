@@ -222,7 +222,7 @@ void AI::send_control( int robot_id, const Control & ctrl ){
                 ctrl.tareOdom
 
             );
-                //DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_translation);
+                //DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
             }else{
                 commander->set(
                 robot_id, true,

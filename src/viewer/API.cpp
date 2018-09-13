@@ -193,9 +193,9 @@ QString API::robotsStatus()
                     
                     jsonRobot["ir"] = (masterRobot.status.status & STATUS_IR) ? true : false;
                     
-                    jsonRobot["x_odom"] = (float)masterRobot.status.xpos/1000;
-                    jsonRobot["y_odom"] = (float)masterRobot.status.ypos/1000;
-                    jsonRobot["t_odom"] = (float)(masterRobot.status.ang);
+                    jsonRobot["x_odom"] = (double)masterRobot.status.xpos/1000;
+                    jsonRobot["y_odom"] = (double)masterRobot.status.ypos/1000;
+                    jsonRobot["t_odom"] = (masterRobot.status.ang);
                 } else {
                     jsonRobot["ir"] = false;
                 }
@@ -398,7 +398,7 @@ void API::tareOdom(int id, bool tare, double xFix, double yFix, double tFix)
         
         //printf("MIAMMIAM\n\r");
         control.fix_translation = Vector2d(xFix, yFix);
-        control.fix_rotation = ContinuousAngle(tFix);
+        control.fix_rotation = tFix; //rad
         //printf("%f %f %f", xFix, yFix, tFix);
     }
     data << shared;
