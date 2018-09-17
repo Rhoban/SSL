@@ -68,7 +68,7 @@ namespace RhobanSSL
             packet.kickPower = 120*command.kickPower;
 
             if(command.tareOdom){
-                packet.t_speed = command.thetaSpeed*10;
+                packet.t_speed = command.thetaSpeed*10000;
             }else{
                 packet.t_speed = command.thetaSpeed*1000;
             }

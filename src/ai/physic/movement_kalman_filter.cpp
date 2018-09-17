@@ -6,23 +6,30 @@
 namespace RhobanSSL{
 
 Movement_kalman_filter::Movement_kalman_filter(){
-    
+    //DEBUG( "kalman1 " );
+
     dt = 0.0;
     lastUpdate = 0.0;
+    //DEBUG( "kalman2 " );
+    cmdUk.resize(3,1);
+    filteredPos.resize(6,1);
 
-    physicModelFk(6,6); //TODO Physic model to apply
-    externCmdBk(6,3);   //TODO Physic model to aalso apply
-    cmdUk(3,1);
-    predCovariancePk(6,6);
-    externImpactQk(6,6);
-    predictedXk(6,6);
-    sensorGainHk(6,6);       
-    sensorCovarianceRk(6,6); 
-    measurementsZk(6,6);     
-    kalmanGainK(6,6);
 
-    filteredPos(6,1);
-    filteredCov(6,6);
+    /*
+    externCmdBk.resize(6,3);   //TODO Physic model to aalso apply
+    cmdUk.resize(3,1);
+    predCovariancePk.resize(6,6);
+    externImpactQk.resize(6,6);
+    predictedXk.resize(6,6);
+    sensorGainHk.resize(6,6);       
+    sensorCovarianceRk.resize(6,6); 
+    measurementsZk.resize(6,6);     
+    kalmanGainK.resize(6,6);
+
+    filteredPos.resize(6,1);
+    filteredCov.resize(6,6);*/
+
+    //DEBUG( "kalman3 " );
 
 
     physicModelFk << 1, 0, 0, dt, 0, 0,  //Maybe improve it with Romain physic model, that's just a first attempt
@@ -31,6 +38,8 @@ Movement_kalman_filter::Movement_kalman_filter(){
                      0, 0, 0, 1, 0, 0, 
                      0, 0, 0, 0, 1, 0, 
                      0, 0, 0, 0, 0, 1;
+
+    //DEBUG( "kalman4 " );
 
     externCmdBk   << (std::pow(dt,2)/(2*POIDS)), 0, 0,  //same here
                      0, (std::pow(dt,2)/(2*POIDS)), 0,
@@ -49,6 +58,10 @@ Movement_kalman_filter::Movement_kalman_filter(){
     kalmanGainK = Eigen::MatrixXd::Identity(6,6); //Kalman Gain (classic gain of a filter)
     filteredPos = Eigen::MatrixXd::Zero(6,1);
     filteredCov = Eigen::MatrixXd::Zero(6,6);
+
+
+    //DEBUG( "kalman5 " );
+
 }
 
 Movement * Movement_kalman_filter::clone() const{
@@ -56,7 +69,7 @@ Movement * Movement_kalman_filter::clone() const{
 }
 
 double Movement_kalman_filter::last_time() const{
-    return lastUpdate;
+    return samples[2].time(0);
 }
 
 void Movement_kalman_filter::set_sample( const MovementSample & samples, unsigned int i){

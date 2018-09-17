@@ -9,6 +9,10 @@
 // namespace Eigen {
 namespace RhobanSSL {
 
+typedef Eigen::Matrix<double, 6, 6> Matrix6d;
+//typedef Eigen::Matrix<double, 6, 3> Matrix63d;
+//typedef Eigen::Matrix<double, 6, 1> Vector6d;
+
 class Movement_kalman_filter : public Movement {
 
     private:
@@ -18,27 +22,28 @@ class Movement_kalman_filter : public Movement {
         double lastUpdate;
         double dt;
 
-        Eigen::MatrixXd physicModelFk; //notations are the same as the following document : https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
-        Eigen::MatrixXd externCmdBk;
-        Eigen::MatrixXd cmdUk;
-        Eigen::MatrixXd predCovariancePk;
-        Eigen::MatrixXd externImpactQk;
-        Eigen::MatrixXd predictedXk; 
+        Matrix6d physicModelFk; //notations are the same as the following document : https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
+        Matrix6d externCmdBk;
+        Matrix6d cmdUk;
+        Matrix6d predCovariancePk;
+        Matrix6d externImpactQk;
+        Matrix6d predictedXk; 
 
-        Eigen::MatrixXd odometryMean;
-        Eigen::MatrixXd odometryGauss;
-        Eigen::MatrixXd videoMean;
-        Eigen::MatrixXd videoGauss;
+        Matrix6d odometryMean;
+        Matrix6d odometryGauss;
+        Matrix6d videoMean;
+        Matrix6d videoGauss;
 
-        Eigen::MatrixXd sensorGainHk;
-        Eigen::MatrixXd sensorCovarianceRk;
-        Eigen::MatrixXd measurementsZk;
-        Eigen::MatrixXd kalmanGainK;
+        Matrix6d sensorGainHk;
+        Matrix6d sensorCovarianceRk;
+        Matrix6d measurementsZk;
+        Matrix6d kalmanGainK;
 
-        Eigen::MatrixXd filteredPos;
-        Eigen::MatrixXd filteredCov;
+        Matrix6d filteredPos;
+        Matrix6d filteredCov;
 
     public:
+        EIGEN_MAKE_ALIGNED_OPERATOR_NEW
         Movement_kalman_filter();
         //Movement_kalman_filter(Eigen::MatrixXd _Fk, Eigen::MatrixXd _Bk, Eigen::MatrixXd _Uk, Eigen::MatrixXd _Pk, Eigen::MatrixXd _Qk, Eigen::MatrixXd _Xk, Eigen::MatrixXd _Hk, Eigen::MatrixXd _Rk, Eigen::MatrixXd _Zk, Eigen::MatrixXd _K, int _nmbSensors);
 

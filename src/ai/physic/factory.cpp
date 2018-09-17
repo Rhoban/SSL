@@ -32,9 +32,9 @@ namespace physic {
 
 Movement* Factory::robot_movement(Ai::AiData & ai_data){
     return new Movement_with_temporal_shift(
-      //new Movement_with_no_prediction()
+      new Movement_with_no_prediction()
       //new Movement_predicted_by_integration()
-      new Movement_kalman_filter()
+      //new Movement_kalman_filter()
       , [&ai_data](){ return ai_data.time_shift_with_vision; }
     );
 }

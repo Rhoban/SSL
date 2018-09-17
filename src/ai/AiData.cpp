@@ -65,7 +65,7 @@ namespace Ai {
 
     void Object::set_vision_data( const Vision::Object & vision_data  ){
         this->vision_data = vision_data;
-        this->movement->set_sample( this->vision_data.movement );
+        //this->movement->set_sample( this->vision_data.movement );
     }
     void Object::set_movement( Movement * movement ){
         if( this->movement ){
@@ -443,7 +443,8 @@ Robot::Robot():
     infra_red(false),
     odometrySample(odometry_size),
     ordersSample(order_size)
-{}
+{        DEBUG( "robot construit");
+}
 
 
 } } //Namespace
