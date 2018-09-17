@@ -65,7 +65,7 @@ namespace Ai {
 
     void Object::set_vision_data( const Vision::Object & vision_data  ){
         this->vision_data = vision_data;
-        //this->movement->set_sample( this->vision_data.movement );
+        this->movement->set_sample( this->vision_data.movement );
     }
     void Object::set_movement( Movement * movement ){
         if( this->movement ){
@@ -104,9 +104,9 @@ namespace Ai {
         if( vision_data.field.present ){
             static_cast<Vision::Field&>(field) = vision_data.field;
         };
-
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
+                //DEBUG(vision_data.robots.at(team).at(k));
                 robots[team][k].set_vision_data(
                     vision_data.robots.at(team).at(k)
                 );

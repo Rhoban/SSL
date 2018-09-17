@@ -65,7 +65,9 @@ Movement_kalman_filter::Movement_kalman_filter(){
 }
 
 Movement * Movement_kalman_filter::clone() const{
-    return new Movement_kalman_filter();
+    Movement_kalman_filter * res = new Movement_kalman_filter();
+    *res = *this;
+    return res;
 }
 
 double Movement_kalman_filter::last_time() const{
@@ -209,85 +211,85 @@ void Movement_kalman_filter::fusionSensors(double _time){
     Eigen::MatrixXd chosenOdomCov(6,6);
     Eigen::MatrixXd chosenVideoCov(6,6);
 
-    if(samples[VideoIndex].time() == _time){ //the time reference is set by a video sample
-        chosenVideo << this->samples[VideoIndex].linear_position().getX(),
-                       this->samples[VideoIndex].linear_position().getY(),
-                       this->samples[VideoIndex].angular_position(),
-                       this->samples[VideoIndex].linear_velocity()[0],
-                       this->samples[VideoIndex].linear_velocity()[1],
-                       this->samples[VideoIndex].angular_velocity();
+    if(samples[0].time() == _time){ //the time reference is set by a video sample
+        chosenVideo << this->samples[0].linear_position().getX(),
+                       this->samples[0].linear_position().getY(),
+                       this->samples[0].angular_position(),
+                       this->samples[0].linear_velocity()[0],
+                       this->samples[0].linear_velocity()[1],
+                       this->samples[0].angular_velocity();
     
         int i = 0;
         PositionSample extrapolatedOdom;
-        while(samples[OdomIndex].time(i) > _time){//Let's find the nearest odometry sample
+        while(samples[1].time(i) > _time){//Let's find the nearest odometry sample
             i++;
         }
         if(i > 0){//it means we have more recent odometry samples that we might use to gain precision
-            double ratio = (samples[OdomIndex].time(i-1)-_time)/(samples[OdomIndex].time(i-1)-samples[OdomIndex].time(i));
+            double ratio = (samples[1].time(i-1)-_time)/(samples[1].time(i-1)-samples[1].time(i));
             extrapolatedOdom = PositionSample(_time,
-                               (1-ratio)*samples[OdomIndex].linear_position(i-1) + ratio*samples[OdomIndex].linear_position(i),
-                               (1-ratio)*samples[OdomIndex].angular_position(i-1).value() + ratio*samples[OdomIndex].angular_position(i).value());
+                               (1-ratio)*samples[1].linear_position(i-1) + ratio*samples[1].linear_position(i),
+                               (1-ratio)*samples[1].angular_position(i-1).value() + ratio*samples[1].angular_position(i).value());
         
             chosenOdom << extrapolatedOdom.linear_position.getX(),
                           extrapolatedOdom.linear_position.getY(),
                           extrapolatedOdom.angular_position,
-                          (1-ratio)*samples[OdomIndex].linear_velocity(i-1)[0] + ratio*samples[OdomIndex].linear_velocity(i)[0],
-                          (1-ratio)*samples[OdomIndex].linear_velocity(i-1)[1] + ratio*samples[OdomIndex].linear_velocity(i)[1],
-                          (1-ratio)*samples[OdomIndex].angular_velocity(i-1).value() + ratio*samples[OdomIndex].angular_velocity(i).value();
+                          (1-ratio)*samples[1].linear_velocity(i-1)[0] + ratio*samples[1].linear_velocity(i)[0],
+                          (1-ratio)*samples[1].linear_velocity(i-1)[1] + ratio*samples[1].linear_velocity(i)[1],
+                          (1-ratio)*samples[1].angular_velocity(i-1).value() + ratio*samples[1].angular_velocity(i).value();
         }
         else{     //we have to extrapolate a new value not given by the sensors
-            int extra_dt = _time - samples[OdomIndex].time();
+            int extra_dt = _time - samples[1].time();
             extrapolatedOdom = PositionSample(_time,
-                               samples[OdomIndex].linear_position() + extra_dt*samples[OdomIndex].linear_velocity(),
-                               samples[OdomIndex].angular_position() + extra_dt*samples[OdomIndex].angular_velocity().value());
+                               samples[1].linear_position() + extra_dt*samples[1].linear_velocity(),
+                               samples[1].angular_position() + extra_dt*samples[1].angular_velocity().value());
         
             chosenOdom << extrapolatedOdom.linear_position.getX(),
                           extrapolatedOdom.linear_position.getY(),
                           extrapolatedOdom.angular_position.value(),
-                          (samples[OdomIndex].linear_velocity() + extra_dt*samples[OdomIndex].linear_acceleration())[0],
-                          (samples[OdomIndex].linear_velocity() + extra_dt*samples[OdomIndex].linear_acceleration())[1],
-                          (samples[OdomIndex].angular_velocity() + extra_dt*samples[OdomIndex].angular_acceleration().value());
+                          (samples[1].linear_velocity() + extra_dt*samples[1].linear_acceleration())[0],
+                          (samples[1].linear_velocity() + extra_dt*samples[1].linear_acceleration())[1],
+                          (samples[1].angular_velocity() + extra_dt*samples[1].angular_acceleration().value());
         }
         
     }
     else{//the time reference is set by the odometry sample
-        chosenOdom << samples[OdomIndex].linear_position().getX(),
-                      samples[OdomIndex].linear_position().getY(),
-                      samples[OdomIndex].angular_position().value(),
-                      samples[OdomIndex].linear_velocity()[0],
-                      samples[OdomIndex].linear_velocity()[1],
-                      samples[OdomIndex].angular_velocity();
+        chosenOdom << samples[1].linear_position().getX(),
+                      samples[1].linear_position().getY(),
+                      samples[1].angular_position().value(),
+                      samples[1].linear_velocity()[0],
+                      samples[1].linear_velocity()[1],
+                      samples[1].angular_velocity();
         
         int i = 0;
         PositionSample extrapolatedVideo;
-        while(samples[VideoIndex].time(i) > _time){//Let's find the nearest odometry sample
+        while(samples[0].time(i) > _time){//Let's find the nearest odometry sample
             i++;
         }
         if(i > 0){//it means we have more recent odometry samples that we might use to gain precision
-            double ratio = (samples[VideoIndex].time(i-1)-_time)/(samples[VideoIndex].time(i-1)-samples[VideoIndex].time(i));
+            double ratio = (samples[0].time(i-1)-_time)/(samples[0].time(i-1)-samples[0].time(i));
             extrapolatedVideo = PositionSample(_time,
-                                (1-ratio)*samples[VideoIndex].linear_position(i-1) + ratio*samples[VideoIndex].linear_position(i),
-                                (1-ratio)*samples[VideoIndex].angular_position(i-1).value() + ratio*samples[VideoIndex].angular_position(i).value());
+                                (1-ratio)*samples[0].linear_position(i-1) + ratio*samples[0].linear_position(i),
+                                (1-ratio)*samples[0].angular_position(i-1).value() + ratio*samples[0].angular_position(i).value());
         
             chosenVideo << extrapolatedVideo.linear_position.getX(),
                            extrapolatedVideo.linear_position.getY(),
                            extrapolatedVideo.angular_position.value(),
-                           (1-ratio)*samples[VideoIndex].linear_velocity(i-1)[0] + ratio*samples[VideoIndex].linear_velocity(i)[0],
-                           (1-ratio)*samples[VideoIndex].linear_velocity(i-1)[1] + ratio*samples[VideoIndex].linear_velocity(i)[1],
-                           (1-ratio)*samples[VideoIndex].angular_velocity(i-1).value() + ratio*samples[VideoIndex].angular_velocity(i).value();
+                           (1-ratio)*samples[0].linear_velocity(i-1)[0] + ratio*samples[0].linear_velocity(i)[0],
+                           (1-ratio)*samples[0].linear_velocity(i-1)[1] + ratio*samples[0].linear_velocity(i)[1],
+                           (1-ratio)*samples[0].angular_velocity(i-1).value() + ratio*samples[0].angular_velocity(i).value();
         }
         else{     //we have to extrapolate a new value not given by the sensors
-            int extra_dt = _time - samples[VideoIndex].time();
+            int extra_dt = _time - samples[0].time();
             extrapolatedVideo = PositionSample(_time,
-                                samples[VideoIndex].linear_position() + extra_dt*samples[VideoIndex].linear_velocity(),
-                                samples[VideoIndex].angular_position() + extra_dt*samples[VideoIndex].angular_velocity().value());
+                                samples[0].linear_position() + extra_dt*samples[0].linear_velocity(),
+                                samples[0].angular_position() + extra_dt*samples[0].angular_velocity().value());
         
             chosenVideo << extrapolatedVideo.linear_position.getX(),
                            extrapolatedVideo.linear_position.getY(),
                            extrapolatedVideo.angular_position.value(),
-                           (samples[VideoIndex].linear_velocity() + extra_dt*samples[VideoIndex].linear_acceleration())[0],
-                           (samples[VideoIndex].linear_velocity() + extra_dt*samples[VideoIndex].linear_acceleration())[1],
-                           (samples[VideoIndex].angular_velocity() + extra_dt*samples[VideoIndex].angular_acceleration().value());
+                           (samples[0].linear_velocity() + extra_dt*samples[0].linear_acceleration())[0],
+                           (samples[0].linear_velocity() + extra_dt*samples[0].linear_acceleration())[1],
+                           (samples[0].angular_velocity() + extra_dt*samples[0].angular_acceleration().value());
         }
     }
 

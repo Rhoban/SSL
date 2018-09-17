@@ -398,8 +398,11 @@ void AI::update_robots( ){
         // if(final_control.control.tareOdom == true){
         //     ai_data.robots[robot_id].lastResetOdom = rhoban_utils::TimeStamp::now();
         // }
-        robot.ordersSample.insert(SpeedTargetSample(ai_data.time, (int16_t)(commander->commands[robot_id].xSpeed*1000), (int16_t)(commander->commands[robot_id].ySpeed*1000), (int16_t)(commander->commands[robot_id].thetaSpeed*1000)));
-        //robot.movement->set_orders_sample(robot.ordersSample);
+        if(!(is_in_simulation)){
+            robot.ordersSample.insert(SpeedTargetSample(ai_data.time, (int16_t)(commander->commands[robot_id].xSpeed*1000), (int16_t)(commander->commands[robot_id].ySpeed*1000), (int16_t)(commander->commands[robot_id].thetaSpeed*1000)));
+            robot.movement->set_orders_sample(robot.ordersSample);
+        }
+        
         send_control( robot_id, final_control.control );
         //DEBUG("send_control time : " << robot_id << " : " << diffSec(timeindice0, rhoban_utils::TimeStamp::now())); //2.5 us
         //DEBUG(diffSec(ai_data.all_robots[team][robot_id]->lastUpdate, rhoban_utils::TimeStamp::now()));
@@ -442,9 +445,12 @@ void AI::run(){
 
         //DEBUG("");
         visionData.checkAssert(current_time);
-        //DEBUG("");
+        //DEBUG("ARGH");
 
         ai_data.update( visionData );
+
+        //DEBUG("ARGH2");
+
         if( not(is_in_simulation) ){
             update_electronic_informations();
         }
@@ -563,9 +569,11 @@ void AI::update_electronic_informations(){
         if( robot.isOk() ){
             Ai::Robot & robotai = ai_data.robots.at(team).at(id);
             robotai.infra_red = (robot.status.status & STATUS_IR) ? true : false;
-            robotai.odometrySample.insert(PositionSample(ai_data.time, rhoban_geometry::Point(robot.status.xpos, robot.status.ypos), ContinuousAngle(robot.status.ang))); //ODOME
-            //unsigned int odometry_index = 1; // TODO Faire une enum !
-            //robotai.movement->set_sample(robotai.odometrySample, OdomIndex);
+            /*if(!(is_in_simulation)){
+                robotai.odometrySample.insert(PositionSample(ai_data.time, rhoban_geometry::Point(robot.status.xpos, robot.status.ypos), ContinuousAngle(robot.status.ang))); //ODOME
+                unsigned int odometry_index = 1; // TODO Faire une enum !
+                robotai.movement->set_sample(robotai.odometrySample, odometry_index);
+            }*/
         }
     }
 }

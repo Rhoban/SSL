@@ -24,25 +24,25 @@
 #include <physic/movement_with_no_prediction.h>
 #include <physic/movement_on_new_frame.h>
 #include <physic/movement_with_temporal_shift.h>
-#include "physic/movement_kalman_filter.h"
+#include <physic/movement_kalman_filter.h>
+
 
 namespace RhobanSSL {
 namespace physic {
 
-
 Movement* Factory::robot_movement(Ai::AiData & ai_data){
     return new Movement_with_temporal_shift(
-      new Movement_with_no_prediction()
+      new Movement_with_no_prediction()  
       //new Movement_predicted_by_integration()
       //new Movement_kalman_filter()
       , [&ai_data](){ return ai_data.time_shift_with_vision; }
-    );
-}
+      );
+      }
 
 Movement* Factory::ball_movement(Ai::AiData & ai_data){
-    return new Movement_with_temporal_shift(
-      //new Movement_with_no_prediction()
-      new Movement_predicted_by_integration()
+     return new Movement_with_temporal_shift(
+      new Movement_with_no_prediction()  
+      //new Movement_predicted_by_integration()
       , [&ai_data](){ return ai_data.time_shift_with_vision; }
       );
 }
