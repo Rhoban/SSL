@@ -39,7 +39,9 @@ Movement_predicted_by_integration::print(std::ostream& stream) const {
 void
 Movement_predicted_by_integration::set_sample( const MovementSample & samples, unsigned int i ){
     assert( samples.is_valid() );
-    this->samples = samples;
+    if(i==0){
+        this->samples = samples;
+    }
 }
 
 const MovementSample & Movement_predicted_by_integration::get_sample(unsigned int i) const {

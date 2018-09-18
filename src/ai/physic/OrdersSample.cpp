@@ -12,9 +12,9 @@ SpeedTargetSample::SpeedTargetSample():
 
 SpeedTargetSample::SpeedTargetSample(
         double time,
-        const int16_t & x_speed,
-        const int16_t & y_speed,
-        const int16_t & t_speed
+        const int16_t x_speed,
+        const int16_t y_speed,
+        const int16_t t_speed
     ):
     time(time), x_speed(x_speed),
     y_speed(y_speed), t_speed(t_speed)

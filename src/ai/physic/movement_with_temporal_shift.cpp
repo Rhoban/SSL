@@ -83,7 +83,7 @@ Movement_with_temporal_shift::~Movement_with_temporal_shift(){
 }
 
 void Movement_with_temporal_shift::set_orders_sample( const OrdersSample & samples){
-
+    movement->set_orders_sample(samples);
 }
 
 

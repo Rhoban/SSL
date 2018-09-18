@@ -6,31 +6,17 @@
 namespace RhobanSSL{
 
 Movement_kalman_filter::Movement_kalman_filter(){
-    //DEBUG( "kalman1 " );
+
+    samples[0]    =  MovementSample(10);
+    samples[1]    =  MovementSample(10);
+    samples[2]    =  MovementSample(10);
+    ordersSamples =  OrdersSample(10);
 
     dt = 0.0;
     lastUpdate = 0.0;
-    //DEBUG( "kalman2 " );
+    externCmdBk.resize(6,3);
     cmdUk.resize(3,1);
     filteredPos.resize(6,1);
-
-
-    /*
-    externCmdBk.resize(6,3);   //TODO Physic model to aalso apply
-    cmdUk.resize(3,1);
-    predCovariancePk.resize(6,6);
-    externImpactQk.resize(6,6);
-    predictedXk.resize(6,6);
-    sensorGainHk.resize(6,6);       
-    sensorCovarianceRk.resize(6,6); 
-    measurementsZk.resize(6,6);     
-    kalmanGainK.resize(6,6);
-
-    filteredPos.resize(6,1);
-    filteredCov.resize(6,6);*/
-
-    //DEBUG( "kalman3 " );
-
 
     physicModelFk << 1, 0, 0, dt, 0, 0,  //Maybe improve it with Romain physic model, that's just a first attempt
                      0, 1, 0, 0, dt, 0, 
@@ -39,7 +25,6 @@ Movement_kalman_filter::Movement_kalman_filter(){
                      0, 0, 0, 0, 1, 0, 
                      0, 0, 0, 0, 0, 1;
 
-    //DEBUG( "kalman4 " );
 
     externCmdBk   << (std::pow(dt,2)/(2*POIDS)), 0, 0,  //same here
                      0, (std::pow(dt,2)/(2*POIDS)), 0,
@@ -59,8 +44,6 @@ Movement_kalman_filter::Movement_kalman_filter(){
     filteredPos = Eigen::MatrixXd::Zero(6,1);
     filteredCov = Eigen::MatrixXd::Zero(6,6);
 
-
-    //DEBUG( "kalman5 " );
 
 }
 
@@ -84,7 +67,6 @@ void Movement_kalman_filter::set_sample( const MovementSample & samples, unsigne
 }
 
 void Movement_kalman_filter::set_orders_sample( const OrdersSample & samples){
-    assert( samples.is_valid() );
     this->ordersSamples = samples;
 }
 
@@ -190,6 +172,14 @@ void Movement_kalman_filter::print(std::ostream& stream) const{
 
 void Movement_kalman_filter::predictPhase(double _time){
     
+    //DEBUG(dt);
+    //DEBUG(physicModelFk);
+    physicModelFk  << 1, 0, 0, dt, 0, 0,  //Maybe improve it with Romain physic model, that's just a first attempt
+                     0, 1, 0, 0, dt, 0, 
+                     0, 0, 1, 0, 0, dt, 
+                     0, 0, 0, 1, 0, 0, 
+                     0, 0, 0, 0, 1, 0, 
+                     0, 0, 0, 0, 0, 1;
     predictedXk      = physicModelFk*filteredPos + externCmdBk*cmdUk;
     predCovariancePk = physicModelFk*filteredCov*(physicModelFk.transpose()) + externImpactQk;
 }
@@ -315,13 +305,15 @@ void Movement_kalman_filter::kalman_tick(double _time){
     cmdUk       << this->ordersSamples.linear_velocity()[0],
                    this->ordersSamples.linear_velocity()[1],
                    this->ordersSamples.angular_velocity();
-
     predictPhase(_time);
     fusionSensors(_time);
     updatePhase(_time);
 }
 
 Movement_kalman_filter::~Movement_kalman_filter(){
+
+    delete samples;
+
 }
     
 }

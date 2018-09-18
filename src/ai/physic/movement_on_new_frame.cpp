@@ -47,7 +47,7 @@ Movement_on_new_frame::print(std::ostream& stream) const {
 
 void
 Movement_on_new_frame::set_sample( const MovementSample & samples, unsigned int i  ) {
-    movement->set_sample(samples, i);
+        movement->set_sample(samples, i);
 }
 
 const MovementSample & Movement_on_new_frame::get_sample(unsigned int i) const {
@@ -101,7 +101,7 @@ Movement_on_new_frame::~Movement_on_new_frame(){
     delete movement;
 }
 void Movement_on_new_frame::set_orders_sample( const OrdersSample & samples){
-
+        movement->set_orders_sample(samples);
 }
 
 }

@@ -35,8 +35,10 @@ Movement_with_no_prediction::print(std::ostream& stream) const {
 void
 Movement_with_no_prediction::set_sample( const MovementSample & samples,unsigned int i ) {
     //TODO
-    //assert( samples.is_valid() );
-    this->samples = samples;
+    assert( samples.is_valid() );
+    if(i==0){
+        this->samples = samples;
+    }
 }
 
 const MovementSample & Movement_with_no_prediction::get_sample(unsigned int i) const {

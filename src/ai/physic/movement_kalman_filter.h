@@ -23,8 +23,8 @@ class Movement_kalman_filter : public Movement {
         double dt;
 
         Matrix6d physicModelFk; //notations are the same as the following document : https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/
-        Matrix6d externCmdBk;
-        Matrix6d cmdUk;
+        Eigen::MatrixXd externCmdBk;
+        Eigen::MatrixXd cmdUk;
         Matrix6d predCovariancePk;
         Matrix6d externImpactQk;
         Matrix6d predictedXk; 
@@ -39,7 +39,7 @@ class Movement_kalman_filter : public Movement {
         Matrix6d measurementsZk;
         Matrix6d kalmanGainK;
 
-        Matrix6d filteredPos;
+        Eigen::MatrixXd filteredPos;
         Matrix6d filteredCov;
 
     public:

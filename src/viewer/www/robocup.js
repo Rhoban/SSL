@@ -834,10 +834,9 @@ function Manager(viewer)
             }, 'mouseup');
 
             button('.tare-odom', function(robot) {
-                var bite = normalizeTheta(robot.orientation);
+                var ephe = normalizeTheta(robot.orientation);
                 if (robot.enabled) {
-                    //document.getElementById("bite").innerHTML = "lel";
-                    api.tareOdom(robot.id, true, xfix, yfix, tfix);
+                    api.tareOdom(robot.id, true, robot.x, robot.y, ephe);
                 }
             }, 'mousedown');
 

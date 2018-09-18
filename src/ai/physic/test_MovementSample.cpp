@@ -21,9 +21,36 @@
 
 #include <debug.h>
 #include "MovementSample.h"
+#include "OrdersSample.h"
 #include <math.h>
 
 using namespace rhoban_geometry;
+
+TEST(test_MovementSample, orders_sample){
+    {
+        RhobanSSL::OrdersSample ord;
+        EXPECT_TRUE( ord.time == 0 );
+        EXPECT_TRUE( ord.linear_velocity == Vector2d(0.0, 0.0) );
+        EXPECT_TRUE( ord.angular_velocity == 0.0 );
+    }
+
+    // {
+    //     RhobanSSL::PositionSample pos(3.0, Point(4.0, 5.0), ContinuousAngle(6.0));
+    //     EXPECT_TRUE( pos.time == 3.0 );
+    //     EXPECT_TRUE( pos.linear_position == Point(4.0, 5.0) );
+    //     EXPECT_TRUE( pos.angular_position == ContinuousAngle(6.0) );
+    // }
+
+    // {
+    //     RhobanSSL::PositionSample pos(3.0, Point(4.0, 5.0), ContinuousAngle(6.0));
+        
+    //     std::ostringstream s1;
+    //     s1 << pos;
+
+    //     EXPECT_TRUE( "(t=3, lin={4,5}, ang=6)" == s1.str() ); 
+    // }
+}
+
 
 TEST(test_MovementSample, position_sample){
     {

@@ -65,7 +65,7 @@ namespace Ai {
 
     void Object::set_vision_data( const Vision::Object & vision_data  ){
         this->vision_data = vision_data;
-        this->movement->set_sample( this->vision_data.movement );
+        this->movement->set_sample( this->vision_data.movement, 0 );
     }
     void Object::set_movement( Movement * movement ){
         if( this->movement ){

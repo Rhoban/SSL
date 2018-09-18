@@ -16,9 +16,9 @@ struct SpeedTargetSample {
     SpeedTargetSample();
     SpeedTargetSample(
         double time,
-        const int16_t & x_speed,
-        const int16_t & y_speed,
-        const int16_t & t_speed
+        const int16_t x_speed,
+        const int16_t y_speed,
+        const int16_t t_speed
     );
 };
 
