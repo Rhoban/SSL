@@ -13,7 +13,8 @@ namespace Vision {
 enum Part_of_the_field {
     POSIVE_HALF_FIELD,
     NEGATIVE_HALF_FIELD,
-    ALL_FIELD
+    ALL_FIELD,
+    NAN_HALF_FIELD
 };
 
 bool object_coordonate_is_valid(

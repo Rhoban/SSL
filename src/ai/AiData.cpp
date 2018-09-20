@@ -135,9 +135,9 @@ namespace Ai {
 
     AiData::AiData( const std::string & config_path, bool is_in_simulation, Ai::Team team_color ):
         time_shift_with_vision(0.0),
+        dt(constants.period),
         team_color(team_color),
-        constants(config_path, is_in_simulation),
-        dt(constants.period)
+        constants(config_path, is_in_simulation)
     {
         int nb_robots = 0;
         for( auto team : {Vision::Ally, Vision::Opponent} ){
@@ -441,9 +441,18 @@ namespace Ai {
 Robot::Robot():
     is_goalie(false),
     infra_red(false),
+    lastOdomUpdate(0.0),
     odometrySample(odometry_size),
     ordersSample(order_size)
 {        DEBUG( "robot construit");
+}
+
+double Robot::getIncertitudeOdomTime(double time) const {
+    return time - lastOdomUpdate;
+}
+
+void Robot::setOdomTime(double time){
+    this->lastOdomUpdate = time;
 }
 
 

@@ -57,7 +57,6 @@ class RobotBehavior : public GameInformations {
         const Ai::Robot* robot_ptr;
         double birthday;
         double lastUpdate;
-        double lastOdomUpdate;
         std::string name;
 
         Vector2d robot_linear_position;
@@ -66,6 +65,8 @@ class RobotBehavior : public GameInformations {
         ContinuousAngle robot_angular_velocity;
 
         Ai::AiData & ai_data;
+
+
     public:
         RobotBehavior( Ai::AiData & ia_data );
 
@@ -73,7 +74,6 @@ class RobotBehavior : public GameInformations {
         double getIncertitudeOdomTime(double time) const;
         bool is_born() const;
         void set_birthday( double birthday );
-        void setOdomTime(double time);
 
         void update_time_and_position(
             double time,

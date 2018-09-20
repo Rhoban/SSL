@@ -18,6 +18,7 @@ class Movement_kalman_filter : public Movement {
     private:
         MovementSample samples[3]; //0=video 1=odom 2=kalman_result
         OrdersSample ordersSamples;
+        bool odomOff;
 
         double lastUpdate;
         double dt;

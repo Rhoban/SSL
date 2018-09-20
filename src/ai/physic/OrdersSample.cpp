@@ -57,7 +57,7 @@ double OrdersSample::dt( unsigned int i ) const {
   double filtered_dt=0.0;
 
   //small filter
-  for(int it=0;it<(this->size()-1);it++){
+  for(int it=0; it<(int)(this->size()-1); it++){
     filtered_dt+=((*this)[it].time - (*this)[it+1].time);
   }
 

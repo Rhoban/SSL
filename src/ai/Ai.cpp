@@ -21,6 +21,7 @@
 #include "Ai.h"
 #include <rhoban_utils/timing/time_stamp.h>
 #include <cmath>
+#include <rhoban_utils/angle.h>
 #include <unistd.h>
 #include <robot_behavior/do_nothing.h>
 #include <manager/Manual.h>
@@ -275,17 +276,6 @@ Control AI::update_robot(
 ){
     if( robot.is_present_in_vision() ){
         Control ctrl = robot_behavior.control();
-        if (robot_behavior.getIncertitudeOdomTime(time) > 1.0){
-            DEBUG(robot.movement->linear_position(time).getX());
-            ctrl.fix_translation[0] = robot.movement->linear_position(time).getX();
-            ctrl.fix_translation[1] = robot.movement->linear_position(time).getY();
-            ctrl.fix_rotation       = robot.movement->angular_position(time);
-            ctrl.tareOdom = true;
-            robot_behavior.setOdomTime(time);
-        }
-        else{
-            ctrl.tareOdom = false;
-        }
         return ctrl;
     }else{
         return Control::make_desactivated();
@@ -383,7 +373,7 @@ void AI::update_robots( ){
 
     auto team = Vision::Ally;
 
-    auto timeindice1 = rhoban_utils::TimeStamp::now();
+    //auto timeindice1 = rhoban_utils::TimeStamp::now();
     for( int robot_id=0; robot_id<Vision::Robots; robot_id++ ){
         //auto timeindice0 = rhoban_utils::TimeStamp::now();
         Shared_data::Final_control & final_control = shared_data.final_control_for_robots[robot_id];
@@ -395,6 +385,7 @@ void AI::update_robots( ){
 
         if( final_control.is_disabled_by_viewer  ){
             final_control.control = Control::make_desactivated();
+
         }else if( ! final_control.is_manually_controled_by_viewer ){
             Ai::Robot & robot = ai_data.robots[team][robot_id];
 
@@ -411,6 +402,21 @@ void AI::update_robots( ){
             robot.ordersSample.insert(SpeedTargetSample(ai_data.time, (int16_t)(commander->commands[robot_id].xSpeed*1000), (int16_t)(commander->commands[robot_id].ySpeed*1000), (int16_t)(commander->commands[robot_id].thetaSpeed*1000)));
             robot.movement->set_orders_sample(robot.ordersSample);
         }
+        else{
+            if ((robot.getIncertitudeOdomTime(time) > 1.0) || (robot.getIncertitudeOdomTime(time) == 0.0)){
+                final_control.control.fix_translation[0] = robot.movement->get_sample(0).linear_position().getX();
+                final_control.control.fix_translation[1] = robot.movement->get_sample(0).linear_position().getY();
+                final_control.control.fix_rotation       = rhoban_utils::normalizeRad(rhoban_utils::deg2rad(robot.movement->get_sample(0).angular_position().angle().getSignedValue()));
+                final_control.control.tareOdom = true;
+                robot.setOdomTime(time);
+
+                DEBUG(final_control.control.fix_rotation);
+            }
+        else{
+            final_control.control.tareOdom = false;
+        }
+        }
+
         
         send_control( robot_id, final_control.control );
         //DEBUG("send_control time : " << robot_id << " : " << diffSec(timeindice0, rhoban_utils::TimeStamp::now())); //2.5 us
@@ -454,11 +460,8 @@ void AI::run(){
 
         //DEBUG("");
         visionData.checkAssert(current_time);
-        //DEBUG("ARGH");
 
         ai_data.update( visionData );
-
-        //DEBUG("ARGH2");
 
         if( not(is_in_simulation) ){
             update_electronic_informations();
@@ -578,7 +581,7 @@ void AI::update_electronic_informations(){
         if( robot.isOk() ){
             Ai::Robot & robotai = ai_data.robots.at(team).at(id);
             robotai.infra_red = (robot.status.status & STATUS_IR) ? true : false;
-            robotai.odometrySample.insert(PositionSample(ai_data.time, rhoban_geometry::Point(robot.status.xpos, robot.status.ypos), ContinuousAngle(robot.status.ang))); //ODOME
+            robotai.odometrySample.insert(PositionSample(ai_data.time, rhoban_geometry::Point(((double)robot.status.xpos)/1000, ((double)robot.status.ypos)/1000), ContinuousAngle(((double)(robot.status.ang))/1000))); //ODOME
             unsigned int odometry_index = 1; // TODO Faire une enum !
             robotai.movement->set_sample(robotai.odometrySample, odometry_index);
         }

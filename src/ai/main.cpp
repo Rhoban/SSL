@@ -171,6 +171,7 @@ int main(int argc, char **argv)
     }else{
         std::cerr << "Unknonw zone !"  << std::endl;
         assert(false);
+        part_of_the_field_used = Vision::Part_of_the_field::NAN_HALF_FIELD;
     }
 
 

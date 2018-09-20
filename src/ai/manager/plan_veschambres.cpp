@@ -60,10 +60,10 @@ PlanVeschambres::PlanVeschambres(
                               referee(referee),
                               penalty_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               goalie_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              offensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              stop_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              defensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               kick_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+                              offensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+                              defensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
+                              stop_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
                               last_referee_changement(0)
 {
 
@@ -292,7 +292,7 @@ void PlanVeschambres::choose_a_strategy(double time)
 
             // check direct and indirect free kick
 
-            if (referee.direct_free_team().second == referee.edge_entropy() - 1)
+            if (referee.direct_free_team().second == (int)referee.edge_entropy() - 1)
             {
                 if (get_team() == referee.direct_free_team().first)
                 {
@@ -314,7 +314,7 @@ void PlanVeschambres::choose_a_strategy(double time)
                     ball_last_position = ball_position();
                 }
             }
-            else if (referee.indirect_free_team().second == referee.edge_entropy() - 1)
+            else if (referee.indirect_free_team().second == (int)referee.edge_entropy() - 1)
             {
                 if (get_team() == referee.indirect_free_team().first)
                 {

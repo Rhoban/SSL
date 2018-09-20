@@ -58,4 +58,5 @@ int main()
         std::cout << std::flush;
         usleep(30000);
     }
+    return 0;
 }

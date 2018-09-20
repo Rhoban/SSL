@@ -11,6 +11,7 @@ Movement_kalman_filter::Movement_kalman_filter(){
     samples[1]    =  MovementSample(10);
     samples[2]    =  MovementSample(10);
     ordersSamples =  OrdersSample(10);
+    odomOff       = true;
 
     dt = 0.0;
     lastUpdate = 0.0;
@@ -44,7 +45,6 @@ Movement_kalman_filter::Movement_kalman_filter(){
     filteredPos = Eigen::MatrixXd::Zero(6,1);
     filteredCov = Eigen::MatrixXd::Zero(6,6);
 
-
 }
 
 Movement * Movement_kalman_filter::clone() const{
@@ -60,10 +60,20 @@ double Movement_kalman_filter::last_time() const{
 void Movement_kalman_filter::set_sample( const MovementSample & samples, unsigned int i){
     assert( samples.is_valid() );
     assert((i<2));
+
+    if(this->samples[2].time() == 0.0){
+        this->samples[2] = samples;
+    }
+
     dt = samples.time() - this->samples[2].time();
     this->samples[i] = samples;
+    if(this->samples[1].time() != 0.0){
+        odomOff = false;
+    }
 
-    kalman_tick(samples.time());
+    if((i != 2) && !(odomOff)){
+        kalman_tick(samples.time());
+    }
 }
 
 void Movement_kalman_filter::set_orders_sample( const OrdersSample & samples){
@@ -77,6 +87,17 @@ const MovementSample & Movement_kalman_filter::get_sample(unsigned int i) const{
 }
 
 rhoban_geometry::Point Movement_kalman_filter::linear_position( double _time ) const{
+    if(samples[1].time() == 0.0){ //HACK in case there is no Odometry, just release video sample
+        if( std::fabs( samples[0].time() - _time ) <= 0.000001 ){
+            _time = samples[0].time();
+        }
+        double dt = _time - samples[0].time(0);
+
+        return (
+        samples[0].linear_position(0) + samples[0].linear_velocity(0) * dt// + samples.linear_acceleration(0) * dt*dt/2.0
+        );
+    }
+
     if(((samples[2].time()) - _time) < 0){
         if(samples[2].time() > samples[0].time()){//it means kalman is fresher than video
             return samples[2].linear_position();
@@ -92,6 +113,18 @@ rhoban_geometry::Point Movement_kalman_filter::linear_position( double _time ) c
 }
 
 ContinuousAngle Movement_kalman_filter::angular_position( double _time ) const{
+    if(samples[1].time() == 0.0){ //HACK in case there is no Odometry, just release video sample
+        if( std::fabs( samples[0].time() - _time ) <= 0.000001 ){
+            _time = samples[0].time();
+        }
+        double dt = _time - samples[0].time(0);
+
+        return (
+        samples[0].angular_position(0) + samples[0].angular_velocity(0) * dt// + samples.linear_acceleration(0) * dt*dt/2.0
+        );
+    }
+    
+    
     if(((samples[2].time()) - _time) < 0){
         if(samples[2].time() > samples[0].time()){//it means kalman is fresher than video
             return samples[2].angular_position();
@@ -107,6 +140,18 @@ ContinuousAngle Movement_kalman_filter::angular_position( double _time ) const{
 }
 
 Vector2d Movement_kalman_filter::linear_velocity( double _time ) const{
+    if(samples[1].time() == 0.0){ //HACK in case there is no Odometry, just release video sample
+        if( std::fabs( samples[0].time() - _time ) <= 0.000001 ){
+            _time = samples[0].time();
+        }
+        double dt = _time - samples[0].time(0);
+
+        return (
+        samples[0].linear_velocity(0) + samples[0].linear_acceleration(0) * dt// + samples.linear_acceleration(0) * dt*dt/2.0
+        );
+    }
+    
+    
     if(((samples[2].time()) - _time) < 0){
         if(samples[2].time() > samples[0].time()){//it means kalman is fresher than video
             return samples[2].linear_velocity();
@@ -122,6 +167,19 @@ Vector2d Movement_kalman_filter::linear_velocity( double _time ) const{
 }
 
 ContinuousAngle Movement_kalman_filter::angular_velocity( double _time ) const{
+    if(samples[1].time() == 0.0){ //HACK in case there is no Odometry, just release video sample
+        if( std::fabs( samples[0].time() - _time ) <= 0.000001 ){
+            _time = samples[0].time();
+        }
+        double dt = _time - samples[0].time(0);
+
+        return (
+        samples[0].angular_velocity(0) + samples[0].angular_acceleration(0) * dt// + samples.linear_acceleration(0) * dt*dt/2.0
+        );
+    }
+    
+    
+    
     if(((samples[2].time()) - _time) < 0){//it means that we have to recalculate it. We will calculate everything at the same time so one call will update all the others values
         if(samples[2].time() > samples[0].time()){//it means kalman is fresher than video
             return samples[2].angular_velocity();
@@ -137,6 +195,18 @@ ContinuousAngle Movement_kalman_filter::angular_velocity( double _time ) const{
 }
 
 Vector2d Movement_kalman_filter::linear_acceleration( double _time ) const{
+    if(samples[1].time() == 0.0){ //HACK in case there is no Odometry, just release video sample
+        if( std::fabs( samples[0].time() - _time ) <= 0.000001 ){
+            _time = samples[0].time();
+        }
+        double dt = _time - samples[0].time(0);
+
+        return (
+        samples[0].linear_acceleration(0) // + samples.linear_acceleration(0) * dt*dt/2.0
+        );
+    }
+
+
     if(((samples[2].time()) - _time) < 0){//it means that we have to recalculate it. We will calculate everything at the same time so one call will update all the others values
         if(samples[2].time() > samples[0].time()){//it means kalman is fresher than video
             return samples[2].linear_acceleration();
@@ -152,6 +222,17 @@ Vector2d Movement_kalman_filter::linear_acceleration( double _time ) const{
 }
 
 ContinuousAngle Movement_kalman_filter::angular_acceleration( double _time ) const{
+    if(samples[1].time() == 0.0){ //HACK in case there is no Odometry, just release video sample
+        if( std::fabs( samples[0].time() - _time ) <= 0.000001 ){
+            _time = samples[0].time();
+        }
+        double dt = _time - samples[0].time(0);
+
+        return (
+        samples[0].angular_acceleration(0) // + samples.linear_acceleration(0) * dt*dt/2.0
+        );
+    }
+    
     if(((samples[2].time()) - _time) < 0){//it means that we have to recalculate it. We will calculate everything at the same time so one call will update all the others values
         if(samples[2].time() > samples[0].time()){//it means kalman is fresher than video
             return samples[2].angular_acceleration();
@@ -172,16 +253,25 @@ void Movement_kalman_filter::print(std::ostream& stream) const{
 
 void Movement_kalman_filter::predictPhase(double _time){
     
-    //DEBUG(dt);
-    //DEBUG(physicModelFk);
     physicModelFk  << 1, 0, 0, dt, 0, 0,  //Maybe improve it with Romain physic model, that's just a first attempt
                      0, 1, 0, 0, dt, 0, 
                      0, 0, 1, 0, 0, dt, 
                      0, 0, 0, 1, 0, 0, 
                      0, 0, 0, 0, 1, 0, 
                      0, 0, 0, 0, 0, 1;
+
+    externCmdBk   << (std::pow(dt,2)/(2*POIDS)), 0, 0,  //same here
+                     0, (std::pow(dt,2)/(2*POIDS)), 0,
+                     0, 0, (std::pow(dt,2)/(2*POIDS)),
+                     dt, 0, 0,
+                     0, dt, 0,
+                     0, 0, dt;
+
+    //DEBUG(physicModelFk*filteredPos);
+
     predictedXk      = physicModelFk*filteredPos + externCmdBk*cmdUk;
     predCovariancePk = physicModelFk*filteredCov*(physicModelFk.transpose()) + externImpactQk;
+
 }
 
 void Movement_kalman_filter::updatePhase(double _time){
@@ -204,10 +294,10 @@ void Movement_kalman_filter::fusionSensors(double _time){
     if(samples[0].time() == _time){ //the time reference is set by a video sample
         chosenVideo << this->samples[0].linear_position().getX(),
                        this->samples[0].linear_position().getY(),
-                       this->samples[0].angular_position(),
+                       this->samples[0].angular_position().value(),
                        this->samples[0].linear_velocity()[0],
                        this->samples[0].linear_velocity()[1],
-                       this->samples[0].angular_velocity();
+                       this->samples[0].angular_velocity().value();
     
         int i = 0;
         PositionSample extrapolatedOdom;
@@ -222,23 +312,23 @@ void Movement_kalman_filter::fusionSensors(double _time){
         
             chosenOdom << extrapolatedOdom.linear_position.getX(),
                           extrapolatedOdom.linear_position.getY(),
-                          extrapolatedOdom.angular_position,
-                          (1-ratio)*samples[1].linear_velocity(i-1)[0] + ratio*samples[1].linear_velocity(i)[0],
-                          (1-ratio)*samples[1].linear_velocity(i-1)[1] + ratio*samples[1].linear_velocity(i)[1],
-                          (1-ratio)*samples[1].angular_velocity(i-1).value() + ratio*samples[1].angular_velocity(i).value();
+                          extrapolatedOdom.angular_position.value(),
+                          ((1-ratio)*samples[1].linear_velocity(i-1)[0] + ratio*samples[1].linear_velocity(i)[0]),
+                          ((1-ratio)*samples[1].linear_velocity(i-1)[1] + ratio*samples[1].linear_velocity(i)[1]),
+                          ((1-ratio)*samples[1].angular_velocity(i-1).value() + ratio*samples[1].angular_velocity(i).value());
         }
         else{     //we have to extrapolate a new value not given by the sensors
             int extra_dt = _time - samples[1].time();
             extrapolatedOdom = PositionSample(_time,
                                samples[1].linear_position() + extra_dt*samples[1].linear_velocity(),
-                               samples[1].angular_position() + extra_dt*samples[1].angular_velocity().value());
+                               samples[1].angular_position().value() + extra_dt*samples[1].angular_velocity().value());
         
             chosenOdom << extrapolatedOdom.linear_position.getX(),
                           extrapolatedOdom.linear_position.getY(),
                           extrapolatedOdom.angular_position.value(),
                           (samples[1].linear_velocity() + extra_dt*samples[1].linear_acceleration())[0],
                           (samples[1].linear_velocity() + extra_dt*samples[1].linear_acceleration())[1],
-                          (samples[1].angular_velocity() + extra_dt*samples[1].angular_acceleration().value());
+                          (samples[1].angular_velocity().value() + extra_dt*samples[1].angular_acceleration().value());
         }
         
     }
@@ -248,7 +338,7 @@ void Movement_kalman_filter::fusionSensors(double _time){
                       samples[1].angular_position().value(),
                       samples[1].linear_velocity()[0],
                       samples[1].linear_velocity()[1],
-                      samples[1].angular_velocity();
+                      samples[1].angular_velocity().value();
         
         int i = 0;
         PositionSample extrapolatedVideo;
@@ -272,14 +362,14 @@ void Movement_kalman_filter::fusionSensors(double _time){
             int extra_dt = _time - samples[0].time();
             extrapolatedVideo = PositionSample(_time,
                                 samples[0].linear_position() + extra_dt*samples[0].linear_velocity(),
-                                samples[0].angular_position() + extra_dt*samples[0].angular_velocity().value());
+                                samples[0].angular_position().value() + extra_dt*samples[0].angular_velocity().value());
         
             chosenVideo << extrapolatedVideo.linear_position.getX(),
                            extrapolatedVideo.linear_position.getY(),
                            extrapolatedVideo.angular_position.value(),
                            (samples[0].linear_velocity() + extra_dt*samples[0].linear_acceleration())[0],
                            (samples[0].linear_velocity() + extra_dt*samples[0].linear_acceleration())[1],
-                           (samples[0].angular_velocity() + extra_dt*samples[0].angular_acceleration().value());
+                           (samples[0].angular_velocity().value() + extra_dt*samples[0].angular_acceleration().value());
         }
     }
 
@@ -297,22 +387,27 @@ void Movement_kalman_filter::fusionSensors(double _time){
 void Movement_kalman_filter::kalman_tick(double _time){
     filteredPos << this->samples[2].linear_position().getX(),
                    this->samples[2].linear_position().getY(),
-                   this->samples[2].angular_position(),
+                   this->samples[2].angular_position().value(),
                    this->samples[2].linear_velocity()[0],
                    this->samples[2].linear_velocity()[1],
-                   this->samples[2].angular_position();
-    
+                   this->samples[2].angular_position().value();
+
     cmdUk       << this->ordersSamples.linear_velocity()[0],
                    this->ordersSamples.linear_velocity()[1],
                    this->ordersSamples.angular_velocity();
+
     predictPhase(_time);
     fusionSensors(_time);
     updatePhase(_time);
+
+    MovementSample tempo = this->samples[2];
+    tempo.insert(PositionSample(_time, rhoban_geometry::Point(filteredPos(0,0), filteredPos(1,0)), ContinuousAngle(filteredPos(2,0))));
+    this->set_sample(tempo, 2);
 }
 
 Movement_kalman_filter::~Movement_kalman_filter(){
 
-    delete samples;
+    //delete samples;
 
 }
     

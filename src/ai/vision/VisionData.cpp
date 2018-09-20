@@ -64,7 +64,6 @@ void Object::update(
     }
     lastUpdate = rhoban_utils::TimeStamp::now();
     present = true;
-
     movement.insert(
         PositionSample(time,linear_position, angular_position)
     );

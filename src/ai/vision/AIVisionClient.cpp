@@ -295,7 +295,7 @@ rhoban_geometry::Point
             > & elem : ball_camera_detections 
           ){
           double ball_is_detected = elem.second.first; //TODO
-          double camera_id = elem.first;
+          //double camera_id = elem.first;
     
           const rhoban_geometry::Point & ball_pos = elem.second.second;
           // std::cerr<<"DETECTED: "<<ball_is_detected<<std::endl;

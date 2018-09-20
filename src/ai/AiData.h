@@ -95,7 +95,10 @@ class Robot : public Object {
     public:
     bool is_goalie;
     bool infra_red;
+    double lastOdomUpdate;
     Robot();
+    void setOdomTime(double time);
+    double getIncertitudeOdomTime(double time) const;
     MovementSample odometrySample; //TODO Move to folder "odometry" as vision 
     OrdersSample ordersSample;     //Contains lasts given orders in the time (in terms of speed)
 };

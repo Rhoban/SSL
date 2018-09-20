@@ -102,7 +102,7 @@ void Goalie::update(
     annotations.clear();
 
     future_ball_positions.clear();
-    int nb_points = 10;
+    //int nb_points = 10;
     // for (int i=0; i < nb_points; i++) {
     //     future_ball_positions.push_back( ball.get_movement().linear_position( time + i * 0.2 ) );
     // }
@@ -183,6 +183,9 @@ void Goalie::update(
         Vector2d target_ball_vector = ball_position() - target_position;
         target_rotation = detail::vec2angle(target_ball_vector);
 
+    }
+    else{
+        target_rotation = 0.0;
     }
 
 

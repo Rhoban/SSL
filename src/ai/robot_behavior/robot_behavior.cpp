@@ -87,7 +87,8 @@ double vec2angle( Vector2d direction ){
 RobotBehavior::RobotBehavior( Ai::AiData & ai_data ) :
     GameInformations(ai_data),
     robot_ptr(0), 
-    birthday(-1.0), ai_data(ai_data), lastOdomUpdate(0.0)
+    birthday(-1.0), 
+    lastUpdate(0.0), ai_data(ai_data)
 { };
 
 double RobotBehavior::age() const { return lastUpdate - birthday; };
@@ -141,14 +142,6 @@ RhobanSSLAnnotation::Annotations RobotBehavior::get_annotations() const {
 
 bool RobotBehavior::infra_red() const {
     return robot().infra_red;
-}
-
-double RobotBehavior::getIncertitudeOdomTime(double time) const {
-    return time - lastOdomUpdate;
-}
-
-void RobotBehavior::setOdomTime(double time){
-    this->lastOdomUpdate = time;
 }
 
 }

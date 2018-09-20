@@ -164,7 +164,7 @@ void NewPlan::analyse_data(double time){
         referee.yellow_goalie_id()
     );
 
-    if (last_nb_robot_valid != get_valid_team_ids().size()) {
+    if (last_nb_robot_valid != (int)get_valid_team_ids().size()) {
         last_nb_robot_valid = get_valid_team_ids().size();
         need_to_change_strategies = true;
     }
@@ -219,7 +219,7 @@ void NewPlan::choose_a_strategy(double time){
 
             // check direct and indirect free kick
 
-            if (referee.direct_free_team().second == referee.edge_entropy() - 1) {
+            if (referee.direct_free_team().second == (int)referee.edge_entropy() - 1) {
                 if (get_team() == referee.direct_free_team().first) {
                     DEBUG("Offensive direct Kick");
                     future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
@@ -229,7 +229,7 @@ void NewPlan::choose_a_strategy(double time){
                     in_defensive_free_kick = true;
                     ball_last_position = ball_position();
                 }
-            } else if (referee.indirect_free_team().second == referee.edge_entropy() - 1) {
+            } else if (referee.indirect_free_team().second == (int)referee.edge_entropy() - 1) {
                 if (get_team() == referee.indirect_free_team().first) {
                     DEBUG("Offensive indirect Kick");
                     future_strats = { Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::AttaqueWithSupport::name };
