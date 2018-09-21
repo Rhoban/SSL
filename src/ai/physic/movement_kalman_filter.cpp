@@ -18,6 +18,8 @@ Movement_kalman_filter::Movement_kalman_filter(){
     externCmdBk.resize(6,3);
     cmdUk.resize(3,1);
     filteredPos.resize(6,1);
+    predictedXk.resize(6,1);
+    measurementsZk.resize(6,1);
 
     physicModelFk << 1, 0, 0, dt, 0, 0,  //Maybe improve it with Romain physic model, that's just a first attempt
                      0, 1, 0, 0, dt, 0, 
@@ -37,10 +39,10 @@ Movement_kalman_filter::Movement_kalman_filter(){
     cmdUk = Eigen::MatrixXd::Zero(3,1); //Update with the order given to the robots
     predCovariancePk   = Eigen::MatrixXd::Identity(6,6); //Covariance supposed by the model
     externImpactQk = Eigen::MatrixXd::Zero(6,6); //Extern impact on the Covariance of the model
-    predictedXk = Eigen::MatrixXd::Zero(6,6); //Result of the predictphase
+    predictedXk = Eigen::MatrixXd::Zero(6,1); //Result of the predictphase
     sensorGainHk = Eigen::MatrixXd::Identity(6,6); //Gain of each sensor (equal to 1 in our case i guess)
     sensorCovarianceRk = Eigen::MatrixXd::Zero(6,6); //Covariance (noise) around our sensors (Gaussian variance of all the sensors combined)
-    measurementsZk = Eigen::MatrixXd::Zero(6,6); //Values read by the sensors (mean of all the values considered)
+    measurementsZk = Eigen::MatrixXd::Zero(6,1); //Values read by the sensors (mean of all the values considered)
     kalmanGainK = Eigen::MatrixXd::Identity(6,6); //Kalman Gain (classic gain of a filter)
     filteredPos = Eigen::MatrixXd::Zero(6,1);
     filteredCov = Eigen::MatrixXd::Zero(6,6);
@@ -61,19 +63,27 @@ void Movement_kalman_filter::set_sample( const MovementSample & samples, unsigne
     assert( samples.is_valid() );
     assert((i<2));
 
-    if(this->samples[2].time() == 0.0){
+    if(this->samples[2].time() == 0.0){ //start with a known value for kalman
         this->samples[2] = samples;
     }
 
-    dt = samples.time() - this->samples[2].time();
-    this->samples[i] = samples;
-    if(this->samples[1].time() != 0.0){
+    if((this->samples[1].time() != 0.0) && (odomOff == true)){ //to know if the robot has odometry on
         odomOff = false;
     }
 
-    if((i != 2) && !(odomOff)){
-        kalman_tick(samples.time());
+    DEBUG(i);
+
+    if(this->samples[i].time() < samples.time()){ //if the value we'd like to insert is older than our fresher value
+        this->samples[i] = samples;
+    
+        if((i < 2) && !(odomOff)){
+            this->dt = samples.time() - this->samples[2].time();
+            if(dt > 0){
+                kalman_tick(samples.time());
+            }
+        }
     }
+
 }
 
 void Movement_kalman_filter::set_orders_sample( const OrdersSample & samples){
@@ -267,20 +277,10 @@ void Movement_kalman_filter::predictPhase(double _time){
                      0, dt, 0,
                      0, 0, dt;
 
-    //DEBUG(physicModelFk*filteredPos);
 
     predictedXk      = physicModelFk*filteredPos + externCmdBk*cmdUk;
     predCovariancePk = physicModelFk*filteredCov*(physicModelFk.transpose()) + externImpactQk;
-
 }
-
-void Movement_kalman_filter::updatePhase(double _time){
-    kalmanGainK = predCovariancePk*(sensorGainHk.transpose())*((sensorGainHk*predCovariancePk*sensorGainHk.transpose()+sensorCovarianceRk).inverse());
-    filteredPos = predictedXk + kalmanGainK*(measurementsZk-sensorGainHk*predictedXk);
-    filteredCov = predCovariancePk - kalmanGainK*sensorGainHk*predCovariancePk;
-    //lastUpdate  = getCurrentTime();
-}
-
 
 void Movement_kalman_filter::fusionSensors(double _time){
     //Synchronize sensors data : if the last sensor of the other kind is too late (like video for example), the
@@ -372,6 +372,7 @@ void Movement_kalman_filter::fusionSensors(double _time){
                            (samples[0].angular_velocity().value() + extra_dt*samples[0].angular_acceleration().value());
         }
     }
+    //DEBUG(chosenOdom);
 
     //TODO Calculate Covariance too = find a way to scale it on a timestamps
     chosenOdomCov  = Eigen::MatrixXd::Identity(6,6);
@@ -382,6 +383,14 @@ void Movement_kalman_filter::fusionSensors(double _time){
     measurementsZk = chosenVideo + gainFusion*(chosenOdom - chosenVideo);
     sensorCovarianceRk = chosenVideoCov - gainFusion * chosenOdomCov;
 
+}
+
+void Movement_kalman_filter::updatePhase(double _time){
+    kalmanGainK = predCovariancePk*(sensorGainHk.transpose())*((sensorGainHk*predCovariancePk*sensorGainHk.transpose()+sensorCovarianceRk).inverse());
+    filteredPos = predictedXk + kalmanGainK*(measurementsZk-sensorGainHk*predictedXk);
+    filteredCov = predCovariancePk - kalmanGainK*sensorGainHk*predCovariancePk;
+
+    //lastUpdate  = getCurrentTime();
 }
 
 void Movement_kalman_filter::kalman_tick(double _time){
@@ -399,6 +408,8 @@ void Movement_kalman_filter::kalman_tick(double _time){
     predictPhase(_time);
     fusionSensors(_time);
     updatePhase(_time);
+
+
 
     MovementSample tempo = this->samples[2];
     tempo.insert(PositionSample(_time, rhoban_geometry::Point(filteredPos(0,0), filteredPos(1,0)), ContinuousAngle(filteredPos(2,0))));

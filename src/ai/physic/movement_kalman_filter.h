@@ -28,7 +28,7 @@ class Movement_kalman_filter : public Movement {
         Eigen::MatrixXd cmdUk;
         Matrix6d predCovariancePk;
         Matrix6d externImpactQk;
-        Matrix6d predictedXk; 
+        Eigen::MatrixXd predictedXk; 
 
         Matrix6d odometryMean;
         Matrix6d odometryGauss;
@@ -37,7 +37,7 @@ class Movement_kalman_filter : public Movement {
 
         Matrix6d sensorGainHk;
         Matrix6d sensorCovarianceRk;
-        Matrix6d measurementsZk;
+        Eigen::MatrixXd measurementsZk;
         Matrix6d kalmanGainK;
 
         Eigen::MatrixXd filteredPos;

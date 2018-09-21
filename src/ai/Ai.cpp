@@ -409,9 +409,8 @@ void AI::update_robots( ){
                 final_control.control.fix_rotation       = rhoban_utils::normalizeRad(rhoban_utils::deg2rad(robot.movement->get_sample(0).angular_position().angle().getSignedValue()));
                 final_control.control.tareOdom = true;
                 robot.setOdomTime(time);
-
-                DEBUG(final_control.control.fix_rotation);
             }
+            
         else{
             final_control.control.tareOdom = false;
         }
