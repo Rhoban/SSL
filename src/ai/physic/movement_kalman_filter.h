@@ -12,6 +12,7 @@ namespace RhobanSSL {
 typedef Eigen::Matrix<double, 6, 6> Matrix6d;
 //typedef Eigen::Matrix<double, 6, 3> Matrix63d;
 //typedef Eigen::Matrix<double, 6, 1> Vector6d;
+double cont2signrad(ContinuousAngle angle);
 
 class Movement_kalman_filter : public Movement {
 
