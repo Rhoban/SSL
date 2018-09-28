@@ -25,6 +25,7 @@ set (SOURCES
     vision/print_protobuf.cpp
     vision/robot_position_filter.cpp
     vision/factory.cpp
+    odometry/OdometryData.cpp
     com/AICommander.cpp
     com/AICommanderSimulation.cpp
     com/AICommanderReal.cpp

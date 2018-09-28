@@ -104,11 +104,11 @@ rhoban_geometry::Point Movement_kalman_filter::linear_position( double _time ) c
     //     samples[0].linear_position(0) + samples[0].linear_velocity(0) * dt// + samples.linear_acceleration(0) * dt*dt/2.0
     //     );
     // }
-
+    //DEBUG(samples[0].linear_position(_time) + samples[0].linear_velocity(_time)*dt);
     if(((samples[2].time()) - _time) > -0.05){ //the recent kalman value is good enough
         return samples[2].linear_position(_time);
     }
-    else if((samples[1].time() > _time)&&(!odomeOff)){         //if odometry is fresher than the required time, let's use it
+    else if((samples[1].time() > _time)&&(!odomOff)){         //if odometry is fresher than the required time, let's use it
         return samples[1].linear_position(_time);
     }
     else{                                     
@@ -160,7 +160,7 @@ Vector2d Movement_kalman_filter::linear_velocity( double _time ) const{
     if(((samples[2].time()) - _time) > -0.05){ //the recent kalman value is good enough
         return samples[2].linear_velocity(_time);
     }
-    else if((samples[1].time() > _time)&&(!odomeOff)){         //if odometry is fresher than the required time, let's use it
+    else if((samples[1].time() > _time)&&(!odomOff)){         //if odometry is fresher than the required time, let's use it
         return samples[1].linear_velocity(_time);
     }
     else{                                     
@@ -211,7 +211,7 @@ Vector2d Movement_kalman_filter::linear_acceleration( double _time ) const{
     if(((samples[2].time()) - _time) > -0.05){ //the recent kalman value is good enough
         return samples[2].linear_acceleration(_time);
     }
-    else if((samples[1].time() > _time)&&(!odomeOff)){         //if odometry is fresher than the required time, let's use it
+    else if((samples[1].time() > _time)&&(!odomOff)){         //if odometry is fresher than the required time, let's use it
         return samples[1].linear_acceleration(_time);
     }
     else{                                     
@@ -425,4 +425,4 @@ double cont2signrad(ContinuousAngle angle){
     return rhoban_utils::normalizeRad(rhoban_utils::deg2rad(angle.angle().getSignedValue()));
 }
     
-}
+}   

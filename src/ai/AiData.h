@@ -28,6 +28,7 @@
 #include <physic/MovementSample.h>
 #include <physic/OrdersSample.h>
 #include <vision/VisionData.h>
+#include <odometry/OdometryData.h>
 #include <physic/Movement.h>
 #include <math/frame_changement.h>
 #include <math/position.h>
@@ -58,6 +59,7 @@ typedef enum {
 class Object {
 public:
     Vision::Object vision_data;
+    Odom::Object odom_data;
     RhobanSSL::Movement * movement;
 
 public:
@@ -71,6 +73,7 @@ public:
     Object& operator=( const Object& object );
 
     void set_vision_data( const Vision::Object & vision_data  );
+    void set_odom_data( const Odom::Object & odom_data  );
     void set_movement( Movement * movement );
 
     //We assume that v1 and v2 are orthonormal
@@ -95,11 +98,11 @@ class Robot : public Object {
     public:
     bool is_goalie;
     bool infra_red;
-    double lastOdomUpdate;
+    //double lastOdomUpdate;
     Robot();
-    void setOdomTime(double time);
-    double getIncertitudeOdomTime(double time) const;
-    MovementSample odometrySample; //TODO Move to folder "odometry" as vision 
+    //void setOdomTime(double time);
+    //double getIncertitudeOdomTime(double time) const;
+    //MovementSample odometrySample; //TODO Move to folder "odometry" as vision 
     OrdersSample ordersSample;     //Contains lasts given orders in the time (in terms of speed)
 };
 class Ball : public Object { };
@@ -219,7 +222,7 @@ public:
     Constants constants;
 
     void update( const Vision::VisionData vision_data);
-
+    void update( const Odom::OdometryData odom_data);
     // Rturn true is the robot is ready and inside the field
     bool robot_is_valid( int robot_id ) const;
     bool robot_is_inside_the_field( int robot_id ) const;

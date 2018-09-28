@@ -53,11 +53,12 @@ namespace Ai {
     { }
 
     Object::Object( const Object& object ):
-        vision_data(object.vision_data), movement( object.movement->clone() )
+        vision_data(object.vision_data), odom_data(object.odom_data), movement( object.movement->clone() )
     { }
 
     Object& Object::operator=( const Object& object ){
         this->vision_data = vision_data;
+        this->odom_data   = odom_data;
         this->movement = object.movement->clone();
         return *this;
     }
@@ -67,6 +68,14 @@ namespace Ai {
         this->vision_data = vision_data;
         this->movement->set_sample( this->vision_data.movement, 0 );
     }
+    void Object::set_odom_data( const Odom::Object & odom_data  ){
+        this->odom_data = odom_data;
+        this->movement->set_sample( this->odom_data.movement, 1 );
+        if(odom_data.present == true){
+            DEBUG(odom_data.movement.linear_position());
+        }
+    }
+
     void Object::set_movement( Movement * movement ){
         if( this->movement ){
             assert( movement != static_cast<Movement_on_new_frame*>(this->movement)->get_original_movement() );
@@ -114,6 +123,18 @@ namespace Ai {
         }
         ball.set_vision_data( vision_data.ball );
         compute_table_of_collision_times();
+    }
+
+    void AiData::update( const Odom::OdometryData odom_data ){
+        for( auto team : {Vision::Ally, Vision::Opponent} ){
+            for( int k=0; k<Vision::Robots; k++ ){
+                //DEBUG(odom_data.robots.at(team).at(k));
+                robots[team][k].set_odom_data(
+                    odom_data.robots.at(team).at(k)
+                );
+            }
+        }
+        //compute_table_of_collision_times();
     }
 
     void AiData::change_frame_for_all_objects(
@@ -440,20 +461,10 @@ namespace Ai {
     
 Robot::Robot():
     is_goalie(false),
-    infra_red(false),
-    lastOdomUpdate(0.0),
-    odometrySample(odometry_size),
-    ordersSample(order_size)
+    infra_red(false)
 {        DEBUG( "robot construit");
 }
 
-double Robot::getIncertitudeOdomTime(double time) const {
-    return time - lastOdomUpdate;
-}
-
-void Robot::setOdomTime(double time){
-    this->lastOdomUpdate = time;
-}
 
 
 } } //Namespace

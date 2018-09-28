@@ -402,18 +402,24 @@ void AI::update_robots( ){
             robot.ordersSample.insert(SpeedTargetSample(ai_data.time, (int16_t)(commander->commands[robot_id].xSpeed*1000), (int16_t)(commander->commands[robot_id].ySpeed*1000), (int16_t)(commander->commands[robot_id].thetaSpeed*1000)));
             robot.movement->set_orders_sample(robot.ordersSample);
         }
-        else{
-            if ((robot.getIncertitudeOdomTime(time) > 1.0) || (robot.getIncertitudeOdomTime(time) == 0.0)){
-                final_control.control.fix_translation[0] = robot.movement->get_sample(0).linear_position().getX();
-                final_control.control.fix_translation[1] = robot.movement->get_sample(0).linear_position().getY();
-                final_control.control.fix_rotation       = rhoban_utils::normalizeRad(rhoban_utils::deg2rad(robot.movement->get_sample(0).angular_position().angle().getSignedValue()));
-                final_control.control.tareOdom = true;
-                robot.setOdomTime(time);
-            }
-            
+        // if ((robot.getIncertitudeOdomTime(time) > 1.0) || (robot.getIncertitudeOdomTime(time) == 0.0)){
+        //     final_control.control.fix_translation[0] = robot.movement->get_sample(0).linear_position().getX();
+        //     final_control.control.fix_translation[1] = robot.movement->get_sample(0).linear_position().getY();
+        //     final_control.control.fix_rotation       = rhoban_utils::normalizeRad(rhoban_utils::deg2rad(robot.movement->get_sample(0).angular_position().angle().getSignedValue()));
+        //     final_control.control.tareOdom = true;
+        //     robot.setOdomTime(time);
+        // }
+        if ((robot.odom_data.ageOdom(ai_data.time) > 1.0)&&(robot.odom_data.present == true)){
+            DEBUG(robot_id);
+            final_control.control.fix_translation[0] = robot.movement->get_sample(0).linear_position().getX();
+            final_control.control.fix_translation[1] = robot.movement->get_sample(0).linear_position().getY();
+            final_control.control.fix_rotation       = rhoban_utils::normalizeRad(rhoban_utils::deg2rad(robot.movement->get_sample(0).angular_position().angle().getSignedValue()));
+            final_control.control.tareOdom = true;
+            robot.odom_data.setLastUpdate(ai_data.time);
+
+        }
         else{
             final_control.control.tareOdom = false;
-        }
         }
 
         
@@ -459,8 +465,10 @@ void AI::run(){
 
         //DEBUG("");
         visionData.checkAssert(current_time);
+        odomData.checkAssert(current_time);
 
         ai_data.update( visionData );
+        ai_data.update( odomData );
 
         if( not(is_in_simulation) ){
             update_electronic_informations();
@@ -580,9 +588,12 @@ void AI::update_electronic_informations(){
         if( robot.isOk() ){
             Ai::Robot & robotai = ai_data.robots.at(team).at(id);
             robotai.infra_red = (robot.status.status & STATUS_IR) ? true : false;
-            robotai.odometrySample.insert(PositionSample(ai_data.time, rhoban_geometry::Point(((double)robot.status.xpos)/1000, ((double)robot.status.ypos)/1000), ContinuousAngle(((double)(robot.status.ang))/1000))); //ODOME
-            unsigned int odometry_index = 1; // TODO Faire une enum !
-            robotai.movement->set_sample(robotai.odometrySample, odometry_index);
+            if(robotai.odom_data.present == false){
+                robotai.odom_data.present = true;
+            }
+            robotai.odom_data.update(ai_data.time, rhoban_geometry::Point(((double)robot.status.xpos)/1000, ((double)robot.status.ypos)/1000), ContinuousAngle(((double)(robot.status.ang))/1000)); //ODOME
+            //unsigned int odometry_index = 1; // TODO Faire une enum !
+            //robotai.movement->set_sample(robotai.odom_data.movement, odometry_index);
         }
     }
 }

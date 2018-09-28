@@ -67,6 +67,7 @@ namespace RhobanSSL
         bool running;
 
         Vision::VisionData visionData;
+        Odom::OdometryData odomData;
         Ai::AiData ai_data;
 
         bool enable_kicking;
