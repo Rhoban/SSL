@@ -409,13 +409,13 @@ void AI::update_robots( ){
         //     final_control.control.tareOdom = true;
         //     robot.setOdomTime(time);
         // }
-        if ((robot.odom_data.ageOdom(ai_data.time) > 1.0)&&(robot.odom_data.present == true)){
+        if ((odomData.robots.at(Vision::Ally).at(robot_id).ageOdom(ai_data.time) > 1.0)&&(odomData.robots.at(Vision::Ally).at(robot_id).present == true)){
             DEBUG(robot_id);
             final_control.control.fix_translation[0] = robot.movement->get_sample(0).linear_position().getX();
             final_control.control.fix_translation[1] = robot.movement->get_sample(0).linear_position().getY();
             final_control.control.fix_rotation       = rhoban_utils::normalizeRad(rhoban_utils::deg2rad(robot.movement->get_sample(0).angular_position().angle().getSignedValue()));
             final_control.control.tareOdom = true;
-            robot.odom_data.setLastUpdate(ai_data.time);
+            odomData.robots.at(Vision::Ally).at(robot_id).setLastUpdate(ai_data.time);    
 
         }
         else{
@@ -588,10 +588,10 @@ void AI::update_electronic_informations(){
         if( robot.isOk() ){
             Ai::Robot & robotai = ai_data.robots.at(team).at(id);
             robotai.infra_red = (robot.status.status & STATUS_IR) ? true : false;
-            if(robotai.odom_data.present == false){
-                robotai.odom_data.present = true;
+            if(odomData.robots.at(team).at(id).present == false){
+                odomData.robots.at(team).at(id).present = true;
             }
-            robotai.odom_data.update(ai_data.time, rhoban_geometry::Point(((double)robot.status.xpos)/1000, ((double)robot.status.ypos)/1000), ContinuousAngle(((double)(robot.status.ang))/1000)); //ODOME
+            odomData.robots.at(team).at(id).update(ai_data.time, rhoban_geometry::Point(((double)robot.status.xpos)/1000, ((double)robot.status.ypos)/1000), ContinuousAngle(((double)(robot.status.ang))/1000)); //ODOME
             //unsigned int odometry_index = 1; // TODO Faire une enum !
             //robotai.movement->set_sample(robotai.odom_data.movement, odometry_index);
         }

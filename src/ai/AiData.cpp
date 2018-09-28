@@ -125,13 +125,15 @@ namespace Ai {
         compute_table_of_collision_times();
     }
 
-    void AiData::update( const Odom::OdometryData odom_data ){
+    void AiData::update( const Odom::OdometryData odomData ){
         for( auto team : {Vision::Ally, Vision::Opponent} ){
             for( int k=0; k<Vision::Robots; k++ ){
                 //DEBUG(odom_data.robots.at(team).at(k));
-                robots[team][k].set_odom_data(
-                    odom_data.robots.at(team).at(k)
-                );
+                if(robots[team][k].odom_data.present == true){
+                    robots[team][k].set_odom_data(
+                    odomData.robots.at(team).at(k)
+                    );
+                }
             }
         }
         //compute_table_of_collision_times();
