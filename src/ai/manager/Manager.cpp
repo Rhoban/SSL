@@ -675,6 +675,7 @@ const std::string & Manager::get_next_strategy_with_goalie() const
 
 void Manager::declare_and_assign_next_strategies(const std::list<std::string> & future_strats){
     declare_next_strategies(future_strats); //This is needed to comput robot affectation
+    DEBUG("Declare and assigne strat");
     for(
         const std::pair< std::string, std::vector<int> > & elem : 
         robot_affectations_by_strategy

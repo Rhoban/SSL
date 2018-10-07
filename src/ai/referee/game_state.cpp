@@ -107,42 +107,42 @@ namespace RhobanSSL {
     machine_state.add_state(
       state_name::stop,
       [this]( const GameStateData & data, unsigned int run_number, unsigned int atomic_run_number ){
-        DEBUG(state_name::stop);
+        // DEBUG(state_name::stop);
       }
     );
     machine_state.add_state(
       state_name::running,
       [this]( const GameStateData & data, unsigned int run_number, unsigned int atomic_run_number ){
-        DEBUG(state_name::running);
+        // DEBUG(state_name::running);
       }
     );
     machine_state.add_state(
       state_name::halt,
       [this]( const GameStateData & data, unsigned int run_number, unsigned int atomic_run_number ){
-        DEBUG(state_name::halt);
+        // DEBUG(state_name::halt);
       }
     );
     machine_state.add_state(
       state_name::free_kick,
       [this]( const GameStateData & data, unsigned int run_number, unsigned int atomic_run_number ){
-        DEBUG(state_name::free_kick);
+        // DEBUG(state_name::free_kick);
       }
     );
     machine_state.add_state(
       state_name::kickoff,
       [this]( const GameStateData & data, unsigned int run_number, unsigned int atomic_run_number ){
-        DEBUG(state_name::kickoff);
+        // DEBUG(state_name::kickoff);
       }
     );
     machine_state.add_state(
       state_name::prepare_kickoff,
       [this]( const GameStateData & data, unsigned int run_number, unsigned int atomic_run_number ){
-        DEBUG(state_name::prepare_kickoff);
+        // DEBUG(state_name::prepare_kickoff);
       }
     );
     machine_state.add_state( state_name::penalty,
       [this]( const GameStateData & data, unsigned int run_number, unsigned int atomic_run_number ){
-        DEBUG(state_name::penalty);
+        // DEBUG(state_name::penalty);
       }
     );
     machine_state.add_init_state( state_name::halt );
@@ -361,10 +361,9 @@ namespace RhobanSSL {
 
   bool GameState::ball_is_moving(){
     Vector2d ball_velocity = ai_data.ball.get_movement().linear_velocity(ai_data.time);
-    double threshold = 0.01;
+    double threshold = 0.001;
     if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
       {
-        DEBUG("TRUE");
         return true;
       }
       return false;
