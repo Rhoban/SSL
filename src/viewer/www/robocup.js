@@ -356,8 +356,8 @@ function Viewer()
         ctx.strokeStyle = '#aaa';
         ctx.fillStyle = this.grColor(robot.team);
         if(robot.active){
-            //ctx.arc(robot.x_odom, robot.y_odom, 0.1, (robot.t_odom/1000)+front, (robot.t_odom/1000)+Math.PI*2-front);
-            ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front); 
+            ctx.arc(robot.x_odom, robot.y_odom, 0.1, (robot.t_odom/1000)+front, (robot.t_odom/1000)+Math.PI*2-front);
+            //ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front); 
 
         }
         else{

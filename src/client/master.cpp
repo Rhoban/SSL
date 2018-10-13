@@ -56,7 +56,7 @@ int main()
     while (true) {
         while (joystick.getEvent(&event)) {
             if (event.type == JS_EVENT_BUTTON) {
-                if (false && event.number == 11) { // Kick
+                if (event.number == 11) { // Kick
                     if (event.isPressed()) {
                         robot.actions |= ACTION_KICK1;
                     } else {
@@ -69,7 +69,7 @@ int main()
                     } else {
                         robot.actions &= ~ACTION_DRIBBLE;
                     }
-                } else if (false && event.number == 15) { // Charge
+                } else if (event.number == 15) { // Charge
                     if (event.isPressed()) {
                         charge = !charge;
                         if (charge) robot.actions |= ACTION_CHARGE;
