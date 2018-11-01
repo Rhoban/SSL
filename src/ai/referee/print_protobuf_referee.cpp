@@ -27,7 +27,8 @@ std::ostream& operator<<(
     std::ostream& out, const SSL_Referee & referee
 ){
     std::string json_data;
-    google::protobuf::util::MessageToJsonString(referee, &json_data);
+    // google::protobuf::util::MessageToJsonString(referee, &json_data);
+    json_data = "TMP referee: bug version protobuf";
     out <<  json_data;
     return out;
 

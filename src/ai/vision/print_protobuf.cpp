@@ -27,7 +27,8 @@ std::ostream& operator<<(
     std::ostream& out, const SSL_DetectionRobot & robot
 ){
     std::string json_data;
-    google::protobuf::util::MessageToJsonString(robot, &json_data);
+    // google::protobuf::util::MessageToJsonString(robot, &json_data);
+    json_data = "TMP robot: bug version protobuf";
     out <<  json_data;
     return out;
 
@@ -38,7 +39,8 @@ std::ostream& operator<<(
     std::ostream& out, const SSL_DetectionBall & ball
 ){
     std::string json_data;
-    google::protobuf::util::MessageToJsonString(ball, &json_data);
+    // google::protobuf::util::MessageToJsonString(ball, &json_data);
+    json_data = "TMP ball: bug version protobuf";
     out << json_data;
     return out;
 }
@@ -49,7 +51,8 @@ std::ostream& operator<<(
     std::ostream& out, const SSL_DetectionFrame & detection
 ){
     std::string json_data;
-    google::protobuf::util::MessageToJsonString(detection, &json_data);
+    // google::protobuf::util::MessageToJsonString(detection, &json_data);
+    json_data = "TMP detection: bug version protobuf";
     out << "DEBUT" <<json_data << "FIN";
     return out;
 }
