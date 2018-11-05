@@ -27,8 +27,14 @@ std::ostream& operator<<(
     std::ostream& out, const SSL_DetectionRobot & robot
 ){
     std::string json_data;
-    // google::protobuf::util::MessageToJsonString(robot, &json_data);
-    json_data = "TMP robot: bug version protobuf";
+
+    #if GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION >= 3000000
+        google::protobuf::util::MessageToJsonString(robot, &json_data);
+    #else
+        json_data = "Upgrade your protobuf version to a version greater than 3.0.0 to print json_data";
+    #endif
+
+    
     out <<  json_data;
     return out;
 
@@ -39,8 +45,11 @@ std::ostream& operator<<(
     std::ostream& out, const SSL_DetectionBall & ball
 ){
     std::string json_data;
-    // google::protobuf::util::MessageToJsonString(ball, &json_data);
-    json_data = "TMP ball: bug version protobuf";
+    #if GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION >= 3000000
+        google::protobuf::util::MessageToJsonString(ball, &json_data);
+    #else
+        json_data = "Upgrade your protobuf version to a version greater than 3.0.0 to print json_data";
+    #endif
     out << json_data;
     return out;
 }
@@ -51,8 +60,11 @@ std::ostream& operator<<(
     std::ostream& out, const SSL_DetectionFrame & detection
 ){
     std::string json_data;
-    // google::protobuf::util::MessageToJsonString(detection, &json_data);
-    json_data = "TMP detection: bug version protobuf";
+    #if GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION >= 3000000
+        google::protobuf::util::MessageToJsonString(detection, &json_data);
+    #else
+        json_data = "Upgrade your protobuf version to a version greater than 3.0.0 to print json_data";
+    #endif
     out << "DEBUT" <<json_data << "FIN";
     return out;
 }

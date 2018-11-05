@@ -27,8 +27,11 @@ std::ostream& operator<<(
     std::ostream& out, const SSL_Referee & referee
 ){
     std::string json_data;
-    // google::protobuf::util::MessageToJsonString(referee, &json_data);
-    json_data = "TMP referee: bug version protobuf";
+    #if GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION >= 3000000
+        google::protobuf::util::MessageToJsonString(referee, &json_data);
+    #else
+        json_data = "Upgrade your protobuf version to a version greater than 3.0.0 to print json_data";
+    #endif
     out <<  json_data;
     return out;
 
