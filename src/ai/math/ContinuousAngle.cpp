@@ -121,6 +121,16 @@ double ContinuousAngle::turn() const {
 
 int ContinuousAngle::nb_turn() const {
     return std::trunc( this->angle_value /(2*M_PI) );
+}
+
+bool ContinuousAngle::equals(const ContinuousAngle &angle, double precision)
+{
+    return (std::fabs(this->angle_value - angle.value()) <= precision);
+}
+
+bool ContinuousAngle::notEquals(const ContinuousAngle &angle, double precision)
+{
+    return (std::fabs(this->angle_value - angle.value()) > precision);
 };
 
 bool ContinuousAngle::operator==( const ContinuousAngle& angle ) const {

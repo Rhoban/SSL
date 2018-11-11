@@ -25,6 +25,9 @@
 class ContinuousAngle {
 private:
     double angle_value;
+
+    constexpr static const double FLOAT_PRECISION = 0.01;
+
 public:
     ContinuousAngle();
     ContinuousAngle(double angle);
@@ -34,6 +37,7 @@ public:
     ContinuousAngle& operator=( double angle );
     ContinuousAngle& operator=( const ContinuousAngle & angle );
 //    ContinuousAngle& operator=( const Angle & angle );
+
 
     rhoban_utils::Angle angle() const;
     double value() const;
@@ -63,8 +67,11 @@ public:
     double turn() const;
     int nb_turn() const;
 
-    bool operator==( const ContinuousAngle& angle ) const;
-    bool operator!=( const ContinuousAngle& angle ) const;
+    bool equals(const ContinuousAngle& angle, double precision = FLOAT_PRECISION);
+    bool notEquals(const ContinuousAngle& angle, double precision = FLOAT_PRECISION);
+
+    bool operator==( const ContinuousAngle& angle) const;  //unsafe
+    bool operator!=( const ContinuousAngle& angle ) const; //unsafe
     bool operator<( const ContinuousAngle& angle ) const;
     bool operator<=( const ContinuousAngle& angle ) const;
     bool operator>( const ContinuousAngle& angle ) const;

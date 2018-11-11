@@ -57,10 +57,15 @@ class Vector2d {
     Vector2d & operator=( const Vector2d & v );
 
     Vector2d perpendicular();
+
+    constexpr static const double FLOAT_PRECISION = 0.01;
 };
 
 rhoban_geometry::Point vector2point( const Vector2d & v );
 Vector2d point2vector( const rhoban_geometry::Point & p );
+
+bool equals( const Vector2d & v1, const Vector2d & v2, double precision = Vector2d::FLOAT_PRECISION );
+bool notEquals( const Vector2d & v1, const Vector2d & v2, double precision = Vector2d::FLOAT_PRECISION );
 
 bool operator==(const Vector2d & v1, const Vector2d & v2);
 bool operator!=(const Vector2d & v1, const Vector2d & v2);

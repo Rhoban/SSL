@@ -63,6 +63,16 @@ Vector2d point2vector( const rhoban_geometry::Point & p ){
     return Vector2d(p);
 }
 
+bool equals(const Vector2d &v1, const Vector2d &v2, double precision)
+{
+    return (std::fabs(v1[0]-v2[0])<= precision) and (std::fabs(v1[1]-v2[1])<= precision);
+}
+
+bool notEquals(const Vector2d &v1, const Vector2d &v2, double precision)
+{
+    return (std::fabs(v1[0]-v2[0]) > precision) or (std::fabs(v1[1]-v2[1]) > precision);
+}
+
 bool operator==(const Vector2d & v1, const Vector2d & v2){
     return (v1[0] == v2[0]) and (v1[1] == v2[1]);
 }
@@ -195,4 +205,3 @@ std::ostream& operator<<(std::ostream& out, const Vector2d& v){
     out << "[" << v[0] << ", " << v[1] << "]";
     return out;
 }
-
