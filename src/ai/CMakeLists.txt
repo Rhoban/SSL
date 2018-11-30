@@ -116,6 +116,7 @@ set (SOURCES
     math/frame_changement.cpp
     math/intersection.cpp
     math/box.cpp
+    math/lines.cpp
     core/export_to_plot.cpp
     core/logger.cpp
     referee/print_protobuf_referee.cpp
@@ -147,6 +148,7 @@ if(CATKIN_ENABLE_TESTING)
     math/test_circular_vector.cpp
     math/test_frame_changement.cpp
     math/test_matching.cpp
+    math/test_lines.cpp
     physic/test_MovementSample.cpp
     physic/test_movement_with_no_prediction.cpp
     physic/test_movement_predicted_by_integration.cpp
