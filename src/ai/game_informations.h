@@ -39,8 +39,8 @@ class GameInformations {
 
     /**************************  Ball INFORMATIONS ***************************/
     /**
-     * @brief return ball reference
-     * @return const Ai::Ball&
+     * @brief returns a ball reference
+     * @return A ball.
      */
     const Ai::Ball & ball() const ;
     /**
@@ -49,51 +49,52 @@ class GameInformations {
      */
     rhoban_geometry::Point ball_position() const ;
     /**
-     * @brief return ball radius constant
-     * @return cosnt double
+     * @brief returns the ball radius.
+     * @return a real.
      */
     double get_ball_radius() const;
 
     /**************************  Field INFORMATIONS ***************************/
     /**
-     * @brief return field box
-     * @return const Box
+     * @brief return a box that contains the coordinates of the corners of the 
+     *        field.
+     * @return A box
      */
     Box field() const;
     /**
-     * @brief center_mark
-     * @return const rhoban_geometry::Point
+     * @brief return the position of the center mark of the field.
+     * @return a point
      */
     rhoban_geometry::Point center_mark() const ;
     /**
-     * @brief return ally penalty area
-     * @return const Box
+     * @brief returns a box that represent the ally penalty area
+     * @return a box
      */
     Box ally_penalty_area() const;
     /**
-     * @brief return opponent penalty area
-     * @return const Box
+     * @brief returns the opponent penalty area
+     * @return a box
      */
     Box opponent_penalty_area() const;
     /**
-     * @brief return ally goal center
-     * @return const rhoban_geometry::Point
+     * @brief returns the position of ally goal center
+     * @return a point
      */
     rhoban_geometry::Point ally_goal_center() const ;
     /**
-     * @brief oponent_goal_center
-     * @return const rhoban_geometry::Point
+     * @brief returns the position of oponent goal center
+     * @return a point
      */
     rhoban_geometry::Point oponent_goal_center() const ;
 
     /**
      * @brief return opponant right corner
-     * @return const rhoban_geometry::Point
+     * @return a point
      */
     rhoban_geometry::Point oponent_corner_right() const ;
     /**
      * @brief return opponant left corner
-     * @return const rhoban_geometry::Point
+     * @return a point
      */
     rhoban_geometry::Point oponent_corner_left() const ;
     /**
@@ -154,13 +155,19 @@ class GameInformations {
 
     /*************************  Robot INFORMATIONS ***************************/
     /**
-     * @brief return the robot's reference that correspond to the given
-     * robot_id and team in parameters
-     * @param robot_id
-     * @param team
-     * @return robot's reference
+     * @brief return the reference on a robot whose id is given in parameter.
+     * 
+     * Robot have to kind of ids. The number of robots or the ids of the robot.
+     * The number of the robot is the same concept as the number of a foot player.
+     * Usually thers is two robot with the same number, one in the ally team
+     * and another ony in the oponnent team.
+     * All the robots have differents ids. (there is a bijection between ids
+     * 
+     * @param robot_number the number of the robot.
+     * @param team the team of the robot
+     * @return a reference on a robot
      */
-    const Ai::Robot & get_robot( int robot_id, Vision::Team team = Vision::Team::Ally ) const ;
+    const Ai::Robot & get_robot( int robot_number, Vision::Team team = Vision::Team::Ally ) const ;
     /**
      * @brief return robot radius
      * @return const double
@@ -168,16 +175,19 @@ class GameInformations {
     double get_robot_radius() const;
     /**
      * @brief return true if the ball is closed to the kicker.
+     *
      * In front of the kicker there is an infrared captor,
      * when the ball is on the captor, the captor return true.
      * In fact we don't use it to kick. Indeed we can ask the robot
      * to kick when infrared is not on, in that case the robot will
-     * kick as soon as the infrared will be on
-     * @param robot_id
-     * @param team
-     * @return true/false
+     * kick as soon as the infrared will be on.
+     *
+     * @param robot_number the robot number (see get_robot() method to know 
+     *        the difference betweem robot id and robot number).
+     * @param team the team of the robot (ally or oponnent)
+     * @return a boolean
      */
-    bool infra_red(  int robot_id, Vision::Team team = Vision::Team::Ally ) const;
+    bool infra_red(  int robot_number, Vision::Team team = Vision::Team::Ally ) const;
     /**
      * @brief store all robots in the team 'team' which are at a distance
      * between the line describe by 'p1' and 'p2' less than the 'distance'
