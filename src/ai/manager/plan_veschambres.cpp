@@ -224,7 +224,6 @@ PlanVeschambres::PlanVeschambres(
 }
 
 void PlanVeschambres::start_stop(){
-    set_ball_avoidance_for_all_robots(true);
     future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }

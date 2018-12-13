@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -22,6 +23,7 @@
 #include "Manual.h"
 // #include "Match.h"
 #include "plan_veschambres.h"
+#include "rules.h"
 
 namespace RhobanSSL {
 namespace Manager {
@@ -69,11 +71,14 @@ std::shared_ptr<Manager> Factory::construct_manager(
     //     );
     // }
     if( manager_name == names::plan_veschambres ){
-        manager = std::shared_ptr<Manager>(
-            new PlanVeschambres(ai_data, game_state)
-        );
+        // std::shared_ptr<Manager> manager_without_rules = std::shared_ptr<Manager>(
+        //     new PlanVeschambres(ai_data, game_state)
+        // );
+        // Rules<PlanVeschambres> manager(manager_without_rules);
+        PlanVeschambres *planveschambres = new PlanVeschambres(ai_data, game_state);
+        Rules<PlanVeschambres> * manager = new Rules<PlanVeschambres>(planveschambres); // ou planvesxhambres en shared_ptr et plus de destructeur
     }
-    return manager;
+    return std::shared_ptr<Manager>( manager );
 }
 
 };
