@@ -29,72 +29,76 @@ namespace RhobanSSL
 namespace Manager
 {
 
-template <typename MANAGER>
-class Rules : ManagerWithGameState
+template< typename MANAGER>
+class Rules : public ManagerWithGameState
 {
   private:
-	MANAGER *manager;
+        MANAGER *manager;
 
   public:
-	Rules(MANAGER *manager) : manager(manager) {}
+      Rules(Ai::AiData & ai_data, const GameState & game_state)
+          :
+            ManagerWithGameState(ai_data, game_state),
+            manager{ new MANAGER(ai_data, game_state) }
+      {}
 
 	virtual void start_stop(){
 		set_ball_avoidance_for_all_robots(true);
-		manager->start_stop();
+                manager->start_stop();
 	}
 
 	virtual void start_running(){
 		set_ball_avoidance_for_all_robots(false);
-		manager->start_running();
+                manager->start_running();
 	}
 	virtual void start_halt(){
 		set_ball_avoidance_for_all_robots(true);
-		manager->start_halt();
+                manager->start_halt();
 	}
 
 	virtual void start_direct_kick_ally(){
 		set_ball_avoidance_for_all_robots(false);
-		manager->start_direct_kick_ally();
+                manager->start_direct_kick_ally();
 	}
 	virtual void start_direct_kick_opponent(){
 		set_ball_avoidance_for_all_robots(true);
-		manager->start_direct_kick_opponent();
+                manager->start_direct_kick_opponent();
 	}
 
 	virtual void start_indirect_kick_ally(){
 		set_ball_avoidance_for_all_robots(false);
-		manager->start_indirect_kick_ally();
+                manager->start_indirect_kick_ally();
 	}
 	virtual void start_indirect_kick_opponent(){
 		set_ball_avoidance_for_all_robots(true);
-		manager->start_indirect_kick_opponent();
+                manager->start_indirect_kick_opponent();
 	}
 
 	virtual void start_prepare_kickoff_ally(){
 		set_ball_avoidance_for_all_robots(true);
-		manager->start_prepare_kickoff_ally();
+                manager->start_prepare_kickoff_ally();
 	}
 	virtual void start_prepare_kickoff_opponent(){
 		set_ball_avoidance_for_all_robots(true);
-		manager->start_prepare_kickoff_opponent();
+                manager->start_prepare_kickoff_opponent();
 	}
 
 	virtual void start_kickoff_ally(){
 		set_ball_avoidance_for_all_robots(false);
-		manager->start_kickoff_ally();
+                manager->start_kickoff_ally();
 	}
 	virtual void start_kickoff_opponent(){
 		set_ball_avoidance_for_all_robots(true);
-		manager->start_kickoff_opponent();
+                manager->start_kickoff_opponent();
 	}
 
 	virtual void start_penalty_ally(){
 		set_ball_avoidance_for_all_robots(false);
-		manager->start_penalty_ally();
+                manager->start_penalty_ally();
 	}
 	virtual void start_penalty_opponent(){
 		set_ball_avoidance_for_all_robots(true);
-		manager->start_penalty_opponent();
+                manager->start_penalty_opponent();
 	}
 
 	//Continue
@@ -103,50 +107,50 @@ class Rules : ManagerWithGameState
 	}
 
 	virtual void continue_running(){
-		manager->continue_running();
+                manager->continue_running();
 	}
 	virtual void continue_halt(){
-		manager->continue_halt();
+                manager->continue_halt();
 	}
 
 	virtual void continue_direct_kick_ally(){
-		manager->continue_direct_kick_ally();
+                manager->continue_direct_kick_ally();
 	}
 	virtual void continue_direct_kick_opponent(){
-		manager->continue_direct_kick_opponent();
+                manager->continue_direct_kick_opponent();
 	}
 
 	virtual void continue_indirect_kick_ally(){
-		manager->continue_indirect_kick_ally();
+                manager->continue_indirect_kick_ally();
 	}
 	virtual void continue_indirect_kick_opponent(){
-		manager->continue_indirect_kick_opponent();
+                manager->continue_indirect_kick_opponent();
 	}
 
 	virtual void continue_prepare_kickoff_ally(){
-		manager->continue_prepare_kickoff_ally();
+                manager->continue_prepare_kickoff_ally();
 	}
 	virtual void continue_prepare_kickoff_opponent(){
-		manager->continue_prepare_kickoff_opponent();
+                manager->continue_prepare_kickoff_opponent();
 	}
 
 	virtual void continue_kickoff_ally(){
-		manager->continue_kickoff_ally();
+                manager->continue_kickoff_ally();
 	}
 	virtual void continue_kickoff_opponent(){
-		manager->continue_kickoff_opponent();
+                manager->continue_kickoff_opponent();
 	}
 
 	virtual void continue_penalty_ally(){
-		manager->continue_penalty_ally();
+                manager->continue_penalty_ally();
 	}
 	virtual void continue_penalty_opponent(){
-		manager->continue_penalty_opponent();
+                manager->continue_penalty_opponent();
 	}
 
 	virtual ~Rules()
 	{
-		delete manager;
+                delete manager;
 	}
 };
 
