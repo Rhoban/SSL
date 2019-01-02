@@ -22,14 +22,15 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 
 #include <manager/manager_with_game_state.h>
-
+#include <type_traits>
 
 namespace RhobanSSL
 {
 namespace Manager
 {
 
-template< typename MANAGER>
+template< typename MANAGER,
+          typename = typename std::enable_if<std::is_base_of<ManagerWithGameState, MANAGER>::value>::type>
 class Rules : public MANAGER
 {
 
