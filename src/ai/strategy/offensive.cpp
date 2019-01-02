@@ -68,32 +68,26 @@ void Offensive::stop(double time){
 }
 
 void Offensive::update(double time){
+}
 
+void Offensive::assign_behavior_to_robots(
+    std::function<
+        void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)>
+        assign_behavior,
+    double time, double dt)
+{
     if ( GameInformations::get_nearest_ball( Vision::Team::Ally ) == player_id(0) ) {
         is_closest = true;
     } else {
         is_closest = false;
     }
-}
-
-void Offensive::assign_behavior_to_robots(
-    std::function<
-        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-    > assign_behavior,
-    double time, double dt
-){
-    if( not(behaviors_are_assigned) ){
-
-        assert( get_player_ids().size() == 1 );
-        assign_behavior( player_id(0), search );
-
-    } else {
-        if ( is_closest == true ) {
-            assign_behavior( player_id(0), striker );
-
-        } else {
-            assign_behavior( player_id(0), search );
-        }
+    if (is_closest == true)
+    {
+        assign_behavior(player_id(0), striker);
+    }
+    else
+    {
+        assign_behavior(player_id(0), search);
     }
 }
 
