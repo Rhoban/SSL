@@ -229,7 +229,6 @@ void PlanVeschambres::start_stop(){
 }
 
 void PlanVeschambres::start_running(){
-    set_ball_avoidance_for_all_robots(false);
     if(ball_position().getX() <= 0){
         future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
         ball_was_in_ally_part = true;
@@ -241,62 +240,51 @@ void PlanVeschambres::start_running(){
     declare_and_assign_next_strategies(future_strats);
 }
 void PlanVeschambres::start_halt(){
-    set_ball_avoidance_for_all_robots(true);
     future_strats = halt_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 
 void PlanVeschambres::start_direct_kick_ally(){
-    set_ball_avoidance_for_all_robots(false);
     future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 void PlanVeschambres::start_direct_kick_opponent(){
-    set_ball_avoidance_for_all_robots(true);
     future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 
 void PlanVeschambres::start_indirect_kick_ally(){
-    set_ball_avoidance_for_all_robots(false);
     future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 void PlanVeschambres::start_indirect_kick_opponent(){
-    set_ball_avoidance_for_all_robots(true);
     future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 
 void PlanVeschambres::start_prepare_kickoff_ally(){
-    set_ball_avoidance_for_all_robots(true);
     future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 void PlanVeschambres::start_prepare_kickoff_opponent(){
-    set_ball_avoidance_for_all_robots(true);
     future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 
 void PlanVeschambres::start_kickoff_ally(){
-    set_ball_avoidance_for_all_robots(false);
     future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 void PlanVeschambres::start_kickoff_opponent(){
-    set_ball_avoidance_for_all_robots(true);
     future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 
 void PlanVeschambres::start_penalty_ally(){
-    set_ball_avoidance_for_all_robots(false);
     future_strats = penalty_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }
 void PlanVeschambres::start_penalty_opponent(){
-    set_ball_avoidance_for_all_robots(true);
     future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
     declare_and_assign_next_strategies(future_strats);
 }

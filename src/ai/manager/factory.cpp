@@ -71,12 +71,9 @@ std::shared_ptr<Manager> Factory::construct_manager(
     //     );
     // }
     if( manager_name == names::plan_veschambres ){
-//         manager = std::shared_ptr<Manager>(
-//             new PlanVeschambres(ai_data, game_state)
-//         );
-        // Rules<PlanVeschambres> manager(manager_without_rules);
-        //PlanVeschambres *planveschambres = new PlanVeschambres(ai_data, game_state);
-        manager = std::shared_ptr<Manager>(new Rules<PlanVeschambres>(ai_data, game_state)); // ou planvesxhambres en shared_ptr et plus de destructeur
+        manager = std::shared_ptr<Manager>(
+            new Rules<PlanVeschambres>(ai_data, game_state)
+        );
     }
     return std::shared_ptr<Manager>( manager );
 }

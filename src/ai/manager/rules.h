@@ -34,29 +34,26 @@ class Rules : public MANAGER
 {
 
   public:
-      Rules(Ai::AiData & ai_data, const GameState & game_state)
-          :
-            MANAGER(ai_data, game_state)
+      Rules(Ai::AiData & ai_data, const GameState & game_state):MANAGER(ai_data, game_state)
       {
-
-            PLOT("\ncoucou CONSTRUCT \n");
+            DEBUG("\n CONSTRUCT \n");
       }
 
         virtual void start_stop(){
                 MANAGER::set_ball_avoidance_for_all_robots(true);
                 MANAGER::start_stop();
-                PLOT("coucou START && STOP\n");
+                DEBUG("\n coucou START STOP\n");
 	}
 
 	virtual void start_running(){
                 MANAGER::set_ball_avoidance_for_all_robots(false);
                 MANAGER::start_running();
-                PLOT("coucou RUNNING \n");
+                DEBUG("\n coucou RUNNING \n");
 	}
 	virtual void start_halt(){
                 MANAGER::set_ball_avoidance_for_all_robots(true);
                 MANAGER::start_halt();
-                PLOT("coucou HALT\n");
+                DEBUG("\n coucou HALT\n");
 	}
 
 	virtual void start_direct_kick_ally(){
