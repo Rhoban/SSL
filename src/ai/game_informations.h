@@ -39,177 +39,195 @@ class GameInformations {
 
     /**************************  Ball INFORMATIONS ***************************/
     /**
-     * @brief returns a ball reference
-     * @return A ball.
+     * @brief returns the reference on the ball.
+     * @return a ball.
      */
     const Ai::Ball & ball() const ;
     /**
-     * @brief return the current ball_position
+     * @brief returns the current ball's position.
      * @return const rhoban_geometry::Point
      */
     rhoban_geometry::Point ball_position() const ;
     /**
-     * @brief returns the ball radius.
+     * @brief returns the ball's radius.
      * @return a real.
      */
     double get_ball_radius() const;
 
     /**************************  Field INFORMATIONS ***************************/
     /**
-     * @brief return a box that contains the coordinates of the corners of the 
+     * @brief returns a box that contains the coordinates of the corners of the
      *        field.
-     * @return A box
+     * @return a box
      */
     Box field() const;
     /**
-     * @brief return the position of the center mark of the field.
+     * @brief returns the position of the center mark of the field.
      * @return a point
      */
     rhoban_geometry::Point center_mark() const ;
     /**
-     * @brief returns a box that represent the ally penalty area
+     * @brief returns a box that represent the ally penalty area.
      * @return a box
      */
     Box ally_penalty_area() const;
     /**
-     * @brief returns the opponent penalty area
+     * @brief returns a box that represent the opponent penalty area.
      * @return a box
      */
     Box opponent_penalty_area() const;
     /**
-     * @brief returns the position of ally goal center
+     * @brief returns the position of the ally goal center.
      * @return a point
      */
     rhoban_geometry::Point ally_goal_center() const ;
     /**
-     * @brief returns the position of oponent goal center
+     * @brief returns the position of the opponent goal center.
      * @return a point
      */
-    rhoban_geometry::Point oponent_goal_center() const ;
+    rhoban_geometry::Point opponent_goal_center() const ;
 
     /**
-     * @brief return opponant right corner
+     * @brief returns the position of the opponant right corner.
      * @return a point
      */
-    rhoban_geometry::Point oponent_corner_right() const ;
+    rhoban_geometry::Point opponent_corner_right() const ;
     /**
-     * @brief return opponant left corner
+     * @brief returns the position of the opponant left corner.
      * @return a point
      */
-    rhoban_geometry::Point oponent_corner_left() const ;
+    rhoban_geometry::Point opponent_corner_left() const ;
     /**
-     * @brief return all the quarter's of the field
-     * @return const vector<rhoban_geometry::Point>
+     * @brief returns an array which contains the center position
+     * of the four the field's quarter.
+     * @return a point
      */
     std::vector<rhoban_geometry::Point> center_quarter_field() const ;
     /**
-     * @brief return center ally field
-     * @return const rhoban_geometry::Point
+     * @brief returns the position of the center ally field.
+     * @return a point
      */
     rhoban_geometry::Point center_ally_field() const ;
     /**
-     * @brief return center opponant field
-     * @return const rhoban_geometry::Point
+     * @brief returns the position of the center opponant field.
+     * @return a point
      */
     rhoban_geometry::Point center_opponent_field() const ;
     /**
-     * @brief return field width
-     * @return double
+     * @brief returns the field's width.
+     * the width correspond to the x axis
+     * @return width in meter
      */
     double field_width() const;
     /**
-     * @brief return field length
-     * @return double
+     * @brief returns field's length.
+     * the length correspond to the y axis
+     * @return length in meter
      */
     double field_length() const;
     /**
-     * @brief return penalty area width
-     * @return double
+     * @brief returns penalty area's width.
+     * the width correspond to the x axis
+     * @return width in meter
      */
     double penalty_area_width() const;
     /**
-     * @brief return penalty area depth
-     * @return double
+     * @brief returns penalty area's length.
+     * the length correspond to the y axis
+     * @return length in meter
      */
-    double penalty_area_depth() const;
+    double penalty_area_length() const;
     /**
-     * @brief return the South West point in the field
-     * @return double
+     * @brief returns the South West point of the field.
+     * @return a point
      */
     rhoban_geometry::Point field_SW() const;
     /**
-     * @brief return the North West point in the field
-     * @return double
+     * @brief returns the North West point of the field.
+     * @return a point
      */
     rhoban_geometry::Point field_NW() const;
     /**
-     * @brief return the South East point in the field
-     * @return double
+     * @brief returns the South East point of the field.
+     * @return a point
      */
     rhoban_geometry::Point field_NE() const;
     /**
-     * @brief return the South East point in the field
-     * @return double
+     * @brief returns the South East point of the field.
+     * @return a point
      */
     rhoban_geometry::Point field_SE() const;
 
     /*************************  Robot INFORMATIONS ***************************/
     /**
-     * @brief return the reference on a robot whose id is given in parameter.
-     * 
-     * Robot have to kind of ids. The number of robots or the ids of the robot.
-     * The number of the robot is the same concept as the number of a foot player.
-     * Usually thers is two robot with the same number, one in the ally team
-     * and another ony in the oponnent team.
-     * All the robots have differents ids. (there is a bijection between ids
-     * 
-     * @param robot_number the number of the robot.
-     * @param team the team of the robot
+     * @brief returns the robot's reference whose robot's number is given in parameter.
+     *
+     * Robot have two type of identification number: its number and its ID.
+     * The robot's number is the same concept as a foot player's jersey number.
+     * Usually during a game, there are two robots with the same number, one in the ally team
+     * and another one in the oponnent team.
+     * All the robots have differents ids. (there is a bijection between ids).
+     *
+     * @param robot_number
+     * the number of the robot.
+     * @param team
+     * the team of the robot
      * @return a reference on a robot
      */
     const Ai::Robot & get_robot( int robot_number, Vision::Team team = Vision::Team::Ally ) const ;
     /**
-     * @brief return robot radius
-     * @return const double
+     * @brief returns the robot's radius.
+     * @return a radius in meter
      */
     double get_robot_radius() const;
     /**
-     * @brief return true if the ball is closed to the kicker.
+     * @brief returns true if the ball is closed to the kicker.
      *
-     * In front of the kicker there is an infrared captor,
-     * when the ball is on the captor, the captor return true.
+     * In front of the kicker there is an infrared sensor,
+     * when the ball is on it, the sensor returns true.
      * In fact we don't use it to kick. Indeed we can ask the robot
      * to kick when infrared is not on, in that case the robot will
      * kick as soon as the infrared will be on.
      *
-     * @param robot_number the robot number (see get_robot() method to know 
-     *        the difference betweem robot id and robot number).
+     * @param robot_number
+     * the robot number
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      * @param team the team of the robot (ally or oponnent)
      * @return a boolean
      */
     bool infra_red(  int robot_number, Vision::Team team = Vision::Team::Ally ) const;
     /**
-     * @brief store all robots in the team 'team' which are at a distance
-     * between the line describe by 'p1' and 'p2' less than the 'distance'
-     * parameter
+     * @brief With p1 and p2 given in parameter we create a line L.
+     * We store in result given in parameter all robot's number in the team
+     * given in parameter that follow this constraint :
+     *      dist(L, robot's center) <= distance (given in parameter).
      * @param p1
+     * a point
      * @param p2
-     * @param team ( Vision::Team::Opponent ou Vision::Team::Ally)
+     * a point
+     * @param team
+     * ( Vision::Team::Opponent or Vision::Team::Ally)
      * @param distance (usually the robot radius)
-     * @param result
+     * @param[out] result
+     * a vector of robot's number
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     void get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
         Vision::Team team, double distance,
         std::vector<int> & result
     ) const ;
     /**
-     * @brief same as void get_robot_in_line() but return the result
-     * instead of storing it in a variable
+     * @brief same as void get_robot_in_line() but returns the result
+     * instead of storing it in a variable.
      * @param p1
+     * a point
      * @param p2
-     * @param team  ( Vision::Team::Opponent ou Vision::Team::Ally)
+     * a point
+     * @param team
+     * ( Vision::Team::Opponent or Vision::Team::Ally)
      * @param distance (usually the robot radius)
-     * @return vector<int>
+     * @return a vector of robot's number
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     std::vector<int> get_robot_in_line(
         const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
@@ -217,43 +235,54 @@ class GameInformations {
     ) const ;
     /**
      * @brief same as vector<int> get_robot_in_line() but doesn't
-     * consider the robot's team
+     * consider the robot's team.
      * @param p1
      * @param p2
      * @param distance (usually the robot radius)
-     * @return vector<int>
+     * @return a vector of robot's number
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     std::vector<int> get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
         double distance
     ) const ;
     /**
-     * @brief find the robot id of the closest robot to the 'point'
-     * from the team 'team'
-     * @param team ( Vision::Team::Opponent or Vision::Team::Ally)
-     * @param point
-     * @return robot index (-1 if not found)
+     * @brief returns the robot's number which is closest to the point
+     * given in parameter in the team given in parameter.
+     * @param team
+     * ( Vision::Team::Opponent or Vision::Team::Ally)
+     * @return robot's number (-1 if not found)
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     int get_nearest_point( Vision::Team team, rhoban_geometry::Point point ) const ;
     /**
-     * @brief find the robot id of the closest robot to the ball
-     * from the team 'team'
-     * @param team ( Vision::Team::Opponent or Vision::Team::Ally)
-     * @return robot index (-1 if not found)
+     * @brief returns the robot's number which is closest robot to the ball
+     * from the team given in parameter.
+     * @param team
+     * ( Vision::Team::Opponent or Vision::Team::Ally)
+     * @return robot' index 's number(-1 if not found)
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     int get_nearest_ball( Vision::Team team ) const ;
     /**
-     * @brief find the robot id of the closest robot to the ball
+     * @brief returns the robot's number which is closest to the ball.
+     * It doesn"t consider any team
      * @return robot index ( -1 if not found)
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     int get_nearest_ball() const ;
 
     /**************************  Algos INFORMATIONS *************************/
     /**
-     * @brief find the "ideal" position that maximazes the chance to score
-     * in the targeted goal in parameter
+     * @brief returns the "ideal" position to target that maximazes the chance to score
+     * in the targeted goal given in parameter and its probability to score.
+     *
+     * The algorithm tests different lines between the point and the goal given
+     * in parameter and returns the leasts covered by robots line.
      * @note Attack algorithm
-     * @param point  (usually the ball position)
-     * @param goal
+     * @param a point
+     * (usually the ball's position)
+     * @param a goal
+     * (usually the ennemy's goal center)
      * @return pair<rhoban_geometry::Point, double>
      * (double correspond of his "efficiency rate" )
      */
@@ -261,47 +290,51 @@ class GameInformations {
             const rhoban_geometry::Point point,
             const rhoban_geometry::Point goal = rhoban_geometry::Point(66,66) ) const ;
     /**
-     * @brief find the distance between a robot and the ally goal center
+     * @brief returns the distance between a robot with the number given in parameter
+     * and the ally goal center.
      * @note Defense algorithm
-     * @param id_robot
-     * @param team (opponent by default)
-     * @return distance
+     * @param robot_number
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+     * @param team
+     * the team of the robot (opponent by default)
+     * @return a distance
      */
-    double get_robot_distance_from_ally_goal_center( int id_robot, Vision::Team team = Vision::Team::Opponent) const ;
+    double get_robot_distance_from_ally_goal_center( int robot_number, Vision::Team team = Vision::Team::Opponent) const ;
     /**
-     * @brief find the distance between all robots in the team 'team' and
-     * the ally goal center
+     * @brief returns the distance between all robots in the team given in parameter and
+     * the ally goal center.
      * @note Defense algorithm
-     * @param team (opponent by default
-     * @return vector [0] = distance first robot, [1] = distance second robot
+     * @param team
+     * (opponent by default)
+     * @return a vector
+     * [0] = distance of the first robot,
+     * [1] = distance of the second robot
      * ...
      */
     std::vector<double> threat(  Vision::Team team = Vision::Team::Opponent ) const ;
     /**
-     * @brief find the biggest threat belonging to the team 'team'
-     * which correspond to the closest opposant's robot to the ally goal
-     * center
+     * @brief returns the robot's number of the biggest threat belonging
+     * to the team given in parameter.
+     *
+     * It corresponds to the closest opposant's robot to the ally's goal center.
      * @note Defense algorithm
      * @param team
-     * @return robot id
+     * @return a robot's number
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
-    int id_threat_max( Vision::Team team ) const;
+    int number_of_threat_max( Vision::Team team ) const;
     /**
-     * @brief find the second biggest threat belonging to the team 'team'
-     * which correspond to the second closest opposant's robot to the ally goal
-     * center
+     * @brief returns the robot's number of the second biggest threat belonging
+     * to the team given in parameter.
+     *
+     * It corresponds to the second closest opposant's robot to the ally's goal
+     * center.
      * @note Defense algorithm
      * @param team
-     * @return robot id
+     * @return a robot's number
+     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
-    int id_threat_max_2( Vision::Team team ) const; // second threat max
-    /**
-     * @brief  find the biggest threat in the field
-     * doesn't consider any team side
-     * @note Defense algorithm
-     * @return robot index
-     */
-    int id_threat_max( ) const;
+    int number_of_threat_max_2( Vision::Team team ) const; // second threat max
 };
 
 

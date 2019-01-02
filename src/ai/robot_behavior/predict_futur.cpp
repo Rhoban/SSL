@@ -30,7 +30,7 @@ PredictFutur::PredictFutur(
 ):
     RobotBehavior(ai_data),
     use_custom_vector(false),
-    striking_point( oponent_goal_center() ),
+    striking_point( opponent_goal_center() ),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
 }
