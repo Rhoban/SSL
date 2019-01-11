@@ -31,6 +31,7 @@ set (SOURCES
     robot_behavior/factory.cpp
     robot_behavior/example_machine_state.cpp
     robot_behavior/example.cpp
+    robot_behavior/beginner_goto_position.cpp
     robot_behavior/goalie.cpp
     robot_behavior/patrol.cpp
     robot_behavior/pass.cpp

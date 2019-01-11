@@ -25,6 +25,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/example.h>
+#include <robot_behavior/beginner_goto_position.h>
 #include <robot_behavior/example_machine_state.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/passive_defensor.h>
@@ -91,6 +92,17 @@ Manual::Manual( Ai::AiData & ai_data ):
             )
         )
     );
+	register_strategy(
+		"Beginner_goto_position", std::shared_ptr<Strategy::Strategy>(
+		    new Strategy::From_robot_behavior(
+		        ai_data,
+		        [&](double time, double dt){
+		            Robot_behavior::Beginner_goto_position* beginner_goto_position = new Robot_behavior::Beginner_goto_position(ai_data);
+		            return std::shared_ptr<Robot_behavior::RobotBehavior>(beginner_goto_position);
+		        }, false // we don't want to define a goal here !
+		    )
+		)
+	    );
     register_strategy(
         "Defensor1", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
