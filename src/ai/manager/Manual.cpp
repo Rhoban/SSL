@@ -25,6 +25,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/example.h>
+#include <robot_behavior/beginner_goto_ball.h>
 #include <robot_behavior/example_machine_state.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/passive_defensor.h>
@@ -415,6 +416,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Example* example = new Robot_behavior::Example(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(example);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Beginner_goto_ball", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Beginner_goto_ball* beginner_goto_ball  = new Robot_behavior::Beginner_goto_ball(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(beginner_goto_ball);
                 }, false // we don't want to define a goal here !
             )
         )
