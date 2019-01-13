@@ -121,7 +121,6 @@ $$
 \int_{T=t}^{t+dt} V(T) dT 
 =
 \int_{T=t}^{t+dt}
-\left\(
 \left( \begin{array}{cc}
 \cos{\theta(T)} & -\sin{\theta(T)} \\
 \sin{\theta(T)} & \cos{\theta(T)}
@@ -134,7 +133,6 @@ $$
 \int_{T=t}^{t+dt} V(T) dT 
 =
 \int_{T=t}^{t+dt}
-\left\(
 \left( \begin{array}{cc}
 \cos{\theta(T)} & -\sin{\theta(T)} \\
 \sin{\theta(T)} & \cos{\theta(T)}
@@ -172,7 +170,6 @@ V_C
 \cdot
 \left(
 \left[
-\left\(
 \left( \begin{array}{cc}
 \sin{\theta(T)} & \cos{\theta(T)} \\
 -\cos{\theta(T)} & \sin{\theta(T)}
@@ -198,7 +195,6 @@ V_C
 \cdot
 \left(
 \left[
-\left\(
 \left( \begin{array}{cc}
 \sin{\theta(T)} & \cos{\theta(T)} \\
 -\cos{\theta(T)} & \sin{\theta(T)}
@@ -242,7 +238,6 @@ V_C(u)
 \cdot
 \left(
 \left[
-\left\(
 \left( \begin{array}{cc}
 \sin{\theta(T)} & \cos{\theta(T)} \\
 -\cos{\theta(T)} & \sin{\theta(T)}
