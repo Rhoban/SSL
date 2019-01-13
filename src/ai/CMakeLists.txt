@@ -99,6 +99,7 @@ set (SOURCES
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
     control/pid.cpp
+    control/control.cpp
     physic/movement_predicted_by_integration.cpp
     physic/movement_with_no_prediction.cpp
     physic/movement_on_new_frame.cpp
