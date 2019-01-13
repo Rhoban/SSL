@@ -20,26 +20,12 @@
 #ifndef __pid__H__
 #define __pid__H__
 
+#include "control.h"
+
 #include <debug.h>
 #include <math/ContinuousAngle.h>
 #include <math/vector2d.h>
 #include <utility>
-
-struct PidControl {
-    Vector2d velocity_translation;
-    ContinuousAngle velocity_rotation;
-
-    PidControl();
-    PidControl(
-        const Vector2d & velocity_translation,
-        ContinuousAngle velocity_rotation
-    );
-    PidControl relative_control(
-        const ContinuousAngle & angular_orientation, double dt
-    ) const ;
-};
-
-std::ostream& operator << ( std::ostream &, const PidControl& control );
 
 struct PidController {
     double kp_t,ki_t,kd_t;
@@ -98,7 +84,7 @@ struct PidController {
     );
     double no_limited_angular_control() const;
 
-    virtual PidControl no_limited_control() const;
+    virtual Control no_limited_control() const;
 };
 
 #endif
