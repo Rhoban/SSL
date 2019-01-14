@@ -216,7 +216,7 @@ $$
 
 Dans la commande du robot, la commande angulaire est constante
 et identique à la vitesse angulaire du robot et est consatant entre $T$ et 
-$T+dt$. On a donc :
+$T+\Delta t$. On a donc :
 $\partial \cos{\theta} = - \omega_C \sin{\theta}$
 et
 $\partial \sin{\theta} = \omega_C \cos{\theta}$.
@@ -263,7 +263,7 @@ V_C
 \right]_{t=T}^{T+\Delta t}
 \right)^{-1}
 \cdot 
-\int_{t=T}^{T+dt} V_{consigne}(t) dt 
+\int_{t=T}^{T+\Delta t} V_{consigne}(t) dt 
 $$
 
 
@@ -273,7 +273,7 @@ Pour résumé, les valeurs de commande $V_C$ et $\omega_C$ s'obtiennet à partir
 de la valeur de consigne $V_{consigne}$ et $\omega_{consigne}$ de la 
 façon suivante :
 
-Pour toute valeure $u$ de $[T, T+dt[$, on a :
+Pour toute valeure $u$ de $[T, T+\Delta t[$, on a :
 
 $$
 \omega_C
