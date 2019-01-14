@@ -24,119 +24,179 @@
 
 #+OPTIONS: tex:dvipng
 
-L'objectif de ce document est de déterminer la commande en vitesse du robot holonome en fonction d'un consigne en vitesse absolu $V_{consigne}$.
-Le robot holonome reçoit à une pèriode fixe $dt$ un ordre de vitesse $V_C$ à suivre exrprimé dans son repère relatif. 
-Etant donné une consingne en vitesse à suivre $V(t)$, il faut déterminer la 
-valeur de $V_C$. 
+L'objectif de ce document est de déterminer la commande en vitesse d'un 
+robot holonome en fonction d'une consigne en vitesse.
+
+Les robots holonomes sont dirigés en donnant, tout les $\Delta t$ temps, une 
+consigne en vitesse linéaire et angulaire constante exprimée dans le
+repère fixe qui coincide, au moment du calcul, avec le repère mobile du robot.
+
+L'objectif de ce document est de détermriner ces vitesses de sorte à ce que le
+robot suive une vitesse linéaire et angulaire exprimée dans le repère
+absolue.
+
+* Définitions et notations 
+
+Soit $t$ la variable du temps.
+
+Soit $\mathcal{O} = (0, \overrightarrow{i}, \overrightarrow{j})$, le repère 
+absolu.
+
+Soit $M(t)$ la position du robot holonome.
+Soit $\theta(t)$ la position angulaire du robot holonome dans le repère absolue.
+
+On notera par $V(t)$ et $\omega(t)$ la vitesse linéaire et angulaire exprimée dans le repère absolue :
+ - Vitesse linéaire absolu : $V(t) = \left. \frac{\partial OM}{\partial t} \right|_{\mathcal{O}}$.
+ - Vitesse angulaire absolu : $\omega = \dot{\theta}$.
+
+On suppose qu'au temps $t=T$, l'application est dans l'attente d'une nouvelle 
+commande en vitesse linéaire et angulaire.
+
+La commande du robot, à l'instant $t=T$, se fait en comunicant au robot, une 
+vitesse linéaire $V_C$ et angulaire $\omega_C$ absolue exprimée 
+dans le repère du robot. Cette commande restera constante entre $t=T$ et $t=T+\Delta t$.
+
+Soit $\mathcal{R}(t) = (M(t), \overrightarrow{i_1}(t), \overrightarrow{j_1}(t))$, le repère relatif au robot au temps $t$.
+
+Soit $V_r(t)$ le vecteur de vitesse absolue du robot exrpimée dans le repère $R(t)$.
+Ce vecteur est différent du vecteur vitesse relatif au robot exprimé dans le repère du robot. En effet, ce vecteur qui vaut $\left. \frac{\partial M(t)M(t)}{\partial t} \right|_{\mathcal{R}}$ est nul.
+
+Le vecteur $V_r(t)$ est, quant à lui, définit par :
+
+$$
+V_r(t) = \left. \frac{\partial M(t=T)M(t)}{\partial t} \right|_{\mathcal{R}} = \left. \frac{\partial OM(t)}{\partial t} \right|_{\mathcal{R}}.
+$$
+
+Il faut donc bien distinguer la différence entre le vecteur de vitesse relatif 
+au repère du robot et le vecteur de vitesse absolue exprimée dans le repère du 
+robot.
+
+Lorsque $t \in [T, T+\Delta t]$, on sait que $V_r(t) = V_C$ et $\omega(t)=\omega_C$. 
+On sait que l'utilisateur souhaite que le robot se déplace à une position 
+linéaire $M_{consigne}(t)$ et angulaire $\theta_{consgine}(t)$ donné en 
+commandant le robot à l'aide de $V_C$ et $\omega_C$.
+Pour cela, l'utilisateur dispose de la vitesse linéaire et angulaire 
+$V_{consigne}$, $\omega_{consigne}$ exprimée dans le repère absolu, définit par :
+$V_{consigne} = \left. \frac{\partial OM_{consigne}}{\partial t} \right|_{\mathcal{O}}$
+et par
+$\omega_{consigne} = \partial_t( \theta_{consigne} )$.
+
+Comme la commande entre $t=T$ et $t=T+\Delta t$ est constante, il n'est pas possible
+de faire en sorte que $M(t) = M_{consigne}(t)$ et $\theta(t) = \theta_{consigne}(t)$, cependant, on peut 
+calculer $V_C$ et $\omega_C$ de sorte à ce que 
+$M(T) = M_{consigne}(T)$, $\theta(T) = \theta_{consigne}(T)$, 
+$M(T+\Delta t) = M_{consigne}(T+\Delta t)$ et $\theta(T+\Delta t) = \theta_{consigne}(T+\Delta t)$. 
+
+Écrit autrement, on a les rélations :
+
+$$
+\int_{t=T}^{T+\Delta t} V_{consigne} = \int_{t=T}^{T+\Delta t} V(t) dt
+$$
+
+et
+
+$$
+\int_{t=T}^{t+\Delta t} \omega_{consigne}(t) dt = \int_{t=T}^{T+\Delta t} \omega(t) dt
+$$
+
+
+Ce calcul est l'objet de ce document.
 
 * Détail du calcul
 
-Soit $\mathcal{R} = (0, \overrightarrow{i}, \overrightarrow{j})$, le repère 
-absolu.
 
-Soit $\mathcal{R}_1 = (0, \overrightarrow{i_1}, \overrightarrow{j_1})$, le 
-repère du robot.
-
-On définit la vitesse linéraire et angulaire absolu du robot par : 
-
- - Vitesse linéaire absolu : $V = \left. \frac{\partial OM}{\partial t} \right|_{\mathcal{R}}$.
- - Vitesse angulaire absolu : $\omega = \dot{\theta}$.
-
-La vitesse absolu du robot peut être exprimé dans le repère absolu 
-$\mathcal{R}$ ou dans le repère $\mathcal{R}_1$ du robot. On passe 
+La vitesse absolu du robot peut être exprimée dans le repère absolu 
+$\mathcal{O}$ ou dans le repère $\mathcal{R}$ du robot. On passe 
 d'une vitesse à l'autre par la relation suivante : 
 
 $$
 \left. 
     \frac{\partial OM}{\partial t}
-\right|_{\mathcal{R}}
+\right|_{\mathcal{O}}
 = 
-M_{\mathcal{R}_1 \rightarrow \mathcal{R}}
+M_{\mathcal{R} \rightarrow \mathcal{O}}
 \cdot
 \left. 
     \frac{\partial OM}{\partial t}
-\right|_{\mathcal{R}_1}
+\right|_{\mathcal{R}}
 $$
 
-où $M_{\mathcal{R}_1 \rightarrow \mathcal{R}}$ est la matrice du changement de
-repère de $\mathcal{R}_1$ dans $\mathcal{R}$.
+où $M_{\mathcal{R} \rightarrow \mathcal{O}}$ est la matrice du changement de
+repère de $\mathcal{R}$ dans $\mathcal{O}$.
 
 Ainsi, 
 
 $$
-V
+V(t)
 =
 \left( \begin{array}{cc}
 \cos{\theta} & -\sin{\theta} \\
 \sin{\theta} & \cos{\theta}
 \end{array} \right)
 \cdot
-V_C
+V_r(t)
 $$
 
 et donc
 
 $$
-V_C
+V_r(t)
 =
 \left( \begin{array}{cc}
 \cos{\theta} & \sin{\theta} \\
 -\sin{\theta} & \cos{\theta}
 \end{array} \right)
 \cdot
-V
+V(t).
 $$
 
-Les vecteurs $V_C$ et $V$ sont des vecteurs de vitesses instantannées.
+Dans la commande du robot, on peut modifier les valeurs de $V$ et
+$\omega$ toutes les $\Delta t$ secondes. Il s'agit de la commande.
+La valeur de $V$ est la vitesse absolu que l'on souhaite imprimer au robot.
 
-Dans la commande du robot, on peut modifier les valeurs de $V_C$ et
-$\omega$ toutes les $dt$ secondes. Il s'agit de la commande.
-La valeur de $V$ est la vitesse absolu que l'on souhaite imprimé au robot.
+Il n'est donc pas possible de faire en sorte que $V_C$ soit égale à la vitesse consigne $V_{Consigne}$.
 
-Il n'est donc pas possible de faire en sorte que $V_C$ soit égale à la vitesse consigne $V_{COnsigne}$.
-
-Cependant, on peut déterminer $V_C$ et $\omega$ de sorte à ce que 
+Cependant, on a vu précédement que l'on peut faire en sorte d'avoir :
 
 $$
-\int_{T=t}^{t+dt} V_{consigne} = \int_{T=t}^{t} V(T) dT
+\int_{t=T}^{T+\Delta t} V_{consigne} = \int_{t=T}^{T+\Delta t} V(t) dt
 $$
 
 et
 
 $$
-\int_{T=t}^{t+dt} \omega_{consigne}(T) dT = \int_{T=t}^{t+dt} \omega(T) dT
+\int_{t=T}^{t+\Delta t} \omega_{consigne}(t) dt = \int_{t=T}^{T+\Delta t} \omega(t) dt
 $$
 
-On obtient, pour $\omega$,
+Or on sait que $\omega(t) = \omega_C$ si $t \in [T, T+\Delta t]$, ainsi on a,
  
 $$
-\omega = \frac{1}{dt} \int_{T=t}^{t+dt} \omega_{consigne}(T) dT.
+\omega_C = \frac{1}{\Delta t} \int_{t=T}^{T+\Delta t} \omega_{consigne}(t) dt.
 $$
 
 
-Pour la valeur de $V_C$, on l'obtient en intégrant $V$ et $V_C$ entre $t$ et 
-$t+dt$:
-
+Faisons le changement de repère entre $V(t)$ et $V_r(t)$ :
 $$
-\int_{T=t}^{t+dt} V(T) dT 
+\int_{t=T}^{T+\Delta t} V(t) dt 
 =
-\int_{T=t}^{t+dt}
+\int_{t=T}^{T+\Delta t}
 \left( \begin{array}{cc}
-\cos{\theta(T)} & -\sin{\theta(T)} \\
-\sin{\theta(T)} & \cos{\theta(T)}
-\end{array} \right) \cdot V_C(T) \ dT
+\cos{\theta(t)} & -\sin{\theta(t)} \\
+\sin{\theta(t)} & \cos{\theta(t)}
+\end{array} \right) \cdot V_r(t) \ dt
 $$
 
-Comme $V_C$ est constant entre $t$ et $t+dt$, on a alors,
+Comme la valeur de $V_r$ est constant entre $T$ et $T+ \Delta t$ et vaut $V_C$,
+on a 
 
 $$
-\int_{T=t}^{t+dt} V(T) dT 
+\int_{t=T}^{T+ \Delta t} V(t) dt
 =
-\int_{T=t}^{t+dt}
+\int_{t=T}^{T+ \Delta t}
 \left( \begin{array}{cc}
-\cos{\theta(T)} & -\sin{\theta(T)} \\
-\sin{\theta(T)} & \cos{\theta(T)}
-\end{array} \right) dT
+\cos{\theta(t)} & -\sin{\theta(t)} \\
+\sin{\theta(t)} & \cos{\theta(t)}
+\end{array} \right) dt
 \cdot V_C
 $$
 
@@ -146,87 +206,87 @@ $$
 V_C
 =
 \left(
-\int_{T=t}^{t+dt}
+\int_{t=T}^{T+\Delta t}
 \left( \begin{array}{cc}
-\cos{\theta(T)} & -\sin{\theta(T)} \\
-\sin{\theta(T)} & \cos{\theta(T)}
-\end{array} \right) dT
-\right)^{-1} \cdot \int_{T=t}^{t+dt} V(T) dT 
+\cos{\theta(t)} & -\sin{\theta(t)} \\
+\sin{\theta(t)} & \cos{\theta(t)}
+\end{array} \right) dt
+\right)^{-1} \cdot \int_{t=T}^{T+\Delta t} V(t) dt 
 $$
 
-Dans la commande du robot, la commande angulaire $\omega$ est constante
-et identique à la vitesse angulaire du robot et est consatant entre $t$ et 
-$t+dt$. On a donc :
-$\partial \cos{\theta} = - \omega \sin{\theta}$
+Dans la commande du robot, la commande angulaire est constante
+et identique à la vitesse angulaire du robot et est consatant entre $T$ et 
+$T+dt$. On a donc :
+$\partial \cos{\theta} = - \omega_C \sin{\theta}$
 et
-$\partial \sin{\theta} = \omega \cos{\theta}$.
+$\partial \sin{\theta} = \omega_C \cos{\theta}$.
 
 Ainsi,
  
 $$
 V_C
 =
-\omega
+\omega_C
 \cdot
 \left(
 \left[
 \left( \begin{array}{cc}
-\sin{\theta(T)} & \cos{\theta(T)} \\
--\cos{\theta(T)} & \sin{\theta(T)}
+\sin{\theta(t)} & \cos{\theta(t)} \\
+-\cos{\theta(t)} & \sin{\theta(t)}
 \end{array}
 \right) 
-\right]_{t}^{t+dt}
+\right]_{T}^{T+\Delta t}
 \right)^{-1}
 \cdot 
-\int_{T=t}^{t+dt} V(T) dT 
+\int_{t=T}^{T+\Delta t} V(t) dt 
 $$
 
-avec $\theta(u) = \omega \cdot (u-t) + \theta(t)$.
+avec $\theta(u) = \omega_C \cdot (u-t) + \theta(t)$.
 
 Il suffit maintenant de remplacer 
-$\int_{T=t}^{t+dt} V(T) dT$
+$\int_{t=T}^{T+\Delta t} V(t) dt$
 par la consigne 
-$\int_{T=t}^{t+dt} V_{consigne}(T) dT$ :
+$\int_{t=T}^{T+\Delta t} V_{consigne}(t) dt$ :
 
 $$
 V_C
 =
-\omega
+\omega_C
 \cdot
 \left(
 \left[
 \left( \begin{array}{cc}
-\sin{\theta(T)} & \cos{\theta(T)} \\
--\cos{\theta(T)} & \sin{\theta(T)}
+\sin{\theta(t)} & \cos{\theta(t)} \\
+-\cos{\theta(t)} & \sin{\theta(t)}
 \end{array}
 \right) 
-\right]_{T=t}^{t+dt}
+\right]_{t=T}^{T+\Delta t}
 \right)^{-1}
 \cdot 
-\int_{T=t}^{t+dt} V_{consigne}(T) dT 
+\int_{t=T}^{T+dt} V_{consigne}(t) dt 
 $$
 
 
 * Résumé :
 
-Pour résumé, les valeurs de commande $V_C$ et $\omega$ s'obtiennet à partir
+Pour résumé, les valeurs de commande $V_C$ et $\omega_C$ s'obtiennet à partir
 de la valeur de consigne $V_{consigne}$ et $\omega_{consigne}$ de la 
 façon suivante :
 
-Pour toute valeur $u$ de $[t, t+dt[$, on a :
+Pour toute valeure $u$ de $[T, T+dt[$, on a :
 
 $$
-\omega(u)
+\omega_C
 =
-\frac{1}{dt} \int_{T=t}^{t+dt} \omega_{consigne}(T) dT.
+\frac{1}{\Delta t} \int_{t=T}^{T+\Delta t} \omega_{consigne}(t) dt.
 =
 \frac{
-\theta_{consigne}(t+dt) - \theta_{consigne}(t)
+\theta_{consigne}(T+\Delta t) - \theta_{consigne}(T)
 }{
-dt
+\Delta t
 }
 \approx
-\omega_{consigne}(t)
+\omega_{consigne}(T)
 $$
 
 et 
@@ -234,7 +294,7 @@ et
 $$
 V_C(u)
 =
-\omega(u)
+\omega_C
 \cdot
 \left(
 \left[
@@ -243,19 +303,19 @@ V_C(u)
 -\cos{\theta(T)} & \sin{\theta(T)}
 \end{array}
 \right) 
-\right]_{T=t}^{t+dt}
+\right]_{t=T}^{T+\Delta t}
 \right)^{-1}
 \cdot 
-\int_{T=t}^{t+dt} V_{consigne}(T) dT 
+\int_{t=T}^{T+\Delta t} V_{consigne}(t) dt 
 $$
 
 avec 
 
 $$
-\int_{T=t}^{t+dt} V_{consigne}(T) dT 
+\int_{t=T}^{T+\Delta t} V_{consigne}(t) dt 
 =
 \left(
-OM_{consigne}( t+dt) - OM_{consigne}(t)
+OM_{consigne}( T+\Delta t) - OM_{consigne}(T)
 \right)
 \approx
 V_{consigne}(t) * dt
@@ -264,6 +324,6 @@ $$
 et enfin 
 
 $$
-\theta(u) = \omega(t) * (u-t) + \theta(t).
+\theta(u) = \omega_C * (u-T) + \theta(T).
 $$
 
