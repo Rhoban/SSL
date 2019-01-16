@@ -61,6 +61,7 @@ set (SOURCES
     robot_behavior/slow_striker.cpp
     robot_behavior/test_infra.cpp
     robot_behavior/tutorials/begginer/begginer_go_corner.cpp
+    robot_behavior/tutorials/begginer/begginer_striker.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp
