@@ -60,6 +60,7 @@ set (SOURCES
     robot_behavior/wait_pass.cpp
     robot_behavior/slow_striker.cpp
     robot_behavior/test_infra.cpp
+    robot_behavior/tutorials/begginer/begginer_go_corner.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp

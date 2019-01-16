@@ -41,6 +41,7 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
+#include <robot_behavior/tutorials/begginer/begginer_go_corner.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -415,6 +416,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Example* example = new Robot_behavior::Example(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(example);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer_go_corner", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_go_corner* begginer_go_corner = new Robot_behavior::Begginer_go_corner(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(begginer_go_corner);
                 }, false // we don't want to define a goal here !
             )
         )
