@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__BEGINNER_GO_TO_BALL__H__
-#define __ROBOT_BEHAVIOR__BEGINNER_GO_TO_BALL__H__
+#ifndef __ROBOT_BEHAVIOR__BEGINNER_GOTO_POSITION__H__
+#define __ROBOT_BEHAVIOR__BEGINNER_GOTO_POSITION__H__
 
 #include "robot_behavior.h"
 #include "factory.h"
