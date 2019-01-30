@@ -42,7 +42,8 @@
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
 #include <robot_behavior/tutorials/begginer/begginer_go_corner.h>
-#include <robot_behavior/tutorials/begginer/begginer_striker.h>
+#include <robot_behavior/tutorials/intermediate/striker.h>
+#include <robot_behavior/tutorials/intermediate/prepare_strike.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -433,12 +434,23 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
-        "Begginer_striker", std::shared_ptr<Strategy::Strategy>(
+        "Intermediate_striker", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Begginer_striker* begginer_striker = new Robot_behavior::Begginer_striker(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(begginer_striker);
+                    Robot_behavior::Intermediate_striker* striker = new Robot_behavior::Intermediate_striker(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Intermediate_prepare_to_strike", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Prepare_strike* Prepare_strike = new Robot_behavior::Prepare_strike(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(Prepare_strike);
                 }, false // we don't want to define a goal here !
             )
         )

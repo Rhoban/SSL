@@ -60,8 +60,9 @@ set (SOURCES
     robot_behavior/wait_pass.cpp
     robot_behavior/slow_striker.cpp
     robot_behavior/test_infra.cpp
+    robot_behavior/tutorials/intermediate/prepare_strike.cpp
     robot_behavior/tutorials/begginer/begginer_go_corner.cpp
-    robot_behavior/tutorials/begginer/begginer_striker.cpp
+    robot_behavior/tutorials/intermediate/striker.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp
