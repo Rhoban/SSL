@@ -64,7 +64,9 @@ void GameInformations::get_robot_in_line(
     const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team, double distance,
     std::vector<int> & result
 ) const{
-    assert(norm_square(p1 - p2) != 0);
+    if(norm_square(p1 - p2) == 0) {
+        return;
+    }
 
     for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
         const Ai::Robot& robot = get_robot(i, team);
@@ -151,79 +153,20 @@ std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move(
     return results;
 }
 
-
-int GameInformations::get_nearest_ball() const{
-    int id = -1;
-    double distance_max = 666;
-    for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
-      const Ai::Robot & robot = get_robot( i,  Vision::Team::Ally );
-      if(robot.is_present_in_vision()){
-        const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
-        Vector2d ball_robot = robot_position - ball_position();
-
-        double distance = ball_robot.norm();
-        if (distance < distance_max) {
-          distance_max = distance;
-          id = i;
-        }
-      }
-    }
-    for (size_t i = 8; i <= 15; i++) {
-      const Ai::Robot & robot = get_robot( i-8,  Vision::Team::Opponent );
-      if(robot.is_present_in_vision()){
-        const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
-#if 0
-        Vector2d ball_robot = robot_position - ball_position();
-
-        double distance = ball_robot.norm();
-#endif
-        double distance = robot_position.getDist(ball_position());
-        if (distance < distance_max) {
-          distance_max = distance;
-          id = i;
-        }
-      }
-    }
-    return id;
-}
-
-int GameInformations::get_nearest_ball( Vision::Team team ) const{
-#if 0
-    int id = -1;
-    double distance_max = 666;
-    for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
-      const Ai::Robot & robot = get_robot( i,  team );
-      if(robot.is_present_in_vision()){
-        const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
-        Vector2d ball_robot = robot_position - ball_position();
-
-        double distance = ball_robot.norm();
-        if (distance < distance_max) {
-          distance_max = distance;
-          id = i;
-        }
-      }
-    }
-    return id;
-#endif
-    return get_nearest_point(team, ball_position());
+int GameInformations::get_shirt_number_of_closest_robot_to_the_ball( Vision::Team team ) const{
+    return get_shirt_number_of_closest_robot(team, ball_position());
 }
 
 
-int GameInformations::get_nearest_point(Vision::Team team, rhoban_geometry::Point point) const{
+int GameInformations::get_shirt_number_of_closest_robot(Vision::Team team, rhoban_geometry::Point point) const{
     int id = -1;
-    double distance_max = 666;
-    for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
+    double distance_max = -1;
+    for (int i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++) {
       const Ai::Robot & robot = get_robot( i,  team );
       if(robot.is_present_in_vision()){
         const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time() );
-#if 0
-        Vector2d ball_robot = robot_position - point;
-
-        double distance = ball_robot.norm();
-#endif
-        double distance = robot_position.getDist(ball_position());
-        if (distance < distance_max) {
+        double distance = robot_position.getDist(point);
+        if (id == -1 or distance < distance_max) {
           distance_max = distance;
           id = i;
         }
@@ -332,7 +275,7 @@ double GameInformations::field_width() const{
  return ai_data.field.fieldWidth;
 }
 
-double GameInformations::field_length() const{
+double GameInformations::field_height() const{
  return ai_data.field.fieldLength;
 }
 
@@ -385,7 +328,7 @@ double GameInformations::penalty_area_width() const{
     return ai_data.field.penaltyAreaWidth;
 }
 
-double GameInformations::penalty_area_length() const {
+double GameInformations::penalty_area_height() const {
     return ai_data.field.penaltyAreaDepth;
 }
 

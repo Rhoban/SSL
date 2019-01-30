@@ -39,7 +39,7 @@ class GameInformations {
 
     /**************************  Ball INFORMATIONS ***************************/
     /**
-     * @brief returns the reference on the ball.
+     * @brief returns the ball.
      * @return a ball.
      */
     const Ai::Ball & ball() const ;
@@ -99,7 +99,7 @@ class GameInformations {
     rhoban_geometry::Point opponent_corner_left() const ;
     /**
      * @brief returns an array which contains the center position
-     * of the four the field's quarter.
+     * of the four field's quarter.
      * @return a point
      */
     std::vector<rhoban_geometry::Point> center_quarter_field() const ;
@@ -120,11 +120,11 @@ class GameInformations {
      */
     double field_width() const;
     /**
-     * @brief returns field's length.
+     * @brief returns field's height.
      * the length correspond to the y axis
      * @return length in meter
      */
-    double field_length() const;
+    double field_height() const;
     /**
      * @brief returns penalty area's width.
      * the width correspond to the x axis
@@ -132,11 +132,11 @@ class GameInformations {
      */
     double penalty_area_width() const;
     /**
-     * @brief returns penalty area's length.
+     * @brief returns penalty area's height.
      * the length correspond to the y axis
      * @return length in meter
      */
-    double penalty_area_length() const;
+    double penalty_area_height() const;
     /**
      * @brief returns the South West point of the field.
      * @return a point
@@ -160,7 +160,7 @@ class GameInformations {
 
     /*************************  Robot INFORMATIONS ***************************/
     /**
-     * @brief returns the robot's reference whose robot's number is given in parameter.
+     * @brief returns the robot's whose robot's number is given in parameter.
      *
      * Robot have two type of identification number: its number and its ID.
      * The robot's number is the same concept as a foot player's shirt number.
@@ -197,10 +197,13 @@ class GameInformations {
      */
     bool infra_red(  int robot_number, Vision::Team team = Vision::Team::Ally ) const;
     /**
-     * @brief With p1 and p2 given in parameter we create a line L.
-     * We store in result given in parameter all robot's number in the team
-     * given in parameter that follow this constraint :
-     *      dist(L, robot's center) <= distance (given in parameter).
+     * @brief Computes all the robots of a given team at a distance `distance` of the line
+     * ( `P1`, `P2` ).
+     *
+     * Those robot shirt numbers are stored in `result`.
+     *
+     * If `P1` == `P2` this function returns an empty list.
+     *
      * @param p1
      * a point
      * @param p2
@@ -219,6 +222,8 @@ class GameInformations {
     /**
      * @brief same as void get_robot_in_line() but returns the result
      * instead of storing it in a variable.
+     *
+     * If `P1` == `P2` this function returns an empty list.
      * @param p1
      * a point
      * @param p2
@@ -253,7 +258,7 @@ class GameInformations {
      * @return robot's number (-1 if not found)
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
-    int get_nearest_point( Vision::Team team, rhoban_geometry::Point point ) const ;
+    int get_shirt_number_of_closest_robot( Vision::Team team, rhoban_geometry::Point point ) const ;
     /**
      * @brief returns the robot's number which is closest robot to the ball
      * from the team given in parameter.
@@ -262,14 +267,7 @@ class GameInformations {
      * @return robot' index 's number(-1 if not found)
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
-    int get_nearest_ball( Vision::Team team ) const ;
-    /**
-     * @brief returns the robot's number which is closest to the ball.
-     * It doesn"t consider any team
-     * @return robot index ( -1 if not found)
-     * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
-     */
-    int get_nearest_ball() const ;
+    int get_shirt_number_of_closest_robot_to_the_ball( Vision::Team team ) const ;
 
     /**************************  Algos INFORMATIONS *************************/
     /**

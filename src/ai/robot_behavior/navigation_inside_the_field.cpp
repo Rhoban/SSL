@@ -131,7 +131,7 @@ void Navigation_inside_the_field::update_control(
                     deviation_position
                 );
                 if( not(cropped_field.is_inside( deviation_position)) ){
-                    deviation_position = deviation_position + Vector2d( penalty_area_length() + error, 0.0 );
+                    deviation_position = deviation_position + Vector2d( penalty_area_height() + error, 0.0 );
                 }
             }else if( opponent_penalty.is_inside( deviation_position ) ){
                 opponent_penalty_large.closest_segment_intersection(
@@ -139,7 +139,7 @@ void Navigation_inside_the_field::update_control(
                     deviation_position
                 );
                 if( not(cropped_field.is_inside( deviation_position)) ){
-                    deviation_position = deviation_position - Vector2d( penalty_area_length() + error, 0.0 );
+                    deviation_position = deviation_position - Vector2d( penalty_area_height() + error, 0.0 );
                 }
             }
         }

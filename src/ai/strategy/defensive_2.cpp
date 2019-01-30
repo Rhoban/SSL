@@ -111,7 +111,7 @@ void Defensive2::assign_behavior_to_robots(
 
 
 
-  int nearest_ballID = get_nearest_ball( Vision::Team::Ally );
+  int nearest_ballID = get_shirt_number_of_closest_robot_to_the_ball( Vision::Team::Ally );
 
   if ( nearest_ballID == robotID1 ) {
     assign_behavior( robotID1, degageur1 );
