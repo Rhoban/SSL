@@ -163,7 +163,7 @@ class GameInformations {
      * @brief returns the robot's reference whose robot's number is given in parameter.
      *
      * Robot have two type of identification number: its number and its ID.
-     * The robot's number is the same concept as a foot player's jersey number.
+     * The robot's number is the same concept as a foot player's shirt number.
      * Usually during a game, there are two robots with the same number, one in the ally team
      * and another one in the oponnent team.
      * All the robots have differents ids. (there is a bijection between ids).
@@ -322,7 +322,7 @@ class GameInformations {
      * @return a robot's number
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
-    int number_of_threat_max( Vision::Team team ) const;
+    int shirt_number_of_threat_max( Vision::Team team ) const;
     /**
      * @brief returns the robot's number of the second biggest threat belonging
      * to the team given in parameter.
@@ -334,7 +334,7 @@ class GameInformations {
      * @return a robot's number
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
-    int number_of_threat_max_2( Vision::Team team ) const; // second threat max
+    int shirt_number_of_threat_max_2( Vision::Team team ) const; // second threat max
 };
 
 

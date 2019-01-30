@@ -255,7 +255,7 @@ std::vector<double> GameInformations::threat( Vision::Team team ) const{
   return v_threat;
 }
 
-int GameInformations::number_of_threat_max( Vision::Team team ) const{
+int GameInformations::shirt_number_of_threat_max( Vision::Team team ) const{
   int id = -1;
   double threat_max = -1;
 
@@ -270,7 +270,7 @@ int GameInformations::number_of_threat_max( Vision::Team team ) const{
   return id;
 }
 
-int GameInformations::number_of_threat_max_2( Vision::Team team ) const{ // second threat max
+int GameInformations::shirt_number_of_threat_max_2( Vision::Team team ) const{ // second threat max
   int id_1 = -1;
   int id_2 = -1;
   double threat_max = -1;
