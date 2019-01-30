@@ -152,7 +152,7 @@ std::list<
             0.0
         ),
         std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            oponent_goal_center(),
+            opponent_goal_center(),
             0.0
         )
     };
