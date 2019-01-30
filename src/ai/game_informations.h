@@ -244,7 +244,7 @@ class GameInformations {
      * @param p1
      * @param p2
      * @param distance (usually the robot radius)
-     * @return a vector of robot's number
+     * @return a vector of robot's shirt number
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     std::vector<int> get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
@@ -255,16 +255,16 @@ class GameInformations {
      * given in parameter in the team given in parameter.
      * @param team
      * ( Vision::Team::Opponent or Vision::Team::Ally)
-     * @return robot's number (-1 if not found)
+     * @return robot's shirt number (-1 if not found)
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     int get_shirt_number_of_closest_robot( Vision::Team team, rhoban_geometry::Point point ) const ;
     /**
-     * @brief returns the robot's number which is closest robot to the ball
+     * @brief returns the robot's shirt number which is closest robot to the ball
      * from the team given in parameter.
      * @param team
      * ( Vision::Team::Opponent or Vision::Team::Ally)
-     * @return robot' index 's number(-1 if not found)
+     * @return robot's shirt number(-1 if not found)
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     int get_shirt_number_of_closest_robot_to_the_ball( Vision::Team team ) const ;
@@ -288,7 +288,7 @@ class GameInformations {
             const rhoban_geometry::Point point,
             const rhoban_geometry::Point goal = rhoban_geometry::Point(66,66) ) const ;
     /**
-     * @brief returns the distance between a robot with the number given in parameter
+     * @brief returns the distance between a robot with the shirt number given in parameter
      * and the ally goal center.
      * @note Defense algorithm
      * @param robot_number
@@ -317,7 +317,7 @@ class GameInformations {
      * It corresponds to the closest opposant's robot to the ally's goal center.
      * @note Defense algorithm
      * @param team
-     * @return a robot's number
+     * @return a robot's shirt number
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     int shirt_number_of_threat_max( Vision::Team team ) const;
@@ -329,7 +329,7 @@ class GameInformations {
      * center.
      * @note Defense algorithm
      * @param team
-     * @return a robot's number
+     * @return a robot's shirt number
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
      */
     int shirt_number_of_threat_max_2( Vision::Team team ) const; // second threat max
