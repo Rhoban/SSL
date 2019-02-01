@@ -41,7 +41,7 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
-#include <robot_behavior/tutorials/begginer/begginer_go_corner.h>
+#include <robot_behavior/tutorials/begginer/go_corner.h>
 #include <robot_behavior/tutorials/begginer/goalie.h>
 #include <robot_behavior/tutorials/begginer/defensor.h>
 #include <robot_behavior/tutorials/intermediate/striker.h>

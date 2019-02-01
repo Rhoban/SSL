@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
     
-    Copyright 2018 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "begginer_go_corner.h"
+#include "go_corner.h"
 #include <math/vector2d.h>
 
 namespace RhobanSSL {
