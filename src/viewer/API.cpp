@@ -1,7 +1,7 @@
 #include <QThread>
 #include <unistd.h>
 #include "API.h"
-#include <robot_behavior/robot_behavior.h>
+#include <control/control.h>
 #include <annotations/Annotations.h>
 #include <manager/Manual.h>
 #include <com/AICommanderReal.h>
@@ -38,13 +38,13 @@ API::API(
     RhobanSSL::Shared_data shared;
     data >> shared;
     for (int id=0; id<NB_ROBOT_ELEC; id++) {
-        RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+        Control &control = shared.final_control_for_robots[id].control;
 
         control.ignore = true;
         control.charge = false;
         control.active = false;
-        control.velocity_translation = Vector2d(0, 0);
-        control.velocity_rotation = ContinuousAngle(0);
+        control.linear_velocity = Vector2d(0, 0);
+        control.angular_velocity = ContinuousAngle(0);
         control.spin = false;
         shared.final_control_for_robots[id].is_manually_controled_by_viewer = true;
     }
@@ -270,7 +270,7 @@ void API::enableRobot(int id, bool enabled)
     if (id >= 0 && id < NB_ROBOT_ELEC) {
         RhobanSSL::Shared_data shared;
         data >> shared;
-        RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+        Control &control = shared.final_control_for_robots[id].control;
 
         control.ignore = !enabled;
 
@@ -304,7 +304,7 @@ void API::activeRobot(int id, bool active)
     if (id >= 0 && id < NB_ROBOT_ELEC) {
         RhobanSSL::Shared_data shared;
         data >> shared;
-        RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+        Control &control = shared.final_control_for_robots[id].control;
 
         control.active = active;
         data << shared;
@@ -319,11 +319,11 @@ void API::robotCommand(int id,
 
     RhobanSSL::Shared_data shared;
     data >> shared;
-    RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+    Control &control = shared.final_control_for_robots[id].control;
 
     if (!control.ignore) {
-        control.velocity_translation = Vector2d(xSpeed, ySpeed);
-        control.velocity_rotation = ContinuousAngle(thetaSpeed);
+        control.linear_velocity = Vector2d(xSpeed, ySpeed);
+        control.angular_velocity = ContinuousAngle(thetaSpeed);
     }
 
     data << shared;
@@ -335,7 +335,7 @@ void API::robotCharge(int id, bool charge)
     mutex.lock();
     RhobanSSL::Shared_data shared;
     data >> shared;
-    RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+    Control &control = shared.final_control_for_robots[id].control;
     if (!control.ignore) {
         control.charge = charge;
     }
@@ -348,7 +348,7 @@ void API::kick(int id, int kick, float power)
     mutex.lock();
     RhobanSSL::Shared_data shared;
     data >> shared;
-    RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+    Control &control = shared.final_control_for_robots[id].control;
 
     if (!control.ignore) {
         control.kick = false;
@@ -371,7 +371,7 @@ void API::setSpin(int id, bool spin)
     mutex.lock();
     RhobanSSL::Shared_data shared;
     data >> shared;
-    RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+    Control &control = shared.final_control_for_robots[id].control;
 
     if (!control.ignore) {
         control.spin = spin;
@@ -449,7 +449,7 @@ void API::scan()
     data << shared;
 
     for (int id=0; id<NB_ROBOT_ELEC; id++) {
-        RhobanSSL::Control &control = shared.final_control_for_robots[id].control;
+        Control &control = shared.final_control_for_robots[id].control;
         if (simulation) {
             if (id <= 7) {
                 control.ignore = false;
@@ -536,9 +536,9 @@ void API::joystickThreadExec()
             // Updating control
             RhobanSSL::Shared_data shared;
             data >> shared;
-            RhobanSSL::Control &control = shared.final_control_for_robots[joystickRobot].control;
-            control.velocity_translation = Vector2d(xSpeed, ySpeed);
-            control.velocity_rotation = ContinuousAngle(thetaSpeed);
+            Control &control = shared.final_control_for_robots[joystickRobot].control;
+            control.linear_velocity = Vector2d(xSpeed, ySpeed);
+            control.angular_velocity = ContinuousAngle(thetaSpeed);
             control.spin = spin;
             control.charge = charge;
             control.kick = false;

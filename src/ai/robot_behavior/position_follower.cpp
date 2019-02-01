@@ -72,7 +72,7 @@ Control PositionFollower::control() const {
         robot_linear_velocity, robot_angular_velocity
     );
 
-    //DEBUG( "CONTROL - " << ai_data.time << " - " << ctrl.velocity_translation );
+    //DEBUG( "CONTROL - " << ai_data.time << " - " << ctrl.linear_velocity );
     return ctrl;
 }
 
@@ -107,7 +107,7 @@ RhobanSSLAnnotation::Annotations PositionFollower::get_annotations() const {
     );
     Control ctrl = control();
     annotations.addArrow(
-        linear_position(), linear_position() + ctrl.velocity_translation
+        linear_position(), linear_position() + ctrl.linear_velocity
         , "orange", false
     );
     return annotations;

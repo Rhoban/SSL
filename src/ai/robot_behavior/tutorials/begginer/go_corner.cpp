@@ -41,8 +41,8 @@ void Begginer_go_corner::update(
     
     annotations.clear();
     
-    // Set the robot_position to the right corner. (Use oponent_corner_left() for the left corner).
-    const rhoban_geometry::Point & robot_position = oponent_corner_right();
+    // Set the robot_position to the right corner. (Use opponent_corner_left() for the left corner).
+    const rhoban_geometry::Point & robot_position = opponent_corner_right();
 
     follower->set_following_position( robot_position, 0 ); 
     follower->update(time, robot, ball);

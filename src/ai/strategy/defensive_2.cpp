@@ -85,8 +85,8 @@ void Defensive2::assign_behavior_to_robots(
   //we assign now all the other behavior
   assert( get_player_ids().size() == 2 );
 
-  int id_to_obstruct1 = id_threat_max( Vision::Team::Opponent );
-  int id_to_obstruct2 = id_threat_max_2( Vision::Team::Opponent );
+  int id_to_obstruct1 = shirt_number_of_threat_max( Vision::Team::Opponent );
+  int id_to_obstruct2 = shirt_number_of_threat_max_2( Vision::Team::Opponent );
   int robotID1 = player_id(0);
   int robotID2 = player_id(1);
 
@@ -111,7 +111,7 @@ void Defensive2::assign_behavior_to_robots(
 
 
 
-  int nearest_ballID = get_nearest_ball( Vision::Team::Ally );
+  int nearest_ballID = get_shirt_number_of_closest_robot_to_the_ball( Vision::Team::Ally );
 
   if ( nearest_ballID == robotID1 ) {
     assign_behavior( robotID1, degageur1 );

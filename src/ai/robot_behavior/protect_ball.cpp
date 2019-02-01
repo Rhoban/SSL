@@ -48,9 +48,9 @@ void ProtectBall::update(
     // annotations.clear();
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
-    // const rhoban_geometry::Point & oponent_goal_point = oponent_goal_center();
+    // const rhoban_geometry::Point & opponent_goal_point = opponent_goal_center();
 
-    // Vector2d ball_goal_vector = oponent_goal_point - ball_position();
+    // Vector2d ball_goal_vector = opponent_goal_point - ball_position();
     Vector2d ball_robot_vector = ball_position() - robot_position;
     // Vector2d target_position;
 

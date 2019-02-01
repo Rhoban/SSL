@@ -39,7 +39,7 @@ void  Intermediate_Prepare_strike::update(
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     
-    Vector2d ball_goal_vector = oponent_goal_center() - ball_position();
+    Vector2d ball_goal_vector = opponent_goal_center() - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
     
     double dist_ball_robot = ball_robot_vector.norm();
@@ -50,7 +50,7 @@ void  Intermediate_Prepare_strike::update(
     double target_radius_from_ball;
     double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_goal_vector );
     
-    // If the robot is between the x-axis of the ball and the x-axis of the oponent_goal_center, the scalar is lesser than to 0. 
+    // If the robot is between the x-axis of the ball and the x-axis of the opponent_goal_center, the scalar is lesser than to 0. 
     // If the robot is behind the x-axis of the ball, the scalar is greater than to 0.
     
     if ( scalar_ball_robot < 0 ) {

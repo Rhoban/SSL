@@ -42,7 +42,7 @@ void Begginer_defensor::update(
     Vector2d ball_goal_vector = ally_goal_center() - ball_position();
     ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
 
-    // Put the robot at 0.5 meters on the ball on the vector oponent_goal and ball.
+    // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
     rhoban_geometry::Point target_position = ball_position() + ball_goal_vector * 0.5;
     double target_rotation = detail::vec2angle(ball_goal_vector);
 

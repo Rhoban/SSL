@@ -65,6 +65,7 @@ set (SOURCES
     robot_behavior/tutorials/begginer/defensor.cpp
     robot_behavior/tutorials/intermediate/prepare_strike.cpp
     robot_behavior/tutorials/intermediate/striker.cpp
+    robot_behavior/test_relative_velocity_consign.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp
@@ -104,6 +105,7 @@ set (SOURCES
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
     control/pid.cpp
+    control/control.cpp
     physic/movement_predicted_by_integration.cpp
     physic/movement_with_no_prediction.cpp
     physic/movement_on_new_frame.cpp
@@ -121,6 +123,7 @@ set (SOURCES
     math/frame_changement.cpp
     math/intersection.cpp
     math/box.cpp
+    math/lines.cpp
     core/export_to_plot.cpp
     core/logger.cpp
     referee/print_protobuf_referee.cpp
@@ -152,6 +155,7 @@ if(CATKIN_ENABLE_TESTING)
     math/test_circular_vector.cpp
     math/test_frame_changement.cpp
     math/test_matching.cpp
+    math/test_lines.cpp
     physic/test_MovementSample.cpp
     physic/test_movement_with_no_prediction.cpp
     physic/test_movement_predicted_by_integration.cpp

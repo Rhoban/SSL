@@ -17,39 +17,23 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__MANUAL__H__
-#define __MANAGER__MANUAL__H__
+#ifndef __LINES__H__
+#define __LINES__H__
 
-#include <manager/Manager.h>
+#include <rhoban_geometry/point.h>
+#include <rhoban_geometry/segment.h>
+#include <vector>
 
-namespace RhobanSSL {
-namespace Manager {
+namespace rhoban_geometry {
 
-class Manual : public Manager {
-    private:
+    double distance_from_point_to_line(
+        const rhoban_geometry::Point & point,
+        const rhoban_geometry::Point & point_line_1,
+        const rhoban_geometry::Point & point_line_2
+    );    
 
-    bool strategy_was_assigned;
-
-    Ai::Team team_color;
-    bool goal_to_positive_axis;
-    int ally_goalie_id;
-    int opponent_goalie_id;
-
-    void assign_point_of_view_and_goalie();
-
-
-    public:
-    Manual( Ai::AiData & ai_data );
-
-    void set_team_color( Ai::Team team_color );
-    void define_goal_to_positive_axis(bool value = true);
-
-    void update(double time);
-
-    virtual ~Manual();
-};
-
-};
-};
+     
+}
 
 #endif
+

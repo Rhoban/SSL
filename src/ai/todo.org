@@ -1,0 +1,64 @@
+* RobotBehavior
+** faire une documentation
+** Beginner
+*** DONE Go to position
+    CLOSED: [2019-02-01 ven. 18:28]
+*** DONE go to center
+    CLOSED: [2019-02-01 ven. 18:28]
+*** DONE rotation
+    CLOSED: [2019-02-01 ven. 18:28]
+*** DONE go corner
+    CLOSED: [2019-02-01 ven. 18:29]
+*** DONE Prepare to strike
+    CLOSED: [2019-02-01 ven. 18:29]
+*** Regarder la balle
+*** Regarde une direction donnée
+*** Regarder un robot
+*** DONE goalie
+    CLOSED: [2019-02-01 ven. 18:28]
+*** Dessiner des annotations sur le viewer
+**** Dessiner la position de la balle
+**** récupèrel le position du robot
+**** determiner le robot qui possède la balle
+**** determiner le robot le plus proche de la balle
+     - affiche aussi si c'est ami ou un ennemi
+**** récuperer la postion de tous les ennemis/allié
+** medium
+*** Tirer dans la balle 
+**** en ligne droite 
+**** faire un pas de coté avant de tirer 
+**** prendre de l'élan pour faire un tir
+**** tirer en lobe
+**** tirer selon une direction
+*** suivre un robot (version simple)
+*** faire obstruction : 
+**** se mettre entre lui et la balle
+**** se mettre entre la balle et le but
+**** se mettre entre deux robots
+**** se mettre entre un robot avec la balle et un autre
+*** Dégagement
+**** degager une balle (en urgence)
+**** dégager vers le but adverse
+**** dégager en touche
+**** dégager le long de la touche
+** Advanced
+*** dribler pour attraper une balle
+*** pousser un robot
+*** suivre un robot (en anticipant les mouvements du robot)
+*** defenseurs
+*** attaquants
+*** envoyer la balle à une position donnée
+*** Faire des passes 
+**** envoyer la balle
+**** receptionner la balle
+* Strategies
+*** Dessiner des annotations sur le viewer
+**** chercher l'allié le plus proche de la balle
+**** chercher l'ennemi le plus proche de la balle
+**** chercher des robots proches d'une ligne 
+**** chercher des robots proches du but
+* Managers
+
+
+
+

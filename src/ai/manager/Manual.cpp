@@ -46,6 +46,7 @@
 #include <robot_behavior/tutorials/begginer/defensor.h>
 #include <robot_behavior/tutorials/intermediate/striker.h>
 #include <robot_behavior/tutorials/intermediate/prepare_strike.h>
+#include <robot_behavior/test_relative_velocity_consign.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -55,7 +56,7 @@ Manual::Manual( Ai::AiData & ai_data ):
     team_color(Ai::Team::Unknown),
     goal_to_positive_axis(true),
     ally_goalie_id(0),
-    oponnent_goalie_id(0)
+    opponent_goalie_id(0)
 {
 
     change_team_and_point_of_view(
@@ -668,6 +669,45 @@ Manual::Manual( Ai::AiData & ai_data ):
             )
         )
     );
+
+    register_strategy(
+        "test_angular_only_relative_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_relative_velocity_consign* p = Robot_behavior::Test_relative_velocity_consign::get_movement_angular_velocity_only(ai_data, M_PI/2);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+    register_strategy(
+        "test_linear_only_relative_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_relative_velocity_consign* p = Robot_behavior::Test_relative_velocity_consign::get_movement_linear_velocity_only(ai_data, Vector2d(0,1));
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+    register_strategy(
+        "test_linear_and_angular_relative_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_relative_velocity_consign* p = Robot_behavior::Test_relative_velocity_consign::get_movement_angular_and_linear_velocity(ai_data, Vector2d(0,1), M_PI*7/3);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+
+
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
             new Strategy::Halt(ai_data)

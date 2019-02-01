@@ -54,8 +54,8 @@ void Test_velocity_consign::update(
 
 Control Test_velocity_consign::control() const {
     Control ctrl;
-    ctrl.velocity_translation = linear_velocity;
-    ctrl.velocity_rotation = angular_velocity;
+    ctrl.linear_velocity = linear_velocity;
+    ctrl.angular_velocity = angular_velocity;
     return ctrl; 
 }
 
