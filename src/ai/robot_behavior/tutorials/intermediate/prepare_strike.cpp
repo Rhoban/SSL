@@ -22,7 +22,7 @@
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-Prepare_strike::Prepare_strike(
+ Intermediate_Prepare_strike:: Intermediate_Prepare_strike(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
@@ -30,7 +30,7 @@ Prepare_strike::Prepare_strike(
 {
 }
 
-void Prepare_strike::update(
+void  Intermediate_Prepare_strike::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
@@ -69,16 +69,16 @@ void Prepare_strike::update(
 
 }
 
-Control Prepare_strike::control() const {
+Control  Intermediate_Prepare_strike::control() const {
     Control ctrl = follower->control();
     return ctrl; 
 }
 
-Prepare_strike::~Prepare_strike(){
+ Intermediate_Prepare_strike::~ Intermediate_Prepare_strike(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Prepare_strike::get_annotations() const {
+RhobanSSLAnnotation::Annotations  Intermediate_Prepare_strike::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     annotations.addAnnotations( follower->get_annotations() );

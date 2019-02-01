@@ -425,18 +425,18 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
-        "Begginer_go_corner", std::shared_ptr<Strategy::Strategy>(
+        "Begginer Go corner", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Begginer_go_corner* begginer_go_corner = new Robot_behavior::Begginer_go_corner(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(begginer_go_corner);
+                    Robot_behavior::Begginer_go_corner* go_corner = new Robot_behavior::Begginer_go_corner(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(go_corner);
                 }, false // we don't want to define a goal here !
             )
         )
     );
     register_strategy(
-        "Begginer_goalie", std::shared_ptr<Strategy::Strategy>(
+        "Begginer Goalie", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
@@ -447,18 +447,18 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
-        "Begginer_Defensor", std::shared_ptr<Strategy::Strategy>(
+        "Begginer Defensor", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Begginer_defensor* striker = new Robot_behavior::Begginer_defensor(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
+                    Robot_behavior::Begginer_defensor* defensor = new Robot_behavior::Begginer_defensor(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
                 }, false // we don't want to define a goal here !
             )
         )
     );
     register_strategy(
-        "Intermediate_striker", std::shared_ptr<Strategy::Strategy>(
+        "Intermediate Striker", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
@@ -469,12 +469,12 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
-        "Intermediate_prepare_to_strike", std::shared_ptr<Strategy::Strategy>(
+        "Intermediate Prepare to strike", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Prepare_strike* Prepare_strike = new Robot_behavior::Prepare_strike(ai_data);
-                    return std::shared_ptr<Robot_behavior::RobotBehavior>(Prepare_strike);
+                    Robot_behavior::Intermediate_Prepare_strike* prepare_strike = new Robot_behavior::Intermediate_Prepare_strike(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(prepare_strike);
                 }, false // we don't want to define a goal here !
             )
         )

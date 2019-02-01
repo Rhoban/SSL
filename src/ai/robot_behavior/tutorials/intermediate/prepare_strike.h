@@ -30,13 +30,13 @@ namespace Robot_behavior {
 /** Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
-class Prepare_strike : public RobotBehavior  {
+class Intermediate_Prepare_strike : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
 
     public:
-    Prepare_strike(Ai::AiData& ai_data);
+    Intermediate_Prepare_strike(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -48,7 +48,7 @@ class Prepare_strike : public RobotBehavior  {
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Prepare_strike();
+	virtual ~Intermediate_Prepare_strike();
 };
 
 };
