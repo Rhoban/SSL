@@ -42,6 +42,7 @@
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
 #include <robot_behavior/tutorials/begginer/begginer_go_corner.h>
+#include <robot_behavior/tutorials/begginer/goalie.h>
 #include <robot_behavior/tutorials/intermediate/striker.h>
 #include <robot_behavior/tutorials/intermediate/prepare_strike.h>
 
@@ -429,6 +430,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Begginer_go_corner* begginer_go_corner = new Robot_behavior::Begginer_go_corner(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(begginer_go_corner);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer_goalie", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_goalie* goalie = new Robot_behavior::Begginer_goalie(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
                 }, false // we don't want to define a goal here !
             )
         )
