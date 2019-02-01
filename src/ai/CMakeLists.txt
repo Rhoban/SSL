@@ -64,6 +64,7 @@ set (SOURCES
     robot_behavior/tutorials/intermediate/prepare_strike.cpp
     robot_behavior/tutorials/begginer/begginer_go_corner.cpp
     robot_behavior/tutorials/intermediate/striker.cpp
+    robot_behavior/tutorials/begginer/defensor.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp
