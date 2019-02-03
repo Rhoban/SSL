@@ -40,6 +40,8 @@ void Begginer_annotations_ball_position::update(
     annotations.clear();
     // Add an annotations
     annotations.addCross(ball_position(), "red", false);
+    
+    follower->update(time, robot, ball);
 }
 
 Control Begginer_annotations_ball_position::control() const {
