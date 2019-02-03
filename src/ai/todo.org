@@ -17,8 +17,8 @@
 *** DONE goalie
     CLOSED: [2019-02-01 ven. 18:28]
 *** Dessiner des annotations sur le viewer
-**** Dessiner la position de la balle
-**** récupèrel le position du robot
+**** DONE Dessiner la position de la balle
+**** récupèrer le position du robot
 **** determiner le robot qui possède la balle
 **** determiner le robot le plus proche de la balle
      - affiche aussi si c'est ami ou un ennemi

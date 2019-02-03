@@ -44,6 +44,7 @@
 #include <robot_behavior/tutorials/begginer/go_corner.h>
 #include <robot_behavior/tutorials/begginer/goalie.h>
 #include <robot_behavior/tutorials/begginer/defensor.h>
+#include <robot_behavior/tutorials/begginer/annotations_ball_position.h>
 #include <robot_behavior/tutorials/intermediate/striker.h>
 #include <robot_behavior/tutorials/intermediate/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
@@ -454,6 +455,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Begginer_defensor* defensor = new Robot_behavior::Begginer_defensor(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer Annotations - Ball position", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_annotations_ball_position* ball_position = new Robot_behavior::Begginer_annotations_ball_position(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(ball_position);
                 }, false // we don't want to define a goal here !
             )
         )
