@@ -30,7 +30,6 @@ namespace Robot_behavior {
 /** Tutorial class to show how to move a robot in the side corner. */
 class Begginer_annotations_ball_position : public RobotBehavior  {
     private:
-	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
 
     public:

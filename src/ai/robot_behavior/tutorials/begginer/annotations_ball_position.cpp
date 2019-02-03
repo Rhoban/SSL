@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
     
-    Copyright 2018 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -25,8 +25,7 @@ namespace Robot_behavior {
 Begginer_annotations_ball_position::Begginer_annotations_ball_position(
     Ai::AiData & ai_data
 ):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+    RobotBehavior(ai_data)
 {
 }
 
@@ -35,28 +34,23 @@ void Begginer_annotations_ball_position::update(
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
-    RobotBehavior::update_time_and_position( time, robot, ball );
+    // Do not remove this line.
+    RobotBehavior::update_time_and_position(time, robot, ball);
     // Clear all annotations write before
     annotations.clear();
     // Add an annotations
     annotations.addCross(ball_position(), "red", false);
-    
-    follower->update(time, robot, ball);
 }
 
 Control Begginer_annotations_ball_position::control() const {
-    Control ctrl = follower->control();
-    return ctrl; 
+    return Control();
 }
 
-Begginer_annotations_ball_position::~Begginer_annotations_ball_position(){
-    delete follower;
-}
+Begginer_annotations_ball_position::~Begginer_annotations_ball_position(){}
 
 RhobanSSLAnnotation::Annotations Begginer_annotations_ball_position::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
     return annotations;
 }
 
