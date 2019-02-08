@@ -7,22 +7,25 @@
     CLOSED: [2019-02-01 ven. 18:28]
 *** DONE rotation
     CLOSED: [2019-02-01 ven. 18:28]
-*** DONE go corner
-    CLOSED: [2019-02-01 ven. 18:29]
-*** DONE Prepare to strike
-    CLOSED: [2019-02-01 ven. 18:29]
+*** TODO go corner
+**** TODO [AB] Need review
+*** TODO Prepare to strike
+**** TODO [AB] Need review
 *** TODO Regarder la balle
 **** TODO [AB] Need review
 *** TODO [LB] Regarde une direction donnée
 *** TODO [RPC] Regarder un robot
-*** DONE goalie
-    CLOSED: [2019-02-01 ven. 18:28]
+*** TODO goalie
+**** TODO [AB] Need review
 *** Dessiner des annotations sur le viewer
 **** TODO Dessiner la position de la balle
+***** TODO [AB] Need review
 **** récupèrer le position du robot
 **** TODO determiner le robot qui possède la balle
+***** TODO [AB] Need review
 **** TODO determiner le robot le plus proche de la balle
      - affiche aussi si c'est ami ou un ennemi
+***** TODO [AB] Need review
 **** récuperer la postion de tous les ennemis/allié
 ** medium
 *** Tirer dans la balle 
