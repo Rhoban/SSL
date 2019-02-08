@@ -20,8 +20,8 @@
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GO__CORNER__
 #define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GO__CORNER__
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
