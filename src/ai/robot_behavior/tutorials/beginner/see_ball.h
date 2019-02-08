@@ -17,16 +17,24 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// REVIEW AB : BEGGINER --> BEGINNER 
 #ifndef __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
 #define __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
 
+// REVIEW AB : Mettre des chemins absolus avec <>
 #include "../../robot_behavior.h"
+// REVIEW AB : Mettre des chemins absolus avec <>
 #include "../../factory.h"
+
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
 
+// REVIEW AB : mettre un namespace Beginner 
+
+
+// REVIEW AB : renomer partout Begginer_see_ball à See_ball
 class Begginer_see_ball : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
