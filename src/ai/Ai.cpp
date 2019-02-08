@@ -59,20 +59,20 @@ void AI::limits_velocity( Control & ctrl ) const {
 #if 1
     if( ai_data.constants.translation_velocity_limit > 0.0 ){
         if(
-            ctrl.velocity_translation.norm() >
+            ctrl.linear_velocity.norm() >
             ai_data.constants.translation_velocity_limit
         ){
-            ctrl.velocity_translation *= ai_data.constants.translation_velocity_limit/ctrl.velocity_translation.norm();
+            ctrl.linear_velocity *= ai_data.constants.translation_velocity_limit/ctrl.linear_velocity.norm();
             std::cerr << "AI WARNING : we reached the "
                 "limit translation velocity !" << std::endl;
         }
     }
     if( ai_data.constants.rotation_velocity_limit > 0.0 ){
         if(
-            std::fabs( ctrl.velocity_rotation.value() ) >
+            std::fabs( ctrl.angular_velocity.value() ) >
             ai_data.constants.rotation_velocity_limit
         ){
-            ctrl.velocity_rotation = ai_data.constants.rotation_velocity_limit*sign(ctrl.velocity_rotation.value());
+            ctrl.angular_velocity = ai_data.constants.rotation_velocity_limit*sign(ctrl.angular_velocity.value());
             std::cerr << "AI WARNING : we reached the "
                 "limit rotation velocity !" << std::endl;
         }
@@ -83,7 +83,7 @@ void AI::limits_velocity( Control & ctrl ) const {
 void AI::prevent_collision( int robot_id, Control & ctrl ){
     const Ai::Robot & robot = ai_data.robots.at(Vision::Team::Ally).at(robot_id);
 
-    const Vector2d & ctrl_velocity = ctrl.velocity_translation;
+    const Vector2d & ctrl_velocity = ctrl.linear_velocity;
     Vector2d robot_velocity = robot.get_movement().linear_velocity( ai_data.time );
 
     bool collision_is_detected = false;
@@ -135,7 +135,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
             if( velocity_increase < 0.0 ){
                 velocity_increase = 0.0;
             }
-            ctrl.velocity_translation = robot_velocity * velocity_increase;
+            ctrl.linear_velocity = robot_velocity * velocity_increase;
         }else{
             // We want to go out the blockage situation
         }
@@ -182,7 +182,7 @@ void AI::prevent_collision( int robot_id, Control & ctrl ){
                     DEBUG("Emergency stop -- time_befor_coll " << time_before_collision << ", time_to_top " << time_to_stop );
                 }
                 velocity_increase = 0.0;
-                ctrl.velocity_translation = velocity * velocity_increase;
+                ctrl.linear_velocity = velocity * velocity_increase;
             }
         }
     }
@@ -212,8 +212,8 @@ void AI::send_control( int robot_id, const Control & ctrl ){
 
             commander->set(
                 robot_id, true,
-                ctrl.velocity_translation[0], ctrl.velocity_translation[1],
-                ctrl.velocity_rotation.value(),
+                ctrl.linear_velocity[0], ctrl.linear_velocity[1],
+                ctrl.angular_velocity.value(),
                 kick,
                 ctrl.kickPower,
                 ctrl.spin,
@@ -229,8 +229,8 @@ void AI::prepare_to_send_control( int robot_id, Control & ctrl ){
         debug_mov.insert(
             PositionSample(
                 ai_data.time,
-                vector2point(ctrl.velocity_translation),
-                ctrl.velocity_rotation
+                vector2point(ctrl.linear_velocity),
+                ctrl.angular_velocity
             )
         );
         DEBUG(
@@ -247,7 +247,7 @@ void AI::prepare_to_send_control( int robot_id, Control & ctrl ){
 #endif
 
     prevent_collision( robot_id, ctrl );
-    static_cast<PidControl &>(ctrl) = ctrl.relative_control(
+    ctrl.change_to_relative_control(
         ai_data.robots[Vision::Ally][robot_id].get_movement().angular_position( ai_data.time ), ai_data.dt
     );
     limits_velocity(ctrl);

@@ -90,7 +90,7 @@ class RobotControl {
         ContinuousAngle rotation_acceleration_limit;
 
     public:
-        PidControl limited_control(
+        Control limited_control(
             const Vector2d & robot_position,
             const ContinuousAngle & robot_orientation,
             const Vector2d & robot_linear_velocity,
@@ -107,7 +107,7 @@ class RobotControl {
             double rotation_acceleration_limit
         );
 
-        virtual PidControl no_limited_control() const = 0;
+        virtual Control no_limited_control() const = 0;
 
         /* TODO : write a documentation to explaint that function */
         virtual double get_dt() const = 0;
@@ -116,7 +116,7 @@ class RobotControl {
 
 class RobotControlWithPid : public RobotControl, public PidController {
     public:
-        virtual PidControl no_limited_control() const;
+        virtual Control no_limited_control() const;
 
         virtual double get_dt() const;
 };

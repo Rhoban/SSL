@@ -30,7 +30,7 @@ PredictFutur::PredictFutur(
 ):
     RobotBehavior(ai_data),
     use_custom_vector(false),
-    striking_point( oponent_goal_center() ),
+    striking_point( opponent_goal_center() ),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
 }
@@ -56,7 +56,7 @@ void PredictFutur::update(
     annotations.addCross( robot_position_futur.x, robot_position_futur.y, "blue");
     annotations.addCross( ball_position_futur.x, ball_position_futur.y, "red");
 
-    //rhoban_geometry::Point oponent_goal_point = oponent_goal_center();
+    //rhoban_geometry::Point opponent_goal_point = opponent_goal_center();
     //rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
     //rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
 

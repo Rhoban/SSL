@@ -118,11 +118,11 @@ Patrol* Patrol::two_way_trip_on_border( Ai::AiData& ai_data, bool left ){
     res->set_traject(
        {
            {
-                rhoban_geometry::Point( -res->field_length()/4.0, sign*res->field_width()/4.0 ),
+                rhoban_geometry::Point( -res->field_height()/4.0, sign*res->field_width()/4.0 ),
                 ContinuousAngle(0.0)
             },
             {
-                rhoban_geometry::Point( +res->field_length()/4.0, sign*res->field_width()/4.0 ),
+                rhoban_geometry::Point( +res->field_height()/4.0, sign*res->field_width()/4.0 ),
                 ContinuousAngle(0.0)
             }
        } 
@@ -155,11 +155,11 @@ Patrol* Patrol::two_way_trip_on_width( Ai::AiData& ai_data, bool ally_side ){
     res->set_traject(
        {
             { 
-                 rhoban_geometry::Point( sign*res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( sign*res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( sign*res->field_length()/4.0, +res->field_width()/4.0 ),        
+                rhoban_geometry::Point( sign*res->field_height()/4.0, +res->field_width()/4.0 ),        
                 ContinuousAngle(-M_PI/2.0)
             } 
        } 
@@ -192,11 +192,11 @@ Patrol* Patrol::test_NW_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/6.0, res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/6.0, res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( -2*res->field_length()/6.0, res->field_width()/4.0 ),        
+                rhoban_geometry::Point( -2*res->field_height()/6.0, res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -211,11 +211,11 @@ Patrol* Patrol::test_NE_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( res->field_length()/6.0, res->field_width()/4.0 ),
+                 rhoban_geometry::Point( res->field_height()/6.0, res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( 2*res->field_length()/6.0, res->field_width()/4.0 ),        
+                rhoban_geometry::Point( 2*res->field_height()/6.0, res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -230,11 +230,11 @@ Patrol* Patrol::test_SW_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/6.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/6.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( -2*res->field_length()/6.0, -res->field_width()/4.0 ),        
+                rhoban_geometry::Point( -2*res->field_height()/6.0, -res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -249,11 +249,11 @@ Patrol* Patrol::test_SE_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( res->field_length()/6.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( res->field_height()/6.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( 2*res->field_length()/6.0, -res->field_width()/4.0 ),        
+                rhoban_geometry::Point( 2*res->field_height()/6.0, -res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -271,11 +271,11 @@ Patrol* Patrol::test_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( -res->field_length()/4.0, +res->field_width()/4.0 ),        
+                rhoban_geometry::Point( -res->field_height()/4.0, +res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -290,11 +290,11 @@ Patrol* Patrol::test_rotation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(0.0)
             }, 
             {
-                rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),        
+                rhoban_geometry::Point( -res->field_height()/4.0, -res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI)
             }, 
         }
@@ -309,11 +309,11 @@ Patrol* Patrol::test_NW_rotation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, res->field_width()/4.0 ),
                  ContinuousAngle(0.0)
             }, 
             {
-                rhoban_geometry::Point( -res->field_length()/4.0, res->field_width()/4.0 ),        
+                rhoban_geometry::Point( -res->field_height()/4.0, res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI)
             }, 
         }
@@ -328,11 +328,11 @@ Patrol* Patrol::test_NE_rotation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( res->field_length()/4.0, res->field_width()/4.0 ),
+                 rhoban_geometry::Point( res->field_height()/4.0, res->field_width()/4.0 ),
                  ContinuousAngle(0.0)
             }, 
             {
-                rhoban_geometry::Point( res->field_length()/4.0, res->field_width()/4.0 ),        
+                rhoban_geometry::Point( res->field_height()/4.0, res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI)
             }, 
         }
@@ -347,11 +347,11 @@ Patrol* Patrol::test_SW_rotation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(0.0)
             }, 
             {
-                rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),        
+                rhoban_geometry::Point( -res->field_height()/4.0, -res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI)
             }, 
         }
@@ -366,11 +366,11 @@ Patrol* Patrol::test_SE_rotation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(0.0)
             }, 
             {
-                rhoban_geometry::Point( res->field_length()/4.0, -res->field_width()/4.0 ),        
+                rhoban_geometry::Point( res->field_height()/4.0, -res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI)
             }, 
         }
@@ -397,11 +397,11 @@ Patrol* Patrol::test_SW_NW_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/4.0)
             }, 
             {
-                rhoban_geometry::Point( +res->field_length()/4.0, +res->field_width()/4.0 ),        
+                rhoban_geometry::Point( +res->field_height()/4.0, +res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/4.0)
             }, 
         }
@@ -416,11 +416,11 @@ Patrol* Patrol::test_NW_SE_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/4.0)
             }, 
             {
-                rhoban_geometry::Point( +res->field_length()/4.0, -res->field_width()/4.0 ),        
+                rhoban_geometry::Point( +res->field_height()/4.0, -res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/4.0)
             }, 
         }
@@ -436,11 +436,11 @@ Patrol* Patrol::test_N_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( +res->field_length()/4.0, res->field_width()/4.0 ),        
+                rhoban_geometry::Point( +res->field_height()/4.0, res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -455,11 +455,11 @@ Patrol* Patrol::test_E_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( res->field_length()/4.0, +res->field_width()/4.0 ),        
+                rhoban_geometry::Point( res->field_height()/4.0, +res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -474,11 +474,11 @@ Patrol* Patrol::test_W_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( -res->field_length()/4.0, +res->field_width()/4.0 ),        
+                rhoban_geometry::Point( -res->field_height()/4.0, +res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }
@@ -493,11 +493,11 @@ Patrol* Patrol::test_S_translation_for_pid( Ai::AiData& ai_data ){
     res->set_traject( 
 	{
             { 
-                 rhoban_geometry::Point( -res->field_length()/4.0, -res->field_width()/4.0 ),
+                 rhoban_geometry::Point( -res->field_height()/4.0, -res->field_width()/4.0 ),
                  ContinuousAngle(M_PI/2.0)
             }, 
             {
-                rhoban_geometry::Point( +res->field_length()/4.0, -res->field_width()/4.0 ),        
+                rhoban_geometry::Point( +res->field_height()/4.0, -res->field_width()/4.0 ),        
                 ContinuousAngle(M_PI/2.0)
             }, 
         }

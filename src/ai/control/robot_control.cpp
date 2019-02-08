@@ -143,14 +143,14 @@ RobotControl::RobotControl():
 { };
 
 
-PidControl RobotControl::limited_control(
+Control RobotControl::limited_control(
     const Vector2d & robot_position, 
     const ContinuousAngle & robot_orientation,
     const Vector2d & robot_linear_velocity, 
     const ContinuousAngle & robot_angular_velocity
 ) const {
-    PidControl res = no_limited_control();
-    if( res.velocity_rotation.value() != 0.0 ){
+    Control res = no_limited_control();
+    if( res.angular_velocity.value() != 0.0 ){
         double max_angular_velocity;
         if( rotation_acceleration_limit >= ContinuousAngle(0.0) ){ 
             max_angular_velocity = robot_angular_velocity.value() + get_dt() * rotation_acceleration_limit.value();
@@ -167,27 +167,27 @@ PidControl RobotControl::limited_control(
 
 
         if( max_angular_velocity > 0.0 ){ 
-            if( res.velocity_rotation.abs() >= max_angular_velocity ){
-                assert( res.velocity_rotation.value() != 0 );
-                res.velocity_rotation *= (
+            if( res.angular_velocity.abs() >= max_angular_velocity ){
+                assert( res.angular_velocity.value() != 0 );
+                res.angular_velocity *= (
                     max_angular_velocity / (
-                        std::fabs( res.velocity_rotation.value() )/security_margin
+                        std::fabs( res.angular_velocity.value() )/security_margin
                     ) 
                 );
             }
         }
         if( min_angular_velocity > 0.0 ){ 
-            if( res.velocity_rotation.abs() < min_angular_velocity ){
-                assert( res.velocity_rotation.value() != 0 );
-                res.velocity_rotation *= (
+            if( res.angular_velocity.abs() < min_angular_velocity ){
+                assert( res.angular_velocity.value() != 0 );
+                res.angular_velocity *= (
                     min_angular_velocity / (
-                        std::fabs( res.velocity_rotation.value() )*security_margin
+                        std::fabs( res.angular_velocity.value() )*security_margin
                     ) 
                 );
             }
         }
     }
-    if( res.velocity_translation.norm() !=0 ){
+    if( res.linear_velocity.norm() !=0 ){
         double max_linear_velocity;
         if( translation_acceleration_limit >= 0.0 ){ 
             max_linear_velocity = robot_linear_velocity.norm() + translation_acceleration_limit * get_dt();
@@ -204,24 +204,24 @@ PidControl RobotControl::limited_control(
 
 
         if( max_linear_velocity > 0.0 ){
-            if( res.velocity_translation.norm() >= max_linear_velocity ){
+            if( res.linear_velocity.norm() >= max_linear_velocity ){
 
-                assert( res.velocity_translation.norm() != 0 );
-                res.velocity_translation *= ( 
+                assert( res.linear_velocity.norm() != 0 );
+                res.linear_velocity *= ( 
                     max_linear_velocity /
-                    (res.velocity_translation.norm()/security_margin)
+                    (res.linear_velocity.norm()/security_margin)
                 );
             }
         }
 
 
         if( min_linear_velocity > 0.0 ){
-            if( res.velocity_translation.norm() < min_linear_velocity ){
+            if( res.linear_velocity.norm() < min_linear_velocity ){
 
-                assert( res.velocity_translation.norm() != 0 );
-                res.velocity_translation *= ( 
+                assert( res.linear_velocity.norm() != 0 );
+                res.linear_velocity *= ( 
                     min_linear_velocity /
-                    (res.velocity_translation.norm() * security_margin)
+                    (res.linear_velocity.norm() * security_margin)
                 );
             }
         }
@@ -229,7 +229,7 @@ PidControl RobotControl::limited_control(
     return res;
 }
 
-PidControl RobotControlWithPid::no_limited_control() const {
+Control RobotControlWithPid::no_limited_control() const {
     return PidController::no_limited_control();
 }
 

@@ -37,7 +37,7 @@ SearchShootArea::SearchShootArea(
     well_positioned(false),
     follower( Factory::fixed_consign_follower(ai_data) )
 {
-  p1 = Vector2d(oponent_goal_center()) + rhoban_geometry::Point(-1, 2);
+  p1 = Vector2d(opponent_goal_center()) + rhoban_geometry::Point(-1, 2);
   p2 = Vector2d(center_mark()) + rhoban_geometry::Point(1, -2);
 }
 
@@ -57,7 +57,7 @@ void SearchShootArea::update(
     annotations.clear();
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
-    // Vector2d opponent_goal_robot_vector = robot_position - oponent_goal_center();
+    // Vector2d opponent_goal_robot_vector = robot_position - opponent_goal_center();
 
     std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move( robot_position );
 

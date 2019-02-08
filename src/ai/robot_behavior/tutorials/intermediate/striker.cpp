@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
-
-    Copyright 2018 TO COMPLETE 
+    
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -25,79 +25,54 @@ namespace RhobanSSL {
 namespace Robot_behavior {
 
 
-Striker::Striker(
+Intermediate_striker::Intermediate_striker(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    use_custom_vector(false),
     striking_point( opponent_goal_center() ),       
     follower( Factory::fixed_consign_follower(ai_data) )
 {
 }
 
-void Striker::update(
+void Intermediate_striker::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now 
-    //  this->robot_linear_position
-    //  this->robot_angular_position 
-    // are all avalaible
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     
-    //rhoban_geometry::Point opponent_goal_point = opponent_goal_center();
-    //rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0 );
-    //rhoban_geometry::Point right_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
-
-    Vector2d ball_goal_vector = striking_point - ball_position();
+    Vector2d ball_goal_vector = opponent_goal_center() - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
-    //Vector2d ball_l_post_vector = left_post_position - ball_position();
-    //Vector2d ball_r_post_vector = right_post_position - ball_position();
+    
     double dist_ball_robot = ball_robot_vector.norm();
 
     ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
     ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
-    //ball_l_post_vector = ball_l_post_vector / ball_l_post_vector.norm();
-    //ball_r_post_vector = ball_r_post_vector / ball_r_post_vector.norm();
-
-
-    //double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
 
     double target_radius_from_ball;
     double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_goal_vector );
     
+    // If the robot is between the x-axis of the ball and the x-axis of the opponent_goal_center, the scalar is lesser than to 0. 
+    // If the robot is behind the x-axis of the ball, the scalar is greater than to 0.
 
     if ( scalar_ball_robot < 0 ) {
         follower->avoid_the_ball(true);
         target_radius_from_ball = 0.4;
     } else {
         follower->avoid_the_ball(false);
-        //target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
-        //target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.4) ) + 0.55;
+        
+        // Function used to place behind the ball and strike the ball cogently.
+        // The limit when x (scalar_ball_robot) is set to 0, is equal to infinity.
         target_radius_from_ball = 1.0 / ( 24.0*(scalar_ball_robot - 1.04) ) + 0.44;
 
-        //if ( infra_red() || Vector2d(robot_position - ball_position()).norm() > 0.4 ) {
-        //    follower->avoid_opponent(true);
-        //}
-        
-
-        //target_radius_from_ball = 1.0 /(2.0 *(scalar_ball_robot - (goal_visible_angle + 0.21))) + 1.0 / (goal_visible_angle + 0.21) + 2.0 * goal_visible_angle - 0.8;
-        
-        //if ( scalar_ball_robot < goal_visible_angle) {
-        //    target_radius_from_ball = 1.0;
-        //} else {
-        //    target_radius_from_ball = -0.3;
-        //}
-        //
+        // If the ball is near of the robot, we don't care about other robots.
         if ( dist_ball_robot < 0.4 ) {
             follower->avoid_opponent(false);
         } 
     }
+
     if (dist_ball_robot > 0.4) {
         follower->avoid_opponent(true);
     }
@@ -106,10 +81,10 @@ void Striker::update(
     double target_rotation = detail::vec2angle(ball_goal_vector);
 
     follower->set_following_position(target_position, target_rotation);
-    follower->update(time, robot, ball);   
+    follower->update(time, robot, ball);      
 }
 
-Control Striker::control() const {
+Control Intermediate_striker::control() const {
     Control ctrl = follower->control();
     ctrl.charge = true;
     ctrl.kick = true; 
@@ -117,17 +92,15 @@ Control Striker::control() const {
 }
 
 
-void Striker::declare_point_to_strik( rhoban_geometry::Point point ){
-    striking_point = point;
-}
-
-
-Striker::~Striker(){
+Intermediate_striker::~Intermediate_striker(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Striker::get_annotations() const {
-    return follower->get_annotations();
+RhobanSSLAnnotation::Annotations Intermediate_striker::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
+    annotations.addAnnotations( this->annotations );
+    annotations.addAnnotations( follower->get_annotations() );
+    return annotations;
 }
 
 }

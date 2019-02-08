@@ -312,7 +312,7 @@ namespace Ai {
     }
 
     std::list< std::pair<int, double> > AiData::get_collisions(
-        int robot_id, const Vector2d & velocity_translation
+        int robot_id, const Vector2d & linear_velocity
     ) const {
         std::list< std::pair< int, double> > result;
         const Robot * robot_1 = &( robots.at(Vision::Team::Ally).at(robot_id) );
@@ -331,7 +331,7 @@ namespace Ai {
                 std::pair<bool, double> collision = collision_time(
                     constants.robot_radius,
                     robot_1->get_movement().linear_position( robot_1->get_movement().last_time() ),
-                    velocity_translation,
+                    linear_velocity,
                     constants.robot_radius,
                     robot_2->get_movement().linear_position( robot_2->get_movement().last_time() ),
                     robot_2->get_movement().linear_velocity( robot_2->get_movement().last_time() ),
