@@ -11,7 +11,7 @@
     CLOSED: [2019-02-01 ven. 18:29]
 *** DONE Prepare to strike
     CLOSED: [2019-02-01 ven. 18:29]
-*** Regarder la balle
+*** DONE Regarder la balle
 *** Regarde une direction donnée
 *** Regarder un robot
 *** DONE goalie
@@ -19,10 +19,10 @@
 *** Dessiner des annotations sur le viewer
 **** DONE Dessiner la position de la balle
 **** récupèrer le position du robot
-**** determiner le robot qui possède la balle
-**** determiner le robot le plus proche de la balle
+**** TODO determiner le robot qui possède la balle
+**** TODO determiner le robot le plus proche de la balle
      - affiche aussi si c'est ami ou un ennemi
-**** récuperer la postion de tous les ennemis/allié
+**** TODO récuperer la postion de tous les ennemis/allié
 ** medium
 *** Tirer dans la balle 
 **** en ligne droite 
