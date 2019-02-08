@@ -437,6 +437,11 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Beginner_goto_ball* beginner_goto_ball  = new Robot_behavior::Beginner_goto_ball(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(beginner_goto_ball);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
         "Begginer Go corner", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
