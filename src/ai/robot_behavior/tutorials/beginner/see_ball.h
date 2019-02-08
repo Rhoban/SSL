@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,39 +17,38 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__MANUAL__H__
-#define __MANAGER__MANUAL__H__
+#ifndef __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
+#define __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
 
-#include <manager/Manager.h>
+#include "../../robot_behavior.h"
+#include "../../factory.h"
 
-namespace RhobanSSL {
-namespace Manager {
+namespace RhobanSSL
+{
+namespace Robot_behavior {
 
-class Manual : public Manager {
+class Begginer_see_ball : public RobotBehavior  {
     private:
-
-    bool strategy_was_assigned;
-
-    Ai::Team team_color;
-    bool goal_to_positive_axis;
-    int ally_goalie_id;
-    int opponent_goalie_id;
-
-    void assign_point_of_view_and_goalie();
-
+	ConsignFollower* follower;
+    RhobanSSLAnnotation::Annotations annotations;
 
     public:
-    Manual( Ai::AiData & ai_data );
+    Begginer_see_ball(Ai::AiData& ai_data);
 
-    void set_team_color( Ai::Team team_color );
-    void define_goal_to_positive_axis(bool value = true);
+    virtual void update(
+        double time,
+        const Ai::Robot & robot,
+        const Ai::Ball & ball
+    );
 
-    void update(double time);
+	virtual Control control() const;
 
-    virtual ~Manual();
+    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
+	virtual ~Begginer_see_ball();
 };
 
 };
-};
+}; //Namespace Rhoban
 
 #endif

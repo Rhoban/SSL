@@ -42,6 +42,16 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
+#include <robot_behavior/tutorials/beginner/go_corner.h>
+#include <robot_behavior/tutorials/beginner/goalie.h>
+#include <robot_behavior/tutorials/beginner/defensor.h>
+#include <robot_behavior/tutorials/beginner/see_ball.h>
+#include <robot_behavior/tutorials/beginner/robot_near_ball.h>
+#include <robot_behavior/tutorials/beginner/robot_have_ball.h>
+#include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/tutorials/medium/striker.h>
+#include <robot_behavior/tutorials/medium/prepare_strike.h>
+#include <robot_behavior/test_relative_velocity_consign.h>
 
 namespace RhobanSSL {
 namespace Manager {
@@ -51,7 +61,7 @@ Manual::Manual( Ai::AiData & ai_data ):
     team_color(Ai::Team::Unknown),
     goal_to_positive_axis(true),
     ally_goalie_id(0),
-    oponnent_goalie_id(0)
+    opponent_goalie_id(0)
 {
 
     change_team_and_point_of_view(
@@ -427,6 +437,100 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Beginner_goto_ball* beginner_goto_ball  = new Robot_behavior::Beginner_goto_ball(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(beginner_goto_ball);
+        "Begginer Go corner", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_go_corner* go_corner = new Robot_behavior::Begginer_go_corner(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(go_corner);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer Goalie", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_goalie* goalie = new Robot_behavior::Begginer_goalie(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer Defensor", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_defensor* defensor = new Robot_behavior::Begginer_defensor(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer Annotations - Ball position", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_annotations_ball_position* ball_position = new Robot_behavior::Begginer_annotations_ball_position(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(ball_position);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer - See ball", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_see_ball* see_ball = new Robot_behavior::Begginer_see_ball(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(see_ball);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer - Robot near ball", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_robot_near_ball* near_ball = new Robot_behavior::Begginer_robot_near_ball(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(near_ball);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer - Robot have ball", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_robot_have_ball* have_ball = new Robot_behavior::Begginer_robot_have_ball(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(have_ball);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Intermediate Striker", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Intermediate_striker* striker = new Robot_behavior::Intermediate_striker(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Intermediate Prepare to strike", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Intermediate_Prepare_strike* prepare_strike = new Robot_behavior::Intermediate_Prepare_strike(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(prepare_strike);
                 }, false // we don't want to define a goal here !
             )
         )
@@ -620,6 +724,45 @@ Manual::Manual( Ai::AiData & ai_data ):
             )
         )
     );
+
+    register_strategy(
+        "test_angular_only_relative_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_relative_velocity_consign* p = Robot_behavior::Test_relative_velocity_consign::get_movement_angular_velocity_only(ai_data, M_PI/2);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+    register_strategy(
+        "test_linear_only_relative_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_relative_velocity_consign* p = Robot_behavior::Test_relative_velocity_consign::get_movement_linear_velocity_only(ai_data, Vector2d(0,1));
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+    register_strategy(
+        "test_linear_and_angular_relative_velocity_consign", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Test_relative_velocity_consign* p = Robot_behavior::Test_relative_velocity_consign::get_movement_angular_and_linear_velocity(ai_data, Vector2d(0,1), M_PI*7/3);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+
+
+
     register_strategy(
         Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
             new Strategy::Halt(ai_data)

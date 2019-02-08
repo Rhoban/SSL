@@ -58,12 +58,12 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
   closest_robot = -1;
   second_closest_robot=-1;
   std::list< std::pair<int, double> > collisions_with_ctrl = ai_data.get_collisions(
-    robot().id(), ctrl.velocity_translation
+    robot().id(), ctrl.linear_velocity
     );
   assert(
     ai_data.constants.security_acceleration_ratio > ai_data.constants.obstacle_avoidance_ratio
     );
-  double ctrl_velocity_norm = ctrl.velocity_translation.norm();
+  double ctrl_velocity_norm = ctrl.linear_velocity.norm();
   double time_to_stop = ctrl_velocity_norm/(
     ai_data.constants.obstacle_avoidance_ratio
     *
@@ -121,7 +121,7 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle(){
     std::pair<bool, double> collision = collision_time(
       ai_data.constants.robot_radius,
       robot().get_movement().linear_position( robot().get_movement().last_time() ),
-      ctrl.velocity_translation,
+      ctrl.linear_velocity,
       ball_radius_avoidance,
       ball().get_movement().linear_position( ball().get_movement().last_time() ),
       ball().get_movement().linear_velocity( ball().get_movement().last_time() ),
@@ -174,9 +174,9 @@ void Navigation_with_obstacle_avoidance::convert_cycle_direction_to_linear_and_a
 
 
   // Control follower_control = position_follower.control();
-  // avoidance_control.velocity_rotation = follower_control.velocity_rotation;
-  // avoidance_control.velocity_translation = limit_cycle_direction*(
-  //     follower_control.velocity_translation.norm()/limit_cycle_direction.norm()
+  // avoidance_control.angular_velocity = follower_control.angular_velocity;
+  // avoidance_control.linear_velocity = limit_cycle_direction*(
+  //     follower_control.linear_velocity.norm()/limit_cycle_direction.norm()
   // );
 
   assert(limit_cycle_direction.norm()!=0.0);

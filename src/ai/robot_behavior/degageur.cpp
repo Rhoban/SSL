@@ -56,7 +56,7 @@ void Degageur::update(
 
 //    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
         //default will be the closest ally robot from the opponent goal center
-        robot_to_pass_id = GameInformations::get_nearest_point( Vision::Team::Ally , oponent_goal_center() );
+        robot_to_pass_id = GameInformations::get_shirt_number_of_closest_robot( Vision::Team::Ally , opponent_goal_center() );
 //    }
 
     if ( robot_to_pass_id != -1 ) {  //if point_to_pass wasn't declare and robot_to_pass_id was.
@@ -66,7 +66,7 @@ void Degageur::update(
 
     std::vector<int> robot_in_line = GameInformations::get_robot_in_line( robot_position, point_to_pass );
 
-    if ( robot_position.getX() >  (oponent_goal_center().getX() - 4) ) {
+    if ( robot_position.getX() >  (opponent_goal_center().getX() - 4) ) {
         needKick = true;
     } else {
         if ( robot_in_line.empty() ) {

@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,15 +17,13 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "protect_ball.h"
-#include <math/tangents.h>
+#include "see_ball.h"
 #include <math/vector2d.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-
-ProtectBall::ProtectBall(
+Begginer_see_ball::Begginer_see_ball(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
@@ -33,7 +31,7 @@ ProtectBall::ProtectBall(
 {
 }
 
-void ProtectBall::update(
+void Begginer_see_ball::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
@@ -41,44 +39,41 @@ void ProtectBall::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now
-    //  this->robot_linear_position
-    //  this->robot_angular_position
-    // are all avalaible
-    // annotations.clear();
+    
+    annotations.clear();
+    
+    
+    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
 
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
-    // const rhoban_geometry::Point & opponent_goal_point = opponent_goal_center();
+    Vector2d direction = ball_position() - robot_position;
+    ContinuousAngle target_rotation = vector2angle( direction );
 
-    // Vector2d ball_goal_vector = opponent_goal_point - ball_position();
-    Vector2d ball_robot_vector = ball_position() - robot_position;
-    // Vector2d target_position;
-
-    // annotations.addCircle( ball_position().x, ball_position().y , radius );
-    // annotations.addAnnotations(follower->get_annotations());
-
-
-    rhoban_geometry::Point target_position = ball_position();
-
-    double target_rotation = detail::vec2angle(ball_robot_vector);
-
-    follower->avoid_the_ball(true);
-    follower->set_following_position(target_position, target_rotation);
+    
+    follower->set_following_position(robot_position, target_rotation );
+    
+    follower->avoid_the_ball(false);
     follower->update(time, robot, ball);
 }
 
-Control ProtectBall::control() const {
+Control Begginer_see_ball::control() const {
     Control ctrl = follower->control();
-    return ctrl;
+    // ctrl.spin = true; // We active the dribler !
+    ctrl.kick = false; 
+    return ctrl; 
 }
 
-ProtectBall::~ProtectBall(){
+Begginer_see_ball::~Begginer_see_ball(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations ProtectBall::get_annotations() const {
-    return follower->get_annotations();
+RhobanSSLAnnotation::Annotations Begginer_see_ball::get_annotations() const {
+    RhobanSSLAnnotation::Annotations annotations;
+    annotations.addAnnotations( this->annotations );
+    annotations.addAnnotations( follower->get_annotations() );
+    return annotations;
 }
+
+
 
 }
 }

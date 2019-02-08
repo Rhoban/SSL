@@ -76,7 +76,7 @@ void Offensive::assign_behavior_to_robots(
         assign_behavior,
     double time, double dt)
 {
-    if ( GameInformations::get_nearest_ball( Vision::Team::Ally ) == player_id(0) ) {
+    if ( GameInformations::get_shirt_number_of_closest_robot_to_the_ball( Vision::Team::Ally ) == player_id(0) ) {
         is_closest = true;
     } else {
         is_closest = false;

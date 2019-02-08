@@ -25,50 +25,6 @@
 #define LIMITE 200.0
 #define LIMITE_ROT 3.0
 
-PidControl PidControl::relative_control(
-    const ContinuousAngle & robot_orientation,
-    double dt
-) const {
-    Matrix2d rotation_matrix;
-
-    const Vector2d & a_t = velocity_translation;
-    const ContinuousAngle & a_r =  velocity_rotation;
-
-    if( std::fabs(a_r.value()) > CALCULUS_ERROR ){
-        rotation_matrix = Matrix2d(
-            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value()),
-            std::cos((a_r*dt+robot_orientation).value()) - std::cos(robot_orientation.value()),
-          - std::cos((a_r*dt+robot_orientation).value()) + std::cos(robot_orientation.value()),
-            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value())
-        );
-        rotation_matrix = (a_r*dt).value()*( rotation_matrix.inverse() );
-    }else{
-        rotation_matrix = Matrix2d(
-            std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
-          - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
-        );
-    }
-    return PidControl( rotation_matrix * a_t, a_r );
-}
-
-PidControl::PidControl():
-    velocity_translation(0.0, 0.0), velocity_rotation(0.0)
-{ };
-
-PidControl::PidControl(
-    const Vector2d & velocity_translation,
-    ContinuousAngle velocity_rotation
-):
-    velocity_translation(velocity_translation),
-    velocity_rotation(velocity_rotation)
-{ };
-
-std::ostream& operator << ( std::ostream & out, const PidControl& control  ){
-    out << "[lin vel. : " << control.velocity_translation
-        << ", ang vel. : " << control.velocity_rotation << "]";
-    return out;
-}
-
 PidController::PidController():
     PidController(1.0, 0.0, 0.0, 1.0, 0.0, 0.0)
 { }
@@ -240,8 +196,8 @@ double PidController::no_limited_angular_control() const {
     return no_limited_angular_control_value;
 }
 
-PidControl PidController::no_limited_control() const {
-    return PidControl(
+Control PidController::no_limited_control() const {
+    return Control(
         no_limited_translation_control(),
         no_limited_angular_control()
     );

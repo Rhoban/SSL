@@ -53,7 +53,7 @@ void Pass::update(
     // rhoban_geometry::Point target_position = ball_position();
 
     //Striker:
-    // rhoban_geometry::Point oponent_goal_point = oponent_goal_center();
+    // rhoban_geometry::Point opponent_goal_point = opponent_goal_center();
     Vector2d ball_robot_to_pass_vector = position_robot_to_pass - ball_position();
     Vector2d ball_robot_vector = robot_position - ball_position();
     ball_robot_to_pass_vector = ball_robot_to_pass_vector / ball_robot_to_pass_vector.norm();
