@@ -41,7 +41,7 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
-#include <robot_behavior/tutorials/beginner/beginner_goto_ball.h>
+#include <robot_behavior/tutorials/beginner/goto_ball.h>
 #include <robot_behavior/tutorials/beginner/go_corner.h>
 #include <robot_behavior/tutorials/beginner/goalie.h>
 #include <robot_behavior/tutorials/beginner/defensor.h>
@@ -431,11 +431,11 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
-        "Beginner_goto_ball", std::shared_ptr<Strategy::Strategy>(
+        "Beginner go to ball", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Beginner_goto_ball* beginner_goto_ball  = new Robot_behavior::Beginner_goto_ball(ai_data);
+                    Robot_behavior::Beginner::Goto_ball* beginner_goto_ball  = new Robot_behavior::Beginner::Goto_ball(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(beginner_goto_ball);
                 }, false // we don't want to define a goal here !
             )

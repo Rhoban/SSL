@@ -17,13 +17,14 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "beginner_goto_ball.h"
+#include "goto_ball.h"
 #include <math/vector2d.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
+namespace Beginner {
 
-Beginner_goto_ball::Beginner_goto_ball(
+Goto_ball::Goto_ball(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
@@ -31,7 +32,7 @@ Beginner_goto_ball::Beginner_goto_ball(
 {
 }
 
-void Beginner_goto_ball::update(
+void Goto_ball::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
@@ -50,16 +51,16 @@ void Beginner_goto_ball::update(
     follower->update(time, robot, ball);
 }
 
-Control Beginner_goto_ball::control() const {
+Control Goto_ball::control() const {
     Control ctrl = follower->control();
     return ctrl; 
 }
 
-Beginner_goto_ball::~Beginner_goto_ball(){
+Goto_ball::~Goto_ball(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Beginner_goto_ball::get_annotations() const {
+RhobanSSLAnnotation::Annotations Goto_ball::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     annotations.addAnnotations( follower->get_annotations() );
@@ -68,5 +69,6 @@ RhobanSSLAnnotation::Annotations Beginner_goto_ball::get_annotations() const {
 
 
 
+}
 }
 }
