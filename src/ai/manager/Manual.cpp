@@ -434,7 +434,7 @@ Manual::Manual( Ai::AiData & ai_data ):
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Begginer_go_corner* go_corner = new Robot_behavior::Begginer_go_corner(ai_data);
+                    Robot_behavior::Beginner::Go_corner* go_corner = new Robot_behavior::Beginner::Go_corner(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(go_corner);
                 }, false // we don't want to define a goal here !
             )
