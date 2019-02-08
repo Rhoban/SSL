@@ -44,11 +44,11 @@ void Go_corner::update(
     annotations.clear();
     
     // Set the robot_position to the right corner. (Use opponent_corner_left() for the left corner).
-    const rhoban_geometry::Point & robot_position = opponent_corner_right();
+    const rhoban_geometry::Point & future_position = opponent_corner_right();
 
     ContinuousAngle angle(0.0);
 
-    follower->set_following_position( robot_position, angle); 
+    follower->set_following_position( future_position, angle); 
     follower->update(time, robot, ball);
 }
 
