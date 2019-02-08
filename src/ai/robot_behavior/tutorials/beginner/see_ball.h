@@ -18,30 +18,23 @@
 */
 
 // REVIEW AB : BEGGINER --> BEGINNER 
-#ifndef __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
-#define __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
+#ifndef __ROBOT_BEHAVIOR__BEGINNER__SEE_BALL__
+#define __ROBOT_BEHAVIOR__BEGINNER__SEE_BALL__
 
-// REVIEW AB : Mettre des chemins absolus avec <>
-#include "../../robot_behavior.h"
-// REVIEW AB : Mettre des chemins absolus avec <>
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 
-namespace RhobanSSL
-{
+namespace RhobanSSL{
 namespace Robot_behavior {
-
-// REVIEW AB : mettre un namespace Beginner 
-
-
-// REVIEW AB : renomer partout Begginer_see_ball à See_ball
-class Begginer_see_ball : public RobotBehavior  {
+namespace Beginner {
+class See_ball : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
 
     public:
-    Begginer_see_ball(Ai::AiData& ai_data);
+    See_ball(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -53,9 +46,9 @@ class Begginer_see_ball : public RobotBehavior  {
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Begginer_see_ball();
+	virtual ~See_ball();
 };
-
+};
 };
 }; //Namespace Rhoban
 

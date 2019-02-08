@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 SCHMITZ Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -22,8 +22,9 @@
 
 namespace RhobanSSL {
 namespace Robot_behavior {
-
-Begginer_see_ball::Begginer_see_ball(
+namespace Beginner
+{
+See_ball::See_ball(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
@@ -31,7 +32,7 @@ Begginer_see_ball::Begginer_see_ball(
 {
 }
 
-void Begginer_see_ball::update(
+void See_ball::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
@@ -39,34 +40,27 @@ void Begginer_see_ball::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    
     annotations.clear();
-    
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
 
     Vector2d direction = ball_position() - robot_position;
     ContinuousAngle target_rotation = vector2angle( direction );
-
     
     follower->set_following_position(robot_position, target_rotation );
-    
-    follower->avoid_the_ball(false);
     follower->update(time, robot, ball);
 }
 
-Control Begginer_see_ball::control() const {
+Control See_ball::control() const {
     Control ctrl = follower->control();
-    // ctrl.spin = true; // We active the dribler !
-    ctrl.kick = false; 
     return ctrl; 
 }
 
-Begginer_see_ball::~Begginer_see_ball(){
+See_ball::~See_ball(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_see_ball::get_annotations() const {
+RhobanSSLAnnotation::Annotations See_ball::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     annotations.addAnnotations( follower->get_annotations() );
@@ -74,6 +68,6 @@ RhobanSSLAnnotation::Annotations Begginer_see_ball::get_annotations() const {
 }
 
 
-
+}
 }
 }
