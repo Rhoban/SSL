@@ -12,6 +12,7 @@
 *** DONE Prepare to strike
     CLOSED: [2019-02-01 ven. 18:29]
 *** TODO Regarder la balle
+**** TODO [AB] Need review
 *** Regarde une direction donnée
 *** Regarder un robot
 *** DONE goalie
