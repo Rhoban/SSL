@@ -13,8 +13,8 @@
     CLOSED: [2019-02-01 ven. 18:29]
 *** TODO Regarder la balle
 **** TODO [AB] Need review
-*** Regarde une direction donnée
-*** Regarder un robot
+*** TODO [LB] Regarde une direction donnée
+*** TODO [RPC] Regarder un robot
 *** DONE goalie
     CLOSED: [2019-02-01 ven. 18:28]
 *** Dessiner des annotations sur le viewer
@@ -29,12 +29,13 @@
 **** en ligne droite 
 **** faire un pas de coté avant de tirer 
 **** prendre de l'élan pour faire un tir
-**** tirer en lobe
+**** TODO [ES] tirer en lobe
 **** tirer selon une direction
 *** suivre un robot (version simple)
 *** faire obstruction : 
-**** se mettre entre lui et la balle
-**** se mettre entre la balle et le but
+**** TODO [LB] se mettre entre un défenseur et la balle
+**** TODO se mettre entre la balle et le but
+***** review
 **** se mettre entre deux robots
 **** se mettre entre un robot avec la balle et un autre
 *** Dégagement
