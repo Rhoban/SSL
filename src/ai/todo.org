@@ -9,8 +9,6 @@
     CLOSED: [2019-02-01 ven. 18:28]
 *** TODO [ES] go corner
 **** TODO [AB] Need review
-*** TODO [ES] Prepare to strike
-**** TODO [AB] Need review
 *** TODO [ES] Regarder la balle
 **** TODO [AB] Need review
 *** TODO [LB] Regarde une direction donnée
@@ -29,6 +27,8 @@
 **** TODO [NG] récuperer la postion de tous les ennemis/allié
 ** medium
 *** Tirer dans la balle 
+**** TODO Prepare to strike
+***** TODO [AB] Need review
 **** en ligne droite 
 **** faire un pas de coté avant de tirer 
 **** prendre de l'élan pour faire un tir
