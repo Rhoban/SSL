@@ -31,7 +31,6 @@ set (SOURCES
     robot_behavior/factory.cpp
     robot_behavior/example_machine_state.cpp
     robot_behavior/example.cpp
-    robot_behavior/beginner_goto_ball.cpp
     robot_behavior/goalie.cpp
     robot_behavior/patrol.cpp
     robot_behavior/pass.cpp
@@ -61,6 +60,7 @@ set (SOURCES
     robot_behavior/wait_pass.cpp
     robot_behavior/slow_striker.cpp
     robot_behavior/test_infra.cpp
+    robot_behavior/tutorials/beginner/beginner_goto_ball.cpp
     robot_behavior/tutorials/beginner/goalie.cpp
     robot_behavior/tutorials/beginner/go_corner.cpp
     robot_behavior/tutorials/beginner/robot_near_ball.cpp

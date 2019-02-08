@@ -25,7 +25,6 @@
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/example.h>
-#include <robot_behavior/beginner_goto_ball.h>
 #include <robot_behavior/example_machine_state.h>
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/passive_defensor.h>
@@ -42,6 +41,7 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
+#include <robot_behavior/tutorials/beginner/beginner_goto_ball.h>
 #include <robot_behavior/tutorials/beginner/go_corner.h>
 #include <robot_behavior/tutorials/beginner/goalie.h>
 #include <robot_behavior/tutorials/beginner/defensor.h>
