@@ -21,8 +21,11 @@
 
 namespace RhobanSSL {
 namespace Robot_behavior {
+namespace Beginner {
 
-Begginer_go_corner::Begginer_go_corner(
+// REVIEW AB : Mettre un namespace beginner
+
+Go_corner::Go_corner(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
@@ -30,7 +33,7 @@ Begginer_go_corner::Begginer_go_corner(
 {
 }
 
-void Begginer_go_corner::update(
+void Go_corner::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
@@ -38,31 +41,33 @@ void Begginer_go_corner::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    
     annotations.clear();
     
     // Set the robot_position to the right corner. (Use opponent_corner_left() for the left corner).
-    const rhoban_geometry::Point & robot_position = opponent_corner_right();
+    const rhoban_geometry::Point & future_position = opponent_corner_right();
 
-    follower->set_following_position( robot_position, 0 ); 
+    ContinuousAngle angle(0.0);
+
+    follower->set_following_position( future_position, angle); 
     follower->update(time, robot, ball);
 }
 
-Control Begginer_go_corner::control() const {
+Control Go_corner::control() const {
     Control ctrl = follower->control();
     return ctrl; 
 }
 
-Begginer_go_corner::~Begginer_go_corner(){
+Go_corner::~Go_corner(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_go_corner::get_annotations() const {
+RhobanSSLAnnotation::Annotations Go_corner::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     annotations.addAnnotations( follower->get_annotations() );
     return annotations;
 }
 
+}
 }
 }
