@@ -18,25 +18,26 @@
 */
 
 #define RADIUS_CIRCLE 100
-#include "robot_near_ball.h"
+#include "robot_have_ball.h"
 #include <math/vector2d.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
 
-Begginer_robot_near_ball::Begginer_robot_near_ball(
+Begginer_robot_have_ball::Begginer_robot_have_ball(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data)
 {
 }
 
-void Begginer_robot_near_ball::update(
+void Begginer_robot_have_ball::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
     RobotBehavior::update_time_and_position( time, robot, ball );
+    
     // Find the ally and the opponent closest to the ball
     int nb_ally_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Ally);
     int nb_opponent_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Opponent);
@@ -45,36 +46,31 @@ void Begginer_robot_near_ball::update(
     Ai::Robot ally_closest = get_robot(nb_ally_closest_to_the_ball, Vision::Ally);
     Ai::Robot opponent_closest = get_robot(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
-    // Create the vector between the robots and the ball.
-    Vector2d vec_ally_to_ball = ball_position() - ally_closest.get_movement().linear_position( ai_data.time ); 
-    Vector2d vec_opponent_to_ball = ball_position() - opponent_closest.get_movement().linear_position(ai_data.time);
-
-    // Find the distance between them and the ball.
-    double dist_ally = vec_ally_to_ball.norm();
-    double dist_opponent = vec_opponent_to_ball.norm();
+    // Find if the robot has the ball.
+    int ally_have_ball = GameInformations::infra_red(nb_ally_closest_to_the_ball, Vision::Ally);
+    int opponent_have_ball = GameInformations::infra_red(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
     annotations.clear();
-
-    // Search the nearest robot between the ally and the opponent.
-    if(dist_ally > dist_opponent) {
+    
+    // Find the robot that have the ball.
+    if(opponent_have_ball ) {
         annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);
-    } else if(dist_ally < dist_opponent) {
+    } else if(ally_have_ball) {
         annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), "blue", false);
     } else {
-        annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);
-        annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), "blue", false);
+        annotations.addCross(ball_position(), "red", false);
     }
  
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
 }
 
-Control Begginer_robot_near_ball::control() const {
+Control Begginer_robot_have_ball::control() const {
     return Control();
 }
 
-Begginer_robot_near_ball::~Begginer_robot_near_ball(){}
+Begginer_robot_have_ball::~Begginer_robot_have_ball(){}
 
-RhobanSSLAnnotation::Annotations Begginer_robot_near_ball::get_annotations() const {
+RhobanSSLAnnotation::Annotations Begginer_robot_have_ball::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     return annotations;

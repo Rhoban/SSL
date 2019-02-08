@@ -46,6 +46,7 @@
 #include <robot_behavior/tutorials/begginer/defensor.h>
 #include <robot_behavior/tutorials/begginer/see_ball.h>
 #include <robot_behavior/tutorials/begginer/robot_near_ball.h>
+#include <robot_behavior/tutorials/begginer/robot_have_ball.h>
 #include <robot_behavior/tutorials/begginer/annotations_ball_position.h>
 #include <robot_behavior/tutorials/intermediate/striker.h>
 #include <robot_behavior/tutorials/intermediate/prepare_strike.h>
@@ -490,6 +491,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Begginer_robot_near_ball* near_ball = new Robot_behavior::Begginer_robot_near_ball(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(near_ball);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer - Robot have ball", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Begginer_robot_have_ball* have_ball = new Robot_behavior::Begginer_robot_have_ball(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(have_ball);
                 }, false // we don't want to define a goal here !
             )
         )
