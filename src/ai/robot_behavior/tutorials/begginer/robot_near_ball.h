@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GO__CORNER__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GO__CORNER__
+#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__NEAR__BALL__
+#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__NEAR__BALL__
 
 #include "../../robot_behavior.h"
 #include "../../factory.h"
@@ -27,14 +27,12 @@ namespace RhobanSSL
 {
 namespace Robot_behavior {
 
-/** Tutorial class to show how to move a robot in the side corner. */
-class Begginer_go_corner : public RobotBehavior  {
+class Begginer_robot_near_ball : public RobotBehavior  {
     private:
-	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
 
     public:
-    Begginer_go_corner(Ai::AiData& ai_data);
+    Begginer_robot_near_ball(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -46,7 +44,7 @@ class Begginer_go_corner : public RobotBehavior  {
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Begginer_go_corner();
+	virtual ~Begginer_robot_near_ball();
 };
 
 };

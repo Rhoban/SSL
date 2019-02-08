@@ -62,7 +62,11 @@ set (SOURCES
     robot_behavior/test_infra.cpp
     robot_behavior/tutorials/begginer/goalie.cpp
     robot_behavior/tutorials/begginer/go_corner.cpp
+    robot_behavior/tutorials/begginer/robot_near_ball.cpp
+    robot_behavior/tutorials/begginer/robot_have_ball.cpp
     robot_behavior/tutorials/begginer/defensor.cpp
+    robot_behavior/tutorials/begginer/annotations_ball_position.cpp
+    robot_behavior/tutorials/begginer/see_ball.cpp
     robot_behavior/tutorials/intermediate/prepare_strike.cpp
     robot_behavior/tutorials/intermediate/striker.cpp
     robot_behavior/test_relative_velocity_consign.cpp

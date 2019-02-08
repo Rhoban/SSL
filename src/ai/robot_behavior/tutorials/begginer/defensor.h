@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GO__CORNER__
-#define __ROBOT_BEHAVIOR__TUTORIALS__GO__CORNER__
+#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__DEFENSOR__
+#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__DEFENSOR__
 
 #include "../../robot_behavior.h"
 #include "../../factory.h"
