@@ -44,6 +44,7 @@
 #include <robot_behavior/tutorials/begginer/go_corner.h>
 #include <robot_behavior/tutorials/begginer/goalie.h>
 #include <robot_behavior/tutorials/begginer/defensor.h>
+#include <robot_behavior/tutorials/begginer/robot_looks_a_given_position.h>
 #include <robot_behavior/tutorials/intermediate/striker.h>
 #include <robot_behavior/tutorials/intermediate/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
@@ -71,6 +72,18 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Robot looks at a given position", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Robot_looks_a_given_position* robot_looks_a_given_position = new Robot_behavior::Robot_looks_a_given_position(ai_data);
+	            robot_looks_a_given_position->set_direction( 2*M_PI/2.0 );
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(robot_looks_a_given_position);
                 }, false // we don't want to define a goal here !
             )
         )
