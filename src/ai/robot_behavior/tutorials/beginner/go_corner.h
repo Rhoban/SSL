@@ -23,8 +23,7 @@
 #include "../../robot_behavior.h"
 #include "../../factory.h"
 
-namespace RhobanSSL
-{
+namespace RhobanSSL {
 namespace Robot_behavior {
 namespace Beginner {
 /** Tutorial class to show how to move a robot in the side corner. */
