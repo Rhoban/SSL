@@ -41,15 +41,15 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
-#include <robot_behavior/tutorials/begginer/go_corner.h>
-#include <robot_behavior/tutorials/begginer/goalie.h>
-#include <robot_behavior/tutorials/begginer/defensor.h>
-#include <robot_behavior/tutorials/begginer/see_ball.h>
-#include <robot_behavior/tutorials/begginer/robot_near_ball.h>
-#include <robot_behavior/tutorials/begginer/robot_have_ball.h>
-#include <robot_behavior/tutorials/begginer/annotations_ball_position.h>
-#include <robot_behavior/tutorials/intermediate/striker.h>
-#include <robot_behavior/tutorials/intermediate/prepare_strike.h>
+#include <robot_behavior/tutorials/beginner/go_corner.h>
+#include <robot_behavior/tutorials/beginner/goalie.h>
+#include <robot_behavior/tutorials/beginner/defensor.h>
+#include <robot_behavior/tutorials/beginner/see_ball.h>
+#include <robot_behavior/tutorials/beginner/robot_near_ball.h>
+#include <robot_behavior/tutorials/beginner/robot_have_ball.h>
+#include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/tutorials/medium/striker.h>
+#include <robot_behavior/tutorials/medium/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
 
 namespace RhobanSSL {
