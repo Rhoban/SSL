@@ -7,8 +7,10 @@
     CLOSED: [2019-02-01 ven. 18:28]
 *** DONE rotation
     CLOSED: [2019-02-01 ven. 18:28]
-*** TODO [ES] go corner
-**** TODO [AB] Need review
+*** DONE [ES] go corner
+    CLOSED: [2019-02-08 ven. 19:33]
+**** DONE [AB] Need review
+     CLOSED: [2019-02-08 ven. 19:33]
 *** TODO [ES] Regarder la balle
 **** TODO [AB] Need review
 *** TODO [LB] Regarde une direction donnée
