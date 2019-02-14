@@ -14,7 +14,8 @@
 *** TODO [ES] Regarder la balle
 **** TODO [AB] Need review
 *** TODO [LB] Regarde une direction donnée
-*** TODO [RPC] Regarder un robot
+*** DONE [RPC] Regarder un robot
+**** TODO [AB] Need review
 *** TODO [ES] goalie
 **** TODO [AB] Need review
 *** Dessiner des annotations sur le viewer
