@@ -55,10 +55,18 @@ void See_Robot::update(
     annotations.clear();
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
-    const rhoban_geometry::Point & target_position = get_robot(target_robot_id).get_movement().linear_position( ai_data.time );
+    
+    ContinuousAngle target_rotation = robot.get_movement().angular_position( ai_data.time );
 
-    Vector2d direction = target_position - robot_position;
-    ContinuousAngle target_rotation = vector2angle( direction );
+    //condition to chech if the target robot is not the robot itself
+    if(target_robot_id != robot.id()){
+        const rhoban_geometry::Point & target_position = get_robot(target_robot_id).get_movement().linear_position( ai_data.time );
+
+        Vector2d direction = target_position - robot_position;
+        target_rotation = vector2angle( direction );
+    }else{
+        DEBUG("Warning a robot try to look itself !");
+    }
 
     follower->set_following_position( robot_position, target_rotation );
 
