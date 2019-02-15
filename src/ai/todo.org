@@ -48,7 +48,7 @@
 *** Dégagement
 **** degager une balle (en urgence)
 **** dégager vers le but adverse
-**** dégager en touche
+**** TODO [ES] dégager en touche
 **** dégager le long de la touche
 ** Advanced
 *** dribler pour attraper une balle
