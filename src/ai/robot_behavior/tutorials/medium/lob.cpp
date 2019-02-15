@@ -38,18 +38,26 @@ void Lob::update(
     // At First, we update time and update potition from the abstract class robot_behavior.
     // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
-    
     annotations.clear();
-    
-    // Set the robot_position to the right corner. (Use opponent_corner_left() for the left corner).
-    const rhoban_geometry::Point & robot_position = opponent_corner_right();
 
-    follower->set_following_position( robot_position, 0 ); 
+    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
+    Vector2d ball_robot_vector = ball_position() - robot_position;
+    rhoban_geometry::Point target_position = ball_position();
+
+    follower->avoid_the_ball(false);
+    follower->set_following_position(target_position, vector2angle(ball_robot_vector)); 
     follower->update(time, robot, ball);
 }
 
 Control Lob::control() const {
+    const rhoban_geometry::Point & robot_position = linear_position();
+    Vector2d ball_robot_vector = robot_position - ball_position();
+    double dist = ball_robot_vector.norm();
     Control ctrl = follower->control();
+
+    if(dist < 0.1) {
+        ctrl.chipKick = true;
+    }
     return ctrl; 
 }
 

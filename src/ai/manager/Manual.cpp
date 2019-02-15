@@ -50,6 +50,7 @@
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/tutorials/medium/striker.h>
+#include <robot_behavior/tutorials/medium/lob.h>
 #include <robot_behavior/tutorials/medium/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
 
@@ -448,6 +449,17 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Begginer_go_corner* go_corner = new Robot_behavior::Begginer_go_corner(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(go_corner);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer - Lob", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Medium::Lob * lob = new Robot_behavior::Medium::Lob(ai_data);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(lob);
                 }, false // we don't want to define a goal here !
             )
         )

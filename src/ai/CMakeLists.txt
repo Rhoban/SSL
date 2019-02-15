@@ -70,6 +70,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/medium/prepare_strike.cpp
     robot_behavior/tutorials/medium/striker.cpp
+    robot_behavior/tutorials/medium/lob.cpp
     robot_behavior/test_relative_velocity_consign.cpp
     Ai.cpp
     AiData.cpp
