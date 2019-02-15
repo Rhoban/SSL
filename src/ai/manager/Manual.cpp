@@ -82,7 +82,7 @@ Manual::Manual( Ai::AiData & ai_data ):
                 ai_data,
                 [&](double time, double dt){
                     Robot_behavior::Robot_looks_a_given_position* robot_looks_a_given_position = new Robot_behavior::Robot_looks_a_given_position(ai_data);
-	            robot_looks_a_given_position->set_direction( 2*M_PI/2.0 );
+	            robot_looks_a_given_position->set_direction( M_PI/2.0 );
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(robot_looks_a_given_position);
                 }, false // we don't want to define a goal here !
             )
