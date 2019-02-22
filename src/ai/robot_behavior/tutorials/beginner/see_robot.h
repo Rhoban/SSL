@@ -34,9 +34,7 @@ class See_Robot : public RobotBehavior {
     RhobanSSLAnnotation::Annotations annotations;
 
    public:
-    See_Robot(Ai::AiData &ai_data);
-    // REVIEW AB : Use just one constructor with a default parameter.
-    See_Robot(Ai::AiData &ai_data, int target_id);
+    See_Robot(Ai::AiData &ai_data, int target_id = 0);
 
     virtual void update(
         double time,
@@ -48,8 +46,7 @@ class See_Robot : public RobotBehavior {
 
     void set_robot_id_to_see (int id);
 
-    // REVIEW AB : This function should be declared as const function.
-    int get_robot_id_to_see();
+    int get_robot_id_to_see() const;
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 

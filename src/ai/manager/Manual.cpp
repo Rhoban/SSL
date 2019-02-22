@@ -503,7 +503,7 @@ Manual::Manual( Ai::AiData & ai_data ):
                 ai_data,
                 [&](double time, double dt){
                     Robot_behavior::Beginner::See_Robot* see_robot = new Robot_behavior::Beginner::See_Robot(ai_data);
-                    // REVIEW AB : Use the setter to set the roboto to see.
+                    see_robot->set_robot_id_to_see(3);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(see_robot);
                 }, false // we don't want to define a goal here !
             )

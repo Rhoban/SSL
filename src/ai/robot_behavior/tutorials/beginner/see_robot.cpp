@@ -24,14 +24,6 @@ namespace RhobanSSL {
 namespace Robot_behavior {
 namespace Beginner {
 
-See_Robot::See_Robot(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
-{
-    target_robot_id = 0;//default id
-}
 
 See_Robot::See_Robot(
     Ai::AiData & ai_data, int target_id
@@ -58,16 +50,13 @@ void See_Robot::update(
     
     ContinuousAngle target_rotation = robot.get_movement().angular_position( ai_data.time );
 
-    //condition to chech if the target robot is not the robot itself
+    //condition to check if the target robot is not the robot itself.
+    //WARNING, a robot which try to look itself will do nothing.
     if(target_robot_id != robot.id()){
         const rhoban_geometry::Point & target_position = get_robot(target_robot_id).get_movement().linear_position( ai_data.time );
 
         Vector2d direction = target_position - robot_position;
         target_rotation = vector2angle( direction );
-    }else{
-        // REVIEW AB : Put a comment instead of printing a message.
-        //             Then just set target_rotation to its current rotation.
-        DEBUG("Warning a robot try to look itself !");
     }
 
     follower->set_following_position( robot_position, target_rotation );
@@ -82,7 +71,7 @@ void See_Robot::set_robot_id_to_see (int id){
     target_robot_id = id;
 }
 
-int See_Robot::get_robot_id_to_see(){
+int See_Robot::get_robot_id_to_see() const{
     return target_robot_id;
 }
 
