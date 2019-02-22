@@ -17,9 +17,15 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// REVIEW AB : 
+//  - Change the name of the file to annotations_determine_which_robot_have_the_ball
+//  - Change BEGGINER -> BEGINNER
+//  - Change begginer -> beginer
+
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__HAVE__BALL__
 #define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__HAVE__BALL__
 
+// REVIEW AB : Use absolute path
 #include "../../robot_behavior.h"
 #include "../../factory.h"
 
@@ -27,6 +33,9 @@ namespace RhobanSSL
 {
 namespace Robot_behavior {
 
+// REVIEW AB : Add a namespace beginner
+
+// REVIEW AB : Rename the class to Annotations_determine_which_robot_have_the_ball
 class Begginer_robot_have_ball : public RobotBehavior  {
     private:
     RhobanSSLAnnotation::Annotations annotations;

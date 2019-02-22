@@ -192,6 +192,9 @@ class GameInformations {
      * @param robot_number
      * the robot number
      * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+     * TODO To remove the option team ! It is not possible to get this 
+     * information for opponents.
+     *
      * @param team the team of the robot (ally or opponent)
      * @return a boolean
      */

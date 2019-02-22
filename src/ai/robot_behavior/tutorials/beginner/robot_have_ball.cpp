@@ -17,6 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// REVIEW AB : Remove RADIUS_CIRCLE, it is not used.
 #define RADIUS_CIRCLE 100
 #include "robot_have_ball.h"
 #include <math/vector2d.h>
@@ -39,18 +40,36 @@ void Begginer_robot_have_ball::update(
     RobotBehavior::update_time_and_position( time, robot, ball );
     
     // Find the ally and the opponent closest to the ball
+    // REVIEW AB : The name of the variable is not well choosen :
+    //  nb_ally_closest_to_the_ball -> shirt_number_of_closest_ally_to_the_ball
     int nb_ally_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Ally);
+    // REVIEW AB : The name of the variable is not well choosen :
+    //  nb_opponent_closest_to_the_ball -> shirt_number_of_closest_opponent_to_the_ball
     int nb_opponent_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Opponent);
     
     // Get the robot ally and opponent.
+    // REVIEW AB : 
+    //   ally_closest -> closet_ally
     Ai::Robot ally_closest = get_robot(nb_ally_closest_to_the_ball, Vision::Ally);
+    // REVIEW AB : 
+    //   opponent_closest -> closest_opponent
     Ai::Robot opponent_closest = get_robot(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
     // Find if the robot has the ball.
     int ally_have_ball = GameInformations::infra_red(nb_ally_closest_to_the_ball, Vision::Ally);
+    // REVIEW AB : This is not possible to have this information ! 
+    // We need to implement an algorithme that detect that an opponent robot 
+    // have a ball.
+    // REVIEW AB : use a bool instead of an int.
     int opponent_have_ball = GameInformations::infra_red(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
     annotations.clear();
+    
+    // REVIEW AB : Don't use magic number, for the parameters.
+    //  Use varaible : 
+    //  std::string robot_color = "blue"; 
+    //  std::string ball_color = "red"; 
+    //  std::string bool dashed = false;
     
     // Find the robot that have the ball.
     if(opponent_have_ball ) {
