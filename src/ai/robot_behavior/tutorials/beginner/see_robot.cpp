@@ -50,8 +50,8 @@ void See_Robot::update(
     
     ContinuousAngle target_rotation = robot.get_movement().angular_position( ai_data.time );
 
-    //condition to check if the target robot is not the robot itself.
-    //WARNING, a robot which try to look itself will do nothing.
+    // Condition to check if the target robot is not the robot itself.
+    // A robot which try to look itself will do nothing.
     if(target_robot_id != robot.id()){
         const rhoban_geometry::Point & target_position = get_robot(target_robot_id).get_movement().linear_position( ai_data.time );
 
