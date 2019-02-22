@@ -38,6 +38,10 @@ void Begginer_annotations_ball_position::update(
     RobotBehavior::update_time_and_position(time, robot, ball);
     // Clear all annotations write before
     annotations.clear();
+
+
+    // REVIEW AB : 
+    //    Add an annotations -> Add a cross on the ball.
     // Add an annotations
     annotations.addCross(ball_position(), "red", false);
 }

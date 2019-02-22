@@ -17,15 +17,21 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// REVIEW AB : BEGGINER -> BEGINNER
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ANNOTATIONS__BALL__POSITION
 #define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ANNOTATIONS__BALL__POSITION
 
+// REVIEW AB : use absolution path : 
+//   #include <robot_behavior/robot_behavior.h>
+//   #include <robot_behavior/factory.h>
 #include "../../robot_behavior.h"
 #include "../../factory.h"
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
+
+// REVIEW AB : add a namespace beginner
 
 /** Tutorial class to show how to move a robot in the side corner. */
 class Begginer_annotations_ball_position : public RobotBehavior  {
