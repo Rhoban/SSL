@@ -12,7 +12,7 @@
 **** DONE [AB] Need review
      CLOSED: [2019-02-08 ven. 19:33]
 *** TODO [ES] Regarder la balle
-**** TODO [XM] Need review
+**** DONE [XM] Need review
 *** TODO [LB] Regarde une direction donnée
 **** TODO [AB] need reviews
 *** TODO [RPC] Regarder un robot
