@@ -38,11 +38,23 @@ void Begginer_robot_near_ball::update(
 ){
     RobotBehavior::update_time_and_position( time, robot, ball );
     // Find the ally and the opponent closest to the ball
+
+    // REVIEW AB : Change the name of the variable 
+    //   nb_ally_closest_to_the_ball 
+    //   ->
+    //   ally_shirt_number
+Change the name of the variable 
     int nb_ally_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Ally);
+    // REVIEW AB : Change the name of the variable 
+    //   nb_opponent_closest_to_the_ball
+    //   ->
+    //   opponent_shirt_number
     int nb_opponent_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Opponent);
     
     // Get the robot ally and opponent.
+    // REVIEW AB : ally_closest --> closest_ally
     Ai::Robot ally_closest = get_robot(nb_ally_closest_to_the_ball, Vision::Ally);
+    // REVIEW AB : opponent_closest --> closest_opponent
     Ai::Robot opponent_closest = get_robot(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
     // Create the vector between the robots and the ball.
@@ -55,6 +67,10 @@ void Begginer_robot_near_ball::update(
 
     annotations.clear();
 
+    // REVIEW AB : Don't use magic number ! 
+    //    std::string opponnent_color = "blue";
+    //    std::string ally_color = "blue";
+    //    bool dashed = false;
     // Search the nearest robot between the ally and the opponent.
     if(dist_ally > dist_opponent) {
         annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);

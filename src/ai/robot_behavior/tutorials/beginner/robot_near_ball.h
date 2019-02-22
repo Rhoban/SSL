@@ -17,9 +17,15 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// REVIEW AB : BEGGINER --> BEGINNER
+// REVIEW AB : Use CLOSEST_ROBOT_TO_THE_BALL
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__NEAR__BALL__
 #define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__NEAR__BALL__
 
+// REVIEW AB : Change the name od the file to annotations_closest_robot_to_the_ball.cpp
+
+
+// REVIEW AB : Use absolute path
 #include "../../robot_behavior.h"
 #include "../../factory.h"
 
@@ -27,6 +33,9 @@ namespace RhobanSSL
 {
 namespace Robot_behavior {
 
+// REVIEW AB : add beginner namespace
+
+// REVIEW AB : Rename the class to Annotation_closest_robot_to_the_ball
 class Begginer_robot_near_ball : public RobotBehavior  {
     private:
     RhobanSSLAnnotation::Annotations annotations;
