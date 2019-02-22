@@ -17,8 +17,6 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// REVIEW XM : remove the last REVIEW AB
-// REVIEW AB : BEGGINER --> BEGINNER 
 #ifndef __ROBOT_BEHAVIOR__BEGINNER__SEE_BALL__
 #define __ROBOT_BEHAVIOR__BEGINNER__SEE_BALL__
 
@@ -30,7 +28,7 @@ namespace RhobanSSL{
 namespace Robot_behavior {
 namespace Beginner {
 
-// REVIEW XM : add the description of See_ball ?
+// Tutorial to show how to see the ball.
 class See_ball : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
@@ -51,8 +49,8 @@ class See_ball : public RobotBehavior  {
 
 	virtual ~See_ball();
 };
-};
-};
-}; //Namespace Rhoban
+}; // Namespace Beginner
+}; // Namespace Robot_behavior
+}; //Namespace RhobanSSL
 
 #endif
