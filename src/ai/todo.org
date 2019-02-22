@@ -18,8 +18,10 @@
 *** TODO [RPC] Regarder un robot
 **** DONE [AB] Need review
      CLOSED: [2019-02-22 ven. 17:27]
-*** TODO [ES] goalie
 **** TODO [AB] Need review
+*** TODO [ES] goalie
+**** DONE [AB] Need review
+     CLOSED: [2019-02-22 ven. 17:56]
 *** Dessiner des annotations sur le viewer
 **** TODO [ES] Dessiner la position de la balle
 ***** TODO [AB] Need review
