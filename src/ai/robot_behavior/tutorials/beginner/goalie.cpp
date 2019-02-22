@@ -22,8 +22,9 @@
 
 namespace RhobanSSL {
 namespace Robot_behavior {
+namespace Beginner {
 
-Begginer_goalie::Begginer_goalie(
+Goalie::Goalie(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
@@ -31,49 +32,50 @@ Begginer_goalie::Begginer_goalie(
 {
 }
 
-void Begginer_goalie::update(
+void Goalie::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
     RobotBehavior::update_time_and_position( time, robot, ball );
 
-    // REVIEW AB : Write here a small sentence explaining how the goalie works.
+    // The goalie moves between the position of the ally's goal center and the position of the ball.
+    // The position of the goalie is at 0.5 meters of the goal center.
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
-   
-    // REVIEW AB - remark A: Use the opposite vector to avoid minus operator . 
-    Vector2d ball_goal_vector = ally_goal_center() - ball_position();
-    // REVIEW AB : you need to check that ball_goal_vector.norm() != 0 before
-    // making the division.
-    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+    rhoban_geometry::Point target_position = robot_position;
+    Vector2d ball_goal_vector = ally_goal_center() + ball_position();
+    double dist_ball_goal_vector = ball_goal_vector.norm();
 
-    // REVIEW AB : Move the robot 0.5 meters from the ball and between the ally 
-    // goal center and the ball position.
-    // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
-    // REVIEW AB : Propagate the modification made in the remark (A).
-    rhoban_geometry::Point target_position = ally_goal_center() - ball_goal_vector * 0.5;
+    if(dist_ball_goal_vector != 0) {
+        ball_goal_vector = ball_goal_vector / dist_ball_goal_vector;
+
+        // Move the robot 0.5 meters from the goal center. The robot will be aligne with the ally 
+        // goal center and the ball position.
+        target_position = ally_goal_center() + ball_goal_vector * 0.5;
+    }
+
     double target_rotation = detail::vec2angle(ball_goal_vector);
 
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 
-Control Begginer_goalie::control() const {
+Control Goalie::control() const {
     Control ctrl = follower->control();
     return ctrl; 
 }
 
-Begginer_goalie::~Begginer_goalie(){
+Goalie::~Goalie(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_goalie::get_annotations() const {
+RhobanSSLAnnotation::Annotations Goalie::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     annotations.addAnnotations( follower->get_annotations() );
     return annotations;
 }
-
+}
 }
 }

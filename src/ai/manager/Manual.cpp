@@ -458,7 +458,7 @@ Manual::Manual( Ai::AiData & ai_data ):
                 ai_data,
                 // REVIEW AB : Change the name of the class : Begginer_goalie -> Goalie
                 [&](double time, double dt){
-                    Robot_behavior::Begginer_goalie* goalie = new Robot_behavior::Begginer_goalie(ai_data);
+                    Robot_behavior::Beginner::Goalie* goalie = new Robot_behavior::Beginner::Goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
                 }, false // we don't want to define a goal here !
             )

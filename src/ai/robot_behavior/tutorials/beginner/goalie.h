@@ -17,33 +17,28 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// REVIEW AB : Change BEGGINER to BEGINNER
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GOALIE__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GOALIE__
+#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GOALIE__
+#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GOALIE__
 
-// REVIEW AB : Use absolute path instead of relative path.
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace RhobanSSL
 {
-
-// REVIEW AB : Add an namespace beginner
-
 namespace Robot_behavior {
+namespace Beginner {
 
 /** Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
 
-// REVIEW AB : Change the name of the class : Begginer_goalie -> Goalie
-class Begginer_goalie : public RobotBehavior  {
+class Goalie : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
 
     public:
-    Begginer_goalie(Ai::AiData& ai_data);
+    Goalie(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -55,10 +50,12 @@ class Begginer_goalie : public RobotBehavior  {
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Begginer_goalie();
+	virtual ~Goalie();
 };
 
-};
+    
+}; // Namespace Beginner
+}; // Namespace Robot_behavior
 }; //Namespace Rhoban
 
 #endif
