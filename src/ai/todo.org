@@ -12,11 +12,12 @@
 **** DONE [AB] Need review
      CLOSED: [2019-02-08 ven. 19:33]
 *** TODO [ES] Regarder la balle
-**** TODO [AB] Need review
+**** TODO [XM] Need review
 *** TODO [LB] Regarde une direction donnée
 **** TODO [AB] need reviews
-*** DONE [RPC] Regarder un robot
-**** TODO [AB] Need review
+*** TODO [RPC] Regarder un robot
+**** DONE [AB] Need review
+     CLOSED: [2019-02-22 ven. 17:27]
 *** TODO [ES] goalie
 **** TODO [AB] Need review
 *** Dessiner des annotations sur le viewer
