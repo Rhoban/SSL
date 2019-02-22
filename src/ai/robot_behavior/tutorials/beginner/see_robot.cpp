@@ -65,6 +65,8 @@ void See_Robot::update(
         Vector2d direction = target_position - robot_position;
         target_rotation = vector2angle( direction );
     }else{
+        // REVIEW AB : Put a comment instead of printing a message.
+        //             Then just set target_rotation to its current rotation.
         DEBUG("Warning a robot try to look itself !");
     }
 
