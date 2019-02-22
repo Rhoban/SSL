@@ -17,19 +17,26 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// REVIEW AB : Change BEGGINER to BEGINNER
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GOALIE__
 #define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GOALIE__
 
+// REVIEW AB : Use absolute path instead of relative path.
 #include "../../robot_behavior.h"
 #include "../../factory.h"
 
 namespace RhobanSSL
 {
+
+// REVIEW AB : Add an namespace beginner
+
 namespace Robot_behavior {
 
 /** Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
+
+// REVIEW AB : Change the name of the class : Begginer_goalie -> Goalie
 class Begginer_goalie : public RobotBehavior  {
     private:
 	ConsignFollower* follower;

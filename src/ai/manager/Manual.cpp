@@ -456,6 +456,7 @@ Manual::Manual( Ai::AiData & ai_data ):
         "Begginer Goalie", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
+                // REVIEW AB : Change the name of the class : Begginer_goalie -> Goalie
                 [&](double time, double dt){
                     Robot_behavior::Begginer_goalie* goalie = new Robot_behavior::Begginer_goalie(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);

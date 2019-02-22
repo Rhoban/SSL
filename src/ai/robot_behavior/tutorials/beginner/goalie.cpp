@@ -37,13 +37,21 @@ void Begginer_goalie::update(
     const Ai::Ball & ball
 ){
     RobotBehavior::update_time_and_position( time, robot, ball );
+
+    // REVIEW AB : Write here a small sentence explaining how the goalie works.
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
-    
+   
+    // REVIEW AB - remark A: Use the opposite vector to avoid minus operator . 
     Vector2d ball_goal_vector = ally_goal_center() - ball_position();
+    // REVIEW AB : you need to check that ball_goal_vector.norm() != 0 before
+    // making the division.
     ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
 
+    // REVIEW AB : Move the robot 0.5 meters from the ball and between the ally 
+    // goal center and the ball position.
     // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
+    // REVIEW AB : Propagate the modification made in the remark (A).
     rhoban_geometry::Point target_position = ally_goal_center() - ball_goal_vector * 0.5;
     double target_rotation = detail::vec2angle(ball_goal_vector);
 
