@@ -46,6 +46,7 @@
 #include <robot_behavior/tutorials/beginner/goalie.h>
 #include <robot_behavior/tutorials/beginner/defensor.h>
 #include <robot_behavior/tutorials/beginner/see_ball.h>
+#include <robot_behavior/tutorials/beginner/see_robot.h>
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
@@ -492,6 +493,18 @@ Manual::Manual( Ai::AiData & ai_data ):
                 [&](double time, double dt){
                     Robot_behavior::Begginer_see_ball* see_ball = new Robot_behavior::Begginer_see_ball(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(see_ball);
+                }, false // we don't want to define a goal here !
+            )
+        )
+    );
+    register_strategy(
+        "Begginer - See robot", std::shared_ptr<Strategy::Strategy>(
+            new Strategy::From_robot_behavior(
+                ai_data,
+                [&](double time, double dt){
+                    Robot_behavior::Beginner::See_Robot* see_robot = new Robot_behavior::Beginner::See_Robot(ai_data);
+                    see_robot->set_robot_id_to_see(3);
+                    return std::shared_ptr<Robot_behavior::RobotBehavior>(see_robot);
                 }, false // we don't want to define a goal here !
             )
         )
