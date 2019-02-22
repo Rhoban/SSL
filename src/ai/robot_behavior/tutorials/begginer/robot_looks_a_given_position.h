@@ -17,6 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// REVIEW AB : change  ROBOT__LOOKS__A__GIVEN__POSITION to
+//      ROBOT_LOOKS_AT_A_GIVEN_POSITION 
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__ROBOT__LOOKS__A__GIVEN__POSITION
 #define __ROBOT_BEHAVIOR__TUTORIALS__ROBOT__LOOKS__A__GIVEN__POSITION
 
@@ -27,6 +29,9 @@ namespace RhobanSSL
 {
 namespace Robot_behavior {
 
+// REVIEW AB : Add a namespace beginner
+
+// REVIEW AB : rename class to Robot_looks_at_a_given_position
 class Robot_looks_a_given_position : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
