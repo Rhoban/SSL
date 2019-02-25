@@ -45,9 +45,9 @@ void See_ball::update(
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
 
     Vector2d robot_ball = ball_position() - robot_position;
-    ContinuousAngle target_angular_rotation = vector2angle( robot_ball );
+    ContinuousAngle target_angular_position = vector2angle( robot_ball );
     
-    follower->set_following_position(robot_position, target_angular_rotation );
+    follower->set_following_position(robot_position, target_angular_position );
     follower->update(time, robot, ball);
 }
 

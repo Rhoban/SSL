@@ -28,7 +28,10 @@ namespace RhobanSSL{
 namespace Robot_behavior {
 namespace Beginner {
 
-// Tutorial to show how to see the ball.
+/* Tutorial to show how to see the ball.
+*
+* @brief The robot stay in his position and always turns to the ball.
+*/
 class See_ball : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
