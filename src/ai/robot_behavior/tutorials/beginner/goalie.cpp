@@ -46,7 +46,7 @@ void Goalie::update(
     rhoban_geometry::Point target_position = robot_position;
     // REVIEW AB : This not the good vector : 
     //       Vector2d ball_goal_vector = ball_position() - ally_goal_center();
-    Vector2d ball_goal_vector = ally_goal_center() + ball_position();
+    Vector2d ball_goal_vector = ball_position() - ally_goal_center();
     double dist_ball_goal_vector = ball_goal_vector.norm();
 
     if(dist_ball_goal_vector != 0) {
