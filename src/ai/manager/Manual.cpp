@@ -480,7 +480,7 @@ Manual::Manual( Ai::AiData & ai_data ):
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Begginer_annotations_ball_position* ball_position = new Robot_behavior::Begginer_annotations_ball_position(ai_data);
+                    Robot_behavior::Beginner::Annotations_ball_position* ball_position = new Robot_behavior::Beginner::Annotations_ball_position(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(ball_position);
                 }, false // we don't want to define a goal here !
             )
