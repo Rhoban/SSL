@@ -47,7 +47,7 @@
 #include <robot_behavior/tutorials/beginner/defensor.h>
 #include <robot_behavior/tutorials/beginner/see_ball.h>
 #include <robot_behavior/tutorials/beginner/see_robot.h>
-#include <robot_behavior/tutorials/beginner/robot_near_ball.h>
+#include <robot_behavior/tutorials/beginner/annotations_closest_robot_to_the_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/tutorials/medium/striker.h>
@@ -514,7 +514,7 @@ Manual::Manual( Ai::AiData & ai_data ):
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Begginer_robot_near_ball* near_ball = new Robot_behavior::Begginer_robot_near_ball(ai_data);
+                    Robot_behavior::Beginner::Annotation_closest_robot_to_the_ball* near_ball = new Robot_behavior::Beginner::Annotation_closest_robot_to_the_ball(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(near_ball);
                 }, false // we don't want to define a goal here !
             )

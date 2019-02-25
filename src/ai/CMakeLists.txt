@@ -63,7 +63,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/goto_ball.cpp
     robot_behavior/tutorials/beginner/goalie.cpp
     robot_behavior/tutorials/beginner/go_corner.cpp
-    robot_behavior/tutorials/beginner/robot_near_ball.cpp
+    robot_behavior/tutorials/beginner/annotations_closest_robot_to_the_ball.cpp
     robot_behavior/tutorials/beginner/robot_have_ball.cpp
     robot_behavior/tutorials/beginner/defensor.cpp
     robot_behavior/tutorials/beginner/annotations_ball_position.cpp
