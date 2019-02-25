@@ -510,7 +510,7 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
-        "Begginer - Robot near ball", std::shared_ptr<Strategy::Strategy>(
+        "Begginer - Robot closest to the ball", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
