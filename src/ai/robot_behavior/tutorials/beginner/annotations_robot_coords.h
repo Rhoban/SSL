@@ -20,7 +20,6 @@
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__ANNOTATIONS_ROBOT_COORDS__H__
 #define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__ANNOTATIONS_ROBOT_COORDS__H__
 
-#include "robot_behavior/factory.h"
 #include "robot_behavior/robot_behavior.h"
 
 namespace RhobanSSL {

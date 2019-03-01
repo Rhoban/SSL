@@ -49,6 +49,7 @@ void Annotations_Robot_Coords::update(
 
     //Display of coordinates:
     std::stringstream stream;
+    //We use stream to format numbers.
     stream << "X: " << std::fixed << std::setprecision(2) << x << " Y: " << y;
     annotations.addText( stream.str(),
         x - 0.5,y - 0.25,
