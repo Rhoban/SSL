@@ -60,20 +60,7 @@ void Defender::update(
 }
 
 bool Defender::isInside() {
-    Vector2d goal_to_ball = ball_position() - ally_goal_center();
-
-    double zero = 0.0;
-    const rhoban_geometry::Point & point = rhoban_geometry::Point(penalty_area_width(),zero); 
-    Vector2d perpendiculary = point - ally_goal_center();
-    double scalar = scalar_product(perpendiculary, goal_to_ball);
-
-    if(scalar > penalty_area_width()) {
-        return false;
-    } else {
-        return true;
-    }
-
-    return true;
+    return ally_penalty_area().is_inside(ball_position());;
 }
 
 Control Defender::control() const {
