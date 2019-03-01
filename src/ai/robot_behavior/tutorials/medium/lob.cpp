@@ -41,9 +41,12 @@ void Lob::update(
     annotations.clear();
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
+    // REVIEW RPC : name inversion problem, prefere robot_ball_vector
     Vector2d ball_robot_vector = ball_position() - robot_position;
     rhoban_geometry::Point target_position = ball_position();
 
+    // REVIEW RPC : invert the two following lines. The first is the same in the majority of behaviors, it's a few a"default line"
+    // But the second has a greatest interest so may be separe it from others.
     follower->avoid_the_ball(false);
     follower->set_following_position(target_position, vector2angle(ball_robot_vector)); 
     follower->update(time, robot, ball);
@@ -51,10 +54,12 @@ void Lob::update(
 
 Control Lob::control() const {
     const rhoban_geometry::Point & robot_position = linear_position();
+    // REVIEW RPC : name inversion problem, prefere robot_ball_vector
     Vector2d ball_robot_vector = robot_position - ball_position();
     double dist = ball_robot_vector.norm();
     Control ctrl = follower->control();
 
+    // REVIEW RPC : why 10 cm ?
     if(dist < 0.1) {
         ctrl.chipKick = true;
     }
