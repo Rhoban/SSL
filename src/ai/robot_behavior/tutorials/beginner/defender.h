@@ -17,24 +17,25 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__DEFENSOR__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__DEFENSOR__
+#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__DEFENDER__
+#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__DEFENDER__
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include "robot_behavior/factory.h"
+#include "robot_behavior/robot_behavior.h"
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
+namespace Beginner {
 
-/** Tutorial class to show how to move a robot in the side corner. */
-class Begginer_defensor : public RobotBehavior  {
+/** Tutorial class to show how to place a robot that place between the ally_goal and the ball. */
+class Defender : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
 
     public:
-    Begginer_defensor(Ai::AiData& ai_data);
+    Defender(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -42,14 +43,17 @@ class Begginer_defensor : public RobotBehavior  {
         const Ai::Ball & ball
     );
 
+    bool isInside();
+
 	virtual Control control() const;
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Begginer_defensor();
+	virtual ~Defender();
 };
 
-};
+}; // Namespace Beginner
+}; // Namespace Robot_behavior
 }; //Namespace Rhoban
 
 #endif

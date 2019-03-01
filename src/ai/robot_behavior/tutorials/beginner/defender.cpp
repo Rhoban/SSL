@@ -16,13 +16,13 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "defensor.h"
+#include "defender.h"
 #include <math/vector2d.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
-
-Begginer_defensor::Begginer_defensor(
+namespace Beginner {
+Defender::Defender(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
@@ -30,7 +30,7 @@ Begginer_defensor::Begginer_defensor(
 {
 }
 
-void Begginer_defensor::update(
+void Defender::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
@@ -40,31 +40,58 @@ void Begginer_defensor::update(
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     
     Vector2d ball_goal_vector = ally_goal_center() - ball_position();
-    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
-
-    // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
-    rhoban_geometry::Point target_position = ball_position() + ball_goal_vector * 0.5;
+    double dist_ball_goal = ball_goal_vector.norm();
+    
+    rhoban_geometry::Point target_position = robot_position;
     double target_rotation = detail::vec2angle(ball_goal_vector);
+    
+    if(dist_ball_goal > 0) {
+        ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+
+        // If ball is inside the field.
+        if(!isInside()) {
+            // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
+            target_position = ball_position() + ball_goal_vector * 0.5;
+        }
+    }
 
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
 
-Control Begginer_defensor::control() const {
+bool Defender::isInside() {
+    Vector2d goal_to_ball = ball_position() - ally_goal_center();
+
+    double zero = 0.0;
+    const rhoban_geometry::Point & point = rhoban_geometry::Point(penalty_area_width(),zero); 
+    Vector2d perpendiculary = point - ally_goal_center();
+    double scalar = scalar_product(perpendiculary, goal_to_ball);
+
+    if(scalar > penalty_area_width()) {
+        return false;
+    } else {
+        return true;
+    }
+
+    return true;
+}
+
+Control Defender::control() const {
     Control ctrl = follower->control();
     return ctrl; 
 }
 
-Begginer_defensor::~Begginer_defensor(){
+Defender::~Defender(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_defensor::get_annotations() const {
+RhobanSSLAnnotation::Annotations Defender::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     annotations.addAnnotations( follower->get_annotations() );
     return annotations;
 }
 
+}
 }
 }
