@@ -44,18 +44,18 @@ void Goalie::update(
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     rhoban_geometry::Point target_position = robot_position;
-    Vector2d ball_goal_vector = ball_position() - ally_goal_center();
-    double dist_ball_goal_vector = ball_goal_vector.norm();
+    Vector2d goal_ball_vector = ball_position() - ally_goal_center();
+    double dist_goal_ball_vector = goal_ball_vector.norm();
 
-    if(dist_ball_goal_vector != 0) {
-        ball_goal_vector = ball_goal_vector / dist_ball_goal_vector;
+    if(dist_goal_ball_vector != 0) {
+        goal_ball_vector = goal_ball_vector / dist_goal_ball_vector;
 
         // Move the robot 0.5 meters from the goal center. The robot will be aligne with the ally 
         // goal center and the ball position.
-        target_position = ally_goal_center() + ball_goal_vector * 0.5;
+        target_position = ally_goal_center() + goal_ball_vector * 0.5;
     }
 
-    double target_rotation = detail::vec2angle(ball_goal_vector);
+    double target_rotation = detail::vec2angle(goal_ball_vector);
 
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
