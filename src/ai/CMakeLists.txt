@@ -71,6 +71,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/prepare_strike.cpp
     robot_behavior/tutorials/medium/striker.cpp
+    robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/test_relative_velocity_consign.cpp
     Ai.cpp
     AiData.cpp
