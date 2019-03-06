@@ -532,7 +532,7 @@ Manual::Manual( Ai::AiData & ai_data ):
         )
     );
     register_strategy(
-        "Intermediate Striker", std::shared_ptr<Strategy::Strategy>(
+        "Intermediate - Striker", std::shared_ptr<Strategy::Strategy>(
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
