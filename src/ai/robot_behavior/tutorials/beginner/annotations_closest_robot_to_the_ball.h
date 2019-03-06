@@ -27,6 +27,7 @@ namespace RhobanSSL {
 namespace Robot_behavior {
 namespace Beginner {
 
+/** Class to show how to find the closest robot to the ball and draw the response on the viewer. */
 class Annotation_closest_robot_to_the_ball : public RobotBehavior  {
     private:
     RhobanSSLAnnotation::Annotations annotations;
