@@ -38,43 +38,54 @@ void  Prepare_strike::update(
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    
+    // At First, we update time and update potition from the abstract class robot_behavior.
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
+
+    Vector2d ball_strikingpoint_vector = striking_point - ball_position();
+    Vector2d ball_robot_vector = robot_position - ball_position();
     
-    Vector2d ball_strickypoint_vector = striking_point - ball_position();
-    ball_strickypoint_vector = ball_strickypoint_vector / ball_strickypoint_vector.norm(); // TODO: Check
+    double dist_ball_strikingpoint = ball_strikingpoint_vector.norm();
+    double dist_ball_robot = ball_robot_vector.norm();
+    rhoban_geometry::Point target_position;
+    double target_rotation = detail::vec2angle(ball_strikingpoint_vector);
 
-    double target_radius_from_ball;
-
-    bool is_between_strikypoint_ball;
-    double x_ball = ball_position().getX();
-    double x_strikypoint = striking_point.getX();
-    double x_robot = robot_position.getX();
-
-    if(x_ball > x_strikypoint) {
-        is_between_strikypoint_ball = x_strikypoint < x_robot && x_robot < x_ball;
+    if(dist_ball_robot == 0 && dist_ball_strikingpoint == 0) {
+        // Don't nothing.
+        target_position = robot_position;   
     } else {
-        is_between_strikypoint_ball = x_ball < x_robot && x_robot < x_strikypoint;
+        double radius_robot_ball;
+        
+        ball_strikingpoint_vector = ball_strikingpoint_vector / ball_strikingpoint_vector.norm();
+        ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
+        
+        double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_strikingpoint_vector );
+
+        // We create a imaginary line perpendicular to the vector ball to striking_point and passed in the point of
+        // the ball to seperate the field. 
+        // The goal of this line is to create two comportments when the side has changed.
+        
+        // If the robot is on the side where the striking_point is, the scalar is lesser than to 0, 
+        // Else , the scalar is greater than to 0.
+        if ( scalar_ball_robot < 0 ) { 
+            // It mustn't touch the ball and the target point is far of the ball. 
+            follower->avoid_the_ball(true);
+            radius_robot_ball = 1;
+        } else {
+            // The robot can touch the ball and the target_position must close of the ball.
+            follower->avoid_the_ball(false);
+            // robot_radius + ball_radius = 0.9+0.02 = 0.13 (+0.2 for the security).
+            radius_robot_ball = 0.15; 
+        }
+
+        Vector2d strikingpoint_ball_vector = ball_position() - striking_point;
+        // The norm is not possible to equal at zero.
+        strikingpoint_ball_vector = strikingpoint_ball_vector / strikingpoint_ball_vector.norm();
+        target_position = ball_position() + strikingpoint_ball_vector * radius_robot_ball;
     }
     
-    // If the robot is between the x-axis of the ball and the x-axis of the opponent_goal_center, the scalar is lesser than to 0. 
-    // If the robot is behind the x-axis of the ball, the scalar is greater than to 0.
-    if(is_between_strikypoint_ball) {
-        follower->avoid_the_ball(true);
-        target_radius_from_ball = 0.4;
-    } else {
-        follower->avoid_the_ball(false);
-        target_radius_from_ball = 0.3;
-    }
-
-    
-
-    rhoban_geometry::Point target_position = ball_position() - ball_strickypoint_vector * (target_radius_from_ball);
-    double target_rotation = detail::vec2angle(ball_strickypoint_vector);
-
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);   
+
 
 }
 
