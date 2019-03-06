@@ -547,7 +547,7 @@ Manual::Manual( Ai::AiData & ai_data ):
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Intermediate_Prepare_strike* prepare_strike = new Robot_behavior::Intermediate_Prepare_strike(ai_data);
+                    Robot_behavior::Medium::Prepare_strike* prepare_strike = new Robot_behavior::Medium::Prepare_strike(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(prepare_strike);
                 }, false // we don't want to define a goal here !
             )

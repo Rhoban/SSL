@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,23 +20,25 @@
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__INTERMEDIATE__PREPARE_STRIKE__
 #define __ROBOT_BEHAVIOR__TUTORIALS__INTERMEDIATE__PREPARE_STRIKE__
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
-
-/** Tutorial class to show how to place the robot behind the
- *  ball which aiming the center of ball.
+namespace Robot_behavior 
+{
+namespace Medium 
+{
+/** Tutorial class show how to prepare the robot to strike the ball.
  */
-class Intermediate_Prepare_strike : public RobotBehavior  {
+class Prepare_strike : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
+    rhoban_geometry::Point striking_point;
 
     public:
-    Intermediate_Prepare_strike(Ai::AiData& ai_data);
+    Prepare_strike(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -48,10 +50,11 @@ class Intermediate_Prepare_strike : public RobotBehavior  {
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Intermediate_Prepare_strike();
+	virtual ~Prepare_strike();
 };
 
 };
-}; //Namespace Rhoban
+};
+};  //Namespace Rhoban
 
 #endif

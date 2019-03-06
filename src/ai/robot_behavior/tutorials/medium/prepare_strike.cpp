@@ -16,21 +16,24 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "prepare_strike.h"
 #include <math/vector2d.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
+namespace Medium {
 
- Intermediate_Prepare_strike:: Intermediate_Prepare_strike(
+Prepare_strike:: Prepare_strike(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+    follower( Factory::fixed_consign_follower(ai_data) ),
+    striking_point( opponent_goal_center() ) // You can change the striking_point
 {
 }
 
-void  Intermediate_Prepare_strike::update(
+void  Prepare_strike::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
@@ -39,21 +42,25 @@ void  Intermediate_Prepare_strike::update(
     
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     
-    Vector2d ball_goal_vector = opponent_goal_center() - ball_position();
-    Vector2d ball_robot_vector = robot_position - ball_position();
-    
-    double dist_ball_robot = ball_robot_vector.norm();
-
-    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
-    ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
+    Vector2d ball_strickypoint_vector = striking_point - ball_position();
+    ball_strickypoint_vector = ball_strickypoint_vector / ball_strickypoint_vector.norm(); // TODO: Check
 
     double target_radius_from_ball;
-    double scalar_ball_robot = - scalar_product( ball_robot_vector , ball_goal_vector );
+
+    bool is_between_strikypoint_ball;
+    double x_ball = ball_position().getX();
+    double x_strikypoint = striking_point.getX();
+    double x_robot = robot_position.getX();
+
+    if(x_ball > x_strikypoint) {
+        is_between_strikypoint_ball = x_strikypoint < x_robot && x_robot < x_ball;
+    } else {
+        is_between_strikypoint_ball = x_ball < x_robot && x_robot < x_strikypoint;
+    }
     
     // If the robot is between the x-axis of the ball and the x-axis of the opponent_goal_center, the scalar is lesser than to 0. 
     // If the robot is behind the x-axis of the ball, the scalar is greater than to 0.
-    
-    if ( scalar_ball_robot < 0 ) {
+    if(is_between_strikypoint_ball) {
         follower->avoid_the_ball(true);
         target_radius_from_ball = 0.4;
     } else {
@@ -61,29 +68,32 @@ void  Intermediate_Prepare_strike::update(
         target_radius_from_ball = 0.3;
     }
 
-    rhoban_geometry::Point target_position = ball_position() - ball_goal_vector * (target_radius_from_ball);
-    double target_rotation = detail::vec2angle(ball_goal_vector);
+    
+
+    rhoban_geometry::Point target_position = ball_position() - ball_strickypoint_vector * (target_radius_from_ball);
+    double target_rotation = detail::vec2angle(ball_strickypoint_vector);
 
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);   
 
 }
 
-Control  Intermediate_Prepare_strike::control() const {
+Control  Prepare_strike::control() const {
     Control ctrl = follower->control();
     return ctrl; 
 }
 
- Intermediate_Prepare_strike::~ Intermediate_Prepare_strike(){
+ Prepare_strike::~ Prepare_strike(){
     delete follower;
 }
 
-RhobanSSLAnnotation::Annotations  Intermediate_Prepare_strike::get_annotations() const {
+RhobanSSLAnnotation::Annotations  Prepare_strike::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     annotations.addAnnotations( follower->get_annotations() );
     return annotations;
 }
 
-}
-}
+} // Namespace Medium
+} // Namespace Robot_behavior
+} // Namespace RhobanSSL
