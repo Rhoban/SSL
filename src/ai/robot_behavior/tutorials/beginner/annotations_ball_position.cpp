@@ -35,13 +35,15 @@ void Annotations_ball_position::update(
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
-    // Do not remove this line.
+    // At First, we update time and update potition from the abstract class robot_behavior.
     RobotBehavior::update_time_and_position(time, robot, ball);
     // Clear all annotations write before
     annotations.clear();
 
     // Add a cross on the ball.
-    annotations.addCross(ball_position(), "red", false);
+    std::string color = "red";
+    bool dash = false;
+    annotations.addCross(ball_position(), color, dash);
 }
 
 Control Annotations_ball_position::control() const {
