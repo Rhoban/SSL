@@ -28,7 +28,7 @@ namespace RhobanSSL
 namespace Robot_behavior {
 namespace Beginner {
 
-/** Tutorial class to show how to place a robot that place between the ally_goal and the ball. */
+/** This class shows how to place a robot between the ally's goal and the ball. (Defend situation) */
 class Defender : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
@@ -43,7 +43,7 @@ class Defender : public RobotBehavior  {
         const Ai::Ball & ball
     );
 
-    bool isInside();
+    bool ball_is_inside_ally_penalty_area();
 
 	virtual Control control() const;
 
