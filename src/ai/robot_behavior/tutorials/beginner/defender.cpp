@@ -55,6 +55,7 @@ void Defender::update(
         // The ball is inside the penalty area. Don't nothing.
     }
 
+    follower->avoid_the_ball(true);
     follower->set_following_position(target_position, target_rotation);
     follower->update(time, robot, ball);
 }
