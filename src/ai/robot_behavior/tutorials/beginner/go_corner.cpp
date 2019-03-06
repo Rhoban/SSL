@@ -23,8 +23,6 @@ namespace RhobanSSL {
 namespace Robot_behavior {
 namespace Beginner {
 
-// REVIEW AB : Mettre un namespace beginner
-
 Go_corner::Go_corner(
     Ai::AiData & ai_data
 ):

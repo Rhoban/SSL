@@ -48,8 +48,8 @@ class Go_corner : public RobotBehavior  {
 	virtual ~Go_corner();
 };
 
-};
-};
+}; //Namespace Beginner
+}; //Namespace Robot_behavior
 }; //Namespace Rhoban
 
 #endif
