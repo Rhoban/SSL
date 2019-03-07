@@ -36,31 +36,31 @@ void Lob::update(
     const Ai::Ball & ball
 ){
     // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
     RobotBehavior::update_time_and_position( time, robot, ball );
+    
     annotations.clear();
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
-    // REVIEW RPC : name inversion problem, prefere robot_ball_vector
-    Vector2d ball_robot_vector = ball_position() - robot_position;
+    Vector2d robot_ball_vector = ball_position() - robot_position;
     rhoban_geometry::Point target_position = ball_position();
-
-    // REVIEW RPC : invert the two following lines. The first is the same in the majority of behaviors, it's a few a"default line"
-    // But the second has a greatest interest so may be separe it from others.
+    
+    follower->set_following_position(target_position, vector2angle(robot_ball_vector));
+    
     follower->avoid_the_ball(false);
-    follower->set_following_position(target_position, vector2angle(ball_robot_vector)); 
     follower->update(time, robot, ball);
 }
 
 Control Lob::control() const {
     const rhoban_geometry::Point & robot_position = linear_position();
-    // REVIEW RPC : name inversion problem, prefere robot_ball_vector
-    Vector2d ball_robot_vector = robot_position - ball_position();
-    double dist = ball_robot_vector.norm();
+    
+    Vector2d robot_ball_vector = robot_position - ball_position();
+    double dist = robot_ball_vector.norm();
     Control ctrl = follower->control();
 
-    // REVIEW RPC : why 10 cm ?
-    if(dist < 0.1) {
+    // dist_minimal = robot_radius + radius_ball + safety margin = 0.09 + 0.02 + 0.1 = 0.21
+    double dist_minimal = 0.21;
+
+    if(dist < dist_minimal) {
         ctrl.chipKick = true;
     }
     return ctrl; 

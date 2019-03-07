@@ -26,8 +26,8 @@
 namespace RhobanSSL {
 namespace Robot_behavior {
 namespace Medium {
-// REVIEW RPC : copy-paste abuse
-/** Tutorial class to show how to move a robot in the side corner. */
+
+/** Tutorial class to show how to use the lob. */
 class Lob : public RobotBehavior  {
     private:
 	ConsignFollower* follower;
