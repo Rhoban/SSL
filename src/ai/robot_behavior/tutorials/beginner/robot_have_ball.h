@@ -20,19 +20,21 @@
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__HAVE__BALL__
 #define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__HAVE__BALL__
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
-namespace RhobanSSL
-{
+/** Tutorial Class to show how to see which robot has a ball. */
+
+namespace RhobanSSL {
 namespace Robot_behavior {
+namespace Beginner {
 
-class Begginer_robot_have_ball : public RobotBehavior  {
+class Robot_have_ball : public RobotBehavior  {
     private:
     RhobanSSLAnnotation::Annotations annotations;
 
     public:
-    Begginer_robot_have_ball(Ai::AiData& ai_data);
+    Robot_have_ball(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -44,9 +46,10 @@ class Begginer_robot_have_ball : public RobotBehavior  {
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Begginer_robot_have_ball();
+	virtual ~Robot_have_ball();
 };
 
+};
 };
 }; //Namespace Rhoban
 

@@ -17,25 +17,25 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#define RADIUS_CIRCLE 100
 #include "robot_have_ball.h"
-#include <math/vector2d.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
+namespace Beginner {
 
-Begginer_robot_have_ball::Begginer_robot_have_ball(
+Robot_have_ball::Robot_have_ball(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data)
 {
 }
 
-void Begginer_robot_have_ball::update(
+void Robot_have_ball::update(
     double time,
     const Ai::Robot & robot,
     const Ai::Ball & ball
 ){
+    // At First, we update time and update potition from the abstract class robot_behavior.
     RobotBehavior::update_time_and_position( time, robot, ball );
     
     // Find the ally and the opponent closest to the ball
@@ -52,29 +52,31 @@ void Begginer_robot_have_ball::update(
 
     annotations.clear();
     
+    std::string color_robot_have_ball = "blue";
+    std::string color_robot_have_not_ball = "red";
+    bool dash = false;
     // Find the robot that have the ball.
     if(opponent_have_ball ) {
-        annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);
+        annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), color_robot_have_ball, dash);
     } else if(ally_have_ball) {
-        annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), "blue", false);
+        annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), color_robot_have_ball, dash);
     } else {
-        annotations.addCross(ball_position(), "red", false);
+        annotations.addCross(ball_position(), color_robot_have_not_ball, dash);
     }
- 
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
 }
 
-Control Begginer_robot_have_ball::control() const {
+Control Robot_have_ball::control() const {
     return Control();
 }
 
-Begginer_robot_have_ball::~Begginer_robot_have_ball(){}
+Robot_have_ball::~Robot_have_ball(){}
 
-RhobanSSLAnnotation::Annotations Begginer_robot_have_ball::get_annotations() const {
+RhobanSSLAnnotation::Annotations Robot_have_ball::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
     annotations.addAnnotations( this->annotations );
     return annotations;
 }
 
+}
 }
 }

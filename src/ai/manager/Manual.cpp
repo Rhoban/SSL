@@ -525,7 +525,7 @@ Manual::Manual( Ai::AiData & ai_data ):
             new Strategy::From_robot_behavior(
                 ai_data,
                 [&](double time, double dt){
-                    Robot_behavior::Begginer_robot_have_ball* have_ball = new Robot_behavior::Begginer_robot_have_ball(ai_data);
+                    Robot_behavior::Beginner::Robot_have_ball* have_ball = new Robot_behavior::Beginner::Robot_have_ball(ai_data);
                     return std::shared_ptr<Robot_behavior::RobotBehavior>(have_ball);
                 }, false // we don't want to define a goal here !
             )
