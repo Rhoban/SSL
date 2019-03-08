@@ -46,28 +46,24 @@ void FollowRobot::update(
     
     annotations.clear();
     
-    rhoban_geometry::Point target_position = robot.get_movement().linear_position( ai_data.time );
-    ContinuousAngle target_rotation = robot.get_movement().angular_position( ai_data.time );
+    rhoban_geometry::Point follow_position = robot.get_movement().linear_position( ai_data.time );
+    ContinuousAngle follow_rotation = robot.get_movement().angular_position( ai_data.time );
 
     // Condition to check if the target robot is not the robot itself.
     // A robot which try to follow itself will do nothing.
     if(target_robot_id != robot.id()){
 
-        target_position = get_robot(target_robot_id).get_movement().linear_position( ai_data.time );
+        rhoban_geometry::Point target_position = get_robot(target_robot_id).get_movement().linear_position( ai_data.time );
         rhoban_geometry::Point robot_position = robot.get_movement().linear_position( ai_data.time );
 
         Vector2d vect_robot_target = target_position - robot_position;
-        target_rotation = vector2angle( vect_robot_target );
+        follow_rotation = vector2angle( vect_robot_target );
 
-
-       //this line "reduce" a vector :
-       vect_robot_target *= (1 - TRACKING_DISTANCE/vect_robot_target.norm());;
-       target_position += vector2point(vect_robot_target);
-        
-
+        vect_robot_target *= (1 - TRACKING_DISTANCE/vect_robot_target.norm());//reduce vector
+        follow_position = robot_position + vector2point(vect_robot_target);//transfom vector extremity to point.
     }
 
-    follower->set_following_position( target_position, target_rotation );
+    follower->set_following_position( follow_position, follow_rotation );
 
 
     follower->avoid_the_ball(false);

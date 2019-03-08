@@ -28,7 +28,7 @@ class FollowRobot : public RobotBehavior {
     int target_robot_id;
     ConsignFollower *follower;
     RhobanSSLAnnotation::Annotations annotations;
-    const double TRACKING_DISTANCE = 2.0;
+    const double TRACKING_DISTANCE = 0.3;
 
    public:
     FollowRobot(Ai::AiData &ai_data, int target_id = 0);
