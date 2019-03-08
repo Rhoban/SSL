@@ -87,10 +87,10 @@ void Striker::update(
             target_position = ball_position() + strikingpoint_ball_vector * radius_robot_ball;  
             
             // HACK : See if the robot is on the position target by the final step (when the robot is 0.15 of the ball)
-            Vector2d target_robot = target_position - robot_position;
-            double dist_target_robot = target_robot.norm();
+            Vector2d robot_target_vector = target_position - robot_position;
+            double dist_robot_target = robot_target_vector.norm();
             // We considerate 0.005 very closely and the robot is on target_position..
-            if(dist_target_robot < 0.005) {
+            if(dist_robot_target < 0.005) {
                 placed = true;
             }
         }
