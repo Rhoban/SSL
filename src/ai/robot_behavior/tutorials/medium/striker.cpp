@@ -98,6 +98,7 @@ void Striker::update(
         target_position = ball_position();
         if(dist_ball_robot > 0.3) {
         // The ball has striked and they must to place again.
+        // 0.3 is used because it is double of the minimal radius (0.15).
         placed = false;
         }
     }
