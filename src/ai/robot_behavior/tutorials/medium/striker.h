@@ -28,7 +28,7 @@ namespace RhobanSSL
 namespace Robot_behavior {
 namespace Medium {
 
-/** Tutorial class to show how to move a robot in the side corner. */
+/** Tutorial class to show how to strike the ball. */
 class Striker : public RobotBehavior  {
     private:
     rhoban_geometry::Point striking_point;
