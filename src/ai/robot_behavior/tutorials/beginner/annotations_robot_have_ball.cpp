@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "robot_have_ball.h"
+#include "annotations_robot_have_ball.h"
 
 namespace RhobanSSL {
 namespace Robot_behavior {

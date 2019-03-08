@@ -48,7 +48,7 @@
 #include <robot_behavior/tutorials/beginner/see_ball.h>
 #include <robot_behavior/tutorials/beginner/see_robot.h>
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
-#include <robot_behavior/tutorials/beginner/robot_have_ball.h>
+#include <robot_behavior/tutorials/beginner/annotations_robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/tutorials/medium/striker.h>
 #include <robot_behavior/tutorials/medium/prepare_strike.h>
