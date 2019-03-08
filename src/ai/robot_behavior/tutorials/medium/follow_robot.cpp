@@ -59,8 +59,12 @@ void FollowRobot::update(
         Vector2d vect_robot_target = target_position - robot_position;
         follow_rotation = vector2angle( vect_robot_target );
 
-        vect_robot_target *= (1 - TRACKING_DISTANCE/vect_robot_target.norm());//reduce vector
-        follow_position = robot_position + vector2point(vect_robot_target);//transfom vector extremity to point.
+        //Condition to move only if we are away the target (dist > tracking distance radius),
+        //that also avoid division by zero.
+        if(robot_position.getDist(target_position) > TRACKING_DISTANCE){
+            vect_robot_target *= (1 - TRACKING_DISTANCE/vect_robot_target.norm());//reduce vector
+            follow_position = robot_position + vector2point(vect_robot_target);//transfom vector extremity to point.
+        }
     }
 
     follower->set_following_position( follow_position, follow_rotation );
