@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
     
-    Copyright 2018 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,22 +20,24 @@
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__INTERMEDIATE__STRIKER__
 #define __ROBOT_BEHAVIOR__TUTORIALS__INTERMEDIATE__STRIKER__
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/robot_follower.h>
 
 namespace RhobanSSL
 {
 namespace Robot_behavior {
+namespace Medium {
 
 /** Tutorial class to show how to move a robot in the side corner. */
-class Intermediate_striker : public RobotBehavior  {
+class Striker : public RobotBehavior  {
     private:
     rhoban_geometry::Point striking_point;
 	ConsignFollower* follower;
     RhobanSSLAnnotation::Annotations annotations;
+    bool placed;
 
     public:
-    Intermediate_striker(Ai::AiData& ai_data);
+    Striker(Ai::AiData& ai_data);
 
     virtual void update(
         double time,
@@ -47,10 +49,11 @@ class Intermediate_striker : public RobotBehavior  {
 
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Intermediate_striker();
+	virtual ~Striker();
 };
 
-};
+}; //Namespace Medium
+}; //Namespace Robot_behavior
 }; //Namespace Rhoban
 
 #endif
