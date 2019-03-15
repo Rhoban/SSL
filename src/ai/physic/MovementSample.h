@@ -24,54 +24,45 @@
 #include <math/ContinuousAngle.h>
 #include <math/vector2d.h>
 #include <math/circular_vector.h>
-namespace RhobanSSL {
+namespace RhobanSSL
+{
+struct PositionSample
+{
+  double time;
+  rhoban_geometry::Point linear_position;
+  ContinuousAngle angular_position;
 
-struct PositionSample {
-    double time;
-    rhoban_geometry::Point linear_position;
-    ContinuousAngle angular_position;
-
-    PositionSample();
-    PositionSample(
-        double time,
-        const rhoban_geometry::Point & linear_position,
-        const ContinuousAngle & angular_position
-    );
+  PositionSample();
+  PositionSample(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
 };
 
-struct MovementSample : public circular_vector<PositionSample> {
-    circular_vector<double> dts;
+struct MovementSample : public circular_vector<PositionSample>
+{
+  circular_vector<double> dts;
 
-    MovementSample(unsigned int, double default_dt = 1.0/60.0);
-    MovementSample();
+  MovementSample(unsigned int, double default_dt = 1.0 / 60.0);
+  MovementSample();
 
-    double time( unsigned int i = 0 ) const;
-    double dt( unsigned int i = 0 ) const;
+  double time(unsigned int i = 0) const;
+  double dt(unsigned int i = 0) const;
 
-    rhoban_geometry::Point linear_position( unsigned int i = 0 ) const;
-    ContinuousAngle angular_position( unsigned int i = 0 ) const;
+  rhoban_geometry::Point linear_position(unsigned int i = 0) const;
+  ContinuousAngle angular_position(unsigned int i = 0) const;
 
-    Vector2d linear_velocity( unsigned int i = 0 ) const;
-    ContinuousAngle angular_velocity( unsigned int i = 0 ) const;
+  Vector2d linear_velocity(unsigned int i = 0) const;
+  ContinuousAngle angular_velocity(unsigned int i = 0) const;
 
-    Vector2d linear_acceleration( unsigned int i = 0 ) const;
-    ContinuousAngle angular_acceleration( unsigned int i = 0 ) const;
+  Vector2d linear_acceleration(unsigned int i = 0) const;
+  ContinuousAngle angular_acceleration(unsigned int i = 0) const;
 
-
-    bool is_valid() const;
-    void insert( const PositionSample & sample );
-
+  bool is_valid() const;
+  void insert(const PositionSample& sample);
 };
 
-}//namespace
+}  // namespace RhobanSSL
 
-std::ostream& operator<<(
-    std::ostream& stream, const RhobanSSL::PositionSample & pos
-);
+std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& pos);
 
-std::ostream& operator<<(
-    std::ostream& stream, const RhobanSSL::MovementSample & mov
-);
-
+std::ostream& operator<<(std::ostream& stream, const RhobanSSL::MovementSample& mov);
 
 #endif

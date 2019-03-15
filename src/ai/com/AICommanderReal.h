@@ -30,18 +30,18 @@ namespace RhobanSSL
 class AICommanderReal : public AICommander
 {
 public:
-    AICommanderReal(bool yellow);
+  AICommanderReal(bool yellow);
 
-    virtual void flush();
-    virtual void kick();
+  virtual void flush();
+  virtual void kick();
 
-    Master *getMaster();
+  Master* getMaster();
 
-    virtual ~AICommanderReal();
+  virtual ~AICommanderReal();
 
 protected:
-    bool kicking;
-    Master master;
-    Kinematic kinematic;
+  bool kicking;
+  Master master;
+  Kinematic kinematic;
 };
-}
+}  // namespace RhobanSSL

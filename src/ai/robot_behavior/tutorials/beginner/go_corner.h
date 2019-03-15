@@ -23,33 +23,33 @@
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Beginner {
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+namespace Beginner
+{
 /** Tutorial class to show how to move a robot in the side corner. */
-class Go_corner : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+class Go_corner : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-    public:
-    Go_corner(Ai::AiData& ai_data);
+public:
+  Go_corner(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Go_corner();
+  virtual ~Go_corner();
 };
 
-};
-};
-}; //Namespace Rhoban
+};  // namespace Beginner
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

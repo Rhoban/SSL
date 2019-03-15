@@ -25,126 +25,125 @@
 #include <math/circular_vector.h>
 #include <AiData.h>
 
+namespace RhobanSSL
+{
+struct state_name
+{
+  static const constexpr char* stop = "stop";
+  static const constexpr char* running = "running";
+  static const constexpr char* halt = "halt";
+  static const constexpr char* free_kick = "free_kick";
+  static const constexpr char* kickoff = "kickoff";
+  static const constexpr char* prepare_kickoff = "prepare_kickoff";
+  static const constexpr char* penalty = "penalty";
+};
 
+struct edge_name
+{
+  static const constexpr char* force_start = "force_start";
+  static const constexpr char* running_to_stop = "running_to_stop";
 
-namespace RhobanSSL {
+  static const constexpr char* stop_to_prepare_kickoff = "stop_to_prepare_kickoff";
+  static const constexpr char* prepare_kickoff_to_stop = "prepare_kickoff_to_stop";
+  static const constexpr char* kickoff_to_stop = "kickoff_to_stop";
+  static const constexpr char* start = "start";
+  static const constexpr char* ball_move_after_kickoff = "ball_move_after_kickoff";
+  static const constexpr char* prepare_kickoff_to_halt = "prepare_kickoff_to_halt";
+  static const constexpr char* kickoff_to_halt = "kickoff_to_halt";
 
-  struct state_name {
-    static const constexpr char* stop = "stop" ;
-    static const constexpr char* running = "running" ;
-    static const constexpr char* halt = "halt" ;
-    static const constexpr char* free_kick = "free_kick" ;
-    static const constexpr char* kickoff = "kickoff" ;
-    static const constexpr char* prepare_kickoff = "prepare_kickoff" ;
-    static const constexpr char* penalty = "penalty" ;
-  };
+  static const constexpr char* stop_to_free_kick = "stop_to_free_kick";
+  static const constexpr char* free_kick_to_stop = "free_kick_to_stop";
+  static const constexpr char* ball_move_after_free_kick = "ball_move_after_free_kick";
+  static const constexpr char* free_kick_to_halt = "free_kick_to_halt";
 
-  struct edge_name {
-    static const constexpr char* force_start = "force_start" ;
-    static const constexpr char* running_to_stop = "running_to_stop" ;
+  static const constexpr char* stop_to_penalty = "stop_to_penalty";
+  static const constexpr char* penalty_to_stop = "penalty_to_stop";
+  static const constexpr char* ball_move_after_penalty = "ball_move_after_penalty";
+  static const constexpr char* penalty_to_halt = "penalty_to_halt";
 
-    static const constexpr char* stop_to_prepare_kickoff = "stop_to_prepare_kickoff" ;
-    static const constexpr char* prepare_kickoff_to_stop = "prepare_kickoff_to_stop" ;
-    static const constexpr char* kickoff_to_stop = "kickoff_to_stop" ;
-    static const constexpr char* start = "start" ;
-    static const constexpr char* ball_move_after_kickoff = "ball_move_after_kickoff" ;
-    static const constexpr char* prepare_kickoff_to_halt = "prepare_kickoff_to_halt" ;
-    static const constexpr char* kickoff_to_halt = "kickoff_to_halt" ;
+  static const constexpr char* stop_to_halt = "stop_to_halt";
+  static const constexpr char* halt_to_stop = "halt_to_stop";
 
-    static const constexpr char* stop_to_free_kick = "stop_to_free_kick" ;
-    static const constexpr char* free_kick_to_stop = "free_kick_to_stop" ;
-    static const constexpr char* ball_move_after_free_kick = "ball_move_after_free_kick" ;
-    static const constexpr char* free_kick_to_halt = "free_kick_to_halt" ;
+  static const constexpr char* running_to_halt = "running_to_halt";
 
-    static const constexpr char* stop_to_penalty = "stop_to_penalty" ;
-    static const constexpr char* penalty_to_stop = "penalty_to_stop" ;
-    static const constexpr char* ball_move_after_penalty = "ball_move_after_penalty" ;
-    static const constexpr char* penalty_to_halt = "penalty_to_halt" ;
+  static const constexpr char* goal = "goal";
+};
 
-    static const constexpr char* stop_to_halt = "stop_to_halt" ;
-    static const constexpr char* halt_to_stop = "halt_to_stop" ;
+typedef enum free_kick_type_id
+{
+  UNKNOWN,
+  DIRECT,
+  INDIRECT
+} free_kick_type_id;
 
-    static const constexpr char* running_to_halt = "running_to_halt" ;
+struct GameStateData
+{
+  // datas[0] is the most recent
+  // datas[1] the older
+  circular_vector<SSL_Referee> datas;
 
-    static const constexpr char* goal = "goal" ;
-  };
+  double last_time;
+  uint32_t last_command_counter;
 
-  typedef enum free_kick_type_id
-  {
-    UNKNOWN, DIRECT, INDIRECT
-  } free_kick_type_id;
+  GameStateData();
 
-  struct GameStateData {
+  const SSL_Referee& current() const;
+  const SSL_Referee& old() const;
 
-    //datas[0] is the most recent
-    //datas[1] the older
-    circular_vector<SSL_Referee> datas;
+  bool command_is_new() const;
+};
 
-    double last_time;
-    uint32_t last_command_counter;
+class GameState
+{
+private:
+  Ai::AiData& ai_data;
+  bool blueTeamOnPositiveHalf;
 
-    GameStateData();
+  RefereeClient referee;
+  GameStateData game_state_data;
+  unsigned int change_stamp;
 
-    const SSL_Referee& current() const;
-    const SSL_Referee& old() const;
+  typedef std::string ID;
+  typedef construct_machine_state_infrastructure<ID, GameStateData, GameStateData> machine_infrastructure;
 
-    bool command_is_new() const;
-  };
+  machine_infrastructure::MachineState machine_state;
 
-  class GameState {
-  private:
-    Ai::AiData &ai_data;
-    bool blueTeamOnPositiveHalf;
+  bool ball_is_moving();
+  void extract_data();
+  void save_last_time_stamps();
 
-    RefereeClient referee;
-    GameStateData game_state_data;
-    unsigned int change_stamp;
+  Ai::Team team_having_kickoff;
+  Ai::Team team_having_penalty;
+  Ai::Team team_having_free_kick;
+  free_kick_type_id free_kick_type;
+  int number_of_yellow_goals;
+  int number_of_blue_goals;
 
-    typedef std::string ID;
-    typedef construct_machine_state_infrastructure<
-    ID, GameStateData, GameStateData
-    > machine_infrastructure;
+public:
+  GameState(Ai::AiData& ai_data);
 
-    machine_infrastructure::MachineState machine_state;
+  unsigned int get_change_stamp() const;
+  const ID& get_state() const;
 
-    bool ball_is_moving();
-    void extract_data();
-    void save_last_time_stamps();
+  void update(double time);
 
-    Ai::Team team_having_kickoff;
-    Ai::Team team_having_penalty;
-    Ai::Team team_having_free_kick;
-    free_kick_type_id free_kick_type;
-    int number_of_yellow_goals;
-    int number_of_blue_goals;
+  Ai::Team kickoff_team() const;
+  Ai::Team penalty_team() const;
+  Ai::Team free_kick_team() const;
 
-  public:
-    GameState(Ai::AiData &ai_data);
+  free_kick_type_id type_of_the_free_kick() const;
 
-    unsigned int get_change_stamp() const ;
-    const ID & get_state() const ;
+  bool blue_have_it_s_goal_on_positive_x_axis() const;
+  Ai::Team get_team_color(const std::string& team_name) const;
 
-    void update( double time );
+  int yellow_goalie_id() const;
+  int blue_goalie_id() const;
 
-    Ai::Team kickoff_team() const ;
-    Ai::Team penalty_team() const ;
-    Ai::Team free_kick_team() const ;
+  bool state_is_newer(unsigned int last_change_stamp) const;
 
-    free_kick_type_id type_of_the_free_kick() const ;
+  RefereeClient& getRefereeClient();
+};
 
-    bool blue_have_it_s_goal_on_positive_x_axis() const;
-    Ai::Team get_team_color( const std::string & team_name ) const;
-
-    int yellow_goalie_id() const;
-    int blue_goalie_id() const;
-
-    bool state_is_newer(unsigned int last_change_stamp) const;
-
-    RefereeClient &getRefereeClient();
-
-
-  };
-
-}
+}  // namespace RhobanSSL
 
 #endif
