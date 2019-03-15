@@ -22,48 +22,43 @@
 
 #include "Strategy.h"
 
-namespace RhobanSSL {
-namespace Strategy {
+namespace RhobanSSL
+{
+namespace Strategy
+{
+class Mur_2_passif : public Strategy
+{
+private:
+  bool behaviors_are_assigned;
+  bool is_closest_0;
+  bool is_closest_1;
 
-class Mur_2_passif : public Strategy {
-    private:
-    bool behaviors_are_assigned;
-    bool is_closest_0;
-    bool is_closest_1;
+public:
+  Mur_2_passif(Ai::AiData& ai_data);
+  virtual ~Mur_2_passif();
 
-    public:
-    Mur_2_passif(Ai::AiData & ai_data);
-    virtual ~Mur_2_passif();
+  virtual int min_robots() const;
+  virtual int max_robots() const;
+  virtual Goalie_need needs_goalie() const;
 
-    virtual int min_robots() const;
-    virtual int max_robots() const;
-    virtual Goalie_need needs_goalie() const;
+  static const std::string name;
 
-    static const std::string name;
+  virtual void start(double time);
+  virtual void stop(double time);
 
-    virtual void start(double time);
-    virtual void stop(double time);
+  virtual void update(double time);
 
-    virtual void update(double time);
+  virtual void assign_behavior_to_robots(
+      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
-    virtual void assign_behavior_to_robots(
-        std::function<
-            void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-        > assign_behavior,
-        double time, double dt
-    );
+  virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+  get_starting_positions(int number_of_avalaible_robots);
+  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+                                                ContinuousAngle& angular_position);
 
-    virtual std::list<
-        std::pair<rhoban_geometry::Point,ContinuousAngle>
-    > get_starting_positions( int number_of_avalaible_robots ) ;
-    virtual bool get_starting_position_for_goalie(
-        rhoban_geometry::Point & linear_position,
-        ContinuousAngle & angular_position
-    ) ;
-
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 };
 
-};
-};
+};  // namespace Strategy
+};  // namespace RhobanSSL
 #endif

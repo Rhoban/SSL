@@ -23,32 +23,29 @@
 #include "Manager.h"
 #include <referee/game_state.h>
 
-namespace RhobanSSL {
-namespace Manager {
+namespace RhobanSSL
+{
+namespace Manager
+{
+class Match : public Manager
+{
+private:
+  const GameState& game_state;
 
-class Match : public Manager {
-    private:
-    const GameState & game_state;
+  unsigned int last_game_state_changement;
 
-    unsigned int last_game_state_changement;
+  std::list<std::string> future_strats;
 
-    std::list<std::string> future_strats;
+public:
+  Match(Ai::AiData& ai_data, const GameState& game_state);
 
-    public:
+  void update(double time);
+  void choose_a_strategy(double time);
 
-    Match(
-        Ai::AiData & ai_data,
-        const GameState & game_state
-    );
-
-    void update(double time);
-    void choose_a_strategy(double time);
-
-    virtual ~Match();
-
+  virtual ~Match();
 };
 
-};
-};
+};  // namespace Manager
+};  // namespace RhobanSSL
 
 #endif

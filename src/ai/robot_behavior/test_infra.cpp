@@ -22,55 +22,51 @@
 #include <math/vector2d.h>
 #include <math/ContinuousAngle.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-
-TestInfra::TestInfra(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+TestInfra::TestInfra(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void TestInfra::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now
-    //  this->robot_linear_position
-    //  this->robot_angular_position
-    // are all avalaible
+void TestInfra::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::update_time_and_position(time, robot, ball);
+  // Now
+  //  this->robot_linear_position
+  //  this->robot_angular_position
+  // are all avalaible
 
-    rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
+  rhoban_geometry::Point target_position = robot.get_movement().linear_position(time);
 
-    bool value = GameInformations::infra_red( robot.id() , Vision::Team::Ally );
-    std::cout << "Value infra red : " << value << '\n';
+  bool value = GameInformations::infra_red(robot.id(), Vision::Team::Ally);
+  std::cout << "Value infra red : " << value << '\n';
 
-    // follower->avoid_the_ball(true);
-    double target_rotation = detail::vec2angle(ball_position() - target_position );
+  // follower->avoid_the_ball(true);
+  double target_rotation = detail::vec2angle(ball_position() - target_position);
 
-    follower->set_following_position(target_position, target_rotation);
-    follower->update(time, robot, ball);
+  follower->set_following_position(target_position, target_rotation);
+  follower->update(time, robot, ball);
 }
 
-Control TestInfra::control() const {
-    Control ctrl = follower->control();
-    return ctrl;
+Control TestInfra::control() const
+{
+  Control ctrl = follower->control();
+  return ctrl;
 }
 
-TestInfra::~TestInfra(){
-    delete follower;
+TestInfra::~TestInfra()
+{
+  delete follower;
 }
 
-RhobanSSLAnnotation::Annotations TestInfra::get_annotations() const {
+RhobanSSLAnnotation::Annotations TestInfra::get_annotations() const
+{
   return follower->get_annotations();
 }
 
-}
-}
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 TO COMPLETE 
+    Copyright 2018 TO COMPLETE
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -25,29 +25,26 @@
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class StrikerAi : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
 
-class StrikerAi : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
+public:
+  StrikerAi(Ai::AiData& ai_data);
 
-    public:
-        StrikerAi(Ai::AiData& ai_data);
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
+  virtual Control control() const;
 
-	virtual Control control() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~StrikerAi();
+  virtual ~StrikerAi();
 };
 
-};
-}; //Namespace Rhoban
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

@@ -20,7 +20,6 @@
 #ifndef __ROBOT_CONTROL__H__
 #define __ROBOT_CONTROL__H__
 
-
 #include <debug.h>
 #include <vector>
 #include <math/vector2d.h>
@@ -28,97 +27,86 @@
 #include <math/curve.h>
 #include "pid.h"
 
+namespace robot_control_details
+{
+struct fct_wrapper
+{
+  std::function<double(double u)> rotation;
 
-namespace robot_control_details {
-    struct fct_wrapper {
-        std::function<double (double u)> rotation;
+  fct_wrapper(const std::function<double(double u)>& rotation) : rotation(rotation){};
 
-        fct_wrapper(
-            const std::function<double (double u)> & rotation
-        ):rotation(rotation){ };
-        
-        Vector2d operator()(double t){
-            return Vector2d( rotation(t), 0.0 );
-        };
-    };
-}
+  Vector2d operator()(double t)
+  {
+    return Vector2d(rotation(t), 0.0);
+  };
+};
+}  // namespace robot_control_details
 
-class CurveForRobot {
-      public:
-        robot_control_details::fct_wrapper rotation_fct;
+class CurveForRobot
+{
+public:
+  robot_control_details::fct_wrapper rotation_fct;
 
-        Curve2d translation_curve;
-        Curve2d angular_curve;
+  Curve2d translation_curve;
+  Curve2d angular_curve;
 
-        //DifferentiableVelocityConsign tranlsation_consign;
-        //DifferentiableVelocityConsign angular_consign;
-        ContinuousVelocityConsign tranlsation_consign;
-        ContinuousVelocityConsign angular_consign;
+  // DifferentiableVelocityConsign tranlsation_consign;
+  // DifferentiableVelocityConsign angular_consign;
+  ContinuousVelocityConsign tranlsation_consign;
+  ContinuousVelocityConsign angular_consign;
 
-        double calculus_error_for_translation;
-        double calculus_error_for_rotation;
+  double calculus_error_for_translation;
+  double calculus_error_for_rotation;
 
-        RenormalizedCurve translation_movment;
-        RenormalizedCurve rotation_movment;
+  RenormalizedCurve translation_movment;
+  RenormalizedCurve rotation_movment;
 
-    public:
-        CurveForRobot(
-            const std::function<Vector2d (double u)> & translation,
-            double translation_velocity, double translation_acceleration,
-            const std::function<double (double u)> & rotation,
-            double angular_velocity, double angular_acceleration,
-            double calculus_step
-        );
-        Vector2d translation(double t) const;
-        double rotation(double t) const;
+public:
+  CurveForRobot(const std::function<Vector2d(double u)>& translation, double translation_velocity,
+                double translation_acceleration, const std::function<double(double u)>& rotation,
+                double angular_velocity, double angular_acceleration, double calculus_step);
+  Vector2d translation(double t) const;
+  double rotation(double t) const;
 
-        void print_translation_curve( double dt ) const;
-        void print_translation_movment( double dt ) const;
+  void print_translation_curve(double dt) const;
+  void print_translation_movment(double dt) const;
 
-        void print_rotation_curve( double dt ) const;
-        void print_rotation_movment( double dt ) const;
+  void print_rotation_curve(double dt) const;
+  void print_rotation_movment(double dt) const;
 };
 
+class RobotControl
+{
+public:
+  static constexpr double security_margin = .92;
 
-class RobotControl {
-    public:
-        static constexpr double security_margin = .92;
-    private:
-        double translation_velocity_limit;
-        ContinuousAngle rotation_velocity_limit;
-        double translation_acceleration_limit;
-        ContinuousAngle rotation_acceleration_limit;
+private:
+  double translation_velocity_limit;
+  ContinuousAngle rotation_velocity_limit;
+  double translation_acceleration_limit;
+  ContinuousAngle rotation_acceleration_limit;
 
-    public:
-        Control limited_control(
-            const Vector2d & robot_position,
-            const ContinuousAngle & robot_orientation,
-            const Vector2d & robot_linear_velocity,
-            const ContinuousAngle & robot_angular_velocity
-        ) const;
+public:
+  Control limited_control(const Vector2d& robot_position, const ContinuousAngle& robot_orientation,
+                          const Vector2d& robot_linear_velocity, const ContinuousAngle& robot_angular_velocity) const;
 
+  RobotControl();
 
-        RobotControl();
+  void set_limits(double translation_velocity_limit, double rotation_velocity_limit,
+                  double translation_acceleration_limit, double rotation_acceleration_limit);
 
-        void set_limits(
-            double translation_velocity_limit,
-            double rotation_velocity_limit,
-            double translation_acceleration_limit,
-            double rotation_acceleration_limit
-        );
+  virtual Control no_limited_control() const = 0;
 
-        virtual Control no_limited_control() const = 0;
-
-        /* TODO : write a documentation to explaint that function */
-        virtual double get_dt() const = 0;
-
+  /* TODO : write a documentation to explaint that function */
+  virtual double get_dt() const = 0;
 };
 
-class RobotControlWithPid : public RobotControl, public PidController {
-    public:
-        virtual Control no_limited_control() const;
+class RobotControlWithPid : public RobotControl, public PidController
+{
+public:
+  virtual Control no_limited_control() const;
 
-        virtual double get_dt() const;
+  virtual double get_dt() const;
 };
 
 #endif

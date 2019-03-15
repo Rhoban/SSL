@@ -24,16 +24,10 @@
 #include <rhoban_geometry/segment.h>
 #include <vector>
 
-namespace rhoban_geometry {
-
-    double distance_from_point_to_line(
-        const rhoban_geometry::Point & point,
-        const rhoban_geometry::Point & point_line_1,
-        const rhoban_geometry::Point & point_line_2
-    );    
-
-     
+namespace rhoban_geometry
+{
+double distance_from_point_to_line(const rhoban_geometry::Point& point, const rhoban_geometry::Point& point_line_1,
+                                   const rhoban_geometry::Point& point_line_2);
 }
 
 #endif
-

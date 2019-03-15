@@ -32,86 +32,71 @@
 
 namespace RhobanSSL
 {
+class AI
+{
+private:
+  std::string team_name;
+  Ai::Team default_team;
 
-    class AI
-    {
-    private:
-        std::string team_name;
-        Ai::Team default_team;
-    public:
+public:
+  bool is_in_simulation;
+  AI(std::string manager_name, std::string team_name, Ai::Team default_team, Data& data, AICommander* commander,
+     const std::string& config_path, bool is_in_simulation);
 
-        bool is_in_simulation;
-        AI(
-            std::string manager_name,
-            std::string team_name,
-            Ai::Team default_team,
-            Data & data,
-            AICommander *commander,
-            const std::string & config_path,
-            bool is_in_simulation
-        );
+  void run();
+  void stop();
 
-        void run();
-        void stop();
+  std::vector<std::string> getAvailableManagers();
+  void setManager(std::string manager);
+  std::shared_ptr<Manager::Manager> getManager() const;
+  std::shared_ptr<Manager::Manager> getManualManager();
 
-        std::vector<std::string> getAvailableManagers();
-        void setManager(std::string manager);
-        std::shared_ptr<Manager::Manager> getManager() const;
-        std::shared_ptr<Manager::Manager> getManualManager();
+  GameState& getGameState();
 
-        GameState &getGameState();
+  double getCurrentTime();
 
-        double getCurrentTime();
+protected:
+  bool running;
 
-    protected:
-        bool running;
+  Vision::VisionData visionData;
+  Ai::AiData ai_data;
 
-        Vision::VisionData visionData;
-        Ai::AiData ai_data;
+  bool enable_kicking;
 
-        bool enable_kicking;
+  AICommander* commander;
 
-        AICommander *commander;
+  std::map<int, std::shared_ptr<Robot_behavior::RobotBehavior> > robot_behaviors;
 
-        std::map<
-            int,
-            std::shared_ptr<Robot_behavior::RobotBehavior>
-        > robot_behaviors;
+  void init_robot_behaviors();
+  void update_robots();
+  double current_time;
+  double current_dt;
 
-        void init_robot_behaviors();
-        void update_robots( );
-        double current_time;
-        double current_dt;
+  Shared_data shared_data;
 
-        Shared_data shared_data;
+  Data& data;
+  GameState game_state;
+  std::string manager_name;
+  std::shared_ptr<Manager::Manager> strategy_manager;
+  std::shared_ptr<Manager::Manager> manual_manager;
 
-        Data & data;
-        GameState game_state;
-        std::string manager_name;
-        std::shared_ptr<Manager::Manager> strategy_manager;
-        std::shared_ptr<Manager::Manager> manual_manager;
+  Control update_robot(Robot_behavior::RobotBehavior& robot_behavior, double time, Ai::Robot& robot, Ai::Ball& ball);
+  void update_electronic_informations();
+  void print_electronic_info();
 
-        Control update_robot(
-            Robot_behavior::RobotBehavior & robot_behavior,
-            double time, Ai::Robot & robot, Ai::Ball & ball
-        );
-        void update_electronic_informations();
-        void print_electronic_info();
+  void send_control(int robot_id, const Control& control);
+  void prepare_to_send_control(int robot_id, Control& control);
 
-        void send_control( int robot_id, const Control & control );
-        void prepare_to_send_control( int robot_id, Control & control );
+  void limits_velocity(Control& ctrl) const;
+  void check_time_is_coherent() const;
 
-        void limits_velocity( Control & ctrl ) const ;
-        void check_time_is_coherent() const;
+  void share_data();
+  void prevent_collision(int robot_id, Control& ctrl);
+  RhobanSSLAnnotation::Annotations get_robot_behavior_annotations() const;
 
-        void share_data();
-        void prevent_collision( int robot_id, Control & ctrl );
-        RhobanSSLAnnotation::Annotations get_robot_behavior_annotations() const;
-        public:
-
-        void get_annotations( RhobanSSLAnnotation::Annotations & annotations ) const;
-
-    };
+public:
+  void get_annotations(RhobanSSLAnnotation::Annotations& annotations) const;
 };
+};  // namespace RhobanSSL
 
 #endif
