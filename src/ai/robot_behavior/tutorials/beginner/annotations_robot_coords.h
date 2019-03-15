@@ -22,28 +22,27 @@
 
 #include "robot_behavior/robot_behavior.h"
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Beginner {
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+namespace Beginner
+{
+class Annotations_Robot_Coords : public RobotBehavior
+{
+private:
+  RhobanSSLAnnotation::Annotations annotations;
 
-class Annotations_Robot_Coords : public RobotBehavior {
-   private:
-    RhobanSSLAnnotation::Annotations annotations;
+public:
+  Annotations_Robot_Coords(Ai::AiData& ai_data);
 
-   public:
-    Annotations_Robot_Coords(Ai::AiData &ai_data);
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot &robot,
-        const Ai::Ball &ball
-    );
+  virtual Control control() const;
 
-    virtual Control control() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-    virtual ~Annotations_Robot_Coords();
+  virtual ~Annotations_Robot_Coords();
 };
 
 };  // namespace Beginner
