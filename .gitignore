@@ -1,6 +1,10 @@
 bin
 **.swp
 *~
+build_*
+devel_*
+logs_*
+
 
 .catkin_tools
 **_debug
