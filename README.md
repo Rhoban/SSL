@@ -59,3 +59,40 @@ Here are the packages:
     * Note that this provides test binaries in `bin/` directory
 * ``viewer``: the viewer to interract with the strategies
 * TODO!
+
+## QtCreator
+
+To use QtCreator, you have to add following line at the end of the file .workspace/SetupCommand.php:
+
+below the line:
+
+    OS::run('catkin config --profile release -x _release --cmake-args -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-Wall -msse2"');
+
+add the two lines:
+
+    OS::run('catkin config --profile qtcreator_debug -x _qtdebug --cmake-args -G"CodeBlocks - Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Wall -msse2"');
+    OS::run('catkin config --profile qtcreator_release -x _qtrelease --cmake-args -G"CodeBlocks - Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_FLAGS="-Wall -msse2"');
+
+This will create a debug and release profile with CodeBlocks support (needed by QtCreator).
+
+Then:
+
+    ./workspace setup
+    
+and
+
+    ./workspace build --profile=qtcreator_debug
+    
+and/or:
+
+    ./workspace build --profile=qtcreator_release
+
+Now, you can load a CMakeLists.txt into QtCreator:
+
+$ qtcreator src/ai/CMakeLists.txt
+
+In the configure project window, unclick desktop and choose "import compil from..." and select `build_qtdebug/ssl_ai` then click on Import button. This will create a temporary imported kit with only one checked. You can add various setup (debug/release/...) by selecting the right building directory (i.e. build_qtrelease/ssl_ai).
+
+Finally, click on "Configure Project" button.
+
+If you want to reset your Qt configuration, just remove the file CMakeLists.txt.user. Also, please never add this file to the git repository
