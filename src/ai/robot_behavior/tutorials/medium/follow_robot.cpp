@@ -16,93 +16,88 @@
 #include "follow_robot.h"
 #include <math/vector2d.h>
 
-
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Medium {
-
-/*
-* With this behavior, the robot will go to its target until it reach a defined distance.
-* In short it follow its target without collide it.
-*/
-FollowRobot::FollowRobot(
-    Ai::AiData & ai_data, int target_id
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
-    
+namespace RhobanSSL
 {
-    target_robot_id = target_id;
+namespace Robot_behavior
+{
+namespace Medium
+{
+/*
+ * With this behavior, the robot will go to its target until it reach a defined distance.
+ * In short it follow its target without collide it.
+ */
+FollowRobot::FollowRobot(Ai::AiData& ai_data, int target_id)
+  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+
+{
+  target_robot_id = target_id;
 }
 
-void FollowRobot::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    
-    annotations.clear();
-    
-    rhoban_geometry::Point follow_position = robot.get_movement().linear_position( ai_data.time );
-    ContinuousAngle follow_rotation = robot.get_movement().angular_position( ai_data.time );
+void FollowRobot::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::update_time_and_position(time, robot, ball);
 
-    // Condition to check if the target robot is not the robot itself.
-    // A robot which try to follow itself will do nothing.
-    if(target_robot_id != robot.id()){
+  annotations.clear();
 
-        rhoban_geometry::Point target_position = get_robot(target_robot_id).get_movement().linear_position( ai_data.time );
-        rhoban_geometry::Point robot_position = robot.get_movement().linear_position( ai_data.time );
+  rhoban_geometry::Point follow_position = robot.get_movement().linear_position(ai_data.time);
+  ContinuousAngle follow_rotation = robot.get_movement().angular_position(ai_data.time);
 
-        Vector2d vect_robot_target = target_position - robot_position;
-        follow_rotation = vector2angle( vect_robot_target );
+  // Condition to check if the target robot is not the robot itself.
+  // A robot which try to follow itself will do nothing.
+  if (target_robot_id != robot.id())
+  {
+    rhoban_geometry::Point target_position = get_robot(target_robot_id).get_movement().linear_position(ai_data.time);
+    rhoban_geometry::Point robot_position = robot.get_movement().linear_position(ai_data.time);
 
-        //Condition to move only if we are away the target (dist > tracking distance radius),
-        //that also avoid division by zero.
-        if(robot_position.getDist(target_position) > TRACKING_DISTANCE){
-            vect_robot_target *= (1 - TRACKING_DISTANCE/vect_robot_target.norm());//reduce vector
-            follow_position = robot_position + vector2point(vect_robot_target);//transfom vector extremity to point.
-        }
+    Vector2d vect_robot_target = target_position - robot_position;
+    follow_rotation = vector2angle(vect_robot_target);
+
+    // Condition to move only if we are away the target (dist > tracking distance radius),
+    // that also avoid division by zero.
+    if (robot_position.getDist(target_position) > TRACKING_DISTANCE)
+    {
+      vect_robot_target *= (1 - TRACKING_DISTANCE / vect_robot_target.norm());  // reduce vector
+      follow_position = robot_position + vector2point(vect_robot_target);       // transfom vector extremity to point.
     }
+  }
 
-    follower->set_following_position( follow_position, follow_rotation );
+  follower->set_following_position(follow_position, follow_rotation);
 
-
-    follower->avoid_the_ball(false);
-    follower->update(time, robot, ball);
+  follower->avoid_the_ball(false);
+  follower->update(time, robot, ball);
 }
 
-
-void FollowRobot::set_robot_id_to_follow (int id){
-    target_robot_id = id;
+void FollowRobot::set_robot_id_to_follow(int id)
+{
+  target_robot_id = id;
 }
 
-int FollowRobot::get_robot_id_to_follow() const{
-    return target_robot_id;
+int FollowRobot::get_robot_id_to_follow() const
+{
+  return target_robot_id;
 }
 
-
-
-Control FollowRobot::control() const {
-    Control ctrl = follower->control();
-    return ctrl; 
+Control FollowRobot::control() const
+{
+  Control ctrl = follower->control();
+  return ctrl;
 }
 
-FollowRobot::~FollowRobot(){
-    delete follower;
+FollowRobot::~FollowRobot()
+{
+  delete follower;
 }
 
-RhobanSSLAnnotation::Annotations FollowRobot::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
-    return annotations;
+RhobanSSLAnnotation::Annotations FollowRobot::get_annotations() const
+{
+  RhobanSSLAnnotation::Annotations annotations;
+  annotations.addAnnotations(this->annotations);
+  annotations.addAnnotations(follower->get_annotations());
+  return annotations;
 }
 
-
-
-}
-}
-}
+}  // namespace Medium
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

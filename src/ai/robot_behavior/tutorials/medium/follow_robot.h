@@ -19,38 +19,37 @@
 #include "robot_behavior/factory.h"
 #include "robot_behavior/robot_behavior.h"
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Medium {
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+namespace Medium
+{
+class FollowRobot : public RobotBehavior
+{
+private:
+  int target_robot_id;
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
+  const double TRACKING_DISTANCE = 0.3;
 
-class FollowRobot : public RobotBehavior {
-   private:
-    int target_robot_id;
-    ConsignFollower *follower;
-    RhobanSSLAnnotation::Annotations annotations;
-    const double TRACKING_DISTANCE = 0.3;
+public:
+  FollowRobot(Ai::AiData& ai_data, int target_id = 0);
 
-   public:
-    FollowRobot(Ai::AiData &ai_data, int target_id = 0);
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot &robot,
-        const Ai::Ball &ball
-    );
+  virtual Control control() const;
 
-    virtual Control control() const;
+  void set_robot_id_to_follow(int id);
 
-    void set_robot_id_to_follow (int id);
+  int get_robot_id_to_follow() const;
 
-    int get_robot_id_to_follow() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-    virtual ~FollowRobot();
+  virtual ~FollowRobot();
 };
 
-};  // namespace Beginner
+};  // namespace Medium
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
 
