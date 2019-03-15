@@ -22,37 +22,37 @@
 
 #include "vector2d.h"
 
-class Matrix2d {
-    public:
-    Vector2d mat[2];
+class Matrix2d
+{
+public:
+  Vector2d mat[2];
 
-    Matrix2d( double a, double b, double c , double d);
-    Matrix2d();
+  Matrix2d(double a, double b, double c, double d);
+  Matrix2d();
 
-    double det() const;
-    Matrix2d inverse() const;
+  double det() const;
+  Matrix2d inverse() const;
 
-    Vector2d & operator[](unsigned int i);
-    const Vector2d & operator[](unsigned int i) const;
+  Vector2d& operator[](unsigned int i);
+  const Vector2d& operator[](unsigned int i) const;
 
-    double & operator()(unsigned int i, unsigned int j);
-    double operator()(unsigned int i, unsigned int j) const;
+  double& operator()(unsigned int i, unsigned int j);
+  double operator()(unsigned int i, unsigned int j) const;
 
-    Matrix2d operator*(const Matrix2d & m2) const;
-    Matrix2d operator*(double alpha ) const;
-    Vector2d operator*(const Vector2d & v) const;
+  Matrix2d operator*(const Matrix2d& m2) const;
+  Matrix2d operator*(double alpha) const;
+  Vector2d operator*(const Vector2d& v) const;
 
-    const Matrix2d & operator+() const;
-    Matrix2d operator+(const Matrix2d & m2) const;
-    Matrix2d operator-() const;
-    Matrix2d operator-(const Matrix2d & m2) const;
+  const Matrix2d& operator+() const;
+  Matrix2d operator+(const Matrix2d& m2) const;
+  Matrix2d operator-() const;
+  Matrix2d operator-(const Matrix2d& m2) const;
 
-    static Matrix2d identity();
-    static Matrix2d null();
+  static Matrix2d identity();
+  static Matrix2d null();
 };
 
 std::ostream& operator<<(std::ostream& out, const Matrix2d& v);
-Matrix2d operator*( double alpha, const Matrix2d & m );
-
+Matrix2d operator*(double alpha, const Matrix2d& m);
 
 #endif

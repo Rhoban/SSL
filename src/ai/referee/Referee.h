@@ -25,120 +25,117 @@
 #include <math/circular_vector.h>
 #include <AiData.h>
 
+namespace RhobanSSL
+{
+struct Referee_Id
+{
+  static const std::string STATE_INIT;
+  static const std::string STATE_HALTED;
+  static const std::string STATE_STOPPED;
 
+  static const std::string STATE_PREPARE_KICKOFF;
+  static const std::string STATE_PREPARE_PENALTY;
 
-namespace RhobanSSL {
+  static const std::string STATE_RUNNING;
+  static const std::string STATE_TIMEOUT;
 
-struct Referee_Id {
-    static const std::string STATE_INIT;
-    static const std::string STATE_HALTED;
-    static const std::string STATE_STOPPED;
+  static const std::string EDGE_INIT_TO_STOPPED;
+  static const std::string EDGE_HALTED_TO_STOPPED;
+  static const std::string EDGE_PREPARE_KICKOFF_TO_STOPPED;
+  static const std::string EDGE_PREPARE_PENALTY_TO_STOPPED;
+  static const std::string EDGE_RUNNING_TO_STOPPED;
+  static const std::string EDGE_TIMEOUT_TO_STOPPED;
 
-    static const std::string STATE_PREPARE_KICKOFF;
-    static const std::string STATE_PREPARE_PENALTY;
+  static const std::string EDGE_INIT_TO_HALTED;
+  static const std::string EDGE_STOPPED_TO_HALTED;
+  static const std::string EDGE_PREPARE_KICKOFF_TO_HALTED;
+  static const std::string EDGE_PREPARE_PENALTY_TO_HALTED;
+  static const std::string EDGE_RUNNING_TO_HALTED;
+  static const std::string EDGE_TIMEOUT_TO_HALTED;
 
-    static const std::string STATE_RUNNING;
-    static const std::string STATE_TIMEOUT;
+  static const std::string EDGE_TIMEOUT_START;
+  static const std::string EDGE_FORCE_START;
 
-    static const std::string EDGE_INIT_TO_STOPPED;
-    static const std::string EDGE_HALTED_TO_STOPPED;
-    static const std::string EDGE_PREPARE_KICKOFF_TO_STOPPED;
-    static const std::string EDGE_PREPARE_PENALTY_TO_STOPPED;
-    static const std::string EDGE_RUNNING_TO_STOPPED;
-    static const std::string EDGE_TIMEOUT_TO_STOPPED;
+  static const std::string EDGE_KICKOFF_YELLOW;
+  static const std::string EDGE_KICKOFF_BLUE;
 
-    static const std::string EDGE_INIT_TO_HALTED;
-    static const std::string EDGE_STOPPED_TO_HALTED;
-    static const std::string EDGE_PREPARE_KICKOFF_TO_HALTED;
-    static const std::string EDGE_PREPARE_PENALTY_TO_HALTED;
-    static const std::string EDGE_RUNNING_TO_HALTED;
-    static const std::string EDGE_TIMEOUT_TO_HALTED;
+  static const std::string EDGE_PENALTY_YELLOW;
+  static const std::string EDGE_PENALTY_BLUE;
 
-    static const std::string EDGE_TIMEOUT_START;
-    static const std::string EDGE_FORCE_START;
+  static const std::string EDGE_DIRECT_FREE_BLUE;
+  static const std::string EDGE_DIRECT_FREE_YELLOW;
 
-    static const std::string EDGE_KICKOFF_YELLOW;
-    static const std::string EDGE_KICKOFF_BLUE;
+  static const std::string EDGE_INDIRECT_FREE_BLUE;
+  static const std::string EDGE_INDIRECT_FREE_YELLOW;
 
-    static const std::string EDGE_PENALTY_YELLOW;
-    static const std::string EDGE_PENALTY_BLUE;
+  static const std::string EDGE_NORMAL_START_FOR_KICKOFF;
+  static const std::string EDGE_NORMAL_START_FOR_PENALTY;
 
-    static const std::string EDGE_DIRECT_FREE_BLUE;
-    static const std::string EDGE_DIRECT_FREE_YELLOW;
-
-    static const std::string EDGE_INDIRECT_FREE_BLUE;
-    static const std::string EDGE_INDIRECT_FREE_YELLOW;
-
-    static const std::string EDGE_NORMAL_START_FOR_KICKOFF;
-    static const std::string EDGE_NORMAL_START_FOR_PENALTY;
-
-    static const std::string EDGE_TIMEOUT_RESUME;
-    static const std::string EDGE_GOAL;
+  static const std::string EDGE_TIMEOUT_RESUME;
+  static const std::string EDGE_GOAL;
 };
 
+struct Referee_data
+{
+  // datas[0] is the most recent
+  // datas[1] the older
+  circular_vector<SSL_Referee> datas;
 
-struct Referee_data {
+  double last_time;
+  uint32_t last_command_counter;
 
-    //datas[0] is the most recent
-    //datas[1] the older
-    circular_vector<SSL_Referee> datas;
+  Referee_data();
 
-    double last_time;
-    uint32_t last_command_counter;
+  const SSL_Referee& current() const;
+  const SSL_Referee& old() const;
 
-    Referee_data();
-
-    const SSL_Referee& current() const;
-    const SSL_Referee& old() const;
-
-    bool command_is_new() const;
+  bool command_is_new() const;
 };
 
-class Referee {
+class Referee
+{
 private:
-    bool blueTeamOnPositiveHalf;
+  bool blueTeamOnPositiveHalf;
 
-    RefereeClient referee;
-    Referee_data referee_data;
-    unsigned int edge_entropy_number;
+  RefereeClient referee;
+  Referee_data referee_data;
+  unsigned int edge_entropy_number;
 
-    typedef std::string ID;
-    typedef construct_machine_state_infrastructure<
-        ID, Referee_data, Referee_data
-    > machine_infrastructure;
+  typedef std::string ID;
+  typedef construct_machine_state_infrastructure<ID, Referee_data, Referee_data> machine_infrastructure;
 
-    machine_infrastructure::MachineState machine_state;
+  machine_infrastructure::MachineState machine_state;
 
-    void extract_data();
-    void save_last_time_stamps();
+  void extract_data();
+  void save_last_time_stamps();
 
-    Ai::Team team_having_kickoff;
-    Ai::Team team_having_penalty;
-    std::pair <Ai::Team, int> team_having_direct_free;
-    std::pair <Ai::Team, int> team_having_indirect_free;
+  Ai::Team team_having_kickoff;
+  Ai::Team team_having_penalty;
+  std::pair<Ai::Team, int> team_having_direct_free;
+  std::pair<Ai::Team, int> team_having_indirect_free;
+
 public:
-    Referee();
+  Referee();
 
-    unsigned int edge_entropy() const ;
-    const ID & get_state() const ;
+  unsigned int edge_entropy() const;
+  const ID& get_state() const;
 
-    void update( double time );
+  void update(double time);
 
-    Ai::Team kickoff_team() const ;
-    Ai::Team penalty_team() const ;
-    std::pair <Ai::Team, int> direct_free_team() const ;
-    std::pair <Ai::Team, int> indirect_free_team() const ;
+  Ai::Team kickoff_team() const;
+  Ai::Team penalty_team() const;
+  std::pair<Ai::Team, int> direct_free_team() const;
+  std::pair<Ai::Team, int> indirect_free_team() const;
 
-    bool blue_have_it_s_goal_on_positive_x_axis() const;
-    Ai::Team get_team_color( const std::string & team_name ) const;
+  bool blue_have_it_s_goal_on_positive_x_axis() const;
+  Ai::Team get_team_color(const std::string& team_name) const;
 
-    int yellow_goalie_id() const;
-    int blue_goalie_id() const;
+  int yellow_goalie_id() const;
+  int blue_goalie_id() const;
 
-    RefereeClient &getRefereeClient();
-
+  RefereeClient& getRefereeClient();
 };
 
-}
+}  // namespace RhobanSSL
 
 #endif

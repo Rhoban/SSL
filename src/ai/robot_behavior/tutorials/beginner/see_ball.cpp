@@ -20,60 +20,54 @@
 #include "see_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-Begginer_see_ball::Begginer_see_ball(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+Begginer_see_ball::Begginer_see_ball(Ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void Begginer_see_ball::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    
-    annotations.clear();
-    
-    
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
+void Begginer_see_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::update_time_and_position(time, robot, ball);
 
-    Vector2d direction = ball_position() - robot_position;
-    ContinuousAngle target_rotation = vector2angle( direction );
+  annotations.clear();
 
-    
-    follower->set_following_position(robot_position, target_rotation );
-    
-    follower->avoid_the_ball(false);
-    follower->update(time, robot, ball);
+  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+
+  Vector2d direction = ball_position() - robot_position;
+  ContinuousAngle target_rotation = vector2angle(direction);
+
+  follower->set_following_position(robot_position, target_rotation);
+
+  follower->avoid_the_ball(false);
+  follower->update(time, robot, ball);
 }
 
-Control Begginer_see_ball::control() const {
-    Control ctrl = follower->control();
-    // ctrl.spin = true; // We active the dribler !
-    ctrl.kick = false; 
-    return ctrl; 
+Control Begginer_see_ball::control() const
+{
+  Control ctrl = follower->control();
+  // ctrl.spin = true; // We active the dribler !
+  ctrl.kick = false;
+  return ctrl;
 }
 
-Begginer_see_ball::~Begginer_see_ball(){
-    delete follower;
+Begginer_see_ball::~Begginer_see_ball()
+{
+  delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_see_ball::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
-    return annotations;
+RhobanSSLAnnotation::Annotations Begginer_see_ball::get_annotations() const
+{
+  RhobanSSLAnnotation::Annotations annotations;
+  annotations.addAnnotations(this->annotations);
+  annotations.addAnnotations(follower->get_annotations());
+  return annotations;
 }
 
-
-
-}
-}
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

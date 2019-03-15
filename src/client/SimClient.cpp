@@ -4,13 +4,11 @@
 
 namespace RhobanSSL
 {
-SimClient::SimClient()
-: broadcast(-1, SSL_SIM_PORT)
+SimClient::SimClient() : broadcast(-1, SSL_SIM_PORT)
 {
 }
 
-SimClient::SimClient(std::string port)
-  : broadcast(-1, stoi(port))
+SimClient::SimClient(std::string port) : broadcast(-1, stoi(port))
 {
 }
 
@@ -29,9 +27,7 @@ void SimClient::moveBall(double x, double y, double vx, double vy)
   sendPacket(packet);
 }
 
-void SimClient::moveRobot(bool yellow, int id,
-                          double x, double y, double theta,
-                          bool turnon)
+void SimClient::moveRobot(bool yellow, int id, double x, double y, double theta, bool turnon)
 {
   grSim_Packet packet;
 
@@ -48,35 +44,33 @@ void SimClient::moveRobot(bool yellow, int id,
   sendPacket(packet);
 }
 
-void SimClient::send(bool yellow, int id,
-                     double x, double y, double theta,
-                     double kickX, double kickZ, bool spin)
+void SimClient::send(bool yellow, int id, double x, double y, double theta, double kickX, double kickZ, bool spin)
 {
-                // Building packet
-                grSim_Packet packet;
-                packet.mutable_commands()->set_isteamyellow(yellow);
-                packet.mutable_commands()->set_timestamp(0.0);
-                grSim_Robot_Command *command = packet.mutable_commands()->add_robot_commands();
+  // Building packet
+  grSim_Packet packet;
+  packet.mutable_commands()->set_isteamyellow(yellow);
+  packet.mutable_commands()->set_timestamp(0.0);
+  grSim_Robot_Command* command = packet.mutable_commands()->add_robot_commands();
 
-                // Appending data
-                command->set_id(id);
-                command->set_wheelsspeed(false);
-                command->set_veltangent(x);
-                command->set_velnormal(y);
-                command->set_velangular(theta);
-                command->set_kickspeedx(kickX);
-                command->set_kickspeedz(kickZ);
-                command->set_spinner(spin);
+  // Appending data
+  command->set_id(id);
+  command->set_wheelsspeed(false);
+  command->set_veltangent(x);
+  command->set_velnormal(y);
+  command->set_velangular(theta);
+  command->set_kickspeedx(kickX);
+  command->set_kickspeedz(kickZ);
+  command->set_spinner(spin);
 
-                sendPacket(packet);
-              }
+  sendPacket(packet);
+}
 
-              void SimClient::sendPacket(grSim_Packet &packet)
-              {
-                // Broadcasting the packet
-                size_t len = packet.ByteSize();
-                unsigned char buffer[len];
-                packet.SerializeToArray(buffer, len);
-                broadcast.broadcastMessage(buffer, len);
-              }
-              }
+void SimClient::sendPacket(grSim_Packet& packet)
+{
+  // Broadcasting the packet
+  size_t len = packet.ByteSize();
+  unsigned char buffer[len];
+  packet.SerializeToArray(buffer, len);
+  broadcast.broadcastMessage(buffer, len);
+}
+}  // namespace RhobanSSL

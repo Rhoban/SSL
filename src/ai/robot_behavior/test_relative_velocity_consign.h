@@ -26,37 +26,36 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-
 class Test_relative_velocity_consign : public RobotBehavior
 {
 private:
-    Control relative_control;
+  Control relative_control;
 
 public:
-    Test_relative_velocity_consign(Ai::AiData& ai_data);
-    virtual ~Test_relative_velocity_consign();
+  Test_relative_velocity_consign(Ai::AiData& ai_data);
+  virtual ~Test_relative_velocity_consign();
 
-    void set_linear_velocity(const Vector2d & linear_velocity );
-    void set_angular_velocity(const ContinuousAngle & angular_velocity );
+  void set_linear_velocity(const Vector2d& linear_velocity);
+  void set_angular_velocity(const ContinuousAngle& angular_velocity);
 
-    // RobotBehavior interface
+  // RobotBehavior interface
 public:
-    virtual void update(double time, const Ai::Robot &robot, const Ai::Ball &ball);
-    virtual Control control() const;
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual Control control() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-    // Tests
+  // Tests
 public:
-    static Test_relative_velocity_consign* get_movement_angular_velocity_only(
-        Ai::AiData& ai_data, double angular_velocity);
-    static Test_relative_velocity_consign* get_movement_linear_velocity_only(
-        Ai::AiData& ai_data, Vector2d linear_velocity);
-    static Test_relative_velocity_consign* get_movement_angular_and_linear_velocity(
-        Ai::AiData& ai_data, Vector2d linear_velocity, double angular_velocity);
+  static Test_relative_velocity_consign* get_movement_angular_velocity_only(Ai::AiData& ai_data,
+                                                                            double angular_velocity);
+  static Test_relative_velocity_consign* get_movement_linear_velocity_only(Ai::AiData& ai_data,
+                                                                           Vector2d linear_velocity);
+  static Test_relative_velocity_consign* get_movement_angular_and_linear_velocity(Ai::AiData& ai_data,
+                                                                                  Vector2d linear_velocity,
+                                                                                  double angular_velocity);
 };
 
-}; //Namespace Rhoban_behavior
-}; //Namespace RhobanSSL
-
+};  // namespace Robot_behavior
+};  // Namespace RhobanSSL
 
 #endif
