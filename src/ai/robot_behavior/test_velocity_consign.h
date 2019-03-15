@@ -25,49 +25,46 @@
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class Test_velocity_consign : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-class Test_velocity_consign : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+  double period;
+  double last_time;
+  int cpt;
 
-    double period;
-    double last_time;
-    int cpt;
+  Vector2d linear_velocity;
+  ContinuousAngle angular_velocity;
 
-    Vector2d linear_velocity;
-    ContinuousAngle angular_velocity;
+public:
+  Test_velocity_consign(Ai::AiData& ai_data);
 
-    public:
-    Test_velocity_consign(Ai::AiData& ai_data);
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  static Test_velocity_consign* get_W_movement(Ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_E_movement(Ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_N_movement(Ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_S_movement(Ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_NW_movement(Ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_NE_movement(Ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_SW_movement(Ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_SE_movement(Ai::AiData& ai_data, double velocity);
 
-    static Test_velocity_consign* get_W_movement(Ai::AiData& ai_data, double velocity);
-    static Test_velocity_consign* get_E_movement(Ai::AiData& ai_data, double velocity);
-    static Test_velocity_consign* get_N_movement(Ai::AiData& ai_data, double velocity);
-    static Test_velocity_consign* get_S_movement(Ai::AiData& ai_data, double velocity);
-    static Test_velocity_consign* get_NW_movement(Ai::AiData& ai_data, double velocity);
-    static Test_velocity_consign* get_NE_movement(Ai::AiData& ai_data, double velocity);
-    static Test_velocity_consign* get_SW_movement(Ai::AiData& ai_data, double velocity);
-    static Test_velocity_consign* get_SE_movement(Ai::AiData& ai_data, double velocity);
+  void set_linear_velocity(const Vector2d& velocity);
+  void set_angular_velocity(const ContinuousAngle& angle);
 
-    void set_linear_velocity( const Vector2d & velocity );
-    void set_angular_velocity( const ContinuousAngle & angle );
+  virtual Control control() const;
 
-  	virtual Control control() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Test_velocity_consign();
+  virtual ~Test_velocity_consign();
 };
 
-};
-}; //Namespace Rhoban
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

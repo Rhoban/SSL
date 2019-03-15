@@ -28,74 +28,70 @@
 #include <AiData.h>
 #include <annotations/Annotations.h>
 
-namespace RhobanSSL {
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+class RobotBehavior : public GameInformations
+{
+protected:
+  const Ai::Robot* robot_ptr;
+  double birthday;
+  double lastUpdate;
+  std::string name;
 
-namespace Robot_behavior {
+  Vector2d robot_linear_position;
+  ContinuousAngle robot_angular_position;
+  Vector2d robot_linear_velocity;
+  ContinuousAngle robot_angular_velocity;
 
-class RobotBehavior : public GameInformations {
-    protected:
-        const Ai::Robot* robot_ptr;
-        double birthday;
-        double lastUpdate;
-        std::string name;
+  Ai::AiData& ai_data;
 
-        Vector2d robot_linear_position;
-        ContinuousAngle robot_angular_position;
-        Vector2d robot_linear_velocity;
-        ContinuousAngle robot_angular_velocity;
+public:
+  RobotBehavior(Ai::AiData& ia_data);
 
-        Ai::AiData & ai_data;
-    public:
-        RobotBehavior( Ai::AiData & ia_data );
+  double age() const;
+  bool is_born() const;
+  void set_birthday(double birthday);
 
-        double age() const;
-        bool is_born() const;
-        void set_birthday( double birthday );
+  void update_time_and_position(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-        void update_time_and_position(
-            double time,
-            const Ai::Robot & robot, const Ai::Ball & ball
-        );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball) = 0;
+  virtual Control control() const = 0;
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot, const Ai::Ball & ball
-        ) = 0;
-        virtual Control control() const = 0;
+  //
+  // This function is used to draw annotations in the viewer.
+  // You can use it to print what you want.
+  //
+  // For example :
+  //
+  //
+  //  RhobanSSLAnnotation::Annotations get_annotations() const{
+  //      RhobanSSLAnnotation::Annotations annotations;
+  //      static double d = 0;
+  //      d += 0.01;
+  //
+  //      annotations.addCircle(3, 3, 1, "cyan");
+  //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+  //      return annotations;
+  //  }
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-        //
-        // This function is used to draw annotations in the viewer.
-        // You can use it to print what you want.
-        //
-        // For example :
-        //
-        //
-        //  RhobanSSLAnnotation::Annotations get_annotations() const{
-        //      RhobanSSLAnnotation::Annotations annotations;
-        //      static double d = 0;
-        //      d += 0.01;
-        //
-        //      annotations.addCircle(3, 3, 1, "cyan");
-        //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
-        //      return annotations;
-        //  }
-        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  const Ai::Robot& robot() const;
 
-        const Ai::Robot & robot() const ;
+  rhoban_geometry::Point linear_position() const;
+  ContinuousAngle angular_position() const;
+  bool is_goalie() const;
 
-        rhoban_geometry::Point linear_position() const ;
-        ContinuousAngle angular_position() const;
-        bool is_goalie() const;
-
-        bool infra_red() const;
-
+  bool infra_red() const;
 };
 
-namespace detail {
-    double vec2angle( Vector2d direction );
+namespace detail
+{
+double vec2angle(Vector2d direction);
 };
 
-};
-}; //Namespace Rhoban
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif
