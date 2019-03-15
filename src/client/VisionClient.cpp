@@ -18,17 +18,18 @@ namespace RhobanSSL
 //   init();
 // }
 
-VisionClient::VisionClient(bool simulation,std::string addr, std::string port, std::string sim_port) :
-  MulticastClient(addr, port)
+VisionClient::VisionClient(bool simulation, std::string addr, std::string port, std::string sim_port)
+  : MulticastClient(addr, port)
 {
-  if (simulation) {
+  if (simulation)
+  {
     port = sim_port;
   }
-  std::cout<<"Vision client (simulation="<<((simulation)?"True":"False")<<"): "<<addr<<":"<<port<<std::endl;
+  std::cout << "Vision client (simulation=" << ((simulation) ? "True" : "False") << "): " << addr << ":" << port
+            << std::endl;
 
   init();
 }
-
 
 SSL_WrapperPacket VisionClient::getData()
 {
@@ -41,18 +42,21 @@ SSL_WrapperPacket VisionClient::getData()
   return tmp;
 }
 
-bool VisionClient::process(char *buffer, size_t len)
+bool VisionClient::process(char* buffer, size_t len)
 {
   SSL_WrapperPacket packet;
 
-  if (packet.ParseFromArray(buffer, len)) {
+  if (packet.ParseFromArray(buffer, len))
+  {
     data = packet;
 
     return true;
-  } else {
+  }
+  else
+  {
     std::cerr << "Packet error!" << std::endl;
   }
 
   return false;
 }
-}
+}  // namespace RhobanSSL

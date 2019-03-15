@@ -7,18 +7,14 @@
 
 using namespace rhoban_utils;
 
-
 namespace RhobanSSL
 {
-
-RefereeClient::RefereeClient() :
-  MulticastClient(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT)
+RefereeClient::RefereeClient() : MulticastClient(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT)
 {
   init();
 }
 
-RefereeClient::RefereeClient(std::string addr, std::string port) :
-  MulticastClient(addr, port)
+RefereeClient::RefereeClient(std::string addr, std::string port) : MulticastClient(addr, port)
 {
   init();
 }
@@ -34,15 +30,16 @@ SSL_Referee RefereeClient::getData()
   return tmp;
 }
 
-bool RefereeClient::process(char *buffer, size_t len)
+bool RefereeClient::process(char* buffer, size_t len)
 {
   SSL_Referee packet;
 
-  if (packet.ParseFromArray(buffer, len)) {
+  if (packet.ParseFromArray(buffer, len))
+  {
     data = packet;
     return true;
   }
 
   return false;
 }
-}
+}  // namespace RhobanSSL
