@@ -16,55 +16,53 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "go_corner.h"
 #include <math/vector2d.h>
+#include "go_corner.h"
 
 namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-
-Go_corner::Go_corner(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+// Use opponent_corner_left() for the left corner.
+GoCorner::GoCorner(Ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data)), target_corner_(opponent_corner_left())
 {
 }
 
-void Go_corner::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void GoCorner::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position(time, robot, ball);
-  annotations.clear();
+  annotations_.clear();
 
-  // Set the robot_position to the right corner. (Use opponent_corner_left() for the left corner).
-  const rhoban_geometry::Point& future_position = opponent_corner_right();
-
+  const rhoban_geometry::Point& future_position = target_corner_;
   ContinuousAngle angle(0.0);
 
-  follower->set_following_position(future_position, angle);
-  follower->update(time, robot, ball);
+  follower_->set_following_position(future_position, angle);
+  follower_->update(time, robot, ball);
 }
 
-Control Go_corner::control() const
+Control GoCorner::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
-Go_corner::~Go_corner()
+GoCorner::~GoCorner()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Go_corner::get_annotations() const
+RhobanSSLAnnotation::Annotations GoCorner::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->get_annotations());
   return annotations;
 }
 
-}  // namespace Beginner
+}  // namespace beginner
 }  // namespace Robot_behavior
 }  // namespace RhobanSSL
