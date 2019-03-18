@@ -17,59 +17,44 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
-
-/** @file go_corner.h
- *  @brief Tutorial to show how to move a robot in the side corner.
- *  @author Etienne Schmitz (hello.etienne-schmitz.com)
- *  @version 1.0
- *  @date 17/03/2019
- */
+#ifndef ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
+#define ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
-/** @namespace RhobanSSL
- *
- * Namespace gather all class of the project.
- */
+
 namespace RhobanSSL
 {
-/** @namespace Robot_behavior
- *
- * Namespace gather all robot behavior.
- */
 namespace Robot_behavior
 {
-/** @namespace Robot_behavior
- *
- * Namespace gather all beginner tutorial.
- */
 namespace beginner
 {
-/** @class GoCorner
- *  @brief Class Represent the tutorial behavior to go in corner.
+/** 
+ * @class GoCorner
+ * @brief Tutorial to show how to move a robot in the side corner.
  */
 class GoCorner : public RobotBehavior
 {
 private:
-  /** @brief The follower of the class.
+  /** 
+   * @see RhobanSSL::Robot_behavior::ConsignFollower 
    */
   ConsignFollower* follower_;
-  /** @brief The annotation shows in the viewer.
-   * Not use in this package.
+  /** 
+   * Not use in this package but set in a possible event of copy.
+   * @see RhobanSSLAnnotation::Annotations 
    */
   RhobanSSLAnnotation::Annotations annotations_;
-  /** @brief The target corner which the robot goes.
-   *
-   * The default value is the left opponent corner.
+  /** 
+   * @brief The target corner which the robot goes.
    */
   const rhoban_geometry::Point& target_corner_;
 
 public:
-  /** @brief Constructor of the class.
-   *
-   * @param ai_data : The AI data.
+  /**
+   * @brief Constructor. 
+   * The default value of the target_corner_ is set to left opponent corner.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
    */
   GoCorner(Ai::AiData& ai_data);
 
@@ -86,14 +71,15 @@ public:
    */
   virtual Control control() const;
 
-  /** Get all annotations for the viewer.
+  /** @see RhobanSSLAnnotation::Annotations 
    *
    * The follower draw annotations.
    * The class don't draw any annotations.
    */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-  /** @brief Destructor of the class.
+  /**
+   *  @brief Destructor.
    */
   virtual ~GoCorner();
 };
