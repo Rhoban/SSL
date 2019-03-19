@@ -4,6 +4,7 @@
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
     Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
     Copyright 2018 Muller Xavier (xavier.muller@etu.u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -46,7 +47,7 @@ public:
   const Ai::Ball& ball() const;
   /**
    * @brief returns the current ball's position.
-   * @return const rhoban_geometry::Point
+   * @return a point
    */
   rhoban_geometry::Point ball_position() const;
   /**
@@ -192,7 +193,7 @@ public:
    *
    * @param robot_number
    * the robot number
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    * @param team the team of the robot (ally or opponent)
    * @return a boolean
    */
@@ -214,7 +215,7 @@ public:
    * @param distance (usually the robot radius)
    * @param[out] result
    * a vector of robot's number
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    */
   void get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team,
                          double distance, std::vector<int>& result) const;
@@ -231,7 +232,7 @@ public:
    * ( Vision::Team::Opponent or Vision::Team::Ally)
    * @param distance (usually the robot radius)
    * @return a vector of robot's number
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    */
   std::vector<int> get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
                                      Vision::Team team = Vision::Team::Opponent, double distance = 0.4) const;
@@ -242,7 +243,7 @@ public:
    * @param p2
    * @param distance (usually the robot radius)
    * @return a vector of robot's shirt number
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    */
   std::vector<int> get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
                                      double distance) const;
@@ -252,7 +253,7 @@ public:
    * @param team
    * ( Vision::Team::Opponent or Vision::Team::Ally)
    * @return robot's shirt number (-1 if not found)
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    */
   int get_shirt_number_of_closest_robot(Vision::Team team, rhoban_geometry::Point point) const;
   /**
@@ -261,7 +262,7 @@ public:
    * @param team
    * ( Vision::Team::Opponent or Vision::Team::Ally)
    * @return robot's shirt number(-1 if not found)
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    */
   int get_shirt_number_of_closest_robot_to_the_ball(Vision::Team team) const;
 
@@ -273,9 +274,11 @@ public:
    * The algorithm tests different lines between the point and the goal given
    * in parameter and returns the leasts covered by robots line.
    * @note Attack algorithm
-   * @param a point
+   * @param point
+   * a point
    * (usually the ball's position)
-   * @param a goal
+   * @param goal
+   * a goal
    * (usually the ennemy's goal center)
    * @return pair<rhoban_geometry::Point, double>
    * (double correspond of his "efficiency rate" )
@@ -287,7 +290,7 @@ public:
    * and the ally goal center.
    * @note Defense algorithm
    * @param robot_number
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    * @param team
    * the team of the robot (opponent by default)
    * @return a distance
@@ -313,7 +316,7 @@ public:
    * @note Defense algorithm
    * @param team
    * @return a robot's shirt number
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    */
   int shirt_number_of_threat_max(Vision::Team team) const;
   /**
@@ -325,7 +328,7 @@ public:
    * @note Defense algorithm
    * @param team
    * @return a robot's shirt number
-   * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
+   * @see get_robot() to know the difference between robot'id and robot's number).
    */
   int shirt_number_of_threat_max_2(Vision::Team team) const;  // second threat max
 };
