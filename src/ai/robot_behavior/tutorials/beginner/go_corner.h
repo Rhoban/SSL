@@ -41,7 +41,7 @@ private:
    */
   ConsignFollower* follower_;
   /** 
-   * Not use in this package but set in a possible event of copy.
+   * Not use in this package but set in a case of copy.
    * @see RhobanSSLAnnotation::Annotations 
    */
   RhobanSSLAnnotation::Annotations annotations_;
@@ -55,6 +55,7 @@ public:
    * @brief Constructor. 
    * The default value of the target_corner_ is set to left opponent corner.
    * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
    */
   GoCorner(Ai::AiData& ai_data);
 
@@ -62,8 +63,8 @@ public:
    *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
-   * @param robot : The information for the robot.
-   * @param ball : The information for the ball.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
    */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
@@ -72,9 +73,8 @@ public:
   virtual Control control() const;
 
   /** @see RhobanSSLAnnotation::Annotations 
-   *
-   * The follower draw annotations.
    * The class don't draw any annotations.
+   * The follower draw annotation.
    */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
@@ -84,8 +84,8 @@ public:
   virtual ~GoCorner();
 };
 
-};  // namespace beginner
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+} // namespace beginner
+} // namespace Robot_behavior
+} // namespace RhobanSSL
 
 #endif
