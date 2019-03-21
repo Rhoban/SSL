@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MOVEMENT_PREDICTION_BY_INTEGRATION_H__
-#define __MOVEMENT_PREDICTION_BY_INTEGRATION_H__
+#ifndef MOVEMENT_PREDICTION_BY_INTEGRATION_H
+#define MOVEMENT_PREDICTION_BY_INTEGRATION_H
 
-#include <physic/Movement.h>
+#include <physic/movement.h>
 
 namespace RhobanSSL
 {

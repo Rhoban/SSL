@@ -18,21 +18,21 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Ai.h"
+#include "ai.h"
 #include <rhoban_utils/timing/time_stamp.h>
 #include <cmath>
 #include <unistd.h>
 #include <robot_behavior/do_nothing.h>
-#include <manager/Manual.h>
-#include <manager/Match.h>
-#include <physic/MovementSample.h>
+#include <manager/manual.h>
+#include <manager/match.h>
+#include <physic/movement_sample.h>
 #include <math/vector2d.h>
 #include <physic/constants.h>
 #include <core/print_collection.h>
 #include <core/collection.h>
 #include <manager/factory.h>
 #include <debug.h>
-#include <com/AICommanderReal.h>
+#include <com/ai_commander_real.h>
 #include <utility>
 
 namespace RhobanSSL
@@ -419,7 +419,7 @@ void AI::run()
     {
       update_electronic_informations();
     }
-    // print_electronic_info();
+// print_electronic_info();
 
 #ifndef NDEBUG
 // check_time_is_coherent();

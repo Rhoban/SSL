@@ -19,10 +19,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CONTROL__H__
-#define __CONTROL__H__
+#ifndef CONTROL_H
+#define CONTROL_H
 
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <math/vector2d.h>
 
 class Control

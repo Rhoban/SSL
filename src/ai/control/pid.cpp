@@ -39,8 +39,8 @@ PidController::PidController(double p_t, double i_t, double d_t, double p_o, dou
   , start_time(0.0)
   , time(0.0)
   , dt(0.0)
-  , acc_r(0.0)
   , acc(0.0, 0.0)
+  , acc_r(0.0)
   , ancient_pos(0.0, 0.0)
   , ancient_orientation(0.0)
 {
@@ -115,7 +115,7 @@ void PidController::compute_no_limited_translation_control(const Vector2d& robot
     return;
   }
   Vector2d xt = goal_position(time);
-  Vector2d xt_dt = goal_position(time + dt);
+  // Vector2d xt_dt = goal_position(time + dt);
   Vector2d velocity = (robot_position - ancient_pos) / dt;
 
   Vector2d error = xt - robot_position;
@@ -170,7 +170,7 @@ void PidController::compute_no_limited_angular_control(const ContinuousAngle& ro
     return;
   };
   ContinuousAngle theta_t = goal_orientation(time);
-  ContinuousAngle theta_t_dt = goal_orientation(time + dt);
+  // ContinuousAngle theta_t_dt = goal_orientation(time + dt);
   // DEBUG( "theta_t : " << theta_t );
   // DEBUG( "theta_t_dt : " << theta_t_dt );
   ContinuousAngle velocity = (robot_orientation - ancient_orientation) / dt;
@@ -213,4 +213,8 @@ double PidController::no_limited_angular_control() const
 Control PidController::no_limited_control() const
 {
   return Control(no_limited_translation_control(), no_limited_angular_control());
+}
+
+PidController::~PidController()
+{
 }

@@ -17,12 +17,12 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MOVEMENT_H__
-#define __MOVEMENT_H__
+#ifndef MOVEMENT_H
+#define MOVEMENT_H
 
 #include <math/vector2d.h>
 #include <iostream>
-#include "MovementSample.h"
+#include "movement_sample.h"
 
 namespace RhobanSSL
 {
@@ -48,7 +48,7 @@ public:
 
   virtual void print(std::ostream& stream) const = 0;
 
-  virtual ~Movement(){};
+  virtual ~Movement();
 };
 
 }  // namespace RhobanSSL

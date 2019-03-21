@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__FACTORY__H__
-#define __ROBOT_BEHAVIOR__FACTORY__H__
+#ifndef ROBOT_BEHAVIOR_FACTORY_H
+#define ROBOT_BEHAVIOR_FACTORY_H
 
-#include <AiData.h>
+#include <ai_data.h>
 #include "robot_behavior.h"
 #include "consign_follower.h"
 

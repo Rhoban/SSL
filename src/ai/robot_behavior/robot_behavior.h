@@ -17,16 +17,16 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__ROBOT_BEHAVIOR__H__
-#define __ROBOT_BEHAVIOR__ROBOT_BEHAVIOR__H__
+#ifndef ROBOT_BEHAVIOR_ROBOT_BEHAVIOR_H
+#define ROBOT_BEHAVIOR_ROBOT_BEHAVIOR_H
 
 #include <game_informations.h>
 #include <control/robot_control_with_position_following.h>
 #include <control/robot_control_with_curve.h>
 #include <control/control.h>
 #include <rhoban_utils/angle.h>
-#include <AiData.h>
-#include <annotations/Annotations.h>
+#include <ai_data.h>
+#include <annotations/annotations.h>
 
 namespace RhobanSSL
 {

@@ -1,7 +1,7 @@
 #include <fenv.h>
 #include <tclap/CmdLine.h>
-#include <com/AICommanderReal.h>
-#include <com/AICommanderSimulation.h>
+#include <com/ai_commander_real.h>
+#include <com/ai_commander_simulation.h>
 #include <QApplication>
 #include "mainwindow.h"
 #include "API.h"

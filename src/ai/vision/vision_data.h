@@ -22,9 +22,9 @@
 
 #include <map>
 #include <rhoban_geometry/point.h>
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <rhoban_utils/timing/time_stamp.h>
-#include <physic/MovementSample.h>
+#include <physic/movement_sample.h>
 #include <iostream>
 
 namespace RhobanSSL
@@ -34,11 +34,7 @@ namespace Vision
 static const int history_size = 10;
 static const int Robots = 16;
 
-typedef enum
-{
-  Ally,
-  Opponent
-} Team;
+typedef enum { Ally, Opponent } Team;
 
 struct Object
 {

@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "VisionData.h"
+#include "vision_data.h"
 #include <assert.h>
 #include <debug.h>
 

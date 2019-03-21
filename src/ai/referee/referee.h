@@ -23,7 +23,7 @@
 #include <RefereeClient.h>
 #include <core/machine_state.h>
 #include <math/circular_vector.h>
-#include <AiData.h>
+#include <ai_data.h>
 
 namespace RhobanSSL
 {

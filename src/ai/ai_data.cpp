@@ -16,7 +16,7 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "AiData.h"
+#include "ai_data.h"
 #include <assert.h>
 #include <physic/factory.h>
 #include <debug.h>

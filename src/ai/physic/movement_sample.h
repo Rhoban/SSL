@@ -17,11 +17,11 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PHYSICS_H__
-#define __PHYSICS_H__
+#ifndef PHYSICS_H
+#define PHYSICS_H
 
 #include <rhoban_geometry/point.h>
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <math/vector2d.h>
 #include <math/circular_vector.h>
 namespace RhobanSSL

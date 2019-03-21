@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PHYSIC__COLLISION__H__
-#define __PHYSIC__COLLISION__H__
+#ifndef PHYSIC_COLLISION_H
+#define PHYSIC_COLLISION_H
 
-#include "Movement.h"
+#include "movement.h"
 
 namespace RhobanSSL
 {

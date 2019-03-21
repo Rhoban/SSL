@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__DEFENSIVE__H__
-#define __STRATEGY__DEFENSIVE__H__
+#ifndef STRATEGY_DEFENSIVE_H
+#define STRATEGY_DEFENSIVE_H
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <robot_behavior/degageur.h>
 #include <robot_behavior/obstructor.h>
 

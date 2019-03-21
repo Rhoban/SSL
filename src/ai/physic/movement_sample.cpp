@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "MovementSample.h"
+#include "movement_sample.h"
 #include <assert.h>
 #include <debug.h>
 
@@ -135,12 +135,10 @@ std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& 
 {
   stream << "("
             "t="
-         << pos.time
-         << ", "
-            "lin="
-         << pos.linear_position
-         << ", "
-            "ang="
+         << pos.time << ", "
+                        "lin="
+         << pos.linear_position << ", "
+                                   "ang="
          << pos.angular_position << ")";
   return stream;
 }

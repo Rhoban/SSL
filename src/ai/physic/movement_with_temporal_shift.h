@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MOVEMENT_WITH_TEMPORAL_SHIFT__H__
-#define __MOVEMENT_WITH_TEMPORAL_SHIFT__H__
+#ifndef MOVEMENT_WITH_TEMPORAL_SHIFT_H
+#define MOVEMENT_WITH_TEMPORAL_SHIFT_H
 
-#include <physic/Movement.h>
+#include <physic/movement.h>
 
 namespace RhobanSSL
 {

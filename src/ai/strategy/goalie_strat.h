@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__GOALIESTRAT__H__
-#define __STRATEGY__GOALIESTRAT__H__
+#ifndef STRATEGY_GOALIESTRAT_H
+#define STRATEGY_GOALIESTRAT_H
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <robot_behavior/degageur.h>
 #include <robot_behavior/goalie.h>
 

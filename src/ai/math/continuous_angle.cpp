@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "ContinuousAngle.h"
+#include "continuous_angle.h"
 
 #include <cmath>
 #include <debug.h>

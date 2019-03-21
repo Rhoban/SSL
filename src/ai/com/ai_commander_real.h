@@ -23,7 +23,7 @@
 #include <stdint.h>
 #include <Master.h>
 #include <Kinematic.h>
-#include "AICommander.h"
+#include "ai_commander.h"
 
 namespace RhobanSSL
 {

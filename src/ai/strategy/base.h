@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__BASE__H__
-#define __STRATEGY__BASE__H__
+#ifndef STRATEGY_BASE_H
+#define STRATEGY_BASE_H
 
-#include "Strategy.h"
+#include "strategy.h"
 
 namespace RhobanSSL
 {

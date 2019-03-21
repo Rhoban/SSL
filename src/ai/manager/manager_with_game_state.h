@@ -1,7 +1,7 @@
-#ifndef __MANAGER__WITH_GAME_STATE__H__
-#define __MANAGER__WITH_GAME_STATE__H__
+#ifndef MANAGER_WITH_GAME_STATE_H
+#define MANAGER_WITH_GAME_STATE_H
 
-#include "Manager.h"
+#include "manager.h"
 #include "referee/game_state.h"
 
 namespace RhobanSSL

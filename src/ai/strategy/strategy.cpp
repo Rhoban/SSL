@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Strategy.h"
+#include "strategy.h"
 
 namespace RhobanSSL
 {
@@ -65,17 +65,17 @@ const std::vector<int>& Strategy::get_player_ids() const
 
 int Strategy::robot_id(int id) const
 {
-  assert(0 <= id and static_cast<unsigned int>(id) <
-                         player_ids.size());  // Whent that line make an assertion, that means, you don't have updated
-                                              // the min_robots() implementation inside your strategy code.
+  assert(0 <= id and static_cast<unsigned int>(id) < player_ids.size());  // Whent that line make an assertion, that
+                                                                          // means, you don't have updated
+  // the min_robots() implementation inside your strategy code.
   return player_ids[id];
 }
 
 int Strategy::player_id(int id) const
 {
-  assert(0 <= id and static_cast<unsigned int>(id) <
-                         player_ids.size());  // Whent that line make an assertion, that means, you don't have updated
-                                              // the min_robots() implementation inside your strategy code.
+  assert(0 <= id and static_cast<unsigned int>(id) < player_ids.size());  // Whent that line make an assertion, that
+                                                                          // means, you don't have updated
+  // the min_robots() implementation inside your strategy code.
   return player_ids[id];
 }
 

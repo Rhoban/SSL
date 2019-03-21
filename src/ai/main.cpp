@@ -22,11 +22,11 @@
 #include <signal.h>
 #include <fenv.h>
 #include <tclap/CmdLine.h>
-#include <vision/AIVisionClient.h>
-#include <com/AICommanderReal.h>
-#include <com/AICommanderSimulation.h>
-#include "Ai.h"
-#include "Data.h"
+#include <vision/ai_vision_client.h>
+#include <com/ai_commander_real.h>
+#include <com/ai_commander_simulation.h>
+#include "ai.h"
+#include "data.h"
 #include <core/print_collection.h>
 #include <manager/factory.h>
 #include "client_config.h"

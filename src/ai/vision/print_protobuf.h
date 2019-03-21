@@ -17,10 +17,10 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __VISION__PRINT_PROTOBUF__H__
-#define __VISION__PRINT_PROTOBUF__H__
+#ifndef VISION_PRINT_PROTOBUF_H
+#define VISION_PRINT_PROTOBUF_H
 
-#include "AIVisionClient.h"
+#include "ai_vision_client.h"
 #include <iostream>
 
 #include <google/protobuf/stubs/common.h>

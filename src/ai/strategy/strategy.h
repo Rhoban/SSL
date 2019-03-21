@@ -17,17 +17,17 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__STRATEGY__H__
-#define __STRATEGY__STRATEGY__H__
+#ifndef STRATEGY_STRATEGY_H
+#define STRATEGY_STRATEGY_H
 
 #include <game_informations.h>
 #include <robot_behavior/robot_behavior.h>
 #include <map>
 #include <utility>
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <memory>
-#include <AiData.h>
-#include <annotations/Annotations.h>
+#include <ai_data.h>
+#include <annotations/annotations.h>
 namespace RhobanSSL
 {
 namespace Strategy

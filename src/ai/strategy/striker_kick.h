@@ -17,11 +17,11 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__STRIKER_KICK__H__
-#define __STRATEGY__STRIKER_KICK__H__
+#ifndef STRATEGY_STRIKER_KICK_H
+#define STRATEGY_STRIKER_KICK_H
 
 #include <robot_behavior/slow_striker.h>
-#include "Strategy.h"
+#include "strategy.h"
 
 namespace RhobanSSL
 {

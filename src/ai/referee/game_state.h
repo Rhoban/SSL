@@ -17,13 +17,13 @@
   along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GAMESTATE__H__
-#define __GAMESTATE__H__
+#ifndef GAMESTATE_H
+#define GAMESTATE_H
 
 #include <RefereeClient.h>
 #include <core/machine_state.h>
 #include <math/circular_vector.h>
-#include <AiData.h>
+#include <ai_data.h>
 
 namespace RhobanSSL
 {
@@ -69,12 +69,7 @@ struct edge_name
   static const constexpr char* goal = "goal";
 };
 
-typedef enum free_kick_type_id
-{
-  UNKNOWN,
-  DIRECT,
-  INDIRECT
-} free_kick_type_id;
+typedef enum free_kick_type_id { UNKNOWN, DIRECT, INDIRECT } free_kick_type_id;
 
 struct GameStateData
 {

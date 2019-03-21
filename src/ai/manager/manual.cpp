@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Manual.h"
+#include "manual.h"
 
 // The different strategies
 #include <strategy/halt.h>
@@ -644,9 +644,8 @@ Manual::Manual(Ai::AiData& ai_data)
   register_strategy(Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(new Strategy::Halt(ai_data)));
   register_strategy(Strategy::Tare_and_synchronize::name,
                     std::shared_ptr<Strategy::Strategy>(new Strategy::Tare_and_synchronize(ai_data)));
-  assign_strategy(Strategy::Halt::name, 0.0,
-                  get_team_ids());  // TODO TIME !
-                                    // strategy_was_assigned = false;
+  assign_strategy(Strategy::Halt::name, 0.0, get_team_ids());  // TODO TIME !
+                                                               // strategy_was_assigned = false;
 }
 
 void Manual::assign_point_of_view_and_goalie()

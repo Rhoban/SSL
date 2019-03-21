@@ -17,10 +17,14 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Movement.h"
+#include "movement.h"
 
 std::ostream& operator<<(std::ostream& stream, const RhobanSSL::Movement& movement)
 {
   movement.print(stream);
   return stream;
+}
+
+RhobanSSL::Movement::~Movement()
+{
 }

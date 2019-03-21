@@ -17,10 +17,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__ATTAQUEWITHSUPPORTMS__H__
-#define __STRATEGY__ATTAQUEWITHSUPPORTMS__H__
+#ifndef STRATEGY_ATTAQUEWITHSUPPORTMS_H
+#define STRATEGY_ATTAQUEWITHSUPPORTMS_H
 
-#include "Strategy.h"
+#include "strategy.h"
 // #include <robot_behavior/robot_follower.h>
 #include <robot_behavior/striker.h>
 #include <robot_behavior/striker_ai.h>

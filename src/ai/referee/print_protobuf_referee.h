@@ -17,10 +17,10 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __VISION__PRINT_PROTOBUF_REFEREE__H__
-#define __VISION__PRINT_PROTOBUF_REFEREE__H__
+#ifndef VISION_PRINT_PROTOBUF_REFEREE_H
+#define VISION_PRINT_PROTOBUF_REFEREE_H
 
-#include "Referee.h"
+#include "referee.h"
 #include <iostream>
 #include <google/protobuf/stubs/common.h>
 #if GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION >= 3000000

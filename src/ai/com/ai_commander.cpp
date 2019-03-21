@@ -18,7 +18,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "AICommander.h"
+#include "ai_commander.h"
 #include <debug.h>
 
 namespace RhobanSSL

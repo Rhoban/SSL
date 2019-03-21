@@ -17,17 +17,17 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __AIDATA_H__
-#define __AIDATA_H__
+#ifndef AIDATA_H
+#define AIDATA_H
 
 #include <debug.h>
 #include <map>
 #include <list>
 #include <rhoban_utils/angle.h>
 #include <rhoban_utils/timing/time_stamp.h>
-#include <physic/MovementSample.h>
-#include <vision/VisionData.h>
-#include <physic/Movement.h>
+#include <physic/movement_sample.h>
+#include <vision/vision_data.h>
+#include <physic/movement.h>
 #include <math/frame_changement.h>
 #include <math/position.h>
 
@@ -46,12 +46,7 @@ struct RobotPlacement
   RobotPlacement(std::vector<Position> field_robot_position);
 };
 
-typedef enum
-{
-  Yellow,
-  Blue,
-  Unknown
-} Team;
+typedef enum { Yellow, Blue, Unknown } Team;
 
 class Object
 {

@@ -19,7 +19,7 @@
 */
 
 #include <iostream>
-#include "AIVisionClient.h"
+#include "ai_vision_client.h"
 #include <debug.h>
 #include "factory.h"
 #include <core/print_collection.h>

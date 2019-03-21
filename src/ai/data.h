@@ -19,12 +19,12 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __DATA_H__
-#define __DATA_H__
+#ifndef DATA_H
+#define DATA_H
 
-#include <vision/VisionData.h>
+#include <vision/vision_data.h>
 #include <mutex>
-#include <AiData.h>
+#include <ai_data.h>
 #include <robot_behavior/robot_behavior.h>
 
 namespace RhobanSSL

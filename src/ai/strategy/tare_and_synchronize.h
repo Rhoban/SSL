@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__TARE_AND_SYNCHRONIZE__H__
-#define __STRATEGY__TARE_AND_SYNCHRONIZE__H__
+#ifndef STRATEGY_TARE_AND_SYNCHRONIZE_H
+#define STRATEGY_TARE_AND_SYNCHRONIZE_H
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <string>
 
 namespace RhobanSSL

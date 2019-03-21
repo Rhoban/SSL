@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__INDIRECT__H__
-#define __STRATEGY__INDIRECT__H__
+#ifndef STRATEGY_INDIRECT_H
+#define STRATEGY_INDIRECT_H
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <robot_behavior/pass_dribbler.h>
 #include <memory>
 

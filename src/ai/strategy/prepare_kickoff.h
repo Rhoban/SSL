@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__PREPARE_KICKOFF__H__
-#define __STRATEGY__PREPARE_KICKOFF__H__
+#ifndef STRATEGY_PREPARE_KICKOFF_H
+#define STRATEGY_PREPARE_KICKOFF_H
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <string>
 #include <robot_behavior/robot_behavior.h>
 #include "placer.h"

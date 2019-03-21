@@ -17,12 +17,12 @@
   along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__NAVIGATION_WITH_OBSTACLE_AVOIDANCE__H__
-#define __ROBOT_BEHAVIOR__NAVIGATION_WITH_OBSTACLE_AVOIDANCE__H__
+#ifndef ROBOT_BEHAVIOR_NAVIGATION_WITH_OBSTACLE_AVOIDANCE_H
+#define ROBOT_BEHAVIOR_NAVIGATION_WITH_OBSTACLE_AVOIDANCE_H
 
 #include "robot_behavior.h"
 #include "position_follower.h"
-#include <AiData.h>
+#include <ai_data.h>
 #include <math/circular_vector.h>
 
 namespace RhobanSSL

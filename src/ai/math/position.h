@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MATH__POSITION__H__
-#define __MATH__POSITION__H__
+#ifndef MATH_POSITION_H
+#define MATH_POSITION_H
 
-#include "ContinuousAngle.h"
+#include "continuous_angle.h"
 #include <rhoban_geometry/point.h>
 #include <iostream>
 

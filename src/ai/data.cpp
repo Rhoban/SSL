@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Data.h"
+#include "data.h"
 
 namespace RhobanSSL
 {

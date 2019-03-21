@@ -19,10 +19,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GAME_INFORMATIONS__H__
-#define __GAME_INFORMATIONS__H__
+#ifndef GAME_INFORMATIONS_H
+#define GAME_INFORMATIONS_H
 
-#include <AiData.h>
+#include <ai_data.h>
 #include <math/box.h>
 
 namespace RhobanSSL

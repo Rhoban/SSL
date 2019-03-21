@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__MANUAL__H__
-#define __MANAGER__MANUAL__H__
+#ifndef MANAGER_MANUAL_H
+#define MANAGER_MANUAL_H
 
-#include <manager/Manager.h>
+#include <manager/manager.h>
 
 namespace RhobanSSL
 {

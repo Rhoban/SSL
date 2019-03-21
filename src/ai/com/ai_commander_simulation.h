@@ -22,7 +22,7 @@
 
 #include <stdint.h>
 #include <SimClient.h>
-#include "AICommander.h"
+#include "ai_commander.h"
 
 namespace RhobanSSL
 {

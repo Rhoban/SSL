@@ -17,11 +17,11 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MATH__FRAME_CHANGEMENT__H__
-#define __MATH__FRAME_CHANGEMENT__H__
+#ifndef MATH_FRAME_CHANGEMENT_H
+#define MATH_FRAME_CHANGEMENT_H
 
 #include "vector2d.h"
-#include "ContinuousAngle.h"
+#include "continuous_angle.h"
 #include <math/matrix2d.h>
 
 class Frame_changement

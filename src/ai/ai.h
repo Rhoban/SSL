@@ -18,17 +18,17 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __AI__H__
-#define __AI__H__
+#ifndef AI_H
+#define AI_H
 
-#include <com/AICommander.h>
-#include <vision/AIVisionClient.h>
+#include <com/ai_commander.h>
+#include <vision/ai_vision_client.h>
 #include <robot_behavior/robot_behavior.h>
-#include "AiData.h"
+#include "ai_data.h"
 #include <referee/game_state.h>
 #include <core/machine_state.h>
-#include <manager/Manager.h>
-#include <annotations/Annotations.h>
+#include <manager/manager.h>
+#include <annotations/annotations.h>
 
 namespace RhobanSSL
 {

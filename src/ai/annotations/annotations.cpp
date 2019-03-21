@@ -18,7 +18,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Annotations.h"
+#include "annotations.h"
 
 namespace RhobanSSLAnnotation
 {

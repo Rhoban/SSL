@@ -17,10 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__MATCH__H__
-#define __MANAGER__MATCH__H__
+#ifndef MANAGER_MATCH_H
+#define MANAGER_MATCH_H
 
-#include "Manager.h"
+#include "manager.h"
 #include <referee/game_state.h>
 
 namespace RhobanSSL

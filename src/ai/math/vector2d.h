@@ -20,7 +20,7 @@
 #ifndef __TOOLS__VECTOR_H__
 #define __TOOLS__VECTOR_H__
 
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <rhoban_geometry/point.h>
 
 // This is a hack in order to prepare a future refactoring that introduces a

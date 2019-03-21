@@ -17,11 +17,11 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PHYSIC__FACTORY__H__
-#define __PHYSIC__FACTORY__H__
+#ifndef PHYSIC_FACTORY_H
+#define PHYSIC_FACTORY_H
 
-#include "Movement.h"
-#include <AiData.h>
+#include "movement.h"
+#include <ai_data.h>
 
 namespace RhobanSSL
 {
