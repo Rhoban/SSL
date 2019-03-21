@@ -21,7 +21,6 @@
 #include "factory.h"
 
 #include "Manual.h"
-// #include "Match.h"
 #include "plan_veschambres.h"
 #include "rules.h"
 
@@ -30,7 +29,6 @@ namespace Manager {
 
 std::list<std::string> Factory::list_of_avalaible_managers ={
     names::manual,
-    // names::match,
     names::plan_veschambres,
 };
 
@@ -65,14 +63,9 @@ std::shared_ptr<Manager> Factory::construct_manager(
             //false //ai_data.team_color != Ai::Team::Yellow
         );
     }
-    // if( manager_name == names::match ){
-    //     manager = std::shared_ptr<Manager>(
-    //         new Match(ai_data, game_state)
-    //     );
-    // }
     if( manager_name == names::plan_veschambres ){
         manager = std::shared_ptr<Manager>(
-            new Rules<PlanVeschambres>(ai_data, game_state)
+            new Rules<PlanVeschambres>(ai_data, game_state) // Affect "Rules" to PlanVeschambres
         );
     }
     return std::shared_ptr<Manager>( manager );

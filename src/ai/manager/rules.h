@@ -39,7 +39,7 @@ class Rules : public MANAGER
       {
       }
 
-        virtual void start_stop(){
+  virtual void start_stop(){
                 MANAGER::set_ball_avoidance_for_all_robots(true);
                 MANAGER::start_stop();
 	}
