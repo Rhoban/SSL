@@ -28,20 +28,46 @@ namespace Robot_behavior
 {
 namespace Beginner
 {
+/**
+ * @class AnnotationsRobotCoords
+ * @brief Tutorial to show how to print on the viewer near the robot its coordinates.
+ */
 class AnnotationsRobotCoords : public RobotBehavior
 {
 private:
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   */
   RhobanSSLAnnotation::Annotations annotations_;
 
 public:
+  /**
+   * @brief Constructor.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
+   */
   AnnotationsRobotCoords(Ai::AiData& ai_data);
 
+  /** @brief Update viewer printed texts.
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
+  /** Return the control of the behavior.
+   */
   virtual Control control() const;
 
+  /** @see RhobanSSLAnnotation::Annotations
+   */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
+  /**
+   *  @brief Destructor.
+   */
   virtual ~AnnotationsRobotCoords();
 };
 
