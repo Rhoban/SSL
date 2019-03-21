@@ -28,13 +28,13 @@ namespace Robot_behavior
 {
 namespace Beginner
 {
-class Annotations_Robot_Coords : public RobotBehavior
+class AnnotationsRobotCoords : public RobotBehavior
 {
 private:
-  RhobanSSLAnnotation::Annotations annotations;
+  RhobanSSLAnnotation::Annotations annotations_;
 
 public:
-  Annotations_Robot_Coords(Ai::AiData& ai_data);
+  AnnotationsRobotCoords(Ai::AiData& ai_data);
 
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
@@ -42,7 +42,7 @@ public:
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-  virtual ~Annotations_Robot_Coords();
+  virtual ~AnnotationsRobotCoords();
 };
 
 };  // namespace Beginner
