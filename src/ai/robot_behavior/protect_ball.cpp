@@ -21,64 +21,60 @@
 #include <math/tangents.h>
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-
-ProtectBall::ProtectBall(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+ProtectBall::ProtectBall(Ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void ProtectBall::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    // Now
-    //  this->robot_linear_position
-    //  this->robot_angular_position
-    // are all avalaible
-    // annotations.clear();
+void ProtectBall::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::update_time_and_position(time, robot, ball);
+  // Now
+  //  this->robot_linear_position
+  //  this->robot_angular_position
+  // are all avalaible
+  // annotations.clear();
 
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( time );
-    // const rhoban_geometry::Point & oponent_goal_point = oponent_goal_center();
+  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
+  // const rhoban_geometry::Point & opponent_goal_point = opponent_goal_center();
 
-    // Vector2d ball_goal_vector = oponent_goal_point - ball_position();
-    Vector2d ball_robot_vector = ball_position() - robot_position;
-    // Vector2d target_position;
+  // Vector2d ball_goal_vector = opponent_goal_point - ball_position();
+  Vector2d ball_robot_vector = ball_position() - robot_position;
+  // Vector2d target_position;
 
-    // annotations.addCircle( ball_position().x, ball_position().y , radius );
-    // annotations.addAnnotations(follower->get_annotations());
+  // annotations.addCircle( ball_position().x, ball_position().y , radius );
+  // annotations.addAnnotations(follower->get_annotations());
 
+  rhoban_geometry::Point target_position = ball_position();
 
-    rhoban_geometry::Point target_position = ball_position();
+  double target_rotation = detail::vec2angle(ball_robot_vector);
 
-    double target_rotation = detail::vec2angle(ball_robot_vector);
-
-    follower->avoid_the_ball(true);
-    follower->set_following_position(target_position, target_rotation);
-    follower->update(time, robot, ball);
+  follower->avoid_the_ball(true);
+  follower->set_following_position(target_position, target_rotation);
+  follower->update(time, robot, ball);
 }
 
-Control ProtectBall::control() const {
-    Control ctrl = follower->control();
-    return ctrl;
+Control ProtectBall::control() const
+{
+  Control ctrl = follower->control();
+  return ctrl;
 }
 
-ProtectBall::~ProtectBall(){
-    delete follower;
+ProtectBall::~ProtectBall()
+{
+  delete follower;
 }
 
-RhobanSSLAnnotation::Annotations ProtectBall::get_annotations() const {
-    return follower->get_annotations();
+RhobanSSLAnnotation::Annotations ProtectBall::get_annotations() const
+{
+  return follower->get_annotations();
 }
 
-}
-}
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

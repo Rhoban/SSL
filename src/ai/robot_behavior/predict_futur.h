@@ -25,33 +25,31 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace RhobanSSL
 {
-  namespace Robot_behavior {
+namespace Robot_behavior
+{
+class PredictFutur : public RobotBehavior
+{
+private:
+  bool use_custom_vector;
+  rhoban_geometry::Point striking_point;
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-    class PredictFutur : public RobotBehavior  {
-    private:
-      bool use_custom_vector;
-      rhoban_geometry::Point striking_point;
-      ConsignFollower* follower;
-      RhobanSSLAnnotation::Annotations annotations;
-    public:
-      PredictFutur(Ai::AiData& ai_data);
+public:
+  PredictFutur(Ai::AiData& ai_data);
 
-      virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-      );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-      virtual Control control() const;
+  virtual Control control() const;
 
-      void declare_point_to_strik( rhoban_geometry::Point point );
+  void declare_point_to_strik(rhoban_geometry::Point point);
 
-      virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-      virtual ~PredictFutur();
-    };
+  virtual ~PredictFutur();
+};
 
-  };
-}; //Namespace Rhoban
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

@@ -1,6 +1,11 @@
 bin
 **.swp
 *~
+build_*
+devel_*
+logs_*
+CMakeLists.txt.user
+
 
 .catkin_tools
 **_debug

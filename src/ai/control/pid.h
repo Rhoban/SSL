@@ -20,85 +20,61 @@
 #ifndef __pid__H__
 #define __pid__H__
 
+#include "control.h"
+
 #include <debug.h>
 #include <math/ContinuousAngle.h>
 #include <math/vector2d.h>
 #include <utility>
 
-struct PidControl {
-    Vector2d velocity_translation;
-    ContinuousAngle velocity_rotation;
+struct PidController
+{
+  double kp_t, ki_t, kd_t;
+  double kp_o, ki_o, kd_o;
 
-    PidControl();
-    PidControl(
-        const Vector2d & velocity_translation,
-        ContinuousAngle velocity_rotation
-    );
-    PidControl relative_control(
-        const ContinuousAngle & angular_orientation, double dt
-    ) const ;
-};
+  bool static_robot;
 
-std::ostream& operator << ( std::ostream &, const PidControl& control );
+  double start_time;
+  double time;
+  double dt;
 
-struct PidController {
-    double kp_t,ki_t,kd_t;
-    double kp_o,ki_o,kd_o;
+  Vector2d acc;
+  Vector2d acc_dt;
+  double acc_r;
+  double acc_r_dt;
 
-    bool static_robot;
+  Vector2d ancient_pos;
+  ContinuousAngle ancient_orientation;
 
-    double start_time;
-    double time;
-    double dt;
+  double no_limited_angular_control_value;
+  Vector2d no_limited_translation_control_value;
 
-    Vector2d acc;
-    Vector2d acc_dt;
-    double acc_r;
-    double acc_r_dt;
+  void init_time(double start_time, double dt);
 
-    Vector2d ancient_pos;
-    ContinuousAngle ancient_orientation;
+  void update(double current_time, const Vector2d& robot_position, const ContinuousAngle& robot_orientation);
 
-    double no_limited_angular_control_value;
-    Vector2d no_limited_translation_control_value;
+  PidController();
+  PidController(double p_t, double i_t, double d_t, double p_o, double i_o, double d_o);
 
-    void init_time(double start_time, double dt);
+  void set_orientation_pid(double kp, double ki, double kd);
+  void set_translation_pid(double kp, double ki, double kd);
 
-    void update(
-        double current_time,
-        const Vector2d & robot_position,
-        const ContinuousAngle & robot_orientation
-    );
+  void set_static(bool value);
+  bool is_static() const;
 
-    PidController();
-    PidController(
-        double p_t, double i_t, double d_t,
-        double p_o, double i_o, double d_o
-    );
+  double get_dt() const;
+  double get_time() const;
 
-    void set_orientation_pid( double kp, double ki, double kd );
-    void set_translation_pid( double kp, double ki, double kd );
+  virtual ContinuousAngle goal_orientation(double t) const = 0;
+  virtual Vector2d goal_position(double t) const = 0;
 
-    void set_static(bool value);
-    bool is_static() const ;
+  void compute_no_limited_translation_control(const Vector2d& robot_position);
+  Vector2d no_limited_translation_control() const;
 
-    double get_dt() const;
-    double get_time() const;
+  void compute_no_limited_angular_control(const ContinuousAngle& robot_orientation);
+  double no_limited_angular_control() const;
 
-    virtual ContinuousAngle goal_orientation( double t ) const =0;
-    virtual Vector2d goal_position( double t ) const = 0;
-
-    void compute_no_limited_translation_control(
-        const Vector2d & robot_position
-    );
-    Vector2d no_limited_translation_control() const;
-
-    void compute_no_limited_angular_control(
-        const ContinuousAngle & robot_orientation
-    );
-    double no_limited_angular_control() const;
-
-    virtual PidControl no_limited_control() const;
+  virtual Control no_limited_control() const;
 };
 
 #endif

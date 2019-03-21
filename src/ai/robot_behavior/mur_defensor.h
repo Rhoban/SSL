@@ -25,31 +25,28 @@
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class Mur_defensor : public RobotBehavior
+{
+private:
+  int mur_robot_id;
+  int mur_nb_robot;
+  ConsignFollower* follower;
 
-class Mur_defensor : public RobotBehavior  {
-    private:
-    int mur_robot_id;
-    int mur_nb_robot;
-	ConsignFollower* follower;
+public:
+  Mur_defensor(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
-    public:
-        Mur_defensor(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  void declare_mur_robot_id(int id, int mur_nb_robots);
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
-    void declare_mur_robot_id( int id, int mur_nb_robots );
+  virtual Control control() const;
 
-	virtual Control control() const;
-
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-	virtual ~Mur_defensor();
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual ~Mur_defensor();
 };
 
-};
-}; //Namespace Rhoban
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

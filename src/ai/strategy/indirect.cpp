@@ -24,64 +24,67 @@
 #include <robot_behavior/striker.h>
 #include <robot_behavior/robot_follower.h>
 
-namespace RhobanSSL {
-namespace Strategy {
-
-Indirect::Indirect(Ai::AiData & ai_data):
-    Strategy(ai_data),
-    state(0)
+namespace RhobanSSL
+{
+namespace Strategy
+{
+Indirect::Indirect(Ai::AiData& ai_data) : Strategy(ai_data), state(0)
 {
 }
 
-Indirect::~Indirect(){
+Indirect::~Indirect()
+{
 }
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Indirect::min_robots() const {
-    return 2;
+int Indirect::min_robots() const
+{
+  return 2;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Indirect::max_robots() const {
-    return 2;
+int Indirect::max_robots() const
+{
+  return 2;
 }
 
-Goalie_need Indirect::needs_goalie() const {
-    return Goalie_need::NO;
+Goalie_need Indirect::needs_goalie() const
+{
+  return Goalie_need::NO;
 }
 
 const std::string Indirect::name = "indirect";
 
-void Indirect::start(double time){
-    DEBUG("START PREPARE KICKOFF");
-    behaviors_are_assigned = false;
+void Indirect::start(double time)
+{
+  DEBUG("START PREPARE KICKOFF");
+  behaviors_are_assigned = false;
 }
-void Indirect::stop(double time){
-    DEBUG("STOP PREPARE KICKOFF");
+void Indirect::stop(double time)
+{
+  DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Indirect::update(double time){
+void Indirect::update(double time)
+{
 }
 
 void Indirect::assign_behavior_to_robots(
-  std::function<
-  void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-  > assign_behavior,
-  double time, double dt
-){
-  assert( get_player_ids().size() == 2 );
+    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+{
+  assert(get_player_ids().size() == 2);
 
-  int wait_pass = player_id(0); // we get the first if in get_player_ids()
-  int pass = player_id(1); // we get the first if in get_player_ids()
-  //double seuil = 0.2;
-  //const Ai::Robot & robot_pass = get_robot( pass );
-  //const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
+  int wait_pass = player_id(0);  // we get the first if in get_player_ids()
+  int pass = player_id(1);       // we get the first if in get_player_ids()
+  // double seuil = 0.2;
+  // const Ai::Robot & robot_pass = get_robot( pass );
+  // const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
 
   // Vector2d ball_robot_vector_pass = ball_position() - robot_pass_position;
   // double d = ball_robot_vector_pass.norm();
@@ -89,44 +92,36 @@ void Indirect::assign_behavior_to_robots(
   //   state = 1;
   // }
 
-  if( state == 0){
+  if (state == 0)
+  {
     // DEBUG("STATE "  << state);
-    if (not(behaviors_are_assigned)) {
-        assign_behavior(
-            wait_pass, std::shared_ptr<Robot_behavior::SearchShootArea>(
-              new Robot_behavior::SearchShootArea(ai_data)
-            )
-        );
-        pass_behavior = std::shared_ptr<Robot_behavior::Pass_dribbler>(
-            new Robot_behavior::Pass_dribbler(ai_data)
-        );
-        pass_behavior->declare_point_to_pass(get_robot(wait_pass, Vision::Team::Ally).get_movement().linear_position( time ));
-        assign_behavior( pass, pass_behavior );
+    if (not(behaviors_are_assigned))
+    {
+      assign_behavior(wait_pass,
+                      std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data)));
+      pass_behavior = std::shared_ptr<Robot_behavior::Pass_dribbler>(new Robot_behavior::Pass_dribbler(ai_data));
+      pass_behavior->declare_point_to_pass(
+          get_robot(wait_pass, Vision::Team::Ally).get_movement().linear_position(time));
+      assign_behavior(pass, pass_behavior);
     }
 
     // DEBUG("NEED TO KICK before " << pass_behavior->need_to_kick);
-    assert( pass_behavior.get() );
-    if (pass_behavior->need_to_kick) {
+    assert(pass_behavior.get());
+    if (pass_behavior->need_to_kick)
+    {
       // DEBUG("NEED TO KICK");
       state = 1;
     }
-
-  }else if( state == 1 ){
-    // DEBUG("STATE "  << state);
-    assign_behavior(
-      wait_pass, std::shared_ptr<Robot_behavior::Striker>(
-        new Robot_behavior::Striker(ai_data)
-      )
-    );
-
-    std::shared_ptr<Robot_behavior::RobotFollower> support(
-      new Robot_behavior::RobotFollower(ai_data)
-    );
-    support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), Vision::Team::Ally);
-    assign_behavior( pass, support );
   }
+  else if (state == 1)
+  {
+    // DEBUG("STATE "  << state);
+    assign_behavior(wait_pass, std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data)));
 
-
+    std::shared_ptr<Robot_behavior::RobotFollower> support(new Robot_behavior::RobotFollower(ai_data));
+    support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), Vision::Team::Ally);
+    assign_behavior(pass, support);
+  }
 
   behaviors_are_assigned = true;
 }
@@ -137,25 +132,14 @@ void Indirect::assign_behavior_to_robots(
 //     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
-std::list<
-    std::pair<rhoban_geometry::Point,ContinuousAngle>
-> Indirect::get_starting_positions( int number_of_avalaible_robots ){
-    assert( min_robots() <= number_of_avalaible_robots );
-    assert(
-        max_robots()==-1 or
-        number_of_avalaible_robots <= max_robots()
-    );
+std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+Indirect::get_starting_positions(int number_of_avalaible_robots)
+{
+  assert(min_robots() <= number_of_avalaible_robots);
+  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
 
-    return {
-        std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            ball_position(),
-            0.0
-        ),
-        std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            oponent_goal_center(),
-            0.0
-        )
-    };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ball_position(), 0.0),
+           std::pair<rhoban_geometry::Point, ContinuousAngle>(opponent_goal_center(), 0.0) };
 }
 
 //
@@ -163,28 +147,26 @@ std::list<
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Indirect::get_starting_position_for_goalie(
-    rhoban_geometry::Point & linear_position,
-    ContinuousAngle & angular_position
-){
-    linear_position =  ally_goal_center();
-    angular_position = ContinuousAngle(0.0);
-    return true;
+bool Indirect::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+                                                ContinuousAngle& angular_position)
+{
+  linear_position = ally_goal_center();
+  angular_position = ContinuousAngle(0.0);
+  return true;
 }
 
-RhobanSSLAnnotation::Annotations Indirect::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
+RhobanSSLAnnotation::Annotations Indirect::get_annotations() const
+{
+  RhobanSSLAnnotation::Annotations annotations;
 
-    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
-    {
-        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
-        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
-    }
-    return annotations;
+  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  {
+    const rhoban_geometry::Point& robot_position = get_robot(*it).get_movement().linear_position(time());
+    // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+    annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+  }
+  return annotations;
 }
 
-
-
-}
-}
+}  // namespace Strategy
+}  // namespace RhobanSSL

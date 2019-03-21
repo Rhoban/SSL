@@ -22,22 +22,21 @@
 
 #include "robot_behavior.h"
 
-namespace RhobanSSL {
-namespace Robot_behavior {
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+class DoNothing : public RobotBehavior
+{
+public:
+  DoNothing(Ai::AiData& ai_data);
 
-class DoNothing : public RobotBehavior {
-    public:
-        DoNothing( Ai::AiData& ai_data ); 
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-        virtual void update(
-            double time, 
-            const Ai::Robot & robot, const Ai::Ball & ball
-        );
-
-        virtual Control control() const;
+  virtual Control control() const;
 };
 
-};
-}; //Namespace Rhoban
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

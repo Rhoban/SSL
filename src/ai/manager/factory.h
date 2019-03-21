@@ -25,30 +25,29 @@
 #include <referee/game_state.h>
 #include "Manager.h"
 
-namespace RhobanSSL {
-namespace Manager {
-
-struct names {
-    static constexpr const char* manual = "manual";
-    static constexpr const char* plan_veschambres = "PlanVeschambres";
+namespace RhobanSSL
+{
+namespace Manager
+{
+struct names
+{
+  static constexpr const char* manual = "manual";
+  static constexpr const char* plan_veschambres = "PlanVeschambres";
 };
 
-class Factory {
-    private:
-    static std::list<std::string> list_of_avalaible_managers;
+class Factory
+{
+private:
+  static std::list<std::string> list_of_avalaible_managers;
 
-    public:
-    static const std::list<std::string> & avalaible_managers();
+public:
+  static const std::list<std::string>& avalaible_managers();
 
-    static std::shared_ptr<Manager> construct_manager(
-        const std::string & manager_name,
-        Ai::AiData & ai_data,
-        GameState & game_state
-    );
-
+  static std::shared_ptr<Manager> construct_manager(const std::string& manager_name, Ai::AiData& ai_data,
+                                                    GameState& game_state);
 };
 
-};
-};
+};  // namespace Manager
+};  // namespace RhobanSSL
 
 #endif
