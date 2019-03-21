@@ -53,6 +53,7 @@
 #include <robot_behavior/tutorials/medium/striker.h>
 #include <robot_behavior/tutorials/medium/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
+#include <robot_behavior/tutorials/medium/go_to_position_with_motionless_target_tracking.h>
 
 namespace RhobanSSL
 {
@@ -67,6 +68,16 @@ Manual::Manual(Ai::AiData& ai_data)
 {
   change_team_and_point_of_view(ai_data.team_color, goal_to_positive_axis);
 
+  register_strategy("Goto position with motionless target tracking",
+                    std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+                        ai_data,
+                        [&](double time, double dt) {
+                          rhoban_ssl::robot_behavior::medium::GoToPositionWithMotionlessTargetTracking* behavior =
+                              new rhoban_ssl::robot_behavior::medium::GoToPositionWithMotionlessTargetTracking(ai_data);
+                          return std::shared_ptr<Robot_behavior::RobotBehavior>(behavior);
+                        },
+                        false  // we don't want to define a goal here !
+                        )));
   register_strategy("Goalie", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                   ai_data,
                                   [&](double time, double dt) {

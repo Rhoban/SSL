@@ -38,7 +38,7 @@ namespace robot_control
  * Types currently supported :
  * double(default), Vector2d, ContinuousAngle
  *
- * @note If a developper tries to use this class with an unsupported type
+ * @note If a developer tries to use this class with an unsupported type
  * then the code will not compile.
  */
 class Pid

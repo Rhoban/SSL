@@ -22,12 +22,12 @@ namespace rhoban_ssl
 {
 namespace robot_control
 {
-Pid::Pid(double p, double ki, double kd) : kp_(p), ki_(ki), kd_(kd)
+Pid::Pid(double kp, double ki, double kd) : kp_(kp), ki_(ki), kd_(kd)
 {
 }
 
-Pid::Pid(double integration_limit, double p, double i, double d)
-  : integration_limit_(integration_limit), kp_(p), ki_(i), kd_(d)
+Pid::Pid(double integration_limit, double kp, double ki, double kd)
+  : integration_limit_(integration_limit), kp_(kp), ki_(ki), kd_(kd)
 {
 }
 
@@ -64,7 +64,7 @@ double Pid::compute<double>(const double& dt, const double& error)
   {
     integral = integration_limit_;
   }
-  else if (integral < integration_limit_)
+  else if (integral < -integration_limit_)
   {
     integral = -integration_limit_;
   }
