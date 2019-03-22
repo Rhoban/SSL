@@ -48,7 +48,7 @@ private:
   /** 
    * @brief The target corner which the robot goes.
    */
-  const rhoban_geometry::Point& target_corner_;
+  const rhoban_geometry::Point target_corner_;
 
 public:
   /**
@@ -59,7 +59,8 @@ public:
    */
   GoCorner(Ai::AiData& ai_data);
 
-  /** @brief Set the position of the robot in the target_corner_.
+  /** 
+   * @brief Set the position of the robot in the target_corner_.
    *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
@@ -68,18 +69,20 @@ public:
    */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-  /** Return the control of the behavior.
+  /** 
+   * Return the control of the behavior.
    */
   virtual Control control() const;
 
-  /** @see RhobanSSLAnnotation::Annotations 
+  /** 
+   * @see RhobanSSLAnnotation::Annotations 
    * The class don't draw any annotations.
    * The follower draw annotation.
    */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
   /**
-   *  @brief Destructor.
+   * @brief Destructor.
    */
   virtual ~GoCorner();
 };
