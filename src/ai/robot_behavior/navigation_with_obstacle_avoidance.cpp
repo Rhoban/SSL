@@ -335,6 +335,10 @@ void Navigation_with_obstacle_avoidance::avoid_opponent(bool value)
     ignore_robot_[i] = not(value);
   }
 }
+void Navigation_with_obstacle_avoidance::avoidRobot(int id, bool value)
+{
+  ignore_robot_[id] = not(value);
+}
 
 void Navigation_with_obstacle_avoidance::set_limits(double translation_velocity_limit, double rotation_velocity_limit,
                                                     double translation_acceleration_limit,

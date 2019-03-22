@@ -96,6 +96,7 @@ public:
   virtual void avoid_the_ball(bool value = true);
   virtual void avoid_ally(bool value);
   virtual void avoid_opponent(bool value);
+  virtual void avoidRobot(int id, bool value);
 
   virtual void set_radius_avoidance_for_the_ball(double radius);
   double get_radius_avoidance_for_the_ball();
