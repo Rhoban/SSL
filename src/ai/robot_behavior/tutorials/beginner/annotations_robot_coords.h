@@ -48,20 +48,22 @@ public:
    */
   AnnotationsRobotCoords(Ai::AiData& ai_data);
 
-  /** @brief Update viewer printed texts.
+  /**
+   * @brief Update
    *
-   * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-  /** Return the control of the behavior.
+  /**
+   * Return the control of the behavior.
    */
   virtual Control control() const;
 
-  /** @see RhobanSSLAnnotation::Annotations
+  /**
+   * @see RhobanSSLAnnotation::Annotations
    */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
