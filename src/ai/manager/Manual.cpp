@@ -466,13 +466,13 @@ Manual::Manual(Ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("Intermediate - Follow robot",
+  register_strategy("Medium - Follow robot",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
-                          Robot_behavior::Medium::FollowRobot* follow_robot =
-                              new Robot_behavior::Medium::FollowRobot(ai_data);
-                          follow_robot->set_robot_id_to_follow(0);
+                          Robot_behavior::medium::FollowRobot* follow_robot =
+                              new Robot_behavior::medium::FollowRobot(ai_data);
+                          follow_robot->setRobotIdToFollow(0);
                           return std::shared_ptr<Robot_behavior::RobotBehavior>(follow_robot);
                         },
                         false  // we don't want to define a goal here !

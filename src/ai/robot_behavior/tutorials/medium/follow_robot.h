@@ -23,14 +23,14 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace Medium
+namespace medium
 {
 class FollowRobot : public RobotBehavior
 {
 private:
-  int target_robot_id;
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  int target_id_;
+  ConsignFollower* follower_;
+  RhobanSSLAnnotation::Annotations annotations_;
   const double TRACKING_DISTANCE = 0.3;
 
 public:
@@ -40,9 +40,9 @@ public:
 
   virtual Control control() const;
 
-  void set_robot_id_to_follow(int id);
+  void setRobotIdToFollow(int target_id);
 
-  int get_robot_id_to_follow() const;
+  int getRobotIdToFollow() const;
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 

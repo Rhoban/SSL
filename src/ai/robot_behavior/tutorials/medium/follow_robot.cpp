@@ -20,17 +20,17 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace Medium
+namespace medium
 {
 /*
  * With this behavior, the robot will go to its target until it reach a defined distance.
  * In short it follow its target without collide it.
  */
 FollowRobot::FollowRobot(Ai::AiData& ai_data, int target_id)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
 
 {
-  target_robot_id = target_id;
+  target_id_ = target_id;
 }
 
 void FollowRobot::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
@@ -39,16 +39,16 @@ void FollowRobot::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
   // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  annotations.clear();
+  annotations_.clear();
 
   rhoban_geometry::Point follow_position = robot.get_movement().linear_position(ai_data.time);
   ContinuousAngle follow_rotation = robot.get_movement().angular_position(ai_data.time);
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to follow itself will do nothing.
-  if (target_robot_id != robot.id())
+  if (target_id_ != robot.id())
   {
-    rhoban_geometry::Point target_position = get_robot(target_robot_id).get_movement().linear_position(ai_data.time);
+    rhoban_geometry::Point target_position = get_robot(target_id_).get_movement().linear_position(ai_data.time);
     rhoban_geometry::Point robot_position = robot.get_movement().linear_position(ai_data.time);
 
     Vector2d vect_robot_target = target_position - robot_position;
@@ -63,38 +63,38 @@ void FollowRobot::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
     }
   }
 
-  follower->set_following_position(follow_position, follow_rotation);
+  follower_->set_following_position(follow_position, follow_rotation);
 
-  follower->avoid_the_ball(false);
-  follower->update(time, robot, ball);
+  follower_->avoid_the_ball(false);
+  follower_->update(time, robot, ball);
 }
 
-void FollowRobot::set_robot_id_to_follow(int id)
+void FollowRobot::setRobotIdToFollow(int target_id)
 {
-  target_robot_id = id;
+  target_id_ = target_id;
 }
 
-int FollowRobot::get_robot_id_to_follow() const
+int FollowRobot::getRobotIdToFollow() const
 {
-  return target_robot_id;
+  return target_id_;
 }
 
 Control FollowRobot::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
 FollowRobot::~FollowRobot()
 {
-  delete follower;
+  delete follower_;
 }
 
 RhobanSSLAnnotation::Annotations FollowRobot::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(annotations_);
+  annotations.addAnnotations(follower_->get_annotations());
   return annotations;
 }
 
