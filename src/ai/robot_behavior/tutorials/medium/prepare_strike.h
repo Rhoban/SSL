@@ -25,33 +25,30 @@
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
-
+namespace Robot_behavior
+{
 /** Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
-class Intermediate_Prepare_strike : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+class Intermediate_Prepare_strike : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-    public:
-    Intermediate_Prepare_strike(Ai::AiData& ai_data);
+public:
+  Intermediate_Prepare_strike(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Intermediate_Prepare_strike();
+  virtual ~Intermediate_Prepare_strike();
 };
 
-};
-}; //Namespace Rhoban
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

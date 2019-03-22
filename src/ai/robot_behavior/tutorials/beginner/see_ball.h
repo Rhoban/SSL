@@ -23,7 +23,6 @@
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-
 namespace RhobanSSL{
 namespace Robot_behavior {
 namespace Beginner {
@@ -39,16 +38,11 @@ class See_ball : public RobotBehavior  {
 
     public:
     See_ball(Ai::AiData& ai_data);
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual Control control() const;
 
-	virtual Control control() const;
-
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 	virtual ~See_ball();
 };

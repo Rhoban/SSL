@@ -17,39 +17,39 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GO__CORNER__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GO__CORNER__
+#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
+#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
-
+namespace Robot_behavior
+{
+namespace Beginner
+{
 /** Tutorial class to show how to move a robot in the side corner. */
-class Begginer_go_corner : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+class Go_corner : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-    public:
-    Begginer_go_corner(Ai::AiData& ai_data);
+public:
+  Go_corner(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Begginer_go_corner();
+  virtual ~Go_corner();
 };
 
-};
-}; //Namespace Rhoban
+};  // namespace Beginner
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

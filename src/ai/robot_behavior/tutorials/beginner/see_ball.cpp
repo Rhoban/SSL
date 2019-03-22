@@ -68,6 +68,7 @@ RhobanSSLAnnotation::Annotations See_ball::get_annotations() const {
 }
 
 
-}
-}
-}
+
+}  // namespace beginner
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

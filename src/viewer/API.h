@@ -16,14 +16,10 @@ class API : public QObject
   Q_OBJECT
 
 public:
-  API(
-    std::string teamName, bool simulation,
-    RhobanSSL::Ai::Team team, 
-    RhobanSSL::AICommander *commander,
-    const std::string & config_path,
-    RhobanSSL::Vision::Part_of_the_field part_of_the_field_used,
-    std::string addr=SSL_VISION_ADDRESS, std::string port=SSL_VISION_PORT, std::string sim_port=SSL_SIMULATION_VISION_PORT
-    );
+  API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander* commander,
+      const std::string& config_path, RhobanSSL::Vision::Part_of_the_field part_of_the_field_used,
+      std::string addr = SSL_VISION_ADDRESS, std::string port = SSL_VISION_PORT,
+      std::string sim_port = SSL_SIMULATION_VISION_PORT);
   virtual ~API();
 
   bool simulation;
@@ -62,15 +58,14 @@ public slots:
   void activeRobot(int id, bool active);
 
   // Commands a robot
-  void robotCommand(int id,
-                    double xSpeed=0, double ySpeed=0, double thetaSpeed=0);
+  void robotCommand(int id, double xSpeed = 0, double ySpeed = 0, double thetaSpeed = 0);
 
   // Enable or disable the charge for a robot
-  void robotCharge(int id, bool charge=false);
+  void robotCharge(int id, bool charge = false);
 
   // Run a kick
   void kick(int id, int kick, float power = 1.0);
-    
+
   // Set spin
   void setSpin(int id, bool spin);
 
@@ -106,24 +101,24 @@ public slots:
 
 protected:
   std::string teamName;
-  RhobanSSL::AI *ai;
+  RhobanSSL::AI* ai;
   RhobanSSL::Data data;
   RhobanSSL::Ai::Team team;
   RhobanSSL::AIVisionClient visionClient;
-  RhobanSSL::AICommander *commander;
+  RhobanSSL::AICommander* commander;
 
   std::map<int, std::string> assignments;
 
   std::string ourColor();
   std::string opponentColor();
 
-  std::thread *comThread;
-  std::thread *aiThread;
+  std::thread* comThread;
+  std::thread* aiThread;
 
   std::mutex mutex;
 
-  std::thread *joystickThread;
-  RhobanSSL::Joystick *joystick;
+  std::thread* joystickThread;
+  RhobanSSL::Joystick* joystick;
   int joystickRobot;
 
   // void comThreadExec();
