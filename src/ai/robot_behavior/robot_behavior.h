@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ROBOT_BEHAVIOR_ROBOT_BEHAVIOR_H
-#define ROBOT_BEHAVIOR_ROBOT_BEHAVIOR_H
+#pragma once
 
 #include <game_informations.h>
 #include <control/robot_control_with_position_following.h>
@@ -93,5 +92,3 @@ double vec2angle(Vector2d direction);
 
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
-
-#endif

@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHYSICS_H
-#define PHYSICS_H
+#pragma once
 
 #include <rhoban_geometry/point.h>
 #include <math/continuous_angle.h>
@@ -64,5 +63,3 @@ struct MovementSample : public circular_vector<PositionSample>
 std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& pos);
 
 std::ostream& operator<<(std::ostream& stream, const RhobanSSL::MovementSample& mov);
-
-#endif

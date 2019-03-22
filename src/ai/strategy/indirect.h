@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRATEGY_INDIRECT_H
-#define STRATEGY_INDIRECT_H
+#pragma once
 
 #include "strategy.h"
 #include <robot_behavior/pass_dribbler.h>
@@ -63,4 +62,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-#endif

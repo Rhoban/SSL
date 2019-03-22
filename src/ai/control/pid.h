@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PID_H
-#define PID_H
+#pragma once
 
 #include "control.h"
 
@@ -77,5 +76,3 @@ struct PidController
   virtual Control no_limited_control() const;
   virtual ~PidController();
 };
-
-#endif

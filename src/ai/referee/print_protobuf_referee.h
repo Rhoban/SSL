@@ -17,8 +17,7 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef VISION_PRINT_PROTOBUF_REFEREE_H
-#define VISION_PRINT_PROTOBUF_REFEREE_H
+#pragma once
 
 #include "referee.h"
 #include <iostream>
@@ -33,5 +32,3 @@ std::ostream& operator<<(std::ostream& out, const SSL_Referee& referee);
 
 //};
 //};
-
-#endif

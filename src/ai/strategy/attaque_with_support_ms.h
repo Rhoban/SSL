@@ -17,8 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRATEGY_ATTAQUEWITHSUPPORTMS_H
-#define STRATEGY_ATTAQUEWITHSUPPORTMS_H
+#pragma once
 
 #include "strategy.h"
 // #include <robot_behavior/robot_follower.h>
@@ -150,4 +149,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-#endif

@@ -1,5 +1,4 @@
-#ifndef __MATH__BOX__H__
-#define __MATH__BOX__H__
+#pragma once
 
 #include "vector2d.h"
 #include <rhoban_geometry/segment.h>
@@ -40,4 +39,3 @@ struct Box
 std::ostream& operator<<(std::ostream& out, const Box& box);
 
 };  // namespace RhobanSSL
-#endif

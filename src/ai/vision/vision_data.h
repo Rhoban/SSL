@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __VISIONDATA_H__
-#define __VISIONDATA_H__
+#pragma once
 
 #include <map>
 #include <rhoban_geometry/point.h>
@@ -101,5 +100,3 @@ std::ostream& operator<<(std::ostream& out, const VisionData& vision);
 
 }  // namespace Vision
 }  // namespace RhobanSSL
-
-#endif

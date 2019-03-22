@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MOVEMENT_H
-#define MOVEMENT_H
+#pragma once
 
 #include <math/vector2d.h>
 #include <iostream>
@@ -54,5 +53,3 @@ public:
 }  // namespace RhobanSSL
 
 std::ostream& operator<<(std::ostream& stream, const RhobanSSL::Movement& movement);
-
-#endif

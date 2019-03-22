@@ -17,8 +17,7 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef VISION_PRINT_PROTOBUF_H
-#define VISION_PRINT_PROTOBUF_H
+#pragma once
 
 #include "ai_vision_client.h"
 #include <iostream>
@@ -39,5 +38,3 @@ std::ostream& operator<<(std::ostream& out, const SSL_DetectionFrame& detection)
 
 //};
 //};
-
-#endif

@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ANNOTATIONS__ANNOTATIONS_H__
-#define __ANNOTATIONS__ANNOTATIONS_H__
+#pragma once
 
 #include <json/json.h>
 #include <vector>
@@ -65,5 +64,3 @@ protected:
   Json::Value json;
 };
 }  // namespace RhobanSSLAnnotation
-
-#endif

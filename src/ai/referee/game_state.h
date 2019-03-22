@@ -17,8 +17,7 @@
   along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef GAMESTATE_H
-#define GAMESTATE_H
+#pragma once
 
 #include <RefereeClient.h>
 #include <core/machine_state.h>
@@ -140,5 +139,3 @@ public:
 };
 
 }  // namespace RhobanSSL
-
-#endif

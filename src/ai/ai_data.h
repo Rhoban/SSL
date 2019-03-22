@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AIDATA_H
-#define AIDATA_H
+#pragma once
 
 #include <debug.h>
 #include <map>
@@ -215,5 +214,3 @@ public:
 
 }  // namespace Ai
 }  // namespace RhobanSSL
-
-#endif

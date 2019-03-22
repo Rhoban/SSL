@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRATEGY_GOALIESTRAT_H
-#define STRATEGY_GOALIESTRAT_H
+#pragma once
 
 #include "strategy.h"
 #include <robot_behavior/degageur.h>
@@ -63,4 +62,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-#endif

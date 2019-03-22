@@ -1,5 +1,4 @@
-#ifndef MANAGER_WITH_GAME_STATE_H
-#define MANAGER_WITH_GAME_STATE_H
+#pragma once
 
 #include "manager.h"
 #include "referee/game_state.h"
@@ -67,5 +66,3 @@ public:
 
 };  // namespace Manager
 };  // namespace RhobanSSL
-
-#endif

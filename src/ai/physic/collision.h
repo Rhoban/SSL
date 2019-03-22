@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PHYSIC_COLLISION_H
-#define PHYSIC_COLLISION_H
+#pragma once
 
 #include "movement.h"
 
@@ -38,5 +37,3 @@ std::pair<bool, double> collision_time(double radius_A, const rhoban_geometry::P
                                        double radius_error);
 
 };  // namespace RhobanSSL
-
-#endif

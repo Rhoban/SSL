@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRATEGY_TARE_AND_SYNCHRONIZE_H
-#define STRATEGY_TARE_AND_SYNCHRONIZE_H
+#pragma once
 
 #include "strategy.h"
 #include <string>
@@ -64,5 +63,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef VISION_ROBOT_POSITION_FILTER_H
-#define VISION_ROBOT_POSITION_FILTER_H
+#pragma once
 
 #include <ai_data.h>
 #include <VisionClient.h>
@@ -40,4 +39,3 @@ public:
 
 };  // namespace Vision
 };  // namespace RhobanSSL
-#endif

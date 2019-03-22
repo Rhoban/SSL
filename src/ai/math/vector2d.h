@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __TOOLS__VECTOR_H__
-#define __TOOLS__VECTOR_H__
+#pragma once
 
 #include <math/continuous_angle.h>
 #include <rhoban_geometry/point.h>
@@ -82,5 +81,3 @@ ContinuousAngle vector2angle(Vector2d direction);
 Vector2d operator*(double alpha, const Vector2d& v);
 
 std::ostream& operator<<(std::ostream& out, const Vector2d& v);
-
-#endif

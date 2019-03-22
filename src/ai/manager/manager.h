@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MANAGER_MANAGER_H
-#define MANAGER_MANAGER_H
+#pragma once
 
 #include <game_informations.h>
 #include <strategy/strategy.h>
@@ -197,5 +196,3 @@ public:
 
 };  // namespace Manager
 };  // namespace RhobanSSL
-
-#endif

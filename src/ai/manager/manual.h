@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MANAGER_MANUAL_H
-#define MANAGER_MANUAL_H
+#pragma once
 
 #include <manager/manager.h>
 
@@ -51,5 +50,3 @@ public:
 
 };  // namespace Manager
 };  // namespace RhobanSSL
-
-#endif

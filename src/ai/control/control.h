@@ -19,8 +19,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef CONTROL_H
-#define CONTROL_H
+#pragma once
 
 #include <math/continuous_angle.h>
 #include <math/vector2d.h>
@@ -63,5 +62,3 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& out, const Control& control);
-
-#endif

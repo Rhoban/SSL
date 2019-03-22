@@ -18,8 +18,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef AI_H
-#define AI_H
+#pragma once
 
 #include <com/ai_commander.h>
 #include <vision/ai_vision_client.h>
@@ -98,5 +97,3 @@ public:
   void get_annotations(RhobanSSLAnnotation::Annotations& annotations) const;
 };
 };  // namespace RhobanSSL
-
-#endif

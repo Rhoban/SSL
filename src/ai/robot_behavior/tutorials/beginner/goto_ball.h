@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GOTO_BALL__H__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GOTO_BALL__H__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
@@ -50,5 +49,3 @@ public:
 };  // namespace Beginner
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
-
-#endif

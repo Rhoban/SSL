@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRATEGY_MUR_H
-#define STRATEGY_MUR_H
+#pragma once
 
 #include "strategy.h"
 
@@ -59,4 +58,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-#endif

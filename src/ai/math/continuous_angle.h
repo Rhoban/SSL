@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CONTINUOUS_ANGLE__H__
-#define __CONTINUOUS_ANGLE__H__
+#pragma once
 
 #include <rhoban_utils/angle.h>
 
@@ -78,5 +77,3 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& out, const ContinuousAngle& a);
-
-#endif

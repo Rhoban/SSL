@@ -17,8 +17,7 @@
   along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ROBOT_BEHAVIOR_NAVIGATION_WITH_OBSTACLE_AVOIDANCE_H
-#define ROBOT_BEHAVIOR_NAVIGATION_WITH_OBSTACLE_AVOIDANCE_H
+#pragma once
 
 #include "robot_behavior.h"
 #include "position_follower.h"
@@ -106,5 +105,3 @@ public:
 
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
-
-#endif

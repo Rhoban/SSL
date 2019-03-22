@@ -19,8 +19,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef DATA_H
-#define DATA_H
+#pragma once
 
 #include <vision/vision_data.h>
 #include <mutex>
@@ -100,5 +99,3 @@ public:
 };
 
 }  // namespace RhobanSSL
-
-#endif

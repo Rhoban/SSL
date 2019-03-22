@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRATEGY_STRATEGY_H
-#define STRATEGY_STRATEGY_H
+#pragma once
 
 #include <game_informations.h>
 #include <robot_behavior/robot_behavior.h>
@@ -156,4 +155,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-#endif

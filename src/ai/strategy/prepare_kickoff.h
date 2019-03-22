@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef STRATEGY_PREPARE_KICKOFF_H
-#define STRATEGY_PREPARE_KICKOFF_H
+#pragma once
 
 #include "strategy.h"
 #include <string>
@@ -80,5 +79,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-
-#endif
