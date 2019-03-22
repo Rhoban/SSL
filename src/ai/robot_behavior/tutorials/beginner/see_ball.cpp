@@ -20,54 +20,49 @@
 #include "see_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Beginner
+namespace RhobanSSL
 {
-See_ball::See_ball(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+namespace Robot_behavior
+{
+namespace beginner
+{
+SeeBall::SeeBall(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void See_ball::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    annotations.clear();
-    
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
+void SeeBall::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  RobotBehavior::update_time_and_position(time, robot, ball);
+  annotations_.clear();
 
-    Vector2d robot_ball = ball_position() - robot_position;
-    ContinuousAngle target_angular_position = vector2angle( robot_ball );
-    
-    follower->set_following_position(robot_position, target_angular_position );
-    follower->update(time, robot, ball);
+  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+
+  Vector2d robot_ball = ball_position() - robot_position;
+  ContinuousAngle target_angular_position = vector2angle(robot_ball);
+
+  follower_->set_following_position(robot_position, target_angular_position);
+  follower_->update(time, robot, ball);
 }
 
-Control See_ball::control() const {
-    Control ctrl = follower->control();
-    return ctrl; 
+Control SeeBall::control() const
+{
+  Control ctrl = follower_->control();
+  return ctrl;
 }
 
-See_ball::~See_ball(){
-    delete follower;
+SeeBall::~SeeBall()
+{
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations See_ball::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
-    return annotations;
+RhobanSSLAnnotation::Annotations SeeBall::get_annotations() const
+{
+  RhobanSSLAnnotation::Annotations annotations;
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->get_annotations());
+  return annotations;
 }
-
-
 
 }  // namespace beginner
 }  // namespace Robot_behavior

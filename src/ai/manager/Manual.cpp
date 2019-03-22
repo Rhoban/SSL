@@ -410,8 +410,8 @@ Manual::Manual(Ai::AiData& ai_data)
   register_strategy("Beginner - See ball", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                ai_data,
                                                [&](double time, double dt) {
-                                                 Robot_behavior::Beginner::See_ball* see_ball =
-                                                     new Robot_behavior::Beginner::See_ball(ai_data);
+                                                 Robot_behavior::beginner::SeeBall* see_ball =
+                                                     new Robot_behavior::beginner::SeeBall(ai_data);
                                                  return std::shared_ptr<Robot_behavior::RobotBehavior>(see_ball);
                                                },
                                                false  // we don't want to define a goal here !
