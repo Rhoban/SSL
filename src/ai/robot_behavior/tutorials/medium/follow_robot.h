@@ -25,31 +25,83 @@ namespace Robot_behavior
 {
 namespace medium
 {
+/**
+ * @class FollowRobot
+ * @brief Tutorial to show how follow a other robot.
+ */
 class FollowRobot : public RobotBehavior
 {
 private:
-  int target_id_;
+  /**
+   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   */
   ConsignFollower* follower_;
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   */
   RhobanSSLAnnotation::Annotations annotations_;
+  /**
+   * @brief Constant value to define distance from which the robot is close enough the target.
+   */
   const double TRACKING_DISTANCE = 0.3;
+  /**
+   * @brief The target robot to follow.
+   */
+  int target_id_;
 
 public:
+  /**
+   * @brief Constructor.
+   * The default value of the target_id is set to the id 0.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @param target_id : ID of robot to follow.
+   * @see Ai::AiData
+   */
   FollowRobot(Ai::AiData& ai_data, int target_id = 0);
 
+  /**
+   * @brief At each iteration of this function, the robot go to a point on the line between it and the target, at a
+   * certain distance from the target. This distance is TRACKING_DISTANCE constant. If the robot is nearest, it doesn't
+   * move anymore while the target is still in this perimeter.
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
+  /**
+   * @return the control of the behavior.
+   */
   virtual Control control() const;
 
+  /**
+   * @brief target_id_ setter.
+   * @param target_id : ID to set.
+   */
   void setRobotIdToFollow(int target_id);
 
+  /**
+   * @brief target_id_ getter.
+   * @return target_id_.
+   */
   int getRobotIdToFollow() const;
 
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   * The class don't draw any annotations.
+   * The follower draw annotation.
+   */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
+  /**
+   * @brief Destructor.
+   */
   virtual ~FollowRobot();
 };
 
-};  // namespace Medium
+};  // namespace medium
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
 
