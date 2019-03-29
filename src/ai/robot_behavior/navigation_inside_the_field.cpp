@@ -183,7 +183,8 @@ void Navigation_inside_the_field::avoid_opponent(bool value)
   position_follower.avoid_opponent(value);
 }
 
-void Navigation_inside_the_field::avoidRobot(int id, bool value){
+void Navigation_inside_the_field::avoidRobot(int id, bool value)
+{
   position_follower.avoidRobot(id, value);
 }
 
