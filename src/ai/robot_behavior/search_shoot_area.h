@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__SEARCHSHOOTAREA__H__
-#define __ROBOT_BEHAVIOR__SEARCHSHOOTAREA__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
@@ -26,47 +25,43 @@
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class SearchShootArea : public RobotBehavior
+{
+private:
+  rhoban_geometry::Point p1;
+  rhoban_geometry::Point p2;
+  int obstructed_view;
 
-class SearchShootArea : public RobotBehavior  {
-    private:
-      rhoban_geometry::Point p1;
-      rhoban_geometry::Point p2;
-      int obstructed_view;
+  std::default_random_engine generator;
 
-      std::default_random_engine generator;
+  double period;
+  double last_time_changement;
 
-      double period;
-      double last_time_changement;
+  rhoban_geometry::Point target_position;
 
-      rhoban_geometry::Point target_position;
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-      ConsignFollower* follower;
-      RhobanSSLAnnotation::Annotations annotations;
-    public:
-      bool well_positioned;
-      
-        SearchShootArea(Ai::AiData& ai_data);
+public:
+  bool well_positioned;
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
+  SearchShootArea(Ai::AiData& ai_data);
 
-        void set_period( double period ){
-            this->period = period;
-        }
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-        void declare_area( rhoban_geometry::Point p1, rhoban_geometry::Point p2 );
+  void set_period(double period)
+  {
+    this->period = period;
+  }
 
+  void declare_area(rhoban_geometry::Point p1, rhoban_geometry::Point p2);
 
-	virtual Control control() const;
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const ;
-	virtual ~SearchShootArea();
+  virtual Control control() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual ~SearchShootArea();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL

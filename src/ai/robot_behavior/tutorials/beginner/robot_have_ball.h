@@ -17,13 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// REVIEW AB : 
-//  - Change the name of the file to annotations_determine_which_robot_have_the_ball
-//  - Change BEGGINER -> BEGINNER
-//  - Change begginer -> beginer
-
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__HAVE__BALL__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__HAVE__BALL__
+#pragma once
 
 // REVIEW AB : Use absolute path
 #include "../../robot_behavior.h"
@@ -40,23 +34,14 @@ class Begginer_robot_have_ball : public RobotBehavior  {
     private:
     RhobanSSLAnnotation::Annotations annotations;
 
-    public:
-    Begginer_robot_have_ball(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Begginer_robot_have_ball();
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual ~Begginer_robot_have_ball();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL

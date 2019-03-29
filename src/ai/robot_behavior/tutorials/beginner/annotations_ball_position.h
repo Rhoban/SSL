@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__ANNOTATIONS__BALL__POSITION
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__ANNOTATIONS__BALL__POSITION
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
@@ -36,15 +35,11 @@ class Annotations_ball_position : public RobotBehavior  {
     public:
     Annotations_ball_position(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
 	virtual ~Annotations_ball_position();
 };
@@ -52,5 +47,3 @@ class Annotations_ball_position : public RobotBehavior  {
 }; // Namespace Beginner
 }; // Namespace Robot_behavior
 }; // 5Namespace Rhoban
-
-#endif

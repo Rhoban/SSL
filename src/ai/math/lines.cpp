@@ -20,22 +20,17 @@
 #include "tangents.h"
 #include "vector2d.h"
 #include <debug.h>
-namespace rhoban_geometry {
+namespace rhoban_geometry
+{
+double distance_from_point_to_line(const rhoban_geometry::Point& point, const rhoban_geometry::Point& point_line_1,
+                                   const rhoban_geometry::Point& point_line_2)
+{
+  assert(norm_square(point_line_1 - point_line_2) != 0);
 
-    
-double distance_from_point_to_line(
-        const rhoban_geometry::Point & point,
-        const rhoban_geometry::Point & point_line_1,
-        const rhoban_geometry::Point & point_line_2     
-)
-{ 
-    assert(norm_square(point_line_1 - point_line_2) != 0);
-
-    Vector2d p1p2 = point_line_2 - point_line_1;
-    Vector2d p1p = point - point_line_1;
-    Vector2d u = p1p2 / p1p2.norm();
-    return std::fabs(vectorial_product(u, p1p));
+  Vector2d p1p2 = point_line_2 - point_line_1;
+  Vector2d p1p = point - point_line_1;
+  Vector2d u = p1p2 / p1p2.norm();
+  return std::fabs(vectorial_product(u, p1p));
 }
 
-}
-
+}  // namespace rhoban_geometry

@@ -17,39 +17,33 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__MUR_DEF_KICK__H__
-#define __ROBOT_BEHAVIOR__MUR_DEF_KICK__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class Mur_def_kick : public RobotBehavior
+{
+private:
+  int mur_robot_id;
+  int mur_nb_robot;
+  ConsignFollower* follower;
 
-class Mur_def_kick : public RobotBehavior  {
-    private:
-    int mur_robot_id;
-    int mur_nb_robot;
-	ConsignFollower* follower;
+public:
+  Mur_def_kick(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
-    public:
-        Mur_def_kick(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  void declare_mur_robot_id(int id, int mur_nb_robots);
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
-    void declare_mur_robot_id( int id, int mur_nb_robots );
+  virtual Control control() const;
 
-	virtual Control control() const;
-
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-	virtual ~Mur_def_kick();
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual ~Mur_def_kick();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL

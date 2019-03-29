@@ -17,43 +17,36 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__WAIT_PASS__H__
-#define __ROBOT_BEHAVIOR__WAIT_PASS__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class WaitPass : public RobotBehavior
+{
+private:
+  Vector2d translation;
+  Vision::Team team;
+  double distance_ball;
 
-class WaitPass : public RobotBehavior  {
-    private:
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-    Vector2d translation;
-    Vision::Team team;
-    double distance_ball;
+public:
+  WaitPass(Ai::AiData& ai_data);
 
-    ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-    public:
-    WaitPass(Ai::AiData& ai_data);
-
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
-
-	virtual Control control() const;
+  virtual Control control() const;
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~WaitPass();
+  virtual ~WaitPass();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL

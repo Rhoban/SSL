@@ -1,6 +1,6 @@
 /*
     This file is part of SSL.
-    
+
     Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
@@ -57,6 +57,6 @@ RhobanSSLAnnotation::Annotations Annotations_ball_position::get_annotations() co
     annotations.addAnnotations( this->annotations );
     return annotations;
 }
-}
-}
-}
+} // namespace begginer
+} // namespace Robot_behavior
+} // namespace RhobanSSL
