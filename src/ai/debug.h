@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __DEBUG__H__
-#define __DEBUG__H__
+#pragma once
 
 #include <rhoban_utils/util.h>
 
@@ -44,5 +43,3 @@ void update_periodic_debug(double current_time, double period);
   }
 
 #define PLOT(message) std::cout << "P " << message << std::endl
-
-#endif

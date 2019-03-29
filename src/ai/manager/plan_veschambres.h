@@ -17,8 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__PLANVESCHAMBRES__H__
-#define __MANAGER__PLANVESCHAMBRES__H__
+#pragma once
 
 #include <manager/manager_with_game_state.h>
 
@@ -100,5 +99,3 @@ public:
 
 };  // namespace Manager
 };  // namespace RhobanSSL
-
-#endif

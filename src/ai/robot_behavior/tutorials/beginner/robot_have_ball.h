@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__HAVE__BALL__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__HAVE__BALL__
+#pragma once
 
 #include "../../robot_behavior.h"
 #include "../../factory.h"
@@ -46,5 +45,3 @@ public:
 
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
-
-#endif

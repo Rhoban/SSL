@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CORE__EXPORT_TO_PLOT__H__
-#define __CORE__EXPORT_TO_PLOT__H__
+#pragma once
+
 #include <fstream>
 #include <functional>
 #include <vector>
@@ -47,5 +47,3 @@ public:
   void store();
   void close();
 };
-
-#endif
