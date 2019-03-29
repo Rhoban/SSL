@@ -63,6 +63,8 @@ void FollowRobot::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
     }
   }
 
+  // Disabled avoidance with the target to correclty follow it:
+  follower_->avoidRobot(target_id_, false);
   follower_->set_following_position(follow_position, follow_rotation);
 
   follower_->avoid_the_ball(false);
@@ -98,6 +100,6 @@ RhobanSSLAnnotation::Annotations FollowRobot::get_annotations() const
   return annotations;
 }
 
-}  // namespace Medium
+}  // namespace medium
 }  // namespace Robot_behavior
 }  // namespace RhobanSSL
