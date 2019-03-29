@@ -183,6 +183,11 @@ void Navigation_inside_the_field::avoid_opponent(bool value)
   position_follower.avoid_opponent(value);
 }
 
+void Navigation_inside_the_field::avoidRobot(int id, bool value)
+{
+  position_follower.avoidRobot(id, value);
+}
+
 void Navigation_inside_the_field::set_limits(double translation_velocity_limit, double rotation_velocity_limit,
                                              double translation_acceleration_limit, double rotation_acceleration_limit)
 {

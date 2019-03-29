@@ -109,10 +109,10 @@ void Manager::assign_strategy(const std::string& strategy_name, double time, con
   assert(strategies.find(strategy_name) != strategies.end());  // The name of the strategy is not declared. Please
                                                                // register them with register_strategy() (during the
                                                                // initialisation of your manager for example).
-  assert(not(assign_goalie) or (assign_goalie and
-                                std::find(robot_ids.begin(), robot_ids.end(), goalie_id) ==
-                                    robot_ids.end()));  // If you declare that you are assigning a goal, you should not
-                                                        // declar the goal id inside the list of field robots.
+  assert(not(assign_goalie) or
+         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(), goalie_id) ==
+                                robot_ids.end()));  // If you declare that you are assigning a goal, you should not
+                                                    // declar the goal id inside the list of field robots.
 
   current_strategy_names.push_front(strategy_name);
   Strategy::Strategy& strategy = get_strategy(strategy_name);

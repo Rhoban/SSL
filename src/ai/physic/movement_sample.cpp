@@ -135,10 +135,12 @@ std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& 
 {
   stream << "("
             "t="
-         << pos.time << ", "
-                        "lin="
-         << pos.linear_position << ", "
-                                   "ang="
+         << pos.time
+         << ", "
+            "lin="
+         << pos.linear_position
+         << ", "
+            "ang="
          << pos.angular_position << ")";
   return stream;
 }

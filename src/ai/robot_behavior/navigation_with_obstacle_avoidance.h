@@ -36,8 +36,7 @@ class Navigation_with_obstacle_avoidance : public ConsignFollower
 {
 private:
   bool ignore_the_ball;
-  bool ignore_ally;
-  bool ignore_opponent;
+  bool ignore_robot_[2 * Ai::Constants::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.
   double ball_radius_avoidance;
   bool ball_is_the_obstacle;
   PositionFollower position_follower;
@@ -96,6 +95,7 @@ public:
   virtual void avoid_the_ball(bool value = true);
   virtual void avoid_ally(bool value);
   virtual void avoid_opponent(bool value);
+  virtual void avoidRobot(int id, bool value);
 
   virtual void set_radius_avoidance_for_the_ball(double radius);
   double get_radius_avoidance_for_the_ball();
