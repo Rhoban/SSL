@@ -17,10 +17,9 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MATH__POSITION__H__
-#define __MATH__POSITION__H__
+#pragma once
 
-#include "ContinuousAngle.h"
+#include "continuous_angle.h"
 #include <rhoban_geometry/point.h>
 #include <iostream>
 
@@ -35,5 +34,3 @@ struct Position
 };
 
 std::ostream& operator<<(std::ostream& out, const Position& pos);
-
-#endif

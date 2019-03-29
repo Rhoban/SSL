@@ -17,13 +17,12 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __pid__H__
-#define __pid__H__
+#pragma once
 
 #include "control.h"
 
 #include <debug.h>
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <math/vector2d.h>
 #include <utility>
 
@@ -75,6 +74,5 @@ struct PidController
   double no_limited_angular_control() const;
 
   virtual Control no_limited_control() const;
+  virtual ~PidController();
 };
-
-#endif

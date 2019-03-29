@@ -17,13 +17,12 @@
   along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GAMESTATE__H__
-#define __GAMESTATE__H__
+#pragma once
 
 #include <RefereeClient.h>
 #include <core/machine_state.h>
 #include <math/circular_vector.h>
-#include <AiData.h>
+#include <ai_data.h>
 
 namespace RhobanSSL
 {
@@ -145,5 +144,3 @@ public:
 };
 
 }  // namespace RhobanSSL
-
-#endif

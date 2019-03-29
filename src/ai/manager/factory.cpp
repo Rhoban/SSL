@@ -19,7 +19,7 @@
 
 #include "factory.h"
 
-#include "Manual.h"
+#include "manual.h"
 // #include "Match.h"
 #include "plan_veschambres.h"
 

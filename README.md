@@ -1,4 +1,4 @@
-# SSL
+# SSL {#mainpage}
 
 ## Development
 
@@ -48,6 +48,17 @@ You can then use the following debugging binaries:
 * ``./bin/vision``, to display informations from the vision (see ``client/vision.cpp``)
 * ``./bin/referee``, to display inforamtions from the referee (see ``client/referee.cpp``)
 * ``./bin/sim``, to send commands to the simulator (see ``client/sim.cpp``)
+
+## Documentation
+
+From workspace root:
+
+    cd doc
+    mkdir build
+    cd build
+    cmake ..
+    make doc
+Documentation is under html directory
 
 ## Testing
 

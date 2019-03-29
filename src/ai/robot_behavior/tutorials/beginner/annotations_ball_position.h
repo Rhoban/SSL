@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ANNOTATIONS__BALL__POSITION
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ANNOTATIONS__BALL__POSITION
+#ifndef ROBOT_BEHAVIOR_TUTORIALS_BEGGINER_ANNOTATIONS_BALL_POSITION
+#define ROBOT_BEHAVIOR_TUTORIALS_BEGGINER_ANNOTATIONS_BALL_POSITION
 
 #include "../../robot_behavior.h"
 #include "../../factory.h"
