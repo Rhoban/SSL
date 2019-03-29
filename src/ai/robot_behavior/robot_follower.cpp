@@ -20,7 +20,7 @@
 #include "robot_follower.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 
 namespace RhobanSSL
 {

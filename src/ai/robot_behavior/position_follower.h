@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
-#define __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "consign_follower.h"
@@ -58,5 +57,3 @@ public:
 
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
-
-#endif

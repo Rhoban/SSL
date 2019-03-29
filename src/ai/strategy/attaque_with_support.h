@@ -17,10 +17,9 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__ATTAQUEWITHSUPPORT__H__
-#define __STRATEGY__ATTAQUEWITHSUPPORT__H__
+#pragma once
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <robot_behavior/striker.h>
 #include <robot_behavior/robot_follower.h>
 #include <robot_behavior/pass.h>
@@ -67,4 +66,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-#endif

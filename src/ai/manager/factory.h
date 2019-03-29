@@ -17,12 +17,11 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__FACTORY__H__
-#define __MANAGER__FACTORY__H__
+#pragma once
 
-#include <AiData.h>
+#include <ai_data.h>
 #include <referee/game_state.h>
-#include "Manager.h"
+#include "manager.h"
 
 namespace RhobanSSL
 {
@@ -49,5 +48,3 @@ public:
 
 };  // namespace Manager
 };  // namespace RhobanSSL
-
-#endif

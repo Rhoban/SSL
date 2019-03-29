@@ -17,10 +17,9 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MOVEMENT_ON_NEW_FRAME_H__
-#define __MOVEMENT_ON_NEW_FRAME_H__
+#pragma once
 
-#include <physic/Movement.h>
+#include <physic/movement.h>
 #include <math/frame_changement.h>
 
 namespace RhobanSSL
@@ -60,5 +59,3 @@ public:
 };
 
 }  // namespace RhobanSSL
-
-#endif

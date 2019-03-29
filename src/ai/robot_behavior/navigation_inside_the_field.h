@@ -17,12 +17,11 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__NAVIGATION_INSIDE_THE_FIELD__H__
-#define __ROBOT_BEHAVIOR__NAVIGATION_INSIDE_THE_FIELD__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "navigation_with_obstacle_avoidance.h"
-#include <AiData.h>
+#include <ai_data.h>
 
 namespace RhobanSSL
 {
@@ -74,5 +73,3 @@ public:
 };
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
-
-#endif
