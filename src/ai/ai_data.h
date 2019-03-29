@@ -45,7 +45,12 @@ struct RobotPlacement
   RobotPlacement(std::vector<Position> field_robot_position);
 };
 
-typedef enum { Yellow, Blue, Unknown } Team;
+typedef enum
+{
+  Yellow,
+  Blue,
+  Unknown
+} Team;
 
 class Object
 {
