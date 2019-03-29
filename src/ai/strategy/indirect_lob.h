@@ -17,10 +17,9 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__INDIRECTLOB__H__
-#define __STRATEGY__INDIRECTLOB__H__
+#pragma once
 
-#include "Strategy.h"
+#include "strategy.h"
 
 namespace RhobanSSL
 {
@@ -60,4 +59,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-#endif

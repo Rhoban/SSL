@@ -1,14 +1,14 @@
 #pragma once
 
 #include <thread>
-#include <vision/AIVisionClient.h>
-#include <com/AICommander.h>
+#include <vision/ai_vision_client.h>
+#include <com/ai_commander.h>
 #include <joystick/Joystick.h>
 #include <json/json.h>
 #include <string>
 #include <QObject>
-#include <Data.h>
-#include <Ai.h>
+#include <data.h>
+#include <ai.h>
 #include "client_config.h"
 
 class API : public QObject

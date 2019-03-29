@@ -2,9 +2,9 @@
 #include <unistd.h>
 #include "API.h"
 #include <control/control.h>
-#include <annotations/Annotations.h>
-#include <manager/Manual.h>
-#include <com/AICommanderReal.h>
+#include <annotations/annotations.h>
+#include <manager/manual.h>
+#include <com/ai_commander_real.h>
 #include <manager/factory.h>
 
 using namespace RhobanSSL;

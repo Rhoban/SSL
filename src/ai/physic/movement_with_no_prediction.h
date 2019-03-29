@@ -17,10 +17,9 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MOVEMENT_WITH_NO_PREDICTION_H__
-#define __MOVEMENT_WITH_NO_PREDICTION_H__
+#pragma once
 
-#include <physic/Movement.h>
+#include <physic/movement.h>
 
 namespace RhobanSSL
 {
@@ -52,5 +51,3 @@ public:
 };
 
 }  // namespace RhobanSSL
-
-#endif

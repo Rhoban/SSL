@@ -1,5 +1,4 @@
-#ifndef __VISION__FACTORY__H__
-#define __VISION__FACTORY__H__
+#pragma once
 
 #include "robot_position_filter.h"
 
@@ -18,4 +17,3 @@ public:
 
 };  // namespace Vision
 };  // namespace RhobanSSL
-#endif

@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__EXAMPLE_MACHINE_STATE__H__
-#define __ROBOT_BEHAVIOR__EXAMPLE_MACHINE_STATE__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
@@ -51,15 +50,15 @@ public:
   void print_are_pass()
   {
     DEBUG("ARE PASSING");
-  };
+  }
   void print_ball_info()
   {
     DEBUG("INFO");
-  };
+  }
   void print_ball_info2()
   {
     DEBUG("INFO2");
-  };
+  }
 
   typedef construct_machine_state_infrastructure<std::string, Ai::AiData, Ai::AiData> machine_state_infrastructure;
 
@@ -80,5 +79,3 @@ public:
 
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
-
-#endif

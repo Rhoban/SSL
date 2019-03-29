@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __TANGENTS__H__
-#define __TANGENTS__H__
+#pragma once
 
 #include <rhoban_geometry/point.h>
 #include <rhoban_geometry/segment.h>
@@ -40,5 +39,3 @@ std::vector<rhoban_geometry::Segment> tangent_of_two_circle(const rhoban_geometr
                                                             const rhoban_geometry::Circle& center_B);
 
 }  // namespace rhoban_geometry
-
-#endif
