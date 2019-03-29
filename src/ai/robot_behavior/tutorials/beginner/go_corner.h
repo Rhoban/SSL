@@ -88,5 +88,3 @@ public:
 }  // namespace beginner
 }  // namespace Robot_behavior
 }  // namespace RhobanSSL
-
-#endif
