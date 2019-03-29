@@ -419,7 +419,7 @@ void AI::run()
     {
       update_electronic_informations();
     }
-// print_electronic_info();
+    // print_electronic_info();
 
 #ifndef NDEBUG
 // check_time_is_coherent();

@@ -67,6 +67,7 @@ public:
   virtual void avoid_the_ball(bool value = true);
   virtual void avoid_ally(bool value = true);
   virtual void avoid_opponent(bool value = true);
+  virtual void avoidRobot(int id, bool value);
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
   virtual void set_radius_avoidance_for_the_ball(double radius);
