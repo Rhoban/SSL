@@ -17,11 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__STRIKERWITHSUPPORT__H__
-#define __STRATEGY__STRIKERWITHSUPPORT__H__
+#pragma once
 
 #include <robot_behavior/striker.h>
-#include "Strategy.h"
+#include "strategy.h"
 
 namespace RhobanSSL
 {
@@ -60,4 +59,3 @@ public:
 
 };  // namespace Strategy
 };  // namespace RhobanSSL
-#endif

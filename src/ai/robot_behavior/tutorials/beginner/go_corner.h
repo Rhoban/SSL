@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
-#define ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
@@ -86,7 +85,6 @@ public:
    */
   virtual ~GoCorner();
 };
-
 }  // namespace beginner
 }  // namespace Robot_behavior
 }  // namespace RhobanSSL

@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __curve__H__
-#define __curve__H__
+#pragma once
 
 #include <debug.h>
 #include <vector>
@@ -259,5 +258,3 @@ public:
   double error_position_consign() const;
   double get_step_time() const;
 };
-
-#endif

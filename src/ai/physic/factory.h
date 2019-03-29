@@ -17,11 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PHYSIC__FACTORY__H__
-#define __PHYSIC__FACTORY__H__
+#pragma once
 
-#include "Movement.h"
-#include <AiData.h>
+#include "movement.h"
+#include <ai_data.h>
 
 namespace RhobanSSL
 {
@@ -37,5 +36,3 @@ public:
 
 };  // namespace physic
 };  // namespace RhobanSSL
-
-#endif

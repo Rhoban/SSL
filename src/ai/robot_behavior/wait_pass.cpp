@@ -20,14 +20,14 @@
 #include "wait_pass.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 
 namespace RhobanSSL
 {
 namespace Robot_behavior
 {
 WaitPass::WaitPass(Ai::AiData& ai_data)
-  : distance_ball(12), RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), distance_ball(12), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 

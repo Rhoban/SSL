@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_CONTROL__H__
-#define __ROBOT_CONTROL__H__
+#pragma once
 
 #include <debug.h>
 #include <vector>
@@ -108,5 +107,3 @@ public:
 
   virtual double get_dt() const;
 };
-
-#endif
