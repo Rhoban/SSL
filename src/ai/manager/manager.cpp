@@ -443,7 +443,7 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position()
         return Vector2d(pos.first - this->getRobot(robot_id).getMovement().linear_position(time())).norm_square();
       };
 
-  matching::Matchings matchings = matching::gale_shapley_algorithm(get_valid_player_ids(), choising_positions,
+  matching::Matchings matchings = matching::galeShapleyAlgorithm(get_valid_player_ids(), choising_positions,
                                                                    robot_ranking, distance_ranking, false, false);
 
   std::list<int> not_choosen_robot;
