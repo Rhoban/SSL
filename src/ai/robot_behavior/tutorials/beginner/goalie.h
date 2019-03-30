@@ -26,28 +26,63 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-/** Tutorial class to show how to place the robot behind the
+/**
+ */
+/**
+ * @class Goalie
+ * @brief Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
-
 class Goalie : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  /**
+   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   */
+  ConsignFollower* follower_;
+  /**
+   * Not use in this package but set in a case of copy.
+   * @see RhobanSSLAnnotation::Annotations
+   */
+  RhobanSSLAnnotation::Annotations annotations_;
 
 public:
+  /**
+   * @brief Constructor.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
+   */
   Goalie(Ai::AiData& ai_data);
 
+  /**
+   * @brief Move the robot 0.5 meters from the goal center.
+   * The robot will be align with the ally goal center and the ball position..
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
+  /**
+   * @see Control.
+   */
   virtual Control control() const;
 
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   */
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
+  /**
+   * @brief Destructor.
+   */
   virtual ~Goalie();
 };
 
-};  // Namespace Beginner
-};  // Namespace Robot_behavior
-};  // namespace RhobanSSL
+}  // Namespace beginner
+}  // Namespace Robot_behavior
+}  // namespace RhobanSSL

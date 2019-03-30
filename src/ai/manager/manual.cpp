@@ -379,15 +379,15 @@ Manual::Manual(Ai::AiData& ai_data)
                                                 },
                                                 false  // we don't want to define a goal here !
                                                 )));
-  register_strategy("Begginer Goalie", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
-                                           ai_data,
-                                           [&](double time, double dt) {
-                                             Robot_behavior::Begginer_goalie* goalie =
-                                                 new Robot_behavior::Begginer_goalie(ai_data);
-                                             return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
-                                           },
-                                           false  // we don't want to define a goal here !
-                                           )));
+  register_strategy("Begginer - Goalie", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+                                             ai_data,
+                                             [&](double time, double dt) {
+                                               Robot_behavior::beginner::Goalie* goalie =
+                                                   new Robot_behavior::beginner::Goalie(ai_data);
+                                               return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                                             },
+                                             false  // we don't want to define a goal here !
+                                             )));
   register_strategy("Begginer Defensor", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                              ai_data,
                                              [&](double time, double dt) {

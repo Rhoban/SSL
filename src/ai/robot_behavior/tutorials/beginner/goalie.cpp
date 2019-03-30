@@ -24,9 +24,9 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-Goalie::Goalie(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+Goalie::Goalie(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
 {
 }
 
@@ -36,6 +36,7 @@ void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   // The goalie moves between the position of the ally's goal center and the position of the ball.
   // The position of the goalie is at 0.5 meters of the goal center.
+  annotations_.clear();
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
   rhoban_geometry::Point target_position = robot_position;
@@ -53,28 +54,28 @@ void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   double target_rotation = detail::vec2angle(goal_ball_vector);
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->set_following_position(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control Goalie::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
 Goalie::~Goalie()
 {
-  delete follower;
+  delete follower_;
 }
 
 RhobanSSLAnnotation::Annotations Goalie::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->get_annotations());
   return annotations;
 }
-}  // namespace Beginner
+}  // namespace beginner
 }  // namespace Robot_behavior
 }  // namespace RhobanSSL
