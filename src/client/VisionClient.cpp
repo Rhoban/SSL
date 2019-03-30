@@ -36,7 +36,7 @@ SSL_WrapperPacket VisionClient::getData()
   SSL_WrapperPacket tmp;
 
   mutex.lock();
-  tmp = data;
+  tmp = data_;
   mutex.unlock();
 
   return tmp;
@@ -48,7 +48,7 @@ bool VisionClient::process(char* buffer, size_t len)
 
   if (packet.ParseFromArray(buffer, len))
   {
-    data = packet;
+    data_ = packet;
 
     return true;
   }

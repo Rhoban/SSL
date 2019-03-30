@@ -19,6 +19,6 @@ public:
   SSL_WrapperPacket getData();
 
 protected:
-  SSL_WrapperPacket data;
+  SSL_WrapperPacket data_;
 };
 }  // namespace rhoban_ssl
