@@ -45,7 +45,7 @@ void Navigation_with_obstacle_avoidance::set_following_position(const rhoban_geo
   this->target_position = position_to_follow;
   this->target_angle = target_angle;
   this->target_angle = this->robot_angular_position;
-  this->target_angle.set_to_nearest(target_angle);
+  this->target_angle.setToNearest(target_angle);
 }
 
 void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle()

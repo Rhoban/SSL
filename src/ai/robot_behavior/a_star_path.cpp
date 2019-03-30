@@ -38,7 +38,7 @@ void A_star_path::set_following_position(const rhoban_geometry::Point& position_
   this->target_position = position_to_follow;
   this->target_angle = target_angle;
   this->target_angle = this->robot_angular_position;
-  this->target_angle.set_to_nearest(target_angle);
+  this->target_angle.setToNearest(target_angle);
 }
 
 void A_star_path::update(double time, const ai::Robot& robot, const ai::Ball& ball)

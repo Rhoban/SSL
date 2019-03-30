@@ -48,7 +48,7 @@ void Object::update(double time, const Point& linear_position)
 void Object::update(double time, const Point& linear_position, const Angle& angular_position)
 {
   ContinuousAngle angle(movement[0].angular_position);
-  angle.set_to_nearest(angular_position);
+  angle.setToNearest(angular_position);
   update(time, linear_position, angle);
 }
 
