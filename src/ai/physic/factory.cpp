@@ -31,7 +31,7 @@ namespace physic
 {
 Movement* Factory::movement(ai::AiData& ai_data)
 {
-  return new Movement_with_temporal_shift(
+  return new MovementWithTemporalShift(
       // new Movement_with_no_prediction()
       new MovementPredictedByIntegration(), [&ai_data]() { return ai_data.time_shift_with_vision; });
 }

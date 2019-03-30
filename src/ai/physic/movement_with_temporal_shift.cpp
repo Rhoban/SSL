@@ -21,69 +21,69 @@
 
 namespace rhoban_ssl
 {
-Movement_with_temporal_shift::Movement_with_temporal_shift(Movement* movement, std::function<double()> temporal_shift)
-  : movement(movement), temporal_shift(temporal_shift)
+MovementWithTemporalShift::MovementWithTemporalShift(Movement* movement, std::function<double()> temporal_shift)
+  : movement_(movement), temporal_shift(temporal_shift)
 {
 }
 
-Movement* Movement_with_temporal_shift::clone() const
+Movement* MovementWithTemporalShift::clone() const
 {
-  return new Movement_with_temporal_shift(movement->clone(), temporal_shift);
+  return new MovementWithTemporalShift(movement_->clone(), temporal_shift);
 }
-const Movement* Movement_with_temporal_shift::get_original_movement() const
+const Movement* MovementWithTemporalShift::getOriginalMovement() const
 {
-  return movement;
-}
-
-void Movement_with_temporal_shift::setSample(const MovementSample& samples)
-{
-  movement->setSample(samples);
-}
-const MovementSample& Movement_with_temporal_shift::getSample() const
-{
-  return movement->getSample();
+  return movement_;
 }
 
-double Movement_with_temporal_shift::lastTime() const
+void MovementWithTemporalShift::setSample(const MovementSample& samples)
 {
-  return movement->lastTime() + temporal_shift();
+  movement_->setSample(samples);
+}
+const MovementSample& MovementWithTemporalShift::getSample() const
+{
+  return movement_->getSample();
+}
+
+double MovementWithTemporalShift::lastTime() const
+{
+  return movement_->lastTime() + temporal_shift();
 };
 
-rhoban_geometry::Point Movement_with_temporal_shift::linearPosition(double time) const
+rhoban_geometry::Point MovementWithTemporalShift::linearPosition(double time) const
 {
-  return movement->linearPosition(time - temporal_shift());
+  return movement_->linearPosition(time - temporal_shift());
 }
-ContinuousAngle Movement_with_temporal_shift::angularPosition(double time) const
+ContinuousAngle MovementWithTemporalShift::angularPosition(double time) const
 {
-  return movement->angularPosition(time - temporal_shift());
-}
-
-Vector2d Movement_with_temporal_shift::linearVelocity(double time) const
-{
-  return movement->linearVelocity(time - temporal_shift());
-}
-ContinuousAngle Movement_with_temporal_shift::angularVelocity(double time) const
-{
-  return movement->angularVelocity(time - temporal_shift());
+  return movement_->angularPosition(time - temporal_shift());
 }
 
-Vector2d Movement_with_temporal_shift::linearAcceleration(double time) const
+Vector2d MovementWithTemporalShift::linearVelocity(double time) const
 {
-  return movement->linearAcceleration(time - temporal_shift());
+  return movement_->linearVelocity(time - temporal_shift());
 }
-ContinuousAngle Movement_with_temporal_shift::angularAcceleration(double time) const
+ContinuousAngle MovementWithTemporalShift::angularVelocity(double time) const
 {
-  return movement->angularAcceleration(time - temporal_shift());
-}
-
-void Movement_with_temporal_shift::print(std::ostream& stream) const
-{
-  return movement->print(stream);
+  return movement_->angularVelocity(time - temporal_shift());
 }
 
-Movement_with_temporal_shift::~Movement_with_temporal_shift()
+Vector2d MovementWithTemporalShift::linearAcceleration(double time) const
 {
-  delete movement;
+  return movement_->linearAcceleration(time - temporal_shift());
+}
+ContinuousAngle MovementWithTemporalShift::angularAcceleration(double time) const
+{
+  return movement_->angularAcceleration(time - temporal_shift());
+}
+
+void MovementWithTemporalShift::print(std::ostream& stream) const
+{
+  return movement_->print(stream);
+}
+
+MovementWithTemporalShift::~MovementWithTemporalShift()
+{
+  delete movement_;
 }
 
 }  // namespace rhoban_ssl

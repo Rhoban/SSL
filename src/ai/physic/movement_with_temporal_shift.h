@@ -23,10 +23,10 @@
 
 namespace rhoban_ssl
 {
-class Movement_with_temporal_shift : public Movement
+class MovementWithTemporalShift : public Movement
 {
 private:
-  Movement* movement;
+  Movement* movement_;
   std::function<double()> temporal_shift;
 
 public:
@@ -36,9 +36,9 @@ public:
   virtual double lastTime() const;
 
   virtual Movement* clone() const;
-  const Movement* get_original_movement() const;
+  const Movement* getOriginalMovement() const;
 
-  Movement_with_temporal_shift(Movement* movement, std::function<double()> temporal_shift);
+  MovementWithTemporalShift(Movement* movement, std::function<double()> temporal_shift);
 
   virtual void setSample(const MovementSample& samples);
   virtual const MovementSample& getSample() const;
@@ -54,7 +54,7 @@ public:
 
   virtual void print(std::ostream& stream) const;
 
-  virtual ~Movement_with_temporal_shift();
+  virtual ~MovementWithTemporalShift();
 };
 
 }  // namespace rhoban_ssl
