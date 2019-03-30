@@ -80,7 +80,7 @@ void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rho
     if (robot.isPresentInVision())
     {
       const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time());
-      if (distance_from_point_to_line(robot_position, p1, p2) <= distance)
+      if (distanceFromPointToLine(robot_position, p1, p2) <= distance)
       {
         result.push_back(i);
       }
