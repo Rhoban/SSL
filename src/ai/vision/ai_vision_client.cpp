@@ -47,7 +47,7 @@ AIVisionClient::AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulati
 
 void AIVisionClient::setRobotPos(Ai::Team team, int id, double x, double y, double orientation)
 {
-  Data_from_ai data_from_ai;
+  DataFromAi data_from_ai;
   shared_data >> data_from_ai;
 
   myTeam = data_from_ai.team_color;
@@ -71,7 +71,7 @@ void AIVisionClient::setRobotPos(Ai::Team team, int id, double x, double y, doub
 
 void AIVisionClient::packetReceived()
 {
-  Data_from_ai data_from_ai;
+  DataFromAi data_from_ai;
   shared_data >> data_from_ai;
 
   myTeam = data_from_ai.team_color;

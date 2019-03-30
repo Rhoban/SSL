@@ -32,7 +32,7 @@ API::API(std::string teamName, bool simulation, rhoban_ssl::Ai::Team team, rhoba
   , joystickRobot(0)
 {
   // Be sure that the final controls are initalized to no-speed
-  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::SharedData shared;
   data >> shared;
   for (int id = 0; id < NB_ROBOT_ELEC; id++)
   {
@@ -112,7 +112,7 @@ bool API::isSimulation()
 
 bool API::isYellow()
 {
-  Data_from_ai data_from_ai;
+  DataFromAi data_from_ai;
   data >> data_from_ai;
   return data_from_ai.team_color == Ai::Team::Yellow;
 }
@@ -154,7 +154,7 @@ QString API::robotsStatus()
   rhoban_ssl::Vision::VisionData vision;
   data >> vision;
 
-  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::SharedData shared;
   data >> shared;
 
   for (auto& entry : vision.robots)
@@ -269,7 +269,7 @@ void API::enableRobot(int id, bool enabled)
   mutex.lock();
   if (id >= 0 && id < NB_ROBOT_ELEC)
   {
-    rhoban_ssl::Shared_data shared;
+    rhoban_ssl::SharedData shared;
     data >> shared;
     Control& control = shared.final_control_for_robots[id].control;
 
@@ -291,7 +291,7 @@ void API::manualControl(int id, bool manual)
   mutex.lock();
   if (id >= 0 && id < NB_ROBOT_ELEC)
   {
-    rhoban_ssl::Shared_data shared;
+    rhoban_ssl::SharedData shared;
     data >> shared;
     auto& final_control = shared.final_control_for_robots[id];
 
@@ -306,7 +306,7 @@ void API::activeRobot(int id, bool active)
   mutex.lock();
   if (id >= 0 && id < NB_ROBOT_ELEC)
   {
-    rhoban_ssl::Shared_data shared;
+    rhoban_ssl::SharedData shared;
     data >> shared;
     Control& control = shared.final_control_for_robots[id].control;
 
@@ -320,7 +320,7 @@ void API::robotCommand(int id, double xSpeed, double ySpeed, double thetaSpeed)
 {
   mutex.lock();
 
-  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::SharedData shared;
   data >> shared;
   Control& control = shared.final_control_for_robots[id].control;
 
@@ -337,7 +337,7 @@ void API::robotCommand(int id, double xSpeed, double ySpeed, double thetaSpeed)
 void API::robotCharge(int id, bool charge)
 {
   mutex.lock();
-  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::SharedData shared;
   data >> shared;
   Control& control = shared.final_control_for_robots[id].control;
   if (!control.ignore)
@@ -351,7 +351,7 @@ void API::robotCharge(int id, bool charge)
 void API::kick(int id, int kick, float power)
 {
   mutex.lock();
-  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::SharedData shared;
   data >> shared;
   Control& control = shared.final_control_for_robots[id].control;
 
@@ -377,7 +377,7 @@ void API::kick(int id, int kick, float power)
 void API::setSpin(int id, bool spin)
 {
   mutex.lock();
-  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::SharedData shared;
   data >> shared;
   Control& control = shared.final_control_for_robots[id].control;
 
@@ -395,7 +395,7 @@ void API::emergencyStop()
 
   mutex.lock();
 
-  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::SharedData shared;
   data >> shared;
 
   for (int id = 0; id < NB_ROBOT_ELEC; id++)
@@ -419,7 +419,7 @@ void API::emergencyStop()
 
 std::string API::ourColor()
 {
-  Data_from_ai data_from_ai;
+  DataFromAi data_from_ai;
   data >> data_from_ai;
 
   return data_from_ai.team_color == Ai::Team::Yellow ? "yellow" : "blue";
@@ -442,8 +442,8 @@ void API::scan()
   mutex.lock();
 
   // Enabling robots depending on their statuses
-  rhoban_ssl::Shared_data shared;
-  rhoban_ssl::Shared_data shared_tmp_manual;
+  rhoban_ssl::SharedData shared;
+  rhoban_ssl::SharedData shared_tmp_manual;
   data >> shared;
   shared_tmp_manual = shared;
 
@@ -508,7 +508,7 @@ void API::joystickThreadExec()
   }
 
   {
-    rhoban_ssl::Shared_data shared;
+    rhoban_ssl::SharedData shared;
     data >> shared;
     auto& final_control = shared.final_control_for_robots[joystickRobot];
     final_control.is_manually_controled_by_viewer = true;
@@ -573,7 +573,7 @@ void API::joystickThreadExec()
       }
 
       // Updating control
-      rhoban_ssl::Shared_data shared;
+      rhoban_ssl::SharedData shared;
       data >> shared;
       Control& control = shared.final_control_for_robots[joystickRobot].control;
       control.linear_velocity = Vector2d(xSpeed, ySpeed);
@@ -651,7 +651,7 @@ QString API::availableJoysticks()
 
 QString API::getAnnotations()
 {
-  Data_for_viewer data_for_viewer;
+  DataForViewer data_for_viewer;
   data >> data_for_viewer;
 
   return QString::fromStdString(data_for_viewer.annotations.toJsonString());
@@ -729,7 +729,7 @@ void API::managerStop()
 
 void API::managerPlay()
 {
-  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::SharedData shared;
   data >> shared;
 
   for (int id = 0; id < NB_ROBOT_ELEC; id++)

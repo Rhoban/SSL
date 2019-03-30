@@ -352,7 +352,7 @@ void AI::update_robots()
   auto team = Vision::Ally;
   for (int robot_id = 0; robot_id < Vision::Robots; robot_id++)
   {
-    Shared_data::Final_control& final_control = shared_data.final_control_for_robots[robot_id];
+    SharedData::FinalControl& final_control = shared_data.final_control_for_robots[robot_id];
 
     Ai::Robot& robot = ai_data.robots[team][robot_id];
     Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors[robot_id]);
@@ -403,7 +403,7 @@ void AI::run()
     ai_data.time = current_time, ai_data.dt = current_dt;
 
 #ifndef NDEBUG
-    update_periodic_debug(current_time, 10.0);
+    updatePeriodicDebug(current_time, 10.0);
 #endif
 
     data >> visionData;
@@ -461,7 +461,7 @@ void AI::run()
 
     data << shared_data;
 
-    data.edit_data_for_viewer([this](Data_for_viewer& data_for_viewer) {
+    data.editDataForViewer([this](DataForViewer& data_for_viewer) {
       data_for_viewer.annotations.clear();
       this->get_annotations(data_for_viewer.annotations);
     });
@@ -479,7 +479,7 @@ void AI::stop()
 
 void AI::share_data()
 {
-  Data_from_ai data_from_ai;
+  DataFromAi data_from_ai;
   data_from_ai.team_color = ai_data.team_color;
   data << data_from_ai;
 }

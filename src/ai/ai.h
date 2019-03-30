@@ -71,7 +71,7 @@ protected:
   double current_time;
   double current_dt;
 
-  Shared_data shared_data;
+  SharedData shared_data;
 
   Data& data;
   GameState game_state;
