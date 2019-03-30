@@ -135,7 +135,7 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team t
   {
     for (int k = 0; k < vision::Robots; k++)
     {
-      robots[team][k].setMovement(physic::Factory::robot_movement(*this));
+      robots[team][k].setMovement(physic::Factory::robotMovement(*this));
       nb_robots++;
     }
   }
@@ -149,7 +149,7 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team t
       i++;
     }
   }
-  ball.setMovement(physic::Factory::ball_movement(*this));
+  ball.setMovement(physic::Factory::ballMovement(*this));
 }
 
 Constants::Constants(const std::string& config_path, bool is_in_simulation) : is_in_simulation(is_in_simulation)

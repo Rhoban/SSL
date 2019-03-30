@@ -36,12 +36,12 @@ Movement* Factory::movement(ai::AiData& ai_data)
       new Movement_predicted_by_integration(), [&ai_data]() { return ai_data.time_shift_with_vision; });
 }
 
-Movement* Factory::robot_movement(ai::AiData& ai_data)
+Movement* Factory::robotMovement(ai::AiData& ai_data)
 {
   return Factory::movement(ai_data);
 }
 
-Movement* Factory::ball_movement(ai::AiData& ai_data)
+Movement* Factory::ballMovement(ai::AiData& ai_data)
 {
   return Factory::movement(ai_data);
 }
