@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-AICommanderSimulation::AICommanderSimulation(bool yellow) : AICommander(yellow), client()
+AICommanderSimulation::AICommanderSimulation(bool yellow) : AICommander(yellow), client_()
 {
 }
 
@@ -69,18 +69,18 @@ void AICommanderSimulation::flush()
     simCommand->set_spinner(command.enabled ? command.spin : false);
   }
 
-  client.sendPacket(packet);
+  client_.sendPacket(packet);
   commands_.clear();
 }
 
 void AICommanderSimulation::moveBall(double x, double y, double vx, double vy)
 {
-  client.moveBall(x, y, vx, vy);
+  client_.moveBall(x, y, vx, vy);
 }
 
 void AICommanderSimulation::moveRobot(bool yellow, int id, double x, double y, double theta, bool turnon)
 {
-  client.moveRobot(yellow, id, x, y, theta * 180 / M_PI, turnon);
+  client_.moveRobot(yellow, id, x, y, theta * 180 / M_PI, turnon);
 }
 
 AICommanderSimulation::~AICommanderSimulation()

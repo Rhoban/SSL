@@ -29,7 +29,7 @@ namespace rhoban_ssl
 class AICommanderSimulation : public AICommander
 {
 public:
-  AICommanderSimulation(bool yellow_);
+  AICommanderSimulation(bool yellow);
 
   virtual void flush();
 
@@ -40,6 +40,6 @@ public:
   virtual ~AICommanderSimulation();
 
 protected:
-  SimClient client;
+  SimClient client_;
 };
 }  // namespace RhobanSSL
