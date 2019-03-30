@@ -36,37 +36,37 @@ double GameInformations::time() const
   return ai_data.time;
 }
 
-rhoban_geometry::Point GameInformations::ally_goal_center() const
+rhoban_geometry::Point GameInformations::allyGoalCenter() const
 {
   return rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, 0.0);
 }
 
-rhoban_geometry::Point GameInformations::opponent_goal_center() const
+rhoban_geometry::Point GameInformations::opponentGoalCenter() const
 {
   return rhoban_geometry::Point(ai_data.field.fieldLength / 2.0, 0.0);
 }
 
-rhoban_geometry::Point GameInformations::center_mark() const
+rhoban_geometry::Point GameInformations::centerMark() const
 {
   return rhoban_geometry::Point(0.0, 0.0);
 }
 
-rhoban_geometry::Point GameInformations::opponent_corner_right() const
+rhoban_geometry::Point GameInformations::opponentCornerRight() const
 {
   return rhoban_geometry::Point(ai_data.field.fieldLength / 2.0, -ai_data.field.fieldWidth / 2.0);
 }
 
-rhoban_geometry::Point GameInformations::opponent_corner_left() const
+rhoban_geometry::Point GameInformations::opponentCornerLeft() const
 {
   return rhoban_geometry::Point(ai_data.field.fieldLength / 2.0, ai_data.field.fieldWidth / 2.0);
 }
 
-const Ai::Robot& GameInformations::get_robot(int robot_number, Vision::Team team) const
+const Ai::Robot& GameInformations::getRobot(int robot_number, Vision::Team team) const
 {
   return ai_data.robots.at(team).at(robot_number);
 }
 
-void GameInformations::get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
+void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
                                          Vision::Team team, double distance, std::vector<int>& result) const
 {
   if (norm_square(p1 - p2) == 0)
@@ -76,7 +76,7 @@ void GameInformations::get_robot_in_line(const rhoban_geometry::Point p1, const 
 
   for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
   {
-    const Ai::Robot& robot = get_robot(i, team);
+    const Ai::Robot& robot = getRobot(i, team);
     if (robot.is_present_in_vision())
     {
       const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time());
@@ -88,30 +88,30 @@ void GameInformations::get_robot_in_line(const rhoban_geometry::Point p1, const 
   }
 }
 
-std::vector<int> GameInformations::get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
+std::vector<int> GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
                                                      Vision::Team team, double distance) const
 {
   std::vector<int> result;
-  get_robot_in_line(p1, p2, team, distance, result);
+  getRobotInLine(p1, p2, team, distance, result);
   return result;
 }
 
-std::vector<int> GameInformations::get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
+std::vector<int> GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
                                                      double distance) const
 {
   std::vector<int> result;
-  get_robot_in_line(p1, p2, Vision::Team::Ally, distance, result);
-  get_robot_in_line(p1, p2, Vision::Team::Opponent, distance, result);
+  getRobotInLine(p1, p2, Vision::Team::Ally, distance, result);
+  getRobotInLine(p1, p2, Vision::Team::Opponent, distance, result);
   return result;
 }
 
-std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move(const rhoban_geometry::Point point,
+std::pair<rhoban_geometry::Point, double> GameInformations::findGoalBestMove(const rhoban_geometry::Point point,
                                                                                 const rhoban_geometry::Point goal) const
 {
   rhoban_geometry::Point opponent_goal_point;
   if (goal == rhoban_geometry::Point(66, 66))
   {
-    opponent_goal_point = opponent_goal_center();
+    opponent_goal_point = opponentGoalCenter();
   }
   else
   {
@@ -137,9 +137,9 @@ std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move(
   {
     analysed_point = right_post_position + rhoban_geometry::Point(0, dist_post / nb_analysed_point * i);
     std::vector<int> robot_in_line =
-        GameInformations::get_robot_in_line(point, analysed_point, Vision::Team::Opponent, 0.15);
+        GameInformations::getRobotInLine(point, analysed_point, Vision::Team::Opponent, 0.15);
     std::vector<int> robot_in_line2 =
-        GameInformations::get_robot_in_line(point, analysed_point, Vision::Team::Ally, 0.15);
+        GameInformations::getRobotInLine(point, analysed_point, Vision::Team::Ally, 0.15);
     robot_in_line.insert(robot_in_line.end(), robot_in_line2.begin(), robot_in_line2.end());
     if (robot_in_line.empty())
     {
@@ -178,18 +178,18 @@ std::pair<rhoban_geometry::Point, double> GameInformations::find_goal_best_move(
   return results;
 }
 
-int GameInformations::get_shirt_number_of_closest_robot_to_the_ball(Vision::Team team) const
+int GameInformations::getShirtNumberOfClosestRobotToTheBall(Vision::Team team) const
 {
-  return get_shirt_number_of_closest_robot(team, ball_position());
+  return getShirtNumberOfClosestRobot(team, ballPosition());
 }
 
-int GameInformations::get_shirt_number_of_closest_robot(Vision::Team team, rhoban_geometry::Point point) const
+int GameInformations::getShirtNumberOfClosestRobot(Vision::Team team, rhoban_geometry::Point point) const
 {
   int id = -1;
   double distance_max = -1;
   for (int i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
   {
-    const Ai::Robot& robot = get_robot(i, team);
+    const Ai::Robot& robot = getRobot(i, team);
     if (robot.is_present_in_vision())
     {
       const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time());
@@ -204,14 +204,14 @@ int GameInformations::get_shirt_number_of_closest_robot(Vision::Team team, rhoba
   return id;
 }
 
-double GameInformations::get_robot_distance_from_ally_goal_center(int robot_number, Vision::Team team) const
+double GameInformations::getRobotDistanceFromAllyGoalCenter(int robot_number, Vision::Team team) const
 {
   double distance = -1;
-  const Ai::Robot& robot = get_robot(robot_number, team);
+  const Ai::Robot& robot = getRobot(robot_number, team);
   if (robot.is_present_in_vision())
   {
     const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time());
-    Vector2d goal_center_robot = robot_position - ally_goal_center();
+    Vector2d goal_center_robot = robot_position - allyGoalCenter();
     distance = goal_center_robot.norm();
     distance = (ai_data.field.fieldLength - distance) / ai_data.field.fieldLength;
   }
@@ -223,13 +223,13 @@ std::vector<double> GameInformations::threat(Vision::Team team) const
   std::vector<double> v_threat;
   for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
   {
-    double threat = get_robot_distance_from_ally_goal_center(i, team);
+    double threat = getRobotDistanceFromAllyGoalCenter(i, team);
     v_threat.push_back(threat);
   }
   return v_threat;
 }
 
-int GameInformations::shirt_number_of_threat_max(Vision::Team team) const
+int GameInformations::shirtNumberOfThreatMax(Vision::Team team) const
 {
   int id = -1;
   double threat_max = -1;
@@ -247,7 +247,7 @@ int GameInformations::shirt_number_of_threat_max(Vision::Team team) const
   return id;
 }
 
-int GameInformations::shirt_number_of_threat_max_2(Vision::Team team) const
+int GameInformations::shirtNumberOfThreatMax2(Vision::Team team) const
 {  // second threat max
   int id_1 = -1;
   int id_2 = -1;
@@ -279,31 +279,31 @@ const Ai::Ball& GameInformations::ball() const
   return ai_data.ball;
 }
 
-rhoban_geometry::Point GameInformations::ball_position() const
+rhoban_geometry::Point GameInformations::ballPosition() const
 {
   return ball().get_movement().linear_position(time());
 }
 
-rhoban_geometry::Point GameInformations::center_ally_field() const
+rhoban_geometry::Point GameInformations::centerAllyField() const
 {
   return rhoban_geometry::Point(-ai_data.field.fieldLength / 4.0, 0.0);
 }
-rhoban_geometry::Point GameInformations::center_opponent_field() const
+rhoban_geometry::Point GameInformations::centerOpponentField() const
 {
   return rhoban_geometry::Point(ai_data.field.fieldLength / 4.0, 0.0);
 }
 
-double GameInformations::get_robot_radius() const
+double GameInformations::getRobotRadius() const
 {
   return ai_data.constants.robot_radius;
 }
 
-double GameInformations::get_ball_radius() const
+double GameInformations::getBallRadius() const
 {
   return ai_data.constants.radius_ball;
 }
 
-std::vector<rhoban_geometry::Point> GameInformations::center_quarter_field() const
+std::vector<rhoban_geometry::Point> GameInformations::centerQuarterField() const
 {
   return std::vector<rhoban_geometry::Point>({
       rhoban_geometry::Point(ai_data.field.fieldLength / 4.0, ai_data.field.fieldWidth / 4.0),
@@ -313,65 +313,65 @@ std::vector<rhoban_geometry::Point> GameInformations::center_quarter_field() con
   });
 }
 
-double GameInformations::field_width() const
+double GameInformations::fieldWidth() const
 {
   return ai_data.field.fieldWidth;
 }
 
-double GameInformations::field_height() const
+double GameInformations::fieldHeight() const
 {
   return ai_data.field.fieldLength;
 }
 
-rhoban_geometry::Point GameInformations::field_SW() const
+rhoban_geometry::Point GameInformations::fieldSW() const
 {
   return rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, -ai_data.field.fieldWidth / 2.0);
 }
-rhoban_geometry::Point GameInformations::field_NW() const
+rhoban_geometry::Point GameInformations::fieldNW() const
 {
   return rhoban_geometry::Point(ai_data.field.fieldLength / 2.0, -ai_data.field.fieldWidth / 2.0);
 }
-rhoban_geometry::Point GameInformations::field_NE() const
+rhoban_geometry::Point GameInformations::fieldNE() const
 {
   return rhoban_geometry::Point(ai_data.field.fieldLength / 2.0, ai_data.field.fieldWidth / 2.0);
 }
-rhoban_geometry::Point GameInformations::field_SE() const
+rhoban_geometry::Point GameInformations::fieldSE() const
 {
   return rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, ai_data.field.fieldWidth / 2.0);
 }
 
 Box GameInformations::field() const
 {
-  return Box(field_SW(), field_NE());
+  return Box(fieldSW(), fieldNE());
 }
 
-Box GameInformations::ally_penalty_area() const
+Box GameInformations::allyPenaltyArea() const
 {
   return Box(
       { -ai_data.field.fieldLength / 2.0, -ai_data.field.penaltyAreaWidth / 2.0 },
       { -(ai_data.field.fieldLength / 2.0 - ai_data.field.penaltyAreaDepth), ai_data.field.penaltyAreaWidth / 2.0 });
 }
 
-Box GameInformations::opponent_penalty_area() const
+Box GameInformations::opponentPenaltyArea() const
 {
   return Box(
       { (ai_data.field.fieldLength / 2.0 - ai_data.field.penaltyAreaDepth), -ai_data.field.penaltyAreaWidth / 2.0 },
       { ai_data.field.fieldLength / 2.0, ai_data.field.penaltyAreaWidth / 2.0 });
 }
 
-double GameInformations::penalty_area_width() const
+double GameInformations::penaltyAreaWidth() const
 {
   return ai_data.field.penaltyAreaWidth;
 }
 
-double GameInformations::penalty_area_height() const
+double GameInformations::penaltyAreaHeight() const
 {
   return ai_data.field.penaltyAreaDepth;
 }
 
-bool GameInformations::infra_red(int robot_number, Vision::Team team) const
+bool GameInformations::infraRed(int robot_number, Vision::Team team) const
 {
-  return get_robot(robot_number, team).infra_red;
+  return getRobot(robot_number, team).infra_red;
 }
 
 };  // namespace rhoban_ssl

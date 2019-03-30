@@ -45,13 +45,13 @@ void ProtectBall::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
   // const rhoban_geometry::Point & opponent_goal_point = opponent_goal_center();
 
   // Vector2d ball_goal_vector = opponent_goal_point - ball_position();
-  Vector2d ball_robot_vector = ball_position() - robot_position;
+  Vector2d ball_robot_vector = ballPosition() - robot_position;
   // Vector2d target_position;
 
   // annotations.addCircle( ball_position().x, ball_position().y , radius );
   // annotations.addAnnotations(follower->get_annotations());
 
-  rhoban_geometry::Point target_position = ball_position();
+  rhoban_geometry::Point target_position = ballPosition();
 
   double target_rotation = detail::vec2angle(ball_robot_vector);
 

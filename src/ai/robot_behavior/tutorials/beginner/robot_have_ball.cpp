@@ -34,16 +34,16 @@ void Begginer_robot_have_ball::update(double time, const Ai::Robot& robot, const
   RobotBehavior::update_time_and_position(time, robot, ball);
 
   // Find the ally and the opponent closest to the ball
-  int nb_ally_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Ally);
-  int nb_opponent_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Opponent);
+  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Vision::Ally);
+  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Vision::Opponent);
 
   // Get the robot ally and opponent.
-  Ai::Robot ally_closest = get_robot(nb_ally_closest_to_the_ball, Vision::Ally);
-  Ai::Robot opponent_closest = get_robot(nb_opponent_closest_to_the_ball, Vision::Opponent);
+  Ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Vision::Ally);
+  Ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
   // Find if the robot has the ball.
-  int ally_have_ball = GameInformations::infra_red(nb_ally_closest_to_the_ball, Vision::Ally);
-  int opponent_have_ball = GameInformations::infra_red(nb_opponent_closest_to_the_ball, Vision::Opponent);
+  int ally_have_ball = GameInformations::infraRed(nb_ally_closest_to_the_ball, Vision::Ally);
+  int opponent_have_ball = GameInformations::infraRed(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
   annotations.clear();
 
@@ -58,7 +58,7 @@ void Begginer_robot_have_ball::update(double time, const Ai::Robot& robot, const
   }
   else
   {
-    annotations.addCross(ball_position(), "red", false);
+    annotations.addCross(ballPosition(), "red", false);
   }
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);

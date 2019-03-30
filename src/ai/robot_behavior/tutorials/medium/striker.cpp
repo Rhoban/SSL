@@ -26,7 +26,7 @@ namespace rhoban_ssl
 namespace Robot_behavior
 {
 Intermediate_striker::Intermediate_striker(Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), striking_point(opponent_goal_center()), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), striking_point(opponentGoalCenter()), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
@@ -36,8 +36,8 @@ void Intermediate_striker::update(double time, const Ai::Robot& robot, const Ai:
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-  Vector2d ball_goal_vector = opponent_goal_center() - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = opponentGoalCenter() - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   double dist_ball_robot = ball_robot_vector.norm();
 
@@ -75,7 +75,7 @@ void Intermediate_striker::update(double time, const Ai::Robot& robot, const Ai:
     follower->avoid_opponent(true);
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_goal_vector * (target_radius_from_ball);
+  rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
   follower->set_following_position(target_position, target_rotation);

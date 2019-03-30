@@ -82,7 +82,7 @@ public:
   ContinuousAngle angular_position() const;
   bool is_goalie() const;
 
-  bool infra_red() const;
+  bool infraRed() const;
 };
 
 namespace detail

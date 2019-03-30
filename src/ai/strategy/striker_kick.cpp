@@ -74,7 +74,7 @@ void StrikerKick::stop(double time)
 
 void StrikerKick::update(double time)
 {
-  std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move(ball_position());
+  std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
   Slowstriker->declare_point_to_strik(results.first);
 }
 
@@ -103,7 +103,7 @@ StrikerKick::get_starting_positions(int number_of_avalaible_robots)
   assert(min_robots() <= number_of_avalaible_robots);
   assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ball_position(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ballPosition(), 0.0) };
 }
 
 //
@@ -114,7 +114,7 @@ StrikerKick::get_starting_positions(int number_of_avalaible_robots)
 bool StrikerKick::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
                                                    ContinuousAngle& angular_position)
 {
-  linear_position = ally_goal_center();
+  linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
@@ -125,7 +125,7 @@ RhobanSSLAnnotation::Annotations StrikerKick::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = get_robot(*it).get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).get_movement().linear_position(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

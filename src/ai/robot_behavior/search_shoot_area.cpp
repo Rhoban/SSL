@@ -35,8 +35,8 @@ SearchShootArea::SearchShootArea(Ai::AiData& ai_data)
   , follower(Factory::fixed_consign_follower(ai_data))
   , well_positioned(false)
 {
-  p1 = Vector2d(opponent_goal_center()) + rhoban_geometry::Point(-1, 2);
-  p2 = Vector2d(center_mark()) + rhoban_geometry::Point(1, -2);
+  p1 = Vector2d(opponentGoalCenter()) + rhoban_geometry::Point(-1, 2);
+  p2 = Vector2d(centerMark()) + rhoban_geometry::Point(1, -2);
 }
 
 void SearchShootArea::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
@@ -54,7 +54,7 @@ void SearchShootArea::update(double time, const Ai::Robot& robot, const Ai::Ball
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
   // Vector2d opponent_goal_robot_vector = robot_position - opponent_goal_center();
 
-  std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move(robot_position);
+  std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(robot_position);
 
   annotations.addArrow(robot_position, results.first, "red");
 
@@ -62,7 +62,7 @@ void SearchShootArea::update(double time, const Ai::Robot& robot, const Ai::Ball
 
   double pos_x = robot_position.getX();
   double pos_y = robot_position.getY();
-  Vector2d ball_robot_vector = ball_position() - robot_position;
+  Vector2d ball_robot_vector = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(ball_robot_vector);
 
   // DEBUG("obstructed_view AFTER : " << obstructed_view);

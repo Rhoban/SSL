@@ -584,7 +584,7 @@ Manual::Manual(Ai::AiData& ai_data)
                                             [&](double time, double dt) {
                                               Robot_behavior::Pass_dribbler* p =
                                                   new Robot_behavior::Pass_dribbler(ai_data);
-                                              p->declare_point_to_pass(ally_goal_center());
+                                              p->declare_point_to_pass(allyGoalCenter());
                                               return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
                                             },
                                             false)));

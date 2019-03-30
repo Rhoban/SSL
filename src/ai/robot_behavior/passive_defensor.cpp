@@ -37,13 +37,13 @@ void Passive_defensor::update(double time, const Ai::Robot& robot, const Ai::Bal
   // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  const Ai::Robot& ennemy = get_robot(robot_to_obstale_id, robot_to_obstale_team);
+  const Ai::Robot& ennemy = getRobot(robot_to_obstale_id, robot_to_obstale_team);
   rhoban_geometry::Point ennemy_position = ennemy.get_movement().linear_position(time);
 
   rhoban_geometry::Point target_position =
-      vector2point(Vector2d(ball_position()) * barycenter + Vector2d(ennemy_position) * (1.0 - barycenter));
+      vector2point(Vector2d(ballPosition()) * barycenter + Vector2d(ennemy_position) * (1.0 - barycenter));
 
-  ContinuousAngle target_rotation = detail::vec2angle(Vector2d(ball_position() - target_position));
+  ContinuousAngle target_rotation = detail::vec2angle(Vector2d(ballPosition() - target_position));
 
   follower->avoid_the_ball(false);
   follower->set_following_position(target_position, target_rotation);

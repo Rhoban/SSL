@@ -100,7 +100,7 @@ RhobanSSLAnnotation::Annotations RobotBehavior::get_annotations() const
   return RhobanSSLAnnotation::Annotations();
 }
 
-bool RobotBehavior::infra_red() const
+bool RobotBehavior::infraRed() const
 {
   return robot().infra_red;
 }

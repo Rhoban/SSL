@@ -435,12 +435,12 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position()
 
   std::function<double(const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos)>
       robot_ranking = [this](const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos) {
-        return Vector2d(pos.first - this->get_robot(robot_id).get_movement().linear_position(time())).norm_square();
+        return Vector2d(pos.first - this->getRobot(robot_id).get_movement().linear_position(time())).norm_square();
       };
 
   std::function<double(const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id)>
       distance_ranking = [this](const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id) {
-        return Vector2d(pos.first - this->get_robot(robot_id).get_movement().linear_position(time())).norm_square();
+        return Vector2d(pos.first - this->getRobot(robot_id).get_movement().linear_position(time())).norm_square();
       };
 
   matching::Matchings matchings = matching::gale_shapley_algorithm(get_valid_player_ids(), choising_positions,

@@ -54,10 +54,10 @@ void Mur_def_kick::update(double time, const Ai::Robot& robot, const Ai::Ball& b
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-  rhoban_geometry::Point ally_goal_point = ally_goal_center();
+  rhoban_geometry::Point ally_goal_point = allyGoalCenter();
 
-  Vector2d ball_goal_vector = ally_goal_point - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = ally_goal_point - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
@@ -98,7 +98,7 @@ void Mur_def_kick::update(double time, const Ai::Robot& robot, const Ai::Ball& b
 
   Vector2d BITE = ball_goal_vector.perpendicular();
   BITE = BITE / BITE.norm();
-  target_position = ball_position() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * BITE;
+  target_position = ballPosition() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * BITE;
 
   follower->set_following_position(target_position, target_rotation);
   follower->update(time, robot, ball);

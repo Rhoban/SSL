@@ -38,7 +38,7 @@ void Goto_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball
 
   annotations.clear();
 
-  rhoban_geometry::Point robot_position = ball_position();
+  rhoban_geometry::Point robot_position = ballPosition();
   ContinuousAngle angle = 0.0;
 
   follower->set_following_position(robot_position, angle);

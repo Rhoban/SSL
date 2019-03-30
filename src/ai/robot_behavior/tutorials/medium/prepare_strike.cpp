@@ -34,8 +34,8 @@ void Intermediate_Prepare_strike::update(double time, const Ai::Robot& robot, co
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-  Vector2d ball_goal_vector = opponent_goal_center() - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = opponentGoalCenter() - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   double dist_ball_robot = ball_robot_vector.norm();
 
@@ -59,7 +59,7 @@ void Intermediate_Prepare_strike::update(double time, const Ai::Robot& robot, co
     target_radius_from_ball = 0.3;
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_goal_vector * (target_radius_from_ball);
+  rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
   follower->set_following_position(target_position, target_rotation);

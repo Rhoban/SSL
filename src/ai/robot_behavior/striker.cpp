@@ -28,7 +28,7 @@ namespace Robot_behavior
 Striker::Striker(Ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , use_custom_vector(false)
-  , striking_point(opponent_goal_center())
+  , striking_point(opponentGoalCenter())
   , follower(Factory::fixed_consign_follower(ai_data))
 {
 }
@@ -50,8 +50,8 @@ void Striker::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
   // ai_data.field.goalWidth / 2.0 ); rhoban_geometry::Point right_post_position = rhoban_geometry::Point(
   // ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
 
-  Vector2d ball_goal_vector = striking_point - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = striking_point - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
   // Vector2d ball_l_post_vector = left_post_position - ball_position();
   // Vector2d ball_r_post_vector = right_post_position - ball_position();
   double dist_ball_robot = ball_robot_vector.norm();
@@ -101,7 +101,7 @@ void Striker::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
     follower->avoid_opponent(true);
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_goal_vector * (target_radius_from_ball);
+  rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
   follower->set_following_position(target_position, target_rotation);

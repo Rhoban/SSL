@@ -48,12 +48,12 @@ void SlowStriker::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
 
   if (robot_to_pass_id != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const Ai::Robot& robot_to_pass = get_robot(robot_to_pass_id, robot_to_pass_team);
+    const Ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
     striking_point = robot_to_pass.get_movement().linear_position(time);
   }
 
-  Vector2d ball_striking_vector = striking_point - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_striking_vector = striking_point - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
   double dist_ball_robot = ball_robot_vector.norm();
 
   ball_striking_vector = ball_striking_vector / ball_striking_vector.norm();
@@ -85,7 +85,7 @@ void SlowStriker::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
     follower->avoid_opponent(true);
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_striking_vector * (target_radius_from_ball);
+  rhoban_geometry::Point target_position = ballPosition() - ball_striking_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_striking_vector);
 
   double position_margin = 0.05;

@@ -172,11 +172,11 @@ void AttaqueWithSupportMs::start(double time)
   ID1 = player_id(0);
   ID2 = player_id(1);  // we get the first if in get_player_ids()
 
-  robot_1_position = get_robot(ID1, Vision::Team::Ally).get_movement().linear_position(time);
-  robot_2_position = get_robot(ID2, Vision::Team::Ally).get_movement().linear_position(time);
+  robot_1_position = getRobot(ID1, Vision::Team::Ally).get_movement().linear_position(time);
+  robot_2_position = getRobot(ID2, Vision::Team::Ally).get_movement().linear_position(time);
 
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position)).norm();
 
   if (db1 > db2)
   {
@@ -205,9 +205,9 @@ void AttaqueWithSupportMs::assign_behavior_to_robots(
   // we assign now all the other behavior
   assert(get_player_ids().size() == 2);
 
-  robot_1_position = get_robot(ID1, Vision::Team::Ally).get_movement().linear_position(time);
-  robot_2_position = get_robot(ID2, Vision::Team::Ally).get_movement().linear_position(time);
-  fgbm_score = find_goal_best_move(ball_position()).second;
+  robot_1_position = getRobot(ID1, Vision::Team::Ally).get_movement().linear_position(time);
+  robot_2_position = getRobot(ID2, Vision::Team::Ally).get_movement().linear_position(time);
+  fgbm_score = findGoalBestMove(ballPosition()).second;
 
   machine.run();
 
@@ -263,7 +263,7 @@ AttaqueWithSupportMs::get_starting_positions(int number_of_avalaible_robots)
   assert(min_robots() <= number_of_avalaible_robots);
   assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ball_position(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ballPosition(), 0.0) };
 }
 
 //
@@ -274,23 +274,23 @@ AttaqueWithSupportMs::get_starting_positions(int number_of_avalaible_robots)
 bool AttaqueWithSupportMs::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
                                                             ContinuousAngle& angular_position)
 {
-  linear_position = ally_goal_center();
+  linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
 bool AttaqueWithSupportMs::is_db1_sup_db2()
 {
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position)).norm();
   // DEBUG("is_db1_sup_db2 " << db1 << " " << db2);
   // double fgbm_score = find_goal_best_move( ball_position() ).second;
   return (db1 >= db2);  // and (fgbm_score >= seuil_fgbm));
 }
 bool AttaqueWithSupportMs::is_db1_inf_db2()
 {
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position)).norm();
   // DEBUG("is_db1_inf_db2 " << db1 << " " << db2);
   // double fgbm_score = find_goal_best_move( ball_position() ).second;
   return (db1 < db2);  // and (fgbm_score >= seuil_fgbm));
@@ -299,7 +299,7 @@ bool AttaqueWithSupportMs::is_db1_inf_db2()
 bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_1()
 {
   DEBUG(fgbm_score);
-  std::vector<int> vect_obstruct = get_robot_in_line(robot_1_position, robot_2_position);
+  std::vector<int> vect_obstruct = getRobotInLine(robot_1_position, robot_2_position);
   bool free_for_pass = vect_obstruct.empty();
   bool ready_for_pass = search_behavior->well_positioned;
   return (fgbm_score < seuil_fgbm) and free_for_pass and ready_for_pass;
@@ -307,7 +307,7 @@ bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_1()
 bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_2()
 {
   DEBUG(fgbm_score);
-  std::vector<int> vect_obstruct = get_robot_in_line(robot_2_position, robot_1_position);
+  std::vector<int> vect_obstruct = getRobotInLine(robot_2_position, robot_1_position);
   bool free_for_pass = vect_obstruct.empty();
   bool ready_for_pass = search_behavior->well_positioned;
   return (fgbm_score >= seuil_fgbm + fgbm_constante) and free_for_pass and ready_for_pass;
@@ -315,14 +315,14 @@ bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_2()
 
 bool AttaqueWithSupportMs::fgbm_score_sup_seuil_1_plus_constante()
 {
-  std::vector<int> vect_obstruct = get_robot_in_line(robot_1_position, robot_2_position);
+  std::vector<int> vect_obstruct = getRobotInLine(robot_1_position, robot_2_position);
   bool free_for_pass = vect_obstruct.empty();
   // bool ready_for_pass = search_behavior->well_positioned;
   return (fgbm_score >= seuil_fgbm + fgbm_constante) or not(free_for_pass);
 }
 bool AttaqueWithSupportMs::fgbm_score_sup_seuil_2_plus_constante()
 {
-  std::vector<int> vect_obstruct = get_robot_in_line(robot_2_position, robot_1_position);
+  std::vector<int> vect_obstruct = getRobotInLine(robot_2_position, robot_1_position);
   bool free_for_pass = vect_obstruct.empty();
   // bool ready_for_pass = search_behavior->well_positioned;
   return (fgbm_score >= seuil_fgbm + fgbm_constante) or not(free_for_pass);
@@ -330,14 +330,14 @@ bool AttaqueWithSupportMs::fgbm_score_sup_seuil_2_plus_constante()
 
 bool AttaqueWithSupportMs::is_infra_1_on()
 {
-  return infra_red(ID1, Vision::Team::Ally);
+  return infraRed(ID1, Vision::Team::Ally);
   // double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
   // // DEBUG("DB1 " << db1 );
   // return (db1 < get_robot_radius()+0.1);
 }
 bool AttaqueWithSupportMs::is_infra_2_on()
 {
-  return infra_red(ID2, Vision::Team::Ally);
+  return infraRed(ID2, Vision::Team::Ally);
   // double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
   // // DEBUG("DB2 " << db2 );
   // return (db2 < get_robot_radius()+0.1);
@@ -346,30 +346,30 @@ bool AttaqueWithSupportMs::is_infra_2_on()
 bool AttaqueWithSupportMs::is_db1_inf_seuil_or_time_inf_tempo()
 {
   // return infra_red( ID1, Vision::Team::Ally);
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position)).norm();
   bool t = (time() - begin_time > tempo);
-  return ((db1 < get_robot_radius() + 0.7) || t);
+  return ((db1 < getRobotRadius() + 0.7) || t);
 }
 bool AttaqueWithSupportMs::is_db2_inf_seuil_or_time_inf_tempo()
 {
   // return infra_red( ID2, Vision::Team::Ally);
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position)).norm();
   bool t = (time() - begin_time > tempo);
-  return ((db2 < get_robot_radius() + 0.7) || t);
+  return ((db2 < getRobotRadius() + 0.7) || t);
 }
 
 bool AttaqueWithSupportMs::is_db1_sup_db2_plus_constante()
 {
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position)).norm();
   // DEBUG("is_db1_sup_db2_plus_constante " << db1 << " " << db2);
   return (db1 > db2 + diff_distance_constante);
   // return false;
 }
 bool AttaqueWithSupportMs::is_db1_plus_constante_inf_db2()
 {
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position)).norm();
   // DEBUG("is_db1_sup_db2_plus_constante " << db1 << " " << db2);
   return (db1 + diff_distance_constante < db2);
 }

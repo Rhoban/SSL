@@ -52,12 +52,12 @@ void Pass_dribbler::update(double time, const Ai::Robot& robot, const Ai::Ball& 
 
   if (robot_to_pass_id != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const Ai::Robot& robot_to_pass = get_robot(robot_to_pass_id, robot_to_pass_team);
+    const Ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
     point_to_pass = robot_to_pass.get_movement().linear_position(time);
   }
 
   Vector2d robot_point_to_pass_vector = point_to_pass - robot_position;
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   robot_point_to_pass_vector = robot_point_to_pass_vector / robot_point_to_pass_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
@@ -68,12 +68,12 @@ void Pass_dribbler::update(double time, const Ai::Robot& robot, const Ai::Ball& 
   // double position_error = 0.14;
   double angle_error = 0.090;
 
-  bool value_infra_red = GameInformations::infra_red(robot.id());
+  bool value_infra_red = GameInformations::infraRed(robot.id());
   DEBUG("robot id " << value_infra_red);
   // if ( std::abs(Vector2d(robot_position - ball_position()).norm()) > position_error )
   if (!value_infra_red)
   {
-    target_position = ball_position();
+    target_position = ballPosition();
     target_rotation = detail::vec2angle(-ball_robot_vector);
   }
   else

@@ -207,7 +207,7 @@ void PlanVeschambres::start_stop()
 void PlanVeschambres::start_running()
 {
   set_ball_avoidance_for_all_robots(false);
-  if (ball_position().getX() <= 0)
+  if (ballPosition().getX() <= 0)
   {
     future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
     ball_was_in_ally_part = true;
@@ -299,14 +299,14 @@ void PlanVeschambres::continue_stop()
 
 void PlanVeschambres::continue_running()
 {
-  if (ball_position().getX() <= 0 and not(ball_was_in_ally_part))
+  if (ballPosition().getX() <= 0 and not(ball_was_in_ally_part))
   {
     clear_strategy_assignement();
     future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
     ball_was_in_ally_part = true;
     declare_and_assign_next_strategies(future_strats);
   }
-  else if (ball_position().getX() > 0 and ball_was_in_ally_part)
+  else if (ballPosition().getX() > 0 and ball_was_in_ally_part)
   {
     clear_strategy_assignement();
     future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];

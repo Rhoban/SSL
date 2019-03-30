@@ -33,16 +33,16 @@ void Begginer_robot_near_ball::update(double time, const Ai::Robot& robot, const
 {
   RobotBehavior::update_time_and_position(time, robot, ball);
   // Find the ally and the opponent closest to the ball
-  int nb_ally_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Ally);
-  int nb_opponent_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Opponent);
+  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Vision::Ally);
+  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Vision::Opponent);
 
   // Get the robot ally and opponent.
-  Ai::Robot ally_closest = get_robot(nb_ally_closest_to_the_ball, Vision::Ally);
-  Ai::Robot opponent_closest = get_robot(nb_opponent_closest_to_the_ball, Vision::Opponent);
+  Ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Vision::Ally);
+  Ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
   // Create the vector between the robots and the ball.
-  Vector2d vec_ally_to_ball = ball_position() - ally_closest.get_movement().linear_position(ai_data.time);
-  Vector2d vec_opponent_to_ball = ball_position() - opponent_closest.get_movement().linear_position(ai_data.time);
+  Vector2d vec_ally_to_ball = ballPosition() - ally_closest.get_movement().linear_position(ai_data.time);
+  Vector2d vec_opponent_to_ball = ballPosition() - opponent_closest.get_movement().linear_position(ai_data.time);
 
   // Find the distance between them and the ball.
   double dist_ally = vec_ally_to_ball.norm();

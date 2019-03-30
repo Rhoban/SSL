@@ -50,13 +50,13 @@ void Obstructor::update(double time, const Ai::Robot& robot, const Ai::Ball& bal
   assert(robot_to_obstruct_id != -1);
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-  rhoban_geometry::Point ally_goal_point = ally_goal_center();
+  rhoban_geometry::Point ally_goal_point = allyGoalCenter();
   rhoban_geometry::Point left_post_position =
       rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0);
   rhoban_geometry::Point right_post_position =
       rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0);
 
-  const Ai::Robot& robot_to_obstruct = get_robot(robot_to_obstruct_id, robot_to_obstruct_team);
+  const Ai::Robot& robot_to_obstruct = getRobot(robot_to_obstruct_id, robot_to_obstruct_team);
   point_to_obstruct = robot_to_obstruct.get_movement().linear_position(time);
 
   Vector2d point_to_obstruct_goal_vector = ally_goal_point - point_to_obstruct;

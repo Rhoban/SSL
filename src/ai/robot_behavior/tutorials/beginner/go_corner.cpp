@@ -27,7 +27,7 @@ namespace beginner
 {
 // Use opponent_corner_left() for the left corner.
 GoCorner::GoCorner(Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data)), target_corner_(opponent_corner_left())
+  : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data)), target_corner_(opponentCornerLeft())
 {
 }
 

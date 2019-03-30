@@ -34,11 +34,11 @@ void Begginer_defensor::update(double time, const Ai::Robot& robot, const Ai::Ba
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-  Vector2d ball_goal_vector = ally_goal_center() - ball_position();
+  Vector2d ball_goal_vector = allyGoalCenter() - ballPosition();
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
 
   // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
-  rhoban_geometry::Point target_position = ball_position() + ball_goal_vector * 0.5;
+  rhoban_geometry::Point target_position = ballPosition() + ball_goal_vector * 0.5;
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
   follower->set_following_position(target_position, target_rotation);

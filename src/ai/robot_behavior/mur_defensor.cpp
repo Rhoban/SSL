@@ -54,10 +54,10 @@ void Mur_defensor::update(double time, const Ai::Robot& robot, const Ai::Ball& b
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-  rhoban_geometry::Point ally_goal_point = ally_goal_center();
+  rhoban_geometry::Point ally_goal_point = allyGoalCenter();
 
-  Vector2d ball_goal_vector = ally_goal_point - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = ally_goal_point - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
@@ -96,7 +96,7 @@ void Mur_defensor::update(double time, const Ai::Robot& robot, const Ai::Ball& b
     multiple_robot_offset = 0;
   }
 
-  if (Vector2d(ally_goal_point - ball_position()).norm() > distance_defense_line)
+  if (Vector2d(ally_goal_point - ballPosition()).norm() > distance_defense_line)
   {
     if (target_rotation < -0.7071)
     {

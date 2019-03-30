@@ -41,11 +41,11 @@ void StrikerAi::update(double time, const Ai::Robot& robot, const Ai::Ball& ball
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-  std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move(ball_position());
+  std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
   rhoban_geometry::Point goal_point = results.first;
 
-  Vector2d ball_goal_vector = goal_point - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = goal_point - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
   double dist_ball_robot = ball_robot_vector.norm();
 
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
@@ -75,7 +75,7 @@ void StrikerAi::update(double time, const Ai::Robot& robot, const Ai::Ball& ball
     follower->avoid_opponent(true);
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_goal_vector * target_radius_from_ball;
+  rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * target_radius_from_ball;
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
   follower->set_following_position(target_position, target_rotation);

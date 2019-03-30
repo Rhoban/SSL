@@ -50,7 +50,7 @@ void See_Robot::update(double time, const Ai::Robot& robot, const Ai::Ball& ball
   if (target_robot_id != robot.id())
   {
     const rhoban_geometry::Point& target_position =
-        get_robot(target_robot_id).get_movement().linear_position(ai_data.time);
+        getRobot(target_robot_id).get_movement().linear_position(ai_data.time);
 
     Vector2d direction = target_position - robot_position;
     target_rotation = vector2angle(direction);

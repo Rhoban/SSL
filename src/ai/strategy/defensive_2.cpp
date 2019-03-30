@@ -81,17 +81,17 @@ void Defensive2::assign_behavior_to_robots(
   // we assign now all the other behavior
   assert(get_player_ids().size() == 2);
 
-  int id_to_obstruct1 = shirt_number_of_threat_max(Vision::Team::Opponent);
-  int id_to_obstruct2 = shirt_number_of_threat_max_2(Vision::Team::Opponent);
+  int id_to_obstruct1 = shirtNumberOfThreatMax(Vision::Team::Opponent);
+  int id_to_obstruct2 = shirtNumberOfThreatMax2(Vision::Team::Opponent);
   int robotID1 = player_id(0);
   int robotID2 = player_id(1);
 
-  const Ai::Robot& robot1 = get_robot(robotID1, Vision::Team::Ally);
-  const Ai::Robot& robot2 = get_robot(robotID2, Vision::Team::Ally);
+  const Ai::Robot& robot1 = getRobot(robotID1, Vision::Team::Ally);
+  const Ai::Robot& robot2 = getRobot(robotID2, Vision::Team::Ally);
   const rhoban_geometry::Point& robot_position_1 = robot1.get_movement().linear_position(time);
   const rhoban_geometry::Point& robot_position_2 = robot2.get_movement().linear_position(time);
 
-  const Ai::Robot& robot_to_obstruct1 = get_robot(id_to_obstruct1, Vision::Team::Opponent);
+  const Ai::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, Vision::Team::Opponent);
   const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.get_movement().linear_position(time);
 
   double distance1 = (Vector2d(robot_position_1 - robot_to_obstruct_position1)).norm();
@@ -108,7 +108,7 @@ void Defensive2::assign_behavior_to_robots(
     obstructeur2->declare_robot_to_obstruct(id_to_obstruct1, Vision::Team::Opponent);
   }
 
-  int nearest_ballID = get_shirt_number_of_closest_robot_to_the_ball(Vision::Team::Ally);
+  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(Vision::Team::Ally);
 
   if (nearest_ballID == robotID1)
   {
@@ -143,7 +143,7 @@ Defensive2::get_starting_positions(int number_of_avalaible_robots)
   assert(min_robots() <= number_of_avalaible_robots);
   assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ally_goal_center(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
 }
 
 //
@@ -154,7 +154,7 @@ Defensive2::get_starting_positions(int number_of_avalaible_robots)
 bool Defensive2::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
                                                   ContinuousAngle& angular_position)
 {
-  linear_position = ally_goal_center();
+  linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
@@ -165,7 +165,7 @@ RhobanSSLAnnotation::Annotations Defensive2::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = get_robot(*it).get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).get_movement().linear_position(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

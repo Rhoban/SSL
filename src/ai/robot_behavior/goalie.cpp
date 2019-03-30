@@ -113,7 +113,7 @@ void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
         right_post_position + rhoban_geometry::Point(offset_goal, -post_offset);
 
     const rhoban_geometry::Segment predicted_ball_segment =
-        rhoban_geometry::Segment(predicted_ball_position, ball_position());
+        rhoban_geometry::Segment(predicted_ball_position, ballPosition());
     const rhoban_geometry::Segment our_goal_segment =
         rhoban_geometry::Segment(new_left_post_position, new_right_post_position);
 
@@ -137,12 +137,12 @@ void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   if (defensive_approach == 0)
   {
-    rhoban_geometry::Point new_goal_center = ally_goal_center() + rhoban_geometry::Point(offset_goal, 0.0);
+    rhoban_geometry::Point new_goal_center = allyGoalCenter() + rhoban_geometry::Point(offset_goal, 0.0);
 
-    rhoban_geometry::Point protect_position = ball_position();
-    if (ball_position().getX() < ally_goal_center().getX())
+    rhoban_geometry::Point protect_position = ballPosition();
+    if (ballPosition().getX() < allyGoalCenter().getX())
     {
-      protect_position = rhoban_geometry::Point(ally_goal_center().getX(), ball_position().getY());
+      protect_position = rhoban_geometry::Point(allyGoalCenter().getX(), ballPosition().getY());
     }
 
     Vector2d ball_goal_vector = new_goal_center - protect_position;
@@ -169,7 +169,7 @@ void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
       target_position = predicted_intersection_point;
     }
 
-    Vector2d target_ball_vector = ball_position() - target_position;
+    Vector2d target_ball_vector = ballPosition() - target_position;
     target_rotation = detail::vec2angle(target_ball_vector);
   }
 

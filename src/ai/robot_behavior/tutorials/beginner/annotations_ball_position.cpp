@@ -34,7 +34,7 @@ void Begginer_annotations_ball_position::update(double time, const Ai::Robot& ro
   // Clear all annotations write before
   annotations.clear();
   // Add an annotations
-  annotations.addCross(ball_position(), "red", false);
+  annotations.addCross(ballPosition(), "red", false);
 }
 
 Control Begginer_annotations_ball_position::control() const

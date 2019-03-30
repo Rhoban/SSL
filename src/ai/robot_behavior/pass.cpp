@@ -43,14 +43,14 @@ void Pass::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
   //  this->robot_angular_position
   // are all avalaible
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
-  const Ai::Robot& robot_to_pass = get_robot(robot_to_pass_id, robot_to_pass_team);
+  const Ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
   rhoban_geometry::Point position_robot_to_pass = robot_to_pass.get_movement().linear_position(time);
   // rhoban_geometry::Point target_position = ball_position();
 
   // Striker:
   // rhoban_geometry::Point opponent_goal_point = opponent_goal_center();
-  Vector2d ball_robot_to_pass_vector = position_robot_to_pass - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_robot_to_pass_vector = position_robot_to_pass - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
   ball_robot_to_pass_vector = ball_robot_to_pass_vector / ball_robot_to_pass_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
   double target_radius_from_ball;
@@ -66,7 +66,7 @@ void Pass::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
     follower->avoid_the_ball(false);
     target_radius_from_ball = 1 / (2 * (scalar_ball_robot - 1.2)) + 2;
   }
-  rhoban_geometry::Point target_position = ball_position() - ball_robot_to_pass_vector * target_radius_from_ball;
+  rhoban_geometry::Point target_position = ballPosition() - ball_robot_to_pass_vector * target_radius_from_ball;
   double target_rotation = detail::vec2angle(ball_robot_to_pass_vector);
 
   // follower->avoid_the_ball(false);

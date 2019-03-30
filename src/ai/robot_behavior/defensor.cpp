@@ -41,14 +41,14 @@ void Defensor::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-  rhoban_geometry::Point ally_goal_point = ally_goal_center();
+  rhoban_geometry::Point ally_goal_point = allyGoalCenter();
   rhoban_geometry::Point left_post_position =
       rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0);
   rhoban_geometry::Point right_post_position =
       rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0);
 
-  Vector2d ball_goal_vector = ally_goal_point - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = ally_goal_point - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
@@ -65,7 +65,7 @@ void Defensor::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
   }
 
   rhoban_geometry::Point target_position = rhoban_geometry::center_of_cone_incircle(
-      ball_position(), left_post_position, right_post_position, get_robot_radius());
+      ballPosition(), left_post_position, right_post_position, getRobotRadius());
   double target_rotation = detail::vec2angle(-ball_goal_vector);
 
   // This part will be remove once we have proper avoidance of the penalty area

@@ -44,7 +44,7 @@ void Example::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
   // On ajoute un text à la position du robot.
   // annotations.addText("Exemple :)", robot_position, "blue");
 
-  Vector2d direction = ball_position() - robot_position;
+  Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
 
   if (time - last_time > period)
@@ -52,11 +52,11 @@ void Example::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
     rhoban_geometry::Point target;
     if (cpt % 2 == 0)
     {
-      target = center_ally_field();
+      target = centerAllyField();
     }
     else
     {
-      target = center_opponent_field();
+      target = centerOpponentField();
     }
     follower->set_following_position(target, target_rotation);
     cpt = (cpt + 1) % 2;

@@ -44,7 +44,7 @@ private:
   double penalty_rayon;
   int defensive_approach;
 
-  static rhoban_geometry::Point calculate_goal_position(const rhoban_geometry::Point& ball_position,
+  static rhoban_geometry::Point calculate_goal_position(const rhoban_geometry::Point& ballPosition,
                                                         const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
                                                         double goalie_radius);
 

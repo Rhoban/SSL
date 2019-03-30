@@ -134,7 +134,7 @@ Base::get_starting_positions(int number_of_avalaible_robots)
 //
 bool Base::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
-  linear_position = ally_goal_center();
+  linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }

@@ -37,7 +37,7 @@ void Test_kicker::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
 
   annotations.clear();
 
-  const rhoban_geometry::Point& target_position = center_ally_field();
+  const rhoban_geometry::Point& target_position = centerAllyField();
   ContinuousAngle target_rotation(M_PI);
 
   follower->avoid_the_ball(false);

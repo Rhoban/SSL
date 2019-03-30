@@ -93,8 +93,8 @@ RhobanSSLAnnotation::Annotations Example_machine_state::get_annotations() const
 
 bool Example_machine_state::is_closed_to_the_ball() const
 {
-  DEBUG("is_closed fcttt" << (norm_square(this->linear_position() - this->ball_position()) < 0.05));
-  return norm_square(this->linear_position() - this->ball_position()) < 0.05;
+  DEBUG("is_closed fcttt" << (norm_square(this->linear_position() - this->ballPosition()) < 0.05));
+  return norm_square(this->linear_position() - this->ballPosition()) < 0.05;
 };
 
 }  // namespace Robot_behavior

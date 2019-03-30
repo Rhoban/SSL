@@ -65,7 +65,7 @@ void Navigation_inside_the_field::update_control(double time, const Ai::Robot& r
 {
   if (ai_data.force_ball_avoidance)
   {
-    this->position_follower.set_radius_avoidance_for_the_ball(get_robot_radius() + get_ball_radius() +
+    this->position_follower.set_radius_avoidance_for_the_ball(getRobotRadius() + getBallRadius() +
                                                               ai_data.constants.rules_avoidance_distance);
     this->avoid_the_ball(true);
   }
@@ -75,7 +75,7 @@ void Navigation_inside_the_field::update_control(double time, const Ai::Robot& r
     this->avoid_the_ball(need_to_avoid_the_ball);
   }
 
-  double marge = 2 * get_robot_radius();
+  double marge = 2 * getRobotRadius();
   if (following_position_was_updated)
   {
     // Box cropped_field(
@@ -87,16 +87,16 @@ void Navigation_inside_the_field::update_control(double time, const Ai::Robot& r
     //     field_NE()
     // );
     // Trying agressive margins
-    Box cropped_field(field_SW() - Vector2d(marge, marge), field_NE() + Vector2d(marge, marge));
+    Box cropped_field(fieldSW() - Vector2d(marge, marge), fieldNE() + Vector2d(marge, marge));
     float radius_margin_factor = 2.0;
-    Box opponent_penalty = opponent_penalty_area().increase(get_robot_radius());
-    Box ally_penalty = ally_penalty_area().increase(get_robot_radius());
+    Box opponent_penalty = opponentPenaltyArea().increase(getRobotRadius());
+    Box ally_penalty = allyPenaltyArea().increase(getRobotRadius());
 
-    Box opponent_penalty_large = opponent_penalty_area().increase(get_robot_radius() * radius_margin_factor);
-    Box ally_penalty_large = ally_penalty_area().increase(get_robot_radius() * radius_margin_factor);
+    Box opponent_penalty_large = opponentPenaltyArea().increase(getRobotRadius() * radius_margin_factor);
+    Box ally_penalty_large = allyPenaltyArea().increase(getRobotRadius() * radius_margin_factor);
 
     rhoban_geometry::Point robot_position = linear_position();
-    double error = get_robot_radius() * radius_margin_factor;
+    double error = getRobotRadius() * radius_margin_factor;
 
     if (opponent_penalty.is_inside(robot_position))
     {
@@ -127,7 +127,7 @@ void Navigation_inside_the_field::update_control(double time, const Ai::Robot& r
                                                         deviation_position);
         if (not(cropped_field.is_inside(deviation_position)))
         {
-          deviation_position = deviation_position + Vector2d(penalty_area_height() + error, 0.0);
+          deviation_position = deviation_position + Vector2d(penaltyAreaHeight() + error, 0.0);
         }
       }
       else if (opponent_penalty.is_inside(deviation_position))
@@ -136,7 +136,7 @@ void Navigation_inside_the_field::update_control(double time, const Ai::Robot& r
                                                             deviation_position);
         if (not(cropped_field.is_inside(deviation_position)))
         {
-          deviation_position = deviation_position - Vector2d(penalty_area_height() + error, 0.0);
+          deviation_position = deviation_position - Vector2d(penaltyAreaHeight() + error, 0.0);
         }
       }
     }

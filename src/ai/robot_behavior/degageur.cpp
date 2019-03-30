@@ -51,18 +51,18 @@ void Degageur::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   //    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
   // default will be the closest ally robot from the opponent goal center
-  robot_to_pass_id = GameInformations::get_shirt_number_of_closest_robot(Vision::Team::Ally, opponent_goal_center());
+  robot_to_pass_id = GameInformations::getShirtNumberOfClosestRobot(Vision::Team::Ally, opponentGoalCenter());
   //    }
 
   if (robot_to_pass_id != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const Ai::Robot& robot_to_pass = get_robot(robot_to_pass_id, robot_to_pass_team);
+    const Ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
     point_to_pass = robot_to_pass.get_movement().linear_position(time);
   }
 
-  std::vector<int> robot_in_line = GameInformations::get_robot_in_line(robot_position, point_to_pass);
+  std::vector<int> robot_in_line = GameInformations::getRobotInLine(robot_position, point_to_pass);
 
-  if (robot_position.getX() > (opponent_goal_center().getX() - 4))
+  if (robot_position.getX() > (opponentGoalCenter().getX() - 4))
   {
     needKick = true;
   }
@@ -78,11 +78,11 @@ void Degageur::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
     }
   }
 
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
   double dist_ball_robot = ball_robot_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
-  Vector2d ball_point_vector = point_to_pass - ball_position();
+  Vector2d ball_point_vector = point_to_pass - ballPosition();
   ball_point_vector = ball_point_vector / ball_point_vector.norm();
 
   double target_radius_from_ball;
@@ -109,7 +109,7 @@ void Degageur::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
     follower->avoid_opponent(true);
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_point_vector * target_radius_from_ball;
+  rhoban_geometry::Point target_position = ballPosition() - ball_point_vector * target_radius_from_ball;
   double target_rotation = detail::vec2angle(ball_point_vector);
 
   // follower->avoid_the_ball(false);
