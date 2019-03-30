@@ -20,56 +20,51 @@
 #include "test_kicker.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-
-Test_kicker::Test_kicker(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+Test_kicker::Test_kicker(Ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void Test_kicker::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    
-    annotations.clear();
-    
-    const rhoban_geometry::Point & target_position = center_ally_field();
-    ContinuousAngle target_rotation(M_PI);
-    
-    follower->avoid_the_ball(false);
-    follower->set_following_position(target_position, target_rotation);
-    follower->update(time, robot, ball);
+void Test_kicker::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::update_time_and_position(time, robot, ball);
+
+  annotations.clear();
+
+  const rhoban_geometry::Point& target_position = center_ally_field();
+  ContinuousAngle target_rotation(M_PI);
+
+  follower->avoid_the_ball(false);
+  follower->set_following_position(target_position, target_rotation);
+  follower->update(time, robot, ball);
 }
 
-Control Test_kicker::control() const {
-    Control ctrl = follower->control();
-    ctrl.kick = true; 
-    ctrl.charge = true; 
-    return ctrl; 
+Control Test_kicker::control() const
+{
+  Control ctrl = follower->control();
+  ctrl.kick = true;
+  ctrl.charge = true;
+  return ctrl;
 }
 
-Test_kicker::~Test_kicker(){
-    delete follower;
+Test_kicker::~Test_kicker()
+{
+  delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Test_kicker::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
-    return annotations;
+RhobanSSLAnnotation::Annotations Test_kicker::get_annotations() const
+{
+  RhobanSSLAnnotation::Annotations annotations;
+  annotations.addAnnotations(this->annotations);
+  annotations.addAnnotations(follower->get_annotations());
+  return annotations;
 }
 
-
-
-}
-}
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

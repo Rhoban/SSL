@@ -1,6 +1,6 @@
 /*
     This file is part of SSL.
-    
+
     Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
@@ -20,52 +20,50 @@
 #include "goalie.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-Begginer_goalie::Begginer_goalie(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+Begginer_goalie::Begginer_goalie(Ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void Begginer_goalie::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
-    
-    Vector2d ball_goal_vector = ally_goal_center() - ball_position();
-    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+void Begginer_goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+{
+  RobotBehavior::update_time_and_position(time, robot, ball);
 
-    // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
-    rhoban_geometry::Point target_position = ally_goal_center() - ball_goal_vector * 0.5;
-    double target_rotation = detail::vec2angle(ball_goal_vector);
+  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
-    follower->set_following_position(target_position, target_rotation);
-    follower->update(time, robot, ball);
+  Vector2d ball_goal_vector = ally_goal_center() - ball_position();
+  ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+
+  // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
+  rhoban_geometry::Point target_position = ally_goal_center() - ball_goal_vector * 0.5;
+  double target_rotation = detail::vec2angle(ball_goal_vector);
+
+  follower->set_following_position(target_position, target_rotation);
+  follower->update(time, robot, ball);
 }
 
-Control Begginer_goalie::control() const {
-    Control ctrl = follower->control();
-    return ctrl; 
+Control Begginer_goalie::control() const
+{
+  Control ctrl = follower->control();
+  return ctrl;
 }
 
-Begginer_goalie::~Begginer_goalie(){
-    delete follower;
+Begginer_goalie::~Begginer_goalie()
+{
+  delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_goalie::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
-    return annotations;
+RhobanSSLAnnotation::Annotations Begginer_goalie::get_annotations() const
+{
+  RhobanSSLAnnotation::Annotations annotations;
+  annotations.addAnnotations(this->annotations);
+  annotations.addAnnotations(follower->get_annotations());
+  return annotations;
 }
 
-}
-}
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

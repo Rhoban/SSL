@@ -17,46 +17,38 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__DEGAGEUR__H__
-#define __ROBOT_BEHAVIOR__DEGAGEUR__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class Degageur : public RobotBehavior
+{
+private:
+  rhoban_geometry::Point point_to_pass;
+  int robot_to_pass_id;
+  Vision::Team robot_to_pass_team;
+  bool needKick;
 
-class Degageur : public RobotBehavior  {
-    private:
-        rhoban_geometry::Point point_to_pass;
-        int robot_to_pass_id;
-        Vision::Team robot_to_pass_team;
-        bool needKick;
+  ConsignFollower* follower;
 
+public:
+  Degageur(Ai::AiData& ai_data);
 
-        ConsignFollower* follower;
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  void declare_point_to_pass(rhoban_geometry::Point point);
+  void declare_robot_to_pass(int robot_id, Vision::Team team = Vision::Team::Ally);
 
-    public:
-        Degageur(Ai::AiData& ai_data);
+  virtual Control control() const;
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
-        void declare_point_to_pass( rhoban_geometry::Point point );
-        void declare_robot_to_pass( int robot_id, Vision::Team team = Vision::Team::Ally );
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-
-	virtual Control control() const;
-
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Degageur();
+  virtual ~Degageur();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL

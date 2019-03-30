@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__EXAMPLE_MACHINE_STATE__H__
-#define __ROBOT_BEHAVIOR__EXAMPLE_MACHINE_STATE__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
@@ -26,60 +25,57 @@
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class Example_machine_state : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-class Example_machine_state : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+public:
+  struct state_name
+  {
+    static const constexpr char* wait_pass = "wait_pass";
+    static const constexpr char* strike = "strike";
+  };
+  struct edge_name
+  {
+    static const constexpr char* can_strike = "can_strike";
+    static const constexpr char* strike_is_finished = "strike_is_finished";
+  };
 
-    public:
-    struct state_name {
-        static const constexpr char* wait_pass = "wait_pass" ;
-        static const constexpr char* strike = "strike" ;
-    };
-    struct edge_name {
-        static const constexpr char* can_strike = "can_strike" ;
-        static const constexpr char* strike_is_finished = "strike_is_finished" ;
-    };
+  bool is_closed_to_the_ball() const;
 
+  void print_are_pass()
+  {
+    DEBUG("ARE PASSING");
+  }
+  void print_ball_info()
+  {
+    DEBUG("INFO");
+  }
+  void print_ball_info2()
+  {
+    DEBUG("INFO2");
+  }
 
-    bool is_closed_to_the_ball() const;
+  typedef construct_machine_state_infrastructure<std::string, Ai::AiData, Ai::AiData> machine_state_infrastructure;
 
-    void print_are_pass(){
-        DEBUG("ARE PASSING");
-    };
-    void print_ball_info(){
-        DEBUG("INFO");
-    };
-    void print_ball_info2(){
-        DEBUG("INFO2");
-    };
+private:
+  machine_state_infrastructure::MachineState machine;
 
-    typedef construct_machine_state_infrastructure<
-        std::string, Ai::AiData, Ai::AiData
-    > machine_state_infrastructure;
+public:
+  Example_machine_state(Ai::AiData& ai_data);
 
-    private:
-    machine_state_infrastructure::MachineState machine;
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-    public:
-    Example_machine_state(Ai::AiData& ai_data);
+  virtual Control control() const;
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual Control control() const;
-
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Example_machine_state();
+  virtual ~Example_machine_state();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
