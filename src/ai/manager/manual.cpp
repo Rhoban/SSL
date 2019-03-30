@@ -430,7 +430,7 @@ Manual::Manual(Ai::AiData& ai_data)
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
-                          Robot_behavior::beginner::AnnotationClosestRobotToTheBall * near_ball =
+                          Robot_behavior::beginner::AnnotationClosestRobotToTheBall* near_ball =
                               new Robot_behavior::beginner::AnnotationClosestRobotToTheBall(ai_data);
                           return std::shared_ptr<Robot_behavior::RobotBehavior>(near_ball);
                         },

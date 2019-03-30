@@ -55,7 +55,8 @@ void AnnotationClosestRobotToTheBall::update(double time, const Ai::Robot& robot
   std::string opponnent_color = "red";
   bool dashed = false;
   const rhoban_geometry::Point closest_ally_position = closest_ally.get_movement().linear_position(ai_data.time);
-  const rhoban_geometry::Point closest_opponent_position = closest_opponent.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point closest_opponent_position =
+      closest_opponent.get_movement().linear_position(ai_data.time);
 
   // Search the nearest robot between the ally and the opponent.
   if (dist_ally > dist_opponent)

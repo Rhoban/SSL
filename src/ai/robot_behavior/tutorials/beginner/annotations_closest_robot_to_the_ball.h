@@ -35,9 +35,9 @@ namespace beginner
 class AnnotationClosestRobotToTheBall : public RobotBehavior
 {
 private:
-   /**
-    * @see RhobanSSLAnnotation::Annotations
-    */
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   */
   RhobanSSLAnnotation::Annotations annotations_;
 
 public:
@@ -75,4 +75,3 @@ public:
 }  // Namespace beginner
 }  // Namespace Robot_behavior
 }  // namespace RhobanSSL
-
