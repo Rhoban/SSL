@@ -36,7 +36,7 @@ rhoban_geometry::Point Goalie::calculate_goal_position(const rhoban_geometry::Po
   return defender_position;
 }
 
-Goalie::Goalie(Ai::AiData& ai_data)
+Goalie::Goalie(ai::AiData& ai_data)
   : Goalie::Goalie(ai_data, Vector2d(-ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0),
                    Vector2d(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0),
                    rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, 0.0) +
@@ -45,7 +45,7 @@ Goalie::Goalie(Ai::AiData& ai_data)
 {
 }
 
-Goalie::Goalie(Ai::AiData& ai_data, const Vector2d& left_post_position, const Vector2d& right_post_position,
+Goalie::Goalie(ai::AiData& ai_data, const Vector2d& left_post_position, const Vector2d& right_post_position,
                const rhoban_geometry::Point& waiting_goal_position, double penalty_rayon, double goalie_radius,
                double time, double dt)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
@@ -62,7 +62,7 @@ Goalie::Goalie(Ai::AiData& ai_data, const Vector2d& left_post_position, const Ve
   foll->set_orientation_pid(1.0, 0, 0);
 }
 
-void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -92,7 +92,7 @@ void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
   double target_rotation;
   rhoban_geometry::Point predicted_intersection_point;
 
-  const rhoban_geometry::Point& predicted_ball_position = ball.get_movement().linear_position(time + 3.0);
+  const rhoban_geometry::Point& predicted_ball_position = ball.getMovement().linear_position(time + 3.0);
   // test if the ball hits the back
 
   if (predicted_ball_position.getX() < left_post_position.getX())

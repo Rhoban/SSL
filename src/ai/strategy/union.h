@@ -36,7 +36,7 @@ private:
   int max;
 
 public:
-  Union(Ai::AiData& ai_data);
+  Union(ai::AiData& ai_data);
 
   void clear();
 

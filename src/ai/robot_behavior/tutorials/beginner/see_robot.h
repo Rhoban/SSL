@@ -36,9 +36,9 @@ private:
   RhobanSSLAnnotation::Annotations annotations;
 
 public:
-  See_Robot(Ai::AiData& ai_data, int target_id = 0);
+  See_Robot(ai::AiData& ai_data, int target_id = 0);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

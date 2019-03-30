@@ -19,7 +19,7 @@ static QString js(Json::Value& json)
   return QString::fromStdString(writer.write(json));
 }
 
-API::API(std::string teamName, bool simulation, rhoban_ssl::Ai::Team team, rhoban_ssl::AICommander* commander,
+API::API(std::string teamName, bool simulation, rhoban_ssl::ai::Team team, rhoban_ssl::AICommander* commander,
          const std::string& config_path, Vision::Part_of_the_field part_of_the_field_used, std::string addr,
          std::string port, std::string sim_port)
   : simulation(simulation)
@@ -114,7 +114,7 @@ bool API::isYellow()
 {
   DataFromAi data_from_ai;
   data >> data_from_ai;
-  return data_from_ai.team_color == Ai::Team::Yellow;
+  return data_from_ai.team_color == ai::Team::Yellow;
 }
 
 QString API::visionStatus()
@@ -260,7 +260,7 @@ void API::moveRobot(bool yellow, int id, double x, double y, double theta)
 {
   mutex.lock();
   commander->moveRobot(yellow, id, x, y, theta, true);
-  visionClient.setRobotPos(yellow ? Ai::Team::Yellow : Ai::Team::Blue, id, x, y, theta);
+  visionClient.setRobotPos(yellow ? ai::Team::Yellow : ai::Team::Blue, id, x, y, theta);
   mutex.unlock();
 }
 
@@ -422,7 +422,7 @@ std::string API::ourColor()
   DataFromAi data_from_ai;
   data >> data_from_ai;
 
-  return data_from_ai.team_color == Ai::Team::Yellow ? "yellow" : "blue";
+  return data_from_ai.team_color == ai::Team::Yellow ? "yellow" : "blue";
 }
 
 std::string API::opponentColor()

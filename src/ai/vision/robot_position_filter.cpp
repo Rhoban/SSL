@@ -31,7 +31,7 @@ bool object_coordonate_is_valid(double x, double y, Vision::Part_of_the_field pa
 }
 
 std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::average_filter(
-    int robot_id, const SSL_DetectionRobot& robotFrame, Ai::Team team_color, bool ally,
+    int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
     const Vision::VisionData& old_vision_data, Part_of_the_field part_of_the_field_used)
 {
@@ -47,7 +47,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::averag
     const SSL_DetectionFrame& detection = elem.second;
 
     const google::protobuf::RepeatedPtrField<SSL_DetectionRobot>* robots;
-    if (team_color == Ai::Team::Yellow)
+    if (team_color == ai::Team::Yellow)
     {
       robots = &detection.robots_yellow();
     }
@@ -94,7 +94,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::averag
 }
 
 std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::exponential_degression_filter(
-    int robot_id, const SSL_DetectionRobot& robotFrame, Ai::Team team_color, bool ally,
+    int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
     const Vision::VisionData& old_vision_data)
 {
@@ -110,7 +110,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::expone
     const google::protobuf::RepeatedPtrField<SSL_DetectionRobot>* robots;
     const MovementSample& old_robot_movement =
         old_vision_data.robots.at(ally ? Vision::Team::Ally : Vision::Team::Opponent).at(robot_id).movement;
-    if (team_color == Ai::Team::Yellow)
+    if (team_color == ai::Team::Yellow)
     {
       robots = &detection.robots_yellow();
     }
@@ -151,7 +151,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::expone
 }
 
 std::pair<rhoban_geometry::Point, ContinuousAngle>
-Robot_position_filter::no_filter(int robot_id, const SSL_DetectionRobot& robotFrame, Ai::Team team_color, bool ally,
+Robot_position_filter::no_filter(int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team team_color, bool ally,
                                  const std::map<int, SSL_DetectionFrame>& camera_detections,
                                  bool& orientation_is_defined, const Vision::VisionData& old_vision_data)
 {

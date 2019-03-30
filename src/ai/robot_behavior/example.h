@@ -37,9 +37,9 @@ private:
   int cpt;
 
 public:
-  Example(Ai::AiData& ai_data);
+  Example(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

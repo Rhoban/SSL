@@ -56,7 +56,7 @@ private:
   void detect_invalid_robots();
 
 protected:
-  Ai::AiData& ai_data;
+  ai::AiData& ai_data;
 
 public:
   int time() const;
@@ -64,9 +64,9 @@ public:
 
   std::vector<std::string> get_available_strategies();
 
-  Manager(Ai::AiData& ai_data);
+  Manager(ai::AiData& ai_data);
 
-  Ai::Team get_team() const;
+  ai::Team get_team() const;
   const std::string& get_team_name() const;
   void declare_goalie_id(int goalie_id);
   void declare_goalie_opponent_id(int goalie_opponent_id);
@@ -115,7 +115,7 @@ public:
 
   void change_ally_and_opponent_goalie_id(int blue_goalie_id, int yellow_goalie_id);
 
-  void change_team_and_point_of_view(Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis);
+  void change_team_and_point_of_view(ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis);
 
   void remove_invalid_robots();
 

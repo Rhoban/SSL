@@ -38,9 +38,9 @@ private:
   ConsignFollower* follower;
 
 public:
-  RobotFollower(Ai::AiData& ai_data);
+  RobotFollower(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   void declare_robot_to_follow(int robot_id, const Vector2d& translation, Vision::Team team = Vision::Team::Ally);
 

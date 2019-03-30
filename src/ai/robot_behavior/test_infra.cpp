@@ -26,11 +26,11 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-TestInfra::TestInfra(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+TestInfra::TestInfra(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void TestInfra::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void TestInfra::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -40,7 +40,7 @@ void TestInfra::update(double time, const Ai::Robot& robot, const Ai::Ball& ball
   //  this->robot_angular_position
   // are all avalaible
 
-  rhoban_geometry::Point target_position = robot.get_movement().linear_position(time);
+  rhoban_geometry::Point target_position = robot.getMovement().linear_position(time);
 
   bool value = GameInformations::infraRed(robot.id(), Vision::Team::Ally);
   std::cout << "Value infra red : " << value << '\n';

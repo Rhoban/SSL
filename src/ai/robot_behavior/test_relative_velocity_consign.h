@@ -31,7 +31,7 @@ private:
   Control relative_control;
 
 public:
-  Test_relative_velocity_consign(Ai::AiData& ai_data);
+  Test_relative_velocity_consign(ai::AiData& ai_data);
   virtual ~Test_relative_velocity_consign();
 
   void set_linear_velocity(const Vector2d& linear_velocity);
@@ -39,17 +39,17 @@ public:
 
   // RobotBehavior interface
 public:
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   virtual Control control() const;
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
   // Tests
 public:
-  static Test_relative_velocity_consign* get_movement_angular_velocity_only(Ai::AiData& ai_data,
+  static Test_relative_velocity_consign* get_movement_angular_velocity_only(ai::AiData& ai_data,
                                                                             double angular_velocity);
-  static Test_relative_velocity_consign* get_movement_linear_velocity_only(Ai::AiData& ai_data,
+  static Test_relative_velocity_consign* get_movement_linear_velocity_only(ai::AiData& ai_data,
                                                                            Vector2d linear_velocity);
-  static Test_relative_velocity_consign* get_movement_angular_and_linear_velocity(Ai::AiData& ai_data,
+  static Test_relative_velocity_consign* get_movement_angular_and_linear_velocity(ai::AiData& ai_data,
                                                                                   Vector2d linear_velocity,
                                                                                   double angular_velocity);
 };

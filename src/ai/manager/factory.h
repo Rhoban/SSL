@@ -42,7 +42,7 @@ private:
 public:
   static const std::list<std::string>& avalaible_managers();
 
-  static std::shared_ptr<Manager> construct_manager(const std::string& manager_name, Ai::AiData& ai_data,
+  static std::shared_ptr<Manager> construct_manager(const std::string& manager_name, ai::AiData& ai,
                                                     GameState& game_state);
 };
 

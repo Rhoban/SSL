@@ -58,9 +58,9 @@ namespace rhoban_ssl
 {
 namespace Manager
 {
-Manual::Manual(Ai::AiData& ai_data)
+Manual::Manual(ai::AiData& ai_data)
   : Manager(ai_data)
-  , team_color(Ai::Team::Unknown)
+  , team_color(ai::Team::Unknown)
   , goal_to_positive_axis(true)
   , ally_goalie_id(0)
   , opponent_goalie_id(0)
@@ -651,11 +651,11 @@ Manual::Manual(Ai::AiData& ai_data)
 void Manual::assign_point_of_view_and_goalie()
 {
   // DEBUG(team_color);
-  // DEBUG(Ai::Team::Yellow);
+  // DEBUG(ai::Team::Yellow);
   change_team_and_point_of_view(team_color, goal_to_positive_axis);
 }
 
-void Manual::set_team_color(Ai::Team team_color)
+void Manual::set_team_color(ai::Team team_color)
 {
   this->team_color = team_color;
 }

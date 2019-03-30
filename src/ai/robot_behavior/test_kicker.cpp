@@ -24,12 +24,12 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Test_kicker::Test_kicker(Ai::AiData& ai_data)
+Test_kicker::Test_kicker(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void Test_kicker::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Test_kicker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE

@@ -29,10 +29,10 @@ namespace rhoban_ssl
 class GameInformations
 {
 private:
-  Ai::AiData& ai_data;
+  ai::AiData& ai_data;
 
 public:
-  GameInformations(Ai::AiData& ai_data);
+  GameInformations(ai::AiData& ai_data);
   virtual ~GameInformations();
 
   double time() const;
@@ -42,7 +42,7 @@ public:
    * @brief returns the ball.
    * @return a ball.
    */
-  const Ai::Ball& ball() const;
+  const ai::Ball& ball() const;
   /**
    * @brief returns the current ball's position.
    * @return const rhoban_geometry::Point
@@ -174,7 +174,7 @@ public:
    * the team of the robot
    * @return a reference on a robot
    */
-  const Ai::Robot& getRobot(int robot_number, Vision::Team team = Vision::Team::Ally) const;
+  const ai::Robot& getRobot(int robot_number, Vision::Team team = Vision::Team::Ally) const;
   /**
    * @brief returns the robot's radius.
    * @return a radius in meter

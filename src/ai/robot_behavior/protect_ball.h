@@ -32,9 +32,9 @@ private:
   ConsignFollower* follower;
 
 public:
-  ProtectBall(Ai::AiData& ai_data);
+  ProtectBall(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 

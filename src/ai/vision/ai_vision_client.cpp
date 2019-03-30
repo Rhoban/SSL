@@ -30,13 +30,13 @@ using namespace rhoban_utils;
 
 namespace rhoban_ssl
 {
-AIVisionClient::AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation,
+AIVisionClient::AIVisionClient(Data& shared_data, ai::Team myTeam, bool simulation,
                                Vision::Part_of_the_field part_of_the_field)
   : VisionClient(simulation), shared_data(shared_data), part_of_the_field_used(part_of_the_field), myTeam(myTeam)
 {
 }
 
-AIVisionClient::AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation, std::string addr, std::string port,
+AIVisionClient::AIVisionClient(Data& shared_data, ai::Team myTeam, bool simulation, std::string addr, std::string port,
                                std::string sim_port, Vision::Part_of_the_field part_of_the_field)
   : VisionClient(simulation, addr, port, sim_port)
   , shared_data(shared_data)
@@ -45,7 +45,7 @@ AIVisionClient::AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulati
 {
 }
 
-void AIVisionClient::setRobotPos(Ai::Team team, int id, double x, double y, double orientation)
+void AIVisionClient::setRobotPos(ai::Team team, int id, double x, double y, double orientation)
 {
   DataFromAi data_from_ai;
   shared_data >> data_from_ai;
@@ -212,18 +212,18 @@ void AIVisionClient::packetReceived()
   // Robots informations
   for (auto robot : detection.robots_blue())
   {
-    updateRobotInformation(detection, robot, myTeam == Ai::Blue, Ai::Blue);
+    updateRobotInformation(detection, robot, myTeam == ai::Blue, ai::Blue);
   }
   for (auto robot : detection.robots_yellow())
   {
-    updateRobotInformation(detection, robot, myTeam == Ai::Yellow, Ai::Yellow);
+    updateRobotInformation(detection, robot, myTeam == ai::Yellow, ai::Yellow);
   }
 
   shared_data << visionData;
 }
 
 void AIVisionClient::updateRobotInformation(const SSL_DetectionFrame& detection, const SSL_DetectionRobot& robotFrame,
-                                            bool ally, Ai::Team team_color)
+                                            bool ally, ai::Team team_color)
 {
   if (not(object_coordonate_is_valid(robotFrame.x() / 1000.0, robotFrame.y() / 1000.0, part_of_the_field_used)))
   {
@@ -231,7 +231,7 @@ void AIVisionClient::updateRobotInformation(const SSL_DetectionFrame& detection,
   }
   if (robotFrame.has_robot_id())
   {
-    if (robotFrame.robot_id() < Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+    if (robotFrame.robot_id() < ai::Constants::NB_OF_ROBOTS_BY_TEAM)
     {
       Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
       Vision::Robot& robot = visionData.robots.at(team).at(robotFrame.robot_id());

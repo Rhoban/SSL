@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Concept_proof_spinner::Concept_proof_spinner(Ai::AiData& ai_data)
+Concept_proof_spinner::Concept_proof_spinner(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , follower(Factory::fixed_consign_follower(ai_data))
   , go_to_home(false)
@@ -34,13 +34,13 @@ Concept_proof_spinner::Concept_proof_spinner(Ai::AiData& ai_data)
 {
 }
 
-void Concept_proof_spinner::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Concept_proof_spinner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  rhoban_geometry::Point pos = robot.get_movement().linear_position(time);
+  rhoban_geometry::Point pos = robot.getMovement().linear_position(time);
   Vector2d direction = Vector2d(ballPosition()) - Vector2d(pos);
   direction = direction / direction.norm();
 

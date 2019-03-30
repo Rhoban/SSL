@@ -32,7 +32,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Navigation_inside_the_field::Navigation_inside_the_field(Ai::AiData& ai_data, double time, double dt)
+Navigation_inside_the_field::Navigation_inside_the_field(ai::AiData& ai_data, double time, double dt)
   : ConsignFollower(ai_data)
   , need_to_avoid_the_ball(true)
   , saving_ball_radius_avoidance(ai_data.constants.robot_radius)
@@ -52,7 +52,7 @@ void Navigation_inside_the_field::set_following_position(const rhoban_geometry::
   this->target_angle = target_angle;
 }
 
-void Navigation_inside_the_field::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Navigation_inside_the_field::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -61,7 +61,7 @@ void Navigation_inside_the_field::update(double time, const Ai::Robot& robot, co
   update_control(time, robot, ball);
 }
 
-void Navigation_inside_the_field::update_control(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Navigation_inside_the_field::update_control(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   if (ai_data.force_ball_avoidance)
   {

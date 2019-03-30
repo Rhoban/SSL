@@ -25,11 +25,11 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-StrikerAi::StrikerAi(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+StrikerAi::StrikerAi(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void StrikerAi::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void StrikerAi::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -39,7 +39,7 @@ void StrikerAi::update(double time, const Ai::Robot& robot, const Ai::Ball& ball
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
 
   std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
   rhoban_geometry::Point goal_point = results.first;

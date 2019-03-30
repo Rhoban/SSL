@@ -47,9 +47,9 @@ private:
 public:
   bool well_positioned;
 
-  SearchShootArea(Ai::AiData& ai_data);
+  SearchShootArea(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   void set_period(double period)
   {

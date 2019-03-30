@@ -37,7 +37,7 @@ private:
   std::shared_ptr<Robot_behavior::Striker> striker;
 
 public:
-  Offensive(Ai::AiData& ai_data);
+  Offensive(ai::AiData& ai_data);
   virtual ~Offensive();
 
   virtual int min_robots() const;

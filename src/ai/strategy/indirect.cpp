@@ -28,7 +28,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Indirect::Indirect(Ai::AiData& ai_data) : Strategy(ai_data), state(0)
+Indirect::Indirect(ai::AiData& ai_data) : Strategy(ai_data), state(0)
 {
 }
 
@@ -83,7 +83,7 @@ void Indirect::assign_behavior_to_robots(
   int wait_pass = player_id(0);  // we get the first if in get_player_ids()
   int pass = player_id(1);       // we get the first if in get_player_ids()
   // double seuil = 0.2;
-  // const Ai::Robot & robot_pass = get_robot( pass );
+  // const ai::Robot & robot_pass = get_robot( pass );
   // const rhoban_geometry::Point & robot_pass_position = robot_pass.get_movement().linear_position( time );
 
   // Vector2d ball_robot_vector_pass = ball_position() - robot_pass_position;
@@ -101,7 +101,7 @@ void Indirect::assign_behavior_to_robots(
                       std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data)));
       pass_behavior = std::shared_ptr<Robot_behavior::Pass_dribbler>(new Robot_behavior::Pass_dribbler(ai_data));
       pass_behavior->declare_point_to_pass(
-          getRobot(wait_pass, Vision::Team::Ally).get_movement().linear_position(time));
+          getRobot(wait_pass, Vision::Team::Ally).getMovement().linear_position(time));
       assign_behavior(pass, pass_behavior);
     }
 
@@ -161,7 +161,7 @@ RhobanSSLAnnotation::Annotations Indirect::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linear_position(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

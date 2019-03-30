@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Example::Example(Ai::AiData& ai_data) : Strategy(ai_data)
+Example::Example(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 

@@ -26,12 +26,12 @@ namespace Robot_behavior
 namespace beginner
 {
 // Use opponent_corner_left() for the left corner.
-GoCorner::GoCorner(Ai::AiData& ai_data)
+GoCorner::GoCorner(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data)), target_corner_(opponentCornerLeft())
 {
 }
 
-void GoCorner::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void GoCorner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   RobotBehavior::update_time_and_position(time, robot, ball);

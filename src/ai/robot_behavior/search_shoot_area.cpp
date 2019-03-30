@@ -27,7 +27,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-SearchShootArea::SearchShootArea(Ai::AiData& ai_data)
+SearchShootArea::SearchShootArea(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , obstructed_view(-1)
   , period(3)
@@ -39,7 +39,7 @@ SearchShootArea::SearchShootArea(Ai::AiData& ai_data)
   p2 = Vector2d(centerMark()) + rhoban_geometry::Point(1, -2);
 }
 
-void SearchShootArea::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void SearchShootArea::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -51,7 +51,7 @@ void SearchShootArea::update(double time, const Ai::Robot& robot, const Ai::Ball
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time);
   // Vector2d opponent_goal_robot_vector = robot_position - opponent_goal_center();
 
   std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(robot_position);

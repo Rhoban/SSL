@@ -31,7 +31,7 @@ private:
   bool behaviors_are_assigned;
 
 public:
-  Base_3_gds(Ai::AiData& ai_data);
+  Base_3_gds(ai::AiData& ai_data);
   virtual ~Base_3_gds();
 
   virtual int min_robots() const;

@@ -36,9 +36,9 @@ private:
   ConsignFollower* follower;
 
 public:
-  Obstructor(Ai::AiData& ai_data);
+  Obstructor(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
   void declare_robot_to_obstruct(int robot_id, Vision::Team team = Vision::Team::Opponent);

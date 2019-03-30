@@ -42,7 +42,7 @@ private:
 public:
   double get_temporal_shift_between_vision() const;
 
-  Tare_and_synchronize(Ai::AiData& ai_data);
+  Tare_and_synchronize(ai::AiData& ai_data);
 
   int min_robots() const;
   int max_robots() const;

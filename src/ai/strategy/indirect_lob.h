@@ -32,7 +32,7 @@ private:
   int state;
 
 public:
-  IndirectLob(Ai::AiData& ai_data);
+  IndirectLob(ai::AiData& ai_data);
   virtual ~IndirectLob();
 
   virtual int min_robots() const;

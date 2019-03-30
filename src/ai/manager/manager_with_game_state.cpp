@@ -4,7 +4,7 @@ namespace rhoban_ssl
 {
 namespace Manager
 {
-ManagerWithGameState::ManagerWithGameState(Ai::AiData& ai_data, const GameState& game_state)
+ManagerWithGameState::ManagerWithGameState(ai::AiData& ai_data, const GameState& game_state)
   : Manager(ai_data), game_state(game_state), last_change_stamp(0)
 {
 }
@@ -41,7 +41,7 @@ void ManagerWithGameState::choose_a_strategy(double time)
     else if (game_state.get_state() == state_name::free_kick)
     {
       free_kick_type_id type_free_kick = game_state.type_of_the_free_kick();
-      Ai::Team team_free_kick = game_state.free_kick_team();
+      ai::Team team_free_kick = game_state.free_kick_team();
       if (type_free_kick == DIRECT and team_free_kick == get_team())
       {
         DEBUG("DIRECT KICK ALLY");
@@ -65,7 +65,7 @@ void ManagerWithGameState::choose_a_strategy(double time)
     }
     else if (game_state.get_state() == state_name::prepare_kickoff)
     {
-      Ai::Team team_prepare_kickoff = game_state.kickoff_team();
+      ai::Team team_prepare_kickoff = game_state.kickoff_team();
       if (team_prepare_kickoff == get_team())
       {
         DEBUG("PREPARE KICKOFF ALLY");
@@ -79,7 +79,7 @@ void ManagerWithGameState::choose_a_strategy(double time)
     }
     else if (game_state.get_state() == state_name::kickoff)
     {
-      Ai::Team team_kickoff = game_state.kickoff_team();
+      ai::Team team_kickoff = game_state.kickoff_team();
       if (team_kickoff == get_team())
       {
         DEBUG("KICKOFF ALLY");
@@ -93,7 +93,7 @@ void ManagerWithGameState::choose_a_strategy(double time)
     }
     else if (game_state.get_state() == state_name::penalty)
     {
-      Ai::Team team_penalty = game_state.penalty_team();
+      ai::Team team_penalty = game_state.penalty_team();
       if (team_penalty == get_team())
       {
         DEBUG("PENALTY ALLY");
@@ -126,7 +126,7 @@ void ManagerWithGameState::choose_a_strategy(double time)
     else if (game_state.get_state() == state_name::free_kick)
     {
       free_kick_type_id type_free_kick = game_state.type_of_the_free_kick();
-      Ai::Team team_free_kick = game_state.free_kick_team();
+      ai::Team team_free_kick = game_state.free_kick_team();
       if (type_free_kick == DIRECT and team_free_kick == get_team())
       {
         // DEBUG("DIRECT KICK ALLY continue");
@@ -150,7 +150,7 @@ void ManagerWithGameState::choose_a_strategy(double time)
     }
     else if (game_state.get_state() == state_name::prepare_kickoff)
     {
-      Ai::Team team_prepare_kickoff = game_state.kickoff_team();
+      ai::Team team_prepare_kickoff = game_state.kickoff_team();
       if (team_prepare_kickoff == get_team())
       {
         // DEBUG("PREPARE KICKOFF ALLY continue");
@@ -164,7 +164,7 @@ void ManagerWithGameState::choose_a_strategy(double time)
     }
     else if (game_state.get_state() == state_name::kickoff)
     {
-      Ai::Team team_kickoff = game_state.kickoff_team();
+      ai::Team team_kickoff = game_state.kickoff_team();
       if (team_kickoff == get_team())
       {
         // DEBUG("KICKOFF ALLY continue");
@@ -178,7 +178,7 @@ void ManagerWithGameState::choose_a_strategy(double time)
     }
     else if (game_state.get_state() == state_name::penalty)
     {
-      Ai::Team team_penalty = game_state.penalty_team();
+      ai::Team team_penalty = game_state.penalty_team();
       if (team_penalty == get_team())
       {
         // DEBUG("PENALTY ALLY continue");

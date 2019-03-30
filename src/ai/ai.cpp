@@ -51,7 +51,7 @@ void AI::check_time_is_coherent() const
 #ifndef NDEBUG
   for (unsigned int i = 0; i < ai_data.all_robots.size(); i++)
   {
-    assert(ai_data.all_robots.at(i).second->get_movement().last_time() - 0.000001 <= ai_data.time);
+    assert(ai_data.all_robots.at(i).second->getMovement().last_time() - 0.000001 <= ai_data.time);
   }
 #endif
 }
@@ -84,14 +84,14 @@ void AI::limits_velocity(Control& ctrl) const
 
 void AI::prevent_collision(int robot_id, Control& ctrl)
 {
-  const Ai::Robot& robot = ai_data.robots.at(Vision::Team::Ally).at(robot_id);
+  const ai::Robot& robot = ai_data.robots.at(Vision::Team::Ally).at(robot_id);
 
   const Vector2d& ctrl_velocity = ctrl.linear_velocity;
-  Vector2d robot_velocity = robot.get_movement().linear_velocity(ai_data.time);
+  Vector2d robot_velocity = robot.getMovement().linear_velocity(ai_data.time);
 
   bool collision_is_detected = false;
 
-  std::list<std::pair<int, double> > collisions_with_ctrl = ai_data.get_collisions(robot_id, ctrl_velocity);
+  std::list<std::pair<int, double> > collisions_with_ctrl = ai_data.getCollisions(robot_id, ctrl_velocity);
   for (const std::pair<int, double>& collision : collisions_with_ctrl)
   {
     double time_before_collision = collision.second;
@@ -151,7 +151,7 @@ void AI::prevent_collision(int robot_id, Control& ctrl)
     //TODO improve the loop to work fast
     for( const std::pair< std::pair<int,int>, double > & elem : ai_data.table_of_collision_times ){
         const std::pair<int ,int> & collision = elem.first;
-        Ai::Robot* robot = 0;
+        ai::Robot* robot = 0;
         if(
             ( ai_data.all_robots[ collision.first ].second->id() == robot_id )
             and
@@ -252,14 +252,14 @@ void AI::prepare_to_send_control(int robot_id, Control& ctrl)
 #endif
 
   prevent_collision(robot_id, ctrl);
-  ctrl.change_to_relative_control(ai_data.robots[Vision::Ally][robot_id].get_movement().angular_position(ai_data.time),
+  ctrl.change_to_relative_control(ai_data.robots[Vision::Ally][robot_id].getMovement().angular_position(ai_data.time),
                                   ai_data.dt);
   limits_velocity(ctrl);
 }
 
-Control AI::update_robot(Robot_behavior::RobotBehavior& robot_behavior, double time, Ai::Robot& robot, Ai::Ball& ball)
+Control AI::update_robot(Robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball)
 {
-  if (robot.is_present_in_vision())
+  if (robot.isPresentInVision())
   {
     Control ctrl = robot_behavior.control();
     return ctrl;
@@ -279,7 +279,7 @@ void AI::init_robot_behaviors()
   }
 }
 
-AI::AI(std::string manager_name, std::string team_name, Ai::Team default_team, Data& data, AICommander* commander,
+AI::AI(std::string manager_name, std::string team_name, ai::Team default_team, Data& data, AICommander* commander,
        const std::string& config_path, bool is_in_simulation)
   : team_name(team_name)
   , default_team(default_team)
@@ -293,7 +293,7 @@ AI::AI(std::string manager_name, std::string team_name, Ai::Team default_team, D
 {
   init_robot_behaviors();
 
-  ai_data.change_team_color(default_team);
+  ai_data.changeTeamColor(default_team);
   ai_data.team_name = team_name;
 
   manual_manager = Manager::Factory::construct_manager(Manager::names::manual, ai_data, game_state);
@@ -344,17 +344,17 @@ std::shared_ptr<Manager::Manager> AI::getManualManager()
 
 void AI::update_robots()
 {
-  commander->set_yellow(ai_data.team_color == Ai::Yellow);
+  commander->set_yellow(ai_data.team_color == ai::Yellow);
 
   double time = this->current_time;
-  Ai::Ball& ball = ai_data.ball;
+  ai::Ball& ball = ai_data.ball;
 
   auto team = Vision::Ally;
   for (int robot_id = 0; robot_id < Vision::Robots; robot_id++)
   {
     SharedData::FinalControl& final_control = shared_data.final_control_for_robots[robot_id];
 
-    Ai::Robot& robot = ai_data.robots[team][robot_id];
+    ai::Robot& robot = ai_data.robots[team][robot_id];
     Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors[robot_id]);
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)
@@ -363,7 +363,7 @@ void AI::update_robots()
     }
     else if (!final_control.is_manually_controled_by_viewer)
     {
-      Ai::Robot& robot = ai_data.robots[team][robot_id];
+      ai::Robot& robot = ai_data.robots[team][robot_id];
 
       Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors[robot_id]);
       final_control.control = update_robot(robot_behavior, time, robot, ball);
@@ -532,7 +532,7 @@ void AI::update_electronic_informations()
 void AI::print_electronic_info()
 {
   std::cout << "Electronic : " << std::endl;
-  for (unsigned int id = 0; id < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++)
+  for (unsigned int id = 0; id < ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++)
   {
     std::cout << "robot id : " << id << " IR : " << ai_data.robots.at(Vision::Team::Ally).at(id).infra_red << std::endl;
   }

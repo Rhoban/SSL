@@ -108,10 +108,10 @@ private:
   void extract_data();
   void save_last_time_stamps();
 
-  Ai::Team team_having_kickoff;
-  Ai::Team team_having_penalty;
-  std::pair<Ai::Team, int> team_having_direct_free;
-  std::pair<Ai::Team, int> team_having_indirect_free;
+  ai::Team team_having_kickoff;
+  ai::Team team_having_penalty;
+  std::pair<ai::Team, int> team_having_direct_free;
+  std::pair<ai::Team, int> team_having_indirect_free;
 
 public:
   Referee();
@@ -121,13 +121,13 @@ public:
 
   void update(double time);
 
-  Ai::Team kickoff_team() const;
-  Ai::Team penalty_team() const;
-  std::pair<Ai::Team, int> direct_free_team() const;
-  std::pair<Ai::Team, int> indirect_free_team() const;
+  ai::Team kickoff_team() const;
+  ai::Team penalty_team() const;
+  std::pair<ai::Team, int> direct_free_team() const;
+  std::pair<ai::Team, int> indirect_free_team() const;
 
   bool blue_have_it_s_goal_on_positive_x_axis() const;
-  Ai::Team get_team_color(const std::string& team_name) const;
+  ai::Team get_team_color(const std::string& team_name) const;
 
   int yellow_goalie_id() const;
   int blue_goalie_id() const;

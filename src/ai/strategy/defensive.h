@@ -35,7 +35,7 @@ private:
   std::shared_ptr<Robot_behavior::Obstructor> obstructeur;
 
 public:
-  Defensive(Ai::AiData& ai_data);
+  Defensive(ai::AiData& ai_data);
   virtual ~Defensive();
 
   virtual int min_robots() const;

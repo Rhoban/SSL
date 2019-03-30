@@ -39,7 +39,7 @@ private:
   std::pair<rhoban_geometry::Point, double> results;
 
 public:
-  AttaqueWithSupport(Ai::AiData& ai_data);
+  AttaqueWithSupport(ai::AiData& ai_data);
   virtual ~AttaqueWithSupport();
 
   virtual int min_robots() const;

@@ -36,9 +36,9 @@ private:
   RhobanSSLAnnotation::Annotations annotations;
 
 public:
-  Intermediate_Prepare_strike(Ai::AiData& ai_data);
+  Intermediate_Prepare_strike(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

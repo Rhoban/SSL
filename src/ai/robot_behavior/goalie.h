@@ -49,13 +49,13 @@ private:
                                                         double goalie_radius);
 
 public:
-  Goalie(Ai::AiData& ai_data);
+  Goalie(ai::AiData& ai_data);
 
-  Goalie(Ai::AiData& ai_data, const Vector2d& left_post_position, const Vector2d& right_post_position,
+  Goalie(ai::AiData& ai_data, const Vector2d& left_post_position, const Vector2d& right_post_position,
          const rhoban_geometry::Point& waiting_goal_position, double penalty_rayon, double goalie_radius, double time,
          double dt);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   std::vector<rhoban_geometry::Point> future_ball_positions;
 

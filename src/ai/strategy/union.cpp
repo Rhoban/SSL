@@ -23,7 +23,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Union::Union(Ai::AiData& ai_data) : Strategy(ai_data), min(0), max(0)
+Union::Union(ai::AiData& ai_data) : Strategy(ai_data), min(0), max(0)
 {
 }
 

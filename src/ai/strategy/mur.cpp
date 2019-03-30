@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Mur::Mur(Ai::AiData& ai_data) : Strategy(ai_data)
+Mur::Mur(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
@@ -73,7 +73,7 @@ void Mur::update(double time)
   // const std::vector<int> & players = get_player_ids();
   // int nb_robots = players.size();
   // for( int robot_id : players){
-  //	const Ai::Robot & robot = get_robot( robot_id );
+  //	const ai::Robot & robot = get_robot( robot_id );
   //}
 }
 
@@ -126,7 +126,7 @@ RhobanSSLAnnotation::Annotations Mur::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linear_position(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

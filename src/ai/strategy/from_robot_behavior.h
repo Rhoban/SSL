@@ -45,11 +45,11 @@ private:
 
 public:
   From_robot_behavior(
-      Ai::AiData& ai_data,
+      ai::AiData& ai_data,
       std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
       bool is_goalie = false);
   From_robot_behavior(
-      Ai::AiData& ai_data,
+      ai::AiData& ai_data,
       std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
       const rhoban_geometry::Point& starting_linear_position, const ContinuousAngle& starting_angular_position,
       bool is_goalie = false);

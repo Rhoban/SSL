@@ -60,15 +60,15 @@ public:
     DEBUG("INFO2");
   }
 
-  typedef construct_machine_state_infrastructure<std::string, Ai::AiData, Ai::AiData> machine_state_infrastructure;
+  typedef construct_machine_state_infrastructure<std::string, ai::AiData, ai::AiData> machine_state_infrastructure;
 
 private:
   machine_state_infrastructure::MachineState machine;
 
 public:
-  Example_machine_state(Ai::AiData& ai_data);
+  Example_machine_state(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

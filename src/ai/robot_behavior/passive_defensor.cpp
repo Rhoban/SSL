@@ -26,19 +26,19 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Passive_defensor::Passive_defensor(Ai::AiData& ai_data)
+Passive_defensor::Passive_defensor(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data)), barycenter(.5)
 {
 }
 
-void Passive_defensor::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Passive_defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  const Ai::Robot& ennemy = getRobot(robot_to_obstale_id, robot_to_obstale_team);
-  rhoban_geometry::Point ennemy_position = ennemy.get_movement().linear_position(time);
+  const ai::Robot& ennemy = getRobot(robot_to_obstale_id, robot_to_obstale_team);
+  rhoban_geometry::Point ennemy_position = ennemy.getMovement().linear_position(time);
 
   rhoban_geometry::Point target_position =
       vector2point(Vector2d(ballPosition()) * barycenter + Vector2d(ennemy_position) * (1.0 - barycenter));

@@ -26,12 +26,12 @@ namespace Robot_behavior
 {
 #define PERIOD 10.0
 
-Example::Example(Ai::AiData& ai_data)
+Example::Example(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data)), period(PERIOD), last_time(0)
 {
 }
 
-void Example::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Example::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -39,7 +39,7 @@ void Example::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
 
   // On ajoute un text à la position du robot.
   // annotations.addText("Exemple :)", robot_position, "blue");

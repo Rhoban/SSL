@@ -36,7 +36,7 @@ class Navigation_with_obstacle_avoidance : public ConsignFollower
 {
 private:
   bool ignore_the_ball;
-  bool ignore_robot_[2 * Ai::Constants::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.
+  bool ignore_robot_[2 * ai::Constants::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.
   double ball_radius_avoidance;
   bool ball_is_the_obstacle;
   PositionFollower position_follower;
@@ -75,13 +75,13 @@ private:
   void convert_cycle_direction_to_linear_and_angular_velocity();
 
 public:
-  Navigation_with_obstacle_avoidance(Ai::AiData& ai_data, double time, double dt);
+  Navigation_with_obstacle_avoidance(ai::AiData& ai_data, double time, double dt);
 
 protected:
-  void update_control(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  void update_control(double time, const ai::Robot& robot, const ai::Ball& ball);
 
 public:
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

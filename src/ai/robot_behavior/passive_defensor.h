@@ -35,9 +35,9 @@ private:
   double barycenter;
 
 public:
-  Passive_defensor(Ai::AiData& ai_data);
+  Passive_defensor(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   void set_robot_to_obstacle(int robot_id, Vision::Team team = Vision::Team::Opponent);
   void set_barycenter(double barycenter);

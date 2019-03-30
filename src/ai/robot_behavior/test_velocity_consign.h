@@ -40,18 +40,18 @@ private:
   ContinuousAngle angular_velocity;
 
 public:
-  Test_velocity_consign(Ai::AiData& ai_data);
+  Test_velocity_consign(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  static Test_velocity_consign* get_W_movement(Ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_E_movement(Ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_N_movement(Ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_S_movement(Ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_NW_movement(Ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_NE_movement(Ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_SW_movement(Ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_SE_movement(Ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_W_movement(ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_E_movement(ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_N_movement(ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_S_movement(ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_NW_movement(ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_NE_movement(ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_SW_movement(ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_SE_movement(ai::AiData& ai_data, double velocity);
 
   void set_linear_velocity(const Vector2d& velocity);
   void set_angular_velocity(const ContinuousAngle& angle);

@@ -36,9 +36,9 @@ private:
   rhoban_geometry::Point ball_pos;
 
 public:
-  Concept_proof_spinner(Ai::AiData& ai_data);
+  Concept_proof_spinner(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

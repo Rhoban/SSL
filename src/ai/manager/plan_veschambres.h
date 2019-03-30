@@ -52,7 +52,7 @@ private:
   std::list<std::string> future_strats;
 
 public:
-  PlanVeschambres(Ai::AiData& ai_data, const GameState& game_state);
+  PlanVeschambres(ai::AiData& ai_data, const GameState& game_state);
 
   // Begin of a new state
   virtual void start_stop();

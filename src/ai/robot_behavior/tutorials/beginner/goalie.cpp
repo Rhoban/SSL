@@ -24,16 +24,16 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Begginer_goalie::Begginer_goalie(Ai::AiData& ai_data)
+Begginer_goalie::Begginer_goalie(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void Begginer_goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Begginer_goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
 
   Vector2d ball_goal_vector = allyGoalCenter() - ballPosition();
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();

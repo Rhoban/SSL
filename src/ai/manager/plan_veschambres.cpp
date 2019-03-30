@@ -54,17 +54,17 @@ namespace rhoban_ssl
 {
 namespace Manager
 {
-PlanVeschambres::PlanVeschambres(Ai::AiData& ai_data, const GameState& game_state)
+PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_state)
   : ManagerWithGameState(ai_data, game_state)
   , game_state(game_state)
-  , penalty_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , goalie_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , offensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , stop_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , halt_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , defensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , kick_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , kick_strats_indirect(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , penalty_strats(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , goalie_strats(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , offensive_strats(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , stop_strats(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , halt_strats(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , defensive_strats(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , kick_strats(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , kick_strats_indirect(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
 {
   penalty_strats[8] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };
   penalty_strats[7] = { Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL };

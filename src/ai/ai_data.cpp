@@ -28,7 +28,7 @@
 
 namespace rhoban_ssl
 {
-namespace Ai
+namespace ai
 {
 RobotPlacement::RobotPlacement() : goal_is_placed(false){};
 RobotPlacement::RobotPlacement(std::vector<Position> field_robot_position, Position goalie_position)
@@ -51,12 +51,12 @@ Object& Object::operator=(const Object& object)
   return *this;
 }
 
-void Object::set_vision_data(const Vision::Object& vision_data)
+void Object::setVisionData(const Vision::Object& vision_data)
 {
   this->vision_data = vision_data;
   this->movement->set_sample(this->vision_data.movement);
 }
-void Object::set_movement(Movement* movement)
+void Object::setMovement(Movement* movement)
 {
   if (this->movement)
   {
@@ -66,12 +66,12 @@ void Object::set_movement(Movement* movement)
   // We change the frame according referee informatiosns
   this->movement = new Movement_on_new_frame(movement);
 }
-void Object::change_frame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
+void Object::changeFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
   static_cast<Movement_on_new_frame*>(movement)->set_frame(origin, v1, v2);
 }
 
-const rhoban_ssl::Movement& Object::get_movement() const
+const rhoban_ssl::Movement& Object::getMovement() const
 {
   return *movement;
 }
@@ -85,7 +85,7 @@ Object::Object() : movement(0)
 {
 }
 
-bool Object::is_present_in_vision() const
+bool Object::isPresentInVision() const
 {
   return vision_data.isOk();
 }
@@ -101,32 +101,32 @@ void AiData::update(const Vision::VisionData vision_data)
   {
     for (int k = 0; k < Vision::Robots; k++)
     {
-      robots[team][k].set_vision_data(vision_data.robots.at(team).at(k));
+      robots[team][k].setVisionData(vision_data.robots.at(team).at(k));
     }
   }
-  ball.set_vision_data(vision_data.ball);
-  compute_table_of_collision_times();
+  ball.setVisionData(vision_data.ball);
+  computeTableOfCollisionTimes();
 }
 
-void AiData::change_frame_for_all_objects(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
+void AiData::changeFrameForAllObjects(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
   team_point_of_view.set_frame(origin, v1, v2);
   for (auto team : { Vision::Ally, Vision::Opponent })
   {
     for (int k = 0; k < Vision::Robots; k++)
     {
-      robots[team][k].change_frame(origin, v1, v2);
+      robots[team][k].changeFrame(origin, v1, v2);
     }
   }
-  ball.change_frame(origin, v1, v2);
+  ball.changeFrame(origin, v1, v2);
 };
 
-void AiData::change_team_color(Ai::Team team_color)
+void AiData::changeTeamColor(ai::Team team_color)
 {
   this->team_color = team_color;
 }
 
-AiData::AiData(const std::string& config_path, bool is_in_simulation, Ai::Team team_color)
+AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team team_color)
   : time_shift_with_vision(0.0), team_color(team_color), constants(config_path, is_in_simulation), dt(0.0)
 {
   dt = constants.period;
@@ -135,7 +135,7 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, Ai::Team t
   {
     for (int k = 0; k < Vision::Robots; k++)
     {
-      robots[team][k].set_movement(physic::Factory::robot_movement(*this));
+      robots[team][k].setMovement(physic::Factory::robot_movement(*this));
       nb_robots++;
     }
   }
@@ -149,7 +149,7 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, Ai::Team t
       i++;
     }
   }
-  ball.set_movement(physic::Factory::ball_movement(*this));
+  ball.setMovement(physic::Factory::ball_movement(*this));
 }
 
 Constants::Constants(const std::string& config_path, bool is_in_simulation) : is_in_simulation(is_in_simulation)
@@ -269,23 +269,23 @@ void Constants::load(const std::string& config_path)
   enable_kicking = true;
 }
 
-bool AiData::robot_is_inside_the_field(int robot_id) const
+bool AiData::robotIsInsideTheField(int robot_id) const
 {
-  const rhoban_ssl::Movement& mov = robots.at(Vision::Team::Ally).at(robot_id).get_movement();
-  return field.is_inside(mov.linear_position(time));
+  const rhoban_ssl::Movement& mov = robots.at(Vision::Team::Ally).at(robot_id).getMovement();
+  return field.isInside(mov.linear_position(time));
 }
 
-bool AiData::robot_is_valid(int robot_id) const
+bool AiData::robotIsValid(int robot_id) const
 {
-  return (robots.at(Vision::Team::Ally).at(robot_id).is_present_in_vision() and robot_is_inside_the_field(robot_id));
+  return (robots.at(Vision::Team::Ally).at(robot_id).isPresentInVision() and robotIsInsideTheField(robot_id));
 }
 
-const AiData::Collision_times_table& AiData::get_table_of_collision_times() const
+const AiData::Collision_times_table& AiData::getTableOfCollisionTimes() const
 {
   return table_of_collision_times;
 }
 
-void AiData::visit_all_pair_of_robots(
+void AiData::visitAllPairOfRobots(
     std::function<void(Vision::Team robot_team_1, Robot& robot_1, Vision::Team robot_team_2, Robot& robot_2)> visitor)
 {
   for (unsigned int i = 0; i < all_robots.size(); i++)
@@ -297,12 +297,12 @@ void AiData::visit_all_pair_of_robots(
   }
 }
 
-std::list<std::pair<int, double> > AiData::get_collisions(int robot_id, const Vector2d& linear_velocity) const
+std::list<std::pair<int, double> > AiData::getCollisions(int robot_id, const Vector2d& linear_velocity) const
 {
   std::list<std::pair<int, double> > result;
   const Robot* robot_1 = &(robots.at(Vision::Team::Ally).at(robot_id));
 
-  if (not(robot_1->is_present_in_vision()))
+  if (not(robot_1->isPresentInVision()))
   {
     return {};
   }
@@ -310,7 +310,7 @@ std::list<std::pair<int, double> > AiData::get_collisions(int robot_id, const Ve
   for (unsigned int i = 0; i < all_robots.size(); i++)
   {
     const Robot* robot_2 = all_robots[i].second;
-    if (not(robot_2->is_present_in_vision()))
+    if (not(robot_2->isPresentInVision()))
     {
       continue;
     }
@@ -318,10 +318,10 @@ std::list<std::pair<int, double> > AiData::get_collisions(int robot_id, const Ve
     {
       double radius_error = constants.radius_security_for_collision;
       std::pair<bool, double> collision = collision_time(
-          constants.robot_radius, robot_1->get_movement().linear_position(robot_1->get_movement().last_time()),
+          constants.robot_radius, robot_1->getMovement().linear_position(robot_1->getMovement().last_time()),
           linear_velocity, constants.robot_radius,
-          robot_2->get_movement().linear_position(robot_2->get_movement().last_time()),
-          robot_2->get_movement().linear_velocity(robot_2->get_movement().last_time()), radius_error);
+          robot_2->getMovement().linear_position(robot_2->getMovement().last_time()),
+          robot_2->getMovement().linear_velocity(robot_2->getMovement().last_time()), radius_error);
       if (collision.first)
       {
         result.push_back(std::pair<int, double>(i, collision.second));
@@ -331,7 +331,7 @@ std::list<std::pair<int, double> > AiData::get_collisions(int robot_id, const Ve
   return result;
 }
 
-void AiData::compute_table_of_collision_times()
+void AiData::computeTableOfCollisionTimes()
 {
   table_of_collision_times.clear();
   for (unsigned int i = 0; i < all_robots.size(); i++)
@@ -342,7 +342,7 @@ void AiData::compute_table_of_collision_times()
       Robot& robot_2 = *all_robots[j].second;
       double radius_error = constants.radius_security_for_collision;
       std::pair<bool, double> collision =
-          collision_time(constants.robot_radius, robot_1.get_movement(), constants.robot_radius, robot_2.get_movement(),
+          collision_time(constants.robot_radius, robot_1.getMovement(), constants.robot_radius, robot_2.getMovement(),
                          radius_error, time);
       if (collision.first)
       {
@@ -361,7 +361,7 @@ rhoban_geometry::Point AiData::relative2absolute(const rhoban_geometry::Point& p
   return relative2absolute(point.getX(), point.getY());
 }
 
-RobotPlacement AiData::default_attacking_kickoff_placement() const
+RobotPlacement AiData::defaultAttackingKickoffPlacement() const
 {
   //
   //     A.
@@ -384,7 +384,7 @@ RobotPlacement AiData::default_attacking_kickoff_placement() const
                ));
 }
 
-RobotPlacement AiData::default_defending_kickoff_placement() const
+RobotPlacement AiData::defaultDefendingKickoffPlacement() const
 {
   //
   //      .
@@ -409,7 +409,7 @@ RobotPlacement AiData::default_defending_kickoff_placement() const
 
 std::ostream& operator<<(std::ostream& out, const Object& object)
 {
-  out << "visible : " << object.is_present_in_vision() << ", vision : " << object.vision_data;
+  out << "visible : " << object.isPresentInVision() << ", vision : " << object.vision_data;
   return out;
 }
 

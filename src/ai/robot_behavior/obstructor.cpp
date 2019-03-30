@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Obstructor::Obstructor(Ai::AiData& ai_data)
+Obstructor::Obstructor(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_obstruct_id(-1)
   , robot_to_obstruct_team(Vision::Team::Opponent)
@@ -33,7 +33,7 @@ Obstructor::Obstructor(Ai::AiData& ai_data)
 {
 }
 
-void Obstructor::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -45,10 +45,10 @@ void Obstructor::update(double time, const Ai::Robot& robot, const Ai::Ball& bal
 
   // int robot_id = 2;
   // const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
-  // const Ai::Robot & robot = robot_table.at(robot_id);
+  // const ai::Robot & robot = robot_table.at(robot_id);
 
   assert(robot_to_obstruct_id != -1);
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
 
   rhoban_geometry::Point ally_goal_point = allyGoalCenter();
   rhoban_geometry::Point left_post_position =
@@ -56,8 +56,8 @@ void Obstructor::update(double time, const Ai::Robot& robot, const Ai::Ball& bal
   rhoban_geometry::Point right_post_position =
       rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0);
 
-  const Ai::Robot& robot_to_obstruct = getRobot(robot_to_obstruct_id, robot_to_obstruct_team);
-  point_to_obstruct = robot_to_obstruct.get_movement().linear_position(time);
+  const ai::Robot& robot_to_obstruct = getRobot(robot_to_obstruct_id, robot_to_obstruct_team);
+  point_to_obstruct = robot_to_obstruct.getMovement().linear_position(time);
 
   Vector2d point_to_obstruct_goal_vector = ally_goal_point - point_to_obstruct;
   Vector2d point_to_obstruct_robot_vector = robot_position - point_to_obstruct;

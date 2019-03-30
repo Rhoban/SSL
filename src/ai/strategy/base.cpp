@@ -29,7 +29,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Base::Base(Ai::AiData& ai_data) : Strategy(ai_data)
+Base::Base(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 

@@ -76,7 +76,7 @@ class AttaqueWithSupportMs : public Strategy
     static const constexpr char* db1_plus_constante_inf_db2 = "db1_inf_db2_plus_constante";
   };
 
-  typedef construct_machine_state_infrastructure<std::string, Ai::AiData, Ai::AiData> machine_state_infrastructure;
+  typedef construct_machine_state_infrastructure<std::string, ai::AiData, ai::AiData> machine_state_infrastructure;
 
 private:
   machine_state_infrastructure::MachineState machine;
@@ -104,7 +104,7 @@ private:
   rhoban_geometry::Point robot_2_position;
 
 public:
-  AttaqueWithSupportMs(Ai::AiData& ai_data);
+  AttaqueWithSupportMs(ai::AiData& ai_data);
   virtual ~AttaqueWithSupportMs();
 
   virtual int min_robots() const;

@@ -27,7 +27,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Base_3_gds::Base_3_gds(Ai::AiData& ai_data) : Strategy(ai_data)
+Base_3_gds::Base_3_gds(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 

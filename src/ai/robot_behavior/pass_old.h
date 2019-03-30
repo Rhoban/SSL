@@ -36,9 +36,9 @@ private:
   ConsignFollower* follower;
 
 public:
-  Pass(Ai::AiData& ai_data);
+  Pass(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   // TODO: portée des variables ?
   void declare_robot_to_pass(int robot_id, Vision::Team team = Vision::Team::Ally);
 

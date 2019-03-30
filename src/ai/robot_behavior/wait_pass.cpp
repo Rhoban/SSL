@@ -26,12 +26,12 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-WaitPass::WaitPass(Ai::AiData& ai_data)
+WaitPass::WaitPass(ai::AiData& ai_data)
   : RobotBehavior(ai_data), distance_ball(12), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void WaitPass::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void WaitPass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -43,11 +43,11 @@ void WaitPass::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   annotations.clear();
   // rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
-  const rhoban_geometry::Point& ball_position_now = ball.get_movement().linear_position(time);
-  const rhoban_geometry::Point& ball_position_future = ball.get_movement().linear_position(time + 0.5);
+  const rhoban_geometry::Point& ball_position_now = ball.getMovement().linear_position(time);
+  const rhoban_geometry::Point& ball_position_future = ball.getMovement().linear_position(time + 0.5);
   annotations.addCross(ball_position_future.x, ball_position_future.y, "red");
   rhoban_geometry::Point target_position;
-  rhoban_geometry::Point robot_position = robot.get_movement().linear_position(time);
+  rhoban_geometry::Point robot_position = robot.getMovement().linear_position(time);
   double target_rotation = detail::vec2angle(ballPosition() - robot_position);
   distance_ball = (Vector2d(ballPosition() - robot_position)).norm();
 

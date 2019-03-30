@@ -34,9 +34,9 @@ private:
   ConsignFollower* follower;
 
 public:
-  Striker(Ai::AiData& ai_data);
+  Striker(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

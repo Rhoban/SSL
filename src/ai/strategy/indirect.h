@@ -35,7 +35,7 @@ private:
   std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
 
 public:
-  Indirect(Ai::AiData& ai_data);
+  Indirect(ai::AiData& ai_data);
   virtual ~Indirect();
 
   virtual int min_robots() const;

@@ -22,7 +22,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Test_relative_velocity_consign::Test_relative_velocity_consign(rhoban_ssl::Ai::AiData& ai_data)
+Test_relative_velocity_consign::Test_relative_velocity_consign(rhoban_ssl::ai::AiData& ai_data)
   : RobotBehavior(ai_data), relative_control(false)
 {
 }
@@ -41,7 +41,7 @@ void Test_relative_velocity_consign::set_angular_velocity(const ContinuousAngle&
   relative_control.angular_velocity = angular_velocity;
 }
 
-void Test_relative_velocity_consign::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Test_relative_velocity_consign::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -61,7 +61,7 @@ RhobanSSLAnnotation::Annotations Test_relative_velocity_consign::get_annotations
 }
 
 Test_relative_velocity_consign*
-Test_relative_velocity_consign::get_movement_angular_velocity_only(Ai::AiData& ai_data, double angular_velocity)
+Test_relative_velocity_consign::get_movement_angular_velocity_only(ai::AiData& ai_data, double angular_velocity)
 {
   Test_relative_velocity_consign* res = new Test_relative_velocity_consign(ai_data);
   res->set_angular_velocity(angular_velocity);
@@ -69,7 +69,7 @@ Test_relative_velocity_consign::get_movement_angular_velocity_only(Ai::AiData& a
 }
 
 Test_relative_velocity_consign*
-Test_relative_velocity_consign::get_movement_linear_velocity_only(Ai::AiData& ai_data, Vector2d linear_velocity)
+Test_relative_velocity_consign::get_movement_linear_velocity_only(ai::AiData& ai_data, Vector2d linear_velocity)
 {
   Test_relative_velocity_consign* res = new Test_relative_velocity_consign(ai_data);
   res->set_linear_velocity(linear_velocity);
@@ -77,7 +77,7 @@ Test_relative_velocity_consign::get_movement_linear_velocity_only(Ai::AiData& ai
 }
 
 Test_relative_velocity_consign* Test_relative_velocity_consign::get_movement_angular_and_linear_velocity(
-    Ai::AiData& ai_data, Vector2d linear_velocity, double angular_velocity)
+    ai::AiData& ai_data, Vector2d linear_velocity, double angular_velocity)
 {
   Test_relative_velocity_consign* res = new Test_relative_velocity_consign(ai_data);
   res->set_linear_velocity(linear_velocity);

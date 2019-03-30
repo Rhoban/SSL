@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Placer::Placer(Ai::AiData& ai_data) : Strategy(ai_data), goalie_is_defined(false)
+Placer::Placer(ai::AiData& ai_data) : Strategy(ai_data), goalie_is_defined(false)
 {
 }
 

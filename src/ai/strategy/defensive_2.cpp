@@ -23,7 +23,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Defensive2::Defensive2(Ai::AiData& ai_data)
+Defensive2::Defensive2(ai::AiData& ai_data)
   : Strategy(ai_data)
   , degageur1(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
   , obstructeur1(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
@@ -86,13 +86,13 @@ void Defensive2::assign_behavior_to_robots(
   int robotID1 = player_id(0);
   int robotID2 = player_id(1);
 
-  const Ai::Robot& robot1 = getRobot(robotID1, Vision::Team::Ally);
-  const Ai::Robot& robot2 = getRobot(robotID2, Vision::Team::Ally);
-  const rhoban_geometry::Point& robot_position_1 = robot1.get_movement().linear_position(time);
-  const rhoban_geometry::Point& robot_position_2 = robot2.get_movement().linear_position(time);
+  const ai::Robot& robot1 = getRobot(robotID1, Vision::Team::Ally);
+  const ai::Robot& robot2 = getRobot(robotID2, Vision::Team::Ally);
+  const rhoban_geometry::Point& robot_position_1 = robot1.getMovement().linear_position(time);
+  const rhoban_geometry::Point& robot_position_2 = robot2.getMovement().linear_position(time);
 
-  const Ai::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, Vision::Team::Opponent);
-  const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.get_movement().linear_position(time);
+  const ai::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, Vision::Team::Opponent);
+  const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.getMovement().linear_position(time);
 
   double distance1 = (Vector2d(robot_position_1 - robot_to_obstruct_position1)).norm();
   double distance2 = (Vector2d(robot_position_2 - robot_to_obstruct_position1)).norm();
@@ -165,7 +165,7 @@ RhobanSSLAnnotation::Annotations Defensive2::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linear_position(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

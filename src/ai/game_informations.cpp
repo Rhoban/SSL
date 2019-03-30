@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-GameInformations::GameInformations(Ai::AiData& ai_data) : ai_data(ai_data)
+GameInformations::GameInformations(ai::AiData& ai_data) : ai_data(ai_data)
 {
 }
 
@@ -61,7 +61,7 @@ rhoban_geometry::Point GameInformations::opponentCornerLeft() const
   return rhoban_geometry::Point(ai_data.field.fieldLength / 2.0, ai_data.field.fieldWidth / 2.0);
 }
 
-const Ai::Robot& GameInformations::getRobot(int robot_number, Vision::Team team) const
+const ai::Robot& GameInformations::getRobot(int robot_number, Vision::Team team) const
 {
   return ai_data.robots.at(team).at(robot_number);
 }
@@ -74,12 +74,12 @@ void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rho
     return;
   }
 
-  for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
+  for (size_t i = 0; i < ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
   {
-    const Ai::Robot& robot = getRobot(i, team);
-    if (robot.is_present_in_vision())
+    const ai::Robot& robot = getRobot(i, team);
+    if (robot.isPresentInVision())
     {
-      const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time());
+      const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time());
       if (distance_from_point_to_line(robot_position, p1, p2) <= distance)
       {
         result.push_back(i);
@@ -187,12 +187,12 @@ int GameInformations::getShirtNumberOfClosestRobot(Vision::Team team, rhoban_geo
 {
   int id = -1;
   double distance_max = -1;
-  for (int i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
+  for (int i = 0; i < ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
   {
-    const Ai::Robot& robot = getRobot(i, team);
-    if (robot.is_present_in_vision())
+    const ai::Robot& robot = getRobot(i, team);
+    if (robot.isPresentInVision())
     {
-      const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time());
+      const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time());
       double distance = robot_position.getDist(point);
       if (id == -1 or distance < distance_max)
       {
@@ -207,10 +207,10 @@ int GameInformations::getShirtNumberOfClosestRobot(Vision::Team team, rhoban_geo
 double GameInformations::getRobotDistanceFromAllyGoalCenter(int robot_number, Vision::Team team) const
 {
   double distance = -1;
-  const Ai::Robot& robot = getRobot(robot_number, team);
-  if (robot.is_present_in_vision())
+  const ai::Robot& robot = getRobot(robot_number, team);
+  if (robot.isPresentInVision())
   {
-    const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time());
     Vector2d goal_center_robot = robot_position - allyGoalCenter();
     distance = goal_center_robot.norm();
     distance = (ai_data.field.fieldLength - distance) / ai_data.field.fieldLength;
@@ -221,7 +221,7 @@ double GameInformations::getRobotDistanceFromAllyGoalCenter(int robot_number, Vi
 std::vector<double> GameInformations::threat(Vision::Team team) const
 {
   std::vector<double> v_threat;
-  for (size_t i = 0; i < Ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
+  for (size_t i = 0; i < ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
   {
     double threat = getRobotDistanceFromAllyGoalCenter(i, team);
     v_threat.push_back(threat);
@@ -274,14 +274,14 @@ int GameInformations::shirtNumberOfThreatMax2(Vision::Team team) const
   return id_2;
 }
 
-const Ai::Ball& GameInformations::ball() const
+const ai::Ball& GameInformations::ball() const
 {
   return ai_data.ball;
 }
 
 rhoban_geometry::Point GameInformations::ballPosition() const
 {
-  return ball().get_movement().linear_position(time());
+  return ball().getMovement().linear_position(time());
 }
 
 rhoban_geometry::Point GameInformations::centerAllyField() const

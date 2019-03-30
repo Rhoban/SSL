@@ -33,14 +33,14 @@ namespace rhoban_ssl
 class AIVisionClient : public VisionClient
 {
 public:
-  AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation = false,
+  AIVisionClient(Data& shared_data, ai::Team myTeam, bool simulation = false,
                  Vision::Part_of_the_field part_of_the_field_used = Vision::Part_of_the_field::ALL_FIELD);
 
-  AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation, std::string addr = SSL_VISION_ADDRESS,
+  AIVisionClient(Data& shared_data, ai::Team myTeam, bool simulation, std::string addr = SSL_VISION_ADDRESS,
                  std::string port = SSL_VISION_PORT, std::string sim_port = SSL_SIMULATION_VISION_PORT,
                  Vision::Part_of_the_field part_of_the_field_used = Vision::Part_of_the_field::ALL_FIELD);
 
-  void setRobotPos(Ai::Team team, int id, double x, double y, double orientation);
+  void setRobotPos(ai::Team team, int id, double x, double y, double orientation);
 
 protected:
   virtual void packetReceived();
@@ -58,12 +58,12 @@ protected:
       ball_camera_detections;
 
   void updateRobotInformation(const SSL_DetectionFrame& detection, const SSL_DetectionRobot& robot, bool ally,
-                              Ai::Team team_color);
+                              ai::Team team_color);
 
 private:
   Vision::VisionData oldVisionData;
   Vision::VisionData visionData;
-  Ai::Team myTeam;
+  ai::Team myTeam;
   std::map<int, SSL_DetectionFrame> historic;
 
   rhoban_geometry::Point average_filter(const rhoban_geometry::Point& new_ball,

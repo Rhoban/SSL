@@ -30,7 +30,7 @@ class Manual : public Manager
 private:
   bool strategy_was_assigned;
 
-  Ai::Team team_color;
+  ai::Team team_color;
   bool goal_to_positive_axis;
   int ally_goalie_id;
   int opponent_goalie_id;
@@ -38,9 +38,9 @@ private:
   void assign_point_of_view_and_goalie();
 
 public:
-  Manual(Ai::AiData& ai_data);
+  Manual(ai::AiData& ai_data);
 
-  void set_team_color(Ai::Team team_color);
+  void set_team_color(ai::Team team_color);
   void define_goal_to_positive_axis(bool value = true);
 
   void update(double time);

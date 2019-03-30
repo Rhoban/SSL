@@ -35,7 +35,7 @@ private:
   std::shared_ptr<Robot_behavior::Goalie> goalie;
 
 public:
-  GoalieStrat(Ai::AiData& ai_data);
+  GoalieStrat(ai::AiData& ai_data);
   virtual ~GoalieStrat();
 
   virtual int min_robots() const;

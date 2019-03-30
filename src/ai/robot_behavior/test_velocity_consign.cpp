@@ -26,7 +26,7 @@ namespace Robot_behavior
 {
 #define PERIOD 10.0
 
-Test_velocity_consign::Test_velocity_consign(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+Test_velocity_consign::Test_velocity_consign(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
@@ -40,7 +40,7 @@ void Test_velocity_consign::set_linear_velocity(const Vector2d& linear_velocity)
   this->linear_velocity = linear_velocity;
 }
 
-void Test_velocity_consign::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Test_velocity_consign::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -67,49 +67,49 @@ RhobanSSLAnnotation::Annotations Test_velocity_consign::get_annotations() const
   return annotations;
 }
 
-Test_velocity_consign* Test_velocity_consign::get_W_movement(Ai::AiData& ai_data, double velocity)
+Test_velocity_consign* Test_velocity_consign::get_W_movement(ai::AiData& ai_data, double velocity)
 {
   Test_velocity_consign* res = new Test_velocity_consign(ai_data);
   res->set_linear_velocity(Vector2d(-1.0, 0.0) * velocity);
   return res;
 }
-Test_velocity_consign* Test_velocity_consign::get_E_movement(Ai::AiData& ai_data, double velocity)
+Test_velocity_consign* Test_velocity_consign::get_E_movement(ai::AiData& ai_data, double velocity)
 {
   Test_velocity_consign* res = new Test_velocity_consign(ai_data);
   res->set_linear_velocity(Vector2d(1.0, 0.0) * velocity);
   return res;
 }
-Test_velocity_consign* Test_velocity_consign::get_N_movement(Ai::AiData& ai_data, double velocity)
+Test_velocity_consign* Test_velocity_consign::get_N_movement(ai::AiData& ai_data, double velocity)
 {
   Test_velocity_consign* res = new Test_velocity_consign(ai_data);
   res->set_linear_velocity(Vector2d(0.0, 1.0) * velocity);
   return res;
 }
-Test_velocity_consign* Test_velocity_consign::get_S_movement(Ai::AiData& ai_data, double velocity)
+Test_velocity_consign* Test_velocity_consign::get_S_movement(ai::AiData& ai_data, double velocity)
 {
   Test_velocity_consign* res = new Test_velocity_consign(ai_data);
   res->set_linear_velocity(Vector2d(0.0, -1.0) * velocity);
   return res;
 }
-Test_velocity_consign* Test_velocity_consign::get_NW_movement(Ai::AiData& ai_data, double velocity)
+Test_velocity_consign* Test_velocity_consign::get_NW_movement(ai::AiData& ai_data, double velocity)
 {
   Test_velocity_consign* res = new Test_velocity_consign(ai_data);
   res->set_linear_velocity(Vector2d(-1.0, 1.0) * velocity);
   return res;
 }
-Test_velocity_consign* Test_velocity_consign::get_NE_movement(Ai::AiData& ai_data, double velocity)
+Test_velocity_consign* Test_velocity_consign::get_NE_movement(ai::AiData& ai_data, double velocity)
 {
   Test_velocity_consign* res = new Test_velocity_consign(ai_data);
   res->set_linear_velocity(Vector2d(1.0, 1.0) * velocity);
   return res;
 }
-Test_velocity_consign* Test_velocity_consign::get_SW_movement(Ai::AiData& ai_data, double velocity)
+Test_velocity_consign* Test_velocity_consign::get_SW_movement(ai::AiData& ai_data, double velocity)
 {
   Test_velocity_consign* res = new Test_velocity_consign(ai_data);
   res->set_linear_velocity(Vector2d(-1.0, -1.0) * velocity);
   return res;
 }
-Test_velocity_consign* Test_velocity_consign::get_SE_movement(Ai::AiData& ai_data, double velocity)
+Test_velocity_consign* Test_velocity_consign::get_SE_movement(ai::AiData& ai_data, double velocity)
 {
   Test_velocity_consign* res = new Test_velocity_consign(ai_data);
   res->set_linear_velocity(Vector2d(1.0, -1.0) * velocity);

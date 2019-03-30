@@ -39,39 +39,39 @@ private:
   bool reverse_circuit;
 
 public:
-  Patrol(Ai::AiData& ai_data);
+  Patrol(ai::AiData& ai_data);
 
   void see_the_ball(bool value);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   void set_reverse(bool reverse_circuit);
 
-  static Patrol* two_way_trip(Ai::AiData& ai_data);
-  static Patrol* two_way_trip_on_width(Ai::AiData& ai_data, bool ally_side);
-  static Patrol* two_way_trip_on_border(Ai::AiData& ai_data, bool left);
-  static Patrol* tour_of_the_field(Ai::AiData& ai_data, bool reverse_circuit = false);
-  static Patrol* triangle(Ai::AiData& ai_data);
-  static Patrol* test_translation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_rotation_for_pid(Ai::AiData& ai_data);
+  static Patrol* two_way_trip(ai::AiData& ai_data);
+  static Patrol* two_way_trip_on_width(ai::AiData& ai_data, bool ally_side);
+  static Patrol* two_way_trip_on_border(ai::AiData& ai_data, bool left);
+  static Patrol* tour_of_the_field(ai::AiData& ai_data, bool reverse_circuit = false);
+  static Patrol* triangle(ai::AiData& ai_data);
+  static Patrol* test_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_rotation_for_pid(ai::AiData& ai_data);
 
-  static Patrol* test_NW_rotation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_NE_rotation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_SW_rotation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_SE_rotation_for_pid(Ai::AiData& ai_data);
+  static Patrol* test_NW_rotation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_NE_rotation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_SW_rotation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_SE_rotation_for_pid(ai::AiData& ai_data);
 
-  static Patrol* test_NW_translation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_NE_translation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_SW_translation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_SE_translation_for_pid(Ai::AiData& ai_data);
+  static Patrol* test_NW_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_NE_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_SW_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_SE_translation_for_pid(ai::AiData& ai_data);
 
-  static Patrol* test_N_translation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_E_translation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_W_translation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_S_translation_for_pid(Ai::AiData& ai_data);
+  static Patrol* test_N_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_E_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_W_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_S_translation_for_pid(ai::AiData& ai_data);
 
-  static Patrol* test_SW_NW_translation_for_pid(Ai::AiData& ai_data);
-  static Patrol* test_NW_SE_translation_for_pid(Ai::AiData& ai_data);
+  static Patrol* test_SW_NW_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_NW_SE_translation_for_pid(ai::AiData& ai_data);
 
   void set_traject(const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& traject);
   void set_traject(const std::vector<rhoban_geometry::Point>& traject);

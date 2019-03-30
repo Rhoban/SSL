@@ -25,11 +25,11 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Begginer_robot_near_ball::Begginer_robot_near_ball(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+Begginer_robot_near_ball::Begginer_robot_near_ball(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_robot_near_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Begginer_robot_near_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   RobotBehavior::update_time_and_position(time, robot, ball);
   // Find the ally and the opponent closest to the ball
@@ -37,12 +37,12 @@ void Begginer_robot_near_ball::update(double time, const Ai::Robot& robot, const
   int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Vision::Opponent);
 
   // Get the robot ally and opponent.
-  Ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Vision::Ally);
-  Ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Vision::Opponent);
+  ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Vision::Ally);
+  ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Vision::Opponent);
 
   // Create the vector between the robots and the ball.
-  Vector2d vec_ally_to_ball = ballPosition() - ally_closest.get_movement().linear_position(ai_data.time);
-  Vector2d vec_opponent_to_ball = ballPosition() - opponent_closest.get_movement().linear_position(ai_data.time);
+  Vector2d vec_ally_to_ball = ballPosition() - ally_closest.getMovement().linear_position(ai_data.time);
+  Vector2d vec_opponent_to_ball = ballPosition() - opponent_closest.getMovement().linear_position(ai_data.time);
 
   // Find the distance between them and the ball.
   double dist_ally = vec_ally_to_ball.norm();
@@ -53,19 +53,19 @@ void Begginer_robot_near_ball::update(double time, const Ai::Robot& robot, const
   // Search the nearest robot between the ally and the opponent.
   if (dist_ally > dist_opponent)
   {
-    annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(opponent_closest.getMovement().linear_position(ai_data.time), "blue", false);
   }
   else if (dist_ally < dist_opponent)
   {
-    annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(ally_closest.getMovement().linear_position(ai_data.time), "blue", false);
   }
   else
   {
-    annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);
-    annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(opponent_closest.getMovement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(ally_closest.getMovement().linear_position(ai_data.time), "blue", false);
   }
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
 }
 
 Control Begginer_robot_near_ball::control() const

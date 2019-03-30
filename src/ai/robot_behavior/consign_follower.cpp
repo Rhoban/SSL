@@ -23,7 +23,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-ConsignFollower::ConsignFollower(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+ConsignFollower::ConsignFollower(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 

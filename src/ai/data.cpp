@@ -21,7 +21,7 @@
 
 namespace rhoban_ssl
 {
-Data::Data(Ai::Team initial_team_color)
+Data::Data(ai::Team initial_team_color)
 {
   data_from_ai_.team_color = initial_team_color;
 }
@@ -39,7 +39,7 @@ SharedData::FinalControl::FinalControl(const FinalControl& control)
 {
 }
 
-SharedData::SharedData() : final_control_for_robots(Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+SharedData::SharedData() : final_control_for_robots(ai::Constants::NB_OF_ROBOTS_BY_TEAM)
 {
 }
 

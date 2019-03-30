@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Degageur::Degageur(Ai::AiData& ai_data)
+Degageur::Degageur(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , point_to_pass(66, 66)
   , robot_to_pass_id(-1)
@@ -36,7 +36,7 @@ Degageur::Degageur(Ai::AiData& ai_data)
 {
 }
 
-void Degageur::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Degageur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -47,7 +47,7 @@ void Degageur::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
   // are all avalaible
 
   // //TODO: Viser un autre robot
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time);
 
   //    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
   // default will be the closest ally robot from the opponent goal center
@@ -56,8 +56,8 @@ void Degageur::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   if (robot_to_pass_id != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const Ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
-    point_to_pass = robot_to_pass.get_movement().linear_position(time);
+    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
+    point_to_pass = robot_to_pass.getMovement().linear_position(time);
   }
 
   std::vector<int> robot_in_line = GameInformations::getRobotInLine(robot_position, point_to_pass);

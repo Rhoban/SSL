@@ -36,13 +36,13 @@
 #define CONFIG_PATH "./src/ai/config.json"
 
 using namespace rhoban_ssl;
-AI* ai = NULL;
+AI* ai_ = NULL;
 
 void stop(int s)
 {
-  if (ai != NULL)
+  if (ai_!= NULL)
   {
-    ai->stop();
+    ai_->stop();
   }
 }
 
@@ -142,7 +142,7 @@ int main(int argc, char** argv)
   DEBUG("The name of the team have been set to : " << team_name.getValue());
   DEBUG("The manager have been set to : " << manager_name.getValue());
 
-  Data data(yellow.getValue() ? Ai::Yellow : Ai::Blue);
+  Data data(yellow.getValue() ? ai::Yellow : ai::Blue);
 
   Vision::Part_of_the_field part_of_the_field_used;
   if (zone_name.getValue() == "all")
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
   // // Instantiationg the vision
   // AIVisionClient vision(
   //   data,
-  //   yellow.getValue() ? Ai::Yellow : Ai::Blue,
+  //   yellow.getValue() ? ai::Yellow : ai::Blue,
   //   simulation.getValue(), part_of_the_field_used
   //   );
 
@@ -181,8 +181,8 @@ int main(int argc, char** argv)
   }
 
   // Instantiationg the vision
-  AIVisionClient vision(data, yellow.getValue() ? Ai::Yellow : Ai::Blue, simulation.getValue(), addr.getValue(),
-                        theport, theport, part_of_the_field_used);
+  AIVisionClient vision(data, yellow.getValue() ? ai::Yellow : ai::Blue, simulation.getValue(),
+                        addr.getValue(), theport, theport, part_of_the_field_used);
 
   // AI Commander to control the robots
   AICommander* commander;
@@ -203,10 +203,10 @@ int main(int argc, char** argv)
   }
   else
   {
-    ai = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? Ai::Yellow : Ai::Blue, data,
-                commander, config_path.getValue(), simulation.getValue()),
-    ai->run();
-    delete ai;
+    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue,
+                data, commander, config_path.getValue(), simulation.getValue());
+    ai_->run();
+    delete ai_;
   }
   delete commander;
 }

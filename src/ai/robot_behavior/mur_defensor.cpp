@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Mur_defensor::Mur_defensor(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool)
+Mur_defensor::Mur_defensor(ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool)
   : RobotBehavior(ai_data), mur_robot_id(0), mur_nb_robot(1)
 {
   if (fixed_consign_follower_without_repsecting_authorized_location_bool == 0)
@@ -38,7 +38,7 @@ Mur_defensor::Mur_defensor(Ai::AiData& ai_data, bool fixed_consign_follower_with
   }
 }
 
-void Mur_defensor::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Mur_defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -50,9 +50,9 @@ void Mur_defensor::update(double time, const Ai::Robot& robot, const Ai::Ball& b
 
   // int robot_id = 2;
   // const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
-  // const Ai::Robot & robot = robot_table.at(robot_id);
+  // const ai::Robot & robot = robot_table.at(robot_id);
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
 
   rhoban_geometry::Point ally_goal_point = allyGoalCenter();
 

@@ -95,7 +95,7 @@ struct GameStateData
 class GameState
 {
 private:
-  Ai::AiData& ai_data;
+  ai::AiData& ai_data;
   bool blueTeamOnPositiveHalf;
 
   RefereeClient referee;
@@ -111,29 +111,29 @@ private:
   void extract_data();
   void save_last_time_stamps();
 
-  Ai::Team team_having_kickoff;
-  Ai::Team team_having_penalty;
-  Ai::Team team_having_free_kick;
+  ai::Team team_having_kickoff;
+  ai::Team team_having_penalty;
+  ai::Team team_having_free_kick;
   free_kick_type_id free_kick_type;
   int number_of_yellow_goals;
   int number_of_blue_goals;
 
 public:
-  GameState(Ai::AiData& ai_data);
+  GameState(ai::AiData& ai_data);
 
   unsigned int get_change_stamp() const;
   const ID& get_state() const;
 
   void update(double time);
 
-  Ai::Team kickoff_team() const;
-  Ai::Team penalty_team() const;
-  Ai::Team free_kick_team() const;
+  ai::Team kickoff_team() const;
+  ai::Team penalty_team() const;
+  ai::Team free_kick_team() const;
 
   free_kick_type_id type_of_the_free_kick() const;
 
   bool blue_have_it_s_goal_on_positive_x_axis() const;
-  Ai::Team get_team_color(const std::string& team_name) const;
+  ai::Team get_team_color(const std::string& team_name) const;
 
   int yellow_goalie_id() const;
   int blue_goalie_id() const;

@@ -31,7 +31,7 @@ private:
   bool behaviors_are_assigned;
 
 public:
-  Example(Ai::AiData& ai_data);
+  Example(ai::AiData& ai_data);
   virtual ~Example();
 
   virtual int min_robots() const;

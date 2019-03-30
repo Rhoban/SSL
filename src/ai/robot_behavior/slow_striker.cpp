@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-SlowStriker::SlowStriker(Ai::AiData& ai_data)
+SlowStriker::SlowStriker(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_pass_id(-1)
   , robot_to_pass_team(Vision::Team::Ally)
@@ -34,7 +34,7 @@ SlowStriker::SlowStriker(Ai::AiData& ai_data)
   tempo = 0.0;
 }
 
-void SlowStriker::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void SlowStriker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -44,12 +44,12 @@ void SlowStriker::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
 
   if (robot_to_pass_id != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const Ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
-    striking_point = robot_to_pass.get_movement().linear_position(time);
+    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
+    striking_point = robot_to_pass.getMovement().linear_position(time);
   }
 
   Vector2d ball_striking_vector = striking_point - ballPosition();

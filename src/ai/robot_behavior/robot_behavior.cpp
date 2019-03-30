@@ -40,7 +40,7 @@ double vec2angle(Vector2d direction)
 
 }  // namespace detail
 
-RobotBehavior::RobotBehavior(Ai::AiData& ai_data)
+RobotBehavior::RobotBehavior(ai::AiData& ai_data)
   : GameInformations(ai_data), robot_ptr(nullptr), birthday(-1.0), ai_data(ai_data){};
 
 double RobotBehavior::age() const
@@ -57,17 +57,17 @@ void RobotBehavior::set_birthday(double birthday)
   this->birthday = birthday;
 };
 
-void RobotBehavior::update_time_and_position(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void RobotBehavior::update_time_and_position(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   this->robot_ptr = &robot;
   lastUpdate = time;
-  this->robot_linear_position = Vector2d(robot.get_movement().linear_position(time));
-  this->robot_angular_position = robot.get_movement().angular_position(time);
-  this->robot_linear_velocity = robot.get_movement().linear_velocity(time);
-  this->robot_angular_velocity = robot.get_movement().angular_velocity(time);
+  this->robot_linear_position = Vector2d(robot.getMovement().linear_position(time));
+  this->robot_angular_position = robot.getMovement().angular_position(time);
+  this->robot_linear_velocity = robot.getMovement().linear_velocity(time);
+  this->robot_angular_velocity = robot.getMovement().angular_velocity(time);
 };
 
-const Ai::Robot& RobotBehavior::robot() const
+const ai::Robot& RobotBehavior::robot() const
 {
 #ifndef NDEBUG
   if (not(robot_ptr))
@@ -82,12 +82,12 @@ const Ai::Robot& RobotBehavior::robot() const
 
 rhoban_geometry::Point RobotBehavior::linear_position() const
 {
-  return robot().get_movement().linear_position(time());
+  return robot().getMovement().linear_position(time());
 }
 
 ContinuousAngle RobotBehavior::angular_position() const
 {
-  return robot().get_movement().angular_position(time());
+  return robot().getMovement().angular_position(time());
 }
 
 bool RobotBehavior::is_goalie() const

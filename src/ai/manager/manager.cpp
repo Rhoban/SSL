@@ -38,7 +38,7 @@ int Manager::get_goalie_opponent_id() const
 
 void Manager::declare_goalie_opponent_id(int goalie_opponent_id)
 {
-  if (goalie_opponent_id >= Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  if (goalie_opponent_id >= ai::Constants::NB_OF_ROBOTS_BY_TEAM)
     return;
   if (this->goalie_opponent_id >= 0)
   {
@@ -52,7 +52,7 @@ void Manager::declare_goalie_opponent_id(int goalie_opponent_id)
 }
 void Manager::declare_goalie_id(int goalie_id)
 {
-  if (goalie_id >= Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  if (goalie_id >= ai::Constants::NB_OF_ROBOTS_BY_TEAM)
     return;
   if (this->goalie_id >= 0)
   {
@@ -73,7 +73,7 @@ void Manager::declare_team_ids(const std::vector<int>& team_ids)
   this->team_ids = team_ids;
 }
 
-Ai::Team Manager::get_team() const
+ai::Team Manager::get_team() const
 {
   return ai_data.team_color;
 }
@@ -203,16 +203,16 @@ void Manager::assign_behavior_to_robots(std::map<int, std::shared_ptr<Robot_beha
 
 void Manager::change_ally_and_opponent_goalie_id(int blue_goalie_id, int yellow_goalie_id)
 {
-  declare_goalie_id((get_team() == Ai::Team::Yellow) ? yellow_goalie_id : blue_goalie_id);
-  declare_goalie_opponent_id((get_team() == Ai::Team::Yellow) ? blue_goalie_id : yellow_goalie_id);
+  declare_goalie_id((get_team() == ai::Team::Yellow) ? yellow_goalie_id : blue_goalie_id);
+  declare_goalie_opponent_id((get_team() == ai::Team::Yellow) ? blue_goalie_id : yellow_goalie_id);
 }
 
-void Manager::change_team_and_point_of_view(Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis)
+void Manager::change_team_and_point_of_view(ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis)
 {
-  if (team != Ai::Unknown and get_team() != team)
+  if (team != ai::Unknown and get_team() != team)
   {
-    assert(team == Ai::Blue or team == Ai::Yellow);
-    ai_data.change_team_color(team);
+    assert(team == ai::Blue or team == ai::Yellow);
+    ai_data.changeTeamColor(team);
     blueIsNotSet = true;
   }
   // We change the point of view of the team
@@ -220,19 +220,19 @@ void Manager::change_team_and_point_of_view(Ai::Team team, bool blue_have_it_s_g
   {
     blueIsNotSet = false;
     blueTeamOnPositiveHalf = blue_have_it_s_goal_on_positive_x_axis;
-    if ((get_team() == Ai::Blue and blue_have_it_s_goal_on_positive_x_axis) or
-        (get_team() == Ai::Yellow and !blue_have_it_s_goal_on_positive_x_axis))
+    if ((get_team() == ai::Blue and blue_have_it_s_goal_on_positive_x_axis) or
+        (get_team() == ai::Yellow and !blue_have_it_s_goal_on_positive_x_axis))
     {
-      ai_data.change_frame_for_all_objects(rhoban_geometry::Point(0.0, 0.0), Vector2d(-1.0, 0.0), Vector2d(0.0, -1.0));
+      ai_data.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(-1.0, 0.0), Vector2d(0.0, -1.0));
     }
     else
     {
-      ai_data.change_frame_for_all_objects(rhoban_geometry::Point(0.0, 0.0), Vector2d(1.0, 0.0), Vector2d(0.0, 1.0));
+      ai_data.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(1.0, 0.0), Vector2d(0.0, 1.0));
     }
   }
 }
 
-Manager::Manager(Ai::AiData& ai_data)
+Manager::Manager(ai::AiData& ai_data)
   : GameInformations(ai_data), blueIsNotSet(true), goalie_id(-1), goalie_opponent_id(-1), ai_data(ai_data)
 {
   register_strategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<Strategy::Strategy>(new Strategy::Halt(ai_data)));
@@ -272,7 +272,7 @@ void Manager::detect_invalid_robots()
   int n_robots = team_ids.size();
   for (int i = 0; i < n_robots; i++)
   {
-    if (ai_data.robot_is_valid(team_ids[i]))
+    if (ai_data.robotIsValid(team_ids[i]))
     {
       nb_valid++;
     }
@@ -284,7 +284,7 @@ void Manager::detect_invalid_robots()
   for (int i = 0; i < n_robots; i++)
   {
     int id = team_ids[i];
-    if (ai_data.robot_is_valid(id))
+    if (ai_data.robotIsValid(id))
     {
       valid_team_ids.push_back(id);
       if (goalie_id != id)
@@ -435,12 +435,12 @@ void Manager::sort_robot_ordered_by_the_distance_with_starting_position()
 
   std::function<double(const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos)>
       robot_ranking = [this](const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos) {
-        return Vector2d(pos.first - this->getRobot(robot_id).get_movement().linear_position(time())).norm_square();
+        return Vector2d(pos.first - this->getRobot(robot_id).getMovement().linear_position(time())).norm_square();
       };
 
   std::function<double(const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id)>
       distance_ranking = [this](const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id) {
-        return Vector2d(pos.first - this->getRobot(robot_id).get_movement().linear_position(time())).norm_square();
+        return Vector2d(pos.first - this->getRobot(robot_id).getMovement().linear_position(time())).norm_square();
       };
 
   matching::Matchings matchings = matching::gale_shapley_algorithm(get_valid_player_ids(), choising_positions,

@@ -37,7 +37,7 @@ private:
   std::list<std::string> future_strats;
 
 public:
-  Match(Ai::AiData& ai_data, const GameState& game_state);
+  Match(ai::AiData& ai_data, const GameState& game_state);
 
   void update(double time);
   void choose_a_strategy(double time);

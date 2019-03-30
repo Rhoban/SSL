@@ -41,7 +41,7 @@ enum Goalie_need
 class Strategy : public GameInformations
 {
 protected:
-  Ai::AiData& ai_data;
+  ai::AiData& ai_data;
 
 private:
   int goalie_id;
@@ -53,7 +53,7 @@ private:
   void update_player_ids();
 
 public:
-  Strategy(Ai::AiData& ai_data);
+  Strategy(ai::AiData& ai_data);
 
   virtual void set_goalie(int id, bool to_be_managed);
   void set_goalie_opponent(int id);

@@ -25,32 +25,32 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Example_machine_state::Example_machine_state(Ai::AiData& ai_data)
+Example_machine_state::Example_machine_state(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data)), machine(ai_data, ai_data)
 {
   machine.add_state(state_name::wait_pass,
-                    [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       DEBUG("WAIT PASS");
                       this->print_ball_info();
                     });
   machine.add_state(state_name::strike);
 
   machine.add_edge(edge_name::can_strike, state_name::wait_pass, state_name::strike,  //,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      DEBUG("IS is_closed_to_the_ball " << this->is_closed_to_the_ball());
                      return this->is_closed_to_the_ball();
                    },
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      DEBUG("IS Can_striker FUAZHeuh");
                      this->print_ball_info();
                    });
 
   machine.add_edge(edge_name::strike_is_finished, state_name::strike, state_name::wait_pass,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      DEBUG("strike_is_finished");
                      return not(this->is_closed_to_the_ball());
                    },
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      this->print_ball_info2();
                    });
   machine.add_init_state(state_name::wait_pass);
@@ -60,7 +60,7 @@ Example_machine_state::Example_machine_state(Ai::AiData& ai_data)
   machine.export_to_file("/tmp/toto.dot");
 }
 
-void Example_machine_state::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Example_machine_state::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE

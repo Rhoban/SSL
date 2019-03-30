@@ -34,7 +34,7 @@ namespace Robot_behavior
 class RobotBehavior : public GameInformations
 {
 protected:
-  const Ai::Robot* robot_ptr;
+  const ai::Robot* robot_ptr;
   double birthday;
   double lastUpdate;
   std::string name;
@@ -44,18 +44,18 @@ protected:
   Vector2d robot_linear_velocity;
   ContinuousAngle robot_angular_velocity;
 
-  Ai::AiData& ai_data;
+  ai::AiData& ai_data;
 
 public:
-  RobotBehavior(Ai::AiData& ia_data);
+  RobotBehavior(ai::AiData& ia_data);
 
   double age() const;
   bool is_born() const;
   void set_birthday(double birthday);
 
-  void update_time_and_position(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  void update_time_and_position(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball) = 0;
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball) = 0;
   virtual Control control() const = 0;
 
   //
@@ -76,7 +76,7 @@ public:
   //  }
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-  const Ai::Robot& robot() const;
+  const ai::Robot& robot() const;
 
   rhoban_geometry::Point linear_position() const;
   ContinuousAngle angular_position() const;

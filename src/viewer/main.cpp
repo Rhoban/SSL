@@ -118,7 +118,7 @@ int main(int argc, char* argv[])
   }
 
   // Viewer API
-  API api(team_name.getValue(), simulation.getValue(), yellow.getValue() ? rhoban_ssl::Ai::Yellow : rhoban_ssl::Ai::Blue,
+  API api(team_name.getValue(), simulation.getValue(), yellow.getValue() ? rhoban_ssl::ai::Yellow : rhoban_ssl::ai::Blue,
           commander, config_path.getValue(), part_of_the_field_used, addr.getValue(), theport, theport);
 
   // Running Qt application

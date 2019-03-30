@@ -34,7 +34,7 @@ private:
   std::shared_ptr<Robot_behavior::Striker> striker;
 
 public:
-  PassWithSupport(Ai::AiData& ai_data);
+  PassWithSupport(ai::AiData& ai);
   virtual ~PassWithSupport();
 
   virtual int min_robots() const;

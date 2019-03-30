@@ -23,7 +23,7 @@ namespace rhoban_ssl
 {
 namespace Strategy
 {
-Defensive::Defensive(Ai::AiData& ai_data)
+Defensive::Defensive(ai::AiData& ai_data)
   : Strategy(ai_data)
   , degageur(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
   , obstructeur(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
@@ -130,7 +130,7 @@ RhobanSSLAnnotation::Annotations Defensive::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linear_position(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

@@ -57,7 +57,7 @@ private:
   std::list<std::string> future_strats;
 
 public:
-  PlanVeschambres(Ai::AiData& ai_data, const GameState& game_state);
+  PlanVeschambres(ai::AiData& ai, const GameState& game_state);
 
   void update(double time);
   void analyse_data(double time);

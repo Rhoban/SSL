@@ -24,7 +24,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Patrol::Patrol(Ai::AiData& ai_data)
+Patrol::Patrol(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , follower(Factory::fixed_consign_follower(ai_data))
   , zone(0)
@@ -36,7 +36,7 @@ Patrol::Patrol(Ai::AiData& ai_data)
 {
 }
 
-void Patrol::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Patrol::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -44,7 +44,7 @@ void Patrol::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
   rhoban_geometry::Point target_position;
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
 
   ContinuousAngle target_rotation;
 
@@ -112,7 +112,7 @@ void Patrol::set_traject(const std::vector<rhoban_geometry::Point>& traject)
   }
 }
 
-Patrol* Patrol::two_way_trip_on_border(Ai::AiData& ai_data, bool left)
+Patrol* Patrol::two_way_trip_on_border(ai::AiData& ai_data, bool left)
 {
   double sign = left ? -1.0 : 1.0;
   Patrol* res = new Patrol(ai_data);
@@ -125,7 +125,7 @@ Patrol* Patrol::two_way_trip_on_border(Ai::AiData& ai_data, bool left)
   return res;
 }
 
-Patrol* Patrol::two_way_trip(Ai::AiData& ai_data)
+Patrol* Patrol::two_way_trip(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   auto ally_center = res->centerAllyField();
@@ -136,7 +136,7 @@ Patrol* Patrol::two_way_trip(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::two_way_trip_on_width(Ai::AiData& ai_data, bool ally_side)
+Patrol* Patrol::two_way_trip_on_width(ai::AiData& ai_data, bool ally_side)
 {
   Patrol* res = new Patrol(ai_data);
   double sign = ally_side ? -1 : 1;
@@ -151,7 +151,7 @@ Patrol* Patrol::two_way_trip_on_width(Ai::AiData& ai_data, bool ally_side)
   return res;
 }
 
-Patrol* Patrol::tour_of_the_field(Ai::AiData& ai_data, bool reverse_circuit)
+Patrol* Patrol::tour_of_the_field(ai::AiData& ai_data, bool reverse_circuit)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject(res->centerQuarterField());
@@ -166,7 +166,7 @@ void Patrol::set_reverse(bool reverse_circuit)
   this->reverse_circuit = reverse_circuit;
 }
 
-Patrol* Patrol::test_NW_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_NW_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -178,7 +178,7 @@ Patrol* Patrol::test_NW_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_NE_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_NE_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -190,7 +190,7 @@ Patrol* Patrol::test_NE_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_SW_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_SW_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -203,7 +203,7 @@ Patrol* Patrol::test_SW_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_SE_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_SE_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -215,7 +215,7 @@ Patrol* Patrol::test_SE_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -227,7 +227,7 @@ Patrol* Patrol::test_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_rotation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_rotation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -239,7 +239,7 @@ Patrol* Patrol::test_rotation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_NW_rotation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_NW_rotation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -251,7 +251,7 @@ Patrol* Patrol::test_NW_rotation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_NE_rotation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_NE_rotation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -263,7 +263,7 @@ Patrol* Patrol::test_NE_rotation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_SW_rotation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_SW_rotation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -275,7 +275,7 @@ Patrol* Patrol::test_SW_rotation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_SE_rotation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_SE_rotation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -302,7 +302,7 @@ void Patrol::set_waiting_time(double time)
   waiting_time = time;
 }
 
-Patrol* Patrol::test_SW_NW_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_SW_NW_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -314,7 +314,7 @@ Patrol* Patrol::test_SW_NW_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_NW_SE_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_NW_SE_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -326,7 +326,7 @@ Patrol* Patrol::test_NW_SE_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_N_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_N_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -338,7 +338,7 @@ Patrol* Patrol::test_N_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_E_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_E_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -350,7 +350,7 @@ Patrol* Patrol::test_E_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_W_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_W_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({
@@ -362,7 +362,7 @@ Patrol* Patrol::test_W_translation_for_pid(Ai::AiData& ai_data)
   return res;
 }
 
-Patrol* Patrol::test_S_translation_for_pid(Ai::AiData& ai_data)
+Patrol* Patrol::test_S_translation_for_pid(ai::AiData& ai_data)
 {
   Patrol* res = new Patrol(ai_data);
   res->set_traject({

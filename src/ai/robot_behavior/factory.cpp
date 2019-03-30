@@ -28,7 +28,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-ConsignFollower* Factory::fixed_consign_follower(Ai::AiData& ai_data, const rhoban_geometry::Point& position,
+ConsignFollower* Factory::fixed_consign_follower(ai::AiData& ai_data, const rhoban_geometry::Point& position,
                                                  const ContinuousAngle& angle, bool ignore_the_ball)
 {
   return Factory::fixed_consign_follower_without_repsecting_authorized_location(ai_data, position, angle,
@@ -36,7 +36,7 @@ ConsignFollower* Factory::fixed_consign_follower(Ai::AiData& ai_data, const rhob
 }
 
 ConsignFollower* Factory::fixed_consign_follower_without_repsecting_authorized_location(
-    Ai::AiData& ai_data, const rhoban_geometry::Point& position, const ContinuousAngle& angle, bool ignore_the_ball)
+    ai::AiData& ai_data, const rhoban_geometry::Point& position, const ContinuousAngle& angle, bool ignore_the_ball)
 {
   // A_star_path* follower = new A_star_path(ai_data, ai_data.time, ai_data.dt);
   Navigation_inside_the_field* follower = new Navigation_inside_the_field(ai_data, ai_data.time, ai_data.dt);

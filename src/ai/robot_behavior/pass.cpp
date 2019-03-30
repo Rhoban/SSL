@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Pass::Pass(Ai::AiData& ai_data)
+Pass::Pass(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_pass_id(-1)
   , robot_to_pass_team(Vision::Team::Ally)
@@ -33,7 +33,7 @@ Pass::Pass(Ai::AiData& ai_data)
 {
 }
 
-void Pass::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Pass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -42,9 +42,9 @@ void Pass::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
-  const Ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
-  rhoban_geometry::Point position_robot_to_pass = robot_to_pass.get_movement().linear_position(time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time);
+  const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
+  rhoban_geometry::Point position_robot_to_pass = robot_to_pass.getMovement().linear_position(time);
   // rhoban_geometry::Point target_position = ball_position();
 
   // Striker:

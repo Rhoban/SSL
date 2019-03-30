@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-PredictFutur::PredictFutur(Ai::AiData& ai_data)
+PredictFutur::PredictFutur(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , use_custom_vector(false)
   , striking_point(opponentGoalCenter())
@@ -33,7 +33,7 @@ PredictFutur::PredictFutur(Ai::AiData& ai_data)
 {
 }
 
-void PredictFutur::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void PredictFutur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -45,9 +45,9 @@ void PredictFutur::update(double time, const Ai::Robot& robot, const Ai::Ball& b
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
-  const rhoban_geometry::Point& robot_position_futur = robot.get_movement().linear_position(time + 0.5);
-  const rhoban_geometry::Point& ball_position_futur = ball.get_movement().linear_position(time + 0.5);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time);
+  const rhoban_geometry::Point& robot_position_futur = robot.getMovement().linear_position(time + 0.5);
+  const rhoban_geometry::Point& ball_position_futur = ball.getMovement().linear_position(time + 0.5);
   annotations.addCross(robot_position_futur.x, robot_position_futur.y, "blue");
   annotations.addCross(ball_position_futur.x, ball_position_futur.y, "red");
 

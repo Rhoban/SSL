@@ -41,13 +41,13 @@ private:
   ContinuousAngle target_angle;
 
 public:
-  A_star_path(Ai::AiData& ai_data, double time, double dt);
+  A_star_path(ai::AiData& ai_data, double time, double dt);
 
 protected:
-  void update_control(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  void update_control(double time, const ai::Robot& robot, const ai::Ball& ball);
 
 public:
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

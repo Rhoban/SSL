@@ -33,13 +33,13 @@ class Prepare_kickoff : public Strategy
 private:
   bool is_kicking;
   bool strategy_is_active;
-  Ai::RobotPlacement attacking_placement;
-  Ai::RobotPlacement defending_placement;
+  ai::RobotPlacement attacking_placement;
+  ai::RobotPlacement defending_placement;
   Placer placer_when_kicking;
   Placer placer_when_no_kicking;
 
 public:
-  Prepare_kickoff(Ai::AiData& ai_data);
+  Prepare_kickoff(ai::AiData& ai_data);
   virtual ~Prepare_kickoff();
 
   virtual int min_robots() const;

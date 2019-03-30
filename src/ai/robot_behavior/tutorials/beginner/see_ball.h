@@ -34,9 +34,9 @@ private:
   RhobanSSLAnnotation::Annotations annotations;
 
 public:
-  Begginer_see_ball(Ai::AiData& ai_data);
+  Begginer_see_ball(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 

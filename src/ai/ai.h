@@ -35,11 +35,11 @@ class AI
 {
 private:
   std::string team_name;
-  Ai::Team default_team;
+  ai::Team default_team;
 
 public:
   bool is_in_simulation;
-  AI(std::string manager_name, std::string team_name, Ai::Team default_team, Data& data, AICommander* commander,
+  AI(std::string manager_name, std::string team_name, ai::Team default_team, Data& data, AICommander* commander,
      const std::string& config_path, bool is_in_simulation);
 
   void run();
@@ -58,7 +58,7 @@ protected:
   bool running;
 
   Vision::VisionData visionData;
-  Ai::AiData ai_data;
+  ai::AiData ai_data;
 
   bool enable_kicking;
 
@@ -79,7 +79,7 @@ protected:
   std::shared_ptr<Manager::Manager> strategy_manager;
   std::shared_ptr<Manager::Manager> manual_manager;
 
-  Control update_robot(Robot_behavior::RobotBehavior& robot_behavior, double time, Ai::Robot& robot, Ai::Ball& ball);
+  Control update_robot(Robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball);
   void update_electronic_informations();
   void print_electronic_info();
 

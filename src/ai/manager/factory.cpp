@@ -38,7 +38,7 @@ const std::list<std::string>& Factory::avalaible_managers()
   return Factory::list_of_avalaible_managers;
 }
 
-std::shared_ptr<Manager> Factory::construct_manager(const std::string& manager_name, Ai::AiData& ai_data,
+std::shared_ptr<Manager> Factory::construct_manager(const std::string& manager_name, ai::AiData& ai_data,
                                                     GameState& game_state)
 {
   std::shared_ptr<Manager> manager;
@@ -52,8 +52,8 @@ std::shared_ptr<Manager> Factory::construct_manager(const std::string& manager_n
   {
     manager = std::shared_ptr<Manager>(new Manual(ai_data));
     dynamic_cast<Manual&>(*manager).change_team_and_point_of_view(ai_data.team_color,
-                                                                  ai_data.team_color != Ai::Team::Yellow
-                                                                  // false //ai_data.team_color != Ai::Team::Yellow
+                                                                  ai_data.team_color != ai::Team::Yellow
+                                                                  // false //ai_data.team_color != ai::Team::Yellow
     );
   }
   // if( manager_name == names::match ){

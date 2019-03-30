@@ -28,7 +28,7 @@ namespace rhoban_ssl
 {
 struct DataFromAi
 {
-  Ai::Team team_color;
+  ai::Team team_color;
 };
 
 struct DataForViewer
@@ -73,7 +73,7 @@ private:  // Do not remove !
   DataForViewer data_for_viewer_;
 
 public:
-  Data(Ai::Team initial_team_color);
+  Data(ai::Team initial_team_color);
 
   Data& operator<<(const Vision::VisionData& vision_data);
   Data& operator>>(Vision::VisionData& vision_data);

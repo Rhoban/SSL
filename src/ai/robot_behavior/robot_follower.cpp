@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-RobotFollower::RobotFollower(Ai::AiData& ai_data)
+RobotFollower::RobotFollower(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_follow_id(-1)
   , team(Vision::Team::Ally)
@@ -34,7 +34,7 @@ RobotFollower::RobotFollower(Ai::AiData& ai_data)
 {
 }
 
-void RobotFollower::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void RobotFollower::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -44,11 +44,11 @@ void RobotFollower::update(double time, const Ai::Robot& robot, const Ai::Ball& 
   //  this->robot_angular_position
   // are all avalaible
 
-  const Ai::Robot& robot_to_follow = getRobot(robot_to_follow_id, robot_to_follow_team);
-  rhoban_geometry::Point position = robot_to_follow.get_movement().linear_position(time);
+  const ai::Robot& robot_to_follow = getRobot(robot_to_follow_id, robot_to_follow_team);
+  rhoban_geometry::Point position = robot_to_follow.getMovement().linear_position(time);
   rhoban_geometry::Point target_position = position + translation;
 
-  rhoban_geometry::Point robot_position = robot.get_movement().linear_position(time);
+  rhoban_geometry::Point robot_position = robot.getMovement().linear_position(time);
   double target_rotation = detail::vec2angle(ballPosition() - robot_position);
 
   follower->avoid_the_ball(true);
