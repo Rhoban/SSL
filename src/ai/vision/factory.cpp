@@ -9,7 +9,7 @@ Factory::filter(int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team tea
                 const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
                 const Vision::VisionData& old_vision_data, Vision::PartOfTheField part_of_the_field_used)
 {
-  return Robot_position_filter::average_filter(robot_id, robotFrame, team_color, ally, camera_detections,
+  return RobotPositionFilter::averageFilter(robot_id, robotFrame, team_color, ally, camera_detections,
                                                orientation_is_defined, old_vision_data, part_of_the_field_used);
   // return Robot_position_filter::exponential_degression_filter(
   //    robot_id, robotFrame, team_color, ally, camera_detections, orientation_is_defined, old_vision_data
