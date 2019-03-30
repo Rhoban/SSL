@@ -18,16 +18,16 @@ find_package(Protobuf REQUIRED)
 include_directories(${catkin_INCLUDE_DIRS} .)
 
 set (SOURCES
-    Data.cpp
+    data.cpp
     game_informations.cpp
-    vision/AIVisionClient.cpp
-    vision/VisionData.cpp
+    vision/ai_vision_client.cpp
+    vision/vision_data.cpp
     vision/print_protobuf.cpp
     vision/robot_position_filter.cpp
     vision/factory.cpp
-    com/AICommander.cpp
-    com/AICommanderSimulation.cpp
-    com/AICommanderReal.cpp
+    com/ai_commander.cpp
+    com/ai_commander_simulation.cpp
+    com/ai_commander_real.cpp
     robot_behavior/factory.cpp
     robot_behavior/example_machine_state.cpp
     robot_behavior/example.cpp
@@ -68,19 +68,20 @@ set (SOURCES
     robot_behavior/tutorials/beginner/defensor.cpp
     robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
+    robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/prepare_strike.cpp
     robot_behavior/tutorials/medium/striker.cpp
     robot_behavior/test_relative_velocity_consign.cpp
-    Ai.cpp
-    AiData.cpp
+    ai.cpp
+    ai_data.cpp
     debug.cpp
-    manager/Manager.cpp
+    manager/manager.cpp
     manager/manager_with_game_state.cpp
     manager/plan_veschambres.cpp
     # manager/Match.cpp
-    manager/Manual.cpp
+    manager/manual.cpp
     manager/factory.cpp
-    strategy/Strategy.cpp
+    strategy/strategy.cpp
     strategy/halt.cpp
     strategy/mur.cpp
     strategy/striker_with_support.cpp
@@ -115,11 +116,11 @@ set (SOURCES
     physic/movement_with_no_prediction.cpp
     physic/movement_on_new_frame.cpp
     physic/movement_with_temporal_shift.cpp
-    physic/MovementSample.cpp
-    physic/Movement.cpp
+    physic/movement_sample.cpp
+    physic/movement.cpp
     physic/factory.cpp
     physic/collision.cpp
-    math/ContinuousAngle.cpp
+    math/continuous_angle.cpp
     math/curve.cpp
     math/tangents.cpp
     math/vector2d.cpp
@@ -133,7 +134,7 @@ set (SOURCES
     core/logger.cpp
     referee/print_protobuf_referee.cpp
     referee/game_state.cpp
-    annotations/Annotations.cpp
+    annotations/annotations.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)

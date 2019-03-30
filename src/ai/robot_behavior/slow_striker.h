@@ -17,42 +17,36 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__SLOW_STRIKER__H__
-#define __ROBOT_BEHAVIOR__SLOW_STRIKER__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
-
-class SlowStriker : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
+namespace Robot_behavior
+{
+class SlowStriker : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
   double tempo;
   rhoban_geometry::Point striking_point;
   int robot_to_pass_id;
   Vision::Team robot_to_pass_team;
 
-    public:
-        SlowStriker(Ai::AiData& ai_data);
+public:
+  SlowStriker(Ai::AiData& ai_data);
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-  void declare_point_to_strik( rhoban_geometry::Point point );
-  void declare_robot_to_pass( int id, Vision::Team team = Vision::Team::Ally );
-	virtual ~SlowStriker();
+  void declare_point_to_strik(rhoban_geometry::Point point);
+  void declare_robot_to_pass(int id, Vision::Team team = Vision::Team::Ally);
+  virtual ~SlowStriker();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL

@@ -17,45 +17,37 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GOALIE__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GOALIE__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
-namespace Beginner {
-
+namespace Robot_behavior
+{
+namespace Beginner
+{
 /** Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
 
-class Goalie : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+class Goalie : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-    public:
-    Goalie(Ai::AiData& ai_data);
+public:
+  Goalie(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Goalie();
+  virtual ~Goalie();
 };
 
-    
-}; // Namespace Beginner
-}; // Namespace Robot_behavior
-}; //Namespace Rhoban
-
-#endif
+};  // Namespace Beginner
+};  // Namespace Robot_behavior
+};  // namespace RhobanSSL

@@ -17,54 +17,48 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__UNION__H__
-#define __STRATEGY__UNION__H__
+#pragma once
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <string>
 #include <memory>
 
-namespace RhobanSSL {
-namespace Strategy {
+namespace RhobanSSL
+{
+namespace Strategy
+{
+class Union : public Strategy
+{
+private:
+  std::list<std::shared_ptr<Strategy>> strategies_without_goal;
+  std::shared_ptr<Strategy> strategy_with_goal;
+  int min;
+  int max;
 
+public:
+  Union(Ai::AiData& ai_data);
 
-class Union : public Strategy {
-    private:
-    std::list<std::shared_ptr<Strategy>> strategies_without_goal;
-    std::shared_ptr<Strategy> strategy_with_goal;
-    int min;
-    int max;
- 
-    public:
+  void clear();
 
-    Union(Ai::AiData & ai_data);
+  void add_goalie_strategy(std::shared_ptr<Strategy> strategy);
+  void add_strategy(std::shared_ptr<Strategy> strategy);
 
-    void  clear();
+  virtual void update(double time);
 
-    void add_goalie_strategy( std::shared_ptr<Strategy> strategy );
-    void add_strategy( std::shared_ptr<Strategy> strategy );
+  virtual void start(double time);
+  virtual void stop(double time);
+  virtual void pause(double time);
+  virtual void resume(double time);
 
-    virtual void update(double time);
+  virtual int min_robots() const;
+  virtual int max_robots() const;
+  virtual Goalie_need needs_goalie() const;
 
-    virtual void start(double time);
-    virtual void stop(double time);
-    virtual void pause(double time);
-    virtual void resume(double time);
+  virtual void assign_behavior_to_robots(
+      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
-    virtual int min_robots() const;
-    virtual int max_robots() const;
-    virtual Goalie_need needs_goalie() const;
-
-    virtual void assign_behavior_to_robots(
-        std::function<
-            void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-        > assign_behavior,
-        double time, double dt
-    );
-
-    virtual ~Union();
+  virtual ~Union();
 };
 
-};
-};
-#endif
+};  // namespace Strategy
+};  // namespace RhobanSSL

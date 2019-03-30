@@ -17,34 +17,24 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __VISION__PRINT_PROTOBUF__H__
-#define __VISION__PRINT_PROTOBUF__H__
+#pragma once
 
-#include "AIVisionClient.h"
+#include "ai_vision_client.h"
 #include <iostream>
 
 #include <google/protobuf/stubs/common.h>
 #if GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION >= 3000000
-  #include <google/protobuf/util/json_util.h>
+#include <google/protobuf/util/json_util.h>
 #endif
 
+// namespace RhobanSSL {
+// namespace vision {
 
-//namespace RhobanSSL {
-//namespace vision {
+std::ostream& operator<<(std::ostream& out, const SSL_DetectionRobot& robot);
 
-std::ostream& operator<<(
-    std::ostream& out, const SSL_DetectionRobot & robot
-);
+std::ostream& operator<<(std::ostream& out, const SSL_DetectionBall& ball);
 
-std::ostream& operator<<(
-    std::ostream& out, const SSL_DetectionBall & ball
-);
-
-std::ostream& operator<<(
-    std::ostream& out, const SSL_DetectionFrame & detection
-);
+std::ostream& operator<<(std::ostream& out, const SSL_DetectionFrame& detection);
 
 //};
 //};
-
-#endif

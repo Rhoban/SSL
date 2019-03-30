@@ -19,55 +19,46 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CONTROL__H__
-#define __CONTROL__H__
+#pragma once
 
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <math/vector2d.h>
 
 class Control
 {
 private:
-    bool m_is_absolute;
-public :
-    Vector2d linear_velocity = Vector2d(0,0);
-    ContinuousAngle angular_velocity = ContinuousAngle(0);
+  bool m_is_absolute;
 
-    bool charge   = false;
-    bool kick     = false;
-    bool chipKick = false;
-    float kickPower = 1.0;
-    bool spin     = false;
+public:
+  Vector2d linear_velocity = Vector2d(0, 0);
+  ContinuousAngle angular_velocity = ContinuousAngle(0);
 
-    bool active   = true;
-    bool ignore   = false;
+  bool charge = false;
+  bool kick = false;
+  bool chipKick = false;
+  float kickPower = 1.0;
+  bool spin = false;
 
-    Control(bool is_absolute = true);
+  bool active = true;
+  bool ignore = false;
 
-    Control(const Vector2d & linear_velocity,
-        const ContinuousAngle &angular_velocity,
-        bool is_absolute = true
-    );
+  Control(bool is_absolute = true);
 
-    Control(bool kick, bool active, bool ignore);
+  Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool is_absolute = true);
 
-    void change_to_relative_control(
-        const ContinuousAngle & robot_orientation,
-        double dt );
+  Control(bool kick, bool active, bool ignore);
 
-    void change_to_absolute_control(
-        const ContinuousAngle & robot_orientation,
-        double dt );
+  void change_to_relative_control(const ContinuousAngle& robot_orientation, double dt);
 
-    bool is_absolute();
+  void change_to_absolute_control(const ContinuousAngle& robot_orientation, double dt);
 
-    bool is_relative();
+  bool is_absolute();
 
-    static Control make_desactivated();
-    static Control make_ignored();
-    static Control make_null();
+  bool is_relative();
+
+  static Control make_desactivated();
+  static Control make_ignored();
+  static Control make_null();
 };
 
-std::ostream& operator << ( std::ostream & out, const Control& control );
-
-#endif
+std::ostream& operator<<(std::ostream& out, const Control& control);
