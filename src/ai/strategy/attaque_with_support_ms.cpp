@@ -49,91 +49,91 @@ AttaqueWithSupportMs::AttaqueWithSupportMs(ai::AiData& ai_data)
   , fgbm_constante(0.05)
 {
   // STATES
-  machine.add_state(state_name::strike_search,
+  machine.addState(state_name::strike_search,
                     [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::strike_search);
                     });
-  machine.add_state(state_name::search_strike,
+  machine.addState(state_name::search_strike,
                     [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::search_strike);
                     });
 
-  machine.add_state(state_name::pass_search,
+  machine.addState(state_name::pass_search,
                     [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::pass_search);
                     });
-  machine.add_state(state_name::search_pass,
+  machine.addState(state_name::search_pass,
                     [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::search_pass);
                     });
 
-  machine.add_state(state_name::search_waitpass,
+  machine.addState(state_name::search_waitpass,
                     [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::search_waitpass);
                     });
-  machine.add_state(state_name::waitpass_search,
+  machine.addState(state_name::waitpass_search,
                     [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::waitpass_search);
                     });
 
   // EDGES
-  machine.add_edge(edge_name::db1_sup_db2, state_name::strike_search, state_name::search_strike,
+  machine.addEdge(edge_name::db1_sup_db2, state_name::strike_search, state_name::search_strike,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return is_db1_sup_db2();
                    });
-  machine.add_edge(edge_name::db1_inf_db2, state_name::search_strike, state_name::strike_search,
+  machine.addEdge(edge_name::db1_inf_db2, state_name::search_strike, state_name::strike_search,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return is_db1_inf_db2();
                    });
 
-  machine.add_edge(edge_name::fgbm_score_inf_seuil_1, state_name::strike_search, state_name::pass_search,
+  machine.addEdge(edge_name::fgbm_score_inf_seuil_1, state_name::strike_search, state_name::pass_search,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return is_fgbm_score_inf_seuil_1();
                    });
-  machine.add_edge(edge_name::fgbm_score_inf_seuil_2, state_name::search_strike, state_name::search_pass,
+  machine.addEdge(edge_name::fgbm_score_inf_seuil_2, state_name::search_strike, state_name::search_pass,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return is_fgbm_score_inf_seuil_2();
                    });
 
-  machine.add_edge(edge_name::fgbm_score_sup_seuil_1_plus_constante, state_name::pass_search, state_name::strike_search,
+  machine.addEdge(edge_name::fgbm_score_sup_seuil_1_plus_constante, state_name::pass_search, state_name::strike_search,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return fgbm_score_sup_seuil_1_plus_constante();
                    });
-  machine.add_edge(edge_name::fgbm_score_sup_seuil_2_plus_constante, state_name::search_pass, state_name::search_strike,
+  machine.addEdge(edge_name::fgbm_score_sup_seuil_2_plus_constante, state_name::search_pass, state_name::search_strike,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return fgbm_score_sup_seuil_2_plus_constante();
                    });
 
-  machine.add_edge(edge_name::infra_1_on, state_name::pass_search, state_name::search_waitpass,
+  machine.addEdge(edge_name::infra_1_on, state_name::pass_search, state_name::search_waitpass,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      begin_time = time();
                      return is_infra_1_on();
                    });
-  machine.add_edge(edge_name::infra_2_on, state_name::search_pass, state_name::waitpass_search,
+  machine.addEdge(edge_name::infra_2_on, state_name::search_pass, state_name::waitpass_search,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      begin_time = time();
                      return is_infra_2_on();
                    });
 
-  machine.add_edge(edge_name::db2_inf_seuil_or_time_inf_tempo, state_name::search_waitpass, state_name::search_strike,
+  machine.addEdge(edge_name::db2_inf_seuil_or_time_inf_tempo, state_name::search_waitpass, state_name::search_strike,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return is_db2_inf_seuil_or_time_inf_tempo();
                    });
-  machine.add_edge(edge_name::db1_inf_seuil_or_time_inf_tempo, state_name::waitpass_search, state_name::strike_search,
+  machine.addEdge(edge_name::db1_inf_seuil_or_time_inf_tempo, state_name::waitpass_search, state_name::strike_search,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return is_db1_inf_seuil_or_time_inf_tempo();
                    });
 
-  machine.add_edge(edge_name::db1_sup_db2_plus_constante, state_name::pass_search, state_name::search_strike,
+  machine.addEdge(edge_name::db1_sup_db2_plus_constante, state_name::pass_search, state_name::search_strike,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return is_db1_sup_db2_plus_constante();
                    });
-  machine.add_edge(edge_name::db1_plus_constante_inf_db2, state_name::search_pass, state_name::strike_search,
+  machine.addEdge(edge_name::db1_plus_constante_inf_db2, state_name::search_pass, state_name::strike_search,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      return is_db1_plus_constante_inf_db2();
                    });
 
-  machine.export_to_file("/tmp/attaque_with_support_ms.dot");
+  machine.exportToFile("/tmp/attaque_with_support_ms.dot");
 }
 
 AttaqueWithSupportMs::~AttaqueWithSupportMs()
@@ -180,11 +180,11 @@ void AttaqueWithSupportMs::start(double time)
 
   if (db1 > db2)
   {
-    machine.add_init_state(state_name::strike_search);
+    machine.addInitState(state_name::strike_search);
   }
   else
   {
-    machine.add_init_state(state_name::search_strike);
+    machine.addInitState(state_name::search_strike);
   }
   machine.start();
 
@@ -211,7 +211,7 @@ void AttaqueWithSupportMs::assign_behavior_to_robots(
 
   machine.run();
 
-  std::string state = *machine.current_states().begin();
+  std::string state = *machine.currentStates().begin();
   // DEBUG(machine.current_states());
   if (state == state_name::strike_search)
   {
