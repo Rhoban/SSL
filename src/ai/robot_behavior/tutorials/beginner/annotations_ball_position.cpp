@@ -16,47 +16,49 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #include "annotations_ball_position.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Beginner {
-
-Annotations_ball_position::Annotations_ball_position(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data)
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+namespace beginner
+{
+AnnotationsBallPosition::AnnotationsBallPosition(Ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Annotations_ball_position::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    RobotBehavior::update_time_and_position(time, robot, ball);
-    // Clear all annotations write before
-    annotations.clear();
+void AnnotationsBallPosition::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  RobotBehavior::update_time_and_position(time, robot, ball);
+  // Clear all annotations write before
+  annotations_.clear();
 
-    // Add a cross on the ball.
-    std::string color = "red";
-    bool dash = false;
-    annotations.addCross(ball_position(), color, dash);
+  // Add a cross on the ball.
+  std::string color = "red";
+  bool dash = false;
+  rhoban_geometry::Point target_annotations = ball_position();
+  annotations_.addCross(target_annotations, color, dash);
 }
 
-Control Annotations_ball_position::control() const {
-    return Control();
+Control AnnotationsBallPosition::control() const
+{
+  return Control();
 }
 
-Annotations_ball_position::~Annotations_ball_position(){}
-
-RhobanSSLAnnotation::Annotations Annotations_ball_position::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    return annotations;
+AnnotationsBallPosition::~AnnotationsBallPosition()
+{
 }
-} // namespace begginer
-} // namespace Robot_behavior
-} // namespace RhobanSSL
+
+RhobanSSLAnnotation::Annotations AnnotationsBallPosition::get_annotations() const
+{
+  RhobanSSLAnnotation::Annotations annotations;
+  annotations.addAnnotations(this->annotations_);
+  return annotations;
+}
+}  // namespace beginner
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

@@ -70,6 +70,7 @@ public:
 
   /**
    * Return the control of the behavior.
+   * @see Control
    */
   virtual Control control() const;
 

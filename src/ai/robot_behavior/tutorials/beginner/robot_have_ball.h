@@ -19,27 +19,27 @@
 
 #pragma once
 
-// REVIEW AB : Use absolute path
 #include "../../robot_behavior.h"
 #include "../../factory.h"
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class Begginer_robot_have_ball : public RobotBehavior
+{
+private:
+  RhobanSSLAnnotation::Annotations annotations;
 
-// REVIEW AB : Add a namespace beginner
-
-// REVIEW AB : Rename the class to Annotations_determine_which_robot_have_the_ball
-class Begginer_robot_have_ball : public RobotBehavior  {
-    private:
-    RhobanSSLAnnotation::Annotations annotations;
-
+public:
+  Begginer_robot_have_ball(Ai::AiData& ai_data);
 
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
   virtual Control control() const;
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+
   virtual ~Begginer_robot_have_ball();
 };
 

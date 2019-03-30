@@ -24,26 +24,53 @@
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
-namespace Beginner {
+namespace Robot_behavior
+{
+namespace beginner
+{
+/**
+ * @class AnnotationsBallPosition
+ * @brief Tutorial to show how to annotate the position of the ball in the viewer.
+ */
+class AnnotationsBallPosition : public RobotBehavior
+{
+private:
+  RhobanSSLAnnotation::Annotations annotations_;
 
-/** Tutorial class to show how to annotate the position of the ball in the viewer. */
-class Annotations_ball_position : public RobotBehavior  {
-    private:
-    RhobanSSLAnnotation::Annotations annotations;
+public:
+  /**
+   * @brief Constructor.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
+   */
+  AnnotationsBallPosition(Ai::AiData& ai_data);
 
-    public:
-    Annotations_ball_position(Ai::AiData& ai_data);
-
+  /**
+   * @brief Set an annotations in the ball position.
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
+  /**
+   * @see Control
+   */
   virtual Control control() const;
 
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Annotations_ball_position();
+  /**
+   * @brief Destructor.
+   */
+  virtual ~AnnotationsBallPosition();
 };
 
-}; // Namespace Beginner
-}; // Namespace Robot_behavior
-}; // 5Namespace Rhoban
+}  // namespace beginner
+}  // Namespace Robot_behavior
+}  // namespace RhobanSSL
