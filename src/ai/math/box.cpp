@@ -24,76 +24,76 @@ bool Box::is_inside(const rhoban_geometry::Point& position)
   );
 }
 
-std::vector<rhoban_geometry::Point> Box::segment_intersection(const rhoban_geometry::Point& origin,
+std::vector<rhoban_geometry::Point> Box::segmentIntersection(const rhoban_geometry::Point& origin,
                                                               const rhoban_geometry::Point& end) const
 {
   std::vector<rhoban_geometry::Point> result;
   rhoban_geometry::Segment segment(origin, end);
   rhoban_geometry::Point intersection;
-  if (::segment_intersection(segment, get_N_segment(), intersection))
+  if (::segment_intersection(segment, getNorthSegment(), intersection))
   {
     result.push_back(intersection);
   }
-  if (::segment_intersection(segment, get_S_segment(), intersection))
+  if (::segment_intersection(segment, getSouthSegment(), intersection))
   {
     result.push_back(intersection);
   }
-  if (::segment_intersection(segment, get_W_segment(), intersection))
+  if (::segment_intersection(segment, getWestSegment(), intersection))
   {
     result.push_back(intersection);
   }
-  if (::segment_intersection(segment, get_E_segment(), intersection))
+  if (::segment_intersection(segment, getEastSegment(), intersection))
   {
     result.push_back(intersection);
   }
   return result;
 }
 
-rhoban_geometry::Point Box::get_SW() const
+rhoban_geometry::Point Box::getSW() const
 {
   return SW;
 }
 
-rhoban_geometry::Point Box::get_SE() const
+rhoban_geometry::Point Box::getSE() const
 {
   return rhoban_geometry::Point(NE.getX(), SW.getY());
 }
 
-rhoban_geometry::Point Box::get_NE() const
+rhoban_geometry::Point Box::getNE() const
 {
   return NE;
 }
 
-rhoban_geometry::Point Box::get_NW() const
+rhoban_geometry::Point Box::getNW() const
 {
   return rhoban_geometry::Point(SW.getX(), NE.getY());
 }
 
-rhoban_geometry::Segment Box::get_E_segment() const
+rhoban_geometry::Segment Box::getEastSegment() const
 {
-  return rhoban_geometry::Segment(get_SE(), get_NE());
+  return rhoban_geometry::Segment(getSE(), getNE());
 }
-rhoban_geometry::Segment Box::get_W_segment() const
+rhoban_geometry::Segment Box::getWestSegment() const
 {
-  return rhoban_geometry::Segment(get_NW(), get_SW());
+  return rhoban_geometry::Segment(getNW(), getSW());
 }
-rhoban_geometry::Segment Box::get_N_segment() const
+rhoban_geometry::Segment Box::getNorthSegment() const
 {
-  return rhoban_geometry::Segment(get_NE(), get_NW());
+  return rhoban_geometry::Segment(getNE(), getNW());
 }
-rhoban_geometry::Segment Box::get_S_segment() const
+rhoban_geometry::Segment Box::getSouthSegment() const
 {
-  return rhoban_geometry::Segment(get_SW(), get_SE());
+  return rhoban_geometry::Segment(getSW(), getSE());
 }
 rhoban_geometry::Point Box::center() const
 {
-  return (get_SW() + get_NE()) * .5;
+  return (getSW() + getNE()) * .5;
 }
 
-bool Box::closest_segment_intersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
+bool Box::closestSegmentIntersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
                                        rhoban_geometry::Point& intersection) const
 {
-  std::vector<rhoban_geometry::Point> intersections = segment_intersection(origin, end);
+  std::vector<rhoban_geometry::Point> intersections = segmentIntersection(origin, end);
   assert(intersections.size() <= 2);
   if (intersections.size() == 0)
   {
@@ -114,11 +114,11 @@ bool Box::closest_segment_intersection(const rhoban_geometry::Point& origin, con
   return true;
 }
 
-bool Box::closest_segment_intersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
+bool Box::closestSegmentIntersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
                                        rhoban_geometry::Point& intersection, double error) const
 {
   return Box(this->SW - Vector2d(error, error), this->NE + Vector2d(error, error))
-      .closest_segment_intersection(origin, end, intersection);
+      .closestSegmentIntersection(origin, end, intersection);
 }
 
 std::ostream& operator<<(std::ostream& out, const Box& box)

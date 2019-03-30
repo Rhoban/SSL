@@ -101,12 +101,12 @@ void Navigation_inside_the_field::update_control(double time, const ai::Robot& r
     if (opponent_penalty.is_inside(robot_position))
     {
       // If we're in their penalty
-      deviation_position = rhoban_geometry::Point(opponent_penalty.get_SW().getX() - error, robot_position.getY());
+      deviation_position = rhoban_geometry::Point(opponent_penalty.getSW().getX() - error, robot_position.getY());
     }
     else if (not(is_goalie()) and ally_penalty.is_inside(robot_position))
     {
       // If we're in our penalty
-      deviation_position = rhoban_geometry::Point(ally_penalty.get_NE().getX() + error, robot_position.getY());
+      deviation_position = rhoban_geometry::Point(ally_penalty.getNE().getX() + error, robot_position.getY());
     }
     else
     {
@@ -118,12 +118,12 @@ void Navigation_inside_the_field::update_control(double time, const ai::Robot& r
       else
       {
         // Changing the target position to match the closest segment
-        cropped_field.closest_segment_intersection(robot_position, vector2point(target_position), deviation_position);
+        cropped_field.closestSegmentIntersection(robot_position, vector2point(target_position), deviation_position);
       }
       // Here, deviation_position should be inside the field, but it could still be in a penalty area.
       if (not(is_goalie()) and ally_penalty.is_inside(deviation_position))
       {
-        ally_penalty_large.closest_segment_intersection(robot_position, vector2point(deviation_position),
+        ally_penalty_large.closestSegmentIntersection(robot_position, vector2point(deviation_position),
                                                         deviation_position);
         if (not(cropped_field.is_inside(deviation_position)))
         {
@@ -132,7 +132,7 @@ void Navigation_inside_the_field::update_control(double time, const ai::Robot& r
       }
       else if (opponent_penalty.is_inside(deviation_position))
       {
-        opponent_penalty_large.closest_segment_intersection(robot_position, vector2point(deviation_position),
+        opponent_penalty_large.closestSegmentIntersection(robot_position, vector2point(deviation_position),
                                                             deviation_position);
         if (not(cropped_field.is_inside(deviation_position)))
         {

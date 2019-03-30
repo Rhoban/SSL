@@ -174,10 +174,10 @@ void Annotations::addText(const std::string& text, const Vector2d& point, std::s
 
 void Annotations::addBox(const rhoban_ssl::Box& box, std::string color, bool dashed)
 {
-  addArrow(box.get_W_segment(), color, dashed);
-  addArrow(box.get_E_segment(), color, dashed);
-  addArrow(box.get_N_segment(), color, dashed);
-  addArrow(box.get_S_segment(), color, dashed);
+  addArrow(box.getWestSegment(), color, dashed);
+  addArrow(box.getEastSegment(), color, dashed);
+  addArrow(box.getNorthSegment(), color, dashed);
+  addArrow(box.getSouthSegment(), color, dashed);
 }
 
 void Annotations::addCircle(const rhoban_geometry::Point& origin, double r, std::string color, bool dashed)
