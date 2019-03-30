@@ -36,7 +36,7 @@ void AICommanderReal::kick()
 void AICommanderReal::flush()
 {
   // Transferring abstract commands to the master implementation
-  for (auto& command : commands)
+  for (auto& command : commands_)
   {
     struct packet_master packet;
     if (command.enabled)
@@ -78,7 +78,7 @@ void AICommanderReal::flush()
   }
 
   master.send();
-  commands.clear();
+  commands_.clear();
 }
 
 Master* AICommanderReal::getMaster()

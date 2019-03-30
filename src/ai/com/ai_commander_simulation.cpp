@@ -31,10 +31,10 @@ AICommanderSimulation::AICommanderSimulation(bool yellow) : AICommander(yellow),
 void AICommanderSimulation::flush()
 {
   grSim_Packet packet;
-  packet.mutable_commands()->set_isteamyellow(yellow);
+  packet.mutable_commands()->set_isteamyellow(yellow_);
   packet.mutable_commands()->set_timestamp(0.0);
 
-  for (auto& command : commands)
+  for (auto& command : commands_)
   {
     double factor = command.enabled ? 1 : 0;
 
@@ -70,7 +70,7 @@ void AICommanderSimulation::flush()
   }
 
   client.sendPacket(packet);
-  commands.clear();
+  commands_.clear();
 }
 
 void AICommanderSimulation::moveBall(double x, double y, double vx, double vy)

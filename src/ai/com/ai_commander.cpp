@@ -23,15 +23,15 @@
 
 namespace rhoban_ssl
 {
-AICommander::AICommander(bool yellow) : yellow(yellow)
+AICommander::AICommander(bool yellow) : yellow_(yellow)
 {
 }
 
-void AICommander::set_yellow(bool value)
+void AICommander::setYellow(bool value)
 {
-  if (this->yellow != value)
+  if (this->yellow_ != value)
   {
-    this->yellow = value;
+    this->yellow_ = value;
   }
 }
 
@@ -55,7 +55,7 @@ void AICommander::set(uint8_t robot_id, bool enabled, double xSpeed, double ySpe
   command.charge = charge;
   command.kickPower = kickPower;
 
-  commands.push_back(command);
+  commands_.push_back(command);
 }
 
 void AICommander::stopAll()

@@ -47,7 +47,7 @@ public:
   };
   AICommander(bool yellow);
 
-  void set_yellow(bool value);
+  void setYellow(bool value);
 
   /**
    * Set the speed of the robot robot_id to the given speed
@@ -79,8 +79,8 @@ public:
   virtual ~AICommander();
 
 protected:
-  std::vector<struct Command> commands;
+  std::vector<struct Command> commands_;
 
-  bool yellow;
+  bool yellow_;
 };
 }  // namespace RhobanSSL

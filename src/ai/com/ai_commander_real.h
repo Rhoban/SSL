@@ -30,7 +30,7 @@ namespace rhoban_ssl
 class AICommanderReal : public AICommander
 {
 public:
-  AICommanderReal(bool yellow);
+  AICommanderReal(bool yellow_);
 
   virtual void flush();
   virtual void kick();

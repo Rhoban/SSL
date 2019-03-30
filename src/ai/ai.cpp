@@ -344,7 +344,7 @@ std::shared_ptr<Manager::Manager> AI::getManualManager()
 
 void AI::updateRobots()
 {
-  commander_->set_yellow(ai_data_.team_color == ai::Yellow);
+  commander_->setYellow(ai_data_.team_color == ai::Yellow);
 
   double time = this->current_time_;
   ai::Ball& ball = ai_data_.ball;
