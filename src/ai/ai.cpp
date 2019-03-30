@@ -46,34 +46,34 @@ float sign(float x)
   return -1.0;
 }
 
-void AI::check_time_is_coherent() const
+void AI::checkTimeIsCoherent() const
 {
 #ifndef NDEBUG
-  for (unsigned int i = 0; i < ai_data.all_robots.size(); i++)
+  for (unsigned int i = 0; i < ai_data_.all_robots.size(); i++)
   {
-    assert(ai_data.all_robots.at(i).second->getMovement().last_time() - 0.000001 <= ai_data.time);
+    assert(ai_data_.all_robots.at(i).second->getMovement().last_time() - 0.000001 <= ai_data_.time);
   }
 #endif
 }
 
-void AI::limits_velocity(Control& ctrl) const
+void AI::limitsVelocity(Control& ctrl) const
 {
 #if 1
-  if (ai_data.constants.translation_velocity_limit > 0.0)
+  if (ai_data_.constants.translation_velocity_limit > 0.0)
   {
-    if (ctrl.linear_velocity.norm() > ai_data.constants.translation_velocity_limit)
+    if (ctrl.linear_velocity.norm() > ai_data_.constants.translation_velocity_limit)
     {
-      ctrl.linear_velocity *= ai_data.constants.translation_velocity_limit / ctrl.linear_velocity.norm();
+      ctrl.linear_velocity *= ai_data_.constants.translation_velocity_limit / ctrl.linear_velocity.norm();
       std::cerr << "AI WARNING : we reached the "
                    "limit translation velocity !"
                 << std::endl;
     }
   }
-  if (ai_data.constants.rotation_velocity_limit > 0.0)
+  if (ai_data_.constants.rotation_velocity_limit > 0.0)
   {
-    if (std::fabs(ctrl.angular_velocity.value()) > ai_data.constants.rotation_velocity_limit)
+    if (std::fabs(ctrl.angular_velocity.value()) > ai_data_.constants.rotation_velocity_limit)
     {
-      ctrl.angular_velocity = ai_data.constants.rotation_velocity_limit * sign(ctrl.angular_velocity.value());
+      ctrl.angular_velocity = ai_data_.constants.rotation_velocity_limit * sign(ctrl.angular_velocity.value());
       std::cerr << "AI WARNING : we reached the "
                    "limit rotation velocity !"
                 << std::endl;
@@ -82,22 +82,22 @@ void AI::limits_velocity(Control& ctrl) const
 #endif
 }
 
-void AI::prevent_collision(int robot_id, Control& ctrl)
+void AI::preventCollision(int robot_id, Control& ctrl)
 {
-  const ai::Robot& robot = ai_data.robots.at(Vision::Team::Ally).at(robot_id);
+  const ai::Robot& robot = ai_data_.robots.at(Vision::Team::Ally).at(robot_id);
 
   const Vector2d& ctrl_velocity = ctrl.linear_velocity;
-  Vector2d robot_velocity = robot.getMovement().linear_velocity(ai_data.time);
+  Vector2d robot_velocity = robot.getMovement().linear_velocity(ai_data_.time);
 
   bool collision_is_detected = false;
 
-  std::list<std::pair<int, double> > collisions_with_ctrl = ai_data.getCollisions(robot_id, ctrl_velocity);
+  std::list<std::pair<int, double> > collisions_with_ctrl = ai_data_.getCollisions(robot_id, ctrl_velocity);
   for (const std::pair<int, double>& collision : collisions_with_ctrl)
   {
     double time_before_collision = collision.second;
     double ctrl_velocity_norm = ctrl_velocity.norm();
-    double time_to_stop = ctrl_velocity_norm / (ai_data.constants.security_acceleration_ratio *
-                                                ai_data.constants.translation_acceleration_limit);
+    double time_to_stop = ctrl_velocity_norm / (ai_data_.constants.security_acceleration_ratio *
+                                                ai_data_.constants.translation_acceleration_limit);
     if (time_before_collision <= time_to_stop and ctrl_velocity_norm > EPSILON_VELOCITY)
     {
       collision_is_detected = true;
@@ -134,7 +134,7 @@ void AI::prevent_collision(int robot_id, Control& ctrl)
     double err = 0.01;
     if (robot_velocity_norm > err)
     {
-      velocity_increase = (1 - ai_data.dt * ai_data.constants.translation_acceleration_limit / robot_velocity_norm);
+      velocity_increase = (1 - ai_data_.dt * ai_data_.constants.translation_acceleration_limit / robot_velocity_norm);
       if (velocity_increase < 0.0)
       {
         velocity_increase = 0.0;
@@ -197,7 +197,7 @@ void AI::prevent_collision(int robot_id, Control& ctrl)
 
 static MovementSample debug_mov(4);
 
-void AI::send_control(int robot_id, const Control& ctrl)
+void AI::sendControl(int robot_id, const Control& ctrl)
 {
   if (robot_id >= 8)
   {                      // HACK - becaus hardware doesn't support more than 8 robots
@@ -208,7 +208,7 @@ void AI::send_control(int robot_id, const Control& ctrl)
   {
     if (!ctrl.active)
     {
-      commander->set(robot_id, true, 0.0, 0.0, 0.0);
+      commander_->set(robot_id, true, 0.0, 0.0, 0.0);
     }
     else
     {
@@ -221,13 +221,13 @@ void AI::send_control(int robot_id, const Control& ctrl)
       else if (ctrl.chipKick)
         kick = 2;
 
-      commander->set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1], ctrl.angular_velocity.value(),
+      commander_->set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1], ctrl.angular_velocity.value(),
                      kick, ctrl.kickPower, ctrl.spin, ctrl.charge);
     }
   }
 }
 
-void AI::prepare_to_send_control(int robot_id, Control& ctrl)
+void AI::prepareToSendControl(int robot_id, Control& ctrl)
 {
 #if 0
     if( robot_id == 5 ){
@@ -251,13 +251,13 @@ void AI::prepare_to_send_control(int robot_id, Control& ctrl)
     }
 #endif
 
-  prevent_collision(robot_id, ctrl);
-  ctrl.change_to_relative_control(ai_data.robots[Vision::Ally][robot_id].getMovement().angular_position(ai_data.time),
-                                  ai_data.dt);
-  limits_velocity(ctrl);
+  preventCollision(robot_id, ctrl);
+  ctrl.change_to_relative_control(ai_data_.robots[Vision::Ally][robot_id].getMovement().angular_position(ai_data_.time),
+                                  ai_data_.dt);
+  limitsVelocity(ctrl);
 }
 
-Control AI::update_robot(Robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball)
+Control AI::updateRobot(Robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball)
 {
   if (robot.isPresentInVision())
   {
@@ -271,32 +271,32 @@ Control AI::update_robot(Robot_behavior::RobotBehavior& robot_behavior, double t
   return Control::make_ignored();
 }
 
-void AI::init_robot_behaviors()
+void AI::initRobotBehaviors()
 {
   for (int k = 0; k < Vision::Robots; k++)
   {
-    robot_behaviors[k] = std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data));
+    robot_behaviors_[k] = std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_));
   }
 }
 
 AI::AI(std::string manager_name, std::string team_name, ai::Team default_team, Data& data, AICommander* commander,
        const std::string& config_path, bool is_in_simulation)
-  : team_name(team_name)
-  , default_team(default_team)
+  : team_name_(team_name)
+  , default_team_(default_team)
   , is_in_simulation(is_in_simulation)
-  , running(true)
-  , ai_data(config_path, is_in_simulation, default_team)
-  , commander(commander)
-  , current_dt(ai_data.constants.period)
-  , data(data)
-  , game_state(ai_data)
+  , running_(true)
+  , ai_data_(config_path, is_in_simulation, default_team)
+  , commander_(commander)
+  , current_dt_(ai_data_.constants.period)
+  , data_(data)
+  , game_state_(ai_data_)
 {
-  init_robot_behaviors();
+  initRobotBehaviors();
 
-  ai_data.changeTeamColor(default_team);
-  ai_data.team_name = team_name;
+  ai_data_.changeTeamColor(default_team);
+  ai_data_.team_name = team_name;
 
-  manual_manager = Manager::Factory::construct_manager(Manager::names::manual, ai_data, game_state);
+  manual_manager_ = Manager::Factory::construct_manager(Manager::names::manual, ai_data_, game_state_);
 
   setManager(manager_name);
 }
@@ -308,54 +308,54 @@ std::vector<std::string> AI::getAvailableManagers()
 
 void AI::setManager(std::string managerName)
 {
-  std::vector<int> robot_ids(robot_behaviors.size());
+  std::vector<int> robot_ids(robot_behaviors_.size());
   int i = 0;
-  for (auto elem : robot_behaviors)
+  for (auto elem : robot_behaviors_)
   {
     robot_ids[i] = elem.first;
     i++;
   }
 
-  int goalie_id = ai_data.constants.default_goalie_id;
+  int goalie_id = ai_data_.constants.default_goalie_id;
 
   std::cout << "Setting the manager to: " << managerName << std::endl;
   if (managerName == Manager::names::manual)
   {
-    strategy_manager = manual_manager;
+    strategy_manager_ = manual_manager_;
   }
   else
   {
-    strategy_manager = Manager::Factory::construct_manager(managerName, ai_data, game_state);
+    strategy_manager_ = Manager::Factory::construct_manager(managerName, ai_data_, game_state_);
   }
-  manager_name = managerName;
-  strategy_manager->declare_goalie_id(goalie_id);
-  strategy_manager->declare_team_ids(robot_ids);
+  manager_name_ = managerName;
+  strategy_manager_->declare_goalie_id(goalie_id);
+  strategy_manager_->declare_team_ids(robot_ids);
 }
 
 std::shared_ptr<Manager::Manager> AI::getManager() const
 {
-  return strategy_manager;
+  return strategy_manager_;
 }
 
 std::shared_ptr<Manager::Manager> AI::getManualManager()
 {
-  return manual_manager;
+  return manual_manager_;
 }
 
-void AI::update_robots()
+void AI::updateRobots()
 {
-  commander->set_yellow(ai_data.team_color == ai::Yellow);
+  commander_->set_yellow(ai_data_.team_color == ai::Yellow);
 
-  double time = this->current_time;
-  ai::Ball& ball = ai_data.ball;
+  double time = this->current_time_;
+  ai::Ball& ball = ai_data_.ball;
 
   auto team = Vision::Ally;
   for (int robot_id = 0; robot_id < Vision::Robots; robot_id++)
   {
-    SharedData::FinalControl& final_control = shared_data.final_control_for_robots[robot_id];
+    SharedData::FinalControl& final_control = shared_data_.final_control_for_robots[robot_id];
 
-    ai::Robot& robot = ai_data.robots[team][robot_id];
-    Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors[robot_id]);
+    ai::Robot& robot = ai_data_.robots[team][robot_id];
+    Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)
     {
@@ -363,26 +363,26 @@ void AI::update_robots()
     }
     else if (!final_control.is_manually_controled_by_viewer)
     {
-      ai::Robot& robot = ai_data.robots[team][robot_id];
+      ai::Robot& robot = ai_data_.robots[team][robot_id];
 
-      Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors[robot_id]);
-      final_control.control = update_robot(robot_behavior, time, robot, ball);
-      prepare_to_send_control(robot_id, final_control.control);
+      Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
+      final_control.control = updateRobot(robot_behavior, time, robot, ball);
+      prepareToSendControl(robot_id, final_control.control);
     }
-    send_control(robot_id, final_control.control);
+    sendControl(robot_id, final_control.control);
   }
 }
 
 void AI::run()
 {
-  double period = ai_data.constants.period;
+  double period = ai_data_.constants.period;
   auto lastTick = rhoban_utils::TimeStamp::now();
 
   // TODO ; SEE HOW TO REMOVE THE WARMUP
   double warmup_period = 2 * period * rhoban_ssl::Vision::history_size;
   double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
 
-  while (running)
+  while (running_)
   {
     auto now = rhoban_utils::TimeStamp::now();
     double elapsed = diffSec(lastTick, now);
@@ -396,28 +396,28 @@ void AI::run()
       DEBUG("LAG");
     }
     lastTick = rhoban_utils::TimeStamp::now();
-    current_dt = current_time;
-    current_time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
-    current_dt = current_time - current_dt;
+    current_dt_ = current_time_;
+    current_time_ = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
+    current_dt_ = current_time_ - current_dt_;
 
-    ai_data.time = current_time, ai_data.dt = current_dt;
+    ai_data_.time = current_time_, ai_data_.dt = current_dt_;
 
 #ifndef NDEBUG
-    updatePeriodicDebug(current_time, 10.0);
+    updatePeriodicDebug(current_time_, 10.0);
 #endif
 
-    data >> visionData;
+    data_ >> visionData_;
 
     // DEBUG( visionData );
 
     // DEBUG("");
-    visionData.checkAssert(current_time);
+    visionData_.checkAssert(current_time_);
     // DEBUG("");
 
-    ai_data.update(visionData);
+    ai_data_.update(visionData_);
     if (not(is_in_simulation))
     {
-      update_electronic_informations();
+      updateElectronicInformations();
     }
     // print_electronic_info();
 
@@ -426,115 +426,115 @@ void AI::run()
 #endif
 
     // We wait some time to update completly ai_data structure.
-    if (warmup_start + warmup_period > current_time)
+    if (warmup_start + warmup_period > current_time_)
     {
       continue;
     }
 
-    game_state.update(current_time);
+    game_state_.update(current_time_);
 
-    if (manager_name != Manager::names::manual)
+    if (manager_name_ != Manager::names::manual)
     {  // HACK TOT REMOVEE !
-      strategy_manager->change_team_and_point_of_view(game_state.get_team_color(strategy_manager->get_team_name()),
-                                                      game_state.blue_have_it_s_goal_on_positive_x_axis());
+      strategy_manager_->change_team_and_point_of_view(game_state_.get_team_color(strategy_manager_->get_team_name()),
+                                                      game_state_.blue_have_it_s_goal_on_positive_x_axis());
     }
     else
     {
-      dynamic_cast<Manager::Manual*>(strategy_manager.get())
-          ->define_goal_to_positive_axis(not(game_state.blue_have_it_s_goal_on_positive_x_axis()));
+      dynamic_cast<Manager::Manual*>(strategy_manager_.get())
+          ->define_goal_to_positive_axis(not(game_state_.blue_have_it_s_goal_on_positive_x_axis()));
     }
-    strategy_manager->change_ally_and_opponent_goalie_id(game_state.blue_goalie_id(), game_state.yellow_goalie_id());
+    strategy_manager_->change_ally_and_opponent_goalie_id(game_state_.blue_goalie_id(), game_state_.yellow_goalie_id());
 
-    strategy_manager->remove_invalid_robots();
+    strategy_manager_->remove_invalid_robots();
 
-    strategy_manager->update(current_time);
-    strategy_manager->assign_behavior_to_robots(robot_behaviors, current_time, current_dt);
-    share_data();
+    strategy_manager_->update(current_time_);
+    strategy_manager_->assign_behavior_to_robots(robot_behaviors_, current_time_, current_dt_);
+    shareData();
     // ai_data.compute_table_of_collision_times();
     // if( ai_data.table_of_collision_times.size() != 0 ){
     //   DEBUG( ai_data.table_of_collision_times );
     //}
 
-    data >> shared_data;
+    data_ >> shared_data_;
 
-    update_robots();
+    updateRobots();
 
-    data << shared_data;
+    data_ << shared_data_;
 
-    data.editDataForViewer([this](DataForViewer& data_for_viewer) {
+    data_.editDataForViewer([this](DataForViewer& data_for_viewer) {
       data_for_viewer.annotations.clear();
-      this->get_annotations(data_for_viewer.annotations);
+      this->getAnnotations(data_for_viewer.annotations);
     });
 
     // XXX: Flushing takes some time in real mode, and should be done in parallel
     // along with the computing of the AI
-    commander->flush();
+    commander_->flush();
   }
 }
 
 void AI::stop()
 {
-  running = false;
+  running_ = false;
 }
 
-void AI::share_data()
+void AI::shareData()
 {
   DataFromAi data_from_ai;
-  data_from_ai.team_color = ai_data.team_color;
-  data << data_from_ai;
+  data_from_ai.team_color = ai_data_.team_color;
+  data_ << data_from_ai;
 }
 
 GameState& AI::getGameState()
 {
-  return game_state;
+  return game_state_;
 }
 
 double AI::getCurrentTime()
 {
-  return ai_data.time;
+  return ai_data_.time;
 }
 
-RhobanSSLAnnotation::Annotations AI::get_robot_behavior_annotations() const
+RhobanSSLAnnotation::Annotations AI::getRobotBehaviorAnnotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
   for (int robot_id = 0; robot_id < Vision::Robots; robot_id++)
   {
-    const Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors.at(robot_id));
+    const Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_.at(robot_id));
     annotations.addAnnotations(robot_behavior.get_annotations());
   }
   return annotations;
 }
 
-void AI::get_annotations(RhobanSSLAnnotation::Annotations& annotations) const
+void AI::getAnnotations(RhobanSSLAnnotation::Annotations& annotations) const
 {
   annotations.addAnnotations(getManager()->get_annotations());
-  annotations.addAnnotations(get_robot_behavior_annotations());
+  annotations.addAnnotations(getRobotBehaviorAnnotations());
 
   std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point& p) {
-    return this->ai_data.team_point_of_view.from_frame(p);
+    return this->ai_data_.team_point_of_view.from_frame(p);
   };
   annotations.map_positions(fct);
 }
 
-void AI::update_electronic_informations()
+void AI::updateElectronicInformations()
 {
-  rhoban_ssl::Master* master = dynamic_cast<rhoban_ssl::AICommanderReal*>(commander)->getMaster();
+  rhoban_ssl::Master* master = dynamic_cast<rhoban_ssl::AICommanderReal*>(commander_)->getMaster();
   for (unsigned int id = 0; id < MAX_ROBOTS; id++)
   {
     auto robot = master->robots[id];
     if (robot.isOk())
     {
-      ai_data.robots.at(Vision::Team::Ally).at(id).infra_red = (robot.status.status & STATUS_IR) ? true : false;
+      ai_data_.robots.at(Vision::Team::Ally).at(id).infra_red = (robot.status.status & STATUS_IR) ? true : false;
     }
   }
 }
 
-void AI::print_electronic_info()
+void AI::printElectronicInfo()
 {
   std::cout << "Electronic : " << std::endl;
   for (unsigned int id = 0; id < ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    std::cout << "robot id : " << id << " IR : " << ai_data.robots.at(Vision::Team::Ally).at(id).infra_red << std::endl;
+    std::cout << "robot id : " << id << " IR : " << ai_data_.robots.at(Vision::Team::Ally).at(id).infra_red << std::endl;
   }
 }
 
