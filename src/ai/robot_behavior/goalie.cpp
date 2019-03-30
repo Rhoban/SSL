@@ -31,7 +31,7 @@ rhoban_geometry::Point Goalie::calculate_goal_position(const rhoban_geometry::Po
                                                        const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
                                                        double goalie_radius)
 {
-  rhoban_geometry::Point defender_position = rhoban_geometry::center_of_cone_incircle(
+  rhoban_geometry::Point defender_position = rhoban_geometry::centerOfConeIncircle(
       ball_position, vector2point(poteau_droit), vector2point(poteau_gauche), goalie_radius);
   return defender_position;
 }

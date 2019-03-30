@@ -64,7 +64,7 @@ void Defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
     follower->avoid_the_ball(false);
   }
 
-  rhoban_geometry::Point target_position = rhoban_geometry::center_of_cone_incircle(
+  rhoban_geometry::Point target_position = rhoban_geometry::centerOfConeIncircle(
       ballPosition(), left_post_position, right_post_position, getRobotRadius());
   double target_rotation = detail::vec2angle(-ball_goal_vector);
 

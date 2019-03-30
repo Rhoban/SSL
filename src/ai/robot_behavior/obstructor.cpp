@@ -83,7 +83,7 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
     // target_radius_from_ball = (ai_data.constants.robot_radius) / std::tan(std::acos(goal_visible_angle) / 2);
   }
 
-  rhoban_geometry::Point target_position = rhoban_geometry::center_of_cone_incircle(
+  rhoban_geometry::Point target_position = rhoban_geometry::centerOfConeIncircle(
       point_to_obstruct, left_post_position, right_post_position, ai_data.constants.robot_radius);
 
   // Vector2d target_position = Vector2d(ball_position()) + ball_goal_vector * (target_radius_from_ball);
