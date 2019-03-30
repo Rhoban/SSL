@@ -30,10 +30,10 @@ class RobotFollower : public RobotBehavior
 {
 private:
   int robot_to_follow_id;
-  Vision::Team robot_to_follow_team;
+  vision::Team robot_to_follow_team;
 
   Vector2d translation;
-  Vision::Team team;
+  vision::Team team;
 
   ConsignFollower* follower;
 
@@ -42,7 +42,7 @@ public:
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  void declare_robot_to_follow(int robot_id, const Vector2d& translation, Vision::Team team = Vision::Team::Ally);
+  void declare_robot_to_follow(int robot_id, const Vector2d& translation, vision::Team team = vision::Team::Ally);
 
   virtual Control control() const;
 

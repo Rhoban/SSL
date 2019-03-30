@@ -33,12 +33,12 @@ void Begginer_robot_near_ball::update(double time, const ai::Robot& robot, const
 {
   RobotBehavior::update_time_and_position(time, robot, ball);
   // Find the ally and the opponent closest to the ball
-  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Vision::Ally);
-  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Vision::Opponent);
+  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
+  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Opponent);
 
   // Get the robot ally and opponent.
-  ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Vision::Ally);
-  ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Vision::Opponent);
+  ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, vision::Ally);
+  ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, vision::Opponent);
 
   // Create the vector between the robots and the ball.
   Vector2d vec_ally_to_ball = ballPosition() - ally_closest.getMovement().linear_position(ai_data.time);

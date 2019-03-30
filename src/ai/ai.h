@@ -57,7 +57,7 @@ public:
 protected:
   bool running_;
 
-  Vision::VisionData visionData_;
+  vision::VisionData visionData_;
   ai::AiData ai_data_;
 
   bool enable_kicking_;

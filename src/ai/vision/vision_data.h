@@ -28,7 +28,7 @@
 
 namespace rhoban_ssl
 {
-namespace Vision
+namespace vision
 {
 static const int history_size = 10;
 static const int Robots = 16;
@@ -97,7 +97,7 @@ public:
 
   void print() const;
 
-  friend std::ostream& operator<<(std::ostream& out, const rhoban_ssl::Vision::VisionData& vision);
+  friend std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision);
 };
 
 std::ostream& operator<<(std::ostream& out, const VisionData& vision);

@@ -172,8 +172,8 @@ void AttaqueWithSupportMs::start(double time)
   ID1 = player_id(0);
   ID2 = player_id(1);  // we get the first if in get_player_ids()
 
-  robot_1_position = getRobot(ID1, Vision::Team::Ally).getMovement().linear_position(time);
-  robot_2_position = getRobot(ID2, Vision::Team::Ally).getMovement().linear_position(time);
+  robot_1_position = getRobot(ID1, vision::Team::Ally).getMovement().linear_position(time);
+  robot_2_position = getRobot(ID2, vision::Team::Ally).getMovement().linear_position(time);
 
   double db1 = (Vector2d(ballPosition() - robot_1_position)).norm();
   double db2 = (Vector2d(ballPosition() - robot_2_position)).norm();
@@ -205,8 +205,8 @@ void AttaqueWithSupportMs::assign_behavior_to_robots(
   // we assign now all the other behavior
   assert(get_player_ids().size() == 2);
 
-  robot_1_position = getRobot(ID1, Vision::Team::Ally).getMovement().linear_position(time);
-  robot_2_position = getRobot(ID2, Vision::Team::Ally).getMovement().linear_position(time);
+  robot_1_position = getRobot(ID1, vision::Team::Ally).getMovement().linear_position(time);
+  robot_2_position = getRobot(ID2, vision::Team::Ally).getMovement().linear_position(time);
   fgbm_score = findGoalBestMove(ballPosition()).second;
 
   machine.run();
@@ -330,14 +330,14 @@ bool AttaqueWithSupportMs::fgbm_score_sup_seuil_2_plus_constante()
 
 bool AttaqueWithSupportMs::is_infra_1_on()
 {
-  return infraRed(ID1, Vision::Team::Ally);
+  return infraRed(ID1, vision::Team::Ally);
   // double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
   // // DEBUG("DB1 " << db1 );
   // return (db1 < get_robot_radius()+0.1);
 }
 bool AttaqueWithSupportMs::is_infra_2_on()
 {
-  return infraRed(ID2, Vision::Team::Ally);
+  return infraRed(ID2, vision::Team::Ally);
   // double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
   // // DEBUG("DB2 " << db2 );
   // return (db2 < get_robot_radius()+0.1);

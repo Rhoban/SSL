@@ -84,7 +84,7 @@ void AI::limitsVelocity(Control& ctrl) const
 
 void AI::preventCollision(int robot_id, Control& ctrl)
 {
-  const ai::Robot& robot = ai_data_.robots.at(Vision::Team::Ally).at(robot_id);
+  const ai::Robot& robot = ai_data_.robots.at(vision::Team::Ally).at(robot_id);
 
   const Vector2d& ctrl_velocity = ctrl.linear_velocity;
   Vector2d robot_velocity = robot.getMovement().linear_velocity(ai_data_.time);
@@ -252,7 +252,7 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
 #endif
 
   preventCollision(robot_id, ctrl);
-  ctrl.change_to_relative_control(ai_data_.robots[Vision::Ally][robot_id].getMovement().angular_position(ai_data_.time),
+  ctrl.change_to_relative_control(ai_data_.robots[vision::Ally][robot_id].getMovement().angular_position(ai_data_.time),
                                   ai_data_.dt);
   limitsVelocity(ctrl);
 }
@@ -273,7 +273,7 @@ Control AI::updateRobot(Robot_behavior::RobotBehavior& robot_behavior, double ti
 
 void AI::initRobotBehaviors()
 {
-  for (int k = 0; k < Vision::Robots; k++)
+  for (int k = 0; k < vision::Robots; k++)
   {
     robot_behaviors_[k] = std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_));
   }
@@ -349,8 +349,8 @@ void AI::updateRobots()
   double time = this->current_time_;
   ai::Ball& ball = ai_data_.ball;
 
-  auto team = Vision::Ally;
-  for (int robot_id = 0; robot_id < Vision::Robots; robot_id++)
+  auto team = vision::Ally;
+  for (int robot_id = 0; robot_id < vision::Robots; robot_id++)
   {
     SharedData::FinalControl& final_control = shared_data_.final_control_for_robots[robot_id];
 
@@ -379,7 +379,7 @@ void AI::run()
   auto lastTick = rhoban_utils::TimeStamp::now();
 
   // TODO ; SEE HOW TO REMOVE THE WARMUP
-  double warmup_period = 2 * period * rhoban_ssl::Vision::history_size;
+  double warmup_period = 2 * period * rhoban_ssl::vision::history_size;
   double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
 
   while (running_)
@@ -497,7 +497,7 @@ double AI::getCurrentTime()
 RhobanSSLAnnotation::Annotations AI::getRobotBehaviorAnnotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
-  for (int robot_id = 0; robot_id < Vision::Robots; robot_id++)
+  for (int robot_id = 0; robot_id < vision::Robots; robot_id++)
   {
     const Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_.at(robot_id));
     annotations.addAnnotations(robot_behavior.get_annotations());
@@ -524,7 +524,7 @@ void AI::updateElectronicInformations()
     auto robot = master->robots[id];
     if (robot.isOk())
     {
-      ai_data_.robots.at(Vision::Team::Ally).at(id).infra_red = (robot.status.status & STATUS_IR) ? true : false;
+      ai_data_.robots.at(vision::Team::Ally).at(id).infra_red = (robot.status.status & STATUS_IR) ? true : false;
     }
   }
 }
@@ -534,7 +534,7 @@ void AI::printElectronicInfo()
   std::cout << "Electronic : " << std::endl;
   for (unsigned int id = 0; id < ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    std::cout << "robot id : " << id << " IR : " << ai_data_.robots.at(Vision::Team::Ally).at(id).infra_red << std::endl;
+    std::cout << "robot id : " << id << " IR : " << ai_data_.robots.at(vision::Team::Ally).at(id).infra_red << std::endl;
   }
 }
 

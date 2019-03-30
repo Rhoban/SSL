@@ -42,7 +42,7 @@ void TestInfra::update(double time, const ai::Robot& robot, const ai::Ball& ball
 
   rhoban_geometry::Point target_position = robot.getMovement().linear_position(time);
 
-  bool value = GameInformations::infraRed(robot.id(), Vision::Team::Ally);
+  bool value = GameInformations::infraRed(robot.id(), vision::Team::Ally);
   std::cout << "Value infra red : " << value << '\n';
 
   // follower->avoid_the_ball(true);

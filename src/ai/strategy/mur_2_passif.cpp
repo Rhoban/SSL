@@ -73,7 +73,7 @@ void Mur_2_passif::stop(double time)
 void Mur_2_passif::update(double time)
 {
   int nearest_ally_robot_from_ball =
-      GameInformations::getShirtNumberOfClosestRobotToTheBall(Vision::Team::Ally);
+      GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
   is_closest_0 = false;
   is_closest_1 = false;
 

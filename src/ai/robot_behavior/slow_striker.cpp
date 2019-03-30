@@ -28,7 +28,7 @@ namespace Robot_behavior
 SlowStriker::SlowStriker(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_pass_id(-1)
-  , robot_to_pass_team(Vision::Team::Ally)
+  , robot_to_pass_team(vision::Team::Ally)
   , follower(Factory::fixed_consign_follower(ai_data))
 {
   tempo = 0.0;
@@ -132,7 +132,7 @@ void SlowStriker::declare_point_to_strik(rhoban_geometry::Point point)
   striking_point = point;
 }
 
-void SlowStriker::declare_robot_to_pass(int robot_id, Vision::Team team)
+void SlowStriker::declare_robot_to_pass(int robot_id, vision::Team team)
 {
   robot_to_pass_id = robot_id;
   robot_to_pass_team = team;

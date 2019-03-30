@@ -43,7 +43,7 @@ SharedData::SharedData() : final_control_for_robots(ai::Constants::NB_OF_ROBOTS_
 {
 }
 
-Data& Data::operator<<(const Vision::VisionData& vision_data)
+Data& Data::operator<<(const vision::VisionData& vision_data)
 {
   mutex_for_vision_data_.lock();
   vision_data_ = vision_data;
@@ -51,7 +51,7 @@ Data& Data::operator<<(const Vision::VisionData& vision_data)
   return *this;
 }
 
-Data& Data::operator>>(Vision::VisionData& vision_data)
+Data& Data::operator>>(vision::VisionData& vision_data)
 {
   mutex_for_vision_data_.lock();
   vision_data = vision_data_;
@@ -92,7 +92,7 @@ Data& Data::operator>>(SharedData& shared_data)
 }
 
 void Data::editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(Vision::VisionData& vision_data)> vision_data_editor)
+    std::function<void(vision::VisionData& vision_data)> vision_data_editor)
 {
   mutex_for_vision_data_.lock();
   vision_data_editor(vision_data_);

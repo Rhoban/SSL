@@ -104,7 +104,7 @@ void IndirectLob::assign_behavior_to_robots(
                       std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data)));
 
       std::shared_ptr<Robot_behavior::Pass> pass_behavior(new Robot_behavior::Pass(ai_data));
-      pass_behavior->declare_robot_to_pass(wait_pass, Vision::Team::Ally);
+      pass_behavior->declare_robot_to_pass(wait_pass, vision::Team::Ally);
       assign_behavior(pass, pass_behavior);
       std::cout << "stat aaaaaaaaaa " << state << '\n';
     }
@@ -113,7 +113,7 @@ void IndirectLob::assign_behavior_to_robots(
       assign_behavior(wait_pass, std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data)));
 
       std::shared_ptr<Robot_behavior::RobotFollower> support(new Robot_behavior::RobotFollower(ai_data));
-      support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), Vision::Team::Ally);
+      support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), vision::Team::Ally);
       assign_behavior(pass, support);
       std::cout << "stat bbbbbbbb " << state << '\n';
     }

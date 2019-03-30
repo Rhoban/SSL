@@ -61,7 +61,7 @@ class Data
 {
 private:  // Do not remove !
   std::mutex mutex_for_vision_data_;
-  Vision::VisionData vision_data_;
+  vision::VisionData vision_data_;
 
   std::mutex mutex_for_ai_data_;
   DataFromAi data_from_ai_;
@@ -75,10 +75,10 @@ private:  // Do not remove !
 public:
   Data(ai::Team initial_team_color);
 
-  Data& operator<<(const Vision::VisionData& vision_data);
-  Data& operator>>(Vision::VisionData& vision_data);
+  Data& operator<<(const vision::VisionData& vision_data);
+  Data& operator>>(vision::VisionData& vision_data);
   void editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(Vision::VisionData& vision_data)> vision_data_editor);
+      std::function<void(vision::VisionData& vision_data)> vision_data_editor);
 
   Data& operator<<(const DataFromAi& data_from_ai);
   Data& operator>>(DataFromAi& data_from_ai);

@@ -31,7 +31,7 @@ class Pass_dribbler : public RobotBehavior
 private:
   rhoban_geometry::Point point_to_pass;
   int robot_to_pass_id;
-  Vision::Team robot_to_pass_team;
+  vision::Team robot_to_pass_team;
   double kick_power;
 
   ConsignFollower* follower;
@@ -43,7 +43,7 @@ public:
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   // TODO: portée des variables ?
   void declare_point_to_pass(rhoban_geometry::Point point);
-  void declare_robot_to_pass(int robot_id, Vision::Team team = Vision::Team::Ally);
+  void declare_robot_to_pass(int robot_id, vision::Team team = vision::Team::Ally);
   void calc_kick_power(rhoban_geometry::Point start, rhoban_geometry::Point end);
 
   virtual Control control() const;

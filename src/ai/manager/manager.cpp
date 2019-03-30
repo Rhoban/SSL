@@ -42,12 +42,12 @@ void Manager::declare_goalie_opponent_id(int goalie_opponent_id)
     return;
   if (this->goalie_opponent_id >= 0)
   {
-    ai_data.robots[Vision::Opponent][this->goalie_opponent_id].is_goalie = false;
+    ai_data.robots[vision::Opponent][this->goalie_opponent_id].is_goalie = false;
   }
   this->goalie_opponent_id = goalie_opponent_id;
   if (goalie_opponent_id >= 0)
   {
-    ai_data.robots[Vision::Opponent][goalie_opponent_id].is_goalie = true;
+    ai_data.robots[vision::Opponent][goalie_opponent_id].is_goalie = true;
   }
 }
 void Manager::declare_goalie_id(int goalie_id)
@@ -56,12 +56,12 @@ void Manager::declare_goalie_id(int goalie_id)
     return;
   if (this->goalie_id >= 0)
   {
-    ai_data.robots[Vision::Ally][this->goalie_id].is_goalie = false;
+    ai_data.robots[vision::Ally][this->goalie_id].is_goalie = false;
   }
   this->goalie_id = goalie_id;
   if (goalie_id >= 0)
   {
-    ai_data.robots[Vision::Ally][this->goalie_id].is_goalie = true;
+    ai_data.robots[vision::Ally][this->goalie_id].is_goalie = true;
   }
 }
 int Manager::get_goalie_id() const

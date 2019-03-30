@@ -30,7 +30,7 @@ Pass_dribbler::Pass_dribbler(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , point_to_pass(66, 66)
   , robot_to_pass_id(-1)
-  , robot_to_pass_team(Vision::Team::Ally)
+  , robot_to_pass_team(vision::Team::Ally)
   , kick_power(0.5)
   , follower(Factory::fixed_consign_follower(ai_data))
   , need_to_kick(false)
@@ -119,7 +119,7 @@ void Pass_dribbler::declare_point_to_pass(rhoban_geometry::Point point)
   point_to_pass = point;
 }
 
-void Pass_dribbler::declare_robot_to_pass(int robot_id, Vision::Team team)
+void Pass_dribbler::declare_robot_to_pass(int robot_id, vision::Team team)
 {
   robot_to_pass_id = robot_id;
   robot_to_pass_team = team;

@@ -26,7 +26,7 @@ using namespace rhoban_utils;
 
 namespace rhoban_ssl
 {
-namespace Vision
+namespace vision
 {
 Field::Field()
   : present(false)
@@ -148,12 +148,12 @@ double VisionData::olderTime() const
   return older;
 };
 
-std::ostream& operator<<(std::ostream& out, const rhoban_ssl::Vision::VisionData& vision)
+std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision)
 {
-  for (auto team : { rhoban_ssl::Vision::Ally, rhoban_ssl::Vision::Opponent })
+  for (auto team : { rhoban_ssl::vision::Ally, rhoban_ssl::vision::Opponent })
   {
     out << team << " : " << std::endl;
-    for (int k = 0; k < rhoban_ssl::Vision::Robots; k++)
+    for (int k = 0; k < rhoban_ssl::vision::Robots; k++)
     {
       out << "robot " << k << std::endl;
       out << vision.robots.at(team).at(k);
@@ -165,7 +165,7 @@ std::ostream& operator<<(std::ostream& out, const rhoban_ssl::Vision::VisionData
   return out;
 }
 
-std::ostream& operator<<(std::ostream& out, const rhoban_ssl::Vision::Object& object)
+std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::Object& object)
 {
   out << " id : " << object.id << std::endl;
   out << " present : " << object.present << std::endl;

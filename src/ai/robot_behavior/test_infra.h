@@ -30,7 +30,7 @@ class TestInfra : public RobotBehavior
 {
 private:
   Vector2d translation;
-  Vision::Team team;
+  vision::Team team;
 
   ConsignFollower* follower;
 

@@ -31,13 +31,13 @@ using namespace rhoban_utils;
 namespace rhoban_ssl
 {
 AIVisionClient::AIVisionClient(Data& shared_data, ai::Team myTeam, bool simulation,
-                               Vision::PartOfTheField part_of_the_field)
+                               vision::PartOfTheField part_of_the_field)
   : VisionClient(simulation), shared_data_(shared_data), part_of_the_field_used_(part_of_the_field), my_team_(myTeam)
 {
 }
 
 AIVisionClient::AIVisionClient(Data& shared_data, ai::Team myTeam, bool simulation, std::string addr, std::string port,
-                               std::string sim_port, Vision::PartOfTheField part_of_the_field)
+                               std::string sim_port, vision::PartOfTheField part_of_the_field)
   : VisionClient(simulation, addr, port, sim_port)
   , shared_data_(shared_data)
   , part_of_the_field_used_(part_of_the_field)
@@ -52,14 +52,14 @@ void AIVisionClient::setRobotPos(ai::Team team, int id, double x, double y, doub
 
   my_team_ = data_from_ai.team_color;
 
-  rhoban_ssl::Vision::Team visionTeam = rhoban_ssl::Vision::Ally;
+  rhoban_ssl::vision::Team visionTeam = rhoban_ssl::vision::Ally;
   if (team != my_team_)
   {
-    visionTeam = rhoban_ssl::Vision::Opponent;
+    visionTeam = rhoban_ssl::vision::Opponent;
   }
 
   mutex.lock();
-  Vision::Robot& robot = vision_data_.robots.at(visionTeam).at(id);
+  vision::Robot& robot = vision_data_.robots.at(visionTeam).at(id);
   double t = robot.movement.time() + 0.01;
   Angle angle(rad2deg(orientation));
   robot.update(t, Point(x, y), angle);
@@ -192,17 +192,17 @@ void AIVisionClient::packetReceived()
   }
 
   // We set to not present all robot that is too old
-  for (unsigned int i = 0; i < vision_data_.robots.at(Vision::Team::Ally).size(); i++)
+  for (unsigned int i = 0; i < vision_data_.robots.at(vision::Team::Ally).size(); i++)
   {
-    Vision::Robot& robot = vision_data_.robots.at(Vision::Team::Ally).at(i);
+    vision::Robot& robot = vision_data_.robots.at(vision::Team::Ally).at(i);
     if (robot.isTooOld())
     {
       robot.present = false;
     }
   }
-  for (unsigned int i = 0; i < vision_data_.robots.at(Vision::Team::Opponent).size(); i++)
+  for (unsigned int i = 0; i < vision_data_.robots.at(vision::Team::Opponent).size(); i++)
   {
-    Vision::Robot& robot = vision_data_.robots.at(Vision::Team::Opponent).at(i);
+    vision::Robot& robot = vision_data_.robots.at(vision::Team::Opponent).at(i);
     if (robot.isTooOld())
     {
       robot.present = false;
@@ -233,12 +233,12 @@ void AIVisionClient::updateRobotInformation(const SSL_DetectionFrame& detection,
   {
     if (robotFrame.robot_id() < ai::Constants::NB_OF_ROBOTS_BY_TEAM)
     {
-      Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
-      Vision::Robot& robot = vision_data_.robots.at(team).at(robotFrame.robot_id());
+      vision::Team team = ally ? vision::Team::Ally : vision::Team::Opponent;
+      vision::Robot& robot = vision_data_.robots.at(team).at(robotFrame.robot_id());
 
       bool orientation_is_defined = false;
       std::pair<rhoban_geometry::Point, ContinuousAngle> position =
-          Vision::Factory::filter(robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections_,
+          vision::Factory::filter(robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections_,
                                   orientation_is_defined, old_vision_data_, part_of_the_field_used_);
       //                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
@@ -264,7 +264,7 @@ rhoban_geometry::Point AIVisionClient::averageFilter(const rhoban_geometry::Poin
                                                                std::pair<double,  // camera have found a ball
                                                                          rhoban_geometry::Point  // detecte ball
                                                                          > >& ball_camera_detections,
-                                                      Vision::PartOfTheField part_of_the_field_used)
+                                                      vision::PartOfTheField part_of_the_field_used)
 {
   int n_linear = 0;
   rhoban_geometry::Point linear_average(0.0, 0.0);

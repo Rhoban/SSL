@@ -62,7 +62,7 @@ Passive_defensor::~Passive_defensor()
   delete follower;
 }
 
-void Passive_defensor::set_robot_to_obstacle(int robot_id, Vision::Team team)
+void Passive_defensor::set_robot_to_obstacle(int robot_id, vision::Team team)
 {
   this->robot_to_obstale_id = robot_id;
   this->robot_to_obstale_team = team;

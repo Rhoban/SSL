@@ -55,7 +55,7 @@ typedef enum
 class Object
 {
 public:
-  Vision::Object vision_data;
+  vision::Object vision_data;
   rhoban_ssl::Movement* movement;
 
 public:
@@ -68,7 +68,7 @@ public:
   Object(const Object& object);
   Object& operator=(const Object& object);
 
-  void setVisionData(const Vision::Object& vision_data);
+  void setVisionData(const vision::Object& vision_data);
   void setMovement(Movement* movement);
 
   // We assume that v1 and v2 are orthonormal
@@ -93,7 +93,7 @@ class Ball : public Object
 {
 };
 
-struct Field : Vision::Field
+struct Field : vision::Field
 {
   bool isInside(const rhoban_geometry::Point& point) const
   {
@@ -171,10 +171,10 @@ public:
   AiData(const std::string& config_path, bool is_in_simulation, ai::Team team_color);
 
   typedef std::map<int, Robot> RobotsTable;
-  typedef std::map<Vision::Team, RobotsTable> RobotsTableByTeam;
+  typedef std::map<vision::Team, RobotsTable> RobotsTableByTeam;
   RobotsTableByTeam robots;
 
-  std::vector<std::pair<Vision::Team, Robot*> > all_robots;
+  std::vector<std::pair<vision::Team, Robot*> > all_robots;
 
   Ball ball;
   Field field;
@@ -201,14 +201,14 @@ public:
 
   Constants constants;
 
-  void update(const Vision::VisionData vision_data);
+  void update(const vision::VisionData vision_data);
 
   // Rturn true is the robot is ready and inside the field
   bool robotIsValid(int robot_id) const;
   bool robotIsInsideTheField(int robot_id) const;
 
   void visitAllPairOfRobots(
-      std::function<void(Vision::Team robot_team_1, Robot& robot_1, Vision::Team robot_team_2, Robot& robot_2)>
+      std::function<void(vision::Team robot_team_1, Robot& robot_1, vision::Team robot_team_2, Robot& robot_2)>
           visitor);
 
   const Collision_times_table& getTableOfCollisionTimes() const;

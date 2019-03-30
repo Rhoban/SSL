@@ -91,12 +91,12 @@ void StrikerWithSupport::assign_behavior_to_robots(
     assign_behavior(player_id(0), striker);
     int supportLeft = player_id(1);  // we get the first if in get_player_ids()
     std::shared_ptr<Robot_behavior::RobotFollower> support_behaviorL(new Robot_behavior::RobotFollower(ai_data));
-    support_behaviorL->declare_robot_to_follow(player_id(0), Vector2d(1, 0.5), Vision::Team::Ally);
+    support_behaviorL->declare_robot_to_follow(player_id(0), Vector2d(1, 0.5), vision::Team::Ally);
     assign_behavior(supportLeft, support_behaviorL);
 
     int supportRight = player_id(2);  // we get the first if in get_player_ids()
     std::shared_ptr<Robot_behavior::RobotFollower> support_behaviorR(new Robot_behavior::RobotFollower(ai_data));
-    support_behaviorR->declare_robot_to_follow(player_id(0), Vector2d(1, -0.5), Vision::Team::Ally);
+    support_behaviorR->declare_robot_to_follow(player_id(0), Vector2d(1, -0.5), vision::Team::Ally);
     assign_behavior(supportRight, support_behaviorR);
 
     behaviors_are_assigned = true;

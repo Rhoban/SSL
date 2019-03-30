@@ -30,7 +30,7 @@ Degageur::Degageur(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , point_to_pass(66, 66)
   , robot_to_pass_id(-1)
-  , robot_to_pass_team(Vision::Team::Ally)
+  , robot_to_pass_team(vision::Team::Ally)
   , needKick(false)
   , follower(Factory::fixed_consign_follower(ai_data))
 {
@@ -51,7 +51,7 @@ void Degageur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   //    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
   // default will be the closest ally robot from the opponent goal center
-  robot_to_pass_id = GameInformations::getShirtNumberOfClosestRobot(Vision::Team::Ally, opponentGoalCenter());
+  robot_to_pass_id = GameInformations::getShirtNumberOfClosestRobot(vision::Team::Ally, opponentGoalCenter());
   //    }
 
   if (robot_to_pass_id != -1)
@@ -141,7 +141,7 @@ void Degageur::declare_point_to_pass(rhoban_geometry::Point point)
   point_to_pass = point;
 }
 
-void Degageur::declare_robot_to_pass(int robot_id, Vision::Team team)
+void Degageur::declare_robot_to_pass(int robot_id, vision::Team team)
 {
   robot_to_pass_id = robot_id;
   robot_to_pass_team = team;

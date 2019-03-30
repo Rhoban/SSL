@@ -144,18 +144,18 @@ int main(int argc, char** argv)
 
   Data data(yellow.getValue() ? ai::Yellow : ai::Blue);
 
-  Vision::PartOfTheField part_of_the_field_used;
+  vision::PartOfTheField part_of_the_field_used;
   if (zone_name.getValue() == "all")
   {
-    part_of_the_field_used = Vision::PartOfTheField::ALL_FIELD;
+    part_of_the_field_used = vision::PartOfTheField::ALL_FIELD;
   }
   else if (zone_name.getValue() == "positive")
   {
-    part_of_the_field_used = Vision::PartOfTheField::POSIVE_HALF_FIELD;
+    part_of_the_field_used = vision::PartOfTheField::POSIVE_HALF_FIELD;
   }
   else if (zone_name.getValue() == "negative")
   {
-    part_of_the_field_used = Vision::PartOfTheField::NEGATIVE_HALF_FIELD;
+    part_of_the_field_used = vision::PartOfTheField::NEGATIVE_HALF_FIELD;
   }
   else
   {

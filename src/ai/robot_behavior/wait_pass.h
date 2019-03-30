@@ -30,7 +30,7 @@ class WaitPass : public RobotBehavior
 {
 private:
   Vector2d translation;
-  Vision::Team team;
+  vision::Team team;
   double distance_ball;
 
   ConsignFollower* follower;

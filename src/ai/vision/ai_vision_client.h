@@ -34,11 +34,11 @@ class AIVisionClient : public VisionClient
 {
 public:
   AIVisionClient(Data& shared_data_, ai::Team my_team_, bool simulation = false,
-                 Vision::PartOfTheField part_of_the_field_used_ = Vision::PartOfTheField::ALL_FIELD);
+                 vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
 
   AIVisionClient(Data& shared_data_, ai::Team my_team_, bool simulation, std::string addr = SSL_VISION_ADDRESS,
                  std::string port = SSL_VISION_PORT, std::string sim_port = SSL_SIMULATION_VISION_PORT,
-                 Vision::PartOfTheField part_of_the_field_used_ = Vision::PartOfTheField::ALL_FIELD);
+                 vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
 
   void setRobotPos(ai::Team team, int id, double x, double y, double orientation);
 
@@ -47,7 +47,7 @@ protected:
 
   Data& shared_data_;
 
-  Vision::PartOfTheField part_of_the_field_used_;
+  vision::PartOfTheField part_of_the_field_used_;
 
   std::map<int, SSL_DetectionFrame> camera_detections_;
 
@@ -61,8 +61,8 @@ protected:
                               ai::Team team_color);
 
 private:
-  Vision::VisionData old_vision_data_;
-  Vision::VisionData vision_data_;
+  vision::VisionData old_vision_data_;
+  vision::VisionData vision_data_;
   ai::Team my_team_;
   std::map<int, SSL_DetectionFrame> historic_;
 
@@ -71,6 +71,6 @@ private:
                                                  std::pair<double,                 // camera have found a ball
                                                            rhoban_geometry::Point  // detecte ball
                                                            > >& ball_camera_detections_,
-                                        Vision::PartOfTheField part_of_the_field_used_);
+                                        vision::PartOfTheField part_of_the_field_used_);
 };
 }  // namespace rhoban_ssl

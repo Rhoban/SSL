@@ -33,7 +33,7 @@ private:
   double tempo;
   rhoban_geometry::Point striking_point;
   int robot_to_pass_id;
-  Vision::Team robot_to_pass_team;
+  vision::Team robot_to_pass_team;
 
 public:
   SlowStriker(ai::AiData& ai_data);
@@ -44,7 +44,7 @@ public:
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
   void declare_point_to_strik(rhoban_geometry::Point point);
-  void declare_robot_to_pass(int id, Vision::Team team = Vision::Team::Ally);
+  void declare_robot_to_pass(int id, vision::Team team = vision::Team::Ally);
   virtual ~SlowStriker();
 };
 

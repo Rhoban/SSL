@@ -2,11 +2,11 @@
 
 namespace rhoban_ssl
 {
-namespace Vision
+namespace vision
 {
 #define ERROR_FIELD 0.1
 
-bool objectCoordonateIsValid(double x, double y, Vision::PartOfTheField part_of_the_field_used)
+bool objectCoordonateIsValid(double x, double y, vision::PartOfTheField part_of_the_field_used)
 {
   switch (part_of_the_field_used)
   {
@@ -32,7 +32,7 @@ bool objectCoordonateIsValid(double x, double y, Vision::PartOfTheField part_of_
 
 std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::averageFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
-    const Vision::VisionData& old_vision_data, PartOfTheField part_of_the_field_used)
+    const vision::VisionData& old_vision_data, PartOfTheField part_of_the_field_used)
 {
   int n_linear = 0;
   int n_angular = 0;
@@ -94,7 +94,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::averageF
 
 std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponentialDegressionFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
-    const Vision::VisionData& old_vision_data)
+    const vision::VisionData& old_vision_data)
 {
   double n_linear = 0;
   double n_angular = 0;
@@ -107,7 +107,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponent
 
     const google::protobuf::RepeatedPtrField<SSL_DetectionRobot>* robots;
     const MovementSample& old_robot_movement =
-        old_vision_data.robots.at(ally ? Vision::Team::Ally : Vision::Team::Opponent).at(robot_id).movement;
+        old_vision_data.robots.at(ally ? vision::Team::Ally : vision::Team::Opponent).at(robot_id).movement;
     if (team_color == ai::Team::Yellow)
     {
       robots = &detection.robots_yellow();
@@ -151,7 +151,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponent
 std::pair<rhoban_geometry::Point, ContinuousAngle>
 RobotPositionFilter::noFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
                                  const std::map<int, SSL_DetectionFrame>& camera_detections,
-                                 bool& orientation_is_defined, const Vision::VisionData& old_vision_data)
+                                 bool& orientation_is_defined, const vision::VisionData& old_vision_data)
 {
   orientation_is_defined = robot_frame.has_orientation();
   return { rhoban_geometry::Point(robot_frame.x() / 1000.0, robot_frame.y() / 1000.0),

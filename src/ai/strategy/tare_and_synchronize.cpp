@@ -83,7 +83,7 @@ void Tare_and_synchronize::set_temporal_shift_between_vision()
 void Tare_and_synchronize::assign_behavior_to_robots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  const Movement& movement = ai_data.robots[Vision::Ally][robot_id(0)].getMovement();
+  const Movement& movement = ai_data.robots[vision::Ally][robot_id(0)].getMovement();
   if (!halt_behavior_was_assigned)
   {
     assign_behavior(robot_id(0),

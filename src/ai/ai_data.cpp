@@ -51,7 +51,7 @@ Object& Object::operator=(const Object& object)
   return *this;
 }
 
-void Object::setVisionData(const Vision::Object& vision_data)
+void Object::setVisionData(const vision::Object& vision_data)
 {
   this->vision_data = vision_data;
   this->movement->set_sample(this->vision_data.movement);
@@ -90,16 +90,16 @@ bool Object::isPresentInVision() const
   return vision_data.isOk();
 }
 
-void AiData::update(const Vision::VisionData vision_data)
+void AiData::update(const vision::VisionData vision_data)
 {
   if (vision_data.field.present)
   {
-    static_cast<Vision::Field&>(field) = vision_data.field;
+    static_cast<vision::Field&>(field) = vision_data.field;
   };
 
-  for (auto team : { Vision::Ally, Vision::Opponent })
+  for (auto team : { vision::Ally, vision::Opponent })
   {
-    for (int k = 0; k < Vision::Robots; k++)
+    for (int k = 0; k < vision::Robots; k++)
     {
       robots[team][k].setVisionData(vision_data.robots.at(team).at(k));
     }
@@ -111,9 +111,9 @@ void AiData::update(const Vision::VisionData vision_data)
 void AiData::changeFrameForAllObjects(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
   team_point_of_view.set_frame(origin, v1, v2);
-  for (auto team : { Vision::Ally, Vision::Opponent })
+  for (auto team : { vision::Ally, vision::Opponent })
   {
-    for (int k = 0; k < Vision::Robots; k++)
+    for (int k = 0; k < vision::Robots; k++)
     {
       robots[team][k].changeFrame(origin, v1, v2);
     }
@@ -131,21 +131,21 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team t
 {
   dt = constants.period;
   int nb_robots = 0;
-  for (auto team : { Vision::Ally, Vision::Opponent })
+  for (auto team : { vision::Ally, vision::Opponent })
   {
-    for (int k = 0; k < Vision::Robots; k++)
+    for (int k = 0; k < vision::Robots; k++)
     {
       robots[team][k].setMovement(physic::Factory::robot_movement(*this));
       nb_robots++;
     }
   }
-  all_robots = std::vector<std::pair<Vision::Team, Robot*> >(nb_robots);
+  all_robots = std::vector<std::pair<vision::Team, Robot*> >(nb_robots);
   unsigned int i = 0;
-  for (auto team : { Vision::Ally, Vision::Opponent })
+  for (auto team : { vision::Ally, vision::Opponent })
   {
-    for (int k = 0; k < Vision::Robots; k++)
+    for (int k = 0; k < vision::Robots; k++)
     {
-      all_robots[i] = std::pair<Vision::Team, Robot*>(team, &(robots.at(team).at(k)));
+      all_robots[i] = std::pair<vision::Team, Robot*>(team, &(robots.at(team).at(k)));
       i++;
     }
   }
@@ -271,13 +271,13 @@ void Constants::load(const std::string& config_path)
 
 bool AiData::robotIsInsideTheField(int robot_id) const
 {
-  const rhoban_ssl::Movement& mov = robots.at(Vision::Team::Ally).at(robot_id).getMovement();
+  const rhoban_ssl::Movement& mov = robots.at(vision::Team::Ally).at(robot_id).getMovement();
   return field.isInside(mov.linear_position(time));
 }
 
 bool AiData::robotIsValid(int robot_id) const
 {
-  return (robots.at(Vision::Team::Ally).at(robot_id).isPresentInVision() and robotIsInsideTheField(robot_id));
+  return (robots.at(vision::Team::Ally).at(robot_id).isPresentInVision() and robotIsInsideTheField(robot_id));
 }
 
 const AiData::Collision_times_table& AiData::getTableOfCollisionTimes() const
@@ -286,7 +286,7 @@ const AiData::Collision_times_table& AiData::getTableOfCollisionTimes() const
 }
 
 void AiData::visitAllPairOfRobots(
-    std::function<void(Vision::Team robot_team_1, Robot& robot_1, Vision::Team robot_team_2, Robot& robot_2)> visitor)
+    std::function<void(vision::Team robot_team_1, Robot& robot_1, vision::Team robot_team_2, Robot& robot_2)> visitor)
 {
   for (unsigned int i = 0; i < all_robots.size(); i++)
   {
@@ -300,7 +300,7 @@ void AiData::visitAllPairOfRobots(
 std::list<std::pair<int, double> > AiData::getCollisions(int robot_id, const Vector2d& linear_velocity) const
 {
   std::list<std::pair<int, double> > result;
-  const Robot* robot_1 = &(robots.at(Vision::Team::Ally).at(robot_id));
+  const Robot* robot_1 = &(robots.at(vision::Team::Ally).at(robot_id));
 
   if (not(robot_1->isPresentInVision()))
   {
@@ -314,7 +314,7 @@ std::list<std::pair<int, double> > AiData::getCollisions(int robot_id, const Vec
     {
       continue;
     }
-    if (robot_1->id() != robot_2->id() or all_robots[i].first != Vision::Team::Ally)
+    if (robot_1->id() != robot_2->id() or all_robots[i].first != vision::Team::Ally)
     {
       double radius_error = constants.radius_security_for_collision;
       std::pair<bool, double> collision = collision_time(

@@ -28,7 +28,7 @@ namespace Robot_behavior
 Obstructor::Obstructor(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_obstruct_id(-1)
-  , robot_to_obstruct_team(Vision::Team::Opponent)
+  , robot_to_obstruct_team(vision::Team::Opponent)
   , follower(Factory::fixed_consign_follower(ai_data))
 {
 }
@@ -111,7 +111,7 @@ Control Obstructor::control() const
   return ctrl;
 }
 
-void Obstructor::declare_robot_to_obstruct(int robot_id, Vision::Team team)
+void Obstructor::declare_robot_to_obstruct(int robot_id, vision::Team team)
 {
   robot_to_obstruct_id = robot_id;
   robot_to_obstruct_team = team;

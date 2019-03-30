@@ -20,7 +20,7 @@ static QString js(Json::Value& json)
 }
 
 API::API(std::string teamName, bool simulation, rhoban_ssl::ai::Team team, rhoban_ssl::AICommander* commander,
-         const std::string& config_path, Vision::PartOfTheField part_of_the_field_used, std::string addr,
+         const std::string& config_path, vision::PartOfTheField part_of_the_field_used, std::string addr,
          std::string port, std::string sim_port)
   : simulation(simulation)
   , teamName(teamName)
@@ -151,7 +151,7 @@ QString API::robotsStatus()
 {
   Json::Value json(Json::arrayValue);
 
-  rhoban_ssl::Vision::VisionData vision;
+  rhoban_ssl::vision::VisionData vision;
   data >> vision;
 
   rhoban_ssl::SharedData shared;
@@ -167,13 +167,13 @@ QString API::robotsStatus()
 
       jsonRobot["id"] = robot.id;
       jsonRobot["present"] = robot.isOk();
-      jsonRobot["team"] = ((team == rhoban_ssl::Vision::Ally) ? ourColor() : opponentColor());
+      jsonRobot["team"] = ((team == rhoban_ssl::vision::Ally) ? ourColor() : opponentColor());
       auto movement = robot.movement;
       jsonRobot["x"] = movement.linear_position().getX();
       jsonRobot["y"] = movement.linear_position().getY();
       jsonRobot["orientation"] = movement.angular_position().value();
 
-      if (team == rhoban_ssl::Vision::Ally)
+      if (team == rhoban_ssl::vision::Ally)
       {
         auto final_control = shared.final_control_for_robots[robot.id];
         Control control = final_control.control;
@@ -220,7 +220,7 @@ QString API::ballStatus()
 {
   Json::Value json;
 
-  rhoban_ssl::Vision::VisionData vision;
+  rhoban_ssl::vision::VisionData vision;
   data >> vision;
 
   auto pos = vision.ball.movement[0];
@@ -234,7 +234,7 @@ QString API::fieldStatus()
 {
   Json::Value json;
 
-  rhoban_ssl::Vision::VisionData vision;
+  rhoban_ssl::vision::VisionData vision;
   data >> vision;
 
   auto& field = vision.field;

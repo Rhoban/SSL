@@ -31,7 +31,7 @@ class Passive_defensor : public RobotBehavior
 private:
   ConsignFollower* follower;
   int robot_to_obstale_id;
-  Vision::Team robot_to_obstale_team;
+  vision::Team robot_to_obstale_team;
   double barycenter;
 
 public:
@@ -39,7 +39,7 @@ public:
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  void set_robot_to_obstacle(int robot_id, Vision::Team team = Vision::Team::Opponent);
+  void set_robot_to_obstacle(int robot_id, vision::Team team = vision::Team::Opponent);
   void set_barycenter(double barycenter);
   // void obstacle_the_robot_closed_to_the_ally_goal_line();
 

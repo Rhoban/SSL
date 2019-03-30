@@ -29,7 +29,7 @@ namespace Robot_behavior
 RobotFollower::RobotFollower(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_follow_id(-1)
-  , team(Vision::Team::Ally)
+  , team(vision::Team::Ally)
   , follower(Factory::fixed_consign_follower(ai_data))
 {
 }
@@ -68,7 +68,7 @@ RobotFollower::~RobotFollower()
   delete follower;
 }
 
-void RobotFollower::declare_robot_to_follow(int robot_id, const Vector2d& translation, Vision::Team team)
+void RobotFollower::declare_robot_to_follow(int robot_id, const Vector2d& translation, vision::Team team)
 {
   robot_to_follow_id = robot_id;
   this->translation = translation;

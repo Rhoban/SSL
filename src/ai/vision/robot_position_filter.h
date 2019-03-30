@@ -7,7 +7,7 @@
 
 namespace rhoban_ssl
 {
-namespace Vision
+namespace vision
 {
 enum PartOfTheField
 {
@@ -24,17 +24,17 @@ public:
   static std::pair<rhoban_geometry::Point, ContinuousAngle>
   averageFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
                  const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
-                 const Vision::VisionData& old_vision_data, Vision::PartOfTheField part_of_the_field_used);
+                 const vision::VisionData& old_vision_data, vision::PartOfTheField part_of_the_field_used);
 
   static std::pair<rhoban_geometry::Point, ContinuousAngle>
   exponentialDegressionFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
                                 const std::map<int, SSL_DetectionFrame>& camera_detections,
-                                bool& orientation_is_defined, const Vision::VisionData& old_vision_data);
+                                bool& orientation_is_defined, const vision::VisionData& old_vision_data);
 
   static std::pair<rhoban_geometry::Point, ContinuousAngle>
   noFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
             const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
-            const Vision::VisionData& old_vision_data);
+            const vision::VisionData& old_vision_data);
 };
 
 };  // namespace Vision
