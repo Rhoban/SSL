@@ -19,10 +19,9 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GAME_INFORMATIONS__H__
-#define __GAME_INFORMATIONS__H__
+#pragma once
 
-#include <AiData.h>
+#include <ai_data.h>
 #include <math/box.h>
 
 namespace RhobanSSL
@@ -331,5 +330,3 @@ public:
 };
 
 }  // namespace RhobanSSL
-
-#endif

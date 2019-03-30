@@ -17,11 +17,10 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MATH__FRAME_CHANGEMENT__H__
-#define __MATH__FRAME_CHANGEMENT__H__
+#pragma once
 
 #include "vector2d.h"
-#include "ContinuousAngle.h"
+#include "continuous_angle.h"
 #include <math/matrix2d.h>
 
 class Frame_changement
@@ -57,5 +56,3 @@ public:
   ContinuousAngle to_frame(const ContinuousAngle& angle) const;
   ContinuousAngle to_basis(const ContinuousAngle& angle) const;
 };
-
-#endif

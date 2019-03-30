@@ -1,11 +1,9 @@
-#ifndef __VISION__ROBOT_POSITION_FILTER__H__
-#define __VISION__ROBOT_POSITION_FILTER__H__
+#pragma once
 
-#include <AiData.h>
+#include <ai_data.h>
 #include <VisionClient.h>
-#include <math/ContinuousAngle.h>
-#include <AiData.h>
-#include "VisionData.h"
+#include <math/continuous_angle.h>
+#include "vision_data.h"
 
 namespace RhobanSSL
 {
@@ -41,4 +39,3 @@ public:
 
 };  // namespace Vision
 };  // namespace RhobanSSL
-#endif

@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MOVEMENT_RELATIVE_CONTROL__H__
-#define __MOVEMENT_RELATIVE_CONTROL__H__
+#pragma once
 
 #include "robot_behavior.h"
 
@@ -57,5 +56,3 @@ public:
 
 };  // namespace Robot_behavior
 };  // Namespace RhobanSSL
-
-#endif

@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __TOOLS__MATRIX2D_H__
-#define __TOOLS__MATRIX2D_H__
+#pragma once
 
 #include "vector2d.h"
 
@@ -54,5 +53,3 @@ public:
 
 std::ostream& operator<<(std::ostream& out, const Matrix2d& v);
 Matrix2d operator*(double alpha, const Matrix2d& m);
-
-#endif
