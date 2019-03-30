@@ -46,32 +46,32 @@ const MovementSample& Movement_with_no_prediction::getSample() const
 
 rhoban_geometry::Point Movement_with_no_prediction::linearPosition(double time) const
 {
-  return samples.linear_position(0);
+  return samples.linearPosition(0);
 }
 
 ContinuousAngle Movement_with_no_prediction::angularPosition(double time) const
 {
-  return samples.angular_position(0);
+  return samples.angularPosition(0);
 }
 
 Vector2d Movement_with_no_prediction::linearVelocity(double time) const
 {
-  return samples.linear_velocity(0);
+  return samples.linearVelocity(0);
 }
 
 ContinuousAngle Movement_with_no_prediction::angularVelocity(double time) const
 {
-  return samples.angular_velocity(0);
+  return samples.angularVelocity(0);
 }
 
 Vector2d Movement_with_no_prediction::linearAcceleration(double time) const
 {
-  return samples.linear_acceleration(0);
+  return samples.linearAcceleration(0);
 }
 
 ContinuousAngle Movement_with_no_prediction::angularAcceleration(double time) const
 {
-  return samples.angular_acceleration(0);
+  return samples.angularAcceleration(0);
 }
 
 Movement* Movement_with_no_prediction::clone() const

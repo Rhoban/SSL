@@ -169,9 +169,9 @@ QString API::robotsStatus()
       jsonRobot["present"] = robot.isOk();
       jsonRobot["team"] = ((team == rhoban_ssl::vision::Ally) ? ourColor() : opponentColor());
       auto movement = robot.movement;
-      jsonRobot["x"] = movement.linear_position().getX();
-      jsonRobot["y"] = movement.linear_position().getY();
-      jsonRobot["orientation"] = movement.angular_position().value();
+      jsonRobot["x"] = movement.linearPosition().getX();
+      jsonRobot["y"] = movement.linearPosition().getY();
+      jsonRobot["orientation"] = movement.angularPosition().value();
 
       if (team == rhoban_ssl::vision::Ally)
       {

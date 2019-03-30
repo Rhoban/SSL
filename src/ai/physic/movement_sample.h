@@ -45,16 +45,16 @@ struct MovementSample : public CircularVector<PositionSample>
   double time(unsigned int i = 0) const;
   double dt(unsigned int i = 0) const;
 
-  rhoban_geometry::Point linear_position(unsigned int i = 0) const;
-  ContinuousAngle angular_position(unsigned int i = 0) const;
+  rhoban_geometry::Point linearPosition(unsigned int i = 0) const;
+  ContinuousAngle angularPosition(unsigned int i = 0) const;
 
-  Vector2d linear_velocity(unsigned int i = 0) const;
-  ContinuousAngle angular_velocity(unsigned int i = 0) const;
+  Vector2d linearVelocity(unsigned int i = 0) const;
+  ContinuousAngle angularVelocity(unsigned int i = 0) const;
 
-  Vector2d linear_acceleration(unsigned int i = 0) const;
-  ContinuousAngle angular_acceleration(unsigned int i = 0) const;
+  Vector2d linearAcceleration(unsigned int i = 0) const;
+  ContinuousAngle angularAcceleration(unsigned int i = 0) const;
 
-  bool is_valid() const;
+  bool isValid() const;
   void insert(const PositionSample& sample);
 };
 

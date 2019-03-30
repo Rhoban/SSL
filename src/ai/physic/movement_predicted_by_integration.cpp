@@ -36,7 +36,7 @@ void MovementPredictedByIntegration::print(std::ostream& stream) const
 
 void MovementPredictedByIntegration::setSample(const MovementSample& samples)
 {
-  assert(samples.is_valid());
+  assert(samples.isValid());
   samples_ = samples;
 }
 
@@ -64,7 +64,7 @@ rhoban_geometry::Point MovementPredictedByIntegration::linearPosition(double tim
   {
     DEBUG("WARNING! non monotonous time");
   }
-  return (samples_.linear_position(0) + samples_.linear_velocity(0) * dt  // + samples.linear_acceleration(0) * dt*dt/2.0
+  return (samples_.linearPosition(0) + samples_.linearVelocity(0) * dt  // + samples.linear_acceleration(0) * dt*dt/2.0
   );
 }
 
@@ -80,7 +80,7 @@ ContinuousAngle MovementPredictedByIntegration::angularPosition(double time) con
   }
   // assert( samples[0].time <= time );
   double dt = time - samples_.time(0);
-  return (samples_.angular_position(0) + (samples_.angular_velocity(0) * dt)  // + (samples.angular_acceleration(0) *
+  return (samples_.angularPosition(0) + (samples_.angularVelocity(0) * dt)  // + (samples.angular_acceleration(0) *
                                                                             // (dt*dt/2.0))
   );
 }
@@ -97,7 +97,7 @@ Vector2d MovementPredictedByIntegration::linearVelocity(double time) const
   }
   // assert( samples[0].time <= time );
   double dt = time - samples_.time(0);
-  return samples_.linear_velocity(0) + samples_.linear_acceleration(0) * dt;
+  return samples_.linearVelocity(0) + samples_.linearAcceleration(0) * dt;
 }
 
 ContinuousAngle MovementPredictedByIntegration::angularVelocity(double time) const
@@ -112,7 +112,7 @@ ContinuousAngle MovementPredictedByIntegration::angularVelocity(double time) con
     DEBUG("WARNING! non monotonous time");
   }
   double dt = time - samples_.time(0);
-  return samples_.angular_velocity(0) + samples_.angular_acceleration(0) * dt;
+  return samples_.angularVelocity(0) + samples_.angularAcceleration(0) * dt;
 }
 
 Vector2d MovementPredictedByIntegration::linearAcceleration(double time) const
@@ -126,7 +126,7 @@ Vector2d MovementPredictedByIntegration::linearAcceleration(double time) const
   {
     DEBUG("WARNING! non monotonous time");
   }
-  return samples_.linear_acceleration(0);
+  return samples_.linearAcceleration(0);
 }
 
 ContinuousAngle MovementPredictedByIntegration::angularAcceleration(double time) const
@@ -140,7 +140,7 @@ ContinuousAngle MovementPredictedByIntegration::angularAcceleration(double time)
   {
     DEBUG("WARNING! non monotonous time");
   }
-  return samples_.angular_acceleration(0);
+  return samples_.angularAcceleration(0);
 }
 
 MovementPredictedByIntegration::~MovementPredictedByIntegration()

@@ -120,7 +120,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponent
     {
       if (robot.has_robot_id() and (robot.robot_id() == static_cast<unsigned int>(robot_id)))
       {
-        double x = old_robot_movement.linear_position().getX();
+        double x = old_robot_movement.linearPosition().getX();
         double alpha = .5;
         double coef = (((x < 0 and robot.x() / 1000.0 < 0) or (x > 0 and robot.x() / 1000.0 > 0)) ?
                            1 - std::exp(-alpha * std::fabs(x)) :

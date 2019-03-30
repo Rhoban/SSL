@@ -63,7 +63,7 @@ void MovementSample::insert(const PositionSample& sample)
   }
 }
 
-bool MovementSample::is_valid() const
+bool MovementSample::isValid() const
 {
   assert(this->size() >= 1);
   for (unsigned int i = 0; i < this->size() - 1; i++)
@@ -98,35 +98,35 @@ double MovementSample::dt(unsigned int i) const
   return this->dts[i];
 }
 
-Point MovementSample::linear_position(unsigned int i) const
+Point MovementSample::linearPosition(unsigned int i) const
 {
   return (*this)[i].linear_position;
 }
 
-ContinuousAngle MovementSample::angular_position(unsigned int i) const
+ContinuousAngle MovementSample::angularPosition(unsigned int i) const
 {
   return (*this)[i].angular_position;
 }
 
-Vector2d MovementSample::linear_velocity(unsigned int i) const
+Vector2d MovementSample::linearVelocity(unsigned int i) const
 {
-  return (linear_position(i) - linear_position(i + 1)) / dt(i);
+  return (linearPosition(i) - linearPosition(i + 1)) / dt(i);
 }
 
-ContinuousAngle MovementSample::angular_velocity(unsigned int i) const
+ContinuousAngle MovementSample::angularVelocity(unsigned int i) const
 {
   // TODO Check this
-  return (angular_position(i) - angular_position(i + 1)) / dt(i);
+  return (angularPosition(i) - angularPosition(i + 1)) / dt(i);
 }
 
-Vector2d MovementSample::linear_acceleration(unsigned int i) const
+Vector2d MovementSample::linearAcceleration(unsigned int i) const
 {
-  return (linear_velocity(i) - linear_velocity(i + 1)) / dt(i);
+  return (linearVelocity(i) - linearVelocity(i + 1)) / dt(i);
 }
 
-ContinuousAngle MovementSample::angular_acceleration(unsigned int i) const
+ContinuousAngle MovementSample::angularAcceleration(unsigned int i) const
 {
-  return (angular_velocity(i) - angular_velocity(i + 1)) / dt(i);
+  return (angularVelocity(i) - angularVelocity(i + 1)) / dt(i);
 }
 
 }  // namespace rhoban_ssl
