@@ -24,22 +24,22 @@
 
 namespace rhoban_ssl
 {
-class Movement_on_new_frame : public Movement
+class MovementOnNewFrame : public Movement
 {
 private:
-  Movement* movement;
-  FrameChangement frame;
+  Movement* movement_;
+  FrameChangement frame_;
 
 public:
   // We assume that v1 and v2 are orthonormal
-  void set_frame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
+  void setFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
 
   virtual Movement* clone() const;
-  const Movement* get_original_movement() const;
+  const Movement* getOriginalMovement() const;
 
   virtual double lastTime() const;
 
-  Movement_on_new_frame(Movement* movement);
+  MovementOnNewFrame(Movement* movement_);
 
   virtual void setSample(const MovementSample& samples);
   virtual const MovementSample& getSample() const;
@@ -55,7 +55,7 @@ public:
 
   virtual void print(std::ostream& stream) const;
 
-  virtual ~Movement_on_new_frame();
+  virtual ~MovementOnNewFrame();
 };
 
 }  // namespace rhoban_ssl

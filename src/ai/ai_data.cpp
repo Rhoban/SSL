@@ -60,15 +60,15 @@ void Object::setMovement(Movement* movement)
 {
   if (this->movement)
   {
-    assert(movement != static_cast<Movement_on_new_frame*>(this->movement)->get_original_movement());
+    assert(movement != static_cast<MovementOnNewFrame*>(this->movement)->getOriginalMovement());
     delete this->movement;
   }
   // We change the frame according referee informatiosns
-  this->movement = new Movement_on_new_frame(movement);
+  this->movement = new MovementOnNewFrame(movement);
 }
 void Object::changeFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
-  static_cast<Movement_on_new_frame*>(movement)->set_frame(origin, v1, v2);
+  static_cast<MovementOnNewFrame*>(movement)->setFrame(origin, v1, v2);
 }
 
 const rhoban_ssl::Movement& Object::getMovement() const
