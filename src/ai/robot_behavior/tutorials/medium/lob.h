@@ -17,39 +17,68 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__MEDIUM__LOB__
-#define __ROBOT_BEHAVIOR__TUTORIALS__MEDIUM__LOB__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
 namespace RhobanSSL {
 namespace Robot_behavior {
-namespace Medium {
+namespace medium {
 
-/** Tutorial class to show how to use the lob. */
+/**
+ * @class Lob
+ * @brief Tutorial to show how to use the lob.
+ */
 class Lob : public RobotBehavior  {
     private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+    /**
+     * @see RhobanSSL::Robot_behavior::ConsignFollower
+     */
+    ConsignFollower* follower_;
+    /**
+     * Not use in this package but set in a case of copy.
+     * @see RhobanSSLAnnotation::Annotations
+     */
+    RhobanSSLAnnotation::Annotations annotations_;
 
     public:
+    /**
+     * @brief Constructor.
+     * @param ai_data : The Robot Behavior needs the data of the AI.
+     * @see Ai::AiData
+     */
     Lob(Ai::AiData& ai_data);
 
+    /**
+     * @brief Go in the position of the ball and create a lob.
+     *
+     * We use parameters to update the time and the position before to do anything.
+     * @param time : The time.
+     * @param robot : The information for the robot selected in the behavior.
+     * @param ball : The information of the ball.
+     */
     virtual void update(
         double time,
         const Ai::Robot & robot,
         const Ai::Ball & ball
     );
 
+    /**
+     * @see Control.
+     */
 	virtual Control control() const;
 
+    /**
+     * @see RhobanSSLAnnotation::Annotations.
+     */
     virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
+    /**
+     * @brief Destructor.
+     */
 	virtual ~Lob();
 };
-};
-};
-}; //Namespace Rhoban
-
-#endif
+} // namespace medium
+} // namespace Robot_behavior
+} //Namespace Rhoban

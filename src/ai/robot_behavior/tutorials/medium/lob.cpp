@@ -21,12 +21,12 @@
 
 namespace RhobanSSL {
 namespace Robot_behavior {
-namespace Medium {
+namespace medium {
 Lob::Lob(
     Ai::AiData & ai_data
 ):
     RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+    follower_( Factory::fixed_consign_follower(ai_data) )
 {
 }
 
@@ -37,17 +37,16 @@ void Lob::update(
 ){
     // At First, we update time and update potition from the abstract class robot_behavior.
     RobotBehavior::update_time_and_position( time, robot, ball );
-    
-    annotations.clear();
+    annotations_.clear();
 
     const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
     Vector2d robot_ball_vector = ball_position() - robot_position;
     rhoban_geometry::Point target_position = ball_position();
     
-    follower->set_following_position(target_position, vector2angle(robot_ball_vector));
+    follower_->set_following_position(target_position, vector2angle(robot_ball_vector));
     
-    follower->avoid_the_ball(false);
-    follower->update(time, robot, ball);
+    follower_->avoid_the_ball(false);
+    follower_->update(time, robot, ball);
 }
 
 Control Lob::control() const {
@@ -55,7 +54,7 @@ Control Lob::control() const {
     
     Vector2d robot_ball_vector = robot_position - ball_position();
     double dist = robot_ball_vector.norm();
-    Control ctrl = follower->control();
+    Control ctrl = follower_->control();
 
     // dist_minimal = robot_radius + radius_ball + safety margin = 0.09 + 0.02 + 0.1 = 0.21
     double dist_minimal = 0.21;
@@ -67,13 +66,13 @@ Control Lob::control() const {
 }
 
 Lob::~Lob(){
-    delete follower;
+    delete follower_;
 }
 
 RhobanSSLAnnotation::Annotations Lob::get_annotations() const {
     RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
+    annotations.addAnnotations( this->annotations_ );
+    annotations.addAnnotations( follower_->get_annotations() );
     return annotations;
 }
 
