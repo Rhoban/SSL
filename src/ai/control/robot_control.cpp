@@ -57,7 +57,7 @@ void CurveForRobot::print_translation_movment(double dt) const
 {
   std::cout << "translation movment : " << std::endl;
   std::cout << "--------------------- " << std::endl;
-  double max_time = translation_movment.max_time();
+  double max_time = translation_movment.maxTime();
   std::cout << "   max time : " << max_time;
   for (double t = 0; t < max_time; t += dt)
   {
@@ -81,7 +81,7 @@ void CurveForRobot::print_rotation_movment(double dt) const
 {
   std::cout << "rotation movment : " << std::endl;
   std::cout << "--------------------- " << std::endl;
-  double max_time = rotation_movment.max_time();
+  double max_time = rotation_movment.maxTime();
   std::cout << "   max time : " << max_time;
   for (double t = 0; t < max_time; t += dt)
   {
