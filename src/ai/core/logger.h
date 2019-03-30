@@ -51,16 +51,16 @@ struct Logger
 
   Logger();
 
-  void init_plot(const std::string& name, const std::vector<std::string>& value_names);
-  void init_file(const std::string& file_name);
+  void initPlot(const std::string& name, const std::vector<std::string>& value_names);
+  void initFile(const std::string& file_name);
 
-  void log_plot(const std::string& name, double value);
-  void log_plot(std::function<std::vector<double>()> fct);
-  void store_plot();
+  void logPlot(const std::string& name, double value);
+  void logPlot(std::function<std::vector<double>()> fct);
+  void storePlot();
 
-  Plot* get_plot();
+  Plot* getPlot();
 
-  bool is_active() const;
+  bool isActive() const;
   void log(const std::string& message);
 
   void print(const std::string& message) const;
