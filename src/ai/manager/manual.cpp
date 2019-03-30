@@ -397,7 +397,7 @@ Manual::Manual(Ai::AiData& ai_data)
                                              },
                                              false  // we don't want to define a goal here !
                                              )));
-  register_strategy("Begginer Annotations - Ball position",
+  register_strategy("Begginer - Annotations Ball position",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
