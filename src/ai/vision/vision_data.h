@@ -45,7 +45,7 @@ struct Object
 
   bool present;
   int id;
-  rhoban_utils::TimeStamp lastUpdate;
+  rhoban_utils::TimeStamp last_update;
 
   void update(double time, const rhoban_geometry::Point& linear_position, const rhoban_utils::Angle& angular_position);
   void update(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
@@ -53,7 +53,7 @@ struct Object
 
   double age() const;
   bool isOk() const;
-  bool is_too_old() const;
+  bool isTooOld() const;
 
   Object();
   void checkAssert(double time) const;
@@ -92,7 +92,7 @@ public:
   Ball ball;
   Field field;
 
-  double older_time() const;
+  double olderTime() const;
   void checkAssert(double time) const;
 
   void print() const;

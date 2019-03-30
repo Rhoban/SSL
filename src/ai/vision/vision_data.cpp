@@ -60,7 +60,7 @@ void Object::update(double time, const Point& linear_position, const ContinuousA
     // DEBUG("TODO");
     return;
   }
-  lastUpdate = rhoban_utils::TimeStamp::now();
+  last_update = rhoban_utils::TimeStamp::now();
   present = true;
 
   movement.insert(PositionSample(time, linear_position, angular_position));
@@ -68,10 +68,10 @@ void Object::update(double time, const Point& linear_position, const ContinuousA
 
 double Object::age() const
 {
-  return diffSec(lastUpdate, rhoban_utils::TimeStamp::now());
+  return diffSec(last_update, rhoban_utils::TimeStamp::now());
 }
 
-bool Object::is_too_old() const
+bool Object::isTooOld() const
 {
   return not(present) or age() > 4.0;
 }
@@ -81,7 +81,7 @@ bool Object::isOk() const
   return present && age() < 2.0;
 }
 
-Object::Object() : movement(history_size), present(false), id(-1), lastUpdate(rhoban_utils::TimeStamp::now())
+Object::Object() : movement(history_size), present(false), id(-1), last_update(rhoban_utils::TimeStamp::now())
 {
   for (int i = 0; i < history_size; i++)
   {
@@ -131,7 +131,7 @@ void VisionData::checkAssert(double time) const
   ball.checkAssert(time);
 }
 
-double VisionData::older_time() const
+double VisionData::olderTime() const
 {
   double older = ball.movement.time(0);
   for (auto team : { Ally, Opponent })
@@ -170,7 +170,7 @@ std::ostream& operator<<(std::ostream& out, const rhoban_ssl::Vision::Object& ob
   out << " id : " << object.id << std::endl;
   out << " present : " << object.present << std::endl;
   out << " age : " << object.age() << std::endl;
-  out << " lastUpdate : " << object.lastUpdate.getTimeMS() / 1000.0 << std::endl;
+  out << " lastUpdate : " << object.last_update.getTimeMS() / 1000.0 << std::endl;
   out << " movement : " << object.movement << std::endl;
   return out;
 }

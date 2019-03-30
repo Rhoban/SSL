@@ -195,7 +195,7 @@ void AIVisionClient::packetReceived()
   for (unsigned int i = 0; i < vision_data_.robots.at(Vision::Team::Ally).size(); i++)
   {
     Vision::Robot& robot = vision_data_.robots.at(Vision::Team::Ally).at(i);
-    if (robot.is_too_old())
+    if (robot.isTooOld())
     {
       robot.present = false;
     }
@@ -203,7 +203,7 @@ void AIVisionClient::packetReceived()
   for (unsigned int i = 0; i < vision_data_.robots.at(Vision::Team::Opponent).size(); i++)
   {
     Vision::Robot& robot = vision_data_.robots.at(Vision::Team::Opponent).at(i);
-    if (robot.is_too_old())
+    if (robot.isTooOld())
     {
       robot.present = false;
     }
