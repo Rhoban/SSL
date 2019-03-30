@@ -57,9 +57,9 @@ Begginer_goalie::~Begginer_goalie()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_goalie::get_annotations() const
+rhoban_ssl::annotations::Annotations Begginer_goalie::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
   annotations.addAnnotations(follower->get_annotations());
   return annotations;

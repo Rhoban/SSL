@@ -38,7 +38,7 @@ public:
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual ~StrikerAi();
 };

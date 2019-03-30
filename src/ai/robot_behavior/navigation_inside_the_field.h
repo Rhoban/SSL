@@ -44,7 +44,7 @@ private:
   ContinuousAngle target_angle;
   rhoban_geometry::Point deviation_position;
 
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
 public:
   Navigation_inside_the_field(ai::AiData& ai_data, double time, double dt);
@@ -69,7 +69,7 @@ public:
   virtual void avoid_opponent(bool value = true);
   virtual void avoidRobot(int id, bool value);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
   virtual void set_radius_avoidance_for_the_ball(double radius);
 };
 };  // namespace Robot_behavior

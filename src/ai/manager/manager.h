@@ -191,7 +191,7 @@ public:
   //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
   //      return annotations;
   //  }
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 };
 
 };  // namespace Manager

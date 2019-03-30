@@ -91,9 +91,9 @@ protected:
 
   void shareData();
   void preventCollision(int robot_id, Control& ctrl);
-  RhobanSSLAnnotation::Annotations getRobotBehaviorAnnotations() const;
+  rhoban_ssl::annotations::Annotations getRobotBehaviorAnnotations() const;
 
 public:
-  void getAnnotations(RhobanSSLAnnotation::Annotations& annotations) const;
+  void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
 };
 };  // namespace RhobanSSL

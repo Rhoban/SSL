@@ -123,7 +123,7 @@ Mur_def_kick::~Mur_def_kick()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Mur_def_kick::get_annotations() const
+rhoban_ssl::annotations::Annotations Mur_def_kick::get_annotations() const
 {
   return follower->get_annotations();
 }

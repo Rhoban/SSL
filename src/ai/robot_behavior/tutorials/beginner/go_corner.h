@@ -43,7 +43,7 @@ private:
    * Not use in this package but set in a case of copy.
    * @see RhobanSSLAnnotation::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
   /**
    * @brief The target corner which the robot goes.
    */
@@ -78,7 +78,7 @@ public:
    * The class don't draw any annotations.
    * The follower draw annotation.
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   /**
    * @brief Destructor.

@@ -95,7 +95,7 @@ StrikerAi::~StrikerAi()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations StrikerAi::get_annotations() const
+rhoban_ssl::annotations::Annotations StrikerAi::get_annotations() const
 {
   return follower->get_annotations();
 }

@@ -53,9 +53,9 @@ Control Test_relative_velocity_consign::control() const
   return relative_control;
 }
 
-RhobanSSLAnnotation::Annotations Test_relative_velocity_consign::get_annotations() const
+rhoban_ssl::annotations::Annotations Test_relative_velocity_consign::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addArrow(linear_position(), linear_position() + relative_control.linear_velocity, "blue");
   return annotations;
 }

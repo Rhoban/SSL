@@ -150,7 +150,7 @@ Mur_defensor::~Mur_defensor()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Mur_defensor::get_annotations() const
+rhoban_ssl::annotations::Annotations Mur_defensor::get_annotations() const
 {
   return follower->get_annotations();
 }

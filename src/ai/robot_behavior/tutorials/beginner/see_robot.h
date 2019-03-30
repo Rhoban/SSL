@@ -33,7 +33,7 @@ class See_Robot : public RobotBehavior
 private:
   int target_robot_id;
   ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
 public:
   See_Robot(ai::AiData& ai_data, int target_id = 0);
@@ -46,7 +46,7 @@ public:
 
   int get_robot_id_to_see() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual ~See_Robot();
 };

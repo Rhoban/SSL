@@ -42,7 +42,7 @@ private:
   rhoban_geometry::Point target_position;
 
   ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
 public:
   bool well_positioned;
@@ -59,7 +59,7 @@ public:
   void declare_area(rhoban_geometry::Point p1, rhoban_geometry::Point p2);
 
   virtual Control control() const;
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
   virtual ~SearchShootArea();
 };
 

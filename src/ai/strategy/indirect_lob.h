@@ -54,7 +54,7 @@ public:
   virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 };
 
 };  // namespace Strategy

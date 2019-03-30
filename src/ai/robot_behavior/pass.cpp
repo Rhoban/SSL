@@ -94,7 +94,7 @@ Pass::~Pass()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Pass::get_annotations() const
+rhoban_ssl::annotations::Annotations Pass::get_annotations() const
 {
   return follower->get_annotations();
 }

@@ -85,9 +85,9 @@ void PositionFollower::set_limits(double translation_velocity_limit, double rota
                            rotation_acceleration_limit);
 }
 
-RhobanSSLAnnotation::Annotations PositionFollower::get_annotations() const
+rhoban_ssl::annotations::Annotations PositionFollower::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   bool dashed = true;
   annotations.addArrow(linear_position(), position, "magenta", dashed);
   annotations.addArrow(position, position + Vector2d(std::cos(angle.value()), std::sin(angle.value())), "magenta",

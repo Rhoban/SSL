@@ -96,7 +96,7 @@ Defensor::~Defensor()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Defensor::get_annotations() const
+rhoban_ssl::annotations::Annotations Defensor::get_annotations() const
 {
   return follower->get_annotations();
 }

@@ -100,7 +100,7 @@ public:
   virtual void set_radius_avoidance_for_the_ball(double radius);
   double get_radius_avoidance_for_the_ball();
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 };
 
 };  // namespace Robot_behavior

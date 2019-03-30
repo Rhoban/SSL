@@ -152,7 +152,7 @@ Degageur::~Degageur()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Degageur::get_annotations() const
+rhoban_ssl::annotations::Annotations Degageur::get_annotations() const
 {
   return follower->get_annotations();
 }

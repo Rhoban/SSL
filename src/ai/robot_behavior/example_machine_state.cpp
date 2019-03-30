@@ -86,7 +86,7 @@ Example_machine_state::~Example_machine_state()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Example_machine_state::get_annotations() const
+rhoban_ssl::annotations::Annotations Example_machine_state::get_annotations() const
 {
   return follower->get_annotations();
 }

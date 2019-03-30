@@ -42,7 +42,7 @@ public:
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
   void declare_point_to_strik(rhoban_geometry::Point point);
   void declare_robot_to_pass(int id, vision::Team team = vision::Team::Ally);
   virtual ~SlowStriker();

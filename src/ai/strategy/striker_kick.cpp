@@ -119,9 +119,9 @@ bool StrikerKick::get_starting_position_for_goalie(rhoban_geometry::Point& linea
   return true;
 }
 
-RhobanSSLAnnotation::Annotations StrikerKick::get_annotations() const
+rhoban_ssl::annotations::Annotations StrikerKick::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {

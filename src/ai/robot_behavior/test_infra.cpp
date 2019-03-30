@@ -63,7 +63,7 @@ TestInfra::~TestInfra()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations TestInfra::get_annotations() const
+rhoban_ssl::annotations::Annotations TestInfra::get_annotations() const
 {
   return follower->get_annotations();
 }

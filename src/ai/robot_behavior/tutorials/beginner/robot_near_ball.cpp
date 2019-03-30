@@ -77,9 +77,9 @@ Begginer_robot_near_ball::~Begginer_robot_near_ball()
 {
 }
 
-RhobanSSLAnnotation::Annotations Begginer_robot_near_ball::get_annotations() const
+rhoban_ssl::annotations::Annotations Begginer_robot_near_ball::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
   return annotations;
 }

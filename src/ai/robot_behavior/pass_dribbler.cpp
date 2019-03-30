@@ -138,7 +138,7 @@ Pass_dribbler::~Pass_dribbler()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Pass_dribbler::get_annotations() const
+rhoban_ssl::annotations::Annotations Pass_dribbler::get_annotations() const
 {
   return follower->get_annotations();
 }

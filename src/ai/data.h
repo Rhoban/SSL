@@ -33,7 +33,7 @@ struct DataFromAi
 
 struct DataForViewer
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 };
 
 struct SharedData

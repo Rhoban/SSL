@@ -58,9 +58,9 @@ Test_kicker::~Test_kicker()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Test_kicker::get_annotations() const
+rhoban_ssl::annotations::Annotations Test_kicker::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
   annotations.addAnnotations(follower->get_annotations());
   return annotations;

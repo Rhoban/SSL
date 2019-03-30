@@ -71,7 +71,7 @@ ProtectBall::~ProtectBall()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations ProtectBall::get_annotations() const
+rhoban_ssl::annotations::Annotations ProtectBall::get_annotations() const
 {
   return follower->get_annotations();
 }

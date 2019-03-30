@@ -143,7 +143,7 @@ SlowStriker::~SlowStriker()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations SlowStriker::get_annotations() const
+rhoban_ssl::annotations::Annotations SlowStriker::get_annotations() const
 {
   return follower->get_annotations();
 }

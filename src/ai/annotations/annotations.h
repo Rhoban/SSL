@@ -25,8 +25,11 @@
 #include <rhoban_geometry/segment.h>
 #include <math/box.h>
 
-namespace RhobanSSLAnnotation
+namespace rhoban_ssl
 {
+namespace annotations
+{
+
 class Annotations
 {
 public:
@@ -58,9 +61,10 @@ public:
   Json::Value toJson() const;
   std::string toJsonString() const;
 
-  void map_positions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct);
+  void mapPositions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct);
 
 protected:
-  Json::Value json;
+  Json::Value json_;
 };
 }  // namespace RhobanSSLAnnotation
+}

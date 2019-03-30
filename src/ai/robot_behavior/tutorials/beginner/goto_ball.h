@@ -32,7 +32,7 @@ class Goto_ball : public RobotBehavior
 {
 private:
   ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
 public:
   Goto_ball(ai::AiData& ai_data);
@@ -41,7 +41,7 @@ public:
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual ~Goto_ball();
 };

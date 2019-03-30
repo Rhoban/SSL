@@ -191,9 +191,9 @@ Goalie::~Goalie()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Goalie::get_annotations() const
+rhoban_ssl::annotations::Annotations Goalie::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations_local;
+  rhoban_ssl::annotations::Annotations annotations_local;
   annotations_local.addAnnotations(annotations);
   std::string annotations_text;
   if (robot_ptr)

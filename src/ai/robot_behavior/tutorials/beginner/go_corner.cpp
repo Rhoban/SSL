@@ -55,9 +55,9 @@ GoCorner::~GoCorner()
   delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations GoCorner::get_annotations() const
+rhoban_ssl::annotations::Annotations GoCorner::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
   annotations.addAnnotations(follower_->get_annotations());
   return annotations;

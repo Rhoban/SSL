@@ -69,9 +69,9 @@ Halt::~Halt()
 {
 }
 
-RhobanSSLAnnotation::Annotations Halt::get_annotations() const
+rhoban_ssl::annotations::Annotations Halt::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {

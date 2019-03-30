@@ -32,7 +32,7 @@ private:
   bool use_custom_vector;
   rhoban_geometry::Point striking_point;
   ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
 public:
   PredictFutur(ai::AiData& ai_data);
@@ -43,7 +43,7 @@ public:
 
   void declare_point_to_strik(rhoban_geometry::Point point);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual ~PredictFutur();
 };

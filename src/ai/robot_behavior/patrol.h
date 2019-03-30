@@ -79,7 +79,7 @@ public:
   virtual Control control() const;
   void set_waiting_time(double time);
 
-  RhobanSSLAnnotation::Annotations get_annotations() const;
+  rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual ~Patrol();
 };

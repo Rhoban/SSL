@@ -30,7 +30,7 @@ class Test_velocity_consign : public RobotBehavior
 {
 private:
   ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
   double period;
   double last_time;
@@ -58,7 +58,7 @@ public:
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual ~Test_velocity_consign();
 };

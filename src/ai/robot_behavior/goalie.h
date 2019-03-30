@@ -31,7 +31,7 @@ class Goalie : public RobotBehavior
 private:
   // PositionFollower follower(); TODO : to remove if not necessary
 
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
   ConsignFollower* follower;
 
@@ -61,7 +61,7 @@ public:
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual ~Goalie();
 };

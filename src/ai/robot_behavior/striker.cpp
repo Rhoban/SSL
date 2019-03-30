@@ -126,7 +126,7 @@ Striker::~Striker()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Striker::get_annotations() const
+rhoban_ssl::annotations::Annotations Striker::get_annotations() const
 {
   return follower->get_annotations();
 }

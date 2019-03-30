@@ -84,7 +84,7 @@ Concept_proof_spinner::~Concept_proof_spinner()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Concept_proof_spinner::get_annotations() const
+rhoban_ssl::annotations::Annotations Concept_proof_spinner::get_annotations() const
 {
   return follower->get_annotations();
 }

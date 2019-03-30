@@ -195,9 +195,9 @@ void Navigation_inside_the_field::set_limits(double translation_velocity_limit, 
                                rotation_acceleration_limit);
 }
 
-RhobanSSLAnnotation::Annotations Navigation_inside_the_field::get_annotations() const
+rhoban_ssl::annotations::Annotations Navigation_inside_the_field::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   if (normSquare(deviation_position - target_position) > 0.001)
   {
     annotations.addArrow(deviation_position, target_position, "yellow");

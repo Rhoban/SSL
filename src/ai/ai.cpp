@@ -494,9 +494,9 @@ double AI::getCurrentTime()
   return ai_data_.time;
 }
 
-RhobanSSLAnnotation::Annotations AI::getRobotBehaviorAnnotations() const
+rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   for (int robot_id = 0; robot_id < vision::Robots; robot_id++)
   {
     const Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_.at(robot_id));
@@ -505,7 +505,7 @@ RhobanSSLAnnotation::Annotations AI::getRobotBehaviorAnnotations() const
   return annotations;
 }
 
-void AI::getAnnotations(RhobanSSLAnnotation::Annotations& annotations) const
+void AI::getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const
 {
   annotations.addAnnotations(getManager()->get_annotations());
   annotations.addAnnotations(getRobotBehaviorAnnotations());
@@ -513,7 +513,7 @@ void AI::getAnnotations(RhobanSSLAnnotation::Annotations& annotations) const
   std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point& p) {
     return this->ai_data_.team_point_of_view.fromFrame(p);
   };
-  annotations.map_positions(fct);
+  annotations.mapPositions(fct);
 }
 
 void AI::updateElectronicInformations()

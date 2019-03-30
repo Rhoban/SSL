@@ -95,9 +95,9 @@ Strategy::~Strategy()
 {
 }
 
-RhobanSSLAnnotation::Annotations Strategy::get_annotations() const
+rhoban_ssl::annotations::Annotations Strategy::get_annotations() const
 {
-  return RhobanSSLAnnotation::Annotations();
+  return rhoban_ssl::annotations::Annotations();
 }
 
 }  // namespace Strategy

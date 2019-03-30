@@ -199,9 +199,9 @@ void Prepare_kickoff::set_goalie(int id, bool to_be_managed)
   }
 }
 
-RhobanSSLAnnotation::Annotations Prepare_kickoff::get_annotations() const
+rhoban_ssl::annotations::Annotations Prepare_kickoff::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {

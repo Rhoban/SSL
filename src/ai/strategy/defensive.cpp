@@ -124,9 +124,9 @@ bool Defensive::get_starting_position_for_goalie(rhoban_geometry::Point& linear_
   return true;
 }
 
-RhobanSSLAnnotation::Annotations Defensive::get_annotations() const
+rhoban_ssl::annotations::Annotations Defensive::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {

@@ -287,7 +287,7 @@ Patrol* Patrol::test_SE_rotation_for_pid(ai::AiData& ai_data)
   return res;
 }
 
-RhobanSSLAnnotation::Annotations Patrol::get_annotations() const
+rhoban_ssl::annotations::Annotations Patrol::get_annotations() const
 {
   return follower->get_annotations();
 }

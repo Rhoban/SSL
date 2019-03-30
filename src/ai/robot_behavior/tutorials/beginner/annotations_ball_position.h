@@ -31,7 +31,7 @@ namespace Robot_behavior
 class Begginer_annotations_ball_position : public RobotBehavior
 {
 private:
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
 public:
   Begginer_annotations_ball_position(ai::AiData& ai_data);
@@ -40,7 +40,7 @@ public:
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual ~Begginer_annotations_ball_position();
 };

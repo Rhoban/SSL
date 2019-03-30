@@ -348,9 +348,9 @@ void Navigation_with_obstacle_avoidance::set_limits(double translation_velocity_
                                rotation_acceleration_limit);
 }
 
-RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotations() const
+rhoban_ssl::annotations::Annotations Navigation_with_obstacle_avoidance::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   //    annotations.addCircle( linear_position(), radius_of_limit_cycle );
 
   if (min_time_collision >= 0)

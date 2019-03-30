@@ -43,7 +43,7 @@ public:
   virtual Control control() const;
   void declare_robot_to_obstruct(int robot_id, vision::Team team = vision::Team::Opponent);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
   virtual ~Obstructor();
 };
 

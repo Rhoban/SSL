@@ -59,9 +59,9 @@ Test_velocity_consign::~Test_velocity_consign()
 {
 }
 
-RhobanSSLAnnotation::Annotations Test_velocity_consign::get_annotations() const
+rhoban_ssl::annotations::Annotations Test_velocity_consign::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addArrow(linear_position(), linear_position() + linear_velocity, "blue");
   annotations.addCircle(linear_position(), std::fabs(angular_velocity.value()), "blue");
   return annotations;

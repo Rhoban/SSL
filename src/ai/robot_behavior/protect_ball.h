@@ -36,7 +36,7 @@ public:
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
 
   virtual Control control() const;
 

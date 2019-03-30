@@ -77,9 +77,9 @@ Intermediate_Prepare_strike::~Intermediate_Prepare_strike()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Intermediate_Prepare_strike::get_annotations() const
+rhoban_ssl::annotations::Annotations Intermediate_Prepare_strike::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
   annotations.addAnnotations(follower->get_annotations());
   return annotations;

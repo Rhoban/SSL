@@ -587,9 +587,9 @@ void Manager::declare_and_assign_next_strategies(const std::list<std::string>& f
   }
 }
 
-RhobanSSLAnnotation::Annotations Manager::get_annotations() const
+rhoban_ssl::annotations::Annotations Manager::get_annotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
   for (const std::string& strategy_name : current_strategy_names)
   {

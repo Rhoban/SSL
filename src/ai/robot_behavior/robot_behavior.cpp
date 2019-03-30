@@ -95,9 +95,9 @@ bool RobotBehavior::is_goalie() const
   return robot().is_goalie;
 }
 
-RhobanSSLAnnotation::Annotations RobotBehavior::get_annotations() const
+rhoban_ssl::annotations::Annotations RobotBehavior::get_annotations() const
 {
-  return RhobanSSLAnnotation::Annotations();
+  return rhoban_ssl::annotations::Annotations();
 }
 
 bool RobotBehavior::infraRed() const

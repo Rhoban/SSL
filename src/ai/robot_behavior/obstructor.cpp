@@ -122,7 +122,7 @@ Obstructor::~Obstructor()
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Obstructor::get_annotations() const
+rhoban_ssl::annotations::Annotations Obstructor::get_annotations() const
 {
   return follower->get_annotations();
 }
