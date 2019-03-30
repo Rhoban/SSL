@@ -30,19 +30,19 @@ std::vector<rhoban_geometry::Point> Box::segmentIntersection(const rhoban_geomet
   std::vector<rhoban_geometry::Point> result;
   rhoban_geometry::Segment segment(origin, end);
   rhoban_geometry::Point intersection;
-  if (::segment_intersection(segment, getNorthSegment(), intersection))
+  if (::segmentIntersection(segment, getNorthSegment(), intersection))
   {
     result.push_back(intersection);
   }
-  if (::segment_intersection(segment, getSouthSegment(), intersection))
+  if (::segmentIntersection(segment, getSouthSegment(), intersection))
   {
     result.push_back(intersection);
   }
-  if (::segment_intersection(segment, getWestSegment(), intersection))
+  if (::segmentIntersection(segment, getWestSegment(), intersection))
   {
     result.push_back(intersection);
   }
-  if (::segment_intersection(segment, getEastSegment(), intersection))
+  if (::segmentIntersection(segment, getEastSegment(), intersection))
   {
     result.push_back(intersection);
   }

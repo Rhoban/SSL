@@ -118,7 +118,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
         rhoban_geometry::Segment(new_left_post_position, new_right_post_position);
 
     bool do_they_intersect =
-        segment_intersection(predicted_ball_segment, our_goal_segment, predicted_intersection_point);
+        segmentIntersection(predicted_ball_segment, our_goal_segment, predicted_intersection_point);
 
     if (do_they_intersect == true)
     {
