@@ -76,7 +76,7 @@ void IndirectLob::update(double time)
   int seuil = 0.4;
   int pass = player_id(1);  // we get the first if in get_player_ids()
   const ai::Robot& robot_pass = getRobot(pass);
-  const rhoban_geometry::Point& robot_pass_position = robot_pass.getMovement().linear_position(time);
+  const rhoban_geometry::Point& robot_pass_position = robot_pass.getMovement().linearPosition(time);
 
   Vector2d ball_robot_vector_pass = ballPosition() - robot_pass_position;
 
@@ -156,7 +156,7 @@ RhobanSSLAnnotation::Annotations IndirectLob::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

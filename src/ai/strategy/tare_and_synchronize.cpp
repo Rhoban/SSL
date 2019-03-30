@@ -93,11 +93,11 @@ void Tare_and_synchronize::assign_behavior_to_robots(
   }
   if (halt_behavior_was_assigned and !move_behavior_was_assigned)
   {
-    if (movement.angular_velocity(movement.last_time()).abs().value() <= 0.05)
+    if (movement.angularVelocity(movement.lastTime()).abs().value() <= 0.05)
     {
       Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(ai_data, time, dt);
-      follower->set_following_position(movement.linear_position(movement.last_time()),
-                                       movement.angular_position(movement.last_time()) + M_PI / 2.0);
+      follower->set_following_position(movement.linearPosition(movement.lastTime()),
+                                       movement.angularPosition(movement.lastTime()) + M_PI / 2.0);
       follower->set_translation_pid(ai_data.constants.p_translation, ai_data.constants.i_translation,
                                     ai_data.constants.d_translation);
       follower->set_orientation_pid(ai_data.constants.p_orientation, ai_data.constants.i_orientation,
@@ -114,9 +114,9 @@ void Tare_and_synchronize::assign_behavior_to_robots(
   }
   if (halt_behavior_was_assigned and move_behavior_was_assigned and !time_is_synchro)
   {
-    if (movement.angular_velocity(movement.last_time()).abs().value() >= 0.05)
+    if (movement.angularVelocity(movement.lastTime()).abs().value() >= 0.05)
     {
-      vision_time_command = movement.get_sample().time();
+      vision_time_command = movement.getSample().time();
       ai_time_associated_to_vision_time_command = time;
       assign_behavior(robot_id(0),
                       std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data)));

@@ -35,45 +35,45 @@ const Movement* Movement_with_temporal_shift::get_original_movement() const
   return movement;
 }
 
-void Movement_with_temporal_shift::set_sample(const MovementSample& samples)
+void Movement_with_temporal_shift::setSample(const MovementSample& samples)
 {
-  movement->set_sample(samples);
+  movement->setSample(samples);
 }
-const MovementSample& Movement_with_temporal_shift::get_sample() const
+const MovementSample& Movement_with_temporal_shift::getSample() const
 {
-  return movement->get_sample();
+  return movement->getSample();
 }
 
-double Movement_with_temporal_shift::last_time() const
+double Movement_with_temporal_shift::lastTime() const
 {
-  return movement->last_time() + temporal_shift();
+  return movement->lastTime() + temporal_shift();
 };
 
-rhoban_geometry::Point Movement_with_temporal_shift::linear_position(double time) const
+rhoban_geometry::Point Movement_with_temporal_shift::linearPosition(double time) const
 {
-  return movement->linear_position(time - temporal_shift());
+  return movement->linearPosition(time - temporal_shift());
 }
-ContinuousAngle Movement_with_temporal_shift::angular_position(double time) const
+ContinuousAngle Movement_with_temporal_shift::angularPosition(double time) const
 {
-  return movement->angular_position(time - temporal_shift());
-}
-
-Vector2d Movement_with_temporal_shift::linear_velocity(double time) const
-{
-  return movement->linear_velocity(time - temporal_shift());
-}
-ContinuousAngle Movement_with_temporal_shift::angular_velocity(double time) const
-{
-  return movement->angular_velocity(time - temporal_shift());
+  return movement->angularPosition(time - temporal_shift());
 }
 
-Vector2d Movement_with_temporal_shift::linear_acceleration(double time) const
+Vector2d Movement_with_temporal_shift::linearVelocity(double time) const
 {
-  return movement->linear_acceleration(time - temporal_shift());
+  return movement->linearVelocity(time - temporal_shift());
 }
-ContinuousAngle Movement_with_temporal_shift::angular_acceleration(double time) const
+ContinuousAngle Movement_with_temporal_shift::angularVelocity(double time) const
 {
-  return movement->angular_acceleration(time - temporal_shift());
+  return movement->angularVelocity(time - temporal_shift());
+}
+
+Vector2d Movement_with_temporal_shift::linearAcceleration(double time) const
+{
+  return movement->linearAcceleration(time - temporal_shift());
+}
+ContinuousAngle Movement_with_temporal_shift::angularAcceleration(double time) const
+{
+  return movement->angularAcceleration(time - temporal_shift());
 }
 
 void Movement_with_temporal_shift::print(std::ostream& stream) const

@@ -88,8 +88,8 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle()
 
     if (r->id() != robot().id() && r->id() != closest_robot)
     {
-      rhoban_geometry::Point rpos = r->getMovement().linear_position(r->getMovement().last_time());
-      Vector2d v = (rpos - robot().getMovement().linear_position(robot().getMovement().last_time()));
+      rhoban_geometry::Point rpos = r->getMovement().linearPosition(r->getMovement().lastTime());
+      Vector2d v = (rpos - robot().getMovement().linearPosition(robot().getMovement().lastTime()));
       double d = v.norm();
       if (d < mdist)
       {
@@ -106,9 +106,9 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle()
     double radius_error = ai_data.constants.radius_security_for_collision;
     std::pair<bool, double> collision =
         collisionTime(ai_data.constants.robot_radius,
-                       robot().getMovement().linear_position(robot().getMovement().last_time()), ctrl.linear_velocity,
-                       ball_radius_avoidance, ball().getMovement().linear_position(ball().getMovement().last_time()),
-                       ball().getMovement().linear_velocity(ball().getMovement().last_time()), radius_error);
+                       robot().getMovement().linearPosition(robot().getMovement().lastTime()), ctrl.linear_velocity,
+                       ball_radius_avoidance, ball().getMovement().linearPosition(ball().getMovement().lastTime()),
+                       ball().getMovement().linearVelocity(ball().getMovement().lastTime()), radius_error);
     if (collision.first)
     {
       double time_before_collision = collision.second;
@@ -139,7 +139,7 @@ void Navigation_with_obstacle_avoidance::compute_the_radius_of_limit_cycle()
   }
   else
   {
-    if (robot().getMovement().linear_velocity(ai_data.time).norm() <
+    if (robot().getMovement().linearVelocity(ai_data.time).norm() <
         ai_data.constants.translation_velocity_limit / 4.0)
     {
       radius_of_limit_cycle = 2 * ai_data.constants.robot_radius;  // + ai_data.constants.radius_security_for_avoidance;
@@ -236,8 +236,8 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_r
   // We change the frame from absolute to frame relative to obstacle
   /////////////////////////////////////////////////////////////////
   ai::Robot& obstacle = *(ai_data.all_robots[closest_robot].second);
-  rhoban_geometry::Point obstacle_linear_position = obstacle.getMovement().linear_position(time());
-  Vector2d obstacle_linear_velocity = obstacle.getMovement().linear_velocity(time());
+  rhoban_geometry::Point obstacle_linear_position = obstacle.getMovement().linearPosition(time());
+  Vector2d obstacle_linear_velocity = obstacle.getMovement().linearVelocity(time());
 
   compute_the_limit_cycle_direction_for_obstacle(obstacle_linear_position, obstacle_linear_velocity);
 }
@@ -247,8 +247,8 @@ void Navigation_with_obstacle_avoidance::compute_the_limit_cycle_direction_for_b
   /////////////////////////////////////////////////////////////////
   // We change the frame from absolute to frame relative to obstacle
   /////////////////////////////////////////////////////////////////
-  rhoban_geometry::Point obstacle_linear_position = ball().getMovement().linear_position(time());
-  Vector2d obstacle_linear_velocity = ball().getMovement().linear_velocity(time());
+  rhoban_geometry::Point obstacle_linear_position = ball().getMovement().linearPosition(time());
+  Vector2d obstacle_linear_velocity = ball().getMovement().linearVelocity(time());
 
   compute_the_limit_cycle_direction_for_obstacle(obstacle_linear_position, obstacle_linear_velocity);
 }
@@ -359,11 +359,11 @@ RhobanSSLAnnotation::Annotations Navigation_with_obstacle_avoidance::get_annotat
                          linear_position() + limit_cycle_direction * (limit_cycle_direction.norm()) * 10, "red");
     if (closest_robot == -1)
     {
-      annotations.addCircle(ball().getMovement().linear_position(ai_data.time), radius_of_limit_cycle);
+      annotations.addCircle(ball().getMovement().linearPosition(ai_data.time), radius_of_limit_cycle);
     }
     else
     {
-      annotations.addCircle(ai_data.all_robots.at(closest_robot).second->getMovement().linear_position(ai_data.time),
+      annotations.addCircle(ai_data.all_robots.at(closest_robot).second->getMovement().linearPosition(ai_data.time),
                             radius_of_limit_cycle);
     }
     annotations.addAnnotations(position_follower_avoidance.get_annotations());

@@ -89,9 +89,9 @@ void AttaqueWithSupport::assign_behavior_to_robots(
     int ID2 = player_id(1);  // we get the first if in get_player_ids()
 
     const rhoban_geometry::Point& robot_position_1 =
-        getRobot(ID1, vision::Team::Ally).getMovement().linear_position(time);
+        getRobot(ID1, vision::Team::Ally).getMovement().linearPosition(time);
     const rhoban_geometry::Point& robot_position_2 =
-        getRobot(ID2, vision::Team::Ally).getMovement().linear_position(time);
+        getRobot(ID2, vision::Team::Ally).getMovement().linearPosition(time);
 
     double ball_robot1 = (Vector2d(robot_position_1 - ballPosition())).norm();
     double ball_robot2 = (Vector2d(robot_position_2 - ballPosition())).norm();
@@ -163,7 +163,7 @@ RhobanSSLAnnotation::Annotations AttaqueWithSupport::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

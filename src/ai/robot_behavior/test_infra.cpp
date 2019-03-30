@@ -40,7 +40,7 @@ void TestInfra::update(double time, const ai::Robot& robot, const ai::Ball& ball
   //  this->robot_angular_position
   // are all avalaible
 
-  rhoban_geometry::Point target_position = robot.getMovement().linear_position(time);
+  rhoban_geometry::Point target_position = robot.getMovement().linearPosition(time);
 
   bool value = GameInformations::infraRed(robot.id(), vision::Team::Ally);
   std::cout << "Value infra red : " << value << '\n';

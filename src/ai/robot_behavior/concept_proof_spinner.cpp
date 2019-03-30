@@ -40,7 +40,7 @@ void Concept_proof_spinner::update(double time, const ai::Robot& robot, const ai
   // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  rhoban_geometry::Point pos = robot.getMovement().linear_position(time);
+  rhoban_geometry::Point pos = robot.getMovement().linearPosition(time);
   Vector2d direction = Vector2d(ballPosition()) - Vector2d(pos);
   direction = direction / direction.norm();
 

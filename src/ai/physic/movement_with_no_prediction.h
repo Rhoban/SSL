@@ -31,19 +31,19 @@ private:
 public:
   virtual Movement* clone() const;
 
-  virtual double last_time() const;
+  virtual double lastTime() const;
 
-  virtual void set_sample(const MovementSample& samples);
-  virtual const MovementSample& get_sample() const;
+  virtual void setSample(const MovementSample& samples);
+  virtual const MovementSample& getSample() const;
 
-  virtual rhoban_geometry::Point linear_position(double time) const;
-  virtual ContinuousAngle angular_position(double time) const;
+  virtual rhoban_geometry::Point linearPosition(double time) const;
+  virtual ContinuousAngle angularPosition(double time) const;
 
-  virtual Vector2d linear_velocity(double time) const;
-  virtual ContinuousAngle angular_velocity(double time) const;
+  virtual Vector2d linearVelocity(double time) const;
+  virtual ContinuousAngle angularVelocity(double time) const;
 
-  virtual Vector2d linear_acceleration(double time) const;
-  virtual ContinuousAngle angular_acceleration(double time) const;
+  virtual Vector2d linearAcceleration(double time) const;
+  virtual ContinuousAngle angularAcceleration(double time) const;
 
   virtual void print(std::ostream& stream) const;
 

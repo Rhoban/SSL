@@ -32,7 +32,7 @@ void Intermediate_Prepare_strike::update(double time, const ai::Robot& robot, co
 {
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   Vector2d ball_goal_vector = opponentGoalCenter() - ballPosition();
   Vector2d ball_robot_vector = robot_position - ballPosition();

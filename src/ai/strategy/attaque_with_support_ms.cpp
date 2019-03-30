@@ -172,8 +172,8 @@ void AttaqueWithSupportMs::start(double time)
   ID1 = player_id(0);
   ID2 = player_id(1);  // we get the first if in get_player_ids()
 
-  robot_1_position = getRobot(ID1, vision::Team::Ally).getMovement().linear_position(time);
-  robot_2_position = getRobot(ID2, vision::Team::Ally).getMovement().linear_position(time);
+  robot_1_position = getRobot(ID1, vision::Team::Ally).getMovement().linearPosition(time);
+  robot_2_position = getRobot(ID2, vision::Team::Ally).getMovement().linearPosition(time);
 
   double db1 = (Vector2d(ballPosition() - robot_1_position)).norm();
   double db2 = (Vector2d(ballPosition() - robot_2_position)).norm();
@@ -205,8 +205,8 @@ void AttaqueWithSupportMs::assign_behavior_to_robots(
   // we assign now all the other behavior
   assert(get_player_ids().size() == 2);
 
-  robot_1_position = getRobot(ID1, vision::Team::Ally).getMovement().linear_position(time);
-  robot_2_position = getRobot(ID2, vision::Team::Ally).getMovement().linear_position(time);
+  robot_1_position = getRobot(ID1, vision::Team::Ally).getMovement().linearPosition(time);
+  robot_2_position = getRobot(ID2, vision::Team::Ally).getMovement().linearPosition(time);
   fgbm_score = findGoalBestMove(ballPosition()).second;
 
   machine.run();

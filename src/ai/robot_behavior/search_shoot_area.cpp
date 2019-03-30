@@ -51,7 +51,7 @@ void SearchShootArea::update(double time, const ai::Robot& robot, const ai::Ball
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
   // Vector2d opponent_goal_robot_vector = robot_position - opponent_goal_center();
 
   std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(robot_position);

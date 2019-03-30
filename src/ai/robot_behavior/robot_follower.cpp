@@ -45,10 +45,10 @@ void RobotFollower::update(double time, const ai::Robot& robot, const ai::Ball& 
   // are all avalaible
 
   const ai::Robot& robot_to_follow = getRobot(robot_to_follow_id, robot_to_follow_team);
-  rhoban_geometry::Point position = robot_to_follow.getMovement().linear_position(time);
+  rhoban_geometry::Point position = robot_to_follow.getMovement().linearPosition(time);
   rhoban_geometry::Point target_position = position + translation;
 
-  rhoban_geometry::Point robot_position = robot.getMovement().linear_position(time);
+  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
   double target_rotation = detail::vec2angle(ballPosition() - robot_position);
 
   follower->avoid_the_ball(true);

@@ -88,11 +88,11 @@ void Defensive2::assign_behavior_to_robots(
 
   const ai::Robot& robot1 = getRobot(robotID1, vision::Team::Ally);
   const ai::Robot& robot2 = getRobot(robotID2, vision::Team::Ally);
-  const rhoban_geometry::Point& robot_position_1 = robot1.getMovement().linear_position(time);
-  const rhoban_geometry::Point& robot_position_2 = robot2.getMovement().linear_position(time);
+  const rhoban_geometry::Point& robot_position_1 = robot1.getMovement().linearPosition(time);
+  const rhoban_geometry::Point& robot_position_2 = robot2.getMovement().linearPosition(time);
 
   const ai::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, vision::Team::Opponent);
-  const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.getMovement().linear_position(time);
+  const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.getMovement().linearPosition(time);
 
   double distance1 = (Vector2d(robot_position_1 - robot_to_obstruct_position1)).norm();
   double distance2 = (Vector2d(robot_position_2 - robot_to_obstruct_position1)).norm();
@@ -165,7 +165,7 @@ RhobanSSLAnnotation::Annotations Defensive2::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

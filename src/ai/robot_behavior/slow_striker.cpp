@@ -44,12 +44,12 @@ void SlowStriker::update(double time, const ai::Robot& robot, const ai::Ball& ba
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   if (robot_to_pass_id != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
     const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
-    striking_point = robot_to_pass.getMovement().linear_position(time);
+    striking_point = robot_to_pass.getMovement().linearPosition(time);
   }
 
   Vector2d ball_striking_vector = striking_point - ballPosition();

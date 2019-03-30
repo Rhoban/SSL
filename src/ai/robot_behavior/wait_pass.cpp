@@ -43,11 +43,11 @@ void WaitPass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   annotations.clear();
   // rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
-  const rhoban_geometry::Point& ball_position_now = ball.getMovement().linear_position(time);
-  const rhoban_geometry::Point& ball_position_future = ball.getMovement().linear_position(time + 0.5);
+  const rhoban_geometry::Point& ball_position_now = ball.getMovement().linearPosition(time);
+  const rhoban_geometry::Point& ball_position_future = ball.getMovement().linearPosition(time + 0.5);
   annotations.addCross(ball_position_future.x, ball_position_future.y, "red");
   rhoban_geometry::Point target_position;
-  rhoban_geometry::Point robot_position = robot.getMovement().linear_position(time);
+  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
   double target_rotation = detail::vec2angle(ballPosition() - robot_position);
   distance_ball = (Vector2d(ballPosition() - robot_position)).norm();
 

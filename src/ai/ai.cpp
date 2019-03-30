@@ -51,7 +51,7 @@ void AI::checkTimeIsCoherent() const
 #ifndef NDEBUG
   for (unsigned int i = 0; i < ai_data_.all_robots.size(); i++)
   {
-    assert(ai_data_.all_robots.at(i).second->getMovement().last_time() - 0.000001 <= ai_data_.time);
+    assert(ai_data_.all_robots.at(i).second->getMovement().lastTime() - 0.000001 <= ai_data_.time);
   }
 #endif
 }
@@ -87,7 +87,7 @@ void AI::preventCollision(int robot_id, Control& ctrl)
   const ai::Robot& robot = ai_data_.robots.at(vision::Team::Ally).at(robot_id);
 
   const Vector2d& ctrl_velocity = ctrl.linear_velocity;
-  Vector2d robot_velocity = robot.getMovement().linear_velocity(ai_data_.time);
+  Vector2d robot_velocity = robot.getMovement().linearVelocity(ai_data_.time);
 
   bool collision_is_detected = false;
 
@@ -252,7 +252,7 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
 #endif
 
   preventCollision(robot_id, ctrl);
-  ctrl.change_to_relative_control(ai_data_.robots[vision::Ally][robot_id].getMovement().angular_position(ai_data_.time),
+  ctrl.change_to_relative_control(ai_data_.robots[vision::Ally][robot_id].getMovement().angularPosition(ai_data_.time),
                                   ai_data_.dt);
   limitsVelocity(ctrl);
 }

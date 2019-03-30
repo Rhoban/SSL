@@ -52,7 +52,7 @@ void Mur_def_kick::update(double time, const ai::Robot& robot, const ai::Ball& b
   // const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
   // const ai::Robot & robot = robot_table.at(robot_id);
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   rhoban_geometry::Point ally_goal_point = allyGoalCenter();
 

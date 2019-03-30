@@ -101,7 +101,7 @@ void Indirect::assign_behavior_to_robots(
                       std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data)));
       pass_behavior = std::shared_ptr<Robot_behavior::Pass_dribbler>(new Robot_behavior::Pass_dribbler(ai_data));
       pass_behavior->declare_point_to_pass(
-          getRobot(wait_pass, vision::Team::Ally).getMovement().linear_position(time));
+          getRobot(wait_pass, vision::Team::Ally).getMovement().linearPosition(time));
       assign_behavior(pass, pass_behavior);
     }
 
@@ -161,7 +161,7 @@ RhobanSSLAnnotation::Annotations Indirect::get_annotations() const
 
   for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }

@@ -39,7 +39,7 @@ void StrikerAi::update(double time, const ai::Robot& robot, const ai::Ball& ball
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
   rhoban_geometry::Point goal_point = results.first;

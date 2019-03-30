@@ -92,7 +92,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   double target_rotation;
   rhoban_geometry::Point predicted_intersection_point;
 
-  const rhoban_geometry::Point& predicted_ball_position = ball.getMovement().linear_position(time + 3.0);
+  const rhoban_geometry::Point& predicted_ball_position = ball.getMovement().linearPosition(time + 3.0);
   // test if the ball hits the back
 
   if (predicted_ball_position.getX() < left_post_position.getX())

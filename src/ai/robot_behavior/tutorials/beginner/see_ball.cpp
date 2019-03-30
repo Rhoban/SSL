@@ -37,7 +37,7 @@ void Begginer_see_ball::update(double time, const ai::Robot& robot, const ai::Ba
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);

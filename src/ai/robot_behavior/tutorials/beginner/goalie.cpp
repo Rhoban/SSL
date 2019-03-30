@@ -33,7 +33,7 @@ void Begginer_goalie::update(double time, const ai::Robot& robot, const ai::Ball
 {
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   Vector2d ball_goal_vector = allyGoalCenter() - ballPosition();
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();

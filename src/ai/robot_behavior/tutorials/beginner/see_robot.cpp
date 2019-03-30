@@ -41,16 +41,16 @@ void See_Robot::update(double time, const ai::Robot& robot, const ai::Ball& ball
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
-  ContinuousAngle target_rotation = robot.getMovement().angular_position(ai_data.time);
+  ContinuousAngle target_rotation = robot.getMovement().angularPosition(ai_data.time);
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to look itself will do nothing.
   if (target_robot_id != robot.id())
   {
     const rhoban_geometry::Point& target_position =
-        getRobot(target_robot_id).getMovement().linear_position(ai_data.time);
+        getRobot(target_robot_id).getMovement().linearPosition(ai_data.time);
 
     Vector2d direction = target_position - robot_position;
     target_rotation = vector2angle(direction);

@@ -39,7 +39,7 @@ void Example::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   // On ajoute un text à la position du robot.
   // annotations.addText("Exemple :)", robot_position, "blue");

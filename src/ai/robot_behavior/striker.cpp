@@ -43,7 +43,7 @@ void Striker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   // rhoban_geometry::Point opponent_goal_point = opponent_goal_center();
   // rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0,

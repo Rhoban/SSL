@@ -41,49 +41,49 @@ void Movement_on_new_frame::print(std::ostream& stream) const
   stream << "TODO !";
 }
 
-void Movement_on_new_frame::set_sample(const MovementSample& samples)
+void Movement_on_new_frame::setSample(const MovementSample& samples)
 {
-  movement->set_sample(samples);
+  movement->setSample(samples);
 }
 
-const MovementSample& Movement_on_new_frame::get_sample() const
+const MovementSample& Movement_on_new_frame::getSample() const
 {
-  return movement->get_sample();
+  return movement->getSample();
 }
 
-rhoban_geometry::Point Movement_on_new_frame::linear_position(double time) const
+rhoban_geometry::Point Movement_on_new_frame::linearPosition(double time) const
 {
-  return frame.toFrame(movement->linear_position(time));
+  return frame.toFrame(movement->linearPosition(time));
 }
 
-double Movement_on_new_frame::last_time() const
+double Movement_on_new_frame::lastTime() const
 {
-  return movement->last_time();
+  return movement->lastTime();
 }
 
-ContinuousAngle Movement_on_new_frame::angular_position(double time) const
+ContinuousAngle Movement_on_new_frame::angularPosition(double time) const
 {
-  return frame.toFrame(movement->angular_position(time));
+  return frame.toFrame(movement->angularPosition(time));
 }
 
-Vector2d Movement_on_new_frame::linear_velocity(double time) const
+Vector2d Movement_on_new_frame::linearVelocity(double time) const
 {
-  return frame.toBasis(movement->linear_velocity(time));
+  return frame.toBasis(movement->linearVelocity(time));
 }
 
-ContinuousAngle Movement_on_new_frame::angular_velocity(double time) const
+ContinuousAngle Movement_on_new_frame::angularVelocity(double time) const
 {
-  return movement->angular_velocity(time);
+  return movement->angularVelocity(time);
 }
 
-Vector2d Movement_on_new_frame::linear_acceleration(double time) const
+Vector2d Movement_on_new_frame::linearAcceleration(double time) const
 {
-  return frame.toBasis(movement->linear_acceleration(time));
+  return frame.toBasis(movement->linearAcceleration(time));
 }
 
-ContinuousAngle Movement_on_new_frame::angular_acceleration(double time) const
+ContinuousAngle Movement_on_new_frame::angularAcceleration(double time) const
 {
-  return movement->angular_acceleration(time);
+  return movement->angularAcceleration(time);
 }
 
 Movement* Movement_on_new_frame::clone() const

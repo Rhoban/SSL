@@ -39,7 +39,7 @@ void Defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   rhoban_geometry::Point ally_goal_point = allyGoalCenter();
   rhoban_geometry::Point left_post_position =

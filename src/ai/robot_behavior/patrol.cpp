@@ -44,7 +44,7 @@ void Patrol::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   rhoban_geometry::Point target_position;
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 
   ContinuousAngle target_rotation;
 

@@ -50,18 +50,18 @@ void Begginer_robot_have_ball::update(double time, const ai::Robot& robot, const
   // Find the robot that have the ball.
   if (opponent_have_ball)
   {
-    annotations.addCross(opponent_closest.getMovement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(opponent_closest.getMovement().linearPosition(ai_data.time), "blue", false);
   }
   else if (ally_have_ball)
   {
-    annotations.addCross(ally_closest.getMovement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(ally_closest.getMovement().linearPosition(ai_data.time), "blue", false);
   }
   else
   {
     annotations.addCross(ballPosition(), "red", false);
   }
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 }
 
 Control Begginer_robot_have_ball::control() const

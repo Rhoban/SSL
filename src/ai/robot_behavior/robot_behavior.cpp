@@ -61,10 +61,10 @@ void RobotBehavior::update_time_and_position(double time, const ai::Robot& robot
 {
   this->robot_ptr = &robot;
   lastUpdate = time;
-  this->robot_linear_position = Vector2d(robot.getMovement().linear_position(time));
-  this->robot_angular_position = robot.getMovement().angular_position(time);
-  this->robot_linear_velocity = robot.getMovement().linear_velocity(time);
-  this->robot_angular_velocity = robot.getMovement().angular_velocity(time);
+  this->robot_linear_position = Vector2d(robot.getMovement().linearPosition(time));
+  this->robot_angular_position = robot.getMovement().angularPosition(time);
+  this->robot_linear_velocity = robot.getMovement().linearVelocity(time);
+  this->robot_angular_velocity = robot.getMovement().angularVelocity(time);
 };
 
 const ai::Robot& RobotBehavior::robot() const
@@ -82,12 +82,12 @@ const ai::Robot& RobotBehavior::robot() const
 
 rhoban_geometry::Point RobotBehavior::linear_position() const
 {
-  return robot().getMovement().linear_position(time());
+  return robot().getMovement().linearPosition(time());
 }
 
 ContinuousAngle RobotBehavior::angular_position() const
 {
-  return robot().getMovement().angular_position(time());
+  return robot().getMovement().angularPosition(time());
 }
 
 bool RobotBehavior::is_goalie() const

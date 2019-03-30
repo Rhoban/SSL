@@ -38,43 +38,43 @@ TEST(test_movement_predicted_by_integration, use_cases)
     mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
     rhoban_ssl::Movement_predicted_by_integration pred;
-    pred.set_sample(mov);
+    pred.setSample(mov);
 
     Point pos(27, 54);
-    EXPECT_TRUE(pred.linear_position(6) == pos);
+    EXPECT_TRUE(pred.linearPosition(6) == pos);
 
     ContinuousAngle ang(108);
-    EXPECT_TRUE(pred.angular_position(6) == ang);
+    EXPECT_TRUE(pred.angularPosition(6) == ang);
 
     Point vel = Point(27 - 8, 54 - 16) / 3.0;
-    EXPECT_TRUE(pred.linear_velocity(6) == vel);
+    EXPECT_TRUE(pred.linearVelocity(6) == vel);
 
     double ang_vel = (108.0 - 32) / (6 - 3.0);
-    EXPECT_TRUE(pred.angular_velocity(6) == ang_vel);
+    EXPECT_TRUE(pred.angularVelocity(6) == ang_vel);
 
     Point vel0 = Point(27 - 8, 54 - 16) / 3.0;
     Point vel1 = Point(8 - 1, 16 - 2) / 2.0;
 
     Point accel = (vel0 - vel1) / 3.0;
 
-    EXPECT_TRUE(pred.linear_acceleration(6) == accel);
+    EXPECT_TRUE(pred.linearAcceleration(6) == accel);
 
     double ang_vel1 = (32.0 - 4) / (3 - 1.0);
     double ang_vel0 = (108.0 - 32) / (6 - 3.0);
     double ang_accel = (ang_vel0 - ang_vel1) / (6 - 3.0);
 
-    EXPECT_TRUE(pred.angular_acceleration(6) == ang_accel);
+    EXPECT_TRUE(pred.angularAcceleration(6) == ang_accel);
 
     double step = 0.1;
     double t = 0;
     for (int i = 0; i < 100; i++)
     {
-      EXPECT_TRUE(norm(pred.linear_position(6 + t) - (pos + vel * t + accel * t * t / 2.0)) < 0.00001);
-      EXPECT_TRUE(std::fabs((pred.angular_position(6 + t) - (ang + ang_vel * t + ang_accel * t * t / 2.0)).value()) <
+      EXPECT_TRUE(norm(pred.linearPosition(6 + t) - (pos + vel * t + accel * t * t / 2.0)) < 0.00001);
+      EXPECT_TRUE(std::fabs((pred.angularPosition(6 + t) - (ang + ang_vel * t + ang_accel * t * t / 2.0)).value()) <
                   0.00001);
 
-      EXPECT_TRUE(pred.linear_acceleration(6 + t) == accel);
-      EXPECT_TRUE(pred.angular_acceleration(6 + t) == ang_accel);
+      EXPECT_TRUE(pred.linearAcceleration(6 + t) == accel);
+      EXPECT_TRUE(pred.angularAcceleration(6 + t) == ang_accel);
       t += step;
     }
   }
@@ -92,7 +92,7 @@ TEST(test_movement_predicted_by_integration, clone)
     rhoban_ssl::Movement* pred_ptr = pred_tmp.clone();
     rhoban_ssl::Movement& pred = *pred_ptr;
 
-    pred.set_sample(mov);
+    pred.setSample(mov);
 
     delete (pred_ptr);
   }

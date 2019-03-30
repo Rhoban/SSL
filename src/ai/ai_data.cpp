@@ -54,7 +54,7 @@ Object& Object::operator=(const Object& object)
 void Object::setVisionData(const vision::Object& vision_data)
 {
   this->vision_data = vision_data;
-  this->movement->set_sample(this->vision_data.movement);
+  this->movement->setSample(this->vision_data.movement);
 }
 void Object::setMovement(Movement* movement)
 {
@@ -272,7 +272,7 @@ void Constants::load(const std::string& config_path)
 bool AiData::robotIsInsideTheField(int robot_id) const
 {
   const rhoban_ssl::Movement& mov = robots.at(vision::Team::Ally).at(robot_id).getMovement();
-  return field.isInside(mov.linear_position(time));
+  return field.isInside(mov.linearPosition(time));
 }
 
 bool AiData::robotIsValid(int robot_id) const
@@ -318,10 +318,10 @@ std::list<std::pair<int, double> > AiData::getCollisions(int robot_id, const Vec
     {
       double radius_error = constants.radius_security_for_collision;
       std::pair<bool, double> collision = collisionTime(
-          constants.robot_radius, robot_1->getMovement().linear_position(robot_1->getMovement().last_time()),
+          constants.robot_radius, robot_1->getMovement().linearPosition(robot_1->getMovement().lastTime()),
           linear_velocity, constants.robot_radius,
-          robot_2->getMovement().linear_position(robot_2->getMovement().last_time()),
-          robot_2->getMovement().linear_velocity(robot_2->getMovement().last_time()), radius_error);
+          robot_2->getMovement().linearPosition(robot_2->getMovement().lastTime()),
+          robot_2->getMovement().linearVelocity(robot_2->getMovement().lastTime()), radius_error);
       if (collision.first)
       {
         result.push_back(std::pair<int, double>(i, collision.second));

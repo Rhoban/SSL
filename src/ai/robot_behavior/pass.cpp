@@ -42,9 +42,9 @@ void Pass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
   const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
-  rhoban_geometry::Point position_robot_to_pass = robot_to_pass.getMovement().linear_position(time);
+  rhoban_geometry::Point position_robot_to_pass = robot_to_pass.getMovement().linearPosition(time);
   // rhoban_geometry::Point target_position = ball_position();
 
   // Striker:

@@ -242,7 +242,7 @@ GameState::GameState(ai::AiData& ai_data)
 
 bool GameState::ballIsMoving()
 {
-  Vector2d ball_velocity = ai_data_.ball.getMovement().linear_velocity(ai_data_.time);
+  Vector2d ball_velocity = ai_data_.ball.getMovement().linearVelocity(ai_data_.time);
   double threshold = 0.001;
   if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
   {

@@ -38,7 +38,7 @@ void Passive_defensor::update(double time, const ai::Robot& robot, const ai::Bal
   RobotBehavior::update_time_and_position(time, robot, ball);
 
   const ai::Robot& ennemy = getRobot(robot_to_obstale_id, robot_to_obstale_team);
-  rhoban_geometry::Point ennemy_position = ennemy.getMovement().linear_position(time);
+  rhoban_geometry::Point ennemy_position = ennemy.getMovement().linearPosition(time);
 
   rhoban_geometry::Point target_position =
       vector2point(Vector2d(ballPosition()) * barycenter + Vector2d(ennemy_position) * (1.0 - barycenter));

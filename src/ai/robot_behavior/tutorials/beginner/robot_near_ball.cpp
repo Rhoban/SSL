@@ -41,8 +41,8 @@ void Begginer_robot_near_ball::update(double time, const ai::Robot& robot, const
   ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, vision::Opponent);
 
   // Create the vector between the robots and the ball.
-  Vector2d vec_ally_to_ball = ballPosition() - ally_closest.getMovement().linear_position(ai_data.time);
-  Vector2d vec_opponent_to_ball = ballPosition() - opponent_closest.getMovement().linear_position(ai_data.time);
+  Vector2d vec_ally_to_ball = ballPosition() - ally_closest.getMovement().linearPosition(ai_data.time);
+  Vector2d vec_opponent_to_ball = ballPosition() - opponent_closest.getMovement().linearPosition(ai_data.time);
 
   // Find the distance between them and the ball.
   double dist_ally = vec_ally_to_ball.norm();
@@ -53,19 +53,19 @@ void Begginer_robot_near_ball::update(double time, const ai::Robot& robot, const
   // Search the nearest robot between the ally and the opponent.
   if (dist_ally > dist_opponent)
   {
-    annotations.addCross(opponent_closest.getMovement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(opponent_closest.getMovement().linearPosition(ai_data.time), "blue", false);
   }
   else if (dist_ally < dist_opponent)
   {
-    annotations.addCross(ally_closest.getMovement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(ally_closest.getMovement().linearPosition(ai_data.time), "blue", false);
   }
   else
   {
-    annotations.addCross(opponent_closest.getMovement().linear_position(ai_data.time), "blue", false);
-    annotations.addCross(ally_closest.getMovement().linear_position(ai_data.time), "blue", false);
+    annotations.addCross(opponent_closest.getMovement().linearPosition(ai_data.time), "blue", false);
+    annotations.addCross(ally_closest.getMovement().linearPosition(ai_data.time), "blue", false);
   }
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
 }
 
 Control Begginer_robot_near_ball::control() const

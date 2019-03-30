@@ -34,23 +34,23 @@ void Movement_predicted_by_integration::print(std::ostream& stream) const
   stream << samples;
 };
 
-void Movement_predicted_by_integration::set_sample(const MovementSample& samples)
+void Movement_predicted_by_integration::setSample(const MovementSample& samples)
 {
   assert(samples.is_valid());
   this->samples = samples;
 }
 
-const MovementSample& Movement_predicted_by_integration::get_sample() const
+const MovementSample& Movement_predicted_by_integration::getSample() const
 {
   return samples;
 }
 
-double Movement_predicted_by_integration::last_time() const
+double Movement_predicted_by_integration::lastTime() const
 {
   return samples.time(0);
 }
 
-rhoban_geometry::Point Movement_predicted_by_integration::linear_position(double time) const
+rhoban_geometry::Point Movement_predicted_by_integration::linearPosition(double time) const
 {
   if (std::fabs(samples[0].time - time) <= 0.000001)
   {
@@ -68,7 +68,7 @@ rhoban_geometry::Point Movement_predicted_by_integration::linear_position(double
   );
 }
 
-ContinuousAngle Movement_predicted_by_integration::angular_position(double time) const
+ContinuousAngle Movement_predicted_by_integration::angularPosition(double time) const
 {
   if (std::fabs(samples[0].time - time) <= 0.000001)
   {
@@ -85,7 +85,7 @@ ContinuousAngle Movement_predicted_by_integration::angular_position(double time)
   );
 }
 
-Vector2d Movement_predicted_by_integration::linear_velocity(double time) const
+Vector2d Movement_predicted_by_integration::linearVelocity(double time) const
 {
   if (std::fabs(samples[0].time - time) <= 0.000001)
   {
@@ -100,7 +100,7 @@ Vector2d Movement_predicted_by_integration::linear_velocity(double time) const
   return samples.linear_velocity(0) + samples.linear_acceleration(0) * dt;
 }
 
-ContinuousAngle Movement_predicted_by_integration::angular_velocity(double time) const
+ContinuousAngle Movement_predicted_by_integration::angularVelocity(double time) const
 {
   if (std::fabs(samples[0].time - time) <= 0.000001)
   {
@@ -115,7 +115,7 @@ ContinuousAngle Movement_predicted_by_integration::angular_velocity(double time)
   return samples.angular_velocity(0) + samples.angular_acceleration(0) * dt;
 }
 
-Vector2d Movement_predicted_by_integration::linear_acceleration(double time) const
+Vector2d Movement_predicted_by_integration::linearAcceleration(double time) const
 {
   if (std::fabs(samples[0].time - time) <= 0.000001)
   {
@@ -129,7 +129,7 @@ Vector2d Movement_predicted_by_integration::linear_acceleration(double time) con
   return samples.linear_acceleration(0);
 }
 
-ContinuousAngle Movement_predicted_by_integration::angular_acceleration(double time) const
+ContinuousAngle Movement_predicted_by_integration::angularAcceleration(double time) const
 {
   if (std::fabs(samples[0].time - time) <= 0.000001)
   {

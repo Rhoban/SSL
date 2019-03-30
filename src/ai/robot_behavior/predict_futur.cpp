@@ -45,9 +45,9 @@ void PredictFutur::update(double time, const ai::Robot& robot, const ai::Ball& b
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time);
-  const rhoban_geometry::Point& robot_position_futur = robot.getMovement().linear_position(time + 0.5);
-  const rhoban_geometry::Point& ball_position_futur = ball.getMovement().linear_position(time + 0.5);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
+  const rhoban_geometry::Point& robot_position_futur = robot.getMovement().linearPosition(time + 0.5);
+  const rhoban_geometry::Point& ball_position_futur = ball.getMovement().linearPosition(time + 0.5);
   annotations.addCross(robot_position_futur.x, robot_position_futur.y, "blue");
   annotations.addCross(ball_position_futur.x, ball_position_futur.y, "red");
 

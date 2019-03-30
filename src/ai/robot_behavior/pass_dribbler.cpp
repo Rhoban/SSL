@@ -47,13 +47,13 @@ void Pass_dribbler::update(double time, const ai::Robot& robot, const ai::Ball& 
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linear_position(time);
-  const ContinuousAngle& robot_angle = robot.getMovement().angular_position(time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
+  const ContinuousAngle& robot_angle = robot.getMovement().angularPosition(time);
 
   if (robot_to_pass_id != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
     const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
-    point_to_pass = robot_to_pass.getMovement().linear_position(time);
+    point_to_pass = robot_to_pass.getMovement().linearPosition(time);
   }
 
   Vector2d robot_point_to_pass_vector = point_to_pass - robot_position;
