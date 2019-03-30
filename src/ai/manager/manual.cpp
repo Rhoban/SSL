@@ -466,16 +466,14 @@ Manual::Manual(Ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("Medium - Lob",
-                    std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
-                        ai_data,
-                        [&](double time, double dt) {
-                          Robot_behavior::medium::Lob* lob =
-                              new Robot_behavior::medium::Lob(ai_data);
-                          return std::shared_ptr<Robot_behavior::RobotBehavior>(lob);
-                        },
-                        false  // we don't want to define a goal here !
-                        )));
+  register_strategy("Medium - Lob", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+                                        ai_data,
+                                        [&](double time, double dt) {
+                                          Robot_behavior::medium::Lob* lob = new Robot_behavior::medium::Lob(ai_data);
+                                          return std::shared_ptr<Robot_behavior::RobotBehavior>(lob);
+                                        },
+                                        false  // we don't want to define a goal here !
+                                        )));
   register_strategy("Obstructor", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                       ai_data,
                                       [&](double time, double dt) {
