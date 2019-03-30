@@ -23,9 +23,9 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-Defender::Defender(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+Defender::Defender(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
 {
 }
 
@@ -33,6 +33,7 @@ void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   RobotBehavior::update_time_and_position(time, robot, ball);
+  annotations_.clear();
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
@@ -55,9 +56,9 @@ void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
     // The ball is inside the penalty area. Don't nothing.
   }
 
-  follower->avoid_the_ball(true);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->avoid_the_ball(true);
+  follower_->set_following_position(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 bool Defender::ball_is_inside_ally_penalty_area()
@@ -68,35 +69,22 @@ bool Defender::ball_is_inside_ally_penalty_area()
 
 Control Defender::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
 Defender::~Defender()
 {
-  delete follower;
+  delete follower_;
 }
 
 RhobanSSLAnnotation::Annotations Defender::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->get_annotations());
   return annotations;
 }
-
-Begginer_defensor::~Begginer_defensor()
-{
-  delete follower;
-}
-
-RhobanSSLAnnotation::Annotations Begginer_defensor::get_annotations() const
-{
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
-  return annotations;
-}
-}  // namespace Beginner
+}  // namespace beginner
 }  // namespace Robot_behavior
 }  // namespace RhobanSSL

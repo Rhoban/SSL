@@ -26,27 +26,66 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-/** This class shows how to place a robot between the ally's goal and the ball. (Defend situation) */
+/**
+ * @class Defender
+ * @brief Tutorial shows how to place a robot between the ally's goal and the ball. (Defend situation)
+ */
 class Defender : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  /**
+   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   */
+  ConsignFollower* follower_;
+  /**
+   * Not use in this package but set in a case of copy.
+   * @see RhobanSSLAnnotation::Annotations
+   */
+  RhobanSSLAnnotation::Annotations annotations_;
 
 public:
+  /**
+   * @brief Constructor.
+   * The default value of the target_corner_ is set to left opponent corner.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
+   */
   Defender(Ai::AiData& ai_data);
 
+  /**
+   * @brief Is the ball is inside the penalty area.
+   * @return True if the ball is inside the penalty area.
+   */
   bool ball_is_inside_ally_penalty_area();
+  /**
+   * @brief Put the robot between the ball and the ally goal zone.
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
+  void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-  void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
-
+  /**
+   * @see Control.
+   */
   virtual Control control() const;
 
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   * The class don't draw any annotations.
+   * The follower draw annotation.
+   */
+  RhobanSSLAnnotation::Annotations get_annotations() const;
+  /**
+   * @brief Destructor.
+   */
   virtual ~Defender();
 };
 
-};  // Namespace Beginner
-};  // Namespace Robot_behavior
-};  // namespace RhobanSSL
+}  // Namespace beginner
+}  // Namespace Robot_behavior
+}  // namespace RhobanSSL
