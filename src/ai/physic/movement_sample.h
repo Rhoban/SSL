@@ -35,9 +35,9 @@ struct PositionSample
   PositionSample(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
 };
 
-struct MovementSample : public circular_vector<PositionSample>
+struct MovementSample : public CircularVector<PositionSample>
 {
-  circular_vector<double> dts;
+  CircularVector<double> dts;
 
   MovementSample(unsigned int, double default_dt = 1.0 / 60.0);
   MovementSample();

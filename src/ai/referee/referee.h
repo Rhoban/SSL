@@ -78,7 +78,7 @@ struct Referee_data
 {
   // datas[0] is the most recent
   // datas[1] the older
-  circular_vector<SSL_Referee> datas;
+  CircularVector<SSL_Referee> datas;
 
   double last_time;
   uint32_t last_command_counter;

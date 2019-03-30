@@ -16,83 +16,81 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#ifndef __CIRCULAR_VECTOR_H__
-#define __CIRCULAR_VECTOR_H__
+#pragma once
 
 #include <vector>
 #include <algorithm>
 #include <assert.h>
 
 template <typename T>
-class circular_vector
+class CircularVector
 {
 private:
-  std::vector<T> vector;
-  unsigned int index;
+  std::vector<T> vector_;
+  unsigned int index_;
 
 public:
-  circular_vector() : vector(0), index(0)
+  CircularVector() : vector_(0), index_(0)
   {
   }
-  circular_vector(unsigned int size) : vector(size), index(0)
+  CircularVector(unsigned int size) : vector_(size), index_(0)
   {
   }
-  circular_vector(const circular_vector<T>& cv) : vector(cv.vector), index(cv.index)
+  CircularVector(const CircularVector<T>& cv) : vector_(cv.vector_), index_(cv.index_)
   {
   }
 
   unsigned int size() const
   {
-    return vector.size();
+    return vector_.size();
   }
   void resize(unsigned int size)
   {
-    std::rotate(vector.begin(), vector.begin() + index, vector.end());
-    index = 0;
-    vector.resize(size);
+    std::rotate(vector_.begin(), vector_.begin() + index_, vector_.end());
+    index_ = 0;
+    vector_.resize(size);
   }
 
   void insert(const T& element)
   {
-    if (index == 0)
+    if (index_ == 0)
     {
-      index = vector.size();
+      index_ = vector_.size();
     }
-    index -= 1;
-    vector[index] = element;
+    index_ -= 1;
+    vector_[index_] = element;
   }
 
   const T& operator[](unsigned int i) const
   {
-    assert(i < vector.size());
-    if (index + i < vector.size())
+    assert(i < vector_.size());
+    if (index_ + i < vector_.size())
     {
-      return vector[index + i];
+      return vector_[index_ + i];
     }
     else
     {
-      return vector[index + i - vector.size()];
+      return vector_[index_ + i - vector_.size()];
     }
   }
   T& operator[](unsigned int i)
   {
-    assert(i < vector.size());
-    if (index + i < vector.size())
+    assert(i < vector_.size());
+    if (index_ + i < vector_.size())
     {
-      return vector[index + i];
+      return vector_[index_ + i];
     }
     else
     {
-      return vector[index + i - vector.size()];
+      return vector_[index_ + i - vector_.size()];
     }
   }
   template <typename U>
-  friend std::ostream& operator<<(std::ostream& stream, const circular_vector<U>& vec);
+  friend std::ostream& operator<<(std::ostream& stream, const CircularVector<U>& vec);
 };
 
 template <typename T>
-std::ostream& operator<<(std::ostream& stream, const circular_vector<T>& vec)
+std::ostream& operator<<(std::ostream& stream, const CircularVector<T>& vec)
 {
   assert(vec.size() >= 1);
   stream << "(";
@@ -104,4 +102,3 @@ std::ostream& operator<<(std::ostream& stream, const circular_vector<T>& vec)
   stream << ")";
   return stream;
 }
-#endif

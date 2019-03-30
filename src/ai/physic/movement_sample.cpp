@@ -52,7 +52,7 @@ void MovementSample::insert(const PositionSample& sample)
   }
   else
   {
-    circular_vector<PositionSample>::insert(sample);
+    CircularVector<PositionSample>::insert(sample);
     double filtered_dt = 0.0;
     // small filter
     for (int it = 0; it < (this->size() - 2); it++)
@@ -76,7 +76,7 @@ bool MovementSample::is_valid() const
   return true;
 }
 
-MovementSample::MovementSample(unsigned int size, double default_dt) : circular_vector<PositionSample>(size), dts(size)
+MovementSample::MovementSample(unsigned int size, double default_dt) : CircularVector<PositionSample>(size), dts(size)
 {
   for (unsigned int i = 0; i < size; i++)
   {
@@ -84,7 +84,7 @@ MovementSample::MovementSample(unsigned int size, double default_dt) : circular_
   }
 }
 
-MovementSample::MovementSample() : circular_vector<PositionSample>(), dts()
+MovementSample::MovementSample() : CircularVector<PositionSample>(), dts()
 {
 }
 
@@ -147,6 +147,6 @@ std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample&
 
 std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::MovementSample& mov)
 {
-  stream << static_cast<circular_vector<rhoban_ssl::PositionSample>>(mov);
+  stream << static_cast<CircularVector<rhoban_ssl::PositionSample>>(mov);
   return stream;
 }

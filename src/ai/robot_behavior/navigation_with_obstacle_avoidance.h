@@ -45,7 +45,7 @@ private:
 
   Vector2d target_position;
   ContinuousAngle target_angle;
-  circular_vector<rhoban_geometry::Point> obst_vec;
+  CircularVector<rhoban_geometry::Point> obst_vec;
   double min_time_collision;
   int closest_robot;
   int second_closest_robot;
