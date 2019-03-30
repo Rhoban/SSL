@@ -26,7 +26,7 @@ namespace Robot_behavior
 PositionFollower::PositionFollower(ai::AiData& ai_data, double time, double dt)
   : ConsignFollower(ai_data), position(0.0, 0.0), angle(0.0)
 {
-  robot_control.init_time(time, dt);
+  robot_control.initTime(time, dt);
 }
 
 void PositionFollower::set_following_position(const rhoban_geometry::Point& position_to_follow,
@@ -40,7 +40,7 @@ void PositionFollower::set_following_position(const rhoban_geometry::Point& posi
 
 void PositionFollower::update_control(double time)
 {
-  robot_control.set_goal(position, angle);
+  robot_control.setGoal(position, angle);
   robot_control.update(time, linear_position(), angular_position());
 }
 
@@ -61,7 +61,7 @@ void PositionFollower::update(double time, const ai::Robot& robot, const ai::Bal
 }
 Control PositionFollower::control() const
 {
-  Control ctrl = robot_control.limited_control(robot_linear_position, robot_angular_position, robot_linear_velocity,
+  Control ctrl = robot_control.limitedControl(robot_linear_position, robot_angular_position, robot_linear_velocity,
                                                robot_angular_velocity);
 
   // DEBUG( "CONTROL - " << ai_data.time << " - " << ctrl.linear_velocity );
@@ -70,18 +70,18 @@ Control PositionFollower::control() const
 
 void PositionFollower::set_translation_pid(double kp, double ki, double kd)
 {
-  robot_control.set_translation_pid(kp, ki, kd);
+  robot_control.setTranslationPid(kp, ki, kd);
 }
 
 void PositionFollower::set_orientation_pid(double kp, double ki, double kd)
 {
-  robot_control.set_orientation_pid(kp, ki, kd);
+  robot_control.setOrientationPid(kp, ki, kd);
 }
 
 void PositionFollower::set_limits(double translation_velocity_limit, double rotation_velocity_limit,
                                   double translation_acceleration_limit, double rotation_acceleration_limit)
 {
-  robot_control.set_limits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
+  robot_control.setLimits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
                            rotation_acceleration_limit);
 }
 
