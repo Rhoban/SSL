@@ -296,14 +296,14 @@ AI::AI(std::string manager_name, std::string team_name, ai::Team default_team, D
   ai_data_.changeTeamColor(default_team);
   ai_data_.team_name = team_name;
 
-  manual_manager_ = manager::Factory::construct_manager(manager::names::manual, ai_data_, game_state_);
+  manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL, ai_data_, game_state_);
 
   setManager(manager_name);
 }
 
 std::vector<std::string> AI::getAvailableManagers()
 {
-  return list2vector(manager::Factory::avalaible_managers());
+  return list2vector(manager::Factory::availableManagers());
 }
 
 void AI::setManager(std::string managerName)
@@ -319,13 +319,13 @@ void AI::setManager(std::string managerName)
   int goalie_id = ai_data_.constants.default_goalie_id;
 
   std::cout << "Setting the manager to: " << managerName << std::endl;
-  if (managerName == manager::names::manual)
+  if (managerName == manager::names::MANUAL)
   {
     strategy_manager_ = manual_manager_;
   }
   else
   {
-    strategy_manager_ = manager::Factory::construct_manager(managerName, ai_data_, game_state_);
+    strategy_manager_ = manager::Factory::constructManager(managerName, ai_data_, game_state_);
   }
   manager_name_ = managerName;
   strategy_manager_->declare_goalie_id(goalie_id);
@@ -433,7 +433,7 @@ void AI::run()
 
     game_state_.update(current_time_);
 
-    if (manager_name_ != manager::names::manual)
+    if (manager_name_ != manager::names::MANUAL)
     {  // HACK TOT REMOVEE !
       strategy_manager_->change_team_and_point_of_view(game_state_.getTeamColor(strategy_manager_->get_team_name()),
                                                       game_state_.blueHaveItsGoalOnPositiveXAxis());

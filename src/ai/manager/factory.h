@@ -29,20 +29,20 @@ namespace manager
 {
 struct names
 {
-  static constexpr const char* manual = "manual";
+  static constexpr const char* MANUAL = "manual";
   // static constexpr const char* match = "match";
-  static constexpr const char* plan_veschambres = "PlanVeschambres";
+  static constexpr const char* PLAN_VESCHAMBRES = "PlanVeschambres";
 };
 
 class Factory
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers;
+  static std::list<std::string> list_of_avalaible_managers_;
 
 public:
-  static const std::list<std::string>& avalaible_managers();
+  static const std::list<std::string>& availableManagers();
 
-  static std::shared_ptr<Manager> construct_manager(const std::string& manager_name, ai::AiData& ai,
+  static std::shared_ptr<Manager> constructManager(const std::string& manager_name, ai::AiData& ai,
                                                     GameState& game_state);
 };
 
