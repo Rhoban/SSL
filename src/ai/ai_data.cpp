@@ -110,7 +110,7 @@ void AiData::update(const vision::VisionData vision_data)
 
 void AiData::changeFrameForAllObjects(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
-  team_point_of_view.set_frame(origin, v1, v2);
+  team_point_of_view.setFrame(origin, v1, v2);
   for (auto team : { vision::Ally, vision::Opponent })
   {
     for (int k = 0; k < vision::Robots; k++)

@@ -28,7 +28,7 @@ class Movement_on_new_frame : public Movement
 {
 private:
   Movement* movement;
-  Frame_changement frame;
+  FrameChangement frame;
 
 public:
   // We assume that v1 and v2 are orthonormal

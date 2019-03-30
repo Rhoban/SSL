@@ -194,7 +194,7 @@ public:
 
   Collision_times_table table_of_collision_times;
 
-  Frame_changement team_point_of_view;
+  FrameChangement team_point_of_view;
 
   void changeFrameForAllObjects(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
   void changeTeamColor(ai::Team team_color);

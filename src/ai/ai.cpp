@@ -511,7 +511,7 @@ void AI::getAnnotations(RhobanSSLAnnotation::Annotations& annotations) const
   annotations.addAnnotations(getRobotBehaviorAnnotations());
 
   std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point& p) {
-    return this->ai_data_.team_point_of_view.from_frame(p);
+    return this->ai_data_.team_point_of_view.fromFrame(p);
   };
   annotations.map_positions(fct);
 }

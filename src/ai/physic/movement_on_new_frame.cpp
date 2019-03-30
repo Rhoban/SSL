@@ -24,7 +24,7 @@ namespace rhoban_ssl
 {
 void Movement_on_new_frame::set_frame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
-  frame.set_frame(origin, v1, v2);
+  frame.setFrame(origin, v1, v2);
 }
 
 Movement_on_new_frame::Movement_on_new_frame(Movement* movement) : movement(movement)
@@ -53,7 +53,7 @@ const MovementSample& Movement_on_new_frame::get_sample() const
 
 rhoban_geometry::Point Movement_on_new_frame::linear_position(double time) const
 {
-  return frame.to_frame(movement->linear_position(time));
+  return frame.toFrame(movement->linear_position(time));
 }
 
 double Movement_on_new_frame::last_time() const
@@ -63,12 +63,12 @@ double Movement_on_new_frame::last_time() const
 
 ContinuousAngle Movement_on_new_frame::angular_position(double time) const
 {
-  return frame.to_frame(movement->angular_position(time));
+  return frame.toFrame(movement->angular_position(time));
 }
 
 Vector2d Movement_on_new_frame::linear_velocity(double time) const
 {
-  return frame.to_basis(movement->linear_velocity(time));
+  return frame.toBasis(movement->linear_velocity(time));
 }
 
 ContinuousAngle Movement_on_new_frame::angular_velocity(double time) const
@@ -78,7 +78,7 @@ ContinuousAngle Movement_on_new_frame::angular_velocity(double time) const
 
 Vector2d Movement_on_new_frame::linear_acceleration(double time) const
 {
-  return frame.to_basis(movement->linear_acceleration(time));
+  return frame.toBasis(movement->linear_acceleration(time));
 }
 
 ContinuousAngle Movement_on_new_frame::angular_acceleration(double time) const
