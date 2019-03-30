@@ -6,21 +6,21 @@ namespace Vision
 {
 #define ERROR_FIELD 0.1
 
-bool object_coordonate_is_valid(double x, double y, Vision::Part_of_the_field part_of_the_field_used)
+bool object_coordonate_is_valid(double x, double y, Vision::PartOfTheField part_of_the_field_used)
 {
   switch (part_of_the_field_used)
   {
-    case Part_of_the_field::POSIVE_HALF_FIELD:
+    case PartOfTheField::POSIVE_HALF_FIELD:
     {
       return x > ERROR_FIELD;
     }
     break;
-    case Part_of_the_field::NEGATIVE_HALF_FIELD:
+    case PartOfTheField::NEGATIVE_HALF_FIELD:
     {
       return x < ERROR_FIELD;
     }
     break;
-    case Part_of_the_field::ALL_FIELD:
+    case PartOfTheField::ALL_FIELD:
     {
       return true;
     }
@@ -33,7 +33,7 @@ bool object_coordonate_is_valid(double x, double y, Vision::Part_of_the_field pa
 std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::average_filter(
     int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
-    const Vision::VisionData& old_vision_data, Part_of_the_field part_of_the_field_used)
+    const Vision::VisionData& old_vision_data, PartOfTheField part_of_the_field_used)
 {
   int n_linear = 0;
   int n_angular = 0;

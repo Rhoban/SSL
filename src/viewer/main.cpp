@@ -88,18 +88,18 @@ int main(int argc, char* argv[])
     commander = new rhoban_ssl::AICommanderReal(yellow.getValue());
   }
 
-  rhoban_ssl::Vision::Part_of_the_field part_of_the_field_used;
+  rhoban_ssl::Vision::PartOfTheField part_of_the_field_used;
   if (zone_name.getValue() == "all")
   {
-    part_of_the_field_used = rhoban_ssl::Vision::Part_of_the_field::ALL_FIELD;
+    part_of_the_field_used = rhoban_ssl::Vision::PartOfTheField::ALL_FIELD;
   }
   else if (zone_name.getValue() == "positive")
   {
-    part_of_the_field_used = rhoban_ssl::Vision::Part_of_the_field::POSIVE_HALF_FIELD;
+    part_of_the_field_used = rhoban_ssl::Vision::PartOfTheField::POSIVE_HALF_FIELD;
   }
   else if (zone_name.getValue() == "negative")
   {
-    part_of_the_field_used = rhoban_ssl::Vision::Part_of_the_field::NEGATIVE_HALF_FIELD;
+    part_of_the_field_used = rhoban_ssl::Vision::PartOfTheField::NEGATIVE_HALF_FIELD;
   }
   else
   {

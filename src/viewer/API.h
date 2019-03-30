@@ -17,7 +17,7 @@ class API : public QObject
 
 public:
   API(std::string teamName, bool simulation, rhoban_ssl::ai::Team team, rhoban_ssl::AICommander* commander,
-      const std::string& config_path, rhoban_ssl::Vision::Part_of_the_field part_of_the_field_used,
+      const std::string& config_path, rhoban_ssl::Vision::PartOfTheField part_of_the_field_used,
       std::string addr = SSL_VISION_ADDRESS, std::string port = SSL_VISION_PORT,
       std::string sim_port = SSL_SIMULATION_VISION_PORT);
   virtual ~API();
