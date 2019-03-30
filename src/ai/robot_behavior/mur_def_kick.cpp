@@ -62,7 +62,7 @@ void Mur_def_kick::update(double time, const ai::Robot& robot, const ai::Ball& b
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
-  double scalar_ball_robot = scalar_product(ball_robot_vector, ball_goal_vector);
+  double scalar_ball_robot = scalarProduct(ball_robot_vector, ball_goal_vector);
 
   if (scalar_ball_robot < 0)
   {

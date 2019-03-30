@@ -60,7 +60,7 @@ void SlowStriker::update(double time, const ai::Robot& robot, const ai::Ball& ba
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
   double target_radius_from_ball;
-  double scalar_ball_robot = -scalar_product(ball_robot_vector, ball_striking_vector);
+  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_striking_vector);
   if (tempo == 0.0)
   {
     target_radius_from_ball = 0.3;

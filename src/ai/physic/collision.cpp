@@ -40,9 +40,9 @@ std::pair<bool, double> collision_time(double radius_A, const rhoban_geometry::P
   Vector2d T = B - A;
   double full_radius = radius_error + radius_A + radius_B;
 
-  double a = V.norm_square();
-  double b = 2 * scalar_product(V, T);
-  double c = T.norm_square() - full_radius * full_radius;
+  double a = V.normSquare();
+  double b = 2 * scalarProduct(V, T);
+  double c = T.normSquare() - full_radius * full_radius;
 
   if (a < EPSILON_VELOCITY)
   {

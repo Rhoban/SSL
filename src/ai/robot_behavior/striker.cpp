@@ -64,7 +64,7 @@ void Striker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   // double goal_visible_angle = scalar_product( ball_l_post_vector , ball_r_post_vector );
 
   double target_radius_from_ball;
-  double scalar_ball_robot = -scalar_product(ball_robot_vector, ball_goal_vector);
+  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_goal_vector);
 
   if (scalar_ball_robot < 0)
   {

@@ -29,7 +29,7 @@ void FrameChangement::setFrame(const rhoban_geometry::Point& origin, const Vecto
 {
   assert(std::fabs(1.0 - norm(v1)) < 0.000001);
   assert(std::fabs(1.0 - norm(v2)) < 0.000001);
-  assert(std::fabs(scalar_product(v1, v2)) < 0.000001);
+  assert(std::fabs(scalarProduct(v1, v2)) < 0.000001);
   origin_ = origin;
   basis_(0, 0) = v1.getX();
   basis_(0, 1) = v2.getX();

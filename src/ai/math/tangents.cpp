@@ -27,11 +27,11 @@ Point centerOfConeIncircle(const rhoban_geometry::Point& cone_vertex, const rhob
 {
   Vector2d u = normalized(cone_base_A - cone_vertex);
   Vector2d v = normalized(cone_base_B - cone_vertex);
-  double u_vec_v = vectorial_product(u, v);
+  double u_vec_v = vectorialProduct(u, v);
   assert(u_vec_v != 0.0);
   double signe = (u_vec_v >= 0) ? 1 : -1;
-  return vector2point(((u + v) * (signe * circle_radius) + v * vectorial_product(u, cone_vertex) +
-                       u * vectorial_product(cone_vertex, v)) /
+  return vector2point(((u + v) * (signe * circle_radius) + v * vectorialProduct(u, cone_vertex) +
+                       u * vectorialProduct(cone_vertex, v)) /
                       u_vec_v);
 }
 

@@ -69,7 +69,7 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
   point_to_obstruct_l_post_vector = point_to_obstruct_l_post_vector / point_to_obstruct_l_post_vector.norm();
   point_to_obstruct_r_post_vector = point_to_obstruct_r_post_vector / point_to_obstruct_r_post_vector.norm();
 
-  double scalar_point_to_obstruct_robot = scalar_product(point_to_obstruct_robot_vector, point_to_obstruct_goal_vector);
+  double scalar_point_to_obstruct_robot = scalarProduct(point_to_obstruct_robot_vector, point_to_obstruct_goal_vector);
 
   // target_radius_from_ball = (ai_data.constants.robot_radius / 2) / std::tan(goal_visible_angle / 2);
 
@@ -94,7 +94,7 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
   double limit_defense_area_radius = 1.4;
 
   if (target_goal_vector.norm() < limit_defense_area_radius or
-      scalar_product(target_goal_vector, point_to_obstruct_goal_vector) < 0)
+      scalarProduct(target_goal_vector, point_to_obstruct_goal_vector) < 0)
   {
     target_position = ally_goal_point + point_to_obstruct_goal_vector * (-limit_defense_area_radius);
   }

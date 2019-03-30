@@ -103,7 +103,7 @@ bool Box::closestSegmentIntersection(const rhoban_geometry::Point& origin, const
   {
     intersection = intersections[0];
   }
-  else if (norm_square(intersections[0] - origin) < norm_square(intersections[1] - origin))
+  else if (normSquare(intersections[0] - origin) < normSquare(intersections[1] - origin))
   {
     intersection = intersections[0];
   }

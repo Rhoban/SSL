@@ -53,7 +53,7 @@ void Defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
-  double scalar_ball_robot = scalar_product(ball_robot_vector, ball_goal_vector);
+  double scalar_ball_robot = scalarProduct(ball_robot_vector, ball_goal_vector);
 
   if (scalar_ball_robot < 0)
   {
@@ -73,7 +73,7 @@ void Defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   Vector2d target_goal_vector = ally_goal_point - target_position;
   double limit_defense_area_radius = 1.4;
 
-  if (target_goal_vector.norm() < limit_defense_area_radius or scalar_product(target_goal_vector, ball_goal_vector) < 0)
+  if (target_goal_vector.norm() < limit_defense_area_radius or scalarProduct(target_goal_vector, ball_goal_vector) < 0)
   {
     target_position = ally_goal_point + ball_goal_vector * (-limit_defense_area_radius);
   }

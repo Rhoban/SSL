@@ -69,7 +69,7 @@ const ai::Robot& GameInformations::getRobot(int robot_number, vision::Team team)
 void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
                                          vision::Team team, double distance, std::vector<int>& result) const
 {
-  if (norm_square(p1 - p2) == 0)
+  if (normSquare(p1 - p2) == 0)
   {
     return;
   }

@@ -86,7 +86,7 @@ void Degageur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   ball_point_vector = ball_point_vector / ball_point_vector.norm();
 
   double target_radius_from_ball;
-  double scalar_ball_robot = -scalar_product(ball_robot_vector, ball_point_vector);
+  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_point_vector);
 
   if (scalar_ball_robot < 0)
   {
