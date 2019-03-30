@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 std::list<std::string> Factory::list_of_avalaible_managers = {
   names::manual,

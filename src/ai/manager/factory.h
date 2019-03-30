@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 struct names
 {

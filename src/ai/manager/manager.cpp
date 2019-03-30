@@ -29,7 +29,7 @@
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 int Manager::get_goalie_opponent_id() const
 {

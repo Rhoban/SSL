@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 class Manual : public Manager
 {

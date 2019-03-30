@@ -49,7 +49,7 @@ API::API(std::string teamName, bool simulation, rhoban_ssl::ai::Team team, rhoba
   data << shared;
 
   // Instanciating AI
-  ai = new rhoban_ssl::AI(Manager::names::manual,  // avant : match
+  ai = new rhoban_ssl::AI(manager::names::manual,  // avant : match
                          teamName, team, data, commander, config_path, simulation);
 
   /*
@@ -723,7 +723,7 @@ void API::setManager(QString manager)
 
 void API::managerStop()
 {
-  ai->setManager(Manager::names::manual);
+  ai->setManager(manager::names::manual);
   clearAssignments();
 }
 

@@ -23,7 +23,7 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 class PlanVeschambres : public ManagerWithGameState
 {

@@ -296,14 +296,14 @@ AI::AI(std::string manager_name, std::string team_name, ai::Team default_team, D
   ai_data_.changeTeamColor(default_team);
   ai_data_.team_name = team_name;
 
-  manual_manager_ = Manager::Factory::construct_manager(Manager::names::manual, ai_data_, game_state_);
+  manual_manager_ = manager::Factory::construct_manager(manager::names::manual, ai_data_, game_state_);
 
   setManager(manager_name);
 }
 
 std::vector<std::string> AI::getAvailableManagers()
 {
-  return list2vector(Manager::Factory::avalaible_managers());
+  return list2vector(manager::Factory::avalaible_managers());
 }
 
 void AI::setManager(std::string managerName)
@@ -319,25 +319,25 @@ void AI::setManager(std::string managerName)
   int goalie_id = ai_data_.constants.default_goalie_id;
 
   std::cout << "Setting the manager to: " << managerName << std::endl;
-  if (managerName == Manager::names::manual)
+  if (managerName == manager::names::manual)
   {
     strategy_manager_ = manual_manager_;
   }
   else
   {
-    strategy_manager_ = Manager::Factory::construct_manager(managerName, ai_data_, game_state_);
+    strategy_manager_ = manager::Factory::construct_manager(managerName, ai_data_, game_state_);
   }
   manager_name_ = managerName;
   strategy_manager_->declare_goalie_id(goalie_id);
   strategy_manager_->declare_team_ids(robot_ids);
 }
 
-std::shared_ptr<Manager::Manager> AI::getManager() const
+std::shared_ptr<manager::Manager> AI::getManager() const
 {
   return strategy_manager_;
 }
 
-std::shared_ptr<Manager::Manager> AI::getManualManager()
+std::shared_ptr<manager::Manager> AI::getManualManager()
 {
   return manual_manager_;
 }
@@ -433,14 +433,14 @@ void AI::run()
 
     game_state_.update(current_time_);
 
-    if (manager_name_ != Manager::names::manual)
+    if (manager_name_ != manager::names::manual)
     {  // HACK TOT REMOVEE !
       strategy_manager_->change_team_and_point_of_view(game_state_.getTeamColor(strategy_manager_->get_team_name()),
                                                       game_state_.blueHaveItsGoalOnPositiveXAxis());
     }
     else
     {
-      dynamic_cast<Manager::Manual*>(strategy_manager_.get())
+      dynamic_cast<manager::Manual*>(strategy_manager_.get())
           ->define_goal_to_positive_axis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
     }
     strategy_manager_->change_ally_and_opponent_goalie_id(game_state_.blueGoalieId(), game_state_.yellowGoalieId());

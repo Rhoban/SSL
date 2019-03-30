@@ -56,7 +56,7 @@
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 Manual::Manual(ai::AiData& ai_data)
   : Manager(ai_data)

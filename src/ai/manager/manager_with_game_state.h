@@ -5,7 +5,7 @@
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 class ManagerWithGameState : public Manager
 {

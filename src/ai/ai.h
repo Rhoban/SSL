@@ -47,8 +47,8 @@ public:
 
   std::vector<std::string> getAvailableManagers();
   void setManager(std::string manager);
-  std::shared_ptr<Manager::Manager> getManager() const;
-  std::shared_ptr<Manager::Manager> getManualManager();
+  std::shared_ptr<manager::Manager> getManager() const;
+  std::shared_ptr<manager::Manager> getManualManager();
 
   GameState& getGameState();
 
@@ -76,8 +76,8 @@ protected:
   Data& data_;
   GameState game_state_;
   std::string manager_name_;
-  std::shared_ptr<Manager::Manager> strategy_manager_;
-  std::shared_ptr<Manager::Manager> manual_manager_;
+  std::shared_ptr<manager::Manager> strategy_manager_;
+  std::shared_ptr<manager::Manager> manual_manager_;
 
   Control updateRobot(Robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball);
   void updateElectronicInformations();

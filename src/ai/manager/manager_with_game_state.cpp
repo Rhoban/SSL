@@ -2,7 +2,7 @@
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 ManagerWithGameState::ManagerWithGameState(ai::AiData& ai_data, const GameState& game_state)
   : Manager(ai_data), game_state(game_state), last_change_stamp(0)

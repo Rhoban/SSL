@@ -82,14 +82,14 @@ int main(int argc, char** argv)
                                          cmd);
 
   std::stringstream manager_names;
-  manager_names << Manager::Factory::avalaible_managers();
+  manager_names << manager::Factory::avalaible_managers();
   TCLAP::ValueArg<std::string> manager_name("m",        // short argument name  (with one character)
                                             "manager",  // long argument name
                                             // "The manager to use. The default value is '" +
                                             // std::string(Manager::names::match) + "'. "
                                             "The manger that can be used are " + manager_names.str() + ".",
                                             false,                   // Flag is not required
-                                            Manager::names::manual,  // Default value
+                                            manager::names::manual,  // Default value
                                             "string",                // short description of the expected value.
                                             cmd);
 
@@ -130,7 +130,7 @@ int main(int argc, char** argv)
 
   cmd.parse(argc, argv);
 
-  const std::list<std::string>& avalaible_managers = Manager::Factory::avalaible_managers();
+  const std::list<std::string>& avalaible_managers = manager::Factory::avalaible_managers();
   if (std::find(avalaible_managers.begin(), avalaible_managers.end(), manager_name.getValue()) ==
       avalaible_managers.end())
   {

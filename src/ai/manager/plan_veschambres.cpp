@@ -52,7 +52,7 @@
 
 namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_state)
   : ManagerWithGameState(ai_data, game_state)
