@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__CLOSEST__ROBOT__TO__THE__BALL__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__CLOSEST__ROBOT__TO__THE__BALL__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
@@ -27,28 +26,53 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-/** Class to show how to find the closest robot to the ball and draw the response on the viewer. */
-class Annotation_closest_robot_to_the_ball : public RobotBehavior
+/**
+ * @class AnnotationClosestRobotToTheBall
+ * @brief Tutorial to show how to find the closest robot to the ball and draw the response on the viewer.
+ */
+class AnnotationClosestRobotToTheBall : public RobotBehavior
 {
 private:
-  RhobanSSLAnnotation::Annotations annotations;
+   /**
+    * @see RhobanSSLAnnotation::Annotations
+    */
+  RhobanSSLAnnotation::Annotations annotations_;
 
 public:
-  Annotation_closest_robot_to_the_ball(Ai::AiData& ai_data);
+  /**
+   * @brief Constructor.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
+   */
+  AnnotationClosestRobotToTheBall(Ai::AiData& ai_data);
 
+  /**
+   * @brief Find the closest robot of the ball with the information of the class GameInformations
+   * and compare the distance between the ally closestrobot and the opponent closest robot.
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
+  /**
+   * @see Control
+   */
   virtual Control control() const;
 
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-  virtual ~Annotation_closest_robot_to_the_ball();
+  virtual ~AnnotationClosestRobotToTheBall();
 };
 
-};  // Namespace Beginner
-};  // Namespace Robot_behavior
-};  // namespace RhobanSSL
+}  // Namespace beginner
+}  // Namespace Robot_behavior
+}  // namespace RhobanSSL
 
-#endif

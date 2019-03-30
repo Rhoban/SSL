@@ -426,12 +426,12 @@ Manual::Manual(Ai::AiData& ai_data)
                                                 },
                                                 false  // we don't want to define a goal here !
                                                 )));
-  register_strategy("Begginer - Robot near ball",
+  register_strategy("Beginner - Annotations robot near ball",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
-                          Robot_behavior::Begginer_robot_near_ball* near_ball =
-                              new Robot_behavior::Begginer_robot_near_ball(ai_data);
+                          Robot_behavior::beginner::AnnotationClosestRobotToTheBall * near_ball =
+                              new Robot_behavior::beginner::AnnotationClosestRobotToTheBall(ai_data);
                           return std::shared_ptr<Robot_behavior::RobotBehavior>(near_ball);
                         },
                         false  // we don't want to define a goal here !
