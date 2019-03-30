@@ -105,7 +105,7 @@ void Navigation_with_obstacle_avoidance::determine_the_closest_obstacle()
   {
     double radius_error = ai_data.constants.radius_security_for_collision;
     std::pair<bool, double> collision =
-        collision_time(ai_data.constants.robot_radius,
+        collisionTime(ai_data.constants.robot_radius,
                        robot().getMovement().linear_position(robot().getMovement().last_time()), ctrl.linear_velocity,
                        ball_radius_avoidance, ball().getMovement().linear_position(ball().getMovement().last_time()),
                        ball().getMovement().linear_velocity(ball().getMovement().last_time()), radius_error);

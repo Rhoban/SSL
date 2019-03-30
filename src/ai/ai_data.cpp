@@ -317,7 +317,7 @@ std::list<std::pair<int, double> > AiData::getCollisions(int robot_id, const Vec
     if (robot_1->id() != robot_2->id() or all_robots[i].first != vision::Team::Ally)
     {
       double radius_error = constants.radius_security_for_collision;
-      std::pair<bool, double> collision = collision_time(
+      std::pair<bool, double> collision = collisionTime(
           constants.robot_radius, robot_1->getMovement().linear_position(robot_1->getMovement().last_time()),
           linear_velocity, constants.robot_radius,
           robot_2->getMovement().linear_position(robot_2->getMovement().last_time()),
@@ -342,7 +342,7 @@ void AiData::computeTableOfCollisionTimes()
       Robot& robot_2 = *all_robots[j].second;
       double radius_error = constants.radius_security_for_collision;
       std::pair<bool, double> collision =
-          collision_time(constants.robot_radius, robot_1.getMovement(), constants.robot_radius, robot_2.getMovement(),
+          collisionTime(constants.robot_radius, robot_1.getMovement(), constants.robot_radius, robot_2.getMovement(),
                          radius_error, time);
       if (collision.first)
       {
