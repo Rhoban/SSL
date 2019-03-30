@@ -6,7 +6,7 @@ namespace Vision
 {
 #define ERROR_FIELD 0.1
 
-bool object_coordonate_is_valid(double x, double y, Vision::PartOfTheField part_of_the_field_used)
+bool objectCoordonateIsValid(double x, double y, Vision::PartOfTheField part_of_the_field_used)
 {
   switch (part_of_the_field_used)
   {
@@ -30,7 +30,7 @@ bool object_coordonate_is_valid(double x, double y, Vision::PartOfTheField part_
   return false;
 }
 
-std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::average_filter(
+std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::averageFilter(
     int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
     const Vision::VisionData& old_vision_data, PartOfTheField part_of_the_field_used)
@@ -57,7 +57,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::averag
     }
     for (auto robot : *robots)
     {
-      if (!object_coordonate_is_valid(robot.x() / 1000.0, robot.y() / 1000.0, part_of_the_field_used))
+      if (!objectCoordonateIsValid(robot.x() / 1000.0, robot.y() / 1000.0, part_of_the_field_used))
       {
         continue;
       }
@@ -93,7 +93,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::averag
   }
 }
 
-std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::exponential_degression_filter(
+std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponentialDegressionFilter(
     int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
     const Vision::VisionData& old_vision_data)
@@ -151,7 +151,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> Robot_position_filter::expone
 }
 
 std::pair<rhoban_geometry::Point, ContinuousAngle>
-Robot_position_filter::no_filter(int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team team_color, bool ally,
+RobotPositionFilter::noFilter(int robot_id, const SSL_DetectionRobot& robotFrame, ai::Team team_color, bool ally,
                                  const std::map<int, SSL_DetectionFrame>& camera_detections,
                                  bool& orientation_is_defined, const Vision::VisionData& old_vision_data)
 {

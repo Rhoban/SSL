@@ -122,7 +122,7 @@ void AIVisionClient::packetReceived()
       {
         double x = ball.x() / 1000.0;
         double y = ball.y() / 1000.0;
-        if (object_coordonate_is_valid(x, y, part_of_the_field_used_))
+        if (objectCoordonateIsValid(x, y, part_of_the_field_used_))
         {
           ball_is_detected = detection.t_sent();
           vision_data_.ball.update(detection.t_sent(), Point(x, y));  // TODO HACK : IL FAUT METTRE t_send() ?
@@ -150,7 +150,7 @@ void AIVisionClient::packetReceived()
         double y = ball.y() / 1000.0;
         // std::cerr<<"CONFIDENCE ELSE ("<<detection.camera_id()<<"): "<<ball.confidence()<<" t:
         // "<<detection.t_sent()<<std::endl;
-        if (not(object_coordonate_is_valid(x, y, part_of_the_field_used_)
+        if (not(objectCoordonateIsValid(x, y, part_of_the_field_used_)
 
                     ))
         {
@@ -225,7 +225,7 @@ void AIVisionClient::packetReceived()
 void AIVisionClient::updateRobotInformation(const SSL_DetectionFrame& detection, const SSL_DetectionRobot& robotFrame,
                                             bool ally, ai::Team team_color)
 {
-  if (not(object_coordonate_is_valid(robotFrame.x() / 1000.0, robotFrame.y() / 1000.0, part_of_the_field_used_)))
+  if (not(objectCoordonateIsValid(robotFrame.x() / 1000.0, robotFrame.y() / 1000.0, part_of_the_field_used_)))
   {
     return;
   }
