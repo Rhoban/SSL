@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__OBSTRUCTOR__H__
-#define __ROBOT_BEHAVIOR__OBSTRUCTOR__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
@@ -27,32 +26,26 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-
 class Obstructor : public RobotBehavior
 {
-  private:
-    rhoban_geometry::Point point_to_obstruct;
-    int robot_to_obstruct_id;
-    Vision::Team robot_to_obstruct_team;
+private:
+  rhoban_geometry::Point point_to_obstruct;
+  int robot_to_obstruct_id;
+  Vision::Team robot_to_obstruct_team;
 
-    ConsignFollower *follower;
+  ConsignFollower* follower;
 
-  public:
-    Obstructor(Ai::AiData &ai_data);
+public:
+  Obstructor(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot &robot,
-        const Ai::Ball &ball);
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-    virtual Control control() const;
-    void declare_robot_to_obstruct( int robot_id, Vision::Team team = Vision::Team::Opponent );
+  virtual Control control() const;
+  void declare_robot_to_obstruct(int robot_id, Vision::Team team = Vision::Team::Opponent);
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-    virtual ~Obstructor();
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual ~Obstructor();
 };
 
-}; // namespace Robot_behavior
-}; // namespace RhobanSSL
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL

@@ -17,43 +17,36 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__DEFENDER__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__DEFENDER__
+#pragma once
 
 #include "robot_behavior/factory.h"
 #include "robot_behavior/robot_behavior.h"
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
-namespace Beginner {
-
+namespace Robot_behavior
+{
+namespace Beginner
+{
 /** This class shows how to place a robot between the ally's goal and the ball. (Defend situation) */
-class Defender : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+class Defender : public RobotBehavior
+{
+private:
+  ConsignFollower* follower;
+  RhobanSSLAnnotation::Annotations annotations;
 
-    public:
-    Defender(Ai::AiData& ai_data);
+public:
+  Defender(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  bool ball_is_inside_ally_penalty_area();
 
-    bool ball_is_inside_ally_penalty_area();
+  void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Defender();
+  virtual ~Defender();
 };
 
-}; // Namespace Beginner
-}; // Namespace Robot_behavior
-}; //Namespace Rhoban
-
-#endif
+};  // Namespace Beginner
+};  // Namespace Robot_behavior
+};  // namespace RhobanSSL

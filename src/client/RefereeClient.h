@@ -13,10 +13,10 @@ class RefereeClient : public MulticastClient
 public:
   RefereeClient();
   RefereeClient(std::string addr, std::string port);
-  bool process(char *buffer, size_t len);
+  bool process(char* buffer, size_t len);
   SSL_Referee getData();
 
 protected:
   SSL_Referee data;
 };
-}
+}  // namespace RhobanSSL

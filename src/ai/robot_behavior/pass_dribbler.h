@@ -17,49 +17,41 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__PASS_DRIBBLER__H__
-#define __ROBOT_BEHAVIOR__PASS_DRIBBLER__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class Pass_dribbler : public RobotBehavior
+{
+private:
+  rhoban_geometry::Point point_to_pass;
+  int robot_to_pass_id;
+  Vision::Team robot_to_pass_team;
+  double kick_power;
 
-class Pass_dribbler : public RobotBehavior  {
-    private:
-        rhoban_geometry::Point point_to_pass;
-        int robot_to_pass_id;
-        Vision::Team robot_to_pass_team;
-        double kick_power;
+  ConsignFollower* follower;
 
+public:
+  bool need_to_kick;
+  Pass_dribbler(Ai::AiData& ai_data);
 
-        ConsignFollower* follower;
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  // TODO: portée des variables ?
+  void declare_point_to_pass(rhoban_geometry::Point point);
+  void declare_robot_to_pass(int robot_id, Vision::Team team = Vision::Team::Ally);
+  void calc_kick_power(rhoban_geometry::Point start, rhoban_geometry::Point end);
 
-    public:
-        bool need_to_kick;
-        Pass_dribbler(Ai::AiData& ai_data);
+  virtual Control control() const;
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
-        //TODO: portée des variables ?
-        void declare_point_to_pass( rhoban_geometry::Point point );
-        void declare_robot_to_pass( int robot_id, Vision::Team team = Vision::Team::Ally );
-        void calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end );
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-
-	virtual Control control() const;
-
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Pass_dribbler();
+  virtual ~Pass_dribbler();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
