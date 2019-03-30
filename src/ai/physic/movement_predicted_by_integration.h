@@ -23,10 +23,10 @@
 
 namespace rhoban_ssl
 {
-class Movement_predicted_by_integration : public Movement
+class MovementPredictedByIntegration : public Movement
 {
 private:
-  MovementSample samples;
+  MovementSample samples_;
 
   void check();
 
@@ -49,7 +49,7 @@ public:
 
   virtual void print(std::ostream& stream) const;
 
-  virtual ~Movement_predicted_by_integration();
+  virtual ~MovementPredictedByIntegration();
 };
 
 }  // namespace rhoban_ssl

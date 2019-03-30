@@ -37,7 +37,7 @@ TEST(test_movement_predicted_by_integration, use_cases)
     mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
     mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
-    rhoban_ssl::Movement_predicted_by_integration pred;
+    rhoban_ssl::MovementPredictedByIntegration pred;
     pred.setSample(mov);
 
     Point pos(27, 54);
@@ -88,7 +88,7 @@ TEST(test_movement_predicted_by_integration, clone)
     mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
     mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
-    rhoban_ssl::Movement_predicted_by_integration pred_tmp;
+    rhoban_ssl::MovementPredictedByIntegration pred_tmp;
     rhoban_ssl::Movement* pred_ptr = pred_tmp.clone();
     rhoban_ssl::Movement& pred = *pred_ptr;
 

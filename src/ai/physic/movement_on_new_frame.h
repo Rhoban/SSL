@@ -39,7 +39,7 @@ public:
 
   virtual double lastTime() const;
 
-  MovementOnNewFrame(Movement* movement_);
+  MovementOnNewFrame(Movement* movement);
 
   virtual void setSample(const MovementSample& samples);
   virtual const MovementSample& getSample() const;
