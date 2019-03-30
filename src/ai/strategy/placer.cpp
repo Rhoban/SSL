@@ -22,7 +22,7 @@
 #include <core/print_collection.h>
 #include <robot_behavior/consign_follower.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -152,4 +152,4 @@ void Placer::set_starting_position_for_goalie(const rhoban_geometry::Point& line
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

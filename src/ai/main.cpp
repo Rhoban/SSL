@@ -35,7 +35,7 @@
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 
-using namespace RhobanSSL;
+using namespace rhoban_ssl;
 AI* ai = NULL;
 
 void stop(int s)

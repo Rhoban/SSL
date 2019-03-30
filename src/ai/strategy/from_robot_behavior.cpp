@@ -19,7 +19,7 @@
 
 #include "from_robot_behavior.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -127,4 +127,4 @@ From_robot_behavior::~From_robot_behavior()
 }
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

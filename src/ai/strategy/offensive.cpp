@@ -19,7 +19,7 @@
 
 #include "offensive.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -135,4 +135,4 @@ RhobanSSLAnnotation::Annotations Offensive::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

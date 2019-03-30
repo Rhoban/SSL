@@ -21,7 +21,7 @@
 
 #include <physic/movement.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class Movement_with_no_prediction : public Movement
 {
@@ -50,4 +50,4 @@ public:
   virtual ~Movement_with_no_prediction();
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

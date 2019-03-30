@@ -27,7 +27,7 @@
 #include <algorithm>
 #include <math/matching.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {
@@ -605,4 +605,4 @@ void Manager::set_ball_avoidance_for_all_robots(bool value = true)
 }
 
 };  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

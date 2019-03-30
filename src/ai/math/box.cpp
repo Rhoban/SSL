@@ -1,7 +1,7 @@
 #include "box.h"
 #include "intersection.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 Box Box::increase(double error) const
 {
@@ -127,4 +127,4 @@ std::ostream& operator<<(std::ostream& out, const Box& box)
   return out;
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

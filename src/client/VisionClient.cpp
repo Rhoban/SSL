@@ -6,7 +6,7 @@
 
 using namespace rhoban_utils;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 // VisionClient::VisionClient(bool simulation) :
 //   MulticastClient(SSL_VISION_ADDRESS, SSL_VISION_PORT)
@@ -59,4 +59,4 @@ bool VisionClient::process(char* buffer, size_t len)
 
   return false;
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

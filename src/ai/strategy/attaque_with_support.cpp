@@ -19,7 +19,7 @@
 
 #include "attaque_with_support.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -171,4 +171,4 @@ RhobanSSLAnnotation::Annotations AttaqueWithSupport::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

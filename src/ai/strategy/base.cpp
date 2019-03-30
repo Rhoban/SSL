@@ -25,7 +25,7 @@
 #include <robot_behavior/defensor.h>
 #include <robot_behavior/passive_defensor.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -140,4 +140,4 @@ bool Base::get_starting_position_for_goalie(rhoban_geometry::Point& linear_posit
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

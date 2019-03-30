@@ -28,7 +28,7 @@
 #include "client_config.h"
 #include "robot_position_filter.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class AIVisionClient : public VisionClient
 {

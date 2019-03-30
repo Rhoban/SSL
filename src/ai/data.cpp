@@ -19,7 +19,7 @@
 
 #include "data.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 Data::Data(Ai::Team initial_team_color)
 {
@@ -139,4 +139,4 @@ void Data::edit_data_for_viewer(  // Use that function if you ha no choice. Pref
   mutex_for_viewer_data.unlock();
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

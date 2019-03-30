@@ -21,7 +21,7 @@
 #include "robot_near_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -85,4 +85,4 @@ RhobanSSLAnnotation::Annotations Begginer_robot_near_ball::get_annotations() con
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

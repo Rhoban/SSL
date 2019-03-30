@@ -1,6 +1,6 @@
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Vision
 {
@@ -20,4 +20,4 @@ Factory::filter(int robot_id, const SSL_DetectionRobot& robotFrame, Ai::Team tea
 }
 
 }  // namespace Vision
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

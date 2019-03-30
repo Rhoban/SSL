@@ -27,7 +27,7 @@
 #include <ai_data.h>
 #include <annotations/annotations.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -91,4 +91,4 @@ double vec2angle(Vector2d direction);
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

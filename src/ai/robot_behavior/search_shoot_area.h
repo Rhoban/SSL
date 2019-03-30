@@ -23,7 +23,7 @@
 #include "factory.h"
 #include <random>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -64,4 +64,4 @@ public:
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

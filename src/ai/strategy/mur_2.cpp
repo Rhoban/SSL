@@ -24,7 +24,7 @@
 #include <robot_behavior/mur_defensor.h>
 #include <robot_behavior/degageur.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -174,4 +174,4 @@ RhobanSSLAnnotation::Annotations Mur_2::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

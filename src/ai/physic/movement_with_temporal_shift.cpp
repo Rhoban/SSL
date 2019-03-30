@@ -19,7 +19,7 @@
 
 #include "movement_with_temporal_shift.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 Movement_with_temporal_shift::Movement_with_temporal_shift(Movement* movement, std::function<double()> temporal_shift)
   : movement(movement), temporal_shift(temporal_shift)
@@ -86,4 +86,4 @@ Movement_with_temporal_shift::~Movement_with_temporal_shift()
   delete movement;
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

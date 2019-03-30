@@ -19,7 +19,7 @@
 #include "annotations_ball_position.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -54,4 +54,4 @@ RhobanSSLAnnotation::Annotations Begginer_annotations_ball_position::get_annotat
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

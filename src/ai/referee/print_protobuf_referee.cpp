@@ -20,7 +20,7 @@
 
 #include "print_protobuf_referee.h"
 
-// namespace RhobanSSL {
+// namespace rhoban_ssl {
 // namespace vision {
 
 std::ostream& operator<<(std::ostream& out, const SSL_Referee& referee)

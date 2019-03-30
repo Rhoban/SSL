@@ -21,7 +21,7 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <manager/manager_with_game_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {
@@ -98,4 +98,4 @@ public:
 };
 
 };  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

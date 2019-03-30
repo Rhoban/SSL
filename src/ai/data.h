@@ -26,7 +26,7 @@
 #include <ai_data.h>
 #include <robot_behavior/robot_behavior.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 struct Data_from_ai
 {

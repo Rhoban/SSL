@@ -19,7 +19,7 @@
 
 #include "do_nothing.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -37,4 +37,4 @@ Control DoNothing::control() const
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

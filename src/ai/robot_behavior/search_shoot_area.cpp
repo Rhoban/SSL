@@ -23,7 +23,7 @@
 #include <debug.h>
 #include <core/print_collection.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -122,4 +122,4 @@ RhobanSSLAnnotation::Annotations SearchShootArea::get_annotations() const
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

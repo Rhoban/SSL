@@ -22,7 +22,7 @@
 #include "movement.h"
 #include <ai_data.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace physic
 {
@@ -35,4 +35,4 @@ public:
 };
 
 };  // namespace physic
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

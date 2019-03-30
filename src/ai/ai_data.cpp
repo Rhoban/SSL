@@ -26,7 +26,7 @@
 #include <json/reader.h>
 #include <fstream>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Ai
 {
@@ -71,7 +71,7 @@ void Object::change_frame(const rhoban_geometry::Point& origin, const Vector2d& 
   static_cast<Movement_on_new_frame*>(movement)->set_frame(origin, v1, v2);
 }
 
-const RhobanSSL::Movement& Object::get_movement() const
+const rhoban_ssl::Movement& Object::get_movement() const
 {
   return *movement;
 }
@@ -271,7 +271,7 @@ void Constants::load(const std::string& config_path)
 
 bool AiData::robot_is_inside_the_field(int robot_id) const
 {
-  const RhobanSSL::Movement& mov = robots.at(Vision::Team::Ally).at(robot_id).get_movement();
+  const rhoban_ssl::Movement& mov = robots.at(Vision::Team::Ally).at(robot_id).get_movement();
   return field.is_inside(mov.linear_position(time));
 }
 
@@ -418,4 +418,4 @@ Robot::Robot() : is_goalie(false), infra_red(false)
 }
 
 }  // namespace Ai
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

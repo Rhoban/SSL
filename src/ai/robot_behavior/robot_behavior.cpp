@@ -20,7 +20,7 @@
 #include "robot_behavior.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -106,4 +106,4 @@ bool RobotBehavior::infra_red() const
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

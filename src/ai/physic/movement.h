@@ -23,7 +23,7 @@
 #include <iostream>
 #include "movement_sample.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class Movement
 {
@@ -52,4 +52,4 @@ public:
 
 }  // namespace RhobanSSL
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::Movement& movement);
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::Movement& movement);

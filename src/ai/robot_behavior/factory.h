@@ -23,7 +23,7 @@
 #include "robot_behavior.h"
 #include "consign_follower.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -40,4 +40,4 @@ public:
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

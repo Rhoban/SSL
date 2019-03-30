@@ -23,7 +23,7 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <memory>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -61,4 +61,4 @@ public:
 };
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

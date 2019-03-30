@@ -23,7 +23,7 @@
 #include "navigation_with_obstacle_avoidance.h"
 #include <ai_data.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -73,4 +73,4 @@ public:
   virtual void set_radius_avoidance_for_the_ball(double radius);
 };
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

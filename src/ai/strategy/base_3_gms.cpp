@@ -23,7 +23,7 @@
 #include <robot_behavior/striker.h>
 #include <robot_behavior/mur_defensor.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -122,4 +122,4 @@ bool Base_3_gms::get_starting_position_for_goalie(rhoban_geometry::Point& linear
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

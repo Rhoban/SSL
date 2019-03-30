@@ -24,7 +24,7 @@
 #include <robot_behavior/striker.h>
 #include <robot_behavior/search_shoot_area.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -63,4 +63,4 @@ public:
 };
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

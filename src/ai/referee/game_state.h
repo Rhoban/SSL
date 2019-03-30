@@ -24,7 +24,7 @@
 #include <math/circular_vector.h>
 #include <ai_data.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 struct state_name
 {
@@ -143,4 +143,4 @@ public:
   RefereeClient& getRefereeClient();
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

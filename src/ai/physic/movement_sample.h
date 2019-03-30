@@ -23,7 +23,7 @@
 #include <math/continuous_angle.h>
 #include <math/vector2d.h>
 #include <math/circular_vector.h>
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 struct PositionSample
 {
@@ -60,6 +60,6 @@ struct MovementSample : public circular_vector<PositionSample>
 
 }  // namespace RhobanSSL
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& pos);
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample& pos);
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::MovementSample& mov);
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::MovementSample& mov);

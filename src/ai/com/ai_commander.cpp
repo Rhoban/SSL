@@ -21,7 +21,7 @@
 #include "ai_commander.h"
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 AICommander::AICommander(bool yellow) : yellow(yellow)
 {
@@ -65,4 +65,4 @@ void AICommander::stopAll()
     set(k, false, 0, 0, 0);
   }
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

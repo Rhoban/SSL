@@ -21,7 +21,7 @@
 #include "game_informations.h"
 #include "math/lines.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 GameInformations::GameInformations(Ai::AiData& ai_data) : ai_data(ai_data)
 {
@@ -374,4 +374,4 @@ bool GameInformations::infra_red(int robot_number, Vision::Team team) const
   return get_robot(robot_number, team).infra_red;
 }
 
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

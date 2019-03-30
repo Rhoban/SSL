@@ -21,7 +21,7 @@
 
 #include <physic/movement.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class Movement_with_temporal_shift : public Movement
 {
@@ -57,4 +57,4 @@ public:
   virtual ~Movement_with_temporal_shift();
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

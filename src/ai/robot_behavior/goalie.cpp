@@ -23,7 +23,7 @@
 #include <math/intersection.h>
 #include "navigation_inside_the_field.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -220,4 +220,4 @@ RhobanSSLAnnotation::Annotations Goalie::get_annotations() const
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

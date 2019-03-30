@@ -19,7 +19,7 @@
 
 #include "consign_follower.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -49,4 +49,4 @@ void ConsignFollower::set_radius_avoidance_for_the_ball(double radius)
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

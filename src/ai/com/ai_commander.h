@@ -28,7 +28,7 @@
  * Generic interface for commanding robots, whatever it is in simulator or
  * not for instance
  */
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class AICommander
 {

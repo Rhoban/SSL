@@ -30,7 +30,7 @@
 #include <math/frame_changement.h>
 #include <math/position.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Ai
 {
@@ -56,7 +56,7 @@ class Object
 {
 public:
   Vision::Object vision_data;
-  RhobanSSL::Movement* movement;
+  rhoban_ssl::Movement* movement;
 
 public:
   int id() const
@@ -76,7 +76,7 @@ public:
 
   bool is_present_in_vision() const;
 
-  const RhobanSSL::Movement& get_movement() const;
+  const rhoban_ssl::Movement& get_movement() const;
   virtual ~Object();
 };
 

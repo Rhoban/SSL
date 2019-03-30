@@ -22,7 +22,7 @@
 #include <math/vector2d.h>
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -80,4 +80,4 @@ RhobanSSLAnnotation::Annotations Passive_defensor::get_annotations() const
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

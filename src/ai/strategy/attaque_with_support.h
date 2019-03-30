@@ -25,7 +25,7 @@
 #include <robot_behavior/pass.h>
 #include <robot_behavior/wait_pass.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -65,4 +65,4 @@ public:
 };
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

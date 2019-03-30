@@ -20,7 +20,7 @@
 #include "test_velocity_consign.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -117,4 +117,4 @@ Test_velocity_consign* Test_velocity_consign::get_SE_movement(Ai::AiData& ai_dat
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

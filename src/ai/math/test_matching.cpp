@@ -25,7 +25,7 @@
 #include <core/collection.h>
 #include <cmath>
 
-using namespace RhobanSSL;
+using namespace rhoban_ssl;
 
 struct Man
 {

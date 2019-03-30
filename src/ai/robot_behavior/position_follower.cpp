@@ -19,7 +19,7 @@
 
 #include "position_follower.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -98,4 +98,4 @@ RhobanSSLAnnotation::Annotations PositionFollower::get_annotations() const
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

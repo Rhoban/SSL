@@ -23,7 +23,7 @@
 #include "manager.h"
 #include <referee/game_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {

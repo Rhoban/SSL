@@ -24,7 +24,7 @@
 #include <robot_behavior/striker.h>
 #include <robot_behavior/robot_follower.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -164,4 +164,4 @@ RhobanSSLAnnotation::Annotations IndirectLob::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

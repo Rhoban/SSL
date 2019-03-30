@@ -19,7 +19,7 @@
 #include "prepare_strike.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -86,4 +86,4 @@ RhobanSSLAnnotation::Annotations Intermediate_Prepare_strike::get_annotations() 
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

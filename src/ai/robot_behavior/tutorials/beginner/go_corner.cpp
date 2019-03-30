@@ -19,7 +19,7 @@
 #include <math/vector2d.h>
 #include "go_corner.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -65,4 +65,4 @@ RhobanSSLAnnotation::Annotations GoCorner::get_annotations() const
 
 }  // namespace beginner
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

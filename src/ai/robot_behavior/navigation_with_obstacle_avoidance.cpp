@@ -22,7 +22,7 @@
 #include <physic/constants.h>
 #include <physic/collision.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -388,4 +388,4 @@ double Navigation_with_obstacle_avoidance::get_radius_avoidance_for_the_ball()
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

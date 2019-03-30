@@ -24,7 +24,7 @@
 #include <ai_data.h>
 #include <math/box.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class GameInformations
 {
@@ -329,4 +329,4 @@ public:
   int shirt_number_of_threat_max_2(Vision::Team team) const;  // second threat max
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

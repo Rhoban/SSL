@@ -26,7 +26,7 @@
 #include <debug.h>
 #include <core/print_collection.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -213,4 +213,4 @@ RhobanSSLAnnotation::Annotations Prepare_kickoff::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

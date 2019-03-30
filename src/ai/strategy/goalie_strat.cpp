@@ -19,7 +19,7 @@
 
 #include "goalie_strat.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -133,4 +133,4 @@ RhobanSSLAnnotation::Annotations GoalieStrat::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

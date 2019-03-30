@@ -1,6 +1,6 @@
 #include "robot_position_filter.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Vision
 {
@@ -161,4 +161,4 @@ Robot_position_filter::no_filter(int robot_id, const SSL_DetectionRobot& robotFr
 }
 
 }  // namespace Vision
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

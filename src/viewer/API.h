@@ -16,8 +16,8 @@ class API : public QObject
   Q_OBJECT
 
 public:
-  API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander* commander,
-      const std::string& config_path, RhobanSSL::Vision::Part_of_the_field part_of_the_field_used,
+  API(std::string teamName, bool simulation, rhoban_ssl::Ai::Team team, rhoban_ssl::AICommander* commander,
+      const std::string& config_path, rhoban_ssl::Vision::Part_of_the_field part_of_the_field_used,
       std::string addr = SSL_VISION_ADDRESS, std::string port = SSL_VISION_PORT,
       std::string sim_port = SSL_SIMULATION_VISION_PORT);
   virtual ~API();
@@ -101,11 +101,11 @@ public slots:
 
 protected:
   std::string teamName;
-  RhobanSSL::AI* ai;
-  RhobanSSL::Data data;
-  RhobanSSL::Ai::Team team;
-  RhobanSSL::AIVisionClient visionClient;
-  RhobanSSL::AICommander* commander;
+  rhoban_ssl::AI* ai;
+  rhoban_ssl::Data data;
+  rhoban_ssl::Ai::Team team;
+  rhoban_ssl::AIVisionClient visionClient;
+  rhoban_ssl::AICommander* commander;
 
   std::map<int, std::string> assignments;
 
@@ -118,7 +118,7 @@ protected:
   std::mutex mutex;
 
   std::thread* joystickThread;
-  RhobanSSL::Joystick* joystick;
+  rhoban_ssl::Joystick* joystick;
   int joystickRobot;
 
   // void comThreadExec();

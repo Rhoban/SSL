@@ -21,7 +21,7 @@
 #include <rhoban_geometry/segment.h>
 #include <physic/constants.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -98,4 +98,4 @@ void A_star_path::set_limits(double translation_velocity_limit, double rotation_
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -22,7 +22,7 @@
 #include <rhoban_utils/angle.h>
 #include <robot_behavior/robot_behavior.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 AICommanderSimulation::AICommanderSimulation(bool yellow) : AICommander(yellow), client()
 {
@@ -87,4 +87,4 @@ AICommanderSimulation::~AICommanderSimulation()
 {
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

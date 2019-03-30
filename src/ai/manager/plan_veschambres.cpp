@@ -50,7 +50,7 @@
 #define GOALIE "goalie"
 #define PROTECT_BALL "protect_ball"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {
@@ -358,4 +358,4 @@ PlanVeschambres::~PlanVeschambres()
 }
 
 };  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

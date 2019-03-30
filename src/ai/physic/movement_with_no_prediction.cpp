@@ -20,7 +20,7 @@
 #include "movement_with_no_prediction.h"
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 double Movement_with_no_prediction::last_time() const
 {
@@ -85,4 +85,4 @@ Movement_with_no_prediction::~Movement_with_no_prediction()
 {
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

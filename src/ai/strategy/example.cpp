@@ -22,7 +22,7 @@
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/striker.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -119,4 +119,4 @@ bool Example::get_starting_position_for_goalie(rhoban_geometry::Point& linear_po
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

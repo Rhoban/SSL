@@ -21,7 +21,7 @@
 #include <debug.h>
 #include "constants.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 std::pair<bool, double> collision_time(double radius_1, const Movement& movement_1, double radius_2,
                                        const Movement& movement_2, double radius_error, double time)
@@ -74,4 +74,4 @@ std::pair<bool, double> collision_time(double radius_A, const rhoban_geometry::P
   return result;
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

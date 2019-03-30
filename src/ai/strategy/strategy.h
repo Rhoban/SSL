@@ -27,7 +27,7 @@
 #include <memory>
 #include <ai_data.h>
 #include <annotations/annotations.h>
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {

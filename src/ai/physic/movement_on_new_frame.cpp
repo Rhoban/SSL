@@ -20,7 +20,7 @@
 #include "movement_on_new_frame.h"
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 void Movement_on_new_frame::set_frame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
@@ -98,4 +98,4 @@ Movement_on_new_frame::~Movement_on_new_frame()
   delete movement;
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

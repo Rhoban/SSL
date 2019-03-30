@@ -23,7 +23,7 @@
 #include "factory.h"
 #include <core/machine_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -78,4 +78,4 @@ public:
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

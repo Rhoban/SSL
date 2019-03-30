@@ -18,11 +18,11 @@
 */
 #include "test_relative_velocity_consign.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
-Test_relative_velocity_consign::Test_relative_velocity_consign(RhobanSSL::Ai::AiData& ai_data)
+Test_relative_velocity_consign::Test_relative_velocity_consign(rhoban_ssl::Ai::AiData& ai_data)
   : RobotBehavior(ai_data), relative_control(false)
 {
 }
@@ -86,4 +86,4 @@ Test_relative_velocity_consign* Test_relative_velocity_consign::get_movement_ang
 }
 
 };  // namespace Robot_behavior
-};  // Namespace RhobanSSL
+};  // namespace rhoban_ssl

@@ -20,7 +20,7 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 #include "attaque_with_support_ms.h"
 #include "core/print_collection.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -380,4 +380,4 @@ void AttaqueWithSupportMs::set_seuil_fgbm(double seuil)
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

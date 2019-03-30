@@ -26,12 +26,12 @@ using namespace rhoban_geometry;
 TEST(test_movement_with_no_prediction, use_cases)
 {
   {
-    RhobanSSL::MovementSample mov(3);
-    mov.insert(RhobanSSL::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
-    mov.insert(RhobanSSL::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
-    mov.insert(RhobanSSL::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
+    rhoban_ssl::MovementSample mov(3);
+    mov.insert(rhoban_ssl::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
+    mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
+    mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
-    RhobanSSL::Movement_with_no_prediction pred;
+    rhoban_ssl::Movement_with_no_prediction pred;
     pred.set_sample(mov);
 
     EXPECT_TRUE(pred.linear_position(6) == Point(27, 54));
@@ -74,14 +74,14 @@ TEST(test_movement_with_no_prediction, use_cases)
 TEST(test_movement_with_no_prediction, clone)
 {
   {
-    RhobanSSL::MovementSample mov(3);
-    mov.insert(RhobanSSL::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
-    mov.insert(RhobanSSL::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
-    mov.insert(RhobanSSL::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
+    rhoban_ssl::MovementSample mov(3);
+    mov.insert(rhoban_ssl::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
+    mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
+    mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
-    RhobanSSL::Movement_with_no_prediction pred_tmp;
-    RhobanSSL::Movement* pred_ptr = pred_tmp.clone();
-    RhobanSSL::Movement& pred = *pred_ptr;
+    rhoban_ssl::Movement_with_no_prediction pred_tmp;
+    rhoban_ssl::Movement* pred_ptr = pred_tmp.clone();
+    rhoban_ssl::Movement& pred = *pred_ptr;
 
     pred.set_sample(mov);
 

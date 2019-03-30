@@ -1,6 +1,6 @@
 #include "manager_with_game_state.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {
@@ -206,4 +206,4 @@ ManagerWithGameState::~ManagerWithGameState()
 }
 
 };  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

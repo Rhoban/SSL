@@ -24,7 +24,7 @@
 #include "navigation_inside_the_field.h"
 #include "a_star_path.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -55,4 +55,4 @@ ConsignFollower* Factory::fixed_consign_follower_without_repsecting_authorized_l
 }
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

@@ -19,7 +19,7 @@
 
 #include "defensive.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -138,4 +138,4 @@ RhobanSSLAnnotation::Annotations Defensive::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

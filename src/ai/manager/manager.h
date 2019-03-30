@@ -29,7 +29,7 @@
 #include <strategy/placer.h>
 #include <annotations/annotations.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {

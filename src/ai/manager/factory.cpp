@@ -23,7 +23,7 @@
 // #include "Match.h"
 #include "plan_veschambres.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {
@@ -69,4 +69,4 @@ std::shared_ptr<Manager> Factory::construct_manager(const std::string& manager_n
 }
 
 };  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

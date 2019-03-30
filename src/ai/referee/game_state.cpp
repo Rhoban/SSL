@@ -23,7 +23,7 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 #include "print_protobuf_referee.h"
 #include <game_informations.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 GameStateData::GameStateData() : datas(2), last_time(0.0), last_command_counter(0)
 {
@@ -358,4 +358,4 @@ RefereeClient& GameState::getRefereeClient()
   return referee;
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

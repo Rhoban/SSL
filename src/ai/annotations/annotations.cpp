@@ -172,7 +172,7 @@ void Annotations::addText(const std::string& text, const Vector2d& point, std::s
   addText(text, point.getX(), point.getY(), color);
 }
 
-void Annotations::addBox(const RhobanSSL::Box& box, std::string color, bool dashed)
+void Annotations::addBox(const rhoban_ssl::Box& box, std::string color, bool dashed)
 {
   addArrow(box.get_W_segment(), color, dashed);
   addArrow(box.get_E_segment(), color, dashed);

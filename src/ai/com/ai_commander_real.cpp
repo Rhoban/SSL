@@ -20,7 +20,7 @@
 
 #include "ai_commander_real.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 AICommanderReal::AICommanderReal(bool yellow) : AICommander(yellow), kicking(false), master("/dev/ttyACM0", 1000000)
 // master("/dev/ttyACM1", 1000000)
@@ -90,4 +90,4 @@ AICommanderReal::~AICommanderReal()
 {
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -30,7 +30,7 @@
 #include <debug.h>
 #include <core/print_collection.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace matching
 {
@@ -152,6 +152,6 @@ Matchings gale_shapley_algorithm(const std::vector<MAN>& man_set, const std::vec
 }
 
 };  // namespace matching
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl
 
 #endif

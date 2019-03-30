@@ -35,7 +35,7 @@
 #include <com/ai_commander_real.h>
 #include <utility>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 float sign(float x)
 {
@@ -379,7 +379,7 @@ void AI::run()
   auto lastTick = rhoban_utils::TimeStamp::now();
 
   // TODO ; SEE HOW TO REMOVE THE WARMUP
-  double warmup_period = 2 * period * RhobanSSL::Vision::history_size;
+  double warmup_period = 2 * period * rhoban_ssl::Vision::history_size;
   double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
 
   while (running)
@@ -518,7 +518,7 @@ void AI::get_annotations(RhobanSSLAnnotation::Annotations& annotations) const
 
 void AI::update_electronic_informations()
 {
-  RhobanSSL::Master* master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+  rhoban_ssl::Master* master = dynamic_cast<rhoban_ssl::AICommanderReal*>(commander)->getMaster();
   for (unsigned int id = 0; id < MAX_ROBOTS; id++)
   {
     auto robot = master->robots[id];
@@ -538,4 +538,4 @@ void AI::print_electronic_info()
   }
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

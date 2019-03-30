@@ -23,7 +23,7 @@
 
 using namespace rhoban_geometry;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 PositionSample::PositionSample() : PositionSample(0.0, Point(0.0, 0.0), ContinuousAngle(0.0))
 {
@@ -129,9 +129,9 @@ ContinuousAngle MovementSample::angular_acceleration(unsigned int i) const
   return (angular_velocity(i) - angular_velocity(i + 1)) / dt(i);
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& pos)
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample& pos)
 {
   stream << "("
             "t="
@@ -145,8 +145,8 @@ std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& 
   return stream;
 }
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::MovementSample& mov)
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::MovementSample& mov)
 {
-  stream << static_cast<circular_vector<RhobanSSL::PositionSample>>(mov);
+  stream << static_cast<circular_vector<rhoban_ssl::PositionSample>>(mov);
   return stream;
 }

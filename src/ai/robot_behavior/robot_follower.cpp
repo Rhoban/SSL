@@ -22,7 +22,7 @@
 #include <math/vector2d.h>
 #include <math/continuous_angle.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -76,4 +76,4 @@ void RobotFollower::declare_robot_to_follow(int robot_id, const Vector2d& transl
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

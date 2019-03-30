@@ -20,7 +20,7 @@
 #include "movement_predicted_by_integration.h"
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 Movement* Movement_predicted_by_integration::clone() const
 {
@@ -147,4 +147,4 @@ Movement_predicted_by_integration::~Movement_predicted_by_integration()
 {
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

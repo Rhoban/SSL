@@ -20,7 +20,7 @@
 #include "goalie.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -66,4 +66,4 @@ RhobanSSLAnnotation::Annotations Begginer_goalie::get_annotations() const
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

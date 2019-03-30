@@ -19,7 +19,7 @@
 
 #include "union.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -155,4 +155,4 @@ void Union::assign_behavior_to_robots(
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -21,7 +21,7 @@
 #include <math/vector2d.h>
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -98,4 +98,4 @@ bool Example_machine_state::is_closed_to_the_ball() const
 };
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

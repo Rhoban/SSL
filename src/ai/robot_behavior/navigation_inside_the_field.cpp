@@ -28,7 +28,7 @@
 #include <core/print_collection.h>
 #include <core/collection.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -215,4 +215,4 @@ void Navigation_inside_the_field::set_radius_avoidance_for_the_ball(double radiu
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

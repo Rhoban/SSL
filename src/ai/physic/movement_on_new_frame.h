@@ -22,7 +22,7 @@
 #include <physic/movement.h>
 #include <math/frame_changement.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class Movement_on_new_frame : public Movement
 {
@@ -58,4 +58,4 @@ public:
   virtual ~Movement_on_new_frame();
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

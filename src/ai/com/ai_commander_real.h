@@ -25,7 +25,7 @@
 #include <Kinematic.h>
 #include "ai_commander.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class AICommanderReal : public AICommander
 {

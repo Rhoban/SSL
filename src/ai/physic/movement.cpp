@@ -19,12 +19,12 @@
 
 #include "movement.h"
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::Movement& movement)
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::Movement& movement)
 {
   movement.print(stream);
   return stream;
 }
 
-RhobanSSL::Movement::~Movement()
+rhoban_ssl::Movement::~Movement()
 {
 }

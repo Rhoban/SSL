@@ -24,7 +24,7 @@
 #include <ai_data.h>
 #include <math/circular_vector.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -104,4 +104,4 @@ public:
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

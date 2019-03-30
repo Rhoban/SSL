@@ -23,7 +23,7 @@
 #include <referee/game_state.h>
 #include "manager.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {
@@ -47,4 +47,4 @@ public:
 };
 
 };  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

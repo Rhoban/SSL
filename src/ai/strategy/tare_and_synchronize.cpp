@@ -21,7 +21,7 @@
 #include <robot_behavior/do_nothing.h>
 #include <robot_behavior/position_follower.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -132,4 +132,4 @@ Tare_and_synchronize::~Tare_and_synchronize()
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

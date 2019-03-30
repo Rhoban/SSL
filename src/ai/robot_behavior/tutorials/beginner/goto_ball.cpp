@@ -20,7 +20,7 @@
 #include "goto_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -67,4 +67,4 @@ RhobanSSLAnnotation::Annotations Goto_ball::get_annotations() const
 
 }  // namespace Beginner
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -25,7 +25,7 @@
 #include <physic/movement_on_new_frame.h>
 #include <physic/movement_with_temporal_shift.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace physic
 {
@@ -47,4 +47,4 @@ Movement* Factory::ball_movement(Ai::AiData& ai_data)
 }
 
 };  // namespace physic
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

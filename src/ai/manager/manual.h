@@ -21,7 +21,7 @@
 
 #include <manager/manager.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {

@@ -30,7 +30,7 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 #include <robot_behavior/slow_striker.h>
 #include <core/machine_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -148,4 +148,4 @@ public:
 };
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

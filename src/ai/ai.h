@@ -29,7 +29,7 @@
 #include <manager/manager.h>
 #include <annotations/annotations.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class AI
 {

@@ -3,7 +3,7 @@
 #include "vector2d.h"
 #include <rhoban_geometry/segment.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 struct Box
 {
@@ -38,4 +38,4 @@ struct Box
 
 std::ostream& operator<<(std::ostream& out, const Box& box);
 
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

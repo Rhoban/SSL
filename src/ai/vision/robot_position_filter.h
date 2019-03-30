@@ -5,7 +5,7 @@
 #include <math/continuous_angle.h>
 #include "vision_data.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Vision
 {
@@ -38,4 +38,4 @@ public:
 };
 
 };  // namespace Vision
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

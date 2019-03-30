@@ -19,7 +19,7 @@
 
 #include "strategy.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -101,4 +101,4 @@ RhobanSSLAnnotation::Annotations Strategy::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

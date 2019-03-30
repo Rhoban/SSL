@@ -28,7 +28,7 @@
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 AIVisionClient::AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation,
                                Vision::Part_of_the_field part_of_the_field)
@@ -52,10 +52,10 @@ void AIVisionClient::setRobotPos(Ai::Team team, int id, double x, double y, doub
 
   myTeam = data_from_ai.team_color;
 
-  RhobanSSL::Vision::Team visionTeam = RhobanSSL::Vision::Ally;
+  rhoban_ssl::Vision::Team visionTeam = rhoban_ssl::Vision::Ally;
   if (team != myTeam)
   {
-    visionTeam = RhobanSSL::Vision::Opponent;
+    visionTeam = rhoban_ssl::Vision::Opponent;
   }
 
   mutex.lock();
@@ -296,4 +296,4 @@ rhoban_geometry::Point AIVisionClient::average_filter(const rhoban_geometry::Poi
   return linear_average * (1.0 / n_linear);
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

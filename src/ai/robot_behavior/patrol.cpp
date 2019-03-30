@@ -20,7 +20,7 @@
 #include "patrol.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -375,4 +375,4 @@ Patrol* Patrol::test_S_translation_for_pid(Ai::AiData& ai_data)
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

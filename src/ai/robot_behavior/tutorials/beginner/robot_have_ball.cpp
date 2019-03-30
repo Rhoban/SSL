@@ -21,7 +21,7 @@
 #include "robot_have_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Robot_behavior
 {
@@ -81,4 +81,4 @@ RhobanSSLAnnotation::Annotations Begginer_robot_have_ball::get_annotations() con
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

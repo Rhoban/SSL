@@ -17,15 +17,14 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __REFEREE__H__
-#define __REFEREE__H__
+#pragma once
 
 #include <RefereeClient.h>
 #include <core/machine_state.h>
 #include <math/circular_vector.h>
 #include <ai_data.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 struct Referee_Id
 {
@@ -137,5 +136,3 @@ public:
 };
 
 }  // namespace RhobanSSL
-
-#endif

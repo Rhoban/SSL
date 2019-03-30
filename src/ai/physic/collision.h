@@ -21,7 +21,7 @@
 
 #include "movement.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 /*
  * This function computes the future time of collision of two movement with respect to
@@ -36,4 +36,4 @@ std::pair<bool, double> collision_time(double radius_A, const rhoban_geometry::P
                                        double radius_B, const rhoban_geometry::Point& B, const Vector2d& V_B,
                                        double radius_error);
 
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

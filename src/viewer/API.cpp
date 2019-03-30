@@ -7,7 +7,7 @@
 #include <com/ai_commander_real.h>
 #include <manager/factory.h>
 
-using namespace RhobanSSL;
+using namespace rhoban_ssl;
 
 #define NB_ROBOT_ELEC 8  // HACK !! TODO ! Electronic doen't support that number of robots
 
@@ -19,7 +19,7 @@ static QString js(Json::Value& json)
   return QString::fromStdString(writer.write(json));
 }
 
-API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander* commander,
+API::API(std::string teamName, bool simulation, rhoban_ssl::Ai::Team team, rhoban_ssl::AICommander* commander,
          const std::string& config_path, Vision::Part_of_the_field part_of_the_field_used, std::string addr,
          std::string port, std::string sim_port)
   : simulation(simulation)
@@ -32,7 +32,7 @@ API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, Rhoban
   , joystickRobot(0)
 {
   // Be sure that the final controls are initalized to no-speed
-  RhobanSSL::Shared_data shared;
+  rhoban_ssl::Shared_data shared;
   data >> shared;
   for (int id = 0; id < NB_ROBOT_ELEC; id++)
   {
@@ -49,7 +49,7 @@ API::API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, Rhoban
   data << shared;
 
   // Instanciating AI
-  ai = new RhobanSSL::AI(Manager::names::manual,  // avant : match
+  ai = new rhoban_ssl::AI(Manager::names::manual,  // avant : match
                          teamName, team, data, commander, config_path, simulation);
 
   /*
@@ -151,10 +151,10 @@ QString API::robotsStatus()
 {
   Json::Value json(Json::arrayValue);
 
-  RhobanSSL::Vision::VisionData vision;
+  rhoban_ssl::Vision::VisionData vision;
   data >> vision;
 
-  RhobanSSL::Shared_data shared;
+  rhoban_ssl::Shared_data shared;
   data >> shared;
 
   for (auto& entry : vision.robots)
@@ -167,13 +167,13 @@ QString API::robotsStatus()
 
       jsonRobot["id"] = robot.id;
       jsonRobot["present"] = robot.isOk();
-      jsonRobot["team"] = ((team == RhobanSSL::Vision::Ally) ? ourColor() : opponentColor());
+      jsonRobot["team"] = ((team == rhoban_ssl::Vision::Ally) ? ourColor() : opponentColor());
       auto movement = robot.movement;
       jsonRobot["x"] = movement.linear_position().getX();
       jsonRobot["y"] = movement.linear_position().getY();
       jsonRobot["orientation"] = movement.angular_position().value();
 
-      if (team == RhobanSSL::Vision::Ally)
+      if (team == rhoban_ssl::Vision::Ally)
       {
         auto final_control = shared.final_control_for_robots[robot.id];
         Control control = final_control.control;
@@ -181,7 +181,7 @@ QString API::robotsStatus()
         if (!simulation)
         {
           // XXX: This should be read from the AI
-          RhobanSSL::Master* master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+          rhoban_ssl::Master* master = dynamic_cast<rhoban_ssl::AICommanderReal*>(commander)->getMaster();
           auto masterRobot = master->robots[robot.id];
           jsonRobot["com"] = masterRobot.isOk();
           jsonRobot["voltage"] = masterRobot.status.voltage / 8.0;
@@ -220,7 +220,7 @@ QString API::ballStatus()
 {
   Json::Value json;
 
-  RhobanSSL::Vision::VisionData vision;
+  rhoban_ssl::Vision::VisionData vision;
   data >> vision;
 
   auto pos = vision.ball.movement[0];
@@ -234,7 +234,7 @@ QString API::fieldStatus()
 {
   Json::Value json;
 
-  RhobanSSL::Vision::VisionData vision;
+  rhoban_ssl::Vision::VisionData vision;
   data >> vision;
 
   auto& field = vision.field;
@@ -269,7 +269,7 @@ void API::enableRobot(int id, bool enabled)
   mutex.lock();
   if (id >= 0 && id < NB_ROBOT_ELEC)
   {
-    RhobanSSL::Shared_data shared;
+    rhoban_ssl::Shared_data shared;
     data >> shared;
     Control& control = shared.final_control_for_robots[id].control;
 
@@ -291,7 +291,7 @@ void API::manualControl(int id, bool manual)
   mutex.lock();
   if (id >= 0 && id < NB_ROBOT_ELEC)
   {
-    RhobanSSL::Shared_data shared;
+    rhoban_ssl::Shared_data shared;
     data >> shared;
     auto& final_control = shared.final_control_for_robots[id];
 
@@ -306,7 +306,7 @@ void API::activeRobot(int id, bool active)
   mutex.lock();
   if (id >= 0 && id < NB_ROBOT_ELEC)
   {
-    RhobanSSL::Shared_data shared;
+    rhoban_ssl::Shared_data shared;
     data >> shared;
     Control& control = shared.final_control_for_robots[id].control;
 
@@ -320,7 +320,7 @@ void API::robotCommand(int id, double xSpeed, double ySpeed, double thetaSpeed)
 {
   mutex.lock();
 
-  RhobanSSL::Shared_data shared;
+  rhoban_ssl::Shared_data shared;
   data >> shared;
   Control& control = shared.final_control_for_robots[id].control;
 
@@ -337,7 +337,7 @@ void API::robotCommand(int id, double xSpeed, double ySpeed, double thetaSpeed)
 void API::robotCharge(int id, bool charge)
 {
   mutex.lock();
-  RhobanSSL::Shared_data shared;
+  rhoban_ssl::Shared_data shared;
   data >> shared;
   Control& control = shared.final_control_for_robots[id].control;
   if (!control.ignore)
@@ -351,7 +351,7 @@ void API::robotCharge(int id, bool charge)
 void API::kick(int id, int kick, float power)
 {
   mutex.lock();
-  RhobanSSL::Shared_data shared;
+  rhoban_ssl::Shared_data shared;
   data >> shared;
   Control& control = shared.final_control_for_robots[id].control;
 
@@ -377,7 +377,7 @@ void API::kick(int id, int kick, float power)
 void API::setSpin(int id, bool spin)
 {
   mutex.lock();
-  RhobanSSL::Shared_data shared;
+  rhoban_ssl::Shared_data shared;
   data >> shared;
   Control& control = shared.final_control_for_robots[id].control;
 
@@ -395,7 +395,7 @@ void API::emergencyStop()
 
   mutex.lock();
 
-  RhobanSSL::Shared_data shared;
+  rhoban_ssl::Shared_data shared;
   data >> shared;
 
   for (int id = 0; id < NB_ROBOT_ELEC; id++)
@@ -442,8 +442,8 @@ void API::scan()
   mutex.lock();
 
   // Enabling robots depending on their statuses
-  RhobanSSL::Shared_data shared;
-  RhobanSSL::Shared_data shared_tmp_manual;
+  rhoban_ssl::Shared_data shared;
+  rhoban_ssl::Shared_data shared_tmp_manual;
   data >> shared;
   shared_tmp_manual = shared;
 
@@ -479,7 +479,7 @@ void API::scan()
     {
       // XXX: We should not access directly master for this, but use the hardware
       // present flag?
-      RhobanSSL::Master* master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+      rhoban_ssl::Master* master = dynamic_cast<rhoban_ssl::AICommanderReal*>(commander)->getMaster();
       auto masterRobot = master->robots[id];
       control.ignore = !masterRobot.isOk();
 
@@ -501,14 +501,14 @@ void API::scan()
 void API::joystickThreadExec()
 {
   static bool fast = false;
-  RhobanSSL::Joystick::JoystickEvent event;
+  rhoban_ssl::Joystick::JoystickEvent event;
   if (joystick != NULL)
   {
     joystick->open();
   }
 
   {
-    RhobanSSL::Shared_data shared;
+    rhoban_ssl::Shared_data shared;
     data >> shared;
     auto& final_control = shared.final_control_for_robots[joystickRobot];
     final_control.is_manually_controled_by_viewer = true;
@@ -573,7 +573,7 @@ void API::joystickThreadExec()
       }
 
       // Updating control
-      RhobanSSL::Shared_data shared;
+      rhoban_ssl::Shared_data shared;
       data >> shared;
       Control& control = shared.final_control_for_robots[joystickRobot].control;
       control.linear_velocity = Vector2d(xSpeed, ySpeed);
@@ -607,7 +607,7 @@ void API::openJoystick(int robot, QString device)
   if (joystick == NULL)
   {
     joystickRobot = robot;
-    joystick = new RhobanSSL::Joystick(device.toStdString());
+    joystick = new rhoban_ssl::Joystick(device.toStdString());
 
     joystickThread = new std::thread([this] { this->joystickThreadExec(); });
   }
@@ -623,7 +623,7 @@ void API::tweakPid(int id)
   if (!simulation)
   {
     mutex.lock();
-    RhobanSSL::Master* master = dynamic_cast<RhobanSSL::AICommanderReal*>(commander)->getMaster();
+    rhoban_ssl::Master* master = dynamic_cast<rhoban_ssl::AICommanderReal*>(commander)->getMaster();
 
     struct packet_params params;
     params.kp = 100;
@@ -641,7 +641,7 @@ QString API::availableJoysticks()
 {
   Json::Value json(Json::arrayValue);
 
-  for (auto joystick : RhobanSSL::Joystick::getAvailablePads())
+  for (auto joystick : rhoban_ssl::Joystick::getAvailablePads())
   {
     json.append(joystick);
   }
@@ -729,7 +729,7 @@ void API::managerStop()
 
 void API::managerPlay()
 {
-  RhobanSSL::Shared_data shared;
+  rhoban_ssl::Shared_data shared;
   data >> shared;
 
   for (int id = 0; id < NB_ROBOT_ELEC; id++)
