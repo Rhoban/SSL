@@ -31,7 +31,7 @@ TEST(test_movement_with_no_prediction, use_cases)
     mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
     mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
-    rhoban_ssl::Movement_with_no_prediction pred;
+    rhoban_ssl::MovementWithNoPrediction pred;
     pred.setSample(mov);
 
     EXPECT_TRUE(pred.linearPosition(6) == Point(27, 54));
@@ -79,7 +79,7 @@ TEST(test_movement_with_no_prediction, clone)
     mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
     mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
-    rhoban_ssl::Movement_with_no_prediction pred_tmp;
+    rhoban_ssl::MovementWithNoPrediction pred_tmp;
     rhoban_ssl::Movement* pred_ptr = pred_tmp.clone();
     rhoban_ssl::Movement& pred = *pred_ptr;
 

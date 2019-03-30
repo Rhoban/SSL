@@ -22,66 +22,66 @@
 
 namespace rhoban_ssl
 {
-double Movement_with_no_prediction::lastTime() const
+double MovementWithNoPrediction::lastTime() const
 {
-  return samples.time(0);
+  return samples_.time(0);
 }
 
-void Movement_with_no_prediction::print(std::ostream& stream) const
+void MovementWithNoPrediction::print(std::ostream& stream) const
 {
-  stream << samples;
+  stream << samples_;
 }
 
-void Movement_with_no_prediction::setSample(const MovementSample& samples)
+void MovementWithNoPrediction::setSample(const MovementSample& samples)
 {
   // TODO
   // assert( samples.is_valid() );
-  this->samples = samples;
+  samples_ = samples;
 }
 
-const MovementSample& Movement_with_no_prediction::getSample() const
+const MovementSample& MovementWithNoPrediction::getSample() const
 {
-  return samples;
+  return samples_;
 }
 
-rhoban_geometry::Point Movement_with_no_prediction::linearPosition(double time) const
+rhoban_geometry::Point MovementWithNoPrediction::linearPosition(double time) const
 {
-  return samples.linearPosition(0);
+  return samples_.linearPosition(0);
 }
 
-ContinuousAngle Movement_with_no_prediction::angularPosition(double time) const
+ContinuousAngle MovementWithNoPrediction::angularPosition(double time) const
 {
-  return samples.angularPosition(0);
+  return samples_.angularPosition(0);
 }
 
-Vector2d Movement_with_no_prediction::linearVelocity(double time) const
+Vector2d MovementWithNoPrediction::linearVelocity(double time) const
 {
-  return samples.linearVelocity(0);
+  return samples_.linearVelocity(0);
 }
 
-ContinuousAngle Movement_with_no_prediction::angularVelocity(double time) const
+ContinuousAngle MovementWithNoPrediction::angularVelocity(double time) const
 {
-  return samples.angularVelocity(0);
+  return samples_.angularVelocity(0);
 }
 
-Vector2d Movement_with_no_prediction::linearAcceleration(double time) const
+Vector2d MovementWithNoPrediction::linearAcceleration(double time) const
 {
-  return samples.linearAcceleration(0);
+  return samples_.linearAcceleration(0);
 }
 
-ContinuousAngle Movement_with_no_prediction::angularAcceleration(double time) const
+ContinuousAngle MovementWithNoPrediction::angularAcceleration(double time) const
 {
-  return samples.angularAcceleration(0);
+  return samples_.angularAcceleration(0);
 }
 
-Movement* Movement_with_no_prediction::clone() const
+Movement* MovementWithNoPrediction::clone() const
 {
-  Movement_with_no_prediction* mov = new Movement_with_no_prediction();
+  MovementWithNoPrediction* mov = new MovementWithNoPrediction();
   *mov = *this;
   return mov;
 }
 
-Movement_with_no_prediction::~Movement_with_no_prediction()
+MovementWithNoPrediction::~MovementWithNoPrediction()
 {
 }
 

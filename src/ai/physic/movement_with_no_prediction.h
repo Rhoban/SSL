@@ -23,10 +23,10 @@
 
 namespace rhoban_ssl
 {
-class Movement_with_no_prediction : public Movement
+class MovementWithNoPrediction : public Movement
 {
 private:
-  MovementSample samples;
+  MovementSample samples_;
 
 public:
   virtual Movement* clone() const;
@@ -47,7 +47,7 @@ public:
 
   virtual void print(std::ostream& stream) const;
 
-  virtual ~Movement_with_no_prediction();
+  virtual ~MovementWithNoPrediction();
 };
 
 }  // namespace rhoban_ssl
