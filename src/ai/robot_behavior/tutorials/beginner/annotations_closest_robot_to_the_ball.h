@@ -23,33 +23,32 @@
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Beginner {
-
+namespace RhobanSSL
+{
+namespace Robot_behavior
+{
+namespace Beginner
+{
 /** Class to show how to find the closest robot to the ball and draw the response on the viewer. */
-class Annotation_closest_robot_to_the_ball : public RobotBehavior  {
-    private:
-    RhobanSSLAnnotation::Annotations annotations;
+class Annotation_closest_robot_to_the_ball : public RobotBehavior
+{
+private:
+  RhobanSSLAnnotation::Annotations annotations;
 
-    public:
-    Annotation_closest_robot_to_the_ball(Ai::AiData& ai_data);
+public:
+  Annotation_closest_robot_to_the_ball(Ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Annotation_closest_robot_to_the_ball();
+  virtual ~Annotation_closest_robot_to_the_ball();
 };
 
-}; // Namespace Beginner
-}; // Namespace Robot_behavior
-}; // Namespace Rhoban
+};  // Namespace Beginner
+};  // Namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif

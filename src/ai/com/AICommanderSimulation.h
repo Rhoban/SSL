@@ -29,18 +29,17 @@ namespace RhobanSSL
 class AICommanderSimulation : public AICommander
 {
 public:
-    AICommanderSimulation(bool yellow);
+  AICommanderSimulation(bool yellow);
 
-    virtual void flush();
+  virtual void flush();
 
-    virtual void moveBall(double x, double y, double vx=0, double vy=0);
+  virtual void moveBall(double x, double y, double vx = 0, double vy = 0);
 
-    virtual void moveRobot(bool yellow, int id, double x, double y,
-        double theta, bool turnon);
+  virtual void moveRobot(bool yellow, int id, double x, double y, double theta, bool turnon);
 
-    virtual ~AICommanderSimulation();
+  virtual ~AICommanderSimulation();
 
 protected:
-    SimClient client;
+  SimClient client;
 };
-}
+}  // namespace RhobanSSL

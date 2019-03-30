@@ -25,61 +25,49 @@
 
 namespace RhobanSSL
 {
-namespace Robot_behavior {
+namespace Robot_behavior
+{
+class Goalie : public RobotBehavior
+{
+private:
+  // PositionFollower follower(); TODO : to remove if not necessary
 
-class Goalie : public RobotBehavior  {
-    private:
-        //PositionFollower follower(); TODO : to remove if not necessary
+  RhobanSSLAnnotation::Annotations annotations;
 
-    RhobanSSLAnnotation::Annotations annotations;
+  ConsignFollower* follower;
 
-	ConsignFollower* follower;
+  Vector2d left_post_position;
+  Vector2d right_post_position;
+  Vector2d goal_center;
+  rhoban_geometry::Point waiting_goal_position;
 
-        Vector2d left_post_position; 
-        Vector2d right_post_position;
-        Vector2d goal_center;
-        rhoban_geometry::Point waiting_goal_position;
+  double goalie_radius;
+  double penalty_rayon;
+  int defensive_approach;
 
-        double goalie_radius;
-        double penalty_rayon;
-        int defensive_approach;
+  static rhoban_geometry::Point calculate_goal_position(const rhoban_geometry::Point& ball_position,
+                                                        const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
+                                                        double goalie_radius);
 
-        static rhoban_geometry::Point calculate_goal_position(
-            const rhoban_geometry::Point & ball_position,
-            const Vector2d & poteau_droit,
-            const Vector2d & poteau_gauche,
-            double goalie_radius
-        );
+public:
+  Goalie(Ai::AiData& ai_data);
 
-    public:
-        Goalie(Ai::AiData& ai_data);
+  Goalie(Ai::AiData& ai_data, const Vector2d& left_post_position, const Vector2d& right_post_position,
+         const rhoban_geometry::Point& waiting_goal_position, double penalty_rayon, double goalie_radius, double time,
+         double dt);
 
-        Goalie(
-            Ai::AiData& ai_data,
-            const Vector2d & left_post_position,
-            const Vector2d & right_post_position,
-            const rhoban_geometry::Point & waiting_goal_position,
-            double penalty_rayon,
-            double goalie_radius,
-            double time, double dt
-        );
+  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
-        
-        std::vector<rhoban_geometry::Point> future_ball_positions;
+  std::vector<rhoban_geometry::Point> future_ball_positions;
 
-	virtual Control control() const;
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-	virtual ~Goalie();
+  virtual ~Goalie();
 };
 
-};
-}; //Namespace Rhoban
+};  // namespace Robot_behavior
+};  // namespace RhobanSSL
 
 #endif
