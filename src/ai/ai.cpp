@@ -252,7 +252,7 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
 #endif
 
   preventCollision(robot_id, ctrl);
-  ctrl.change_to_relative_control(ai_data_.robots[vision::Ally][robot_id].getMovement().angularPosition(ai_data_.time),
+  ctrl.changeToRelativeControl(ai_data_.robots[vision::Ally][robot_id].getMovement().angularPosition(ai_data_.time),
                                   ai_data_.dt);
   limitsVelocity(ctrl);
 }
@@ -266,9 +266,9 @@ Control AI::updateRobot(Robot_behavior::RobotBehavior& robot_behavior, double ti
   }
   else
   {
-    return Control::make_desactivated();
+    return Control::makeDesactivated();
   }
-  return Control::make_ignored();
+  return Control::makeIgnored();
 }
 
 void AI::initRobotBehaviors()
@@ -359,7 +359,7 @@ void AI::updateRobots()
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)
     {
-      final_control.control = Control::make_desactivated();
+      final_control.control = Control::makeDesactivated();
     }
     else if (!final_control.is_manually_controled_by_viewer)
     {
