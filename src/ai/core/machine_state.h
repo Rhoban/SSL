@@ -339,11 +339,11 @@ public:
 
   MachineState&
   addEdge(const ID& id, const ID& origin, const ID& end,
-           std::function<bool(const EDGE_DATA& data, unsigned int run_number_, unsigned int atomic_run_number_)>
+           std::function<bool(const EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)>
                condition_fct =
-                   [](const EDGE_DATA& data, unsigned int run_number_, unsigned int atomic_run_number_) { return true; },
-           std::function<void(EDGE_DATA& data, unsigned int run_number_, unsigned int atomic_run_number_)> run_fct =
-               [](EDGE_DATA& data, unsigned int run_number_, unsigned int atomic_run_number_) { return; })
+                   [](const EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return true; },
+           std::function<void(EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)> run_fct =
+               [](EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return; })
   {
     return addEdge(std::shared_ptr<AnonymousEdge<ID, EDGE_DATA> >(
         new AnonymousEdge<ID, EDGE_DATA>(id, origin, end, condition_fct, run_fct)));
@@ -361,8 +361,8 @@ public:
 
   MachineState&
   addState(const ID& id,
-            std::function<void(STATE_DATA& data, unsigned int run_number_, unsigned int atomic_run_number_)> run_fct =
-                [](STATE_DATA& data, unsigned int run_number_, unsigned int atomic_run_number_) { return; })
+            std::function<void(STATE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)> run_fct =
+                [](STATE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return; })
   {
     return addState(std::shared_ptr<AnonymousState<ID, STATE_DATA> >(new AnonymousState<ID, STATE_DATA>(id, run_fct)));
   }
@@ -377,8 +377,8 @@ private:
   std::list<EdgeFollower<ID, STATE_DATA, EDGE_DATA> > edge_followers_;
 
 public:
-  void executeAtEachEdge(std::function<void(ID edge_id, STATE_DATA& state_data_, EDGE_DATA& edge_data_,
-                                               unsigned int run_number_, unsigned int atomic_run_number_)>
+  void executeAtEachEdge(std::function<void(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data,
+                                               unsigned int run_number, unsigned int atomic_run_number)>
                                 edge_run)
   {
     edge_followers_.push_back(EdgeFollower<ID, STATE_DATA, EDGE_DATA>(edge_run));
