@@ -23,7 +23,7 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace beginner
+namespace medium
 {
 Defender::Defender(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
 {
@@ -85,6 +85,6 @@ RhobanSSLAnnotation::Annotations Defender::get_annotations() const
   annotations.addAnnotations(follower_->get_annotations());
   return annotations;
 }
-}  // namespace beginner
+}  // namespace medium
 }  // namespace Robot_behavior
 }  // namespace RhobanSSL

@@ -26,7 +26,7 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace beginner
+namespace medium
 {
 /**
  * @class Defender
@@ -86,6 +86,6 @@ public:
   virtual ~Defender();
 };
 
-}  // Namespace beginner
+}  // namespace medium
 }  // Namespace Robot_behavior
 }  // namespace RhobanSSL

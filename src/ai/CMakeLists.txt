@@ -64,13 +64,12 @@ set (SOURCES
     robot_behavior/tutorials/beginner/goalie.cpp
     robot_behavior/tutorials/beginner/go_corner.cpp
     robot_behavior/tutorials/beginner/robot_near_ball.cpp
-    robot_behavior/tutorials/beginner/robot_have_ball.cpp
-    robot_behavior/tutorials/beginner/defender.cpp
-    robot_behavior/tutorials/beginner/annotations_ball_position.cpp
+    robot_behavior/tutorials/beginner/robot_have_ball.cpp    robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/prepare_strike.cpp
     robot_behavior/tutorials/medium/striker.cpp
+    robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/test_relative_velocity_consign.cpp
     ai.cpp
     ai_data.cpp
