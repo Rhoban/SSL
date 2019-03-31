@@ -28,28 +28,28 @@ namespace manager
 class PlanVeschambres : public ManagerWithGameState
 {
 private:
-  const GameState& game_state;
+  const GameState& game_state_;
 
   // penalty
-  std::vector<std::list<std::string> > penalty_strats;
+  std::vector<std::list<std::string> > penalty_strats_;
   // goale
-  std::vector<std::list<std::string> > goalie_strats;
+  std::vector<std::list<std::string> > goalie_strats_;
   // offensive
-  std::vector<std::list<std::string> > offensive_strats;
+  std::vector<std::list<std::string> > offensive_strats_;
   // stop
-  std::vector<std::list<std::string> > stop_strats;
+  std::vector<std::list<std::string> > stop_strats_;
   // halt
-  std::vector<std::list<std::string> > halt_strats;
+  std::vector<std::list<std::string> > halt_strats_;
   // defensive
-  std::vector<std::list<std::string> > defensive_strats;
+  std::vector<std::list<std::string> > defensive_strats_;
   // kick
-  std::vector<std::list<std::string> > kick_strats;
+  std::vector<std::list<std::string> > kick_strats_;
   // kick_strats_indirect
-  std::vector<std::list<std::string> > kick_strats_indirect;
+  std::vector<std::list<std::string> > kick_strats_indirect_;
 
-  bool ball_was_in_ally_part = true;
+  bool ball_was_in_ally_part_ = true;
 
-  std::list<std::string> future_strats;
+  std::list<std::string> future_strats_;
 
 public:
   PlanVeschambres(ai::AiData& ai_data, const GameState& game_state);
