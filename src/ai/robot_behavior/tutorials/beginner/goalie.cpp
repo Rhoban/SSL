@@ -24,12 +24,12 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-Begginer_goalie::Begginer_goalie(Ai::AiData& ai_data)
+Beginner_goalie::Beginner_goalie(Ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void Begginer_goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Beginner_goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 {
   RobotBehavior::update_time_and_position(time, robot, ball);
 
@@ -46,18 +46,18 @@ void Begginer_goalie::update(double time, const Ai::Robot& robot, const Ai::Ball
   follower->update(time, robot, ball);
 }
 
-Control Begginer_goalie::control() const
+Control Beginner_goalie::control() const
 {
   Control ctrl = follower->control();
   return ctrl;
 }
 
-Begginer_goalie::~Begginer_goalie()
+Beginner_goalie::~Beginner_goalie()
 {
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_goalie::get_annotations() const
+RhobanSSLAnnotation::Annotations Beginner_goalie::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
   annotations.addAnnotations(this->annotations);

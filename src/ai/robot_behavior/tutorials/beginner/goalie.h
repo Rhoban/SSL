@@ -29,14 +29,14 @@ namespace Robot_behavior
 /** Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
-class Begginer_goalie : public RobotBehavior
+class Beginner_goalie : public RobotBehavior
 {
 private:
   ConsignFollower* follower;
   RhobanSSLAnnotation::Annotations annotations;
 
 public:
-  Begginer_goalie(Ai::AiData& ai_data);
+  Beginner_goalie(Ai::AiData& ai_data);
 
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
@@ -44,7 +44,7 @@ public:
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-  virtual ~Begginer_goalie();
+  virtual ~Beginner_goalie();
 };
 
 };  // namespace Robot_behavior

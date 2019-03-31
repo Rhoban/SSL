@@ -25,11 +25,11 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-Begginer_robot_near_ball::Begginer_robot_near_ball(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+Beginner_robot_near_ball::Beginner_robot_near_ball(Ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_robot_near_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Beginner_robot_near_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 {
   RobotBehavior::update_time_and_position(time, robot, ball);
   // Find the ally and the opponent closest to the ball
@@ -68,16 +68,16 @@ void Begginer_robot_near_ball::update(double time, const Ai::Robot& robot, const
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 }
 
-Control Begginer_robot_near_ball::control() const
+Control Beginner_robot_near_ball::control() const
 {
   return Control();
 }
 
-Begginer_robot_near_ball::~Begginer_robot_near_ball()
+Beginner_robot_near_ball::~Beginner_robot_near_ball()
 {
 }
 
-RhobanSSLAnnotation::Annotations Begginer_robot_near_ball::get_annotations() const
+RhobanSSLAnnotation::Annotations Beginner_robot_near_ball::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
   annotations.addAnnotations(this->annotations);

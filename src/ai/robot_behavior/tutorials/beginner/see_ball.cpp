@@ -24,12 +24,12 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-Begginer_see_ball::Begginer_see_ball(Ai::AiData& ai_data)
+Beginner_see_ball::Beginner_see_ball(Ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void Begginer_see_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Beginner_see_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -48,7 +48,7 @@ void Begginer_see_ball::update(double time, const Ai::Robot& robot, const Ai::Ba
   follower->update(time, robot, ball);
 }
 
-Control Begginer_see_ball::control() const
+Control Beginner_see_ball::control() const
 {
   Control ctrl = follower->control();
   // ctrl.spin = true; // We active the dribler !
@@ -56,12 +56,12 @@ Control Begginer_see_ball::control() const
   return ctrl;
 }
 
-Begginer_see_ball::~Begginer_see_ball()
+Beginner_see_ball::~Beginner_see_ball()
 {
   delete follower;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_see_ball::get_annotations() const
+RhobanSSLAnnotation::Annotations Beginner_see_ball::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
   annotations.addAnnotations(this->annotations);

@@ -28,13 +28,13 @@ namespace RhobanSSL
 namespace Robot_behavior
 {
 /** Tutorial class to show how to move a robot in the side corner. */
-class Begginer_annotations_ball_position : public RobotBehavior
+class Beginner_annotations_ball_position : public RobotBehavior
 {
 private:
   RhobanSSLAnnotation::Annotations annotations;
 
 public:
-  Begginer_annotations_ball_position(Ai::AiData& ai_data);
+  Beginner_annotations_ball_position(Ai::AiData& ai_data);
 
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
@@ -42,7 +42,7 @@ public:
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-  virtual ~Begginer_annotations_ball_position();
+  virtual ~Beginner_annotations_ball_position();
 };
 
 };  // namespace Robot_behavior

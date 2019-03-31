@@ -64,7 +64,8 @@ set (SOURCES
     robot_behavior/tutorials/beginner/goalie.cpp
     robot_behavior/tutorials/beginner/go_corner.cpp
     robot_behavior/tutorials/beginner/robot_near_ball.cpp
-    robot_behavior/tutorials/beginner/robot_have_ball.cpp    robot_behavior/tutorials/beginner/annotations_ball_position.cpp
+    robot_behavior/tutorials/beginner/robot_have_ball.cpp
+    robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/prepare_strike.cpp
