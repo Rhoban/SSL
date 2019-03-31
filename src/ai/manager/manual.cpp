@@ -416,16 +416,16 @@ Manual::Manual(Ai::AiData& ai_data)
                                                },
                                                false  // we don't want to define a goal here !
                                                )));
-  register_strategy("Beginner - See Ball", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
-                                               ai_data,
-                                               [&](double time, double dt) {
-                                                 Robot_behavior::Beginner::See_Robot* see_robot =
-                                                     new Robot_behavior::Beginner::See_Robot(ai_data);
-                                                 see_robot->set_robot_id_to_see(3);
-                                                 return std::shared_ptr<Robot_behavior::RobotBehavior>(see_robot);
-                                               },
-                                               false  // we don't want to define a goal here !
-                                               )));
+  register_strategy("Beginner - See Robot 3", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+                                                  ai_data,
+                                                  [&](double time, double dt) {
+                                                    Robot_behavior::Beginner::See_Robot* see_robot =
+                                                        new Robot_behavior::Beginner::See_Robot(ai_data);
+                                                    see_robot->set_robot_id_to_see(3);
+                                                    return std::shared_ptr<Robot_behavior::RobotBehavior>(see_robot);
+                                                  },
+                                                  false  // we don't want to define a goal here !
+                                                  )));
   register_strategy("Beginner - Robot near ball",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
