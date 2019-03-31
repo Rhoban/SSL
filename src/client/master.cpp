@@ -60,8 +60,11 @@ int main()
     {
       if (event.type == JS_EVENT_BUTTON)
       {
-        if (false && event.number == 11)
-        {  // Kick
+        if (false && event.number == 11)  // This is a security to avoid
+                                          // that children will be burn.
+                                          // You can remove false to use kicker
+                                          // with joystick.
+        {                                 // Kick
           if (event.isPressed())
           {
             robot.actions |= ACTION_KICK1;
@@ -83,8 +86,11 @@ int main()
             robot.actions &= ~ACTION_DRIBBLE;
           }
         }
-        else if (false && event.number == 15)
-        {  // Charge
+        else if (false && event.number == 15)  // This is a security to avoid
+                                               // that children will be burn.
+                                               // You can remove false to use kicker
+                                               // with joystick.
+        {                                      // Charge
           if (event.isPressed())
           {
             charge = !charge;
