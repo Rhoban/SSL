@@ -27,13 +27,13 @@ namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-class Begginer_robot_near_ball : public RobotBehavior
+class Beginner_robot_near_ball : public RobotBehavior
 {
 private:
   RhobanSSLAnnotation::Annotations annotations;
 
 public:
-  Begginer_robot_near_ball(Ai::AiData& ai_data);
+  Beginner_robot_near_ball(Ai::AiData& ai_data);
 
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
@@ -41,7 +41,7 @@ public:
 
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-  virtual ~Begginer_robot_near_ball();
+  virtual ~Beginner_robot_near_ball();
 };
 
 };  // namespace Robot_behavior
