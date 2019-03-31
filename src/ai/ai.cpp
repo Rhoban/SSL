@@ -328,8 +328,8 @@ void AI::setManager(std::string managerName)
     strategy_manager_ = manager::Factory::constructManager(managerName, ai_data_, game_state_);
   }
   manager_name_ = managerName;
-  strategy_manager_->declare_goalie_id(goalie_id);
-  strategy_manager_->declare_team_ids(robot_ids);
+  strategy_manager_->declareGoalieId(goalie_id);
+  strategy_manager_->declareTeamIds(robot_ids);
 }
 
 std::shared_ptr<manager::Manager> AI::getManager() const
@@ -435,7 +435,7 @@ void AI::run()
 
     if (manager_name_ != manager::names::MANUAL)
     {  // HACK TOT REMOVEE !
-      strategy_manager_->change_team_and_point_of_view(game_state_.getTeamColor(strategy_manager_->get_team_name()),
+      strategy_manager_->changeTeamAndPointOfView(game_state_.getTeamColor(strategy_manager_->getTeamName()),
                                                       game_state_.blueHaveItsGoalOnPositiveXAxis());
     }
     else
@@ -443,12 +443,12 @@ void AI::run()
       dynamic_cast<manager::Manual*>(strategy_manager_.get())
           ->define_goal_to_positive_axis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
     }
-    strategy_manager_->change_ally_and_opponent_goalie_id(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
+    strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
 
-    strategy_manager_->remove_invalid_robots();
+    strategy_manager_->removeInvalidRobots();
 
     strategy_manager_->update(current_time_);
-    strategy_manager_->assign_behavior_to_robots(robot_behaviors_, current_time_, current_dt_);
+    strategy_manager_->assignBehaviorToRobots(robot_behaviors_, current_time_, current_dt_);
     shareData();
     // ai_data.compute_table_of_collision_times();
     // if( ai_data.table_of_collision_times.size() != 0 ){
@@ -507,7 +507,7 @@ rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
 
 void AI::getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const
 {
-  annotations.addAnnotations(getManager()->get_annotations());
+  annotations.addAnnotations(getManager()->getAnnotations());
   annotations.addAnnotations(getRobotBehaviorAnnotations());
 
   std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point& p) {

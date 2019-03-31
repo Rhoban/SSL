@@ -65,9 +65,9 @@ Manual::Manual(ai::AiData& ai_data)
   , ally_goalie_id(0)
   , opponent_goalie_id(0)
 {
-  change_team_and_point_of_view(ai_data.team_color, goal_to_positive_axis);
+  changeTeamAndPointOfView(ai_data.team_color, goal_to_positive_axis);
 
-  register_strategy("Goalie", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Goalie", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                   ai_data,
                                   [&](double time, double dt) {
                                     Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
@@ -75,7 +75,7 @@ Manual::Manual(ai::AiData& ai_data)
                                   },
                                   false  // we don't want to define a goal here !
                                   )));
-  register_strategy("Striker", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Striker", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                    ai_data,
                                    [&](double time, double dt) {
                                      Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
@@ -83,7 +83,7 @@ Manual::Manual(ai::AiData& ai_data)
                                    },
                                    false  // we don't want to define a goal here !
                                    )));
-  register_strategy("Example_machine_state", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Example_machine_state", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                  ai_data,
                                                  [&](double time, double dt) {
                                                    Robot_behavior::Example_machine_state* ex =
@@ -92,7 +92,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                  },
                                                  false  // we don't want to define a goal here !
                                                  )));
-  register_strategy("Defensor1", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Defensor1", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                      ai_data,
                                      [&](double time, double dt) {
                                        Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
@@ -100,7 +100,7 @@ Manual::Manual(ai::AiData& ai_data)
                                      },
                                      false  // we don't want to define a goal here !
                                      )));
-  register_strategy("passive_defensor", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("passive_defensor", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                             ai_data,
                                             [&](double time, double dt) {
                                               Robot_behavior::Passive_defensor* passive_defensor =
@@ -111,7 +111,7 @@ Manual::Manual(ai::AiData& ai_data)
                                             },
                                             false  // we don't want to define a goal here !
                                             )));
-  register_strategy("Defensor2", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Defensor2", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                      ai_data,
                                      [&](double time, double dt) {
                                        Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
@@ -119,7 +119,7 @@ Manual::Manual(ai::AiData& ai_data)
                                      },
                                      false  // we don't want to define a goal here !
                                      )));
-  register_strategy("two_way_trip", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("two_way_trip", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                         ai_data,
                                         [&](double time, double dt) {
                                           Robot_behavior::Patrol* two_way_trip =
@@ -128,7 +128,7 @@ Manual::Manual(ai::AiData& ai_data)
                                         },
                                         false  // we don't want to define a goal here !
                                         )));
-  register_strategy("two_way_on_width_trip_ally",
+  registerStrategy("two_way_on_width_trip_ally",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -138,7 +138,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("two_way_on_width_trip_opponent",
+  registerStrategy("two_way_on_width_trip_opponent",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -148,7 +148,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("two_way_trip_right", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("two_way_trip_right", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                               ai_data,
                                               [&](double time, double dt) {
                                                 Robot_behavior::Patrol* two_way_trip =
@@ -157,7 +157,7 @@ Manual::Manual(ai::AiData& ai_data)
                                               },
                                               false  // we don't want to define a goal here !
                                               )));
-  register_strategy("two_way_trip_left", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("two_way_trip_left", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                              ai_data,
                                              [&](double time, double dt) {
                                                Robot_behavior::Patrol* two_way_trip =
@@ -166,7 +166,7 @@ Manual::Manual(ai::AiData& ai_data)
                                              },
                                              false  // we don't want to define a goal here !
                                              )));
-  register_strategy("tour_of_the_field", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("tour_of_the_field", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                              ai_data,
                                              [&](double time, double dt) {
                                                Robot_behavior::Patrol* tour_of_the_field =
@@ -175,7 +175,7 @@ Manual::Manual(ai::AiData& ai_data)
                                              },
                                              false  // we don't want to define a goal here !
                                              )));
-  register_strategy("inverse_tour_of_the_field",
+  registerStrategy("inverse_tour_of_the_field",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -185,7 +185,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_kicker", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_kicker", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                        ai_data,
                                        [&](double time, double dt) {
                                          Robot_behavior::Test_kicker* pt = new Robot_behavior::Test_kicker(ai_data);
@@ -193,7 +193,7 @@ Manual::Manual(ai::AiData& ai_data)
                                        },
                                        false  // we don't want to define a goal here !
                                        )));
-  register_strategy("test_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                     ai_data,
                                                     [&](double time, double dt) {
                                                       Robot_behavior::Patrol* pt =
@@ -202,7 +202,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                     },
                                                     false  // we don't want to define a goal here !
                                                     )));
-  register_strategy("test_NW_translation_for_pid",
+  registerStrategy("test_NW_translation_for_pid",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -211,7 +211,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_NE_translation_for_pid",
+  registerStrategy("test_NE_translation_for_pid",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -220,7 +220,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_SW_translation_for_pid",
+  registerStrategy("test_SW_translation_for_pid",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -229,7 +229,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_SE_translation_for_pid",
+  registerStrategy("test_SE_translation_for_pid",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -238,7 +238,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                  ai_data,
                                                  [&](double time, double dt) {
                                                    Robot_behavior::Patrol* pt =
@@ -248,7 +248,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                  false  // we don't want to define a goal here !
                                                  )));
 
-  register_strategy("test_NE_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_NE_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                     ai_data,
                                                     [&](double time, double dt) {
                                                       Robot_behavior::Patrol* pt =
@@ -257,7 +257,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                     },
                                                     false  // we don't want to define a goal here !
                                                     )));
-  register_strategy("test_NW_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_NW_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                     ai_data,
                                                     [&](double time, double dt) {
                                                       Robot_behavior::Patrol* pt =
@@ -267,7 +267,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                     false  // we don't want to define a goal here !
                                                     )));
 
-  register_strategy("test_SE_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_SE_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                     ai_data,
                                                     [&](double time, double dt) {
                                                       Robot_behavior::Patrol* pt =
@@ -277,7 +277,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                     false  // we don't want to define a goal here !
                                                     )));
 
-  register_strategy("test_SW_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_SW_rotation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                     ai_data,
                                                     [&](double time, double dt) {
                                                       Robot_behavior::Patrol* pt =
@@ -286,7 +286,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                     },
                                                     false  // we don't want to define a goal here !
                                                     )));
-  register_strategy("test_N_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_N_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                       ai_data,
                                                       [&](double time, double dt) {
                                                         Robot_behavior::Patrol* pt =
@@ -295,7 +295,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                       },
                                                       false  // we don't want to define a goal here !
                                                       )));
-  register_strategy("test_S_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_S_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                       ai_data,
                                                       [&](double time, double dt) {
                                                         Robot_behavior::Patrol* pt =
@@ -304,7 +304,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                       },
                                                       false  // we don't want to define a goal here !
                                                       )));
-  register_strategy("test_E_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_E_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                       ai_data,
                                                       [&](double time, double dt) {
                                                         Robot_behavior::Patrol* pt =
@@ -313,7 +313,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                       },
                                                       false  // we don't want to define a goal here !
                                                       )));
-  register_strategy("test_W_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("test_W_translation_for_pid", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                       ai_data,
                                                       [&](double time, double dt) {
                                                         Robot_behavior::Patrol* pt =
@@ -323,7 +323,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                       false  // we don't want to define a goal here !
                                                       )));
 
-  register_strategy("test_NW_SE_translation_for_pid",
+  registerStrategy("test_NW_SE_translation_for_pid",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -332,7 +332,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_SW_NW_translation_for_pid",
+  registerStrategy("test_SW_NW_translation_for_pid",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -342,7 +342,7 @@ Manual::Manual(ai::AiData& ai_data)
                         false  // we don't want to define a goal here !
                         )));
 
-  register_strategy("proof_concept_spinner",
+  registerStrategy("proof_concept_spinner",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -352,7 +352,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("Example", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Example", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                    ai_data,
                                    [&](double time, double dt) {
                                      Robot_behavior::Example* example = new Robot_behavior::Example(ai_data);
@@ -360,7 +360,7 @@ Manual::Manual(ai::AiData& ai_data)
                                    },
                                    false  // we don't want to define a goal here !
                                    )));
-  register_strategy("Beginner go to ball",
+  registerStrategy("Beginner go to ball",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -370,7 +370,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("Begginer - Go corner", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Begginer - Go corner", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                 ai_data,
                                                 [&](double time, double dt) {
                                                   Robot_behavior::beginner::GoCorner* go_corner =
@@ -379,7 +379,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                 },
                                                 false  // we don't want to define a goal here !
                                                 )));
-  register_strategy("Begginer Goalie", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Begginer Goalie", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                            ai_data,
                                            [&](double time, double dt) {
                                              Robot_behavior::Begginer_goalie* goalie =
@@ -388,7 +388,7 @@ Manual::Manual(ai::AiData& ai_data)
                                            },
                                            false  // we don't want to define a goal here !
                                            )));
-  register_strategy("Begginer Defensor", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Begginer Defensor", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                              ai_data,
                                              [&](double time, double dt) {
                                                Robot_behavior::Begginer_defensor* defensor =
@@ -397,7 +397,7 @@ Manual::Manual(ai::AiData& ai_data)
                                              },
                                              false  // we don't want to define a goal here !
                                              )));
-  register_strategy("Begginer Annotations - Ball position",
+  registerStrategy("Begginer Annotations - Ball position",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -407,7 +407,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("Begginer - See ball", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Begginer - See ball", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                ai_data,
                                                [&](double time, double dt) {
                                                  Robot_behavior::Begginer_see_ball* see_ball =
@@ -416,7 +416,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                },
                                                false  // we don't want to define a goal here !
                                                )));
-  register_strategy("Begginer - See robot", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Begginer - See robot", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                 ai_data,
                                                 [&](double time, double dt) {
                                                   Robot_behavior::Beginner::See_Robot* see_robot =
@@ -426,7 +426,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                 },
                                                 false  // we don't want to define a goal here !
                                                 )));
-  register_strategy("Begginer - Robot near ball",
+  registerStrategy("Begginer - Robot near ball",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -436,7 +436,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("Begginer - Robot have ball",
+  registerStrategy("Begginer - Robot have ball",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -446,7 +446,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("Intermediate Striker", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Intermediate Striker", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                                 ai_data,
                                                 [&](double time, double dt) {
                                                   Robot_behavior::Intermediate_striker* striker =
@@ -455,7 +455,7 @@ Manual::Manual(ai::AiData& ai_data)
                                                 },
                                                 false  // we don't want to define a goal here !
                                                 )));
-  register_strategy("Intermediate Prepare to strike",
+  registerStrategy("Intermediate Prepare to strike",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -465,7 +465,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("Obstructor", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("Obstructor", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                       ai_data,
                                       [&](double time, double dt) {
                                         Robot_behavior::Obstructor* obstructor =
@@ -474,7 +474,7 @@ Manual::Manual(ai::AiData& ai_data)
                                       },
                                       false  // we don't want to define a goal here !
                                       )));
-  register_strategy("StrikerAi", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("StrikerAi", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                      ai_data,
                                      [&](double time, double dt) {
                                        Robot_behavior::StrikerAi* striker_ai = new Robot_behavior::StrikerAi(ai_data);
@@ -482,7 +482,7 @@ Manual::Manual(ai::AiData& ai_data)
                                      },
                                      false  // we don't want to define a goal here !
                                      )));
-  register_strategy("PredictFutur", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("PredictFutur", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                         ai_data,
                                         [&](double time, double dt) {
                                           Robot_behavior::PredictFutur* p = new Robot_behavior::PredictFutur(ai_data);
@@ -491,7 +491,7 @@ Manual::Manual(ai::AiData& ai_data)
                                         false)));
 
   int velocity = 2.0;
-  register_strategy("test_N_velocity_consign",
+  registerStrategy("test_N_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -501,7 +501,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_E_velocity_consign",
+  registerStrategy("test_E_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -511,7 +511,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_W_velocity_consign",
+  registerStrategy("test_W_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -521,7 +521,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_S_velocity_consign",
+  registerStrategy("test_S_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -531,7 +531,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_NW_velocity_consign",
+  registerStrategy("test_NW_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -541,7 +541,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_NE_velocity_consign",
+  registerStrategy("test_NE_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -551,7 +551,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_SW_velocity_consign",
+  registerStrategy("test_SW_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -561,7 +561,7 @@ Manual::Manual(ai::AiData& ai_data)
                         },
                         false  // we don't want to define a goal here !
                         )));
-  register_strategy("test_SE_velocity_consign",
+  registerStrategy("test_SE_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -572,14 +572,14 @@ Manual::Manual(ai::AiData& ai_data)
                         false  // we don't want to define a goal here !
                         )));
 
-  register_strategy("TestInfra", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("TestInfra", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                      ai_data,
                                      [&](double time, double dt) {
                                        Robot_behavior::TestInfra* p = new Robot_behavior::TestInfra(ai_data);
                                        return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
                                      },
                                      false)));
-  register_strategy("TestPassDribbler", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("TestPassDribbler", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                             ai_data,
                                             [&](double time, double dt) {
                                               Robot_behavior::Pass_dribbler* p =
@@ -588,7 +588,7 @@ Manual::Manual(ai::AiData& ai_data)
                                               return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
                                             },
                                             false)));
-  register_strategy("TestPass", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("TestPass", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                     ai_data,
                                     [&](double time, double dt) {
                                       Robot_behavior::Pass* p = new Robot_behavior::Pass(ai_data);
@@ -597,7 +597,7 @@ Manual::Manual(ai::AiData& ai_data)
                                       return std::shared_ptr<Robot_behavior::RobotBehavior>(p);
                                     },
                                     false)));
-  register_strategy("WaitPass", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy("WaitPass", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                     ai_data,
                                     [&](double time, double dt) {
                                       Robot_behavior::WaitPass* p = new Robot_behavior::WaitPass(ai_data);
@@ -605,7 +605,7 @@ Manual::Manual(ai::AiData& ai_data)
                                     },
                                     false)));
 
-  register_strategy("test_angular_only_relative_velocity_consign",
+  registerStrategy("test_angular_only_relative_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -617,7 +617,7 @@ Manual::Manual(ai::AiData& ai_data)
                         false  // we don't want to define a goal here !
                         )));
 
-  register_strategy("test_linear_only_relative_velocity_consign",
+  registerStrategy("test_linear_only_relative_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -629,7 +629,7 @@ Manual::Manual(ai::AiData& ai_data)
                         false  // we don't want to define a goal here !
                         )));
 
-  register_strategy("test_linear_and_angular_relative_velocity_consign",
+  registerStrategy("test_linear_and_angular_relative_velocity_consign",
                     std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                         ai_data,
                         [&](double time, double dt) {
@@ -641,10 +641,10 @@ Manual::Manual(ai::AiData& ai_data)
                         false  // we don't want to define a goal here !
                         )));
 
-  register_strategy(Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(new Strategy::Halt(ai_data)));
-  register_strategy(Strategy::Tare_and_synchronize::name,
+  registerStrategy(Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(new Strategy::Halt(ai_data)));
+  registerStrategy(Strategy::Tare_and_synchronize::name,
                     std::shared_ptr<Strategy::Strategy>(new Strategy::Tare_and_synchronize(ai_data)));
-  assign_strategy(Strategy::Halt::name, 0.0, get_team_ids());  // TODO TIME !
+  assignStrategy(Strategy::Halt::name, 0.0, getTeamIds());  // TODO TIME !
                                                                // strategy_was_assigned = false;
 }
 
@@ -652,7 +652,7 @@ void Manual::assign_point_of_view_and_goalie()
 {
   // DEBUG(team_color);
   // DEBUG(ai::Team::Yellow);
-  change_team_and_point_of_view(team_color, goal_to_positive_axis);
+  changeTeamAndPointOfView(team_color, goal_to_positive_axis);
 }
 
 void Manual::set_team_color(ai::Team team_color)
@@ -671,7 +671,7 @@ void Manual::update(double time)
   //   assign_strategy( Strategy::Tare_and_synchronize::name, time, get_valid_player_ids() );
   // }
   // update_strategies(time);
-  update_current_strategies(time);
+  updateCurrentStrategies(time);
   assign_point_of_view_and_goalie();
   // if( ! strategy_was_assigned ){
   //    assign_strategy(
