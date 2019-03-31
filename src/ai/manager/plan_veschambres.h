@@ -55,44 +55,44 @@ public:
   PlanVeschambres(ai::AiData& ai_data, const GameState& game_state);
 
   // Begin of a new state
-  virtual void start_stop();
-  virtual void start_running();
-  virtual void start_halt();
+  virtual void startStop();
+  virtual void startRunning();
+  virtual void startHalt();
 
-  virtual void start_direct_kick_ally();
-  virtual void start_direct_kick_opponent();
+  virtual void startDirectKickAlly();
+  virtual void startDirectKickOpponent();
 
-  virtual void start_indirect_kick_ally();
-  virtual void start_indirect_kick_opponent();
+  virtual void startIndirectKickAlly();
+  virtual void startIndirectKickOpponent();
 
-  virtual void start_prepare_kickoff_ally();
-  virtual void start_prepare_kickoff_opponent();
+  virtual void startPrepareKickoffAlly();
+  virtual void startPrepareKickoffOpponent();
 
-  virtual void start_kickoff_ally();
-  virtual void start_kickoff_opponent();
+  virtual void startKickoffAlly();
+  virtual void startKickoffOpponent();
 
-  virtual void start_penalty_ally();
-  virtual void start_penalty_opponent();
+  virtual void startPenaltyAlly();
+  virtual void startPenaltyOpponent();
 
   // During a state
-  virtual void continue_stop();
-  virtual void continue_running();
-  virtual void continue_halt();
+  virtual void continueStop();
+  virtual void continueRunning();
+  virtual void continueHalt();
 
-  virtual void continue_direct_kick_ally();
-  virtual void continue_direct_kick_opponent();
+  virtual void continueDirectKickAlly();
+  virtual void continueDirectKickOpponent();
 
-  virtual void continue_indirect_kick_ally();
-  virtual void continue_indirect_kick_opponent();
+  virtual void continueIndirectKickAlly();
+  virtual void continueIndirectKickOpponent();
 
-  virtual void continue_prepare_kickoff_ally();
-  virtual void continue_prepare_kickoff_opponent();
+  virtual void continuePrepareKickoffAlly();
+  virtual void continuePrepareKickoffOpponent();
 
-  virtual void continue_kickoff_ally();
-  virtual void continue_kickoff_opponent();
+  virtual void continueKickoffAlly();
+  virtual void continueKickoffOpponent();
 
-  virtual void continue_penalty_ally();
-  virtual void continue_penalty_opponent();
+  virtual void continuePenaltyAlly();
+  virtual void continuePenaltyOpponent();
 
   virtual ~PlanVeschambres();
 };
