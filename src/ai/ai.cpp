@@ -441,7 +441,7 @@ void AI::run()
     else
     {
       dynamic_cast<manager::Manual*>(strategy_manager_.get())
-          ->define_goal_to_positive_axis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
+          ->defineGoalToPositiveAxis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
     }
     strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
 

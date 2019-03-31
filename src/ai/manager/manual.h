@@ -28,20 +28,20 @@ namespace manager
 class Manual : public Manager
 {
 private:
-  bool strategy_was_assigned;
+  bool strategy_was_assigned_;
 
-  ai::Team team_color;
-  bool goal_to_positive_axis;
-  int ally_goalie_id;
-  int opponent_goalie_id;
+  ai::Team team_color_;
+  bool goal_to_positive_axis_;
+  int ally_goalie_id_;
+  int opponent_goalie_id_;
 
-  void assign_point_of_view_and_goalie();
+  void assignPointOfViewAndGoalie();
 
 public:
   Manual(ai::AiData& ai_data);
 
-  void set_team_color(ai::Team team_color);
-  void define_goal_to_positive_axis(bool value = true);
+  void setTeamColor(ai::Team team_color);
+  void defineGoalToPositiveAxis(bool value = true);
 
   void update(double time);
 

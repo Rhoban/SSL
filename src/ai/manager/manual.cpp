@@ -60,12 +60,12 @@ namespace manager
 {
 Manual::Manual(ai::AiData& ai_data)
   : Manager(ai_data)
-  , team_color(ai::Team::Unknown)
-  , goal_to_positive_axis(true)
-  , ally_goalie_id(0)
-  , opponent_goalie_id(0)
+  , team_color_(ai::Team::Unknown)
+  , goal_to_positive_axis_(true)
+  , ally_goalie_id_(0)
+  , opponent_goalie_id_(0)
 {
-  changeTeamAndPointOfView(ai_data.team_color, goal_to_positive_axis);
+  changeTeamAndPointOfView(ai_data.team_color, goal_to_positive_axis_);
 
   registerStrategy("Goalie", std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
                                   ai_data,
@@ -648,21 +648,21 @@ Manual::Manual(ai::AiData& ai_data)
                                                                // strategy_was_assigned = false;
 }
 
-void Manual::assign_point_of_view_and_goalie()
+void Manual::assignPointOfViewAndGoalie()
 {
   // DEBUG(team_color);
   // DEBUG(ai::Team::Yellow);
-  changeTeamAndPointOfView(team_color, goal_to_positive_axis);
+  changeTeamAndPointOfView(team_color_, goal_to_positive_axis_);
 }
 
-void Manual::set_team_color(ai::Team team_color)
+void Manual::setTeamColor(ai::Team team_color)
 {
-  this->team_color = team_color;
+  this->team_color_ = team_color;
 }
 
-void Manual::define_goal_to_positive_axis(bool value)
+void Manual::defineGoalToPositiveAxis(bool value)
 {
-  this->goal_to_positive_axis = value;
+  this->goal_to_positive_axis_ = value;
 }
 
 void Manual::update(double time)
@@ -672,7 +672,7 @@ void Manual::update(double time)
   // }
   // update_strategies(time);
   updateCurrentStrategies(time);
-  assign_point_of_view_and_goalie();
+  assignPointOfViewAndGoalie();
   // if( ! strategy_was_assigned ){
   //    assign_strategy(
   //        "Goalie",
