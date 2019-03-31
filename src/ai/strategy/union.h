@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class Union : public Strategy
 {
@@ -36,7 +36,7 @@ private:
   int max;
 
 public:
-  Union(ai::AiData& ai_data);
+  Union(ai::AiData& ai_data_);
 
   void clear();
 
@@ -50,11 +50,11 @@ public:
   virtual void pause(double time);
   virtual void resume(double time);
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
-  virtual void assign_behavior_to_robots(
+  virtual void assignBehaviorToRobots(
       std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual ~Union();

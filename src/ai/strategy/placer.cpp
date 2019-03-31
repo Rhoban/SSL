@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 Placer::Placer(ai::AiData& ai_data) : Strategy(ai_data), goalie_is_defined(false)
 {
@@ -32,17 +32,17 @@ Placer::Placer(ai::AiData& ai_data) : Strategy(ai_data), goalie_is_defined(false
 
 const std::string Placer::name = "placer";
 
-int Placer::min_robots() const
+int Placer::minRobots() const
 {
   return 0;
 }
-int Placer::max_robots() const
+int Placer::maxRobots() const
 {
   return -1;
 }
-Goalie_need Placer::needs_goalie() const
+GoalieNeed Placer::needsGoalie() const
 {
-  return Goalie_need::IF_POSSIBLE;
+  return GoalieNeed::IF_POSSIBLE;
 }
 
 void Placer::start(double time)
@@ -56,7 +56,7 @@ void Placer::stop(double time)
   DEBUG("STOP PREPARE PLACER");
 }
 
-void Placer::assign_behavior_to_robots(
+void Placer::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (!behavior_has_been_assigned)
@@ -64,17 +64,17 @@ void Placer::assign_behavior_to_robots(
     if (have_to_manage_the_goalie())
     {
       Robot_behavior::ConsignFollower* follower =
-          Robot_behavior::Factory::fixed_consign_follower(ai_data, goalie_linear_position, goalie_angular_position);
+          Robot_behavior::Factory::fixed_consign_follower(ai_data_, goalie_linear_position, goalie_angular_position);
       follower->avoid_the_ball(true);
-      assign_behavior(get_goalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
+      assign_behavior(getGoalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
     }
 
-    int nb_players = get_player_ids().size();
+    int nb_players = getPlayerIds().size();
     for (int i = 0; i < nb_players; i++)
     {
-      int id = player_id(i);
+      int id = playerId(i);
       Robot_behavior::ConsignFollower* follower = Robot_behavior::Factory::fixed_consign_follower(
-          ai_data, player_positions[id].first, player_positions[id].second);
+          ai_data_, player_positions[id].first, player_positions[id].second);
       follower->avoid_the_ball(true);
       assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
     }
@@ -110,7 +110,7 @@ void Placer::set_goalie_positions(const rhoban_geometry::Point& linear_position,
 }
 
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Placer::get_starting_positions(int number_of_avalaible_robots) const
+Placer::getStartingPositions(int number_of_avalaible_robots) const
 {
   std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> > result;
   int cpt = 0;
@@ -132,7 +132,7 @@ void Placer::set_starting_positions(
   this->starting_positions = starting_positions;
 }
 
-bool Placer::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool Placer::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                               ContinuousAngle& angular_position) const
 {
   if (goalie_is_defined)

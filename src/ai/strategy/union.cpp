@@ -21,7 +21,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 Union::Union(ai::AiData& ai_data) : Strategy(ai_data), min(0), max(0)
 {
@@ -29,13 +29,13 @@ Union::Union(ai::AiData& ai_data) : Strategy(ai_data), min(0), max(0)
 
 void Union::add_goalie_strategy(std::shared_ptr<Strategy> strategy)
 {
-  min += strategy->min_robots();
+  min += strategy->minRobots();
   strategy_with_goal = strategy;
 }
 
 void Union::add_strategy(std::shared_ptr<Strategy> strategy)
 {
-  if (strategy->max_robots() < 0)
+  if (strategy->maxRobots() < 0)
   {
     max = -1;
   }
@@ -43,29 +43,29 @@ void Union::add_strategy(std::shared_ptr<Strategy> strategy)
   {
     if (max >= 0)
     {
-      max += strategy->max_robots();
+      max += strategy->maxRobots();
     }
   }
   strategies_without_goal.push_back(strategy);
 }
 
-int Union::min_robots() const
+int Union::minRobots() const
 {
   return min;
 }
-int Union::max_robots() const
+int Union::maxRobots() const
 {
   return max;
 }
-Goalie_need Union::needs_goalie() const
+GoalieNeed Union::needsGoalie() const
 {
   if (strategy_with_goal)
   {
-    return Goalie_need::YES;
+    return GoalieNeed::YES;
   }
   else
   {
-    return Goalie_need::NO;
+    return GoalieNeed::NO;
   }
 };
 
@@ -141,16 +141,16 @@ void Union::resume(double time)
   }
 }
 
-void Union::assign_behavior_to_robots(
+void Union::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (strategy_with_goal)
   {
-    strategy_with_goal->assign_behavior_to_robots(assign_behavior, time, dt);
+    strategy_with_goal->assignBehaviorToRobots(assign_behavior, time, dt);
   }
   for (std::shared_ptr<Strategy>& elem : strategies_without_goal)
   {
-    elem->assign_behavior_to_robots(assign_behavior, time, dt);
+    elem->assignBehaviorToRobots(assign_behavior, time, dt);
   }
 }
 

@@ -29,9 +29,9 @@
 #include <annotations/annotations.h>
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
-enum Goalie_need
+enum GoalieNeed
 {
   YES,
   IF_POSSIBLE,
@@ -41,27 +41,27 @@ enum Goalie_need
 class Strategy : public GameInformations
 {
 protected:
-  ai::AiData& ai_data;
+  ai::AiData& ai_data_;
 
 private:
-  int goalie_id;
-  bool manage_a_goalie;
+  int goalie_id_;
+  bool manage_a_goalie_;
 
-  int goalie_opponent_id;
-  std::vector<int> player_ids;
+  int goalie_opponent_id_;
+  std::vector<int> player_ids_;
 
-  void update_player_ids();
+  void updatePlayerIds();
 
 public:
   Strategy(ai::AiData& ai_data);
 
-  virtual void set_goalie(int id, bool to_be_managed);
-  void set_goalie_opponent(int id);
+  virtual void setGoalie(int id, bool to_be_managed);
+  void setGoalieOpponent(int id);
 
   // Get the goalie id. If id<0 then no goalie is declared
-  int get_goalie() const;
+  int getGoalie() const;
   // Get the opponent goalie id. If id<0 then no opponent goalie is declared
-  int get_goalie_opponent() const;
+  int getGoalieOpponent() const;
 
   /*
    * This function is called by the manager to affect robot to the stratgey.
@@ -73,12 +73,12 @@ public:
    * The implementation of set_robot_affectation, is important to calculate
    * get_player_ids().
    */
-  virtual void set_robot_affectation(const std::vector<int>& robot_ids);
+  virtual void setRobotAffectation(const std::vector<int>& robot_ids);
 
-  const std::vector<int>& get_player_ids() const;
+  const std::vector<int>& getPlayerIds() const;
 
-  int robot_id(int id) const;
-  int player_id(int id) const;
+  int robotId(int id) const;
+  int playerId(int id) const;
 
   virtual void update(double time){};
 
@@ -94,35 +94,35 @@ public:
    * number_of_avalaible_robots.
    */
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots) const;
+  getStartingPositions(int number_of_avalaible_robots) const;
   /*
    * Set the position where it is recommended to place a goalie
    * before starting the strategy.
    * If this function return false, then no position is given for a goale.
    * If the strategy have no goalie, this function have to return false.
    */
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position) const;
 
   /*
    * This function give the minimal numer of non goalie robot
    * that the strategy commands.
    */
-  virtual int min_robots() const = 0;
+  virtual int minRobots() const = 0;
   /*
    * This function give the maximal numer of non goalie robot
    * that strategy commands.
    * if it is set to -1, then the strategy can command any number of robot.
    */
-  virtual int max_robots() const = 0;
+  virtual int maxRobots() const = 0;
 
   /*
    * Say if the strategy need a goalie.
    */
-  virtual Goalie_need needs_goalie() const = 0;
+  virtual GoalieNeed needsGoalie() const = 0;
 
   virtual void
-  assign_behavior_to_robots(std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior,
+  assignBehaviorToRobots(std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior,
                             double time, double dt) = 0;
 
   //
@@ -141,7 +141,7 @@ public:
   //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
   //      return annotations;
   //  }
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Strategy();
 

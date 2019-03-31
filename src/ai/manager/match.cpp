@@ -43,12 +43,12 @@ namespace manager
 Match::Match(ai::AiData& ai_data, const GameState& game_state)
   : Manager(ai_data), game_state_(game_state), last_game_state_changement_(0)
 {
-  registerStrategy(Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(new Strategy::Halt(ai_data)));
-  registerStrategy(Strategy::Tare_and_synchronize::name,
-                    std::shared_ptr<Strategy::Strategy>(new Strategy::Tare_and_synchronize(ai_data)));
-  registerStrategy(Strategy::Prepare_kickoff::name,
-                    std::shared_ptr<Strategy::Strategy>(new Strategy::Prepare_kickoff(ai_data)));
-  registerStrategy(GOALIE, std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
+  registerStrategy(strategy::Tare_and_synchronize::name,
+                    std::shared_ptr<strategy::Strategy>(new strategy::Tare_and_synchronize(ai_data)));
+  registerStrategy(strategy::Prepare_kickoff::name,
+                    std::shared_ptr<strategy::Strategy>(new strategy::Prepare_kickoff(ai_data)));
+  registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
                                 ai_data,
                                 [&](double time, double dt) {
                                   Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
@@ -56,7 +56,7 @@ Match::Match(ai::AiData& ai_data, const GameState& game_state)
                                 },
                                 true  // it is a goal
                                 )));
-  registerStrategy(DEFENSOR1, std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy(DEFENSOR1, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
                                    ai_data,
                                    [&](double time, double dt) {
                                      Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
@@ -64,7 +64,7 @@ Match::Match(ai::AiData& ai_data, const GameState& game_state)
                                    },
                                    false  // it is not a goal
                                    )));
-  registerStrategy(DEFENSOR2, std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy(DEFENSOR2, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
                                    ai_data,
                                    [&](double time, double dt) {
                                      Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
@@ -72,7 +72,7 @@ Match::Match(ai::AiData& ai_data, const GameState& game_state)
                                    },
                                    false  // it is not a goal
                                    )));
-  registerStrategy(STRIKER, std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
+  registerStrategy(STRIKER, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
                                  ai_data,
                                  [&](double time, double dt) {
                                    Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
@@ -80,7 +80,7 @@ Match::Match(ai::AiData& ai_data, const GameState& game_state)
                                  },
                                  false  // it is not a goal
                                  )));
-  assignStrategy(Strategy::Halt::name, 0.0,
+  assignStrategy(strategy::Halt::name, 0.0,
                   getTeamIds());  // TODO TIME !
 }
 
@@ -91,15 +91,15 @@ void Match::chooseAStrategy(double time)
     clearStrategyAssignement();
     if (game_state_.getState() == state_name::halt)
     {
-      assignStrategy(Strategy::Halt::name, time, get_valid_team_ids());
+      assignStrategy(strategy::Halt::name, time, get_valid_team_ids());
     }
     else if (game_state_.getState() == state_name::stop)
     {
       if (getValidTeamIds().size() > 0)
       {
-        if (not(getStrategy<Strategy::Tare_and_synchronize>().is_tared_and_synchronized()))
+        if (not(getStrategy<strategy::Tare_and_synchronize>().is_tared_and_synchronized()))
         {
-          assignStrategy(Strategy::Tare_and_synchronize::name, time, getValidPlayerIds());
+          assignStrategy(strategy::Tare_and_synchronize::name, time, getValidPlayerIds());
         }
         else
         {
@@ -111,13 +111,13 @@ void Match::chooseAStrategy(double time)
     {
       if (getTeam() == game_state_.kickoffTeam())
       {
-        getStrategy<Strategy::Prepare_kickoff>().set_kicking(true);
+        getStrategy<strategy::Prepare_kickoff>().set_kicking(true);
       }
       else
       {
-        getStrategy<Strategy::Prepare_kickoff>().set_kicking(false);
+        getStrategy<strategy::Prepare_kickoff>().set_kicking(false);
       }
-      future_strats_ = { Strategy::Prepare_kickoff::name };
+      future_strats_ = { strategy::Prepare_kickoff::name };
       declareAndAssignNextStrategies(future_strats_);
     }
     else if (game_state_.getState() == state_name::penalty)
@@ -130,7 +130,7 @@ void Match::chooseAStrategy(double time)
     }
     else if (game_state_.getState() == state_name::STATE_TIMEOUT)
     {
-      assignStrategy(Strategy::Halt::name, time, getValidTeamIds());
+      assignStrategy(strategy::Halt::name, time, getValidTeamIds());
     }
     last_game_state_changement_ = game_state_.edge_entropy();
   }

@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class Tare_and_synchronize : public Strategy
 {
@@ -42,11 +42,11 @@ private:
 public:
   double get_temporal_shift_between_vision() const;
 
-  Tare_and_synchronize(ai::AiData& ai_data);
+  Tare_and_synchronize(ai::AiData& ai_data_);
 
-  int min_robots() const;
-  int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  int minRobots() const;
+  int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   bool is_tared_and_synchronized() const;
 
@@ -56,7 +56,7 @@ public:
   void stop(double time);
   void update(double time);
 
-  void assign_behavior_to_robots(
+  void assignBehaviorToRobots(
       std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
   virtual ~Tare_and_synchronize();
 };

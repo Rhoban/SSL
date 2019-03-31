@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 Mur_2_passif::Mur_2_passif(ai::AiData& ai_data) : Strategy(ai_data)
 {
@@ -39,7 +39,7 @@ Mur_2_passif::~Mur_2_passif()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2_passif::min_robots() const
+int Mur_2_passif::minRobots() const
 {
   return 2;
 }
@@ -48,14 +48,14 @@ int Mur_2_passif::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2_passif::max_robots() const
+int Mur_2_passif::maxRobots() const
 {
   return 2;
 }
 
-Goalie_need Mur_2_passif::needs_goalie() const
+GoalieNeed Mur_2_passif::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 
 const std::string Mur_2_passif::name = "Mur_2_passif";
@@ -77,33 +77,33 @@ void Mur_2_passif::update(double time)
   is_closest_0 = false;
   is_closest_1 = false;
 
-  if (nearest_ally_robot_from_ball == player_id(0))
+  if (nearest_ally_robot_from_ball == playerId(0))
   {
     is_closest_0 = true;
   }
   else
   {
-    if (nearest_ally_robot_from_ball == player_id(1))
+    if (nearest_ally_robot_from_ball == playerId(1))
     {
       is_closest_1 = true;
     }
   }
 }
 
-void Mur_2_passif::assign_behavior_to_robots(
+void Mur_2_passif::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<Robot_behavior::RobotBehavior> mur1(new Robot_behavior::Mur_defensor(ai_data, 1));
+  std::shared_ptr<Robot_behavior::RobotBehavior> mur1(new Robot_behavior::Mur_defensor(ai_data_, 1));
   static_cast<Robot_behavior::Mur_defensor*>(mur1.get())->declare_mur_robot_id(0, 2);
 
-  std::shared_ptr<Robot_behavior::RobotBehavior> mur2(new Robot_behavior::Mur_defensor(ai_data, 1));
+  std::shared_ptr<Robot_behavior::RobotBehavior> mur2(new Robot_behavior::Mur_defensor(ai_data_, 1));
 
   if (not(behaviors_are_assigned))
   {
-    assert(get_player_ids().size() == 2);
+    assert(getPlayerIds().size() == 2);
 
-    assign_behavior(player_id(0), mur1);
-    assign_behavior(player_id(1), mur2);
+    assign_behavior(playerId(0), mur1);
+    assign_behavior(playerId(1), mur2);
 
     behaviors_are_assigned = true;
   }
@@ -116,10 +116,10 @@ void Mur_2_passif::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Mur_2_passif::get_starting_positions(int number_of_avalaible_robots)
+Mur_2_passif::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
   return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
 }
@@ -129,7 +129,7 @@ Mur_2_passif::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Mur_2_passif::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool Mur_2_passif::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                     ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
@@ -137,11 +137,11 @@ bool Mur_2_passif::get_starting_position_for_goalie(rhoban_geometry::Point& line
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Mur_2_passif::get_annotations() const
+rhoban_ssl::annotations::Annotations Mur_2_passif::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
     const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");

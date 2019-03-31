@@ -50,7 +50,7 @@ private:
   std::vector<int> invalid_team_ids_;
 
   std::list<std::string> current_strategy_names_;
-  std::map<std::string, std::shared_ptr<Strategy::Strategy>> strategies_;
+  std::map<std::string, std::shared_ptr<strategy::Strategy>> strategies_;
 
   void affectInvalidRobotsToInvalidRobotsStrategy();
   void detectInvalidRobots();
@@ -93,11 +93,11 @@ public:
     return getStrategy<STRATEGY>(STRATEGY::name);
   };
 
-  Strategy::Strategy& getStrategy(const std::string& strategy_name);
-  const Strategy::Strategy& getStrategy(const std::string& strategy_name) const;
+  strategy::Strategy& getStrategy(const std::string& strategy_name);
+  const strategy::Strategy& getStrategy(const std::string& strategy_name) const;
   const std::list<std::string>& getCurrentStrategyNames() const;
 
-  void registerStrategy(const std::string& strategy_name, std::shared_ptr<Strategy::Strategy> strategy);
+  void registerStrategy(const std::string& strategy_name, std::shared_ptr<strategy::Strategy> strategy);
 
   void clearStrategyAssignement();
 

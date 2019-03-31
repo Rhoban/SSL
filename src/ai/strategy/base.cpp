@@ -27,7 +27,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 Base::Base(ai::AiData& ai_data) : Strategy(ai_data)
 {
@@ -41,7 +41,7 @@ Base::~Base()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Base::min_robots() const
+int Base::minRobots() const
 {
   return 5;
 }
@@ -50,14 +50,14 @@ int Base::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Base::max_robots() const
+int Base::maxRobots() const
 {
   return 5;
 }
 
-Goalie_need Base::needs_goalie() const
+GoalieNeed Base::needsGoalie() const
 {
-  return Goalie_need::YES;
+  return GoalieNeed::YES;
 }
 
 const std::string Base::name = "base";
@@ -76,37 +76,37 @@ void Base::update(double time)
 {
 }
 
-void Base::assign_behavior_to_robots(
+void Base::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned))
   {
     // We first assign the behhavior of the goalie.
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> goalie(new Robot_behavior::Goalie(ai_data));
+    std::shared_ptr<Robot_behavior::RobotBehavior> goalie(new Robot_behavior::Goalie(ai_data_));
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> striker(new Robot_behavior::Striker(ai_data));
+    std::shared_ptr<Robot_behavior::RobotBehavior> striker(new Robot_behavior::Striker(ai_data_));
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> mur(new Robot_behavior::Mur_defensor(ai_data));
+    std::shared_ptr<Robot_behavior::RobotBehavior> mur(new Robot_behavior::Mur_defensor(ai_data_));
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> dp1(new Robot_behavior::Passive_defensor(ai_data));
+    std::shared_ptr<Robot_behavior::RobotBehavior> dp1(new Robot_behavior::Passive_defensor(ai_data_));
     static_cast<Robot_behavior::Passive_defensor*>(dp1.get())->set_robot_to_obstacle(0);
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> dp2(new Robot_behavior::Passive_defensor(ai_data));
+    std::shared_ptr<Robot_behavior::RobotBehavior> dp2(new Robot_behavior::Passive_defensor(ai_data_));
     static_cast<Robot_behavior::Passive_defensor*>(dp2.get())->set_robot_to_obstacle(1);
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> defensor(new Robot_behavior::Defensor(ai_data));
+    std::shared_ptr<Robot_behavior::RobotBehavior> defensor(new Robot_behavior::Defensor(ai_data_));
 
-    assign_behavior(get_goalie(), goalie);
+    assign_behavior(getGoalie(), goalie);
 
     // we assign now all the other behavior
-    assert(get_player_ids().size() == 5);
+    assert(getPlayerIds().size() == 5);
 
-    assign_behavior(player_id(0), striker);
-    assign_behavior(player_id(1), mur);
-    assign_behavior(player_id(2), dp1);
-    assign_behavior(player_id(3), dp2);
-    assign_behavior(player_id(4), defensor);
+    assign_behavior(playerId(0), striker);
+    assign_behavior(playerId(1), mur);
+    assign_behavior(playerId(2), dp1);
+    assign_behavior(playerId(3), dp2);
+    assign_behavior(playerId(4), defensor);
 
     behaviors_are_assigned = true;
   }
@@ -119,12 +119,12 @@ void Base::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Base::get_starting_positions(int number_of_avalaible_robots)
+Base::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ai_data.relative2absolute(-1.0 / 3.0, 0.0), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ai_data_.relative2absolute(-1.0 / 3.0, 0.0), 0.0) };
 }
 
 //
@@ -132,7 +132,7 @@ Base::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Base::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool Base::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);

@@ -26,7 +26,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class Placer : public Strategy
 {
@@ -37,7 +37,7 @@ private:
 
 public:
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots) const;
+  getStartingPositions(int number_of_avalaible_robots) const;
   void set_starting_position(const std::vector<rhoban_geometry::Point>& starting_position);
 
 private:
@@ -47,17 +47,17 @@ private:
   bool goalie_is_defined;
 
 public:
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position) const;
 
   void set_starting_position_for_goalie(const rhoban_geometry::Point& linear_position,
                                         const ContinuousAngle& angular_position);
 
-  Placer(ai::AiData& ai_data);
+  Placer(ai::AiData& ai_data_);
   bool behavior_has_been_assigned;
-  int min_robots() const;
-  int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  int minRobots() const;
+  int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   // Try to place one robot at each given position.
   // This function return which robot id have been placed.
@@ -71,7 +71,7 @@ public:
   void start(double time);
   void stop(double time);
 
-  void assign_behavior_to_robots(
+  void assignBehaviorToRobots(
       std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
   virtual ~Placer();
 

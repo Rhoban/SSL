@@ -22,7 +22,7 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 AttaqueWithSupportMs::AttaqueWithSupportMs(ai::AiData& ai_data)
   : Strategy(ai_data)
@@ -144,7 +144,7 @@ AttaqueWithSupportMs::~AttaqueWithSupportMs()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int AttaqueWithSupportMs::min_robots() const
+int AttaqueWithSupportMs::minRobots() const
 {
   return 2;
 }
@@ -153,14 +153,14 @@ int AttaqueWithSupportMs::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int AttaqueWithSupportMs::max_robots() const
+int AttaqueWithSupportMs::maxRobots() const
 {
   return 2;
 }
 
-Goalie_need AttaqueWithSupportMs::needs_goalie() const
+GoalieNeed AttaqueWithSupportMs::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 
 const std::string AttaqueWithSupportMs::name = "attaque_with_support_ms";
@@ -169,8 +169,8 @@ void AttaqueWithSupportMs::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
 
-  ID1 = player_id(0);
-  ID2 = player_id(1);  // we get the first if in get_player_ids()
+  ID1 = playerId(0);
+  ID2 = playerId(1);  // we get the first if in get_player_ids()
 
   robot_1_position = getRobot(ID1, vision::Team::Ally).getMovement().linearPosition(time);
   robot_2_position = getRobot(ID2, vision::Team::Ally).getMovement().linearPosition(time);
@@ -199,11 +199,11 @@ void AttaqueWithSupportMs::update(double time)
 {
 }
 
-void AttaqueWithSupportMs::assign_behavior_to_robots(
+void AttaqueWithSupportMs::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // we assign now all the other behavior
-  assert(get_player_ids().size() == 2);
+  assert(getPlayerIds().size() == 2);
 
   robot_1_position = getRobot(ID1, vision::Team::Ally).getMovement().linearPosition(time);
   robot_2_position = getRobot(ID2, vision::Team::Ally).getMovement().linearPosition(time);
@@ -258,10 +258,10 @@ void AttaqueWithSupportMs::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-AttaqueWithSupportMs::get_starting_positions(int number_of_avalaible_robots)
+AttaqueWithSupportMs::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
   return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ballPosition(), 0.0) };
 }
@@ -271,7 +271,7 @@ AttaqueWithSupportMs::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool AttaqueWithSupportMs::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool AttaqueWithSupportMs::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                             ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();

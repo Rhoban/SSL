@@ -22,7 +22,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 const std::string Halt::name = "halt";
 
@@ -30,17 +30,17 @@ Halt::Halt(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-int Halt::min_robots() const
+int Halt::minRobots() const
 {
   return 0;
 }
-int Halt::max_robots() const
+int Halt::maxRobots() const
 {
   return -1;
 }
-Goalie_need Halt::needs_goalie() const
+GoalieNeed Halt::needsGoalie() const
 {
-  return Goalie_need::IF_POSSIBLE;
+  return GoalieNeed::IF_POSSIBLE;
 }
 
 void Halt::start(double time)
@@ -51,17 +51,17 @@ void Halt::stop(double time)
 {
 }
 
-void Halt::assign_behavior_to_robots(
+void Halt::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (have_to_manage_the_goalie())
   {
-    assign_behavior(get_goalie(),
-                    std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data)));
+    assign_behavior(getGoalie(),
+                    std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_)));
   }
-  for (int id : get_player_ids())
+  for (int id : getPlayerIds())
   {
-    assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data)));
+    assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_)));
   }
 }
 
@@ -69,11 +69,11 @@ Halt::~Halt()
 {
 }
 
-rhoban_ssl::annotations::Annotations Halt::get_annotations() const
+rhoban_ssl::annotations::Annotations Halt::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
     const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");

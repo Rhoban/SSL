@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 const std::string Tare_and_synchronize::name = "tare_and_synchronize";
 
@@ -32,17 +32,17 @@ Tare_and_synchronize::Tare_and_synchronize(ai::AiData& ai_data)
 {
 }
 
-int Tare_and_synchronize::min_robots() const
+int Tare_and_synchronize::minRobots() const
 {
   return 1;
 }
-int Tare_and_synchronize::max_robots() const
+int Tare_and_synchronize::maxRobots() const
 {
   return 1;
 }
-Goalie_need Tare_and_synchronize::needs_goalie() const
+GoalieNeed Tare_and_synchronize::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 
 void Tare_and_synchronize::start(double time)
@@ -77,17 +77,17 @@ double Tare_and_synchronize::get_temporal_shift_between_vision() const
 
 void Tare_and_synchronize::set_temporal_shift_between_vision()
 {
-  ai_data.time_shift_with_vision = get_temporal_shift_between_vision();
+  ai_data_.time_shift_with_vision = get_temporal_shift_between_vision();
 }
 
-void Tare_and_synchronize::assign_behavior_to_robots(
+void Tare_and_synchronize::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  const Movement& movement = ai_data.robots[vision::Ally][robot_id(0)].getMovement();
+  const Movement& movement = ai_data_.robots[vision::Ally][robotId(0)].getMovement();
   if (!halt_behavior_was_assigned)
   {
-    assign_behavior(robot_id(0),
-                    std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data)));
+    assign_behavior(robotId(0),
+                    std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_)));
     halt_behavior_was_assigned = true;
     return;
   }
@@ -95,19 +95,19 @@ void Tare_and_synchronize::assign_behavior_to_robots(
   {
     if (movement.angularVelocity(movement.lastTime()).abs().value() <= 0.05)
     {
-      Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(ai_data, time, dt);
+      Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(ai_data_, time, dt);
       follower->set_following_position(movement.linearPosition(movement.lastTime()),
                                        movement.angularPosition(movement.lastTime()) + M_PI / 2.0);
-      follower->set_translation_pid(ai_data.constants.p_translation, ai_data.constants.i_translation,
-                                    ai_data.constants.d_translation);
-      follower->set_orientation_pid(ai_data.constants.p_orientation, ai_data.constants.i_orientation,
-                                    ai_data.constants.d_orientation);
-      follower->set_limits(ai_data.constants.translation_velocity_limit, ai_data.constants.rotation_velocity_limit,
-                           ai_data.constants.translation_acceleration_limit,
-                           ai_data.constants.rotation_acceleration_limit);
+      follower->set_translation_pid(ai_data_.constants.p_translation, ai_data_.constants.i_translation,
+                                    ai_data_.constants.d_translation);
+      follower->set_orientation_pid(ai_data_.constants.p_orientation, ai_data_.constants.i_orientation,
+                                    ai_data_.constants.d_orientation);
+      follower->set_limits(ai_data_.constants.translation_velocity_limit, ai_data_.constants.rotation_velocity_limit,
+                           ai_data_.constants.translation_acceleration_limit,
+                           ai_data_.constants.rotation_acceleration_limit);
 
       ai_time_command = time;
-      assign_behavior(robot_id(0), std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
+      assign_behavior(robotId(0), std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
       move_behavior_was_assigned = true;
       return;
     }
@@ -118,8 +118,8 @@ void Tare_and_synchronize::assign_behavior_to_robots(
     {
       vision_time_command = movement.getSample().time();
       ai_time_associated_to_vision_time_command = time;
-      assign_behavior(robot_id(0),
-                      std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data)));
+      assign_behavior(robotId(0),
+                      std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_)));
       set_temporal_shift_between_vision();
       time_is_synchro = true;
       return;

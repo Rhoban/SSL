@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class From_robot_behavior : public Strategy
 {
@@ -45,17 +45,17 @@ private:
 
 public:
   From_robot_behavior(
-      ai::AiData& ai_data,
+      ai::AiData& ai_data_,
       std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
       bool is_goalie = false);
   From_robot_behavior(
-      ai::AiData& ai_data,
+      ai::AiData& ai_data_,
       std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
       const rhoban_geometry::Point& starting_linear_position, const ContinuousAngle& starting_angular_position,
       bool is_goalie = false);
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
 
   void set_starting_position(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
 
@@ -64,14 +64,14 @@ public:
   virtual void start(double time);
   virtual void stop(double time);
 
-  virtual Goalie_need needs_goalie() const;
+  virtual GoalieNeed needsGoalie() const;
 
-  virtual void assign_behavior_to_robots(
+  virtual void assignBehaviorToRobots(
       std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots) const;
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+  getStartingPositions(int number_of_avalaible_robots) const;
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position) const;
 
   virtual ~From_robot_behavior();

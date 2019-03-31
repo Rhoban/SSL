@@ -37,8 +37,8 @@ public:
   PassWithSupport(ai::AiData& ai);
   virtual ~PassWithSupport();
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
   virtual Goalie_need needs_goalie() const;
 
   static const std::string name;

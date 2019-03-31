@@ -28,7 +28,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 Prepare_kickoff::Prepare_kickoff(ai::AiData& ai_data)
   : Strategy(ai_data), strategy_is_active(false), placer_when_kicking(ai_data), placer_when_no_kicking(ai_data)
@@ -37,22 +37,22 @@ Prepare_kickoff::Prepare_kickoff(ai::AiData& ai_data)
 
 const std::string Prepare_kickoff::name = "prepare_kickoff";
 
-int Prepare_kickoff::min_robots() const
+int Prepare_kickoff::minRobots() const
 {
   return 0;
 }
-int Prepare_kickoff::max_robots() const
+int Prepare_kickoff::maxRobots() const
 {
   return -1;
 }
-Goalie_need Prepare_kickoff::needs_goalie() const
+GoalieNeed Prepare_kickoff::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 void Prepare_kickoff::update_starting_positions()
 {
-  attacking_placement = ai_data.defaultAttackingKickoffPlacement();
-  defending_placement = ai_data.defaultDefendingKickoffPlacement();
+  attacking_placement = ai_data_.defaultAttackingKickoffPlacement();
+  defending_placement = ai_data_.defaultDefendingKickoffPlacement();
   std::function<std::pair<rhoban_geometry::Point, ContinuousAngle>(const Position&)> cvrt =
       [](const Position& position) {
         return std::pair<rhoban_geometry::Point, ContinuousAngle>(position.linear, position.angular);
@@ -77,9 +77,9 @@ void Prepare_kickoff::start(double time)
   ContinuousAngle angular_position;
   if (is_kicking)
   {
-    placer_when_kicking.set_positions(get_player_ids(),
-                                      list2vector(placer_when_kicking.get_starting_positions(get_player_ids().size())));
-    if (placer_when_kicking.get_starting_position_for_goalie(linear_position, angular_position))
+    placer_when_kicking.set_positions(getPlayerIds(),
+                                      list2vector(placer_when_kicking.getStartingPositions(getPlayerIds().size())));
+    if (placer_when_kicking.getStartingPositionForGoalie(linear_position, angular_position))
     {
       placer_when_kicking.set_goalie_positions(linear_position, angular_position);
     }
@@ -88,8 +88,8 @@ void Prepare_kickoff::start(double time)
   else
   {
     placer_when_no_kicking.set_positions(
-        get_player_ids(), list2vector(placer_when_no_kicking.get_starting_positions(get_player_ids().size())));
-    if (placer_when_no_kicking.get_starting_position_for_goalie(linear_position, angular_position))
+        getPlayerIds(), list2vector(placer_when_no_kicking.getStartingPositions(getPlayerIds().size())));
+    if (placer_when_no_kicking.getStartingPositionForGoalie(linear_position, angular_position))
     {
       placer_when_no_kicking.set_goalie_positions(linear_position, angular_position);
     }
@@ -123,16 +123,16 @@ void Prepare_kickoff::update(double time)
   }
 }
 
-void Prepare_kickoff::assign_behavior_to_robots(
+void Prepare_kickoff::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (is_kicking)
   {
-    placer_when_kicking.assign_behavior_to_robots(assign_behavior, time, dt);
+    placer_when_kicking.assignBehaviorToRobots(assign_behavior, time, dt);
   }
   else
   {
-    placer_when_no_kicking.assign_behavior_to_robots(assign_behavior, time, dt);
+    placer_when_no_kicking.assignBehaviorToRobots(assign_behavior, time, dt);
   }
 }
 
@@ -148,62 +148,62 @@ void Prepare_kickoff::set_kicking(bool value)
 }
 
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Prepare_kickoff::get_starting_positions(int number_of_avalaible_robots)
+Prepare_kickoff::getStartingPositions(int number_of_avalaible_robots)
 {
   if (is_kicking)
   {
-    return placer_when_kicking.get_starting_positions(number_of_avalaible_robots);
+    return placer_when_kicking.getStartingPositions(number_of_avalaible_robots);
   }
   else
   {
-    return placer_when_no_kicking.get_starting_positions(number_of_avalaible_robots);
+    return placer_when_no_kicking.getStartingPositions(number_of_avalaible_robots);
   }
 }
 
-bool Prepare_kickoff::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool Prepare_kickoff::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                        ContinuousAngle& angular_position)
 {
   if (is_kicking)
   {
-    return placer_when_kicking.get_starting_position_for_goalie(linear_position, angular_position);
+    return placer_when_kicking.getStartingPositionForGoalie(linear_position, angular_position);
   }
   else
   {
-    return placer_when_no_kicking.get_starting_position_for_goalie(linear_position, angular_position);
+    return placer_when_no_kicking.getStartingPositionForGoalie(linear_position, angular_position);
   }
 }
 
-void Prepare_kickoff::set_robot_affectation(const std::vector<int>& robot_ids)
+void Prepare_kickoff::setRobotAffectation(const std::vector<int>& robot_ids)
 {
-  Strategy::Strategy::set_robot_affectation(robot_ids);
+  Strategy::Strategy::setRobotAffectation(robot_ids);
   if (is_kicking)
   {
-    placer_when_kicking.set_robot_affectation(robot_ids);
+    placer_when_kicking.setRobotAffectation(robot_ids);
   }
   else
   {
-    placer_when_no_kicking.set_robot_affectation(robot_ids);
+    placer_when_no_kicking.setRobotAffectation(robot_ids);
   }
 }
 
-void Prepare_kickoff::set_goalie(int id, bool to_be_managed)
+void Prepare_kickoff::setGoalie(int id, bool to_be_managed)
 {
-  Strategy::set_goalie(id, to_be_managed);
+  Strategy::setGoalie(id, to_be_managed);
   if (is_kicking)
   {
-    placer_when_kicking.set_goalie(id, to_be_managed);
+    placer_when_kicking.setGoalie(id, to_be_managed);
   }
   else
   {
-    placer_when_no_kicking.set_goalie(id, to_be_managed);
+    placer_when_no_kicking.setGoalie(id, to_be_managed);
   }
 }
 
-rhoban_ssl::annotations::Annotations Prepare_kickoff::get_annotations() const
+rhoban_ssl::annotations::Annotations Prepare_kickoff::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
     const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");

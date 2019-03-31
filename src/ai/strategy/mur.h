@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class Mur : public Strategy
 {
@@ -31,12 +31,12 @@ private:
   bool behaviors_are_assigned;
 
 public:
-  Mur(ai::AiData& ai_data);
+  Mur(ai::AiData& ai_data_);
   virtual ~Mur();
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
@@ -45,15 +45,15 @@ public:
 
   virtual void update(double time);
 
-  virtual void assign_behavior_to_robots(
+  virtual void assignBehaviorToRobots(
       std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots);
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+  getStartingPositions(int number_of_avalaible_robots);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position);
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace Strategy

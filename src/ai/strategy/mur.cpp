@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 Mur::Mur(ai::AiData& ai_data) : Strategy(ai_data)
 {
@@ -37,7 +37,7 @@ Mur::~Mur()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur::min_robots() const
+int Mur::minRobots() const
 {
   return 1;
 }
@@ -46,14 +46,14 @@ int Mur::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur::max_robots() const
+int Mur::maxRobots() const
 {
   return 1;
 }
 
-Goalie_need Mur::needs_goalie() const
+GoalieNeed Mur::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 
 const std::string Mur::name = "mur";
@@ -77,7 +77,7 @@ void Mur::update(double time)
   //}
 }
 
-void Mur::assign_behavior_to_robots(
+void Mur::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned))
@@ -85,9 +85,9 @@ void Mur::assign_behavior_to_robots(
     // We first assign the behhavior of the goalie.
 
     // we assign now all the other behavior
-    assert(get_player_ids().size() == 1);
-    int id = player_id(0);  // we get the first if in get_player_ids()
-    assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Mur_defensor(ai_data)));
+    assert(getPlayerIds().size() == 1);
+    int id = playerId(0);  // we get the first if in get_player_ids()
+    assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Mur_defensor(ai_data_)));
 
     behaviors_are_assigned = true;
   }
@@ -100,10 +100,10 @@ void Mur::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Mur::get_starting_positions(int number_of_avalaible_robots)
+Mur::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
   return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
 }
@@ -113,18 +113,18 @@ Mur::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Mur::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool Mur::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Mur::get_annotations() const
+rhoban_ssl::annotations::Annotations Mur::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
     const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");

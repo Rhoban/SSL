@@ -21,7 +21,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 AttaqueWithSupport::AttaqueWithSupport(ai::AiData& ai_data)
   : Strategy(ai_data)
@@ -39,7 +39,7 @@ AttaqueWithSupport::~AttaqueWithSupport()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int AttaqueWithSupport::min_robots() const
+int AttaqueWithSupport::minRobots() const
 {
   return 2;
 }
@@ -48,14 +48,14 @@ int AttaqueWithSupport::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int AttaqueWithSupport::max_robots() const
+int AttaqueWithSupport::maxRobots() const
 {
   return 2;
 }
 
-Goalie_need AttaqueWithSupport::needs_goalie() const
+GoalieNeed AttaqueWithSupport::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 
 const std::string AttaqueWithSupport::name = "attaque_with_support";
@@ -65,7 +65,7 @@ void AttaqueWithSupport::start(double time)
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned = false;
 
-  striker = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data));
+  striker = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
 }
 void AttaqueWithSupport::stop(double time)
 {
@@ -78,15 +78,15 @@ void AttaqueWithSupport::update(double time)
   striker->declare_point_to_strik(results.first);
 }
 
-void AttaqueWithSupport::assign_behavior_to_robots(
+void AttaqueWithSupport::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned))
   {
     // we assign now all the other behavior
-    assert(get_player_ids().size() == 2);
-    int ID1 = player_id(0);
-    int ID2 = player_id(1);  // we get the first if in get_player_ids()
+    assert(getPlayerIds().size() == 2);
+    int ID1 = playerId(0);
+    int ID2 = playerId(1);  // we get the first if in get_player_ids()
 
     const rhoban_geometry::Point& robot_position_1 =
         getRobot(ID1, vision::Team::Ally).getMovement().linearPosition(time);
@@ -136,10 +136,10 @@ void AttaqueWithSupport::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-AttaqueWithSupport::get_starting_positions(int number_of_avalaible_robots)
+AttaqueWithSupport::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
   return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ballPosition(), 0.0) };
 }
@@ -149,7 +149,7 @@ AttaqueWithSupport::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool AttaqueWithSupport::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool AttaqueWithSupport::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                           ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
@@ -157,11 +157,11 @@ bool AttaqueWithSupport::get_starting_position_for_goalie(rhoban_geometry::Point
   return true;
 }
 
-rhoban_ssl::annotations::Annotations AttaqueWithSupport::get_annotations() const
+rhoban_ssl::annotations::Annotations AttaqueWithSupport::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
     const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");

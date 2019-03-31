@@ -21,7 +21,7 @@
 
 namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 Defensive2::Defensive2(ai::AiData& ai_data)
   : Strategy(ai_data)
@@ -40,7 +40,7 @@ Defensive2::~Defensive2()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Defensive2::min_robots() const
+int Defensive2::minRobots() const
 {
   return 2;
 }
@@ -49,14 +49,14 @@ int Defensive2::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Defensive2::max_robots() const
+int Defensive2::maxRobots() const
 {
   return 2;
 }
 
-Goalie_need Defensive2::needs_goalie() const
+GoalieNeed Defensive2::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 
 const std::string Defensive2::name = "defensive2";
@@ -75,16 +75,16 @@ void Defensive2::update(double time)
 {
 }
 
-void Defensive2::assign_behavior_to_robots(
+void Defensive2::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // we assign now all the other behavior
-  assert(get_player_ids().size() == 2);
+  assert(getPlayerIds().size() == 2);
 
   int id_to_obstruct1 = shirtNumberOfThreatMax(vision::Team::Opponent);
   int id_to_obstruct2 = shirtNumberOfThreatMax2(vision::Team::Opponent);
-  int robotID1 = player_id(0);
-  int robotID2 = player_id(1);
+  int robotID1 = playerId(0);
+  int robotID2 = playerId(1);
 
   const ai::Robot& robot1 = getRobot(robotID1, vision::Team::Ally);
   const ai::Robot& robot2 = getRobot(robotID2, vision::Team::Ally);
@@ -138,10 +138,10 @@ void Defensive2::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Defensive2::get_starting_positions(int number_of_avalaible_robots)
+Defensive2::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
   return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
 }
@@ -151,7 +151,7 @@ Defensive2::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Defensive2::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool Defensive2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                   ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
@@ -159,11 +159,11 @@ bool Defensive2::get_starting_position_for_goalie(rhoban_geometry::Point& linear
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Defensive2::get_annotations() const
+rhoban_ssl::annotations::Annotations Defensive2::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
     const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
