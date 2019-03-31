@@ -38,7 +38,7 @@ void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
 
   Vector2d ball_goal_vector = ally_goal_center() - ball_position();
-  double target_rotation = detail::vec2angle(ball_goal_vector);
+  double target_rotation = 0.0;
 
   rhoban_geometry::Point target_position = robot_position;
   if (!ball_is_inside_ally_penalty_area())
@@ -49,6 +49,10 @@ void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
       ball_goal_vector = ball_goal_vector / dist_ball_goal;
       // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
       target_position = ball_position() + ball_goal_vector * 0.5;
+
+      // We always look the ball
+      Vector2d direction_to_ball = ball_position() - robot_position;
+      target_rotation = detail::vec2angle(direction_to_ball);
     }
   }
   else
