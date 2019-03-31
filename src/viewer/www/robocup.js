@@ -355,7 +355,16 @@ function Viewer()
         ctx.beginPath();
         ctx.strokeStyle = '#aaa';
         ctx.fillStyle = this.grColor(robot.team);
-        ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front);
+        if(robot.active){
+            // Uncomment if you want to draw robot from odometry and not from videodata
+            //ctx.arc(robot.x_odom, robot.y_odom, 0.1, (robot.t_odom/1000)+front, (robot.t_odom/1000)+Math.PI*2-front);
+            ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front); 
+
+        }
+        else{
+            ctx.arc(robot.x, robot.y, 0.1, robot.orientation+front, robot.orientation+Math.PI*2-front);
+        }
+        
         if (!robot.present) {
             ctx.stroke();
         }
@@ -819,6 +828,19 @@ function Manager(viewer)
                 api.kick(robot.id, 0, 0.0);
             }, 'mouseup');
 
+            button('.tare-odom', function(robot) {
+                if (robot.enabled) {
+                    api.tareOdom(robot.id, false, 0.0, 0.0, 0.0);
+                }
+            }, 'mouseup');
+
+            button('.tare-odom', function(robot) {
+                var bite = normalizeTheta(robot.orientation);
+                if (robot.enabled) {
+                    api.tareOdom(robot.id, true, robot.x, robot.y, bite);
+                }
+            }, 'mousedown');
+
             button('.left', function(robot) {
                 api.robotCommand(robot.id, 0.0, 0.2, 0.0);
             }, 'mousedown');
@@ -891,6 +913,12 @@ function Manager(viewer)
                 div.find('.pos-x').text(robot.x.toFixed(3));
                 div.find('.pos-y').text(robot.y.toFixed(3));
                 div.find('.pos-orientation').text((normalizeTheta(robot.orientation)*180/Math.PI).toFixed(3));
+
+                div.find('.x_odom').text(robot.x_odom.toFixed(3));
+                div.find('.y_odom').text(robot.y_odom.toFixed(3));
+                //div.find('.t_odom').text((normalizeTheta(robot.t_odom)).toFixed(3));
+                div.find('.t_odom').text((normalizeTheta((robot.t_odom/1000))*(180/Math.PI)).toFixed(3));
+
             } else {
                 div.find('.vision-status').removeClass('ok');
             }
@@ -904,6 +932,11 @@ function Manager(viewer)
                     var voltage_min = 3.6*6;
                     var voltage_max = 4.2*6;
                     var charge = (robot.voltage-voltage_min)/(voltage_max-voltage_min);
+                    div.find('.x_odom').text(robot.x_odom.toFixed(3));
+                    div.find('.y_odom').text(robot.y_odom.toFixed(3));
+                    //div.find('.t_odom').text((normalizeTheta(robot.t_odom)*180/Math.PI).toFixed(3)); 
+                    div.find('.t_odom').text((normalizeTheta((robot.t_odom/1000))*(180/Math.PI)).toFixed(3));
+
                     if (charge < 0) charge = 0;
                     if (charge > 1) charge = 1;
 

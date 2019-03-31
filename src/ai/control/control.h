@@ -31,6 +31,11 @@ private:
   bool m_is_absolute;
 
 public:
+  // TODO : REFACTOR THIS PART ?
+  // fix_translation and fix_rotation is used to set odometry: to give the absolute position to the robot.
+  Vector2d fix_translation = Vector2d(0, 0);  // References for Odometry
+  ContinuousAngle fix_rotation = ContinuousAngle(0);
+
   Vector2d linear_velocity = Vector2d(0, 0);
   ContinuousAngle angular_velocity = ContinuousAngle(0);
 
@@ -42,6 +47,7 @@ public:
 
   bool active = true;
   bool ignore = false;
+  bool tareOdom = false;  // Reset references for Odometry robot
 
   Control(bool is_absolute = true);
 

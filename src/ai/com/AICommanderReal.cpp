@@ -62,6 +62,10 @@ void AICommanderReal::flush()
       {
         packet.actions |= ACTION_DRIBBLE;
       }
+      if (command.tareOdom)
+      {
+        packet.actions |= ACTION_TARE_ODOM;
+      }
     }
     else
     {
@@ -70,6 +74,14 @@ void AICommanderReal::flush()
 
     packet.kickPower = 120 * command.kickPower;
 
+    if (command.tareOdom)
+    {
+      packet.t_speed = command.thetaSpeed * 10000;
+    }
+    else
+    {
+      packet.t_speed = command.thetaSpeed * 1000;
+    }
     packet.x_speed = command.xSpeed * 1000;
     packet.y_speed = command.ySpeed * 1000;
     packet.t_speed = command.thetaSpeed * 1000;
