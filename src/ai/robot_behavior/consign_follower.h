@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__CONSIGN_FOLLOWER__H__
-#define __ROBOT_BEHAVIOR__CONSIGN_FOLLOWER__H__
+#pragma once
 
 #include "robot_behavior.h"
 
@@ -37,6 +36,7 @@ public:
   virtual void avoid_the_ball(bool value);
   virtual void avoid_ally(bool value);
   virtual void avoid_opponent(bool value);
+  virtual void avoidRobot(int id, bool value);
 
   virtual void set_radius_avoidance_for_the_ball(double radius);
 
@@ -45,5 +45,3 @@ public:
 
 };  // namespace Robot_behavior
 };  // namespace RhobanSSL
-
-#endif

@@ -1,8 +1,11 @@
-# SSL
+# SSL {#mainpage}
 
-## Developement
+## Development
 
-The code follow the guiline describe in ROS. [ROS_Guideline](http://wiki.ros.org/CppStyleGuide)
+The code follows the guideline describe in ROS. [ROS_Guideline](http://wiki.ros.org/CppStyleGuide)
+
+### Format
+We using a .clang-format file. Caution ! Use the clang-format version 6.0, if your os doesn't install it automatically then install clang-format-6.0 and rename the command to use the format script.
 
 ## Requirements
 
@@ -32,6 +35,8 @@ After cloning this repository, run:
 
 This will install all the dependencies
 
+See also clang-format above
+
 ## Building
 
 To build, run:
@@ -43,6 +48,17 @@ You can then use the following debugging binaries:
 * ``./bin/vision``, to display informations from the vision (see ``client/vision.cpp``)
 * ``./bin/referee``, to display inforamtions from the referee (see ``client/referee.cpp``)
 * ``./bin/sim``, to send commands to the simulator (see ``client/sim.cpp``)
+
+## Documentation
+
+From workspace root:
+
+    cd doc
+    mkdir build
+    cd build
+    cmake ..
+    make doc
+Documentation is under html directory
 
 ## Testing
 

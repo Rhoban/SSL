@@ -4,6 +4,7 @@ bin
 build_*
 devel_*
 logs_*
+CMakeLists.txt.user
 
 
 .catkin_tools

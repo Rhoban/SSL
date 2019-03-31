@@ -32,8 +32,8 @@ SearchShootArea::SearchShootArea(Ai::AiData& ai_data)
   , obstructed_view(-1)
   , period(3)
   , last_time_changement(0)
-  , well_positioned(false)
   , follower(Factory::fixed_consign_follower(ai_data))
+  , well_positioned(false)
 {
   p1 = Vector2d(opponent_goal_center()) + rhoban_geometry::Point(-1, 2);
   p2 = Vector2d(center_mark()) + rhoban_geometry::Point(1, -2);

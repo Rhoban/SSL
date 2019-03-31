@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
-#define ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
@@ -29,63 +28,63 @@ namespace Robot_behavior
 {
 namespace beginner
 {
-/** 
+/**
  * @class GoCorner
  * @brief Tutorial to show how to move a robot in the side corner.
  */
 class GoCorner : public RobotBehavior
 {
 private:
-  /** 
-   * @see RhobanSSL::Robot_behavior::ConsignFollower 
+  /**
+   * @see RhobanSSL::Robot_behavior::ConsignFollower
    */
   ConsignFollower* follower_;
-  /** 
-   * Not use in this package but set in a possible event of copy.
-   * @see RhobanSSLAnnotation::Annotations 
+  /**
+   * Not use in this package but set in a case of copy.
+   * @see RhobanSSLAnnotation::Annotations
    */
   RhobanSSLAnnotation::Annotations annotations_;
-  /** 
+  /**
    * @brief The target corner which the robot goes.
    */
-  const rhoban_geometry::Point& target_corner_;
+  const rhoban_geometry::Point target_corner_;
 
 public:
   /**
-   * @brief Constructor. 
+   * @brief Constructor.
    * The default value of the target_corner_ is set to left opponent corner.
    * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
    */
   GoCorner(Ai::AiData& ai_data);
 
-  /** @brief Set the position of the robot in the target_corner_.
+  /**
+   * @brief Set the position of the robot in the target_corner_.
    *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
-   * @param robot : The information for the robot.
-   * @param ball : The information for the ball.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
    */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
-  /** Return the control of the behavior.
+  /**
+   * Return the control of the behavior.
    */
   virtual Control control() const;
 
-  /** @see RhobanSSLAnnotation::Annotations 
-   *
-   * The follower draw annotations.
+  /**
+   * @see RhobanSSLAnnotation::Annotations
    * The class don't draw any annotations.
+   * The follower draw annotation.
    */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
   /**
-   *  @brief Destructor.
+   * @brief Destructor.
    */
   virtual ~GoCorner();
 };
-
-};  // namespace beginner
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+}  // namespace beginner
+}  // namespace Robot_behavior
+}  // namespace RhobanSSL

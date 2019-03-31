@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __LOGGER__H__
-#define __LOGGER__H__
+#pragma once
 
 #include <core/export_to_plot.h>
 
@@ -71,5 +70,3 @@ struct Logger
 
   virtual ~Logger();
 };
-
-#endif
