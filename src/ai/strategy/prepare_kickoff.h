@@ -28,19 +28,19 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-class Prepare_kickoff : public Strategy
+class PrepareKickoff : public Strategy
 {
 private:
-  bool is_kicking;
-  bool strategy_is_active;
-  ai::RobotPlacement attacking_placement;
-  ai::RobotPlacement defending_placement;
-  Placer placer_when_kicking;
-  Placer placer_when_no_kicking;
+  bool is_kicking_;
+  bool strategy_is_active_;
+  ai::RobotPlacement attacking_placement_;
+  ai::RobotPlacement defending_placement_;
+  Placer placer_when_kicking_;
+  Placer placer_when_no_kicking_;
 
 public:
-  Prepare_kickoff(ai::AiData& ai_data_);
-  virtual ~Prepare_kickoff();
+  PrepareKickoff(ai::AiData& ai_data);
+  virtual ~PrepareKickoff();
 
   virtual int minRobots() const;
   virtual int maxRobots() const;
@@ -52,18 +52,18 @@ public:
   virtual void stop(double time);
 
   virtual void update(double time);
-  void update_starting_positions();
+  void updateStartingPositions();
 
   virtual void assignBehaviorToRobots(
       std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
-  void set_positions(const std::vector<int>& robot_affectations,
+  void setPositions(const std::vector<int>& robot_affectations,
                      const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns,
                      bool allly_have_the_kickoff);
-  void set_goalie_positions(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position,
+  void setGoaliePositions(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position,
                             bool allly_have_the_kickoff);
 
-  void set_kicking(bool value = true);
+  void setKicking(bool value = true);
 
   virtual void setRobotAffectation(const std::vector<int>& robot_ids);
 

@@ -138,9 +138,9 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   defensive_strats_[2] = { strategy::GoalieStrat::name, strategy::Offensive::name };
   defensive_strats_[1] = { strategy::GoalieStrat::name };
 
-  stop_strats_[8] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Prepare_kickoff::name };
-  stop_strats_[7] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Prepare_kickoff::name };
-  stop_strats_[6] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Prepare_kickoff::name };
+  stop_strats_[8] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+  stop_strats_[7] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+  stop_strats_[6] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
   stop_strats_[5] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Mur_2::name };
   stop_strats_[4] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Mur::name };
   stop_strats_[3] = { strategy::GoalieStrat::name, strategy::MurStop::name };
@@ -160,8 +160,8 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2(ai_data)));
   registerStrategy(strategy::Tare_and_synchronize::name,
                     std::shared_ptr<strategy::Strategy>(new strategy::Tare_and_synchronize(ai_data)));
-  registerStrategy(strategy::Prepare_kickoff::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::Prepare_kickoff(ai_data)));
+  registerStrategy(strategy::PrepareKickoff::name,
+                    std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff(ai_data)));
   registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                 ai_data,
                                 [&](double time, double dt) {
