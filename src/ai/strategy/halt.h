@@ -29,7 +29,7 @@ namespace strategy
 class Halt : public Strategy
 {
 public:
-  Halt(ai::AiData& ai_data_);
+  Halt(ai::AiData& ai_data);
 
   int minRobots() const;
   int maxRobots() const;
