@@ -63,9 +63,9 @@ const std::string StrikerV2::name = "striker_v2";
 void StrikerV2::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 
-  striker = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
+  striker_ = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
 }
 void StrikerV2::stop(double time)
 {
@@ -75,19 +75,19 @@ void StrikerV2::stop(double time)
 void StrikerV2::update(double time)
 {
   std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
-  striker->declare_point_to_strik(results.first);
+  striker_->declare_point_to_strik(results.first);
 }
 
 void StrikerV2::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     assert(getPlayerIds().size() == 1);
 
-    assign_behavior(playerId(0), striker);
+    assign_behavior(playerId(0), striker_);
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
 }
 
