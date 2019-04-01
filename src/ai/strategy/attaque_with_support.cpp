@@ -63,7 +63,7 @@ const std::string AttaqueWithSupport::name = "attaque_with_support";
 void AttaqueWithSupport::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 
   striker_ = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
 }
@@ -81,7 +81,7 @@ void AttaqueWithSupport::update(double time)
 void AttaqueWithSupport::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     // we assign now all the other behavior
     assert(getPlayerIds().size() == 2);

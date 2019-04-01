@@ -25,14 +25,14 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-class Base_3_gds : public Strategy
+class Base3Gds : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
+  bool behaviors_are_assigned_;
 
 public:
-  Base_3_gds(ai::AiData& ai_data_);
-  virtual ~Base_3_gds();
+  Base3Gds(ai::AiData& ai_data);
+  virtual ~Base3Gds();
 
   virtual int minRobots() const;
   virtual int maxRobots() const;

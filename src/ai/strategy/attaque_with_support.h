@@ -32,7 +32,7 @@ namespace strategy
 class AttaqueWithSupport : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
+  bool behaviors_are_assigned_;
   std::shared_ptr<Robot_behavior::RobotFollower> support_;
   std::shared_ptr<Robot_behavior::Pass> pass_;
   std::shared_ptr<Robot_behavior::Striker> striker_;
