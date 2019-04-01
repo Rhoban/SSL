@@ -162,14 +162,14 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
                     std::shared_ptr<strategy::Strategy>(new strategy::Tare_and_synchronize(ai_data)));
   registerStrategy(strategy::Prepare_kickoff::name,
                     std::shared_ptr<strategy::Strategy>(new strategy::Prepare_kickoff(ai_data)));
-  registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
+  registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                 ai_data,
                                 [&](double time, double dt) {
                                   Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
                                   return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
                                 },
                                 true)));
-  registerStrategy(PROTECT_BALL, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
+  registerStrategy(PROTECT_BALL, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                       ai_data,
                                       [&](double time, double dt) {
                                         Robot_behavior::ProtectBall* protect_ball =

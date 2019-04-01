@@ -27,12 +27,12 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-class From_robot_behavior : public Strategy
+class FromRobotBehavior : public Strategy
 {
 private:
-  std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator;
-  bool behavior_has_been_assigned;
-  bool is_goalie;
+  std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator_;
+  bool behavior_has_been_assigned_;
+  bool is_goalie_;
 
   struct StartingPosition
   {
@@ -41,14 +41,14 @@ private:
     ContinuousAngle angular_position;
     StartingPosition() : is_defined(false){};
   };
-  StartingPosition starting_position;
+  StartingPosition starting_position_;
 
 public:
-  From_robot_behavior(
+  FromRobotBehavior(
       ai::AiData& ai_data_,
-      std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
-      bool is_goalie = false);
-  From_robot_behavior(
+      std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator_,
+      bool is_goalie_ = false);
+  FromRobotBehavior(
       ai::AiData& ai_data_,
       std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
       const rhoban_geometry::Point& starting_linear_position, const ContinuousAngle& starting_angular_position,
@@ -57,7 +57,7 @@ public:
   virtual int minRobots() const;
   virtual int maxRobots() const;
 
-  void set_starting_position(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
+  void setStartingPosition(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
 
   static const std::string name;
 
@@ -74,7 +74,7 @@ public:
   virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position) const;
 
-  virtual ~From_robot_behavior();
+  virtual ~FromRobotBehavior();
 };
 
 };  // namespace Strategy
