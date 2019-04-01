@@ -28,10 +28,10 @@ namespace strategy
 class Mur : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
+  bool behaviors_are_assigned_;
 
 public:
-  Mur(ai::AiData& ai_data_);
+  Mur(ai::AiData& ai_data);
   virtual ~Mur();
 
   virtual int minRobots() const;
