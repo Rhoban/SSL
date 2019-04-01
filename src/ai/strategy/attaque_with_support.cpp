@@ -25,8 +25,8 @@ namespace strategy
 {
 AttaqueWithSupport::AttaqueWithSupport(ai::AiData& ai_data)
   : Strategy(ai_data)
-  , support(std::shared_ptr<Robot_behavior::RobotFollower>(new Robot_behavior::RobotFollower(ai_data)))
-  , pass(std::shared_ptr<Robot_behavior::Pass>(new Robot_behavior::Pass(ai_data)))
+  , support_(std::shared_ptr<Robot_behavior::RobotFollower>(new Robot_behavior::RobotFollower(ai_data)))
+  , pass_(std::shared_ptr<Robot_behavior::Pass>(new Robot_behavior::Pass(ai_data)))
 
 {
 }
@@ -65,7 +65,7 @@ void AttaqueWithSupport::start(double time)
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned = false;
 
-  striker = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
+  striker_ = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
 }
 void AttaqueWithSupport::stop(double time)
 {
@@ -74,8 +74,8 @@ void AttaqueWithSupport::stop(double time)
 
 void AttaqueWithSupport::update(double time)
 {
-  results = GameInformations::findGoalBestMove(ballPosition());
-  striker->declare_point_to_strik(results.first);
+  results_ = GameInformations::findGoalBestMove(ballPosition());
+  striker_->declare_point_to_strik(results_.first);
 }
 
 void AttaqueWithSupport::assignBehaviorToRobots(
@@ -111,19 +111,19 @@ void AttaqueWithSupport::assignBehaviorToRobots(
       supportID = ID1;
     }
 
-    if (results.second > seuil)
+    if (results_.second > seuil)
     {
-      assign_behavior(strikerID, striker);
-      support->declare_robot_to_follow(strikerID, Vector2d(1, 2), vision::Team::Ally);
-      assign_behavior(supportID, support);
+      assign_behavior(strikerID, striker_);
+      support_->declare_robot_to_follow(strikerID, Vector2d(1, 2), vision::Team::Ally);
+      assign_behavior(supportID, support_);
     }
     else
     {
-      pass->declare_robot_to_pass(supportID, vision::Team::Ally);
-      assign_behavior(strikerID, pass);
+      pass_->declare_robot_to_pass(supportID, vision::Team::Ally);
+      assign_behavior(strikerID, pass_);
     }
-    support->declare_robot_to_follow(strikerID, Vector2d(1, 2), vision::Team::Ally);
-    assign_behavior(supportID, support);
+    support_->declare_robot_to_follow(strikerID, Vector2d(1, 2), vision::Team::Ally);
+    assign_behavior(supportID, support_);
 
     // behaviors_are_assigned = true;
   }
