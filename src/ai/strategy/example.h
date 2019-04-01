@@ -28,10 +28,10 @@ namespace strategy
 class Example : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
+  bool behaviors_are_assigned_;
 
 public:
-  Example(ai::AiData& ai_data_);
+  Example(ai::AiData& ai_data);
   virtual ~Example();
 
   virtual int minRobots() const;

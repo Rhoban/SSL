@@ -62,7 +62,7 @@ const std::string Example::name = "example";
 void Example::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void Example::stop(double time)
 {
@@ -76,7 +76,7 @@ void Example::update(double time)
 void Example::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     // We first assign the behhavior of the goalie.
     assign_behavior(getGoalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Goalie(ai_data_)));
@@ -86,7 +86,7 @@ void Example::assignBehaviorToRobots(
     int id = playerId(0);  // we get the first if in get_player_ids()
     assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Striker(ai_data_)));
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
 }
 
