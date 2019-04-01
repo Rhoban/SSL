@@ -25,16 +25,16 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-class Mur_stop : public Strategy
+class MurStop : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  bool is_closest_0;
-  bool is_closest_1;
+  bool behaviors_are_assigned_;
+  bool is_closest_0_;
+  bool is_closest_1_;
 
 public:
-  Mur_stop(ai::AiData& ai_data_);
-  virtual ~Mur_stop();
+  MurStop(ai::AiData& ai_data);
+  virtual ~MurStop();
 
   virtual int minRobots() const;
   virtual int maxRobots() const;

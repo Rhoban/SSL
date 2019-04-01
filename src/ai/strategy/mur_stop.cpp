@@ -28,11 +28,11 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Mur_stop::Mur_stop(ai::AiData& ai_data) : Strategy(ai_data)
+MurStop::MurStop(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-Mur_stop::~Mur_stop()
+MurStop::~MurStop()
 {
 }
 
@@ -40,7 +40,7 @@ Mur_stop::~Mur_stop()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_stop::minRobots() const
+int MurStop::minRobots() const
 {
   return 2;
 }
@@ -49,33 +49,33 @@ int Mur_stop::minRobots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_stop::maxRobots() const
+int MurStop::maxRobots() const
 {
   return 2;
 }
 
-GoalieNeed Mur_stop::needsGoalie() const
+GoalieNeed MurStop::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-const std::string Mur_stop::name = "mur_stop";
+const std::string MurStop::name = "mur_stop";
 
-void Mur_stop::start(double time)
+void MurStop::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
-void Mur_stop::stop(double time)
+void MurStop::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Mur_stop::update(double time)
+void MurStop::update(double time)
 {
 }
 
-void Mur_stop::assignBehaviorToRobots(
+void MurStop::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   std::shared_ptr<Robot_behavior::RobotBehavior> mur1(new Robot_behavior::Mur_def_kick(ai_data_, 1));
@@ -84,14 +84,14 @@ void Mur_stop::assignBehaviorToRobots(
   std::shared_ptr<Robot_behavior::RobotBehavior> mur2(new Robot_behavior::Mur_def_kick(ai_data_, 1));
   static_cast<Robot_behavior::Mur_def_kick*>(mur2.get())->declare_mur_robot_id(1, 2);
 
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     assert(getPlayerIds().size() == 2);
 
     assign_behavior(playerId(0), mur1);
     assign_behavior(playerId(1), mur2);
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
 }
 
@@ -102,7 +102,7 @@ void Mur_stop::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Mur_stop::getStartingPositions(int number_of_avalaible_robots)
+MurStop::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
@@ -115,7 +115,7 @@ Mur_stop::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Mur_stop::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
+bool MurStop::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
@@ -123,7 +123,7 @@ bool Mur_stop::getStartingPositionForGoalie(rhoban_geometry::Point& linear_posit
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Mur_stop::getAnnotations() const
+rhoban_ssl::annotations::Annotations MurStop::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 

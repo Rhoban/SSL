@@ -84,28 +84,28 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   goalie_strats_[2] = { strategy::GoalieStrat::name };
   goalie_strats_[1] = { strategy::GoalieStrat::name };
 
-  kick_strats_[8] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur_stop::name,
+  kick_strats_[8] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
                      strategy::Mur_2::name, strategy::Defensive2::name };
-  kick_strats_[7] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur_stop::name,
+  kick_strats_[7] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
                      strategy::Mur_2::name, strategy::Defensive::name };
-  kick_strats_[6] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur_stop::name,
+  kick_strats_[6] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
                      strategy::Mur_2::name };
-  kick_strats_[5] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur_stop::name,
+  kick_strats_[5] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
                      strategy::Mur::name };
-  kick_strats_[4] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur_stop::name };
+  kick_strats_[4] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
   kick_strats_[3] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur::name };
   kick_strats_[2] = { strategy::GoalieStrat::name, strategy::StrikerKick::name };
   kick_strats_[1] = { strategy::GoalieStrat::name };
 
   kick_strats_indirect_[8] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
-                              strategy::Mur_stop::name, strategy::Mur_2::name, strategy::Defensive::name };
+                              strategy::MurStop::name, strategy::Mur_2::name, strategy::Defensive::name };
   kick_strats_indirect_[7] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
-                              strategy::Mur_stop::name, strategy::Mur::name, strategy::Defensive::name };
+                              strategy::MurStop::name, strategy::Mur::name, strategy::Defensive::name };
   kick_strats_indirect_[6] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
-                              strategy::Mur_stop::name, strategy::Mur::name };
+                              strategy::MurStop::name, strategy::Mur::name };
   kick_strats_indirect_[5] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
-                              strategy::Mur_stop::name };
-  kick_strats_indirect_[4] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur_stop::name };
+                              strategy::MurStop::name };
+  kick_strats_indirect_[4] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
   kick_strats_indirect_[3] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur::name };
   kick_strats_indirect_[2] = { strategy::GoalieStrat::name, strategy::StrikerKick::name };
   kick_strats_indirect_[1] = { strategy::GoalieStrat::name };
@@ -138,12 +138,12 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   defensive_strats_[2] = { strategy::GoalieStrat::name, strategy::Offensive::name };
   defensive_strats_[1] = { strategy::GoalieStrat::name };
 
-  stop_strats_[8] = { strategy::GoalieStrat::name, strategy::Mur_stop::name, strategy::Prepare_kickoff::name };
-  stop_strats_[7] = { strategy::GoalieStrat::name, strategy::Mur_stop::name, strategy::Prepare_kickoff::name };
-  stop_strats_[6] = { strategy::GoalieStrat::name, strategy::Mur_stop::name, strategy::Prepare_kickoff::name };
-  stop_strats_[5] = { strategy::GoalieStrat::name, strategy::Mur_stop::name, strategy::Mur_2::name };
-  stop_strats_[4] = { strategy::GoalieStrat::name, strategy::Mur_stop::name, strategy::Mur::name };
-  stop_strats_[3] = { strategy::GoalieStrat::name, strategy::Mur_stop::name };
+  stop_strats_[8] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Prepare_kickoff::name };
+  stop_strats_[7] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Prepare_kickoff::name };
+  stop_strats_[6] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Prepare_kickoff::name };
+  stop_strats_[5] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Mur_2::name };
+  stop_strats_[4] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Mur::name };
+  stop_strats_[3] = { strategy::GoalieStrat::name, strategy::MurStop::name };
   stop_strats_[2] = { strategy::GoalieStrat::name, strategy::Mur::name };
   stop_strats_[1] = { strategy::GoalieStrat::name };
 
@@ -180,7 +180,7 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   registerStrategy(strategy::Offensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Offensive(ai_data)));
   registerStrategy(strategy::StrikerKick::name,
                     std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick(ai_data)));
-  registerStrategy(strategy::Mur_stop::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur_stop(ai_data)));
+  registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop(ai_data)));
   registerStrategy(strategy::Defensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive(ai_data)));
   registerStrategy(strategy::Defensive2::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive2(ai_data)));
   registerStrategy(strategy::Mur::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur(ai_data)));
