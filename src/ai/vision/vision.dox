@@ -1,0 +1,9 @@
+/*! \namespace RobanSSL::Vision
+    \brief Vision namespace
+
+
+    \dotfile vision
+
+    This namespace contains classes used to represent data coming from the Camera. Any data coming from Camera is modeled as a @ref RhobanSSL::Vision::Object
+
+*/
