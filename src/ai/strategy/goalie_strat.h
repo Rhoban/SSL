@@ -30,12 +30,12 @@ namespace strategy
 class GoalieStrat : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  std::shared_ptr<Robot_behavior::Degageur> degageur;
-  std::shared_ptr<Robot_behavior::Goalie> goalie;
+  bool behaviors_are_assigned_;
+  std::shared_ptr<Robot_behavior::Degageur> degageur_;
+  std::shared_ptr<Robot_behavior::Goalie> goalie_;
 
 public:
-  GoalieStrat(ai::AiData& ai_data_);
+  GoalieStrat(ai::AiData& ai_data);
   virtual ~GoalieStrat();
 
   virtual int minRobots() const;

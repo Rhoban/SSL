@@ -24,7 +24,7 @@ namespace rhoban_ssl
 namespace strategy
 {
 GoalieStrat::GoalieStrat(ai::AiData& ai_data)
-  : Strategy(ai_data), degageur(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
+  : Strategy(ai_data), degageur_(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
 {
 }
 
@@ -60,8 +60,8 @@ const std::string GoalieStrat::name = "goalie_strat";
 void GoalieStrat::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  goalie = std::shared_ptr<Robot_behavior::Goalie>(new Robot_behavior::Goalie(ai_data_));
-  behaviors_are_assigned = false;
+  goalie_ = std::shared_ptr<Robot_behavior::Goalie>(new Robot_behavior::Goalie(ai_data_));
+  behaviors_are_assigned_ = false;
 }
 void GoalieStrat::stop(double time)
 {
@@ -81,14 +81,14 @@ void GoalieStrat::assignBehaviorToRobots(
 
   if (allyPenaltyArea().is_inside(ballPosition()))
   {
-    assign_behavior(goalieID, degageur);
+    assign_behavior(goalieID, degageur_);
   }
   else
   {
-    assign_behavior(goalieID, goalie);
+    assign_behavior(goalieID, goalie_);
   }
 
-  behaviors_are_assigned = true;
+  behaviors_are_assigned_ = true;
 }
 
 // We declare here the starting positions that are used to :
