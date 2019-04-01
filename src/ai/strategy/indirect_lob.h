@@ -28,11 +28,11 @@ namespace strategy
 class IndirectLob : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  int state;
+  bool behaviors_are_assigned_;
+  int state_;
 
 public:
-  IndirectLob(ai::AiData& ai_data_);
+  IndirectLob(ai::AiData& ai_data);
   virtual ~IndirectLob();
 
   virtual int minRobots() const;

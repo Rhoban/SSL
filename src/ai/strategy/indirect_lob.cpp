@@ -28,7 +28,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-IndirectLob::IndirectLob(ai::AiData& ai_data) : Strategy(ai_data), state(0)
+IndirectLob::IndirectLob(ai::AiData& ai_data) : Strategy(ai_data), state_(0)
 {
 }
 
@@ -64,7 +64,7 @@ const std::string IndirectLob::name = "indirect_lob";
 void IndirectLob::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void IndirectLob::stop(double time)
 {
@@ -80,17 +80,17 @@ void IndirectLob::update(double time)
 
   Vector2d ball_robot_vector_pass = ballPosition() - robot_pass_position;
 
-  std::cout << "yeeeeeah " << state << "mpyteozur " << ball_robot_vector_pass.norm() << '\n';
+  std::cout << "yeeeeeah " << state_ << "mpyteozur " << ball_robot_vector_pass.norm() << '\n';
   if (ball_robot_vector_pass.norm() <= seuil)
   {
-    state = 1;
+    state_ = 1;
   }
 }
 
 void IndirectLob::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     // we assign now all the other behavior
     assert(getPlayerIds().size() == 2);
@@ -98,7 +98,7 @@ void IndirectLob::assignBehaviorToRobots(
     int wait_pass = playerId(0);  // we get the first if in get_player_ids()
     int pass = playerId(1);       // we get the first if in get_player_ids()
 
-    if (state == 0)
+    if (state_ == 0)
     {
       assign_behavior(wait_pass,
                       std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data_)));
@@ -106,7 +106,7 @@ void IndirectLob::assignBehaviorToRobots(
       std::shared_ptr<Robot_behavior::Pass> pass_behavior(new Robot_behavior::Pass(ai_data_));
       pass_behavior->declare_robot_to_pass(wait_pass, vision::Team::Ally);
       assign_behavior(pass, pass_behavior);
-      std::cout << "stat aaaaaaaaaa " << state << '\n';
+      std::cout << "stat aaaaaaaaaa " << state_ << '\n';
     }
     else
     {
@@ -115,10 +115,10 @@ void IndirectLob::assignBehaviorToRobots(
       std::shared_ptr<Robot_behavior::RobotFollower> support(new Robot_behavior::RobotFollower(ai_data_));
       support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), vision::Team::Ally);
       assign_behavior(pass, support);
-      std::cout << "stat bbbbbbbb " << state << '\n';
+      std::cout << "stat bbbbbbbb " << state_ << '\n';
     }
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
 }
 
