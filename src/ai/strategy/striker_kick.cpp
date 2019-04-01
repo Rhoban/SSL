@@ -63,9 +63,9 @@ const std::string StrikerKick::name = "slow striker";
 void StrikerKick::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 
-  Slowstriker = std::shared_ptr<Robot_behavior::SlowStriker>(new Robot_behavior::SlowStriker(ai_data_));
+  slow_striker_ = std::shared_ptr<Robot_behavior::SlowStriker>(new Robot_behavior::SlowStriker(ai_data_));
 }
 void StrikerKick::stop(double time)
 {
@@ -75,19 +75,19 @@ void StrikerKick::stop(double time)
 void StrikerKick::update(double time)
 {
   std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
-  Slowstriker->declare_point_to_strik(results.first);
+  slow_striker_->declare_point_to_strik(results.first);
 }
 
 void StrikerKick::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     assert(getPlayerIds().size() == 1);
 
-    assign_behavior(playerId(0), Slowstriker);
+    assign_behavior(playerId(0), slow_striker_);
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
 }
 
