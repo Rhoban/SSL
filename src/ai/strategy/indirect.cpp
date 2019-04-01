@@ -28,7 +28,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Indirect::Indirect(ai::AiData& ai_data) : Strategy(ai_data), state(0)
+Indirect::Indirect(ai::AiData& ai_data) : Strategy(ai_data), state_(0)
 {
 }
 
@@ -64,7 +64,7 @@ const std::string Indirect::name = "indirect";
 void Indirect::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void Indirect::stop(double time)
 {
@@ -92,28 +92,28 @@ void Indirect::assignBehaviorToRobots(
   //   state = 1;
   // }
 
-  if (state == 0)
+  if (state_ == 0)
   {
     // DEBUG("STATE "  << state);
-    if (not(behaviors_are_assigned))
+    if (not(behaviors_are_assigned_))
     {
       assign_behavior(wait_pass,
                       std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data_)));
-      pass_behavior = std::shared_ptr<Robot_behavior::Pass_dribbler>(new Robot_behavior::Pass_dribbler(ai_data_));
-      pass_behavior->declare_point_to_pass(
+      pass_behavior_ = std::shared_ptr<Robot_behavior::Pass_dribbler>(new Robot_behavior::Pass_dribbler(ai_data_));
+      pass_behavior_->declare_point_to_pass(
           getRobot(wait_pass, vision::Team::Ally).getMovement().linearPosition(time));
-      assign_behavior(pass, pass_behavior);
+      assign_behavior(pass, pass_behavior_);
     }
 
     // DEBUG("NEED TO KICK before " << pass_behavior->need_to_kick);
-    assert(pass_behavior.get());
-    if (pass_behavior->need_to_kick)
+    assert(pass_behavior_.get());
+    if (pass_behavior_->need_to_kick)
     {
       // DEBUG("NEED TO KICK");
-      state = 1;
+      state_ = 1;
     }
   }
-  else if (state == 1)
+  else if (state_ == 1)
   {
     // DEBUG("STATE "  << state);
     assign_behavior(wait_pass, std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_)));
@@ -123,7 +123,7 @@ void Indirect::assignBehaviorToRobots(
     assign_behavior(pass, support);
   }
 
-  behaviors_are_assigned = true;
+  behaviors_are_assigned_ = true;
 }
 
 // We declare here the starting positions that are used to :

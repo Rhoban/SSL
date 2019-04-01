@@ -30,12 +30,12 @@ namespace strategy
 class Indirect : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  int state;
-  std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
+  bool behaviors_are_assigned_;
+  int state_;
+  std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior_;
 
 public:
-  Indirect(ai::AiData& ai_data_);
+  Indirect(ai::AiData& ai_data);
   virtual ~Indirect();
 
   virtual int minRobots() const;
