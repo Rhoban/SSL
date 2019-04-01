@@ -63,7 +63,7 @@ const std::string Mur_2_passif::name = "Mur_2_passif";
 void Mur_2_passif::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void Mur_2_passif::stop(double time)
 {
@@ -74,18 +74,18 @@ void Mur_2_passif::update(double time)
 {
   int nearest_ally_robot_from_ball =
       GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
-  is_closest_0 = false;
-  is_closest_1 = false;
+  is_closest_0_ = false;
+  is_closest_1_ = false;
 
   if (nearest_ally_robot_from_ball == playerId(0))
   {
-    is_closest_0 = true;
+    is_closest_0_ = true;
   }
   else
   {
     if (nearest_ally_robot_from_ball == playerId(1))
     {
-      is_closest_1 = true;
+      is_closest_1_ = true;
     }
   }
 }
@@ -98,14 +98,14 @@ void Mur_2_passif::assignBehaviorToRobots(
 
   std::shared_ptr<Robot_behavior::RobotBehavior> mur2(new Robot_behavior::Mur_defensor(ai_data_, 1));
 
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     assert(getPlayerIds().size() == 2);
 
     assign_behavior(playerId(0), mur1);
     assign_behavior(playerId(1), mur2);
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
 }
 
