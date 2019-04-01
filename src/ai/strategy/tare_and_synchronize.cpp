@@ -25,73 +25,73 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-const std::string Tare_and_synchronize::name = "tare_and_synchronize";
+const std::string TareAndSynchronize::name = "tare_and_synchronize";
 
-Tare_and_synchronize::Tare_and_synchronize(ai::AiData& ai_data)
-  : Strategy(ai_data), halt_behavior_was_assigned(false), move_behavior_was_assigned(false), time_is_synchro(false)
+TareAndSynchronize::TareAndSynchronize(ai::AiData& ai_data)
+  : Strategy(ai_data), halt_behavior_was_assigned_(false), move_behavior_was_assigned_(false), time_is_synchro_(false)
 {
 }
 
-int Tare_and_synchronize::minRobots() const
+int TareAndSynchronize::minRobots() const
 {
   return 1;
 }
-int Tare_and_synchronize::maxRobots() const
+int TareAndSynchronize::maxRobots() const
 {
   return 1;
 }
-GoalieNeed Tare_and_synchronize::needsGoalie() const
+GoalieNeed TareAndSynchronize::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-void Tare_and_synchronize::start(double time)
+void TareAndSynchronize::start(double time)
 {
   DEBUG("START TIME SYNCHRONIZATION");
-  halt_behavior_was_assigned = false;
-  move_behavior_was_assigned = false;
-  time_is_synchro = false;
+  halt_behavior_was_assigned_ = false;
+  move_behavior_was_assigned_ = false;
+  time_is_synchro_ = false;
 }
 
-bool Tare_and_synchronize::is_tared_and_synchronized() const
+bool TareAndSynchronize::isTaredAndSynchronized() const
 {
-  return time_is_synchro;
+  return time_is_synchro_;
 }
 
-void Tare_and_synchronize::update(double time)
+void TareAndSynchronize::update(double time)
 {
 }
 
-void Tare_and_synchronize::stop(double time)
+void TareAndSynchronize::stop(double time)
 {
   DEBUG("STOP TIME SYNCHRONIZATION");
 }
 
-double Tare_and_synchronize::get_temporal_shift_between_vision() const
+double TareAndSynchronize::getTemporalShiftBetweenVision() const
 {
-  double propagation_time_of_command = ai_time_associated_to_vision_time_command - ai_time_command;
-  double estimated_time_of_command_application = ai_time_command + propagation_time_of_command / 2.0;
-  double temporal_shift = estimated_time_of_command_application - vision_time_command;
+  double propagation_time_of_command = ai_time_associated_to_vision_time_command_ - ai_time_command_;
+  double estimated_time_of_command_application = ai_time_command_ + propagation_time_of_command / 2.0;
+  double temporal_shift = estimated_time_of_command_application - vision_time_command_;
   return temporal_shift;
 }
 
-void Tare_and_synchronize::set_temporal_shift_between_vision()
+void TareAndSynchronize::setTemporalShiftBetweenVision()
 {
-  ai_data_.time_shift_with_vision = get_temporal_shift_between_vision();
+  ai_data_.time_shift_with_vision = getTemporalShiftBetweenVision();
 }
 
-void Tare_and_synchronize::assignBehaviorToRobots(
+void TareAndSynchronize::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   const Movement& movement = ai_data_.robots[vision::Ally][robotId(0)].getMovement();
-  if (!halt_behavior_was_assigned)
+  if (!halt_behavior_was_assigned_)
   {
     assign_behavior(robotId(0),
                     std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_)));
-    halt_behavior_was_assigned = true;
+    halt_behavior_was_assigned_ = true;
     return;
   }
-  if (halt_behavior_was_assigned and !move_behavior_was_assigned)
+  if (halt_behavior_was_assigned_ and !move_behavior_was_assigned_)
   {
     if (movement.angularVelocity(movement.lastTime()).abs().value() <= 0.05)
     {
@@ -106,28 +106,28 @@ void Tare_and_synchronize::assignBehaviorToRobots(
                            ai_data_.constants.translation_acceleration_limit,
                            ai_data_.constants.rotation_acceleration_limit);
 
-      ai_time_command = time;
+      ai_time_command_ = time;
       assign_behavior(robotId(0), std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
-      move_behavior_was_assigned = true;
+      move_behavior_was_assigned_ = true;
       return;
     }
   }
-  if (halt_behavior_was_assigned and move_behavior_was_assigned and !time_is_synchro)
+  if (halt_behavior_was_assigned_ and move_behavior_was_assigned_ and !time_is_synchro_)
   {
     if (movement.angularVelocity(movement.lastTime()).abs().value() >= 0.05)
     {
-      vision_time_command = movement.getSample().time();
-      ai_time_associated_to_vision_time_command = time;
+      vision_time_command_ = movement.getSample().time();
+      ai_time_associated_to_vision_time_command_ = time;
       assign_behavior(robotId(0),
                       std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_)));
-      set_temporal_shift_between_vision();
-      time_is_synchro = true;
+      setTemporalShiftBetweenVision();
+      time_is_synchro_ = true;
       return;
     }
   }
 }
 
-Tare_and_synchronize::~Tare_and_synchronize()
+TareAndSynchronize::~TareAndSynchronize()
 {
 }
 

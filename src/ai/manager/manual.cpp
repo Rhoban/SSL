@@ -642,8 +642,8 @@ Manual::Manual(ai::AiData& ai_data)
                         )));
 
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
-  registerStrategy(strategy::Tare_and_synchronize::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::Tare_and_synchronize(ai_data)));
+  registerStrategy(strategy::TareAndSynchronize::name,
+                    std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
   assignStrategy(strategy::Halt::name, 0.0, getTeamIds());  // TODO TIME !
                                                                // strategy_was_assigned = false;
 }

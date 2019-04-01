@@ -147,19 +147,19 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   stop_strats_[2] = { strategy::GoalieStrat::name, strategy::Mur::name };
   stop_strats_[1] = { strategy::GoalieStrat::name };
 
-  halt_strats_[8] = { strategy::Tare_and_synchronize::name, strategy::Halt::name };
-  halt_strats_[7] = { strategy::Tare_and_synchronize::name, strategy::Halt::name };
-  halt_strats_[6] = { strategy::Tare_and_synchronize::name, strategy::Halt::name };
-  halt_strats_[5] = { strategy::Tare_and_synchronize::name, strategy::Halt::name };
-  halt_strats_[4] = { strategy::Tare_and_synchronize::name, strategy::Halt::name };
-  halt_strats_[3] = { strategy::Tare_and_synchronize::name, strategy::Halt::name };
-  halt_strats_[2] = { strategy::Tare_and_synchronize::name, strategy::Halt::name };
-  halt_strats_[1] = { strategy::Tare_and_synchronize::name };
+  halt_strats_[8] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[7] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[6] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[5] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[4] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[3] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[2] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[1] = { strategy::TareAndSynchronize::name };
 
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
   registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2(ai_data)));
-  registerStrategy(strategy::Tare_and_synchronize::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::Tare_and_synchronize(ai_data)));
+  registerStrategy(strategy::TareAndSynchronize::name,
+                    std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
   registerStrategy(strategy::PrepareKickoff::name,
                     std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff(ai_data)));
   registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
