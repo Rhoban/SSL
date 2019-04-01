@@ -30,12 +30,12 @@ namespace strategy
 class Defensive : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  std::shared_ptr<Robot_behavior::Degageur> degageur;
-  std::shared_ptr<Robot_behavior::Obstructor> obstructeur;
+  bool behaviors_are_assigned_;
+  std::shared_ptr<Robot_behavior::Degageur> degageur_;
+  std::shared_ptr<Robot_behavior::Obstructor> obstructeur_;
 
 public:
-  Defensive(ai::AiData& ai_data_);
+  Defensive(ai::AiData& ai_data);
   virtual ~Defensive();
 
   virtual int minRobots() const;
