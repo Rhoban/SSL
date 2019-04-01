@@ -31,13 +31,13 @@ namespace strategy
 class Offensive : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  bool is_closest;
-  std::shared_ptr<Robot_behavior::SearchShootArea> search;
-  std::shared_ptr<Robot_behavior::Striker> striker;
+  bool behaviors_are_assigned_;
+  bool is_closest_;
+  std::shared_ptr<Robot_behavior::SearchShootArea> search_;
+  std::shared_ptr<Robot_behavior::Striker> striker_;
 
 public:
-  Offensive(ai::AiData& ai_data_);
+  Offensive(ai::AiData& ai_data);
   virtual ~Offensive();
 
   virtual int minRobots() const;

@@ -23,7 +23,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Offensive::Offensive(ai::AiData& ai_data) : Strategy(ai_data), is_closest(false)
+Offensive::Offensive(ai::AiData& ai_data) : Strategy(ai_data), is_closest_(false)
 {
 }
 
@@ -59,9 +59,9 @@ const std::string Offensive::name = "offensive";
 void Offensive::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  search = std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data_));
-  striker = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
-  behaviors_are_assigned = false;
+  search_ = std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data_));
+  striker_ = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
+  behaviors_are_assigned_ = false;
 }
 void Offensive::stop(double time)
 {
@@ -77,19 +77,19 @@ void Offensive::assignBehaviorToRobots(
 {
   if (GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally) == playerId(0))
   {
-    is_closest = true;
+    is_closest_ = true;
   }
   else
   {
-    is_closest = false;
+    is_closest_ = false;
   }
-  if (is_closest == true)
+  if (is_closest_ == true)
   {
-    assign_behavior(playerId(0), striker);
+    assign_behavior(playerId(0), striker_);
   }
   else
   {
-    assign_behavior(playerId(0), search);
+    assign_behavior(playerId(0), search_);
   }
 }
 
