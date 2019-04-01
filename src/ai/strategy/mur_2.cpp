@@ -64,7 +64,7 @@ const std::string Mur_2::name = "mur_2";
 void Mur_2::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void Mur_2::stop(double time)
 {
@@ -75,18 +75,18 @@ void Mur_2::update(double time)
 {
   int nearest_ally_robot_from_ball =
       GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
-  is_closest_0 = false;
-  is_closest_1 = false;
+  is_closest_0_ = false;
+  is_closest_1_ = false;
 
   if (nearest_ally_robot_from_ball == playerId(0))
   {
-    is_closest_0 = true;
+    is_closest_0_ = true;
   }
   else
   {
     if (nearest_ally_robot_from_ball == playerId(1))
     {
-      is_closest_1 = true;
+      is_closest_1_ = true;
     }
   }
 }
@@ -101,25 +101,25 @@ void Mur_2::assignBehaviorToRobots(
   static_cast<Robot_behavior::Mur_defensor*>(mur2.get())->declare_mur_robot_id(1, 2);
   std::shared_ptr<Robot_behavior::RobotBehavior> deg1(new Robot_behavior::Degageur(ai_data_));
 
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     assert(getPlayerIds().size() == 2);
 
     assign_behavior(playerId(0), mur1);
     assign_behavior(playerId(1), mur2);
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
   else
   {
-    if (is_closest_0)
+    if (is_closest_0_)
     {
       assign_behavior(playerId(0), deg1);
       assign_behavior(playerId(1), mur2);
     }
     else
     {
-      if (is_closest_1)
+      if (is_closest_1_)
       {
         assign_behavior(playerId(0), mur1);
         assign_behavior(playerId(1), deg1);

@@ -28,12 +28,12 @@ namespace strategy
 class Mur_2 : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  bool is_closest_0;
-  bool is_closest_1;
+  bool behaviors_are_assigned_;
+  bool is_closest_0_;
+  bool is_closest_1_;
 
 public:
-  Mur_2(ai::AiData& ai_data_);
+  Mur_2(ai::AiData& ai_data);
   virtual ~Mur_2();
 
   virtual int minRobots() const;
