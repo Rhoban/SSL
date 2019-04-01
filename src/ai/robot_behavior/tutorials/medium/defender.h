@@ -19,23 +19,20 @@
 
 #pragma once
 
-#include <robot_behavior/robot_behavior.h>
-#include <robot_behavior/factory.h>
+#include "robot_behavior/factory.h"
+#include "robot_behavior/robot_behavior.h"
 
 namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace beginner
+namespace medium
 {
 /**
+ * @class Defender
+ * @brief Tutorial shows how to place a robot between the ally's goal and the ball. (Defend situation)
  */
-/**
- * @class Goalie
- * @brief Tutorial class to show how to place the robot behind the
- *  ball which aiming the center of ball.
- */
-class Goalie : public RobotBehavior
+class Defender : public RobotBehavior
 {
 private:
   /**
@@ -51,21 +48,26 @@ private:
 public:
   /**
    * @brief Constructor.
+   * The default value of the target_corner_ is set to left opponent corner.
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see Ai::AiData
    */
-  Goalie(Ai::AiData& ai_data);
+  Defender(Ai::AiData& ai_data);
 
   /**
-   * @brief Move the robot 0.5 meters from the goal center.
-   * The robot will be align with the ally goal center and the ball position..
+   * @brief Is the ball is inside the penalty area.
+   * @return True if the ball is inside the penalty area.
+   */
+  bool ball_is_inside_ally_penalty_area();
+  /**
+   * @brief Put the robot between the ball and the ally goal zone.
    *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
   /**
    * @see Control.
@@ -74,15 +76,16 @@ public:
 
   /**
    * @see RhobanSSLAnnotation::Annotations
+   * The class don't draw any annotations.
+   * The follower draw annotation.
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
+  RhobanSSLAnnotation::Annotations get_annotations() const;
   /**
    * @brief Destructor.
    */
-  virtual ~Goalie();
+  virtual ~Defender();
 };
 
-}  // Namespace beginner
+}  // namespace medium
 }  // Namespace Robot_behavior
 }  // namespace RhobanSSL

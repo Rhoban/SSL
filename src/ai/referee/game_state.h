@@ -68,7 +68,12 @@ struct edge_name
   static const constexpr char* goal = "goal";
 };
 
-typedef enum free_kick_type_id { UNKNOWN, DIRECT, INDIRECT } free_kick_type_id;
+typedef enum free_kick_type_id
+{
+  UNKNOWN,
+  DIRECT,
+  INDIRECT
+} free_kick_type_id;
 
 struct GameStateData
 {

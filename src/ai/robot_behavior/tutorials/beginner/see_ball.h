@@ -17,35 +17,75 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
-#define __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
+#ifndef ROBOT_BEHAVIOR__BEGINNER__SEE_BALL__
+#define ROBOT_BEHAVIOR__BEGINNER__SEE_BALL__
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-class Begginer_see_ball : public RobotBehavior
+namespace beginner
+{
+/**
+ * @class See Ball
+ *
+ * @brief Tutorial to show how to see the ball.
+ */
+class SeeBall : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  /**
+   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   */
+  ConsignFollower* follower_;
+  /**
+   * Not use in this package but set in a case of copy.
+   * @see RhobanSSLAnnotation::Annotations
+   */
+  RhobanSSLAnnotation::Annotations annotations_;
 
 public:
-  Begginer_see_ball(Ai::AiData& ai_data);
+  /**
+   * @brief Constructor.
+   *
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
+   */
+  SeeBall(Ai::AiData& ai_data);
 
+  /**
+   * @brief The robot stay in his position and always turns to the ball.
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
   virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
 
+  /**
+   * @see Control
+   */
   virtual Control control() const;
 
+  /**
+   * @see RhobanSSLAnnotation::Annotations
+   * The class don't draw any annotations.
+   * The follower draw annotation.
+   */
   virtual RhobanSSLAnnotation::Annotations get_annotations() const;
 
-  virtual ~Begginer_see_ball();
+  /**
+   * @brief Destructor.
+   */
+  virtual ~SeeBall();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace beginner
+};  // Namespace Robot_behavior
+};  // Namespace RhobanSSL
 
 #endif

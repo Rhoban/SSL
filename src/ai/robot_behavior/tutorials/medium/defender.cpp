@@ -16,66 +16,79 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#include "goalie.h"
+#include "defender.h"
 #include <math/vector2d.h>
 
 namespace RhobanSSL
 {
 namespace Robot_behavior
 {
-namespace beginner
+namespace medium
 {
-Goalie::Goalie(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
+Defender::Defender(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
 {
 }
 
-void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 {
+  // At First, we update time and update potition from the abstract class robot_behavior.
   RobotBehavior::update_time_and_position(time, robot, ball);
-
-  // The goalie moves between the position of the ally's goal center and the position of the ball.
-  // The position of the goalie is at 0.5 meters of the goal center.
   annotations_.clear();
 
   const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+
+  Vector2d ball_goal_vector = ally_goal_center() - ball_position();
+  double target_rotation = 0.0;
+
   rhoban_geometry::Point target_position = robot_position;
-  Vector2d goal_ball_vector = ball_position() - ally_goal_center();
-  double dist_goal_ball_vector = goal_ball_vector.norm();
-  double target_rotation = 0;
-
-  if (dist_goal_ball_vector != 0)
+  if (!ball_is_inside_ally_penalty_area())
   {
-    goal_ball_vector = goal_ball_vector / dist_goal_ball_vector;
+    double dist_ball_goal = ball_goal_vector.norm();
+    if (dist_ball_goal > 0)
+    {
+      ball_goal_vector = ball_goal_vector / dist_ball_goal;
+      // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
+      target_position = ball_position() + ball_goal_vector * 0.5;
 
-    // Move the robot 0.5 meters from the goal center. The robot will be aligne with the ally
-    // goal center and the ball position.
-    target_position = ally_goal_center() + goal_ball_vector * 0.5;
-    target_rotation = detail::vec2angle(goal_ball_vector);
+      // We always look the ball
+      Vector2d direction_to_ball = ball_position() - robot_position;
+      target_rotation = detail::vec2angle(direction_to_ball);
+    }
+  }
+  else
+  {
+    // The ball is inside the penalty area. Don't nothing.
   }
 
+  follower_->avoid_the_ball(true);
   follower_->set_following_position(target_position, target_rotation);
   follower_->update(time, robot, ball);
 }
 
-Control Goalie::control() const
+bool Defender::ball_is_inside_ally_penalty_area()
+{
+  return ally_penalty_area().is_inside(ball_position());
+  ;
+}
+
+Control Defender::control() const
 {
   Control ctrl = follower_->control();
   return ctrl;
 }
 
-Goalie::~Goalie()
+Defender::~Defender()
 {
   delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Goalie::get_annotations() const
+RhobanSSLAnnotation::Annotations Defender::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
   annotations.addAnnotations(follower_->get_annotations());
   return annotations;
 }
-}  // namespace beginner
+}  // namespace medium
 }  // namespace Robot_behavior
 }  // namespace RhobanSSL

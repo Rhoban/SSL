@@ -33,7 +33,11 @@ namespace Vision
 static const int history_size = 10;
 static const int Robots = 16;
 
-typedef enum { Ally, Opponent } Team;
+typedef enum
+{
+  Ally,
+  Opponent
+} Team;
 
 struct Object
 {
