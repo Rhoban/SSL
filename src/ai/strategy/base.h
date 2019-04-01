@@ -28,10 +28,10 @@ namespace strategy
 class Base : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
+  bool behaviors_are_assigned_;
 
 public:
-  Base(ai::AiData& ai_data_);
+  Base(ai::AiData& ai_data);
   virtual ~Base();
 
   virtual int minRobots() const;

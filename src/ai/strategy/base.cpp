@@ -65,7 +65,7 @@ const std::string Base::name = "base";
 void Base::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void Base::stop(double time)
 {
@@ -79,7 +79,7 @@ void Base::update(double time)
 void Base::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     // We first assign the behhavior of the goalie.
 
@@ -108,7 +108,7 @@ void Base::assignBehaviorToRobots(
     assign_behavior(playerId(3), dp2);
     assign_behavior(playerId(4), defensor);
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
 }
 
