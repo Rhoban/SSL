@@ -20,7 +20,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Test_relative_velocity_consign::Test_relative_velocity_consign(rhoban_ssl::ai::AiData& ai_data)
   : RobotBehavior(ai_data), relative_control(false)
@@ -45,7 +45,7 @@ void Test_relative_velocity_consign::update(double time, const ai::Robot& robot,
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 }
 
 Control Test_relative_velocity_consign::control() const
@@ -53,10 +53,10 @@ Control Test_relative_velocity_consign::control() const
   return relative_control;
 }
 
-rhoban_ssl::annotations::Annotations Test_relative_velocity_consign::get_annotations() const
+rhoban_ssl::annotations::Annotations Test_relative_velocity_consign::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addArrow(linear_position(), linear_position() + relative_control.linear_velocity, "blue");
+  annotations.addArrow(linearPosition(), linearPosition() + relative_control.linear_velocity, "blue");
   return annotations;
 }
 

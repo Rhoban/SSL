@@ -64,7 +64,7 @@ protected:
 
   AICommander* commander_;
 
-  std::map<int, std::shared_ptr<Robot_behavior::RobotBehavior> > robot_behaviors_;
+  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
 
   void initRobotBehaviors();
   void updateRobots();
@@ -79,7 +79,7 @@ protected:
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
 
-  Control updateRobot(Robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball);
+  Control updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball);
   void updateElectronicInformations();
   void printElectronicInfo();
 

@@ -257,7 +257,7 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
   limitsVelocity(ctrl);
 }
 
-Control AI::updateRobot(Robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball)
+Control AI::updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball)
 {
   if (robot.isPresentInVision())
   {
@@ -275,7 +275,7 @@ void AI::initRobotBehaviors()
 {
   for (int k = 0; k < vision::Robots; k++)
   {
-    robot_behaviors_[k] = std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_));
+    robot_behaviors_[k] = std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_));
   }
 }
 
@@ -355,7 +355,7 @@ void AI::updateRobots()
     SharedData::FinalControl& final_control = shared_data_.final_control_for_robots[robot_id];
 
     ai::Robot& robot = ai_data_.robots[team][robot_id];
-    Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
+    robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)
     {
@@ -365,7 +365,7 @@ void AI::updateRobots()
     {
       ai::Robot& robot = ai_data_.robots[team][robot_id];
 
-      Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
+      robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
       final_control.control = updateRobot(robot_behavior, time, robot, ball);
       prepareToSendControl(robot_id, final_control.control);
     }
@@ -499,8 +499,8 @@ rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
   rhoban_ssl::annotations::Annotations annotations;
   for (int robot_id = 0; robot_id < vision::Robots; robot_id++)
   {
-    const Robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_.at(robot_id));
-    annotations.addAnnotations(robot_behavior.get_annotations());
+    const robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_.at(robot_id));
+    annotations.addAnnotations(robot_behavior.getAnnotations());
   }
   return annotations;
 }

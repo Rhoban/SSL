@@ -24,7 +24,7 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class PredictFutur : public RobotBehavior
 {
@@ -35,7 +35,7 @@ private:
   rhoban_ssl::annotations::Annotations annotations;
 
 public:
-  PredictFutur(ai::AiData& ai_data);
+  PredictFutur(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -43,7 +43,7 @@ public:
 
   void declare_point_to_strik(rhoban_geometry::Point point);
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~PredictFutur();
 };

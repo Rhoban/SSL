@@ -30,7 +30,7 @@ namespace strategy
 class FromRobotBehavior : public Strategy
 {
 private:
-  std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator_;
+  std::function<std::shared_ptr<robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator_;
   bool behavior_has_been_assigned_;
   bool is_goalie_;
 
@@ -46,11 +46,11 @@ private:
 public:
   FromRobotBehavior(
       ai::AiData& ai_data_,
-      std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator_,
+      std::function<std::shared_ptr<robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator_,
       bool is_goalie_ = false);
   FromRobotBehavior(
       ai::AiData& ai_data_,
-      std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
+      std::function<std::shared_ptr<robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
       const rhoban_geometry::Point& starting_linear_position, const ContinuousAngle& starting_angular_position,
       bool is_goalie = false);
 
@@ -67,7 +67,7 @@ public:
   virtual GoalieNeed needsGoalie() const;
 
   virtual void assignBehaviorToRobots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
   getStartingPositions(int number_of_avalaible_robots) const;

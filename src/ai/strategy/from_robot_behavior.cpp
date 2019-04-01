@@ -27,13 +27,13 @@ const std::string FromRobotBehavior::name = "From_robot_behavior";
 
 FromRobotBehavior::FromRobotBehavior(
     ai::AiData& ai_data,
-    std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
+    std::function<std::shared_ptr<robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
     bool is_goalie)
   : Strategy(ai_data), robot_behavior_allocator_(robot_behavior_allocator), is_goalie_(is_goalie){};
 
 FromRobotBehavior::FromRobotBehavior(
     ai::AiData& ai_data,
-    std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
+    std::function<std::shared_ptr<robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
     const rhoban_geometry::Point& starting_linear_position, const ContinuousAngle& starting_angular_position,
     bool is_goalie)
   : FromRobotBehavior(ai_data, robot_behavior_allocator, is_goalie)
@@ -70,7 +70,7 @@ void FromRobotBehavior::stop(double time)
 }
 
 void FromRobotBehavior::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (!behavior_has_been_assigned_)
   {

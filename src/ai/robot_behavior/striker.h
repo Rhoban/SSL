@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Striker : public RobotBehavior
 {
@@ -34,7 +34,7 @@ private:
   ConsignFollower* follower;
 
 public:
-  Striker(ai::AiData& ai_data);
+  Striker(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -42,7 +42,7 @@ public:
 
   void declare_point_to_strik(rhoban_geometry::Point point);
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Striker();
 };

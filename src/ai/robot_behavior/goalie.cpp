@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 rhoban_geometry::Point Goalie::calculate_goal_position(const rhoban_geometry::Point& ball_position,
                                                        const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
@@ -66,7 +66,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
@@ -81,11 +81,11 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   // }
 
   rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, ai_data_.field.goalWidth / 2.0);
   rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, -ai_data_.field.goalWidth / 2.0);
 
-  double offset_goal = ai_data.constants.robot_radius * 1.5;
+  double offset_goal = ai_data_.constants.robot_radius * 1.5;
   double hyst = 0.10;
 
   rhoban_geometry::Point target_position;
@@ -191,12 +191,12 @@ Goalie::~Goalie()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Goalie::get_annotations() const
+rhoban_ssl::annotations::Annotations Goalie::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations_local;
   annotations_local.addAnnotations(annotations);
   std::string annotations_text;
-  if (robot_ptr)
+  if (robot_ptr_)
   {
     if (defensive_approach == 0)
     {
@@ -206,7 +206,7 @@ rhoban_ssl::annotations::Annotations Goalie::get_annotations() const
     {
       annotations_text = "Dash";
     }
-    annotations_local.addText(annotations_text, linear_position().getX() + 0.15, linear_position().getY() + 0.60,
+    annotations_local.addText(annotations_text, linearPosition().getX() + 0.15, linearPosition().getY() + 0.60,
                               "red");
 
     // DEBUG("nb_future_ball = " << future_ball_positions.size() );
@@ -215,7 +215,7 @@ rhoban_ssl::annotations::Annotations Goalie::get_annotations() const
     //     annotations_local.addCross(future_ball_positions[i].x, future_ball_positions[i].y, "red" );
     // }
   }
-  annotations_local.addAnnotations(follower->get_annotations());
+  annotations_local.addAnnotations(follower->getAnnotations());
   return annotations_local;
 }
 

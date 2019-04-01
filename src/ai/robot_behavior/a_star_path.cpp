@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 A_star_path::A_star_path(ai::AiData& ai_data, double time, double dt)
   : ConsignFollower(ai_data), navigation(ai_data, time, dt), target_position(0.0, 0.0), target_angle(0.0)
@@ -37,7 +37,7 @@ void A_star_path::set_following_position(const rhoban_geometry::Point& position_
 
   this->target_position = position_to_follow;
   this->target_angle = target_angle;
-  this->target_angle = this->robot_angular_position;
+  this->target_angle = this->robot_angular_position_;
   this->target_angle.setToNearest(target_angle);
 }
 
@@ -45,7 +45,7 @@ void A_star_path::update(double time, const ai::Robot& robot, const ai::Ball& ba
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->ball_position

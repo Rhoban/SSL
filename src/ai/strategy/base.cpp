@@ -77,25 +77,25 @@ void Base::update(double time)
 }
 
 void Base::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned_))
   {
     // We first assign the behhavior of the goalie.
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> goalie(new Robot_behavior::Goalie(ai_data_));
+    std::shared_ptr<robot_behavior::RobotBehavior> goalie(new robot_behavior::Goalie(ai_data_));
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> striker(new Robot_behavior::Striker(ai_data_));
+    std::shared_ptr<robot_behavior::RobotBehavior> striker(new robot_behavior::Striker(ai_data_));
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> mur(new Robot_behavior::Mur_defensor(ai_data_));
+    std::shared_ptr<robot_behavior::RobotBehavior> mur(new robot_behavior::Mur_defensor(ai_data_));
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> dp1(new Robot_behavior::Passive_defensor(ai_data_));
-    static_cast<Robot_behavior::Passive_defensor*>(dp1.get())->set_robot_to_obstacle(0);
+    std::shared_ptr<robot_behavior::RobotBehavior> dp1(new robot_behavior::Passive_defensor(ai_data_));
+    static_cast<robot_behavior::Passive_defensor*>(dp1.get())->set_robot_to_obstacle(0);
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> dp2(new Robot_behavior::Passive_defensor(ai_data_));
-    static_cast<Robot_behavior::Passive_defensor*>(dp2.get())->set_robot_to_obstacle(1);
+    std::shared_ptr<robot_behavior::RobotBehavior> dp2(new robot_behavior::Passive_defensor(ai_data_));
+    static_cast<robot_behavior::Passive_defensor*>(dp2.get())->set_robot_to_obstacle(1);
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> defensor(new Robot_behavior::Defensor(ai_data_));
+    std::shared_ptr<robot_behavior::RobotBehavior> defensor(new robot_behavior::Defensor(ai_data_));
 
     assign_behavior(getGoalie(), goalie);
 

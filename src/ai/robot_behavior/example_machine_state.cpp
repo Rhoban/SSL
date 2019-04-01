@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Example_machine_state::Example_machine_state(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data)), machine(ai_data, ai_data)
@@ -64,7 +64,7 @@ void Example_machine_state::update(double time, const ai::Robot& robot, const ai
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   machine.run();
 
@@ -86,15 +86,15 @@ Example_machine_state::~Example_machine_state()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Example_machine_state::get_annotations() const
+rhoban_ssl::annotations::Annotations Example_machine_state::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower->getAnnotations();
 }
 
 bool Example_machine_state::is_closed_to_the_ball() const
 {
-  DEBUG("is_closed fcttt" << (normSquare(this->linear_position() - this->ballPosition()) < 0.05));
-  return normSquare(this->linear_position() - this->ballPosition()) < 0.05;
+  DEBUG("is_closed fcttt" << (normSquare(this->linearPosition() - this->ballPosition()) < 0.05));
+  return normSquare(this->linearPosition() - this->ballPosition()) < 0.05;
 };
 
 }  // namespace Robot_behavior

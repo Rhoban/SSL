@@ -22,7 +22,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 #define PERIOD 10.0
 
@@ -44,7 +44,7 @@ void Test_velocity_consign::update(double time, const ai::Robot& robot, const ai
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 }
 
 Control Test_velocity_consign::control() const
@@ -59,11 +59,11 @@ Test_velocity_consign::~Test_velocity_consign()
 {
 }
 
-rhoban_ssl::annotations::Annotations Test_velocity_consign::get_annotations() const
+rhoban_ssl::annotations::Annotations Test_velocity_consign::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addArrow(linear_position(), linear_position() + linear_velocity, "blue");
-  annotations.addCircle(linear_position(), std::fabs(angular_velocity.value()), "blue");
+  annotations.addArrow(linearPosition(), linearPosition() + linear_velocity, "blue");
+  annotations.addCircle(linearPosition(), std::fabs(angular_velocity.value()), "blue");
   return annotations;
 }
 

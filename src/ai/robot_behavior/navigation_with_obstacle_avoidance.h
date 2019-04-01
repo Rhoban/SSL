@@ -26,7 +26,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 /*
  * This is an implementation of the article :
@@ -75,7 +75,7 @@ private:
   void convert_cycle_direction_to_linear_and_angular_velocity();
 
 public:
-  Navigation_with_obstacle_avoidance(ai::AiData& ai_data, double time, double dt);
+  Navigation_with_obstacle_avoidance(ai::AiData& ai_data_, double time, double dt);
 
 protected:
   void update_control(double time, const ai::Robot& robot, const ai::Ball& ball);
@@ -100,7 +100,7 @@ public:
   virtual void set_radius_avoidance_for_the_ball(double radius);
   double get_radius_avoidance_for_the_ball();
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace Robot_behavior

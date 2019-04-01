@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Defensor::Defensor(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
 {
@@ -33,19 +33,19 @@ void Defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
   rhoban_geometry::Point ally_goal_point = allyGoalCenter();
   rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, ai_data_.field.goalWidth / 2.0);
   rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, -ai_data_.field.goalWidth / 2.0);
 
   Vector2d ball_goal_vector = ally_goal_point - ballPosition();
   Vector2d ball_robot_vector = robot_position - ballPosition();
@@ -96,9 +96,9 @@ Defensor::~Defensor()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Defensor::get_annotations() const
+rhoban_ssl::annotations::Annotations Defensor::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower->getAnnotations();
 }
 
 }  // namespace Robot_behavior

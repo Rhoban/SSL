@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
@@ -56,7 +56,7 @@ public:
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see ai::AiData
    */
-  GoCorner(ai::AiData& ai_data);
+  GoCorner(ai::AiData& ai_data_);
 
   /**
    * @brief Set the position of the robot in the target_corner_.
@@ -78,7 +78,7 @@ public:
    * The class don't draw any annotations.
    * The follower draw annotation.
    */
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
    * @brief Destructor.

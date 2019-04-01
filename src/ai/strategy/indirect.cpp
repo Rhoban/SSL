@@ -76,7 +76,7 @@ void Indirect::update(double time)
 }
 
 void Indirect::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   assert(getPlayerIds().size() == 2);
 
@@ -98,8 +98,8 @@ void Indirect::assignBehaviorToRobots(
     if (not(behaviors_are_assigned_))
     {
       assign_behavior(wait_pass,
-                      std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data_)));
-      pass_behavior_ = std::shared_ptr<Robot_behavior::Pass_dribbler>(new Robot_behavior::Pass_dribbler(ai_data_));
+                      std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea(ai_data_)));
+      pass_behavior_ = std::shared_ptr<robot_behavior::Pass_dribbler>(new robot_behavior::Pass_dribbler(ai_data_));
       pass_behavior_->declare_point_to_pass(
           getRobot(wait_pass, vision::Team::Ally).getMovement().linearPosition(time));
       assign_behavior(pass, pass_behavior_);
@@ -116,9 +116,9 @@ void Indirect::assignBehaviorToRobots(
   else if (state_ == 1)
   {
     // DEBUG("STATE "  << state);
-    assign_behavior(wait_pass, std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_)));
+    assign_behavior(wait_pass, std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_)));
 
-    std::shared_ptr<Robot_behavior::RobotFollower> support(new Robot_behavior::RobotFollower(ai_data_));
+    std::shared_ptr<robot_behavior::RobotFollower> support(new robot_behavior::RobotFollower(ai_data_));
     support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), vision::Team::Ally);
     assign_behavior(pass, support);
   }

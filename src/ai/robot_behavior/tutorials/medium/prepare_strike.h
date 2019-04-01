@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 /** Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
@@ -36,13 +36,13 @@ private:
   rhoban_ssl::annotations::Annotations annotations;
 
 public:
-  Intermediate_Prepare_strike(ai::AiData& ai_data);
+  Intermediate_Prepare_strike(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Intermediate_Prepare_strike();
 };

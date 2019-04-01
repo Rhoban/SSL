@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class PositionFollower : public ConsignFollower
 {
@@ -35,7 +35,7 @@ private:
   RobotControlWithPositionFollowing robot_control;
 
 public:
-  PositionFollower(ai::AiData& ai_data, double time, double dt);
+  PositionFollower(ai::AiData& ai_data_, double time, double dt);
 
   void set_translation_pid(double kp, double ki, double kd);
   void set_orientation_pid(double kp, double ki, double kd);
@@ -52,7 +52,7 @@ public:
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace Robot_behavior

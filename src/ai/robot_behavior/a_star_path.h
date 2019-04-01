@@ -26,7 +26,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 /*
  * This is an implementation of the article :
@@ -41,7 +41,7 @@ private:
   ContinuousAngle target_angle;
 
 public:
-  A_star_path(ai::AiData& ai_data, double time, double dt);
+  A_star_path(ai::AiData& ai_data_, double time, double dt);
 
 protected:
   void update_control(double time, const ai::Robot& robot, const ai::Ball& ball);

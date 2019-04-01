@@ -82,13 +82,13 @@ private:
   machine_state_infrastructure::MachineState machine_;
 
   bool behaviors_are_assigned_;
-  std::shared_ptr<Robot_behavior::StrikerAi> striker_behavior_;
-  std::shared_ptr<Robot_behavior::SearchShootArea> search_behavior_;
+  std::shared_ptr<robot_behavior::StrikerAi> striker_behavior_;
+  std::shared_ptr<robot_behavior::SearchShootArea> search_behavior_;
   // std::shared_ptr<Robot_behavior::Pass> pass_behavior;
   // std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
   // std::shared_ptr<Robot_behavior::SlowStriker> pass_behavior;
-  std::shared_ptr<Robot_behavior::Striker> pass_behavior_;
-  std::shared_ptr<Robot_behavior::WaitPass> wait_pass_behavior_;
+  std::shared_ptr<robot_behavior::Striker> pass_behavior_;
+  std::shared_ptr<robot_behavior::WaitPass> wait_pass_behavior_;
 
   double seuil_fgbm_;  // fgbm = find_goal_best_move
   double fgbm_score_;
@@ -119,7 +119,7 @@ public:
   virtual void update(double time);
 
   virtual void assignBehaviorToRobots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
   getStartingPositions(int number_of_avalaible_robots);

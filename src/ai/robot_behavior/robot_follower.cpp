@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 RobotFollower::RobotFollower(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
@@ -38,7 +38,7 @@ void RobotFollower::update(double time, const ai::Robot& robot, const ai::Ball& 
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position

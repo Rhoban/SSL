@@ -169,13 +169,13 @@ void Manager::updateCurrentStrategies(double time)
   }
 }
 
-void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<Robot_behavior::RobotBehavior> >& robot_behaviors,
+void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> >& robot_behaviors,
                                         double time, double dt)
 {
   for (const std::string& name : current_strategy_names_)
   {
     getStrategy(name).assignBehaviorToRobots(
-        [&](int id, std::shared_ptr<Robot_behavior::RobotBehavior> behavior) {
+        [&](int id, std::shared_ptr<robot_behavior::RobotBehavior> behavior) {
 #ifndef NDEBUG
           bool id_is_present = false;
           for (int robot_id : this->getStrategy(name).getPlayerIds())

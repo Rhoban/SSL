@@ -110,7 +110,7 @@ public:
   virtual void updateStrategies(double time);
   virtual void updateCurrentStrategies(double time);
 
-  virtual void assignBehaviorToRobots(std::map<int, std::shared_ptr<Robot_behavior::RobotBehavior>>& robot_behaviors,
+  virtual void assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior>>& robot_behaviors,
                                          double time, double dt);
 
   void changeAllyAndOpponentGoalieId(int blue_goalie_id, int yellow_goalie_id);

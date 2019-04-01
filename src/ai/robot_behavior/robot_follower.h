@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class RobotFollower : public RobotBehavior
 {
@@ -38,7 +38,7 @@ private:
   ConsignFollower* follower;
 
 public:
-  RobotFollower(ai::AiData& ai_data);
+  RobotFollower(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

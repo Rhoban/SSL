@@ -142,7 +142,7 @@ void Union::resume(double time)
 }
 
 void Union::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (strategy_with_goal_)
   {

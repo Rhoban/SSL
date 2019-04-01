@@ -88,7 +88,7 @@ void IndirectLob::update(double time)
 }
 
 void IndirectLob::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned_))
   {
@@ -101,18 +101,18 @@ void IndirectLob::assignBehaviorToRobots(
     if (state_ == 0)
     {
       assign_behavior(wait_pass,
-                      std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data_)));
+                      std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea(ai_data_)));
 
-      std::shared_ptr<Robot_behavior::Pass> pass_behavior(new Robot_behavior::Pass(ai_data_));
+      std::shared_ptr<robot_behavior::Pass> pass_behavior(new robot_behavior::Pass(ai_data_));
       pass_behavior->declare_robot_to_pass(wait_pass, vision::Team::Ally);
       assign_behavior(pass, pass_behavior);
       std::cout << "stat aaaaaaaaaa " << state_ << '\n';
     }
     else
     {
-      assign_behavior(wait_pass, std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_)));
+      assign_behavior(wait_pass, std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_)));
 
-      std::shared_ptr<Robot_behavior::RobotFollower> support(new Robot_behavior::RobotFollower(ai_data_));
+      std::shared_ptr<robot_behavior::RobotFollower> support(new robot_behavior::RobotFollower(ai_data_));
       support->declare_robot_to_follow(wait_pass, Vector2d(0.5, 0.0), vision::Team::Ally);
       assign_behavior(pass, support);
       std::cout << "stat bbbbbbbb " << state_ << '\n';

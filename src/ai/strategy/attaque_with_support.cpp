@@ -25,8 +25,8 @@ namespace strategy
 {
 AttaqueWithSupport::AttaqueWithSupport(ai::AiData& ai_data)
   : Strategy(ai_data)
-  , support_(std::shared_ptr<Robot_behavior::RobotFollower>(new Robot_behavior::RobotFollower(ai_data)))
-  , pass_(std::shared_ptr<Robot_behavior::Pass>(new Robot_behavior::Pass(ai_data)))
+  , support_(std::shared_ptr<robot_behavior::RobotFollower>(new robot_behavior::RobotFollower(ai_data)))
+  , pass_(std::shared_ptr<robot_behavior::Pass>(new robot_behavior::Pass(ai_data)))
 
 {
 }
@@ -65,7 +65,7 @@ void AttaqueWithSupport::start(double time)
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
 
-  striker_ = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
 }
 void AttaqueWithSupport::stop(double time)
 {
@@ -79,7 +79,7 @@ void AttaqueWithSupport::update(double time)
 }
 
 void AttaqueWithSupport::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned_))
   {

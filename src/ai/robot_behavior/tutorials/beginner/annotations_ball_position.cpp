@@ -21,7 +21,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Begginer_annotations_ball_position::Begginer_annotations_ball_position(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
@@ -30,7 +30,7 @@ Begginer_annotations_ball_position::Begginer_annotations_ball_position(ai::AiDat
 void Begginer_annotations_ball_position::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // Do not remove this line.
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Clear all annotations write before
   annotations.clear();
   // Add an annotations
@@ -46,7 +46,7 @@ Begginer_annotations_ball_position::~Begginer_annotations_ball_position()
 {
 }
 
-rhoban_ssl::annotations::Annotations Begginer_annotations_ball_position::get_annotations() const
+rhoban_ssl::annotations::Annotations Begginer_annotations_ball_position::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);

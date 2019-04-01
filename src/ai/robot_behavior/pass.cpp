@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Pass::Pass(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
@@ -37,7 +37,7 @@ void Pass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
@@ -94,9 +94,9 @@ Pass::~Pass()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Pass::get_annotations() const
+rhoban_ssl::annotations::Annotations Pass::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower->getAnnotations();
 }
 
 }  // namespace Robot_behavior

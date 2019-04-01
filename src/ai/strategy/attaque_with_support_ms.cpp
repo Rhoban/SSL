@@ -27,8 +27,8 @@ namespace strategy
 AttaqueWithSupportMs::AttaqueWithSupportMs(ai::AiData& ai_data)
   : Strategy(ai_data)
   , machine_(ai_data, ai_data)
-  , striker_behavior_(std::shared_ptr<Robot_behavior::StrikerAi>(new Robot_behavior::StrikerAi(ai_data)))
-  , search_behavior_(std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data)))
+  , striker_behavior_(std::shared_ptr<robot_behavior::StrikerAi>(new robot_behavior::StrikerAi(ai_data)))
+  , search_behavior_(std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea(ai_data)))
   ,
   // pass_behavior(std::shared_ptr<Robot_behavior::Pass>(
   //   new Robot_behavior::Pass(ai_data)
@@ -39,8 +39,8 @@ AttaqueWithSupportMs::AttaqueWithSupportMs(ai::AiData& ai_data)
   // pass_behavior(std::shared_ptr<Robot_behavior::SlowStriker>(
   //   new Robot_behavior::SlowStriker(ai_data)
   // )),
-  pass_behavior_(std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data)))
-  , wait_pass_behavior_(std::shared_ptr<Robot_behavior::WaitPass>(new Robot_behavior::WaitPass(ai_data)))
+  pass_behavior_(std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data)))
+  , wait_pass_behavior_(std::shared_ptr<robot_behavior::WaitPass>(new robot_behavior::WaitPass(ai_data)))
   , seuil_fgbm_(0.25)
   , fgbm_score_(1)
   , tempo_(2)
@@ -200,7 +200,7 @@ void AttaqueWithSupportMs::update(double time)
 }
 
 void AttaqueWithSupportMs::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // we assign now all the other behavior
   assert(getPlayerIds().size() == 2);

@@ -55,7 +55,7 @@ public:
   void updateStartingPositions();
 
   virtual void assignBehaviorToRobots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   void setPositions(const std::vector<int>& robot_affectations,
                      const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns,

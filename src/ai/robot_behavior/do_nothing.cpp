@@ -21,7 +21,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 DoNothing::DoNothing(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {

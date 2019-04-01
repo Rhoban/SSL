@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Obstructor : public RobotBehavior
 {
@@ -36,14 +36,14 @@ private:
   ConsignFollower* follower;
 
 public:
-  Obstructor(ai::AiData& ai_data);
+  Obstructor(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
   void declare_robot_to_obstruct(int robot_id, vision::Team team = vision::Team::Opponent);
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual ~Obstructor();
 };
 

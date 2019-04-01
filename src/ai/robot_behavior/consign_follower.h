@@ -23,12 +23,12 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class ConsignFollower : public RobotBehavior
 {
 public:
-  ConsignFollower(ai::AiData& ai_data);
+  ConsignFollower(ai::AiData& ai_data_);
 
   virtual void set_following_position(const rhoban_geometry::Point& position_to_follow,
                                       const ContinuousAngle& angle) = 0;

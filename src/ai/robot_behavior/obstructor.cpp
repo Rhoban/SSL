@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Obstructor::Obstructor(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
@@ -37,7 +37,7 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
@@ -48,13 +48,13 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
   // const ai::Robot & robot = robot_table.at(robot_id);
 
   assert(robot_to_obstruct_id != -1);
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
   rhoban_geometry::Point ally_goal_point = allyGoalCenter();
   rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, ai_data_.field.goalWidth / 2.0);
   rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, -ai_data_.field.goalWidth / 2.0);
 
   const ai::Robot& robot_to_obstruct = getRobot(robot_to_obstruct_id, robot_to_obstruct_team);
   point_to_obstruct = robot_to_obstruct.getMovement().linearPosition(time);
@@ -84,7 +84,7 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
   }
 
   rhoban_geometry::Point target_position = rhoban_geometry::centerOfConeIncircle(
-      point_to_obstruct, left_post_position, right_post_position, ai_data.constants.robot_radius);
+      point_to_obstruct, left_post_position, right_post_position, ai_data_.constants.robot_radius);
 
   // Vector2d target_position = Vector2d(ball_position()) + ball_goal_vector * (target_radius_from_ball);
 
@@ -122,9 +122,9 @@ Obstructor::~Obstructor()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Obstructor::get_annotations() const
+rhoban_ssl::annotations::Annotations Obstructor::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower->getAnnotations();
 }
 
 }  // namespace Robot_behavior

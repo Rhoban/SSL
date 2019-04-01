@@ -22,7 +22,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Test_kicker::Test_kicker(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
@@ -33,7 +33,7 @@ void Test_kicker::update(double time, const ai::Robot& robot, const ai::Ball& ba
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   annotations.clear();
 
@@ -58,11 +58,11 @@ Test_kicker::~Test_kicker()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Test_kicker::get_annotations() const
+rhoban_ssl::annotations::Annotations Test_kicker::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(follower->getAnnotations());
   return annotations;
 }
 

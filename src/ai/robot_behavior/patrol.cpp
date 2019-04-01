@@ -22,7 +22,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Patrol::Patrol(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
@@ -40,11 +40,11 @@ void Patrol::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   rhoban_geometry::Point target_position;
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
   ContinuousAngle target_rotation;
 
@@ -287,9 +287,9 @@ Patrol* Patrol::test_SE_rotation_for_pid(ai::AiData& ai_data)
   return res;
 }
 
-rhoban_ssl::annotations::Annotations Patrol::get_annotations() const
+rhoban_ssl::annotations::Annotations Patrol::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower->getAnnotations();
 }
 
 void Patrol::see_the_ball(bool value)

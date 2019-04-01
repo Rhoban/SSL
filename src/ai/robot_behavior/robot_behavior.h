@@ -29,31 +29,31 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class RobotBehavior : public GameInformations
 {
 protected:
-  const ai::Robot* robot_ptr;
-  double birthday;
-  double lastUpdate;
-  std::string name;
+  const ai::Robot* robot_ptr_;
+  double birthday_;
+  double last_update_;
+  std::string name_;
 
-  Vector2d robot_linear_position;
-  ContinuousAngle robot_angular_position;
-  Vector2d robot_linear_velocity;
-  ContinuousAngle robot_angular_velocity;
+  Vector2d robot_linear_position_;
+  ContinuousAngle robot_angular_position_;
+  Vector2d robot_linear_velocity_;
+  ContinuousAngle robot_angular_velocity_;
 
-  ai::AiData& ai_data;
+  ai::AiData& ai_data_;
 
 public:
   RobotBehavior(ai::AiData& ia_data);
 
   double age() const;
-  bool is_born() const;
-  void set_birthday(double birthday);
+  bool isBorn() const;
+  void setBirthday(double birthday);
 
-  void update_time_and_position(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void updateTimeAndPosition(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball) = 0;
   virtual Control control() const = 0;
@@ -74,13 +74,13 @@ public:
   //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
   //      return annotations;
   //  }
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   const ai::Robot& robot() const;
 
-  rhoban_geometry::Point linear_position() const;
-  ContinuousAngle angular_position() const;
-  bool is_goalie() const;
+  rhoban_geometry::Point linearPosition() const;
+  ContinuousAngle angularPosition() const;
+  bool isGoalie() const;
 
   bool infraRed() const;
 };

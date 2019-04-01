@@ -65,7 +65,7 @@ void StrikerV2::start(double time)
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
 
-  striker_ = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
 }
 void StrikerV2::stop(double time)
 {
@@ -79,7 +79,7 @@ void StrikerV2::update(double time)
 }
 
 void StrikerV2::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned_))
   {

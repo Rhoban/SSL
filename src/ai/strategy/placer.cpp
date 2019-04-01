@@ -57,26 +57,26 @@ void Placer::stop(double time)
 }
 
 void Placer::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (!behavior_has_been_assigned)
   {
     if (have_to_manage_the_goalie())
     {
-      Robot_behavior::ConsignFollower* follower =
-          Robot_behavior::Factory::fixed_consign_follower(ai_data_, goalie_linear_position_, goalie_angular_position_);
+      robot_behavior::ConsignFollower* follower =
+          robot_behavior::Factory::fixed_consign_follower(ai_data_, goalie_linear_position_, goalie_angular_position_);
       follower->avoid_the_ball(true);
-      assign_behavior(getGoalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
+      assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(follower));
     }
 
     int nb_players = getPlayerIds().size();
     for (int i = 0; i < nb_players; i++)
     {
       int id = playerId(i);
-      Robot_behavior::ConsignFollower* follower = Robot_behavior::Factory::fixed_consign_follower(
+      robot_behavior::ConsignFollower* follower = robot_behavior::Factory::fixed_consign_follower(
           ai_data_, player_positions_[id].first, player_positions_[id].second);
       follower->avoid_the_ball(true);
-      assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
+      assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(follower));
     }
     behavior_has_been_assigned = true;
   }

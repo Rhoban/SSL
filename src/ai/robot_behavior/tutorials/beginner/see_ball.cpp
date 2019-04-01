@@ -22,7 +22,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Begginer_see_ball::Begginer_see_ball(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
@@ -33,11 +33,11 @@ void Begginer_see_ball::update(double time, const ai::Robot& robot, const ai::Ba
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
   Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
@@ -61,11 +61,11 @@ Begginer_see_ball::~Begginer_see_ball()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Begginer_see_ball::get_annotations() const
+rhoban_ssl::annotations::Annotations Begginer_see_ball::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(follower->getAnnotations());
   return annotations;
 }
 

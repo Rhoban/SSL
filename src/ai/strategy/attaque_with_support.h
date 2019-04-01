@@ -33,9 +33,9 @@ class AttaqueWithSupport : public Strategy
 {
 private:
   bool behaviors_are_assigned_;
-  std::shared_ptr<Robot_behavior::RobotFollower> support_;
-  std::shared_ptr<Robot_behavior::Pass> pass_;
-  std::shared_ptr<Robot_behavior::Striker> striker_;
+  std::shared_ptr<robot_behavior::RobotFollower> support_;
+  std::shared_ptr<robot_behavior::Pass> pass_;
+  std::shared_ptr<robot_behavior::Striker> striker_;
   std::pair<rhoban_geometry::Point, double> results_;
 
 public:
@@ -54,7 +54,7 @@ public:
   virtual void update(double time);
 
   virtual void assignBehaviorToRobots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
   getStartingPositions(int number_of_avalaible_robots);

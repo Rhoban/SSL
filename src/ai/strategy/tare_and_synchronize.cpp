@@ -81,13 +81,13 @@ void TareAndSynchronize::setTemporalShiftBetweenVision()
 }
 
 void TareAndSynchronize::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   const Movement& movement = ai_data_.robots[vision::Ally][robotId(0)].getMovement();
   if (!halt_behavior_was_assigned_)
   {
     assign_behavior(robotId(0),
-                    std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_)));
+                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
     halt_behavior_was_assigned_ = true;
     return;
   }
@@ -95,7 +95,7 @@ void TareAndSynchronize::assignBehaviorToRobots(
   {
     if (movement.angularVelocity(movement.lastTime()).abs().value() <= 0.05)
     {
-      Robot_behavior::PositionFollower* follower = new Robot_behavior::PositionFollower(ai_data_, time, dt);
+      robot_behavior::PositionFollower* follower = new robot_behavior::PositionFollower(ai_data_, time, dt);
       follower->set_following_position(movement.linearPosition(movement.lastTime()),
                                        movement.angularPosition(movement.lastTime()) + M_PI / 2.0);
       follower->set_translation_pid(ai_data_.constants.p_translation, ai_data_.constants.i_translation,
@@ -107,7 +107,7 @@ void TareAndSynchronize::assignBehaviorToRobots(
                            ai_data_.constants.rotation_acceleration_limit);
 
       ai_time_command_ = time;
-      assign_behavior(robotId(0), std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
+      assign_behavior(robotId(0), std::shared_ptr<robot_behavior::RobotBehavior>(follower));
       move_behavior_was_assigned_ = true;
       return;
     }
@@ -119,7 +119,7 @@ void TareAndSynchronize::assignBehaviorToRobots(
       vision_time_command_ = movement.getSample().time();
       ai_time_associated_to_vision_time_command_ = time;
       assign_behavior(robotId(0),
-                      std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::DoNothing(ai_data_)));
+                      std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
       setTemporalShiftBetweenVision();
       time_is_synchro_ = true;
       return;

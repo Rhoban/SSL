@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 /** Tutorial class to show how to move a robot in the side corner. */
 class Begginer_annotations_ball_position : public RobotBehavior
@@ -34,13 +34,13 @@ private:
   rhoban_ssl::annotations::Annotations annotations;
 
 public:
-  Begginer_annotations_ball_position(ai::AiData& ai_data);
+  Begginer_annotations_ball_position(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Begginer_annotations_ball_position();
 };

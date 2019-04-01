@@ -22,7 +22,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace Beginner
 {
@@ -34,7 +34,7 @@ void Goto_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   annotations.clear();
 
@@ -57,11 +57,11 @@ Goto_ball::~Goto_ball()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Goto_ball::get_annotations() const
+rhoban_ssl::annotations::Annotations Goto_ball::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(follower->getAnnotations());
   return annotations;
 }
 

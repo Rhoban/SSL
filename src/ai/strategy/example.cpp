@@ -74,17 +74,17 @@ void Example::update(double time)
 }
 
 void Example::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned_))
   {
     // We first assign the behhavior of the goalie.
-    assign_behavior(getGoalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Goalie(ai_data_)));
+    assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Goalie(ai_data_)));
 
     // we assign now all the other behavior
     assert(getPlayerIds().size() == 1);
     int id = playerId(0);  // we get the first if in get_player_ids()
-    assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Striker(ai_data_)));
+    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Striker(ai_data_)));
 
     behaviors_are_assigned_ = true;
   }

@@ -41,7 +41,7 @@ public:
   void stop(double time);
 
   void assignBehaviorToRobots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
   virtual ~Halt();
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;

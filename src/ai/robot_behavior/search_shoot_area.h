@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class SearchShootArea : public RobotBehavior
 {
@@ -47,7 +47,7 @@ private:
 public:
   bool well_positioned;
 
-  SearchShootArea(ai::AiData& ai_data);
+  SearchShootArea(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -59,7 +59,7 @@ public:
   void declare_area(rhoban_geometry::Point p1, rhoban_geometry::Point p2);
 
   virtual Control control() const;
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual ~SearchShootArea();
 };
 

@@ -25,10 +25,10 @@ namespace strategy
 {
 Defensive2::Defensive2(ai::AiData& ai_data)
   : Strategy(ai_data)
-  , degageur1_(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
-  , obstructeur1_(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
-  , degageur2_(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
-  , obstructeur2_(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
+  , degageur1_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
+  , obstructeur1_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
+  , degageur2_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
+  , obstructeur2_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
 {
 }
 
@@ -76,7 +76,7 @@ void Defensive2::update(double time)
 }
 
 void Defensive2::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // we assign now all the other behavior
   assert(getPlayerIds().size() == 2);

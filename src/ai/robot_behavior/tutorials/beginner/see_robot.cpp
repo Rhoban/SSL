@@ -22,7 +22,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace Beginner
 {
@@ -37,20 +37,20 @@ void See_Robot::update(double time, const ai::Robot& robot, const ai::Ball& ball
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
-  ContinuousAngle target_rotation = robot.getMovement().angularPosition(ai_data.time);
+  ContinuousAngle target_rotation = robot.getMovement().angularPosition(ai_data_.time);
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to look itself will do nothing.
   if (target_robot_id != robot.id())
   {
     const rhoban_geometry::Point& target_position =
-        getRobot(target_robot_id).getMovement().linearPosition(ai_data.time);
+        getRobot(target_robot_id).getMovement().linearPosition(ai_data_.time);
 
     Vector2d direction = target_position - robot_position;
     target_rotation = vector2angle(direction);
@@ -83,11 +83,11 @@ See_Robot::~See_Robot()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations See_Robot::get_annotations() const
+rhoban_ssl::annotations::Annotations See_Robot::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(follower->getAnnotations());
   return annotations;
 }
 

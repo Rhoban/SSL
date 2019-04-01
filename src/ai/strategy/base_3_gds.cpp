@@ -75,19 +75,19 @@ void Base3Gds::update(double time)
 }
 
 void Base3Gds::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned_))
   {
     // We first assign the behhavior of the goalie.
-    assign_behavior(getGoalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Goalie(ai_data_)));
+    assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Goalie(ai_data_)));
 
     // we assign now all the other behavior
     assert(getPlayerIds().size() == 3);
 
-    assign_behavior(playerId(0), std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Striker(ai_data_)));
+    assign_behavior(playerId(0), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Striker(ai_data_)));
     assign_behavior(playerId(1),
-                    std::shared_ptr<Robot_behavior::RobotBehavior>(new Robot_behavior::Defensor(ai_data_)));
+                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Defensor(ai_data_)));
 
     behaviors_are_assigned_ = true;
   }

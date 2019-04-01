@@ -25,8 +25,8 @@ namespace strategy
 {
 Defensive::Defensive(ai::AiData& ai_data)
   : Strategy(ai_data)
-  , degageur_(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
-  , obstructeur_(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
+  , degageur_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
+  , obstructeur_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
 {
 }
 
@@ -74,7 +74,7 @@ void Defensive::update(double time)
 }
 
 void Defensive::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // we assign now all the other behavior
   assert(getPlayerIds().size() == 1);

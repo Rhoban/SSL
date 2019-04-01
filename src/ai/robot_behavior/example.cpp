@@ -22,7 +22,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 #define PERIOD 10.0
 
@@ -35,11 +35,11 @@ void Example::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   annotations.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
   // On ajoute un text à la position du robot.
   // annotations.addText("Exemple :)", robot_position, "blue");
@@ -80,11 +80,11 @@ Example::~Example()
   delete follower;
 }
 
-rhoban_ssl::annotations::Annotations Example::get_annotations() const
+rhoban_ssl::annotations::Annotations Example::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  annotations.addAnnotations(follower->getAnnotations());
   return annotations;
 }
 

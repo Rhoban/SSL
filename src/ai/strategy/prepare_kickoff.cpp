@@ -124,7 +124,7 @@ void PrepareKickoff::update(double time)
 }
 
 void PrepareKickoff::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (is_kicking_)
   {

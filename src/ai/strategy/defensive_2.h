@@ -31,10 +31,10 @@ class Defensive2 : public Strategy
 {
 private:
   bool behaviors_are_assigned_;
-  std::shared_ptr<Robot_behavior::Degageur> degageur1_;
-  std::shared_ptr<Robot_behavior::Obstructor> obstructeur1_;
-  std::shared_ptr<Robot_behavior::Degageur> degageur2_;
-  std::shared_ptr<Robot_behavior::Obstructor> obstructeur2_;
+  std::shared_ptr<robot_behavior::Degageur> degageur1_;
+  std::shared_ptr<robot_behavior::Obstructor> obstructeur1_;
+  std::shared_ptr<robot_behavior::Degageur> degageur2_;
+  std::shared_ptr<robot_behavior::Obstructor> obstructeur2_;
 
 public:
   Defensive2(ai::AiData& ai_data);
@@ -52,7 +52,7 @@ public:
   virtual void update(double time);
 
   virtual void assignBehaviorToRobots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
   getStartingPositions(int number_of_avalaible_robots);

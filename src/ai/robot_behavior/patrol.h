@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Patrol : public RobotBehavior
 {
@@ -39,7 +39,7 @@ private:
   bool reverse_circuit;
 
 public:
-  Patrol(ai::AiData& ai_data);
+  Patrol(ai::AiData& ai_data_);
 
   void see_the_ball(bool value);
 
@@ -47,31 +47,31 @@ public:
 
   void set_reverse(bool reverse_circuit);
 
-  static Patrol* two_way_trip(ai::AiData& ai_data);
-  static Patrol* two_way_trip_on_width(ai::AiData& ai_data, bool ally_side);
-  static Patrol* two_way_trip_on_border(ai::AiData& ai_data, bool left);
-  static Patrol* tour_of_the_field(ai::AiData& ai_data, bool reverse_circuit = false);
-  static Patrol* triangle(ai::AiData& ai_data);
-  static Patrol* test_translation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_rotation_for_pid(ai::AiData& ai_data);
+  static Patrol* two_way_trip(ai::AiData& ai_data_);
+  static Patrol* two_way_trip_on_width(ai::AiData& ai_data_, bool ally_side);
+  static Patrol* two_way_trip_on_border(ai::AiData& ai_data_, bool left);
+  static Patrol* tour_of_the_field(ai::AiData& ai_data_, bool reverse_circuit = false);
+  static Patrol* triangle(ai::AiData& ai_data_);
+  static Patrol* test_translation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_rotation_for_pid(ai::AiData& ai_data_);
 
-  static Patrol* test_NW_rotation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_NE_rotation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_SW_rotation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_SE_rotation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_NW_rotation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_NE_rotation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_SW_rotation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_SE_rotation_for_pid(ai::AiData& ai_data_);
 
-  static Patrol* test_NW_translation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_NE_translation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_SW_translation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_SE_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_NW_translation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_NE_translation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_SW_translation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_SE_translation_for_pid(ai::AiData& ai_data_);
 
-  static Patrol* test_N_translation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_E_translation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_W_translation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_S_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_N_translation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_E_translation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_W_translation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_S_translation_for_pid(ai::AiData& ai_data_);
 
-  static Patrol* test_SW_NW_translation_for_pid(ai::AiData& ai_data);
-  static Patrol* test_NW_SE_translation_for_pid(ai::AiData& ai_data);
+  static Patrol* test_SW_NW_translation_for_pid(ai::AiData& ai_data_);
+  static Patrol* test_NW_SE_translation_for_pid(ai::AiData& ai_data_);
 
   void set_traject(const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& traject);
   void set_traject(const std::vector<rhoban_geometry::Point>& traject);
@@ -79,7 +79,7 @@ public:
   virtual Control control() const;
   void set_waiting_time(double time);
 
-  rhoban_ssl::annotations::Annotations get_annotations() const;
+  rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Patrol();
 };

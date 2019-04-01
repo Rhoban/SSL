@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Begginer_robot_have_ball::Begginer_robot_have_ball(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
@@ -31,7 +31,7 @@ Begginer_robot_have_ball::Begginer_robot_have_ball(ai::AiData& ai_data) : RobotB
 
 void Begginer_robot_have_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   // Find the ally and the opponent closest to the ball
   int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
@@ -50,18 +50,18 @@ void Begginer_robot_have_ball::update(double time, const ai::Robot& robot, const
   // Find the robot that have the ball.
   if (opponent_have_ball)
   {
-    annotations.addCross(opponent_closest.getMovement().linearPosition(ai_data.time), "blue", false);
+    annotations.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
   else if (ally_have_ball)
   {
-    annotations.addCross(ally_closest.getMovement().linearPosition(ai_data.time), "blue", false);
+    annotations.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
   else
   {
     annotations.addCross(ballPosition(), "red", false);
   }
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 }
 
 Control Begginer_robot_have_ball::control() const
@@ -73,7 +73,7 @@ Begginer_robot_have_ball::~Begginer_robot_have_ball()
 {
 }
 
-rhoban_ssl::annotations::Annotations Begginer_robot_have_ball::get_annotations() const
+rhoban_ssl::annotations::Annotations Begginer_robot_have_ball::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations);

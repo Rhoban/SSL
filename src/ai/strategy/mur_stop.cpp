@@ -76,13 +76,13 @@ void MurStop::update(double time)
 }
 
 void MurStop::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<Robot_behavior::RobotBehavior> mur1(new Robot_behavior::Mur_def_kick(ai_data_, 1));
-  static_cast<Robot_behavior::Mur_def_kick*>(mur1.get())->declare_mur_robot_id(0, 2);
+  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::Mur_def_kick(ai_data_, 1));
+  static_cast<robot_behavior::Mur_def_kick*>(mur1.get())->declare_mur_robot_id(0, 2);
 
-  std::shared_ptr<Robot_behavior::RobotBehavior> mur2(new Robot_behavior::Mur_def_kick(ai_data_, 1));
-  static_cast<Robot_behavior::Mur_def_kick*>(mur2.get())->declare_mur_robot_id(1, 2);
+  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::Mur_def_kick(ai_data_, 1));
+  static_cast<robot_behavior::Mur_def_kick*>(mur2.get())->declare_mur_robot_id(1, 2);
 
   if (not(behaviors_are_assigned_))
   {

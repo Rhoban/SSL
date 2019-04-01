@@ -26,7 +26,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 ConsignFollower* Factory::fixed_consign_follower(ai::AiData& ai_data, const rhoban_geometry::Point& position,
                                                  const ContinuousAngle& angle, bool ignore_the_ball)

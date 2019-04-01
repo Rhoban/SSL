@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Example_machine_state : public RobotBehavior
 {
@@ -66,13 +66,13 @@ private:
   machine_state_infrastructure::MachineState machine;
 
 public:
-  Example_machine_state(ai::AiData& ai_data);
+  Example_machine_state(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Example_machine_state();
 };

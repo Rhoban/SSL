@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Degageur : public RobotBehavior
 {
@@ -37,7 +37,7 @@ private:
   ConsignFollower* follower;
 
 public:
-  Degageur(ai::AiData& ai_data);
+  Degageur(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   void declare_point_to_pass(rhoban_geometry::Point point);
@@ -45,7 +45,7 @@ public:
 
   virtual Control control() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Degageur();
 };

@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Test_velocity_consign : public RobotBehavior
 {
@@ -40,25 +40,25 @@ private:
   ContinuousAngle angular_velocity;
 
 public:
-  Test_velocity_consign(ai::AiData& ai_data);
+  Test_velocity_consign(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  static Test_velocity_consign* get_W_movement(ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_E_movement(ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_N_movement(ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_S_movement(ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_NW_movement(ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_NE_movement(ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_SW_movement(ai::AiData& ai_data, double velocity);
-  static Test_velocity_consign* get_SE_movement(ai::AiData& ai_data, double velocity);
+  static Test_velocity_consign* get_W_movement(ai::AiData& ai_data_, double velocity);
+  static Test_velocity_consign* get_E_movement(ai::AiData& ai_data_, double velocity);
+  static Test_velocity_consign* get_N_movement(ai::AiData& ai_data_, double velocity);
+  static Test_velocity_consign* get_S_movement(ai::AiData& ai_data_, double velocity);
+  static Test_velocity_consign* get_NW_movement(ai::AiData& ai_data_, double velocity);
+  static Test_velocity_consign* get_NE_movement(ai::AiData& ai_data_, double velocity);
+  static Test_velocity_consign* get_SW_movement(ai::AiData& ai_data_, double velocity);
+  static Test_velocity_consign* get_SE_movement(ai::AiData& ai_data_, double velocity);
 
   void set_linear_velocity(const Vector2d& velocity);
   void set_angular_velocity(const ContinuousAngle& angle);
 
   virtual Control control() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Test_velocity_consign();
 };

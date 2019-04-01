@@ -92,14 +92,14 @@ void Mur_2::update(double time)
 }
 
 void Mur_2::assignBehaviorToRobots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<Robot_behavior::RobotBehavior> mur1(new Robot_behavior::Mur_defensor(ai_data_, 1));
-  static_cast<Robot_behavior::Mur_defensor*>(mur1.get())->declare_mur_robot_id(0, 2);
+  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::Mur_defensor(ai_data_, 1));
+  static_cast<robot_behavior::Mur_defensor*>(mur1.get())->declare_mur_robot_id(0, 2);
 
-  std::shared_ptr<Robot_behavior::RobotBehavior> mur2(new Robot_behavior::Mur_defensor(ai_data_, 1));
-  static_cast<Robot_behavior::Mur_defensor*>(mur2.get())->declare_mur_robot_id(1, 2);
-  std::shared_ptr<Robot_behavior::RobotBehavior> deg1(new Robot_behavior::Degageur(ai_data_));
+  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::Mur_defensor(ai_data_, 1));
+  static_cast<robot_behavior::Mur_defensor*>(mur2.get())->declare_mur_robot_id(1, 2);
+  std::shared_ptr<robot_behavior::RobotBehavior> deg1(new robot_behavior::Degageur(ai_data_));
 
   if (not(behaviors_are_assigned_))
   {

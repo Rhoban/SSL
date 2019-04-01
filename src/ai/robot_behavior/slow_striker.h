@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class SlowStriker : public RobotBehavior
 {
@@ -36,13 +36,13 @@ private:
   vision::Team robot_to_pass_team;
 
 public:
-  SlowStriker(ai::AiData& ai_data);
+  SlowStriker(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   void declare_point_to_strik(rhoban_geometry::Point point);
   void declare_robot_to_pass(int id, vision::Team team = vision::Team::Ally);
   virtual ~SlowStriker();

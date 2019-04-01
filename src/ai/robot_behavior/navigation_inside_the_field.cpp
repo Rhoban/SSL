@@ -30,7 +30,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 Navigation_inside_the_field::Navigation_inside_the_field(ai::AiData& ai_data, double time, double dt)
   : ConsignFollower(ai_data)
@@ -56,17 +56,17 @@ void Navigation_inside_the_field::update(double time, const ai::Robot& robot, co
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   update_control(time, robot, ball);
 }
 
 void Navigation_inside_the_field::update_control(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
-  if (ai_data.force_ball_avoidance)
+  if (ai_data_.force_ball_avoidance)
   {
     this->position_follower.set_radius_avoidance_for_the_ball(getRobotRadius() + getBallRadius() +
-                                                              ai_data.constants.rules_avoidance_distance);
+                                                              ai_data_.constants.rules_avoidance_distance);
     this->avoid_the_ball(true);
   }
   else
@@ -95,7 +95,7 @@ void Navigation_inside_the_field::update_control(double time, const ai::Robot& r
     Box opponent_penalty_large = opponentPenaltyArea().increase(getRobotRadius() * radius_margin_factor);
     Box ally_penalty_large = allyPenaltyArea().increase(getRobotRadius() * radius_margin_factor);
 
-    rhoban_geometry::Point robot_position = linear_position();
+    rhoban_geometry::Point robot_position = linearPosition();
     double error = getRobotRadius() * radius_margin_factor;
 
     if (opponent_penalty.is_inside(robot_position))
@@ -103,7 +103,7 @@ void Navigation_inside_the_field::update_control(double time, const ai::Robot& r
       // If we're in their penalty
       deviation_position = rhoban_geometry::Point(opponent_penalty.getSW().getX() - error, robot_position.getY());
     }
-    else if (not(is_goalie()) and ally_penalty.is_inside(robot_position))
+    else if (not(isGoalie()) and ally_penalty.is_inside(robot_position))
     {
       // If we're in our penalty
       deviation_position = rhoban_geometry::Point(ally_penalty.getNE().getX() + error, robot_position.getY());
@@ -121,7 +121,7 @@ void Navigation_inside_the_field::update_control(double time, const ai::Robot& r
         cropped_field.closestSegmentIntersection(robot_position, vector2point(target_position), deviation_position);
       }
       // Here, deviation_position should be inside the field, but it could still be in a penalty area.
-      if (not(is_goalie()) and ally_penalty.is_inside(deviation_position))
+      if (not(isGoalie()) and ally_penalty.is_inside(deviation_position))
       {
         ally_penalty_large.closestSegmentIntersection(robot_position, vector2point(deviation_position),
                                                         deviation_position);
@@ -141,7 +141,7 @@ void Navigation_inside_the_field::update_control(double time, const ai::Robot& r
       }
     }
 
-    if ((not(is_goalie()) && ally_penalty.is_inside(deviation_position)) ||
+    if ((not(isGoalie()) && ally_penalty.is_inside(deviation_position)) ||
         opponent_penalty.is_inside(deviation_position))
     {
       DEBUG("Damn, deviation_position is still inside a penalty (this is a bug)...");
@@ -195,14 +195,14 @@ void Navigation_inside_the_field::set_limits(double translation_velocity_limit, 
                                rotation_acceleration_limit);
 }
 
-rhoban_ssl::annotations::Annotations Navigation_inside_the_field::get_annotations() const
+rhoban_ssl::annotations::Annotations Navigation_inside_the_field::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   if (normSquare(deviation_position - target_position) > 0.001)
   {
     annotations.addArrow(deviation_position, target_position, "yellow");
   }
-  annotations.addAnnotations(position_follower.get_annotations());
+  annotations.addAnnotations(position_follower.getAnnotations());
   // annotations.addBox( opponent_penalty_area(), "red" );
   // annotations.addBox( ally_penalty_area(), "red" );
   return annotations;

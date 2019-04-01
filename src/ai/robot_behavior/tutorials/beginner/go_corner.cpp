@@ -21,7 +21,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
@@ -34,7 +34,7 @@ GoCorner::GoCorner(ai::AiData& ai_data)
 void GoCorner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
   const rhoban_geometry::Point& future_position = target_corner_;
@@ -55,11 +55,11 @@ GoCorner::~GoCorner()
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations GoCorner::get_annotations() const
+rhoban_ssl::annotations::Annotations GoCorner::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
-  annotations.addAnnotations(follower_->get_annotations());
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 

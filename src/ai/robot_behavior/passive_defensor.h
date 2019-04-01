@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Passive_defensor : public RobotBehavior
 {
@@ -35,7 +35,7 @@ private:
   double barycenter;
 
 public:
-  Passive_defensor(ai::AiData& ai_data);
+  Passive_defensor(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -45,7 +45,7 @@ public:
 
   virtual Control control() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Passive_defensor();
 };

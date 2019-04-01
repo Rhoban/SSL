@@ -25,7 +25,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 /*
  * This is an implementation of the article :
@@ -47,7 +47,7 @@ private:
   rhoban_ssl::annotations::Annotations annotations;
 
 public:
-  Navigation_inside_the_field(ai::AiData& ai_data, double time, double dt);
+  Navigation_inside_the_field(ai::AiData& ai_data_, double time, double dt);
 
 protected:
   void update_control(double time, const ai::Robot& robot, const ai::Ball& ball);
@@ -69,7 +69,7 @@ public:
   virtual void avoid_opponent(bool value = true);
   virtual void avoidRobot(int id, bool value);
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual void set_radius_avoidance_for_the_ball(double radius);
 };
 };  // namespace Robot_behavior

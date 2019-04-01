@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace Beginner
 {
@@ -36,7 +36,7 @@ private:
   rhoban_ssl::annotations::Annotations annotations;
 
 public:
-  See_Robot(ai::AiData& ai_data, int target_id = 0);
+  See_Robot(ai::AiData& ai_data_, int target_id = 0);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -46,7 +46,7 @@ public:
 
   int get_robot_id_to_see() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~See_Robot();
 };

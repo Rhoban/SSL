@@ -24,7 +24,7 @@
 
 namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Pass : public RobotBehavior
 {
@@ -35,7 +35,7 @@ private:
   ConsignFollower* follower;
 
 public:
-  Pass(ai::AiData& ai_data);
+  Pass(ai::AiData& ai_data_);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   // TODO: portée des variables ?
@@ -43,7 +43,7 @@ public:
 
   virtual Control control() const;
 
-  virtual rhoban_ssl::annotations::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Pass();
 };
