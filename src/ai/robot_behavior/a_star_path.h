@@ -32,16 +32,16 @@ namespace robot_behavior
  * This is an implementation of the article :
  * "Orbital Obstavle Avoidance Algorithm for reliable and on-line mobile robot navigation", Lounis Adouane, LASMEA.
  */
-class A_star_path : public ConsignFollower
+class AStarPath : public ConsignFollower
 {
 private:
-  Navigation_with_obstacle_avoidance navigation;
+  NavigationWithObstacleAvoidance navigation_;
 
-  Vector2d target_position;
-  ContinuousAngle target_angle;
+  Vector2d target_position_;
+  ContinuousAngle target_angle_;
 
 public:
-  A_star_path(ai::AiData& ai_data_, double time, double dt);
+  AStarPath(ai::AiData& ai_data, double time, double dt);
 
 protected:
   void update_control(double time, const ai::Robot& robot, const ai::Ball& ball);
@@ -51,13 +51,13 @@ public:
 
   virtual Control control() const;
 
-  void set_translation_pid(double kp, double ki, double kd);
-  void set_orientation_pid(double kp, double ki, double kd);
+  void setTranslationPid(double kp, double ki, double kd);
+  void setOrientationPid(double kp, double ki, double kd);
 
-  void set_limits(double translation_velocity_limit, double rotation_velocity_limit,
+  void setLimits(double translation_velocity_limit, double rotation_velocity_limit,
                   double translation_acceleration_limit, double rotation_acceleration_limit);
 
-  virtual void set_following_position(const rhoban_geometry::Point& position_to_follow, const ContinuousAngle& angle);
+  virtual void setFollowingPosition(const rhoban_geometry::Point& position_to_follow, const ContinuousAngle& angle);
 };
 
 };  // namespace Robot_behavior

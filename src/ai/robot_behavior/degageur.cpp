@@ -28,11 +28,11 @@ namespace robot_behavior
 {
 Degageur::Degageur(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , point_to_pass(66, 66)
-  , robot_to_pass_id(-1)
-  , robot_to_pass_team(vision::Team::Ally)
-  , needKick(false)
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , point_to_pass_(66, 66)
+  , robot_to_pass_id_(-1)
+  , robot_to_pass_team_(vision::Team::Ally)
+  , needKick_(false)
+  , follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -51,30 +51,30 @@ void Degageur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   //    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
   // default will be the closest ally robot from the opponent goal center
-  robot_to_pass_id = GameInformations::getShirtNumberOfClosestRobot(vision::Team::Ally, opponentGoalCenter());
+  robot_to_pass_id_ = GameInformations::getShirtNumberOfClosestRobot(vision::Team::Ally, opponentGoalCenter());
   //    }
 
-  if (robot_to_pass_id != -1)
+  if (robot_to_pass_id_ != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
-    point_to_pass = robot_to_pass.getMovement().linearPosition(time);
+    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
+    point_to_pass_ = robot_to_pass.getMovement().linearPosition(time);
   }
 
-  std::vector<int> robot_in_line = GameInformations::getRobotInLine(robot_position, point_to_pass);
+  std::vector<int> robot_in_line = GameInformations::getRobotInLine(robot_position, point_to_pass_);
 
   if (robot_position.getX() > (opponentGoalCenter().getX() - 4))
   {
-    needKick = true;
+    needKick_ = true;
   }
   else
   {
     if (robot_in_line.empty())
     {
-      needKick = true;
+      needKick_ = true;
     }
     else
     {
-      needKick = false;
+      needKick_ = false;
     }
   }
 
@@ -82,7 +82,7 @@ void Degageur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   double dist_ball_robot = ball_robot_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
-  Vector2d ball_point_vector = point_to_pass - ballPosition();
+  Vector2d ball_point_vector = point_to_pass_ - ballPosition();
   ball_point_vector = ball_point_vector / ball_point_vector.norm();
 
   double target_radius_from_ball;
@@ -90,40 +90,40 @@ void Degageur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
     // target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.4) ) + 0.55;
     target_radius_from_ball = 1.0 / (24.0 * (scalar_ball_robot - 1.04)) + 0.44;
 
     if (dist_ball_robot < 0.4)
     {
-      follower->avoid_opponent(false);
+      follower_->avoidOpponent(false);
     }
   }
   if (dist_ball_robot > 0.4)
   {
-    follower->avoid_opponent(true);
+    follower_->avoidOpponent(true);
   }
 
   rhoban_geometry::Point target_position = ballPosition() - ball_point_vector * target_radius_from_ball;
   double target_rotation = detail::vec2angle(ball_point_vector);
 
   // follower->avoid_the_ball(false);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control Degageur::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kickPower = 1.0;
 
-  if (needKick)
+  if (needKick_)
   {
     ctrl.chipKick = false;
     ctrl.kick = true;
@@ -136,25 +136,25 @@ Control Degageur::control() const
   return ctrl;
 }
 
-void Degageur::declare_point_to_pass(rhoban_geometry::Point point)
+void Degageur::declarePointToPass(rhoban_geometry::Point point)
 {
-  point_to_pass = point;
+  point_to_pass_ = point;
 }
 
-void Degageur::declare_robot_to_pass(int robot_id, vision::Team team)
+void Degageur::declareRobotToPass(int robot_id, vision::Team team)
 {
-  robot_to_pass_id = robot_id;
-  robot_to_pass_team = team;
+  robot_to_pass_id_ = robot_id;
+  robot_to_pass_team_ = team;
 }
 
 Degageur::~Degageur()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations Degageur::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior

@@ -24,7 +24,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 Begginer_defensor::Begginer_defensor(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -41,7 +41,7 @@ void Begginer_defensor::update(double time, const ai::Robot& robot, const ai::Ba
   rhoban_geometry::Point target_position = ballPosition() + ball_goal_vector * 0.5;
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->set_following_position(target_position, target_rotation);
+  follower->setFollowingPosition(target_position, target_rotation);
   follower->update(time, robot, ball);
 }
 

@@ -87,7 +87,7 @@ void Base3Gms::assignBehaviorToRobots(
 
     assign_behavior(playerId(0), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Striker(ai_data_)));
     assign_behavior(playerId(1),
-                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Mur_defensor(ai_data_)));
+                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::MurDefensor(ai_data_)));
 
     behaviors_are_assigned = true;
   }

@@ -27,9 +27,9 @@ namespace robot_behavior
 {
 Striker::Striker(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , use_custom_vector(false)
-  , striking_point(opponentGoalCenter())
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , use_custom_vector_(false)
+  , striking_point_(opponentGoalCenter())
+  , follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -50,7 +50,7 @@ void Striker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   // ai_data.field.goalWidth / 2.0 ); rhoban_geometry::Point right_post_position = rhoban_geometry::Point(
   // ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
 
-  Vector2d ball_goal_vector = striking_point - ballPosition();
+  Vector2d ball_goal_vector = striking_point_ - ballPosition();
   Vector2d ball_robot_vector = robot_position - ballPosition();
   // Vector2d ball_l_post_vector = left_post_position - ball_position();
   // Vector2d ball_r_post_vector = right_post_position - ball_position();
@@ -68,12 +68,12 @@ void Striker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
     // target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
     // target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.4) ) + 0.55;
     target_radius_from_ball = 1.0 / (24.0 * (scalar_ball_robot - 1.04)) + 0.44;
@@ -93,42 +93,42 @@ void Striker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
     //
     if (dist_ball_robot < 0.4)
     {
-      follower->avoid_opponent(false);
+      follower_->avoidOpponent(false);
     }
   }
   if (dist_ball_robot > 0.4)
   {
-    follower->avoid_opponent(true);
+    follower_->avoidOpponent(true);
   }
 
   rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control Striker::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kick = true;
   return ctrl;
 }
 
-void Striker::declare_point_to_strik(rhoban_geometry::Point point)
+void Striker::declarePointToStrike(rhoban_geometry::Point point)
 {
-  striking_point = point;
+  striking_point_ = point;
 }
 
 Striker::~Striker()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations Striker::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior

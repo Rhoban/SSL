@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-TestInfra::TestInfra(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+TestInfra::TestInfra(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -48,24 +48,24 @@ void TestInfra::update(double time, const ai::Robot& robot, const ai::Ball& ball
   // follower->avoid_the_ball(true);
   double target_rotation = detail::vec2angle(ballPosition() - target_position);
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control TestInfra::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
 TestInfra::~TestInfra()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations TestInfra::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior

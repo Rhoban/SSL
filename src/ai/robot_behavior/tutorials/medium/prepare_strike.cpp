@@ -24,7 +24,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 Intermediate_Prepare_strike::Intermediate_Prepare_strike(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -50,19 +50,19 @@ void Intermediate_Prepare_strike::update(double time, const ai::Robot& robot, co
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower->avoidTheBall(false);
     target_radius_from_ball = 0.3;
   }
 
   rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->set_following_position(target_position, target_rotation);
+  follower->setFollowingPosition(target_position, target_rotation);
   follower->update(time, robot, ball);
 }
 

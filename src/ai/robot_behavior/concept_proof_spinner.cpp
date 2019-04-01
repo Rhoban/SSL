@@ -26,15 +26,15 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Concept_proof_spinner::Concept_proof_spinner(ai::AiData& ai_data)
+ConceptProofSpinner::ConceptProofSpinner(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , follower(Factory::fixed_consign_follower(ai_data))
-  , go_to_home(false)
-  , save_ball_position(false)
+  , follower_(Factory::fixedConsignFollower(ai_data))
+  , go_to_home_(false)
+  , save_ball_position_(false)
 {
 }
 
-void Concept_proof_spinner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void ConceptProofSpinner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -46,18 +46,18 @@ void Concept_proof_spinner::update(double time, const ai::Robot& robot, const ai
 
   rhoban_geometry::Point target_position;
 
-  if (not(save_ball_position) &&
+  if (not(save_ball_position_) &&
       (norm(Vector2d(ballPosition()) - Vector2d(pos)) < (2 * getBallRadius() + getRobotRadius())))
   {
-    save_ball_position = true;
-    ball_pos = ballPosition();
+    save_ball_position_ = true;
+    ball_pos_ = ballPosition();
   }
-  if (not(go_to_home) && save_ball_position && norm(Vector2d(ball_pos) - Vector2d(pos)) < getRobotRadius())
+  if (not(go_to_home_) && save_ball_position_ && norm(Vector2d(ball_pos_) - Vector2d(pos)) < getRobotRadius())
   {
-    go_to_home = true;
+    go_to_home_ = true;
   }
 
-  if (not(go_to_home))
+  if (not(go_to_home_))
   {
     target_position = (ballPosition() + direction * ai_data_.constants.robot_radius);
   }
@@ -67,26 +67,26 @@ void Concept_proof_spinner::update(double time, const ai::Robot& robot, const ai
   }
   ContinuousAngle angle = vector2angle(direction);
 
-  follower->avoid_the_ball(false);
-  follower->set_following_position(target_position, angle);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(false);
+  follower_->setFollowingPosition(target_position, angle);
+  follower_->update(time, robot, ball);
 }
 
-Control Concept_proof_spinner::control() const
+Control ConceptProofSpinner::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.spin = true;
   return ctrl;
 }
 
-Concept_proof_spinner::~Concept_proof_spinner()
+ConceptProofSpinner::~ConceptProofSpinner()
 {
-  delete follower;
+  delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Concept_proof_spinner::getAnnotations() const
+rhoban_ssl::annotations::Annotations ConceptProofSpinner::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior

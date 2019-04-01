@@ -31,22 +31,22 @@ class Goalie : public RobotBehavior
 private:
   // PositionFollower follower(); TODO : to remove if not necessary
 
-  rhoban_ssl::annotations::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
-  Vector2d left_post_position;
-  Vector2d right_post_position;
-  Vector2d goal_center;
-  rhoban_geometry::Point waiting_goal_position;
+  Vector2d left_post_position_;
+  Vector2d right_post_position_;
+  Vector2d goal_center_;
+  rhoban_geometry::Point waiting_goal_position_;
 
-  double goalie_radius;
-  double penalty_rayon;
-  int defensive_approach;
+  double goalie_radius_;
+  double penalty_rayon_;
+  int defensive_approach_;
 
-  static rhoban_geometry::Point calculate_goal_position(const rhoban_geometry::Point& ballPosition,
+  static rhoban_geometry::Point calculateGoalPosition(const rhoban_geometry::Point& ballPosition,
                                                         const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
-                                                        double goalie_radius);
+                                                        double goalie_radius_);
 
 public:
   Goalie(ai::AiData& ai_data);

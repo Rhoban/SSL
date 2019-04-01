@@ -29,20 +29,20 @@ namespace robot_behavior
 class RobotFollower : public RobotBehavior
 {
 private:
-  int robot_to_follow_id;
-  vision::Team robot_to_follow_team;
+  int robot_to_follow_id_;
+  vision::Team robot_to_follow_team_;
 
-  Vector2d translation;
-  vision::Team team;
+  Vector2d translation_;
+  vision::Team team_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  RobotFollower(ai::AiData& ai_data_);
+  RobotFollower(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  void declare_robot_to_follow(int robot_id, const Vector2d& translation, vision::Team team = vision::Team::Ally);
+  void declare_robot_to_follow_(int robot_id, const Vector2d& translation, vision::Team team = vision::Team::Ally);
 
   virtual Control control() const;
 

@@ -27,7 +27,7 @@ namespace robot_behavior
 namespace Beginner
 {
 See_Robot::See_Robot(ai::AiData& ai_data, int target_id)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
 
 {
   target_robot_id = target_id;
@@ -56,9 +56,9 @@ void See_Robot::update(double time, const ai::Robot& robot, const ai::Ball& ball
     target_rotation = vector2angle(direction);
   }
 
-  follower->set_following_position(robot_position, target_rotation);
+  follower->setFollowingPosition(robot_position, target_rotation);
 
-  follower->avoid_the_ball(false);
+  follower->avoidTheBall(false);
   follower->update(time, robot, ball);
 }
 

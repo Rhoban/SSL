@@ -27,46 +27,43 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class Example_machine_state : public RobotBehavior
+class ExampleMachineState : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  struct state_name
+  struct StateName
   {
     static const constexpr char* wait_pass = "wait_pass";
     static const constexpr char* strike = "strike";
   };
-  struct edge_name
+  struct EdgeName
   {
     static const constexpr char* can_strike = "can_strike";
     static const constexpr char* strike_is_finished = "strike_is_finished";
   };
 
-  bool is_closed_to_the_ball() const;
+  bool isClosedToTheBall() const;
 
-  void print_are_pass()
-  {
-    DEBUG("ARE PASSING");
-  }
-  void print_ball_info()
+  void printArePass();
+  void printBallInfo()
   {
     DEBUG("INFO");
   }
-  void print_ball_info2()
+  void printBallInfo2()
   {
     DEBUG("INFO2");
   }
 
-  typedef construct_machine_state_infrastructure<std::string, ai::AiData, ai::AiData> machine_state_infrastructure;
+  typedef construct_machine_state_infrastructure<std::string, ai::AiData, ai::AiData> MachineStateInfrastructure;
 
 private:
-  machine_state_infrastructure::MachineState machine;
+  MachineStateInfrastructure::MachineState machine;
 
 public:
-  Example_machine_state(ai::AiData& ai_data_);
+  ExampleMachineState(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -74,7 +71,7 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Example_machine_state();
+  virtual ~ExampleMachineState();
 };
 
 };  // namespace Robot_behavior

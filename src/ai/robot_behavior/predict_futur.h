@@ -29,19 +29,19 @@ namespace robot_behavior
 class PredictFutur : public RobotBehavior
 {
 private:
-  bool use_custom_vector;
-  rhoban_geometry::Point striking_point;
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  bool use_custom_vector_;
+  rhoban_geometry::Point striking_point_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  PredictFutur(ai::AiData& ai_data_);
+  PredictFutur(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  void declare_point_to_strik(rhoban_geometry::Point point);
+  void declarePointToStrik(rhoban_geometry::Point point);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 

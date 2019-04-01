@@ -29,13 +29,13 @@ namespace robot_behavior
 class TestInfra : public RobotBehavior
 {
 private:
-  Vector2d translation;
-  vision::Team team;
+  Vector2d translation_;
+  vision::Team team_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  TestInfra(ai::AiData& ai_data_);
+  TestInfra(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

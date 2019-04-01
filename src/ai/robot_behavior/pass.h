@@ -29,17 +29,17 @@ namespace robot_behavior
 class Pass : public RobotBehavior
 {
 private:
-  int robot_to_pass_id;
-  vision::Team robot_to_pass_team;
+  int robot_to_pass_id_;
+  vision::Team robot_to_pass_team_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  Pass(ai::AiData& ai_data_);
+  Pass(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   // TODO: portée des variables ?
-  void declare_robot_to_pass(int robot_id, vision::Team team = vision::Team::Ally);
+  void declareRobotToPass(int robot_id, vision::Team team = vision::Team::Ally);
 
   virtual Control control() const;
 

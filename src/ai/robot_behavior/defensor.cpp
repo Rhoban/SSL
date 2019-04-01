@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Defensor::Defensor(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+Defensor::Defensor(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -57,11 +57,11 @@ void Defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower->avoidTheBall(true);
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower->avoidTheBall(false);
   }
 
   rhoban_geometry::Point target_position = rhoban_geometry::centerOfConeIncircle(
@@ -80,7 +80,7 @@ void Defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   // End of the part
 
-  follower->set_following_position(target_position, target_rotation);
+  follower->setFollowingPosition(target_position, target_rotation);
   follower->update(time, robot, ball);
 }
 

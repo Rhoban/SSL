@@ -26,7 +26,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 ProtectBall::ProtectBall(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -55,25 +55,25 @@ void ProtectBall::update(double time, const ai::Robot& robot, const ai::Ball& ba
 
   double target_rotation = detail::vec2angle(ball_robot_vector);
 
-  follower->avoid_the_ball(true);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(true);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control ProtectBall::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
 ProtectBall::~ProtectBall()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations ProtectBall::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior

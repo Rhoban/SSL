@@ -227,7 +227,7 @@ void AttaqueWithSupportMs::assignBehaviorToRobots(
   {
     assign_behavior(ID1_, pass_behavior_);
     // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
-    pass_behavior_->declare_point_to_strik(robot_2_position_);
+    pass_behavior_->declarePointToStrike(robot_2_position_);
     assign_behavior(ID2_, search_behavior_);
   }
   else if (state == state_name::search_pass)
@@ -235,7 +235,7 @@ void AttaqueWithSupportMs::assignBehaviorToRobots(
     assign_behavior(ID1_, search_behavior_);
     assign_behavior(ID2_, pass_behavior_);
     // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
-    pass_behavior_->declare_point_to_strik(robot_1_position_);
+    pass_behavior_->declarePointToStrike(robot_1_position_);
   }
   else if (state == state_name::search_waitpass)
   {

@@ -93,10 +93,10 @@ void Mur_2_passif::update(double time)
 void Mur_2_passif::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::Mur_defensor(ai_data_, 1));
-  static_cast<robot_behavior::Mur_defensor*>(mur1.get())->declare_mur_robot_id(0, 2);
+  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefensor(ai_data_, 1));
+  static_cast<robot_behavior::MurDefensor*>(mur1.get())->declareMurRobotId(0, 2);
 
-  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::Mur_defensor(ai_data_, 1));
+  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefensor(ai_data_, 1));
 
   if (not(behaviors_are_assigned_))
   {

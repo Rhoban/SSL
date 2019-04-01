@@ -26,7 +26,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 Intermediate_striker::Intermediate_striker(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), striking_point(opponentGoalCenter()), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), striking_point(opponentGoalCenter()), follower(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -52,12 +52,12 @@ void Intermediate_striker::update(double time, const ai::Robot& robot, const ai:
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower->avoidTheBall(false);
 
     // Function used to place behind the ball and strike the ball cogently.
     // The limit when x (scalar_ball_robot) is set to 0, is equal to infinity.
@@ -66,19 +66,19 @@ void Intermediate_striker::update(double time, const ai::Robot& robot, const ai:
     // If the ball is near of the robot, we don't care about other robots.
     if (dist_ball_robot < 0.4)
     {
-      follower->avoid_opponent(false);
+      follower->avoidOpponent(false);
     }
   }
 
   if (dist_ball_robot > 0.4)
   {
-    follower->avoid_opponent(true);
+    follower->avoidOpponent(true);
   }
 
   rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->set_following_position(target_position, target_rotation);
+  follower->setFollowingPosition(target_position, target_rotation);
   follower->update(time, robot, ball);
 }
 

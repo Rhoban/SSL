@@ -87,7 +87,7 @@ void Mur::assignBehaviorToRobots(
     // we assign now all the other behavior
     assert(getPlayerIds().size() == 1);
     int id = playerId(0);  // we get the first if in get_player_ids()
-    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Mur_defensor(ai_data_)));
+    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::MurDefensor(ai_data_)));
 
     behaviors_are_assigned_ = true;
   }

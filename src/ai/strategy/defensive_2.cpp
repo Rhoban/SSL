@@ -99,13 +99,13 @@ void Defensive2::assignBehaviorToRobots(
 
   if (distance1 < distance2)
   {
-    obstructeur1_->declare_robot_to_obstruct(id_to_obstruct1, vision::Team::Opponent);
-    obstructeur2_->declare_robot_to_obstruct(id_to_obstruct2, vision::Team::Opponent);
+    obstructeur1_->declareRobotToObstruct(id_to_obstruct1, vision::Team::Opponent);
+    obstructeur2_->declareRobotToObstruct(id_to_obstruct2, vision::Team::Opponent);
   }
   else
   {
-    obstructeur1_->declare_robot_to_obstruct(id_to_obstruct2, vision::Team::Opponent);
-    obstructeur2_->declare_robot_to_obstruct(id_to_obstruct1, vision::Team::Opponent);
+    obstructeur1_->declareRobotToObstruct(id_to_obstruct2, vision::Team::Opponent);
+    obstructeur2_->declareRobotToObstruct(id_to_obstruct1, vision::Team::Opponent);
   }
 
   int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);

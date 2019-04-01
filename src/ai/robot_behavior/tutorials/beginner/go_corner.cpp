@@ -27,7 +27,7 @@ namespace beginner
 {
 // Use opponent_corner_left() for the left corner.
 GoCorner::GoCorner(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data)), target_corner_(opponentCornerLeft())
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), target_corner_(opponentCornerLeft())
 {
 }
 
@@ -40,7 +40,7 @@ void GoCorner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   const rhoban_geometry::Point& future_position = target_corner_;
   ContinuousAngle angle(0.0);
 
-  follower_->set_following_position(future_position, angle);
+  follower_->setFollowingPosition(future_position, angle);
   follower_->update(time, robot, ball);
 }
 

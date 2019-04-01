@@ -83,7 +83,7 @@ void Defensive::assignBehaviorToRobots(
   int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
 
   int id_to_obstruct = shirtNumberOfThreatMax(vision::Team::Opponent);
-  obstructeur_->declare_robot_to_obstruct(id_to_obstruct, vision::Team::Opponent);
+  obstructeur_->declareRobotToObstruct(id_to_obstruct, vision::Team::Opponent);
   if (nearest_ballID == robotID)
   {
     assign_behavior(robotID, degageur_);

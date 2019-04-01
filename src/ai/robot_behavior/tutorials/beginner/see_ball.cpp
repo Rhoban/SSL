@@ -25,7 +25,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 Begginer_see_ball::Begginer_see_ball(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -42,9 +42,9 @@ void Begginer_see_ball::update(double time, const ai::Robot& robot, const ai::Ba
   Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
 
-  follower->set_following_position(robot_position, target_rotation);
+  follower->setFollowingPosition(robot_position, target_rotation);
 
-  follower->avoid_the_ball(false);
+  follower->avoidTheBall(false);
   follower->update(time, robot, ball);
 }
 

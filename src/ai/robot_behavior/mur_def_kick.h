@@ -26,23 +26,23 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class Mur_def_kick : public RobotBehavior
+class MurDefKick : public RobotBehavior
 {
 private:
-  int mur_robot_id;
-  int mur_nb_robot;
-  ConsignFollower* follower;
+  int mur_robot_id_;
+  int mur_nb_robot_;
+  ConsignFollower* follower_;
 
 public:
-  Mur_def_kick(ai::AiData& ai_data_, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
+  MurDefKick(ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
-  void declare_mur_robot_id(int id, int mur_nb_robots);
+  void declareMurRobotId(int id, int mur_nb_robots);
 
   virtual Control control() const;
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
-  virtual ~Mur_def_kick();
+  virtual ~MurDefKick();
 };
 
 };  // namespace Robot_behavior

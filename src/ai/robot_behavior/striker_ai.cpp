@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-StrikerAi::StrikerAi(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+StrikerAi::StrikerAi(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -56,35 +56,35 @@ void StrikerAi::update(double time, const ai::Robot& robot, const ai::Ball& ball
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
     // target_radius_from_ball = 1.0 / ( 4.0*(scalar_ball_robot - 1.2) ) + 1.0;
     target_radius_from_ball = 1.0 / (24.0 * (scalar_ball_robot - 1.04)) + 0.44;
 
     if (dist_ball_robot < 0.4)
     {
-      follower->avoid_opponent(false);
+      follower_->avoidOpponent(false);
     }
   }
   if (dist_ball_robot > 0.4)
   {
-    follower->avoid_opponent(true);
+    follower_->avoidOpponent(true);
   }
 
   rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * target_radius_from_ball;
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control StrikerAi::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kick = true;
   return ctrl;
@@ -92,12 +92,12 @@ Control StrikerAi::control() const
 
 StrikerAi::~StrikerAi()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations StrikerAi::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior

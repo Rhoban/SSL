@@ -29,15 +29,15 @@ namespace robot_behavior
 class WaitPass : public RobotBehavior
 {
 private:
-  Vector2d translation;
-  vision::Team team;
-  double distance_ball;
+  Vector2d translation_;
+  vision::Team team_;
+  double distance_ball_;
 
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  WaitPass(ai::AiData& ai_data_);
+  WaitPass(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

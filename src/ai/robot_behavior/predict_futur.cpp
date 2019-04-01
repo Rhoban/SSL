@@ -27,9 +27,9 @@ namespace robot_behavior
 {
 PredictFutur::PredictFutur(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , use_custom_vector(false)
-  , striking_point(opponentGoalCenter())
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , use_custom_vector_(false)
+  , striking_point_(opponentGoalCenter())
+  , follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -43,20 +43,20 @@ void PredictFutur::update(double time, const ai::Robot& robot, const ai::Ball& b
   //  this->robot_angular_position
   // are all avalaible
 
-  annotations.clear();
+  annotations_.clear();
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
   const rhoban_geometry::Point& robot_position_futur = robot.getMovement().linearPosition(time + 0.5);
   const rhoban_geometry::Point& ball_position_futur = ball.getMovement().linearPosition(time + 0.5);
-  annotations.addCross(robot_position_futur.x, robot_position_futur.y, "blue");
-  annotations.addCross(ball_position_futur.x, ball_position_futur.y, "red");
+  annotations_.addCross(robot_position_futur.x, robot_position_futur.y, "blue");
+  annotations_.addCross(ball_position_futur.x, ball_position_futur.y, "red");
 
   // rhoban_geometry::Point opponent_goal_point = opponent_goal_center();
   // rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0,
   // ai_data.field.goalWidth / 2.0 ); rhoban_geometry::Point right_post_position = rhoban_geometry::Point(
   // ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0 );
 
-  Vector2d ball_goal_vector = striking_point - ballPosition();
+  Vector2d ball_goal_vector = striking_point_ - ballPosition();
   Vector2d ball_robot_vector = robot_position - ballPosition();
   // Vector2d ball_l_post_vector = left_post_position - ball_position();
   // Vector2d ball_r_post_vector = right_post_position - ball_position();
@@ -73,12 +73,12 @@ void PredictFutur::update(double time, const ai::Robot& robot, const ai::Ball& b
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 1.5;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
     // target_radius_from_ball = 1 / ( 2*(scalar_ball_robot - 1.2) ) + 2;
     target_radius_from_ball = 1.0 / (4.0 * (scalar_ball_robot - 1.2)) + 1.0;
 
@@ -96,33 +96,33 @@ void PredictFutur::update(double time, const ai::Robot& robot, const ai::Ball& b
   rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * target_radius_from_ball;
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control PredictFutur::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kick = true;
   return ctrl;
 }
 
-void PredictFutur::declare_point_to_strik(rhoban_geometry::Point point)
+void PredictFutur::declarePointToStrik(rhoban_geometry::Point point)
 {
-  striking_point = point;
+  striking_point_ = point;
 }
 
 PredictFutur::~PredictFutur()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations PredictFutur::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->getAnnotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
   ;
 }

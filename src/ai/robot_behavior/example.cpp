@@ -27,7 +27,7 @@ namespace robot_behavior
 #define PERIOD 10.0
 
 Example::Example(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data)), period(PERIOD), last_time(0)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), period_(PERIOD), last_time_(0)
 {
 }
 
@@ -37,7 +37,7 @@ void Example::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   // DO NOT REMOVE THAT LINE
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-  annotations.clear();
+  annotations_.clear();
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
@@ -47,10 +47,10 @@ void Example::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
 
-  if (time - last_time > period)
+  if (time - last_time_ > period_)
   {
     rhoban_geometry::Point target;
-    if (cpt % 2 == 0)
+    if (cpt_ % 2 == 0)
     {
       target = centerAllyField();
     }
@@ -58,18 +58,18 @@ void Example::update(double time, const ai::Robot& robot, const ai::Ball& ball)
     {
       target = centerOpponentField();
     }
-    follower->set_following_position(target, target_rotation);
-    cpt = (cpt + 1) % 2;
-    last_time = time;
+    follower_->setFollowingPosition(target, target_rotation);
+    cpt_ = (cpt_ + 1) % 2;
+    last_time_ = time;
   }
 
-  follower->avoid_the_ball(false);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(false);
+  follower_->update(time, robot, ball);
 }
 
 Control Example::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   // ctrl.spin = true; // We active the dribler !
   ctrl.kick = false;
   return ctrl;
@@ -77,14 +77,14 @@ Control Example::control() const
 
 Example::~Example()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations Example::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->getAnnotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 

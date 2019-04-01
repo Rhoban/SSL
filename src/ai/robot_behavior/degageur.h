@@ -29,19 +29,19 @@ namespace robot_behavior
 class Degageur : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point point_to_pass;
-  int robot_to_pass_id;
-  vision::Team robot_to_pass_team;
-  bool needKick;
+  rhoban_geometry::Point point_to_pass_;
+  int robot_to_pass_id_;
+  vision::Team robot_to_pass_team_;
+  bool needKick_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  Degageur(ai::AiData& ai_data_);
+  Degageur(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
-  void declare_point_to_pass(rhoban_geometry::Point point);
-  void declare_robot_to_pass(int robot_id, vision::Team team = vision::Team::Ally);
+  void declarePointToPass(rhoban_geometry::Point point);
+  void declareRobotToPass(int robot_id, vision::Team team = vision::Team::Ally);
 
   virtual Control control() const;
 

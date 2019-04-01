@@ -31,20 +31,20 @@ ConsignFollower::~ConsignFollower()
 {
 }
 
-void ConsignFollower::avoid_the_ball(bool value)
+void ConsignFollower::avoidTheBall(bool value)
 {
 }
-void ConsignFollower::avoid_ally(bool value)
+void ConsignFollower::avoidAlly(bool value)
 {
 }
-void ConsignFollower::avoid_opponent(bool value)
+void ConsignFollower::avoidOpponent(bool value)
 {
 }
 void ConsignFollower::avoidRobot(int id, bool value)
 {
 }
 
-void ConsignFollower::set_radius_avoidance_for_the_ball(double radius)
+void ConsignFollower::setRadiusAvoidanceForTheBall(double radius)
 {
 }
 

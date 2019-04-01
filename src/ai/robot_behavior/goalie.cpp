@@ -27,7 +27,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-rhoban_geometry::Point Goalie::calculate_goal_position(const rhoban_geometry::Point& ball_position,
+rhoban_geometry::Point Goalie::calculateGoalPosition(const rhoban_geometry::Point& ball_position,
                                                        const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
                                                        double goalie_radius)
 {
@@ -48,18 +48,18 @@ Goalie::Goalie(ai::AiData& ai_data)
 Goalie::Goalie(ai::AiData& ai_data, const Vector2d& left_post_position, const Vector2d& right_post_position,
                const rhoban_geometry::Point& waiting_goal_position, double penalty_rayon, double goalie_radius,
                double time, double dt)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
-  this->left_post_position = left_post_position;
-  this->right_post_position = right_post_position;
-  this->waiting_goal_position = waiting_goal_position;
-  this->goal_center = (left_post_position + right_post_position) / 2.0;
-  this->penalty_rayon = penalty_rayon;
-  this->goalie_radius = goalie_radius;
-  defensive_approach = 0;  // 0 arc-de-cercle, 1 dash
-  Navigation_inside_the_field* foll = dynamic_cast<Navigation_inside_the_field*>(follower);
-  foll->set_translation_pid(3.0, 0.0001, 0);
-  foll->set_orientation_pid(1.0, 0, 0);
+  this->left_post_position_ = left_post_position;
+  this->right_post_position_ = right_post_position;
+  this->waiting_goal_position_ = waiting_goal_position;
+  this->goal_center_ = (left_post_position + right_post_position) / 2.0;
+  this->penalty_rayon_ = penalty_rayon;
+  this->goalie_radius_ = goalie_radius;
+  defensive_approach_ = 0;  // 0 arc-de-cercle, 1 dash
+  NavigationInsideTheField* foll = dynamic_cast<NavigationInsideTheField*>(follower_);
+  foll->setTranslationPid(3.0, 0.0001, 0);
+  foll->setOrientationPid(1.0, 0, 0);
 }
 
 void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
@@ -72,7 +72,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   //  this->robot_angular_position
   // are all avalaible
 
-  annotations.clear();
+  annotations_.clear();
 
   future_ball_positions.clear();
   int nb_points = 10;
@@ -101,7 +101,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
     int hyst_sign = 1;
 
-    if (defensive_approach == 0)
+    if (defensive_approach_ == 0)
     {
       hyst_sign = -1;
     }
@@ -122,20 +122,20 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
     if (do_they_intersect == true)
     {
-      defensive_approach = 1;
-      annotations.addCross(predicted_intersection_point.x, predicted_intersection_point.y, "blue");
+      defensive_approach_ = 1;
+      annotations_.addCross(predicted_intersection_point.x, predicted_intersection_point.y, "blue");
     }
     else
     {
-      defensive_approach = 0;
+      defensive_approach_ = 0;
     }
   }
   else
   {
-    defensive_approach = 0;
+    defensive_approach_ = 0;
   }
 
-  if (defensive_approach == 0)
+  if (defensive_approach_ == 0)
   {
     rhoban_geometry::Point new_goal_center = allyGoalCenter() + rhoban_geometry::Point(offset_goal, 0.0);
 
@@ -154,7 +154,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
     target_position = new_goal_center - ball_goal_vector * goal_radius;
   }
-  else if (defensive_approach == 1)
+  else if (defensive_approach_ == 1)
   {
     if (predicted_intersection_point.getY() > left_post_position.getY())
     {
@@ -173,32 +173,32 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
     target_rotation = detail::vec2angle(target_ball_vector);
   }
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->avoid_the_ball(false);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->avoidTheBall(false);
 
-  follower->update(time, robot, ball);
+  follower_->update(time, robot, ball);
 }
 
 Control Goalie::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.chipKick = true;
-  return follower->control();
+  return follower_->control();
 }
 
 Goalie::~Goalie()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations Goalie::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations_local;
-  annotations_local.addAnnotations(annotations);
+  annotations_local.addAnnotations(annotations_);
   std::string annotations_text;
   if (robot_ptr_)
   {
-    if (defensive_approach == 0)
+    if (defensive_approach_ == 0)
     {
       annotations_text = "Arc";
     }
@@ -215,7 +215,7 @@ rhoban_ssl::annotations::Annotations Goalie::getAnnotations() const
     //     annotations_local.addCross(future_ball_positions[i].x, future_ball_positions[i].y, "red" );
     // }
   }
-  annotations_local.addAnnotations(follower->getAnnotations());
+  annotations_local.addAnnotations(follower_->getAnnotations());
   return annotations_local;
 }
 

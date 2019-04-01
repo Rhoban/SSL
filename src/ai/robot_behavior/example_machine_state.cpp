@@ -25,42 +25,42 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Example_machine_state::Example_machine_state(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data)), machine(ai_data, ai_data)
+ExampleMachineState::ExampleMachineState(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), machine(ai_data, ai_data)
 {
-  machine.addState(state_name::wait_pass,
+  machine.addState(StateName::wait_pass,
                     [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       DEBUG("WAIT PASS");
-                      this->print_ball_info();
+                      this->printBallInfo();
                     });
-  machine.addState(state_name::strike);
+  machine.addState(StateName::strike);
 
-  machine.addEdge(edge_name::can_strike, state_name::wait_pass, state_name::strike,  //,
+  machine.addEdge(EdgeName::can_strike, StateName::wait_pass, StateName::strike,  //,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     DEBUG("IS is_closed_to_the_ball " << this->is_closed_to_the_ball());
-                     return this->is_closed_to_the_ball();
+                     DEBUG("IS is_closed_to_the_ball " << this->isClosedToTheBall());
+                     return this->isClosedToTheBall();
                    },
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      DEBUG("IS Can_striker FUAZHeuh");
-                     this->print_ball_info();
+                     this->printBallInfo();
                    });
 
-  machine.addEdge(edge_name::strike_is_finished, state_name::strike, state_name::wait_pass,
+  machine.addEdge(EdgeName::strike_is_finished, StateName::strike, StateName::wait_pass,
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                      DEBUG("strike_is_finished");
-                     return not(this->is_closed_to_the_ball());
+                     return not(this->isClosedToTheBall());
                    },
                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     this->print_ball_info2();
+                     this->printBallInfo2();
                    });
-  machine.addInitState(state_name::wait_pass);
+  machine.addInitState(StateName::wait_pass);
 
   machine.start();
 
   machine.exportToFile("/tmp/toto.dot");
 }
 
-void Example_machine_state::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void ExampleMachineState::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -68,33 +68,38 @@ void Example_machine_state::update(double time, const ai::Robot& robot, const ai
 
   machine.run();
 
-  follower->avoid_the_ball(true);
+  follower_->avoidTheBall(true);
   // follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->update(time, robot, ball);
 }
 
-Control Example_machine_state::control() const
+Control ExampleMachineState::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   // ctrl.spin = true; // We active the dribler !
   ctrl.kick = false;
   return ctrl;
 }
 
-Example_machine_state::~Example_machine_state()
+ExampleMachineState::~ExampleMachineState()
 {
-  delete follower;
+  delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Example_machine_state::getAnnotations() const
+rhoban_ssl::annotations::Annotations ExampleMachineState::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
-bool Example_machine_state::is_closed_to_the_ball() const
+bool ExampleMachineState::isClosedToTheBall() const
 {
   DEBUG("is_closed fcttt" << (normSquare(this->linearPosition() - this->ballPosition()) < 0.05));
   return normSquare(this->linearPosition() - this->ballPosition()) < 0.05;
+}
+
+void ExampleMachineState::printArePass()
+{
+  DEBUG("ARE PASSING");
 };
 
 }  // namespace Robot_behavior

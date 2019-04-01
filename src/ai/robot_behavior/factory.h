@@ -31,10 +31,10 @@ class Factory
 {
 public:
   static ConsignFollower*
-  fixed_consign_follower(ai::AiData& ai, const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0, 0.0),
+  fixedConsignFollower(ai::AiData& ai, const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0, 0.0),
                          const ContinuousAngle& angle = ContinuousAngle(0.0), bool ignore_the_ball = false);
 
-  static ConsignFollower* fixed_consign_follower_without_repsecting_authorized_location(
+  static ConsignFollower* fixedConsignFollowerWithoutRepsectingAuthorizedLocation(
       ai::AiData& ai, const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0, 0.0),
       const ContinuousAngle& angle = ContinuousAngle(0.0), bool ignore_the_ball = false);
 };

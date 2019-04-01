@@ -26,14 +26,14 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class Test_kicker : public RobotBehavior
+class TestKicker : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Test_kicker(ai::AiData& ai_data_);
+  TestKicker(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -41,7 +41,7 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Test_kicker();
+  virtual ~TestKicker();
 };
 
 };  // namespace Robot_behavior

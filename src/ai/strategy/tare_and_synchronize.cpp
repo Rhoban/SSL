@@ -96,13 +96,13 @@ void TareAndSynchronize::assignBehaviorToRobots(
     if (movement.angularVelocity(movement.lastTime()).abs().value() <= 0.05)
     {
       robot_behavior::PositionFollower* follower = new robot_behavior::PositionFollower(ai_data_, time, dt);
-      follower->set_following_position(movement.linearPosition(movement.lastTime()),
+      follower->setFollowingPosition(movement.linearPosition(movement.lastTime()),
                                        movement.angularPosition(movement.lastTime()) + M_PI / 2.0);
-      follower->set_translation_pid(ai_data_.constants.p_translation, ai_data_.constants.i_translation,
+      follower->setTranslationPid(ai_data_.constants.p_translation, ai_data_.constants.i_translation,
                                     ai_data_.constants.d_translation);
-      follower->set_orientation_pid(ai_data_.constants.p_orientation, ai_data_.constants.i_orientation,
+      follower->setOrientationPid(ai_data_.constants.p_orientation, ai_data_.constants.i_orientation,
                                     ai_data_.constants.d_orientation);
-      follower->set_limits(ai_data_.constants.translation_velocity_limit, ai_data_.constants.rotation_velocity_limit,
+      follower->setLimits(ai_data_.constants.translation_velocity_limit, ai_data_.constants.rotation_velocity_limit,
                            ai_data_.constants.translation_acceleration_limit,
                            ai_data_.constants.rotation_acceleration_limit);
 

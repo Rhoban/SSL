@@ -29,19 +29,19 @@ namespace robot_behavior
 class Obstructor : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point point_to_obstruct;
-  int robot_to_obstruct_id;
-  vision::Team robot_to_obstruct_team;
+  rhoban_geometry::Point point_to_obstruct_;
+  int robot_to_obstruct_id_;
+  vision::Team robot_to_obstruct_team_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  Obstructor(ai::AiData& ai_data_);
+  Obstructor(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
-  void declare_robot_to_obstruct(int robot_id, vision::Team team = vision::Team::Opponent);
+  void declareRobotToObstruct(int robot_id, vision::Team team = vision::Team::Opponent);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual ~Obstructor();

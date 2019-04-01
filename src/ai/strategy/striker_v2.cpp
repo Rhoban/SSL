@@ -75,7 +75,7 @@ void StrikerV2::stop(double time)
 void StrikerV2::update(double time)
 {
   std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
-  striker_->declare_point_to_strik(results.first);
+  striker_->declarePointToStrike(results.first);
 }
 
 void StrikerV2::assignBehaviorToRobots(

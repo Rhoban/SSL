@@ -27,9 +27,9 @@ namespace robot_behavior
 {
 Pass::Pass(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , robot_to_pass_id(-1)
-  , robot_to_pass_team(vision::Team::Ally)
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , robot_to_pass_id_(-1)
+  , robot_to_pass_team_(vision::Team::Ally)
+  , follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -43,7 +43,7 @@ void Pass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   //  this->robot_angular_position
   // are all avalaible
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
-  const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
+  const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
   rhoban_geometry::Point position_robot_to_pass = robot_to_pass.getMovement().linearPosition(time);
   // rhoban_geometry::Point target_position = ball_position();
 
@@ -58,45 +58,45 @@ void Pass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 1.5;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
     target_radius_from_ball = 1 / (2 * (scalar_ball_robot - 1.2)) + 2;
   }
   rhoban_geometry::Point target_position = ballPosition() - ball_robot_to_pass_vector * target_radius_from_ball;
   double target_rotation = detail::vec2angle(ball_robot_to_pass_vector);
 
   // follower->avoid_the_ball(false);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control Pass::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kickPower = 0.5;
   ctrl.kick = true;
   return ctrl;
 }
 
-void Pass::declare_robot_to_pass(int robot_id, vision::Team team)
+void Pass::declareRobotToPass(int robot_id, vision::Team team)
 {
-  robot_to_pass_id = robot_id;
-  robot_to_pass_team = team;
+  robot_to_pass_id_ = robot_id;
+  robot_to_pass_team_ = team;
 }
 
 Pass::~Pass()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations Pass::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior

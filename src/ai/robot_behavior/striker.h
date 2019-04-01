@@ -29,18 +29,18 @@ namespace robot_behavior
 class Striker : public RobotBehavior
 {
 private:
-  bool use_custom_vector;
-  rhoban_geometry::Point striking_point;
-  ConsignFollower* follower;
+  bool use_custom_vector_;
+  rhoban_geometry::Point striking_point_;
+  ConsignFollower* follower_;
 
 public:
-  Striker(ai::AiData& ai_data_);
+  Striker(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  void declare_point_to_strik(rhoban_geometry::Point point);
+  void declarePointToStrike(rhoban_geometry::Point point);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 

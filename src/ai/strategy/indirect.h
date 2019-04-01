@@ -32,7 +32,7 @@ class Indirect : public Strategy
 private:
   bool behaviors_are_assigned_;
   int state_;
-  std::shared_ptr<robot_behavior::Pass_dribbler> pass_behavior_;
+  std::shared_ptr<robot_behavior::PassDribbler> pass_behavior_;
 
 public:
   Indirect(ai::AiData& ai_data);

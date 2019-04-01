@@ -87,13 +87,13 @@ void Base::assignBehaviorToRobots(
 
     std::shared_ptr<robot_behavior::RobotBehavior> striker(new robot_behavior::Striker(ai_data_));
 
-    std::shared_ptr<robot_behavior::RobotBehavior> mur(new robot_behavior::Mur_defensor(ai_data_));
+    std::shared_ptr<robot_behavior::RobotBehavior> mur(new robot_behavior::MurDefensor(ai_data_));
 
-    std::shared_ptr<robot_behavior::RobotBehavior> dp1(new robot_behavior::Passive_defensor(ai_data_));
-    static_cast<robot_behavior::Passive_defensor*>(dp1.get())->set_robot_to_obstacle(0);
+    std::shared_ptr<robot_behavior::RobotBehavior> dp1(new robot_behavior::PassiveDefensor(ai_data_));
+    static_cast<robot_behavior::PassiveDefensor*>(dp1.get())->set_robot_to_obstacle(0);
 
-    std::shared_ptr<robot_behavior::RobotBehavior> dp2(new robot_behavior::Passive_defensor(ai_data_));
-    static_cast<robot_behavior::Passive_defensor*>(dp2.get())->set_robot_to_obstacle(1);
+    std::shared_ptr<robot_behavior::RobotBehavior> dp2(new robot_behavior::PassiveDefensor(ai_data_));
+    static_cast<robot_behavior::PassiveDefensor*>(dp2.get())->set_robot_to_obstacle(1);
 
     std::shared_ptr<robot_behavior::RobotBehavior> defensor(new robot_behavior::Defensor(ai_data_));
 

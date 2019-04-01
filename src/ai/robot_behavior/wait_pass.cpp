@@ -27,7 +27,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 WaitPass::WaitPass(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), distance_ball(12), follower(Factory::fixed_consign_follower(ai_data))
+  : RobotBehavior(ai_data), distance_ball_(12), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -41,15 +41,15 @@ void WaitPass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   //  this->robot_angular_position
   // are all avalaible
 
-  annotations.clear();
+  annotations_.clear();
   // rhoban_geometry::Point target_position = robot.get_movement().linear_position( time );
   const rhoban_geometry::Point& ball_position_now = ball.getMovement().linearPosition(time);
   const rhoban_geometry::Point& ball_position_future = ball.getMovement().linearPosition(time + 0.5);
-  annotations.addCross(ball_position_future.x, ball_position_future.y, "red");
+  annotations_.addCross(ball_position_future.x, ball_position_future.y, "red");
   rhoban_geometry::Point target_position;
   rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
   double target_rotation = detail::vec2angle(ballPosition() - robot_position);
-  distance_ball = (Vector2d(ballPosition() - robot_position)).norm();
+  distance_ball_ = (Vector2d(ballPosition() - robot_position)).norm();
 
   if ((Vector2d(ball_position_future - ball_position_now)).norm() > 0.3)
   {
@@ -74,16 +74,16 @@ void WaitPass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
     target_position = robot_position;
   }
 
-  follower->avoid_the_ball(false);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(false);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control WaitPass::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
 
-  if (distance_ball < 1)
+  if (distance_ball_ < 1)
   {
     ctrl.spin = true;  // We active the dribler !
   }
@@ -96,14 +96,14 @@ Control WaitPass::control() const
 
 WaitPass::~WaitPass()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations WaitPass::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->getAnnotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
   ;
 }

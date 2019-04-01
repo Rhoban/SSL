@@ -64,8 +64,8 @@ void Placer::assignBehaviorToRobots(
     if (have_to_manage_the_goalie())
     {
       robot_behavior::ConsignFollower* follower =
-          robot_behavior::Factory::fixed_consign_follower(ai_data_, goalie_linear_position_, goalie_angular_position_);
-      follower->avoid_the_ball(true);
+          robot_behavior::Factory::fixedConsignFollower(ai_data_, goalie_linear_position_, goalie_angular_position_);
+      follower->avoidTheBall(true);
       assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(follower));
     }
 
@@ -73,9 +73,9 @@ void Placer::assignBehaviorToRobots(
     for (int i = 0; i < nb_players; i++)
     {
       int id = playerId(i);
-      robot_behavior::ConsignFollower* follower = robot_behavior::Factory::fixed_consign_follower(
+      robot_behavior::ConsignFollower* follower = robot_behavior::Factory::fixedConsignFollower(
           ai_data_, player_positions_[id].first, player_positions_[id].second);
-      follower->avoid_the_ball(true);
+      follower->avoidTheBall(true);
       assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(follower));
     }
     behavior_has_been_assigned = true;

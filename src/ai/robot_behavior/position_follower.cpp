@@ -24,24 +24,24 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 PositionFollower::PositionFollower(ai::AiData& ai_data, double time, double dt)
-  : ConsignFollower(ai_data), position(0.0, 0.0), angle(0.0)
+  : ConsignFollower(ai_data), position_(0.0, 0.0), angle_(0.0)
 {
-  robot_control.initTime(time, dt);
+  robot_control_.initTime(time, dt);
 }
 
-void PositionFollower::set_following_position(const rhoban_geometry::Point& position_to_follow,
+void PositionFollower::setFollowingPosition(const rhoban_geometry::Point& position_to_follow,
                                               const ContinuousAngle& angle)
 {
-  this->position = position_to_follow;
-  this->angle = angle;
-  this->angle = this->robot_angular_position_;
-  this->angle.setToNearest(angle);
+  this->position_ = position_to_follow;
+  this->angle_ = angle;
+  this->angle_ = this->robot_angular_position_;
+  this->angle_.setToNearest(angle);
 }
 
-void PositionFollower::update_control(double time)
+void PositionFollower::updateControl(double time)
 {
-  robot_control.setGoal(position, angle);
-  robot_control.update(time, linearPosition(), angularPosition());
+  robot_control_.setGoal(position_, angle_);
+  robot_control_.update(time, linearPosition(), angularPosition());
 }
 
 void PositionFollower::update(double time, const ai::Robot& robot, const ai::Ball& ball)
@@ -57,31 +57,31 @@ void PositionFollower::update(double time, const ai::Robot& robot, const ai::Bal
   //  this->ball_position
   // are all avalaible
 
-  update_control(time);
+  updateControl(time);
 }
 Control PositionFollower::control() const
 {
-  Control ctrl = robot_control.limitedControl(robot_linear_position_, robot_angular_position_, robot_linear_velocity_,
+  Control ctrl = robot_control_.limitedControl(robot_linear_position_, robot_angular_position_, robot_linear_velocity_,
                                                robot_angular_velocity_);
 
   // DEBUG( "CONTROL - " << ai_data.time << " - " << ctrl.linear_velocity );
   return ctrl;
 }
 
-void PositionFollower::set_translation_pid(double kp, double ki, double kd)
+void PositionFollower::setTranslationPid(double kp, double ki, double kd)
 {
-  robot_control.setTranslationPid(kp, ki, kd);
+  robot_control_.setTranslationPid(kp, ki, kd);
 }
 
-void PositionFollower::set_orientation_pid(double kp, double ki, double kd)
+void PositionFollower::setOrientationPid(double kp, double ki, double kd)
 {
-  robot_control.setOrientationPid(kp, ki, kd);
+  robot_control_.setOrientationPid(kp, ki, kd);
 }
 
-void PositionFollower::set_limits(double translation_velocity_limit, double rotation_velocity_limit,
+void PositionFollower::setLimits(double translation_velocity_limit, double rotation_velocity_limit,
                                   double translation_acceleration_limit, double rotation_acceleration_limit)
 {
-  robot_control.setLimits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
+  robot_control_.setLimits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
                            rotation_acceleration_limit);
 }
 
@@ -89,8 +89,8 @@ rhoban_ssl::annotations::Annotations PositionFollower::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   bool dashed = true;
-  annotations.addArrow(linearPosition(), position, "magenta", dashed);
-  annotations.addArrow(position, position + Vector2d(std::cos(angle.value()), std::sin(angle.value())), "magenta",
+  annotations.addArrow(linearPosition(), position_, "magenta", dashed);
+  annotations.addArrow(position_, position_ + Vector2d(std::cos(angle_.value()), std::sin(angle_.value())), "magenta",
                        dashed);
   Control ctrl = control();
   annotations.addArrow(linearPosition(), linearPosition() + ctrl.linear_velocity, "orange", false);

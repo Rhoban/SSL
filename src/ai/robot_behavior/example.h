@@ -29,15 +29,15 @@ namespace robot_behavior
 class Example : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
-  double period;
-  double last_time;
-  int cpt;
+  double period_;
+  double last_time_;
+  int cpt_;
 
 public:
-  Example(ai::AiData& ai_data_);
+  Example(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

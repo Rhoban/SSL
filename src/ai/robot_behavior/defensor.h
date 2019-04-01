@@ -32,7 +32,7 @@ private:
   ConsignFollower* follower;
 
 public:
-  Defensor(ai::AiData& ai_data_);
+  Defensor(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

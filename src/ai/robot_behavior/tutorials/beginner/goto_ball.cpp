@@ -26,7 +26,7 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-Goto_ball::Goto_ball(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+Goto_ball::Goto_ball(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -41,8 +41,8 @@ void Goto_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball
   rhoban_geometry::Point robot_position = ballPosition();
   ContinuousAngle angle = 0.0;
 
-  follower->set_following_position(robot_position, angle);
-  follower->avoid_the_ball(false);
+  follower->setFollowingPosition(robot_position, angle);
+  follower->avoidTheBall(false);
   follower->update(time, robot, ball);
 }
 

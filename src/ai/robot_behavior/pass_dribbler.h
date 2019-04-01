@@ -26,31 +26,31 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class Pass_dribbler : public RobotBehavior
+class PassDribbler : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point point_to_pass;
-  int robot_to_pass_id;
-  vision::Team robot_to_pass_team;
-  double kick_power;
+  rhoban_geometry::Point point_to_pass_;
+  int robot_to_pass_id_;
+  vision::Team robot_to_pass_team_;
+  double kick_power_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
   bool need_to_kick;
-  Pass_dribbler(ai::AiData& ai_data_);
+  PassDribbler(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   // TODO: portée des variables ?
-  void declare_point_to_pass(rhoban_geometry::Point point);
-  void declare_robot_to_pass(int robot_id, vision::Team team = vision::Team::Ally);
-  void calc_kick_power(rhoban_geometry::Point start, rhoban_geometry::Point end);
+  void declarePointToPass(rhoban_geometry::Point point);
+  void declareRobotToPass(int robot_id, vision::Team team = vision::Team::Ally);
+  void calcKickPower(rhoban_geometry::Point start, rhoban_geometry::Point end);
 
   virtual Control control() const;
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Pass_dribbler();
+  virtual ~PassDribbler();
 };
 
 };  // namespace Robot_behavior

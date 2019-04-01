@@ -29,11 +29,11 @@ namespace robot_behavior
 class SlowStriker : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  double tempo;
-  rhoban_geometry::Point striking_point;
-  int robot_to_pass_id;
-  vision::Team robot_to_pass_team;
+  ConsignFollower* follower_;
+  double tempo_;
+  rhoban_geometry::Point striking_point_;
+  int robot_to_pass_id_;
+  vision::Team robot_to_pass_team_;
 
 public:
   SlowStriker(ai::AiData& ai_data_);
@@ -43,8 +43,8 @@ public:
   virtual Control control() const;
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
-  void declare_point_to_strik(rhoban_geometry::Point point);
-  void declare_robot_to_pass(int id, vision::Team team = vision::Team::Ally);
+  void declarePointToStrike(rhoban_geometry::Point point);
+  void declareRobotToPass(int id, vision::Team team = vision::Team::Ally);
   virtual ~SlowStriker();
 };
 

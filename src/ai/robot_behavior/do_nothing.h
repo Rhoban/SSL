@@ -28,7 +28,7 @@ namespace robot_behavior
 class DoNothing : public RobotBehavior
 {
 public:
-  DoNothing(ai::AiData& ai_data_);
+  DoNothing(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

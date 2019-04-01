@@ -75,7 +75,7 @@ void AttaqueWithSupport::stop(double time)
 void AttaqueWithSupport::update(double time)
 {
   results_ = GameInformations::findGoalBestMove(ballPosition());
-  striker_->declare_point_to_strik(results_.first);
+  striker_->declarePointToStrike(results_.first);
 }
 
 void AttaqueWithSupport::assignBehaviorToRobots(
@@ -114,15 +114,15 @@ void AttaqueWithSupport::assignBehaviorToRobots(
     if (results_.second > seuil)
     {
       assign_behavior(strikerID, striker_);
-      support_->declare_robot_to_follow(strikerID, Vector2d(1, 2), vision::Team::Ally);
+      support_->declare_robot_to_follow_(strikerID, Vector2d(1, 2), vision::Team::Ally);
       assign_behavior(supportID, support_);
     }
     else
     {
-      pass_->declare_robot_to_pass(supportID, vision::Team::Ally);
+      pass_->declareRobotToPass(supportID, vision::Team::Ally);
       assign_behavior(strikerID, pass_);
     }
-    support_->declare_robot_to_follow(strikerID, Vector2d(1, 2), vision::Team::Ally);
+    support_->declare_robot_to_follow_(strikerID, Vector2d(1, 2), vision::Team::Ally);
     assign_behavior(supportID, support_);
 
     // behaviors_are_assigned = true;

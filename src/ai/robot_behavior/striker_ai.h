@@ -29,10 +29,10 @@ namespace robot_behavior
 class StrikerAi : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  StrikerAi(ai::AiData& ai_data_);
+  StrikerAi(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

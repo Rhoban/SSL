@@ -26,18 +26,18 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Pass_dribbler::Pass_dribbler(ai::AiData& ai_data)
+PassDribbler::PassDribbler(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , point_to_pass(66, 66)
-  , robot_to_pass_id(-1)
-  , robot_to_pass_team(vision::Team::Ally)
-  , kick_power(0.5)
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , point_to_pass_(66, 66)
+  , robot_to_pass_id_(-1)
+  , robot_to_pass_team_(vision::Team::Ally)
+  , kick_power_(0.5)
+  , follower_(Factory::fixedConsignFollower(ai_data))
   , need_to_kick(false)
 {
 }
 
-void Pass_dribbler::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void PassDribbler::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -50,13 +50,13 @@ void Pass_dribbler::update(double time, const ai::Robot& robot, const ai::Ball& 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
   const ContinuousAngle& robot_angle = robot.getMovement().angularPosition(time);
 
-  if (robot_to_pass_id != -1)
+  if (robot_to_pass_id_ != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id, robot_to_pass_team);
-    point_to_pass = robot_to_pass.getMovement().linearPosition(time);
+    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
+    point_to_pass_ = robot_to_pass.getMovement().linearPosition(time);
   }
 
-  Vector2d robot_point_to_pass_vector = point_to_pass - robot_position;
+  Vector2d robot_point_to_pass_vector = point_to_pass_ - robot_position;
   Vector2d ball_robot_vector = robot_position - ballPosition();
 
   robot_point_to_pass_vector = robot_point_to_pass_vector / robot_point_to_pass_vector.norm();
@@ -90,15 +90,15 @@ void Pass_dribbler::update(double time, const ai::Robot& robot, const ai::Ball& 
     }
   }
 
-  Pass_dribbler::calc_kick_power(robot_position, target_position);
-  follower->avoid_the_ball(false);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  PassDribbler::calcKickPower(robot_position, target_position);
+  follower_->avoidTheBall(false);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Pass_dribbler::control() const
+Control PassDribbler::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
 
   if (need_to_kick == false)
@@ -108,39 +108,39 @@ Control Pass_dribbler::control() const
   else
   {
     ctrl.spin = false;
-    ctrl.kickPower = kick_power;
+    ctrl.kickPower = kick_power_;
     ctrl.kick = true;
   }
   return ctrl;
 }
 
-void Pass_dribbler::declare_point_to_pass(rhoban_geometry::Point point)
+void PassDribbler::declarePointToPass(rhoban_geometry::Point point)
 {
-  point_to_pass = point;
+  point_to_pass_ = point;
 }
 
-void Pass_dribbler::declare_robot_to_pass(int robot_id, vision::Team team)
+void PassDribbler::declareRobotToPass(int robot_id, vision::Team team)
 {
-  robot_to_pass_id = robot_id;
-  robot_to_pass_team = team;
+  robot_to_pass_id_ = robot_id;
+  robot_to_pass_team_ = team;
 }
 
-void Pass_dribbler::calc_kick_power(rhoban_geometry::Point start, rhoban_geometry::Point end)
+void PassDribbler::calcKickPower(rhoban_geometry::Point start, rhoban_geometry::Point end)
 {
   Vector2d target_vector = end - start;
 
   // Just a prototype before we actually try on the field how much kick_power affect distance
-  kick_power = target_vector.norm() / 10;
+  kick_power_ = target_vector.norm() / 10;
 }
 
-Pass_dribbler::~Pass_dribbler()
+PassDribbler::~PassDribbler()
 {
-  delete follower;
+  delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Pass_dribbler::getAnnotations() const
+rhoban_ssl::annotations::Annotations PassDribbler::getAnnotations() const
 {
-  return follower->getAnnotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior

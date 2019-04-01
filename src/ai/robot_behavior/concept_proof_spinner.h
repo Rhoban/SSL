@@ -26,17 +26,17 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class Concept_proof_spinner : public RobotBehavior
+class ConceptProofSpinner : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
-  bool go_to_home;
-  bool save_ball_position;
-  rhoban_geometry::Point ball_pos;
+  bool go_to_home_;
+  bool save_ball_position_;
+  rhoban_geometry::Point ball_pos_;
 
 public:
-  Concept_proof_spinner(ai::AiData& ai_data_);
+  ConceptProofSpinner(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -44,7 +44,7 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Concept_proof_spinner();
+  virtual ~ConceptProofSpinner();
 };
 
 };  // namespace Robot_behavior
