@@ -27,11 +27,11 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Base_3_gms::Base_3_gms(ai::AiData& ai_data) : Strategy(ai_data)
+Base3Gms::Base3Gms(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-Base_3_gms::~Base_3_gms()
+Base3Gms::~Base3Gms()
 {
 }
 
@@ -39,7 +39,7 @@ Base_3_gms::~Base_3_gms()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Base_3_gms::minRobots() const
+int Base3Gms::minRobots() const
 {
   return 3;
 }
@@ -48,33 +48,33 @@ int Base_3_gms::minRobots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Base_3_gms::maxRobots() const
+int Base3Gms::maxRobots() const
 {
   return 3;
 }
 
-GoalieNeed Base_3_gms::needsGoalie() const
+GoalieNeed Base3Gms::needsGoalie() const
 {
   return GoalieNeed::YES;
 }
 
-const std::string Base_3_gms::name = "Base_3_gms";
+const std::string Base3Gms::name = "Base_3_gms";
 
-void Base_3_gms::start(double time)
+void Base3Gms::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned = false;
 }
-void Base_3_gms::stop(double time)
+void Base3Gms::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Base_3_gms::update(double time)
+void Base3Gms::update(double time)
 {
 }
 
-void Base_3_gms::assignBehaviorToRobots(
+void Base3Gms::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned))
@@ -100,7 +100,7 @@ void Base_3_gms::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Base_3_gms::getStartingPositions(int number_of_avalaible_robots)
+Base3Gms::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
@@ -113,7 +113,7 @@ Base_3_gms::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Base_3_gms::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
+bool Base3Gms::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                   ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
