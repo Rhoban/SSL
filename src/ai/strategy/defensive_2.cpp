@@ -25,10 +25,10 @@ namespace strategy
 {
 Defensive2::Defensive2(ai::AiData& ai_data)
   : Strategy(ai_data)
-  , degageur1(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
-  , obstructeur1(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
-  , degageur2(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
-  , obstructeur2(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
+  , degageur1_(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
+  , obstructeur1_(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
+  , degageur2_(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
+  , obstructeur2_(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
 {
 }
 
@@ -64,7 +64,7 @@ const std::string Defensive2::name = "defensive2";
 void Defensive2::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void Defensive2::stop(double time)
 {
@@ -99,36 +99,36 @@ void Defensive2::assignBehaviorToRobots(
 
   if (distance1 < distance2)
   {
-    obstructeur1->declare_robot_to_obstruct(id_to_obstruct1, vision::Team::Opponent);
-    obstructeur2->declare_robot_to_obstruct(id_to_obstruct2, vision::Team::Opponent);
+    obstructeur1_->declare_robot_to_obstruct(id_to_obstruct1, vision::Team::Opponent);
+    obstructeur2_->declare_robot_to_obstruct(id_to_obstruct2, vision::Team::Opponent);
   }
   else
   {
-    obstructeur1->declare_robot_to_obstruct(id_to_obstruct2, vision::Team::Opponent);
-    obstructeur2->declare_robot_to_obstruct(id_to_obstruct1, vision::Team::Opponent);
+    obstructeur1_->declare_robot_to_obstruct(id_to_obstruct2, vision::Team::Opponent);
+    obstructeur2_->declare_robot_to_obstruct(id_to_obstruct1, vision::Team::Opponent);
   }
 
   int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
 
   if (nearest_ballID == robotID1)
   {
-    assign_behavior(robotID1, degageur1);
+    assign_behavior(robotID1, degageur1_);
   }
   else
   {
-    assign_behavior(robotID1, obstructeur1);
+    assign_behavior(robotID1, obstructeur1_);
   }
 
   if (nearest_ballID == robotID2)
   {
-    assign_behavior(robotID2, degageur2);
+    assign_behavior(robotID2, degageur2_);
   }
   else
   {
-    assign_behavior(robotID2, obstructeur2);
+    assign_behavior(robotID2, obstructeur2_);
   }
 
-  behaviors_are_assigned = true;
+  behaviors_are_assigned_ = true;
 }
 
 // We declare here the starting positions that are used to :
