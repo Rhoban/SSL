@@ -19,73 +19,73 @@
 
 #include "strategy.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
-Strategy::Strategy(Ai::AiData& ai_data)
-  : GameInformations(ai_data), ai_data(ai_data), goalie_id(-1), manage_a_goalie(false), goalie_opponent_id(-1)
+Strategy::Strategy(ai::AiData& ai_data)
+  : GameInformations(ai_data), ai_data_(ai_data), goalie_id_(-1), manage_a_goalie_(false), goalie_opponent_id_(-1)
 {
 }
 
-void Strategy::set_goalie(int id, bool to_be_managed)
+void Strategy::setGoalie(int id, bool to_be_managed)
 {
-  goalie_id = id;
-  manage_a_goalie = to_be_managed;
+  goalie_id_ = id;
+  manage_a_goalie_ = to_be_managed;
 }
 
 bool Strategy::have_to_manage_the_goalie() const
 {
-  return ((needs_goalie() != Goalie_need::NO) and manage_a_goalie and goalie_id >= 0);
+  return ((needsGoalie() != GoalieNeed::NO) and manage_a_goalie_ and goalie_id_ >= 0);
 }
 
-void Strategy::set_goalie_opponent(int id)
+void Strategy::setGoalieOpponent(int id)
 {
-  goalie_opponent_id = id;
+  goalie_opponent_id_ = id;
 }
 
-int Strategy::get_goalie() const
+int Strategy::getGoalie() const
 {
-  return goalie_id;
+  return goalie_id_;
 }
 
-int Strategy::get_goalie_opponent() const
+int Strategy::getGoalieOpponent() const
 {
-  return goalie_opponent_id;
+  return goalie_opponent_id_;
 }
 
-void Strategy::set_robot_affectation(const std::vector<int>& robot_ids)
+void Strategy::setRobotAffectation(const std::vector<int>& robot_ids)
 {
-  this->player_ids = robot_ids;
+  this->player_ids_ = robot_ids;
 }
-const std::vector<int>& Strategy::get_player_ids() const
+const std::vector<int>& Strategy::getPlayerIds() const
 {
-  return player_ids;
+  return player_ids_;
 }
 
-int Strategy::robot_id(int id) const
+int Strategy::robotId(int id) const
 {
-  assert(0 <= id and static_cast<unsigned int>(id) < player_ids.size());  // Whent that line make an assertion, that
+  assert(0 <= id and static_cast<unsigned int>(id) < player_ids_.size());  // Whent that line make an assertion, that
                                                                           // means, you don't have updated
-  // the min_robots() implementation inside your strategy code.
-  return player_ids[id];
+  // the minRobots() implementation inside your strategy code.
+  return player_ids_[id];
 }
 
-int Strategy::player_id(int id) const
+int Strategy::playerId(int id) const
 {
-  assert(0 <= id and static_cast<unsigned int>(id) < player_ids.size());  // Whent that line make an assertion, that
+  assert(0 <= id and static_cast<unsigned int>(id) < player_ids_.size());  // Whent that line make an assertion, that
                                                                           // means, you don't have updated
-  // the min_robots() implementation inside your strategy code.
-  return player_ids[id];
+  // the minRobots() implementation inside your strategy code.
+  return player_ids_[id];
 }
 
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Strategy::get_starting_positions(int number_of_avalaible_robots) const
+Strategy::getStartingPositions(int number_of_avalaible_robots) const
 {
   return std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >();
 };
 
-bool Strategy::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool Strategy::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position) const
 {
   return false;
@@ -95,10 +95,10 @@ Strategy::~Strategy()
 {
 }
 
-RhobanSSLAnnotation::Annotations Strategy::get_annotations() const
+rhoban_ssl::annotations::Annotations Strategy::getAnnotations() const
 {
-  return RhobanSSLAnnotation::Annotations();
+  return rhoban_ssl::annotations::Annotations();
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

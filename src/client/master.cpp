@@ -6,7 +6,7 @@
 #include "Kinematic.h"
 #include "Master.h"
 
-using namespace RhobanSSL;
+using namespace rhoban_ssl;
 using namespace rhoban_geometry;
 
 #define ROBOT 0

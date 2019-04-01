@@ -25,7 +25,7 @@
 
 namespace rhoban_geometry
 {
-Point center_of_cone_incircle(const rhoban_geometry::Point& cone_vertex, const rhoban_geometry::Point& cone_base_A,
+Point centerOfConeIncircle(const rhoban_geometry::Point& cone_vertex, const rhoban_geometry::Point& cone_base_A,
                               const rhoban_geometry::Point& cone_base_B, double circle_radius);
 
 /*
@@ -35,7 +35,7 @@ Point center_of_cone_incircle(const rhoban_geometry::Point& cone_vertex, const r
  * v[2] and v[3] are crossing tangents of the two circles
  * ( V[2] is the symetric of $V[3] beetween the two circle centers).
  */
-std::vector<rhoban_geometry::Segment> tangent_of_two_circle(const rhoban_geometry::Circle& circle_A,
+std::vector<rhoban_geometry::Segment> tangentOfTwoCircle(const rhoban_geometry::Circle& circle_A,
                                                             const rhoban_geometry::Circle& center_B);
 
 }  // namespace rhoban_geometry

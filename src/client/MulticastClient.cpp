@@ -16,7 +16,7 @@
 
 using namespace rhoban_utils;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 MulticastClient::MulticastClient(std::string addr, std::string port)
   : addr(addr), port(port), receivedData(false), packets(0)
@@ -185,4 +185,4 @@ unsigned int MulticastClient::getPackets()
 {
   return packets;
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

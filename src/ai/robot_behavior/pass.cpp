@@ -21,83 +21,83 @@
 #include <math/tangents.h>
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-Pass::Pass(Ai::AiData& ai_data)
+Pass::Pass(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , robot_to_pass_id(-1)
-  , robot_to_pass_team(Vision::Team::Ally)
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , robot_to_pass_id_(-1)
+  , robot_to_pass_team_(vision::Team::Ally)
+  , follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Pass::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Pass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
-  const Ai::Robot& robot_to_pass = get_robot(robot_to_pass_id, robot_to_pass_team);
-  rhoban_geometry::Point position_robot_to_pass = robot_to_pass.get_movement().linear_position(time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
+  const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
+  rhoban_geometry::Point position_robot_to_pass = robot_to_pass.getMovement().linearPosition(time);
   // rhoban_geometry::Point target_position = ball_position();
 
   // Striker:
   // rhoban_geometry::Point opponent_goal_point = opponent_goal_center();
-  Vector2d ball_robot_to_pass_vector = position_robot_to_pass - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_robot_to_pass_vector = position_robot_to_pass - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
   ball_robot_to_pass_vector = ball_robot_to_pass_vector / ball_robot_to_pass_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
   double target_radius_from_ball;
-  double scalar_ball_robot = -scalar_product(ball_robot_vector, ball_robot_to_pass_vector);
+  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_robot_to_pass_vector);
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 1.5;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
     target_radius_from_ball = 1 / (2 * (scalar_ball_robot - 1.2)) + 2;
   }
-  rhoban_geometry::Point target_position = ball_position() - ball_robot_to_pass_vector * target_radius_from_ball;
+  rhoban_geometry::Point target_position = ballPosition() - ball_robot_to_pass_vector * target_radius_from_ball;
   double target_rotation = detail::vec2angle(ball_robot_to_pass_vector);
 
   // follower->avoid_the_ball(false);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control Pass::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kickPower = 0.5;
   ctrl.kick = true;
   return ctrl;
 }
 
-void Pass::declare_robot_to_pass(int robot_id, Vision::Team team)
+void Pass::declareRobotToPass(int robot_id, vision::Team team)
 {
-  robot_to_pass_id = robot_id;
-  robot_to_pass_team = team;
+  robot_to_pass_id_ = robot_id;
+  robot_to_pass_team_ = team;
 }
 
 Pass::~Pass()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Pass::get_annotations() const
+rhoban_ssl::annotations::Annotations Pass::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

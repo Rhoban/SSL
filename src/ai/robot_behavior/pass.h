@@ -22,31 +22,31 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Pass : public RobotBehavior
 {
 private:
-  int robot_to_pass_id;
-  Vision::Team robot_to_pass_team;
+  int robot_to_pass_id_;
+  vision::Team robot_to_pass_team_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  Pass(Ai::AiData& ai_data);
+  Pass(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   // TODO: portée des variables ?
-  void declare_robot_to_pass(int robot_id, Vision::Team team = Vision::Team::Ally);
+  void declareRobotToPass(int robot_id, vision::Team team = vision::Team::Ally);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Pass();
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

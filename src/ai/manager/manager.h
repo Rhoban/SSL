@@ -29,9 +29,9 @@
 #include <strategy/placer.h>
 #include <annotations/annotations.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 class Manager : public GameInformations
 {
@@ -40,117 +40,117 @@ public:
   static constexpr const char* MANAGER__PLACER = "manager__placer";
 
 private:
-  bool blueIsNotSet;
-  bool blueTeamOnPositiveHalf;
-  int goalie_id;
-  int goalie_opponent_id;
-  std::vector<int> team_ids;
-  std::vector<int> valid_team_ids;
-  std::vector<int> valid_player_ids;
-  std::vector<int> invalid_team_ids;
+  bool blue_is_not_set_;
+  bool blue_team_on_positive_half_;
+  int goalie_id_;
+  int goalie_opponent_id_;
+  std::vector<int> team_ids_;
+  std::vector<int> valid_team_ids_;
+  std::vector<int> valid_player_ids_;
+  std::vector<int> invalid_team_ids_;
 
-  std::list<std::string> current_strategy_names;
-  std::map<std::string, std::shared_ptr<Strategy::Strategy>> strategies;
+  std::list<std::string> current_strategy_names_;
+  std::map<std::string, std::shared_ptr<strategy::Strategy>> strategies_;
 
-  void affect_invalid_robots_to_invalid_robots_strategy();
-  void detect_invalid_robots();
+  void affectInvalidRobotsToInvalidRobotsStrategy();
+  void detectInvalidRobots();
 
 protected:
-  Ai::AiData& ai_data;
+  ai::AiData& ai_data_;
 
 public:
   int time() const;
   int dt() const;
 
-  std::vector<std::string> get_available_strategies();
+  std::vector<std::string> getAvailableStrategies();
 
-  Manager(Ai::AiData& ai_data);
+  Manager(ai::AiData& ai_data);
 
-  Ai::Team get_team() const;
-  const std::string& get_team_name() const;
-  void declare_goalie_id(int goalie_id);
-  void declare_goalie_opponent_id(int goalie_opponent_id);
-  void declare_team_ids(const std::vector<int>& team_ids);
-  const std::string& get_next_strategy_with_goalie() const;
-  const std::vector<int>& get_team_ids() const;
-  const std::vector<int>& get_valid_team_ids() const;
-  const std::vector<int>& get_valid_player_ids() const;
-  const std::vector<int>& get_invalid_team_ids() const;
+  ai::Team getTeam() const;
+  const std::string& getTeamName() const;
+  void declareGoalieId(int goalie_id);
+  void declareGoalieOpponentId(int goalie_opponent_id);
+  void declareTeamIds(const std::vector<int>& team_ids);
+  const std::string& getNextStrategyWithGoalie() const;
+  const std::vector<int>& getTeamIds() const;
+  const std::vector<int>& getValidTeamIds() const;
+  const std::vector<int>& getValidPlayerIds() const;
+  const std::vector<int>& getInvalidTeamIds() const;
   // return the goalie id. If id<0 then no goalie is declared.
-  int get_goalie_id() const;
+  int getGoalieId() const;
   // return the opponent goalie id. If id<0 then no opponent goalie is declared.
-  int get_goalie_opponent_id() const;
+  int getGoalieOpponentId() const;
 
   template <typename STRATEGY>
-  STRATEGY& get_strategy_(const std::string& name)
+  STRATEGY& getStrategy(const std::string& name)
   {
-    return static_cast<STRATEGY&>(*strategies.at(name));
+    return static_cast<STRATEGY&>(*strategies_.at(name));
   };
 
   template <typename STRATEGY>
-  STRATEGY& get_strategy_()
+  STRATEGY& getStrategy()
   {
-    return get_strategy_<STRATEGY>(STRATEGY::name);
+    return getStrategy<STRATEGY>(STRATEGY::name);
   };
 
-  Strategy::Strategy& get_strategy(const std::string& strategy_name);
-  const Strategy::Strategy& get_strategy(const std::string& strategy_name) const;
-  const std::list<std::string>& get_current_strategy_names() const;
+  strategy::Strategy& getStrategy(const std::string& strategy_name);
+  const strategy::Strategy& getStrategy(const std::string& strategy_name) const;
+  const std::list<std::string>& getCurrentStrategyNames() const;
 
-  void register_strategy(const std::string& strategy_name, std::shared_ptr<Strategy::Strategy> strategy);
+  void registerStrategy(const std::string& strategy_name, std::shared_ptr<strategy::Strategy> strategy);
 
-  void clear_strategy_assignement();
+  void clearStrategyAssignement();
 
-  void assign_strategy(const std::string& strategy_name, double time, const std::vector<int>& robot_ids,
+  void assignStrategy(const std::string& strategy_name, double time, const std::vector<int>& robot_ids,
                        bool assign_goalie = false);
-  void declare_and_assign_next_strategies(const std::list<std::string>& future_strats);
+  void declareAndAssignNextStrategies(const std::list<std::string>& future_strats);
 
   virtual void update(double time) = 0;
 
-  virtual void update_strategies(double time);
-  virtual void update_current_strategies(double time);
+  virtual void updateStrategies(double time);
+  virtual void updateCurrentStrategies(double time);
 
-  virtual void assign_behavior_to_robots(std::map<int, std::shared_ptr<Robot_behavior::RobotBehavior>>& robot_behaviors,
+  virtual void assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior>>& robot_behaviors,
                                          double time, double dt);
 
-  void change_ally_and_opponent_goalie_id(int blue_goalie_id, int yellow_goalie_id);
+  void changeAllyAndOpponentGoalieId(int blue_goalie_id, int yellow_goalie_id);
 
-  void change_team_and_point_of_view(Ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis);
+  void changeTeamAndPointOfView(ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis);
 
-  void remove_invalid_robots();
+  void removeInvalidRobots();
 
   virtual ~Manager();
 
 private:
-  std::list<std::string> determine_the_robot_needs_for_the_strategies(const std::list<std::string>& next_strategies);
-  unsigned int nb_of_extra_robots_non_affected;
-  unsigned int minimal_nb_of_robots_to_be_affected;
-  unsigned int nb_of_extra_robots;
-  std::string strategy_with_arbitrary_number_of_robot;
+  std::list<std::string> determineTheRobotNeedsForTheStrategies(const std::list<std::string>& next_strategies);
+  unsigned int nb_of_extra_robots_non_affected_;
+  unsigned int minimal_nb_of_robots_to_be_affected_;
+  unsigned int nb_of_extra_robots_;
+  std::string strategy_with_arbitrary_number_of_robot_;
   // init of robot_affectations_by_strategy;
-  bool goal_has_to_be_placed;
-  std::string strategy_with_goal;
+  bool goal_has_to_be_placed_;
+  std::string strategy_with_goal_;
 
-  void aggregate_all_starting_position_of_all_strategies(const std::list<std::string>& next_strategies);
-  std::list<std::pair<rhoban_geometry::Point, ContinuousAngle>> starting_positions;
-  std::list<std::pair<std::string, int>> repartitions_of_starting_positions_in_the_list;
-  rhoban_geometry::Point goalie_linear_position;
-  ContinuousAngle goalie_angular_position;
+  void aggregateAllStartingPositionOfAllStrategies(const std::list<std::string>& next_strategies);
+  std::list<std::pair<rhoban_geometry::Point, ContinuousAngle>> starting_positions_;
+  std::list<std::pair<std::string, int>> repartitions_of_starting_positions_in_the_list_;
+  rhoban_geometry::Point goalie_linear_position_;
+  ContinuousAngle goalie_angular_position_;
 
-  void sort_robot_ordered_by_the_distance_with_starting_position();
-  std::vector<int> robot_affectations;
+  void sortRobotOrderedByTheDistanceWithStartingPosition();
+  std::vector<int> robot_affectations_;
   // this list is a special orrder of get_valid_player_ids().
   // ths starting_posiitons.size() fisrt robots of robot_affectation
   // correspond a good affectation with respect to the starting position
   // of startings position;
-  std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle>> robot_consigns;
+  std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle>> robot_consigns_;
   // this list contains the starting position of get_valid_player_ids().
   // the starting_posiitons.size() first position are equals to the position
   // pf starting_position.
   // the other are some default placement.
 
-  void compute_robot_affectations_to_strategies();
-  std::map<std::string, std::vector<int>> robot_affectations_by_strategy;
+  void computeRobotAffectationsToStrategies();
+  std::map<std::string, std::vector<int>> robot_affectations_by_strategy_;
 
   /*
 
@@ -164,16 +164,16 @@ private:
 
   */
 
-  void declare_robot_positions_in_the_placer();
+  void declareRobotPositionsInThePlacer();
 
 protected:
-  void declare_next_strategies(const std::list<std::string>& next_strategies);
+  void declareNextStrategies(const std::list<std::string>& next_strategies);
 
 public:
-  void set_ball_avoidance_for_all_robots(bool value);
+  void setBallAvoidanceForAllRobots(bool value);
 
-  void place_all_the_robots(double time, const std::list<std::string>& next_strategies);
-  const std::vector<int>& get_robot_affectations(const std::string& strategy_name) const;
+  void placeAllTheRobots(double time, const std::list<std::string>& next_strategies);
+  const std::vector<int>& getRobotAffectations(const std::string& strategy_name) const;
 
   //
   // This function is used to draw annotations in the viewer.
@@ -191,7 +191,7 @@ public:
   //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
   //      return annotations;
   //  }
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace Manager

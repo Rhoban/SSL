@@ -22,31 +22,31 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class SlowStriker : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  double tempo;
-  rhoban_geometry::Point striking_point;
-  int robot_to_pass_id;
-  Vision::Team robot_to_pass_team;
+  ConsignFollower* follower_;
+  double tempo_;
+  rhoban_geometry::Point striking_point_;
+  int robot_to_pass_id_;
+  vision::Team robot_to_pass_team_;
 
 public:
-  SlowStriker(Ai::AiData& ai_data);
+  SlowStriker(ai::AiData& ai_data_);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-  void declare_point_to_strik(rhoban_geometry::Point point);
-  void declare_robot_to_pass(int id, Vision::Team team = Vision::Team::Ally);
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+  void declarePointToStrike(rhoban_geometry::Point point);
+  void declareRobotToPass(int id, vision::Team team = vision::Team::Ally);
   virtual ~SlowStriker();
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

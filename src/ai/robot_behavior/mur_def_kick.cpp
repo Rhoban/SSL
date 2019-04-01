@@ -21,28 +21,28 @@
 #include <math/tangents.h>
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-Mur_def_kick::Mur_def_kick(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool)
-  : RobotBehavior(ai_data), mur_robot_id(0), mur_nb_robot(1)
+MurDefKick::MurDefKick(ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool)
+  : RobotBehavior(ai_data), mur_robot_id_(0), mur_nb_robot_(1)
 {
   if (fixed_consign_follower_without_repsecting_authorized_location_bool == 0)
   {
-    follower = Factory::fixed_consign_follower(ai_data);
+    follower_ = Factory::fixedConsignFollower(ai_data);
   }
   else
   {
-    follower = Factory::fixed_consign_follower_without_repsecting_authorized_location(ai_data);
+    follower_ = Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocation(ai_data);
   }
 }
 
-void Mur_def_kick::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void MurDefKick::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
@@ -50,37 +50,37 @@ void Mur_def_kick::update(double time, const Ai::Robot& robot, const Ai::Ball& b
 
   // int robot_id = 2;
   // const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
-  // const Ai::Robot & robot = robot_table.at(robot_id);
+  // const ai::Robot & robot = robot_table.at(robot_id);
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
-  rhoban_geometry::Point ally_goal_point = ally_goal_center();
+  rhoban_geometry::Point ally_goal_point = allyGoalCenter();
 
-  Vector2d ball_goal_vector = ally_goal_point - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = ally_goal_point - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
-  double scalar_ball_robot = scalar_product(ball_robot_vector, ball_goal_vector);
+  double scalar_ball_robot = scalarProduct(ball_robot_vector, ball_goal_vector);
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
   }
 
   double target_rotation = detail::vec2angle(-ball_robot_vector);
   rhoban_geometry::Point target_position;
 
-  double multiple_robot_offset = ai_data.constants.robot_radius + 0.02;
+  double multiple_robot_offset = ai_data_.constants.robot_radius + 0.02;
 
-  if (mur_nb_robot == 2)
+  if (mur_nb_robot_ == 2)
   {
-    if (mur_robot_id == 0)
+    if (mur_robot_id_ == 0)
     {
       multiple_robot_offset = multiple_robot_offset;
     }
@@ -98,35 +98,35 @@ void Mur_def_kick::update(double time, const Ai::Robot& robot, const Ai::Ball& b
 
   Vector2d BITE = ball_goal_vector.perpendicular();
   BITE = BITE / BITE.norm();
-  target_position = ball_position() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * BITE;
+  target_position = ballPosition() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * BITE;
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Mur_def_kick::control() const
+Control MurDefKick::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   // ctrl.spin = true; // We active the dribler !
   ctrl.kick = false;
   return ctrl;
 }
 
-void Mur_def_kick::declare_mur_robot_id(int id, int mur_nb_robots)
+void MurDefKick::declareMurRobotId(int id, int mur_nb_robots)
 {
-  mur_robot_id = id;
-  mur_nb_robot = mur_nb_robots;
+  mur_robot_id_ = id;
+  mur_nb_robot_ = mur_nb_robots;
 }
 
-Mur_def_kick::~Mur_def_kick()
+MurDefKick::~MurDefKick()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Mur_def_kick::get_annotations() const
+rhoban_ssl::annotations::Annotations MurDefKick::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

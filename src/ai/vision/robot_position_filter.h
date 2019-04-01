@@ -5,37 +5,37 @@
 #include <math/continuous_angle.h>
 #include "vision_data.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Vision
+namespace vision
 {
-enum Part_of_the_field
+enum PartOfTheField
 {
   POSIVE_HALF_FIELD,
   NEGATIVE_HALF_FIELD,
   ALL_FIELD
 };
 
-bool object_coordonate_is_valid(double x, double y, Part_of_the_field part_of_the_field_used);
+bool objectCoordonateIsValid(double x, double y, PartOfTheField part_of_the_field_used);
 
-class Robot_position_filter
+class RobotPositionFilter
 {
 public:
   static std::pair<rhoban_geometry::Point, ContinuousAngle>
-  average_filter(int robot_id, const SSL_DetectionRobot& robotFrame, Ai::Team team_color, bool ally,
+  averageFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
                  const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
-                 const Vision::VisionData& old_vision_data, Vision::Part_of_the_field part_of_the_field_used);
+                 const vision::VisionData& old_vision_data, vision::PartOfTheField part_of_the_field_used);
 
   static std::pair<rhoban_geometry::Point, ContinuousAngle>
-  exponential_degression_filter(int robot_id, const SSL_DetectionRobot& robotFrame, Ai::Team team_color, bool ally,
+  exponentialDegressionFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
                                 const std::map<int, SSL_DetectionFrame>& camera_detections,
-                                bool& orientation_is_defined, const Vision::VisionData& old_vision_data);
+                                bool& orientation_is_defined, const vision::VisionData& old_vision_data);
 
   static std::pair<rhoban_geometry::Point, ContinuousAngle>
-  no_filter(int robot_id, const SSL_DetectionRobot& robotFrame, Ai::Team team_color, bool ally,
+  noFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
             const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
-            const Vision::VisionData& old_vision_data);
+            const vision::VisionData& old_vision_data);
 };
 
 };  // namespace Vision
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

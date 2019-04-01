@@ -25,7 +25,7 @@
 #include <Kinematic.h>
 #include "ai_commander.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class AICommanderReal : public AICommander
 {
@@ -40,8 +40,8 @@ public:
   virtual ~AICommanderReal();
 
 protected:
-  bool kicking;
-  Master master;
-  Kinematic kinematic;
+  bool kicking_;
+  Master master_;
+  Kinematic kinematic_;
 };
 }  // namespace RhobanSSL

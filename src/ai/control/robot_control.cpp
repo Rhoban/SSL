@@ -53,11 +53,11 @@ double CurveForRobot::rotation(double t) const
   return rotation_movment(t)[0];
 }
 
-void CurveForRobot::print_translation_movment(double dt) const
+void CurveForRobot::printTranslationMovment(double dt) const
 {
   std::cout << "translation movment : " << std::endl;
   std::cout << "--------------------- " << std::endl;
-  double max_time = translation_movment.max_time();
+  double max_time = translation_movment.maxTime();
   std::cout << "   max time : " << max_time;
   for (double t = 0; t < max_time; t += dt)
   {
@@ -66,7 +66,7 @@ void CurveForRobot::print_translation_movment(double dt) const
   }
 }
 
-void CurveForRobot::print_translation_curve(double dt) const
+void CurveForRobot::printTranslationCurve(double dt) const
 {
   std::cout << "translation curve : " << std::endl;
   std::cout << "------------------- " << std::endl;
@@ -77,11 +77,11 @@ void CurveForRobot::print_translation_curve(double dt) const
   }
 }
 
-void CurveForRobot::print_rotation_movment(double dt) const
+void CurveForRobot::printRotationMovment(double dt) const
 {
   std::cout << "rotation movment : " << std::endl;
   std::cout << "--------------------- " << std::endl;
-  double max_time = rotation_movment.max_time();
+  double max_time = rotation_movment.maxTime();
   std::cout << "   max time : " << max_time;
   for (double t = 0; t < max_time; t += dt)
   {
@@ -90,7 +90,7 @@ void CurveForRobot::print_rotation_movment(double dt) const
   }
 }
 
-void CurveForRobot::print_rotation_curve(double dt) const
+void CurveForRobot::printRotationCurve(double dt) const
 {
   std::cout << "rotation curve : " << std::endl;
   std::cout << "------------------- " << std::endl;
@@ -101,46 +101,46 @@ void CurveForRobot::print_rotation_curve(double dt) const
   }
 }
 
-void RobotControl::set_limits(double translation_velocity_limit, double rotation_velocity_limit,
+void RobotControl::setLimits(double translation_velocity_limit, double rotation_velocity_limit,
                               double translation_acceleration_limit, double rotation_acceleration_limit)
 {
-  this->translation_velocity_limit = translation_velocity_limit;
-  this->rotation_velocity_limit = ContinuousAngle(rotation_velocity_limit);
-  this->translation_acceleration_limit = translation_acceleration_limit;
-  this->rotation_acceleration_limit = ContinuousAngle(rotation_acceleration_limit);
+  this->translation_velocity_limit_ = translation_velocity_limit;
+  this->rotation_velocity_limit_ = ContinuousAngle(rotation_velocity_limit);
+  this->translation_acceleration_limit_ = translation_acceleration_limit;
+  this->rotation_acceleration_limit_ = ContinuousAngle(rotation_acceleration_limit);
 }
 
 RobotControl::RobotControl()
-  : translation_velocity_limit(-1)
-  , rotation_velocity_limit(-1)
-  , translation_acceleration_limit(-1)
-  , rotation_acceleration_limit(-1){};
+  : translation_velocity_limit_(-1)
+  , rotation_velocity_limit_(-1)
+  , translation_acceleration_limit_(-1)
+  , rotation_acceleration_limit_(-1){};
 
-Control RobotControl::limited_control(const Vector2d& robot_position, const ContinuousAngle& robot_orientation,
+Control RobotControl::limitedControl(const Vector2d& robot_position, const ContinuousAngle& robot_orientation,
                                       const Vector2d& robot_linear_velocity,
                                       const ContinuousAngle& robot_angular_velocity) const
 {
-  Control res = no_limited_control();
+  Control res = noLimitedControl();
   if (res.angular_velocity.value() != 0.0)
   {
     double max_angular_velocity;
-    if (rotation_acceleration_limit >= ContinuousAngle(0.0))
+    if (rotation_acceleration_limit_ >= ContinuousAngle(0.0))
     {
-      max_angular_velocity = robot_angular_velocity.value() + get_dt() * rotation_acceleration_limit.value();
-      if (rotation_velocity_limit >= 0)
+      max_angular_velocity = robot_angular_velocity.value() + getDt() * rotation_acceleration_limit_.value();
+      if (rotation_velocity_limit_ >= 0)
       {
-        max_angular_velocity = std::min(rotation_velocity_limit.value(), max_angular_velocity);
+        max_angular_velocity = std::min(rotation_velocity_limit_.value(), max_angular_velocity);
       }
     }
     else
     {
-      max_angular_velocity = rotation_velocity_limit.value();
+      max_angular_velocity = rotation_velocity_limit_.value();
     }
     double min_angular_velocity = -1;
-    if (rotation_acceleration_limit >= ContinuousAngle(0.0))
+    if (rotation_acceleration_limit_ >= ContinuousAngle(0.0))
     {
       min_angular_velocity =
-          std::max(0.0, robot_angular_velocity.value() - get_dt() * rotation_acceleration_limit.value());
+          std::max(0.0, robot_angular_velocity.value() - getDt() * rotation_acceleration_limit_.value());
     }
 
     if (max_angular_velocity > 0.0)
@@ -163,23 +163,23 @@ Control RobotControl::limited_control(const Vector2d& robot_position, const Cont
   if (res.linear_velocity.norm() != 0)
   {
     double max_linear_velocity;
-    if (translation_acceleration_limit >= 0.0)
+    if (translation_acceleration_limit_ >= 0.0)
     {
-      max_linear_velocity = robot_linear_velocity.norm() + translation_acceleration_limit * get_dt();
-      if (translation_velocity_limit >= 0)
+      max_linear_velocity = robot_linear_velocity.norm() + translation_acceleration_limit_ * getDt();
+      if (translation_velocity_limit_ >= 0)
       {
-        max_linear_velocity = std::min(translation_velocity_limit, max_linear_velocity);
+        max_linear_velocity = std::min(translation_velocity_limit_, max_linear_velocity);
       }
     }
     else
     {
-      max_linear_velocity = translation_velocity_limit;
+      max_linear_velocity = translation_velocity_limit_;
     }
     double min_linear_velocity = -1.0;
-    if (translation_acceleration_limit >= 0.0)
+    if (translation_acceleration_limit_ >= 0.0)
     {
       min_linear_velocity =
-          std::max(0.0, robot_linear_velocity.norm() - get_dt() * this->translation_acceleration_limit);
+          std::max(0.0, robot_linear_velocity.norm() - getDt() * this->translation_acceleration_limit_);
     }
 
     if (max_linear_velocity > 0.0)
@@ -203,12 +203,12 @@ Control RobotControl::limited_control(const Vector2d& robot_position, const Cont
   return res;
 }
 
-Control RobotControlWithPid::no_limited_control() const
+Control RobotControlWithPid::noLimitedControl() const
 {
-  return PidController::no_limited_control();
+  return PidController::noLimitedControl();
 }
 
-double RobotControlWithPid::get_dt() const
+double RobotControlWithPid::getDt() const
 {
-  return PidController::get_dt();
+  return PidController::getDt();
 }

@@ -19,12 +19,12 @@
 
 #include "goalie_strat.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
-GoalieStrat::GoalieStrat(Ai::AiData& ai_data)
-  : Strategy(ai_data), degageur(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
+GoalieStrat::GoalieStrat(ai::AiData& ai_data)
+  : Strategy(ai_data), degageur_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
 {
 }
 
@@ -36,7 +36,7 @@ GoalieStrat::~GoalieStrat()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int GoalieStrat::min_robots() const
+int GoalieStrat::minRobots() const
 {
   return 0;
 }
@@ -45,14 +45,14 @@ int GoalieStrat::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int GoalieStrat::max_robots() const
+int GoalieStrat::maxRobots() const
 {
   return 0;
 }
 
-Goalie_need GoalieStrat::needs_goalie() const
+GoalieNeed GoalieStrat::needsGoalie() const
 {
-  return Goalie_need::YES;
+  return GoalieNeed::YES;
 }
 
 const std::string GoalieStrat::name = "goalie_strat";
@@ -60,8 +60,8 @@ const std::string GoalieStrat::name = "goalie_strat";
 void GoalieStrat::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  goalie = std::shared_ptr<Robot_behavior::Goalie>(new Robot_behavior::Goalie(ai_data));
-  behaviors_are_assigned = false;
+  goalie_ = std::shared_ptr<robot_behavior::Goalie>(new robot_behavior::Goalie(ai_data_));
+  behaviors_are_assigned_ = false;
 }
 void GoalieStrat::stop(double time)
 {
@@ -72,23 +72,23 @@ void GoalieStrat::update(double time)
 {
 }
 
-void GoalieStrat::assign_behavior_to_robots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+void GoalieStrat::assignBehaviorToRobots(
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // we assign now all the other behavior
 
-  int goalieID = get_goalie();  // we get the first if in get_player_ids()
+  int goalieID = getGoalie();  // we get the first if in get_player_ids()
 
-  if (ally_penalty_area().is_inside(ball_position()))
+  if (allyPenaltyArea().is_inside(ballPosition()))
   {
-    assign_behavior(goalieID, degageur);
+    assign_behavior(goalieID, degageur_);
   }
   else
   {
-    assign_behavior(goalieID, goalie);
+    assign_behavior(goalieID, goalie_);
   }
 
-  behaviors_are_assigned = true;
+  behaviors_are_assigned_ = true;
 }
 
 // We declare here the starting positions that are used to :
@@ -98,12 +98,12 @@ void GoalieStrat::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-GoalieStrat::get_starting_positions(int number_of_avalaible_robots)
+GoalieStrat::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ally_goal_center(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
 }
 
 //
@@ -111,21 +111,21 @@ GoalieStrat::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool GoalieStrat::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool GoalieStrat::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                    ContinuousAngle& angular_position)
 {
-  linear_position = ally_goal_center();
+  linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-RhobanSSLAnnotation::Annotations GoalieStrat::get_annotations() const
+rhoban_ssl::annotations::Annotations GoalieStrat::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = get_robot(*it).get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }
@@ -133,4 +133,4 @@ RhobanSSLAnnotation::Annotations GoalieStrat::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

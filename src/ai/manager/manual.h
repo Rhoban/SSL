@@ -21,27 +21,27 @@
 
 #include <manager/manager.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 class Manual : public Manager
 {
 private:
-  bool strategy_was_assigned;
+  bool strategy_was_assigned_;
 
-  Ai::Team team_color;
-  bool goal_to_positive_axis;
-  int ally_goalie_id;
-  int opponent_goalie_id;
+  ai::Team team_color_;
+  bool goal_to_positive_axis_;
+  int ally_goalie_id_;
+  int opponent_goalie_id_;
 
-  void assign_point_of_view_and_goalie();
+  void assignPointOfViewAndGoalie();
 
 public:
-  Manual(Ai::AiData& ai_data);
+  Manual(ai::AiData& ai_data);
 
-  void set_team_color(Ai::Team team_color);
-  void define_goal_to_positive_axis(bool value = true);
+  void setTeamColor(ai::Team team_color);
+  void defineGoalToPositiveAxis(bool value = true);
 
   void update(double time);
 

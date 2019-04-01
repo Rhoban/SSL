@@ -21,23 +21,23 @@
 #include <math/tangents.h>
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-Intermediate_striker::Intermediate_striker(Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), striking_point(opponent_goal_center()), follower(Factory::fixed_consign_follower(ai_data))
+IntermediateStriker::IntermediateStriker(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), striking_point_(opponentGoalCenter()), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Intermediate_striker::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void IntermediateStriker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
-  Vector2d ball_goal_vector = opponent_goal_center() - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = opponentGoalCenter() - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   double dist_ball_robot = ball_robot_vector.norm();
 
@@ -45,19 +45,19 @@ void Intermediate_striker::update(double time, const Ai::Robot& robot, const Ai:
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
   double target_radius_from_ball;
-  double scalar_ball_robot = -scalar_product(ball_robot_vector, ball_goal_vector);
+  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_goal_vector);
 
   // If the robot is between the x-axis of the ball and the x-axis of the opponent_goal_center, the scalar is lesser
   // than to 0. If the robot is behind the x-axis of the ball, the scalar is greater than to 0.
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
 
     // Function used to place behind the ball and strike the ball cogently.
     // The limit when x (scalar_ball_robot) is set to 0, is equal to infinity.
@@ -66,42 +66,42 @@ void Intermediate_striker::update(double time, const Ai::Robot& robot, const Ai:
     // If the ball is near of the robot, we don't care about other robots.
     if (dist_ball_robot < 0.4)
     {
-      follower->avoid_opponent(false);
+      follower_->avoidOpponent(false);
     }
   }
 
   if (dist_ball_robot > 0.4)
   {
-    follower->avoid_opponent(true);
+    follower_->avoidOpponent(true);
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_goal_vector * (target_radius_from_ball);
+  rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Intermediate_striker::control() const
+Control IntermediateStriker::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kick = true;
   return ctrl;
 }
 
-Intermediate_striker::~Intermediate_striker()
+IntermediateStriker::~IntermediateStriker()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Intermediate_striker::get_annotations() const
+rhoban_ssl::annotations::Annotations IntermediateStriker::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

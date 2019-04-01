@@ -35,14 +35,14 @@
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 
-using namespace RhobanSSL;
-AI* ai = NULL;
+using namespace rhoban_ssl;
+AI* ai_ = NULL;
 
 void stop(int s)
 {
-  if (ai != NULL)
+  if (ai_!= NULL)
   {
-    ai->stop();
+    ai_->stop();
   }
 }
 
@@ -82,14 +82,14 @@ int main(int argc, char** argv)
                                          cmd);
 
   std::stringstream manager_names;
-  manager_names << Manager::Factory::avalaible_managers();
+  manager_names << manager::Factory::availableManagers();
   TCLAP::ValueArg<std::string> manager_name("m",        // short argument name  (with one character)
                                             "manager",  // long argument name
                                             // "The manager to use. The default value is '" +
                                             // std::string(Manager::names::match) + "'. "
                                             "The manger that can be used are " + manager_names.str() + ".",
                                             false,                   // Flag is not required
-                                            Manager::names::manual,  // Default value
+                                            manager::names::MANUAL,  // Default value
                                             "string",                // short description of the expected value.
                                             cmd);
 
@@ -130,7 +130,7 @@ int main(int argc, char** argv)
 
   cmd.parse(argc, argv);
 
-  const std::list<std::string>& avalaible_managers = Manager::Factory::avalaible_managers();
+  const std::list<std::string>& avalaible_managers = manager::Factory::availableManagers();
   if (std::find(avalaible_managers.begin(), avalaible_managers.end(), manager_name.getValue()) ==
       avalaible_managers.end())
   {
@@ -142,20 +142,20 @@ int main(int argc, char** argv)
   DEBUG("The name of the team have been set to : " << team_name.getValue());
   DEBUG("The manager have been set to : " << manager_name.getValue());
 
-  Data data(yellow.getValue() ? Ai::Yellow : Ai::Blue);
+  Data data(yellow.getValue() ? ai::Yellow : ai::Blue);
 
-  Vision::Part_of_the_field part_of_the_field_used;
+  vision::PartOfTheField part_of_the_field_used;
   if (zone_name.getValue() == "all")
   {
-    part_of_the_field_used = Vision::Part_of_the_field::ALL_FIELD;
+    part_of_the_field_used = vision::PartOfTheField::ALL_FIELD;
   }
   else if (zone_name.getValue() == "positive")
   {
-    part_of_the_field_used = Vision::Part_of_the_field::POSIVE_HALF_FIELD;
+    part_of_the_field_used = vision::PartOfTheField::POSIVE_HALF_FIELD;
   }
   else if (zone_name.getValue() == "negative")
   {
-    part_of_the_field_used = Vision::Part_of_the_field::NEGATIVE_HALF_FIELD;
+    part_of_the_field_used = vision::PartOfTheField::NEGATIVE_HALF_FIELD;
   }
   else
   {
@@ -166,7 +166,7 @@ int main(int argc, char** argv)
   // // Instantiationg the vision
   // AIVisionClient vision(
   //   data,
-  //   yellow.getValue() ? Ai::Yellow : Ai::Blue,
+  //   yellow.getValue() ? ai::Yellow : ai::Blue,
   //   simulation.getValue(), part_of_the_field_used
   //   );
 
@@ -181,8 +181,8 @@ int main(int argc, char** argv)
   }
 
   // Instantiationg the vision
-  AIVisionClient vision(data, yellow.getValue() ? Ai::Yellow : Ai::Blue, simulation.getValue(), addr.getValue(),
-                        theport, theport, part_of_the_field_used);
+  AIVisionClient vision(data, yellow.getValue() ? ai::Yellow : ai::Blue, simulation.getValue(),
+                        addr.getValue(), theport, theport, part_of_the_field_used);
 
   // AI Commander to control the robots
   AICommander* commander;
@@ -203,10 +203,10 @@ int main(int argc, char** argv)
   }
   else
   {
-    ai = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? Ai::Yellow : Ai::Blue, data,
-                commander, config_path.getValue(), simulation.getValue()),
-    ai->run();
-    delete ai;
+    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue,
+                data, commander, config_path.getValue(), simulation.getValue());
+    ai_->run();
+    delete ai_;
   }
   delete commander;
 }

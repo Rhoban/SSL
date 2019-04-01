@@ -28,7 +28,7 @@
 extern double last_debug_printing;
 extern bool periodic_debug_is_allowed;
 
-void update_periodic_debug(double current_time, double period);
+void updatePeriodicDebug(double current_time, double period);
 
 // TODO: move to rhoban_utils
 #define DEBUG(message)                                                                                                 \

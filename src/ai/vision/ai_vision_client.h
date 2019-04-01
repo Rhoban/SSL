@@ -28,49 +28,49 @@
 #include "client_config.h"
 #include "robot_position_filter.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class AIVisionClient : public VisionClient
 {
 public:
-  AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation = false,
-                 Vision::Part_of_the_field part_of_the_field_used = Vision::Part_of_the_field::ALL_FIELD);
+  AIVisionClient(Data& shared_data_, ai::Team my_team_, bool simulation = false,
+                 vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
 
-  AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation, std::string addr = SSL_VISION_ADDRESS,
+  AIVisionClient(Data& shared_data_, ai::Team my_team_, bool simulation, std::string addr = SSL_VISION_ADDRESS,
                  std::string port = SSL_VISION_PORT, std::string sim_port = SSL_SIMULATION_VISION_PORT,
-                 Vision::Part_of_the_field part_of_the_field_used = Vision::Part_of_the_field::ALL_FIELD);
+                 vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
 
-  void setRobotPos(Ai::Team team, int id, double x, double y, double orientation);
+  void setRobotPos(ai::Team team, int id, double x, double y, double orientation);
 
 protected:
   virtual void packetReceived();
 
-  Data& shared_data;
+  Data& shared_data_;
 
-  Vision::Part_of_the_field part_of_the_field_used;
+  vision::PartOfTheField part_of_the_field_used_;
 
-  std::map<int, SSL_DetectionFrame> camera_detections;
+  std::map<int, SSL_DetectionFrame> camera_detections_;
 
   std::map<int,                              // CMAERA ID
            std::pair<double,                 // camera have found a ball at time?
                      rhoban_geometry::Point  // detecte ball
                      > >
-      ball_camera_detections;
+      ball_camera_detections_;
 
   void updateRobotInformation(const SSL_DetectionFrame& detection, const SSL_DetectionRobot& robot, bool ally,
-                              Ai::Team team_color);
+                              ai::Team team_color);
 
 private:
-  Vision::VisionData oldVisionData;
-  Vision::VisionData visionData;
-  Ai::Team myTeam;
-  std::map<int, SSL_DetectionFrame> historic;
+  vision::VisionData old_vision_data_;
+  vision::VisionData vision_data_;
+  ai::Team my_team_;
+  std::map<int, SSL_DetectionFrame> historic_;
 
-  rhoban_geometry::Point average_filter(const rhoban_geometry::Point& new_ball,
+  rhoban_geometry::Point averageFilter(const rhoban_geometry::Point& new_ball,
                                         std::map<int,                              // CMAERA ID
                                                  std::pair<double,                 // camera have found a ball
                                                            rhoban_geometry::Point  // detecte ball
-                                                           > >& ball_camera_detections,
-                                        Vision::Part_of_the_field part_of_the_field_used);
+                                                           > >& ball_camera_detections_,
+                                        vision::PartOfTheField part_of_the_field_used_);
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

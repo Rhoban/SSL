@@ -20,51 +20,51 @@
 #include "goto_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace Beginner
 {
-Goto_ball::Goto_ball(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+Goto_ball::Goto_ball(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Goto_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Goto_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-  annotations.clear();
+  annotations_.clear();
 
-  rhoban_geometry::Point robot_position = ball_position();
+  rhoban_geometry::Point robot_position = ballPosition();
   ContinuousAngle angle = 0.0;
 
-  follower->set_following_position(robot_position, angle);
-  follower->avoid_the_ball(false);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(robot_position, angle);
+  follower_->avoidTheBall(false);
+  follower_->update(time, robot, ball);
 }
 
 Control Goto_ball::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
 Goto_ball::~Goto_ball()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Goto_ball::get_annotations() const
+rhoban_ssl::annotations::Annotations Goto_ball::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
 }  // namespace Beginner
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -24,7 +24,7 @@
 #include <SimClient.h>
 #include "ai_commander.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class AICommanderSimulation : public AICommander
 {
@@ -35,11 +35,11 @@ public:
 
   virtual void moveBall(double x, double y, double vx = 0, double vy = 0);
 
-  virtual void moveRobot(bool yellow, int id, double x, double y, double theta, bool turnon);
+  virtual void moveRobot(bool yellow_, int id, double x, double y, double theta, bool turnon);
 
   virtual ~AICommanderSimulation();
 
 protected:
-  SimClient client;
+  SimClient client_;
 };
 }  // namespace RhobanSSL

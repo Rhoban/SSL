@@ -19,112 +19,112 @@
 
 #include "from_robot_behavior.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
-const std::string From_robot_behavior::name = "From_robot_behavior";
+const std::string FromRobotBehavior::name = "From_robot_behavior";
 
-From_robot_behavior::From_robot_behavior(
-    Ai::AiData& ai_data,
-    std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
+FromRobotBehavior::FromRobotBehavior(
+    ai::AiData& ai_data,
+    std::function<std::shared_ptr<robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
     bool is_goalie)
-  : Strategy(ai_data), robot_behavior_allocator(robot_behavior_allocator), is_goalie(is_goalie){};
+  : Strategy(ai_data), robot_behavior_allocator_(robot_behavior_allocator), is_goalie_(is_goalie){};
 
-From_robot_behavior::From_robot_behavior(
-    Ai::AiData& ai_data,
-    std::function<std::shared_ptr<Robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
+FromRobotBehavior::FromRobotBehavior(
+    ai::AiData& ai_data,
+    std::function<std::shared_ptr<robot_behavior::RobotBehavior>(double time, double dt)> robot_behavior_allocator,
     const rhoban_geometry::Point& starting_linear_position, const ContinuousAngle& starting_angular_position,
     bool is_goalie)
-  : From_robot_behavior(ai_data, robot_behavior_allocator, is_goalie)
+  : FromRobotBehavior(ai_data, robot_behavior_allocator, is_goalie)
 {
-  set_starting_position(starting_linear_position, starting_angular_position);
+  setStartingPosition(starting_linear_position, starting_angular_position);
 };
 
-Goalie_need From_robot_behavior::needs_goalie() const
+GoalieNeed FromRobotBehavior::needsGoalie() const
 {
-  return is_goalie ? Goalie_need::YES : Goalie_need::NO;
+  return is_goalie_ ? GoalieNeed::YES : GoalieNeed::NO;
 }
 
-int From_robot_behavior::min_robots() const
+int FromRobotBehavior::minRobots() const
 {
-  return is_goalie ? 0 : 1;
+  return is_goalie_ ? 0 : 1;
 }
 
-int From_robot_behavior::max_robots() const
+int FromRobotBehavior::maxRobots() const
 {
-  return is_goalie ? 0 : 1;
+  return is_goalie_ ? 0 : 1;
 }
 
-void From_robot_behavior::start(double time)
+void FromRobotBehavior::start(double time)
 {
   DEBUG("START STRATEGY FROM BEHAVIOR "
         "TODO");
-  behavior_has_been_assigned = false;
+  behavior_has_been_assigned_ = false;
 }
 
-void From_robot_behavior::stop(double time)
+void FromRobotBehavior::stop(double time)
 {
   DEBUG("STOP STRATEGY FROM BEHAVIOR "
         "TODO");
 }
 
-void From_robot_behavior::assign_behavior_to_robots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+void FromRobotBehavior::assignBehaviorToRobots(
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (!behavior_has_been_assigned)
+  if (!behavior_has_been_assigned_)
   {
-    if (is_goalie)
+    if (is_goalie_)
     {
-      DEBUG("GOALIE : " << get_goalie());
+      DEBUG("GOALIE : " << getGoalie());
       if (have_to_manage_the_goalie())
       {
-        assign_behavior(get_goalie(), robot_behavior_allocator(time, dt));
+        assign_behavior(getGoalie(), robot_behavior_allocator_(time, dt));
       }
     }
     else
     {
-      assign_behavior(player_id(0), robot_behavior_allocator(time, dt));
+      assign_behavior(playerId(0), robot_behavior_allocator_(time, dt));
     }
-    behavior_has_been_assigned = true;
+    behavior_has_been_assigned_ = true;
   }
 }
 
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-From_robot_behavior::get_starting_positions(int number_of_avalaible_robots) const
+FromRobotBehavior::getStartingPositions(int number_of_avalaible_robots) const
 {
   std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> > result;
-  if (starting_position.is_defined)
+  if (starting_position_.is_defined)
   {
-    result.push_back(std::pair<rhoban_geometry::Point, ContinuousAngle>(starting_position.linear_position,
-                                                                        starting_position.angular_position));
+    result.push_back(std::pair<rhoban_geometry::Point, ContinuousAngle>(starting_position_.linear_position,
+                                                                        starting_position_.angular_position));
   }
   return result;
 }
 
-bool From_robot_behavior::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool FromRobotBehavior::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                            ContinuousAngle& angular_position) const
 {
-  assert(is_goalie);  // This function should not called since strategy doesn't devaler a goalie.
-  if (starting_position.is_defined)
+  assert(is_goalie_);  // This function should not called since strategy doesn't devaler a goalie.
+  if (starting_position_.is_defined)
   {
-    linear_position = starting_position.linear_position;
-    angular_position = starting_position.angular_position;
+    linear_position = starting_position_.linear_position;
+    angular_position = starting_position_.angular_position;
   }
-  return starting_position.is_defined;
+  return starting_position_.is_defined;
 }
 
-void From_robot_behavior::set_starting_position(const rhoban_geometry::Point& linear_position,
+void FromRobotBehavior::setStartingPosition(const rhoban_geometry::Point& linear_position,
                                                 const ContinuousAngle& angular_position)
 {
-  starting_position.is_defined = true;
-  starting_position.linear_position = linear_position;
-  starting_position.angular_position = angular_position;
+  starting_position_.is_defined = true;
+  starting_position_.linear_position = linear_position;
+  starting_position_.angular_position = angular_position;
 }
 
-From_robot_behavior::~From_robot_behavior()
+FromRobotBehavior::~FromRobotBehavior()
 {
 }
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

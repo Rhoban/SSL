@@ -46,21 +46,21 @@ PidController::PidController(double p_t, double i_t, double d_t, double p_o, dou
 {
 }
 
-void PidController::set_static(bool value = true)
+void PidController::setStatic(bool value = true)
 {
   static_robot = value;
 }
-bool PidController::is_static() const
+bool PidController::isStatic() const
 {
   return static_robot;
 }
 
-double PidController::get_dt() const
+double PidController::getDt() const
 {
   return dt;
 }
 
-void PidController::init_time(double start_time, double dt)
+void PidController::initTime(double start_time, double dt)
 {
   assert(dt > 0.0);
   this->start_time = start_time;
@@ -68,14 +68,14 @@ void PidController::init_time(double start_time, double dt)
   this->time = 0.0;
 }
 
-void PidController::set_orientation_pid(double kp, double ki = 0.0, double kd = 0.0)
+void PidController::setOrientationPid(double kp, double ki = 0.0, double kd = 0.0)
 {
   this->kp_o = kp;
   this->ki_o = ki;
   this->kd_o = kd;
 }
 
-void PidController::set_translation_pid(double kp, double ki = 0.0, double kd = 0.0)
+void PidController::setTranslationPid(double kp, double ki = 0.0, double kd = 0.0)
 {
   this->kp_t = kp;
   this->ki_t = ki;
@@ -92,29 +92,29 @@ void PidController::update(double current_time, const Vector2d& robot_position,
     this->time = (current_time - start_time);
   }
 
-  compute_no_limited_translation_control(robot_position);
-  compute_no_limited_angular_control(robot_orientation);
+  computeNoLimitedTranslationControl(robot_position);
+  computeNoLimitedAngularControl(robot_orientation);
 }
 
-double PidController::get_time() const
+double PidController::getTime() const
 {
   return this->time;
 }
 
-Vector2d PidController::no_limited_translation_control() const
+Vector2d PidController::noLimitedTranslationControl() const
 {
   return no_limited_translation_control_value;
 }
 
-void PidController::compute_no_limited_translation_control(const Vector2d& robot_position)
+void PidController::computeNoLimitedTranslationControl(const Vector2d& robot_position)
 {
   assert(dt > 0);
-  if (is_static())
+  if (isStatic())
   {
     no_limited_translation_control_value = Vector2d(0.0, 0.0);
     return;
   }
-  Vector2d xt = goal_position(time);
+  Vector2d xt = goalPosition(time);
   // Vector2d xt_dt = goal_position(time + dt);
   Vector2d velocity = (robot_position - ancient_pos) / dt;
 
@@ -162,14 +162,14 @@ void PidController::compute_no_limited_translation_control(const Vector2d& robot
   ancient_pos = robot_position;
 }
 
-void PidController::compute_no_limited_angular_control(const ContinuousAngle& robot_orientation)
+void PidController::computeNoLimitedAngularControl(const ContinuousAngle& robot_orientation)
 {
-  if (is_static())
+  if (isStatic())
   {
     no_limited_angular_control_value = 0.0;
     return;
   };
-  ContinuousAngle theta_t = goal_orientation(time);
+  ContinuousAngle theta_t = goalOrientation(time);
   // ContinuousAngle theta_t_dt = goal_orientation(time + dt);
   // DEBUG( "theta_t : " << theta_t );
   // DEBUG( "theta_t_dt : " << theta_t_dt );
@@ -205,14 +205,14 @@ void PidController::compute_no_limited_angular_control(const ContinuousAngle& ro
   // DEBUG( "kpt : " << kp_o );
 }
 
-double PidController::no_limited_angular_control() const
+double PidController::noLimitedAngularControl() const
 {
   return no_limited_angular_control_value;
 }
 
-Control PidController::no_limited_control() const
+Control PidController::noLimitedControl() const
 {
-  return Control(no_limited_translation_control(), no_limited_angular_control());
+  return Control(noLimitedTranslationControl(), noLimitedAngularControl());
 }
 
 PidController::~PidController()

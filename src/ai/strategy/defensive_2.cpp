@@ -19,16 +19,16 @@
 
 #include "defensive_2.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
-Defensive2::Defensive2(Ai::AiData& ai_data)
+Defensive2::Defensive2(ai::AiData& ai_data)
   : Strategy(ai_data)
-  , degageur1(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
-  , obstructeur1(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
-  , degageur2(std::shared_ptr<Robot_behavior::Degageur>(new Robot_behavior::Degageur(ai_data)))
-  , obstructeur2(std::shared_ptr<Robot_behavior::Obstructor>(new Robot_behavior::Obstructor(ai_data)))
+  , degageur1_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
+  , obstructeur1_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
+  , degageur2_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
+  , obstructeur2_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
 {
 }
 
@@ -40,7 +40,7 @@ Defensive2::~Defensive2()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Defensive2::min_robots() const
+int Defensive2::minRobots() const
 {
   return 2;
 }
@@ -49,14 +49,14 @@ int Defensive2::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Defensive2::max_robots() const
+int Defensive2::maxRobots() const
 {
   return 2;
 }
 
-Goalie_need Defensive2::needs_goalie() const
+GoalieNeed Defensive2::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 
 const std::string Defensive2::name = "defensive2";
@@ -64,7 +64,7 @@ const std::string Defensive2::name = "defensive2";
 void Defensive2::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void Defensive2::stop(double time)
 {
@@ -75,60 +75,60 @@ void Defensive2::update(double time)
 {
 }
 
-void Defensive2::assign_behavior_to_robots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+void Defensive2::assignBehaviorToRobots(
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // we assign now all the other behavior
-  assert(get_player_ids().size() == 2);
+  assert(getPlayerIds().size() == 2);
 
-  int id_to_obstruct1 = shirt_number_of_threat_max(Vision::Team::Opponent);
-  int id_to_obstruct2 = shirt_number_of_threat_max_2(Vision::Team::Opponent);
-  int robotID1 = player_id(0);
-  int robotID2 = player_id(1);
+  int id_to_obstruct1 = shirtNumberOfThreatMax(vision::Team::Opponent);
+  int id_to_obstruct2 = shirtNumberOfThreatMax2(vision::Team::Opponent);
+  int robotID1 = playerId(0);
+  int robotID2 = playerId(1);
 
-  const Ai::Robot& robot1 = get_robot(robotID1, Vision::Team::Ally);
-  const Ai::Robot& robot2 = get_robot(robotID2, Vision::Team::Ally);
-  const rhoban_geometry::Point& robot_position_1 = robot1.get_movement().linear_position(time);
-  const rhoban_geometry::Point& robot_position_2 = robot2.get_movement().linear_position(time);
+  const ai::Robot& robot1 = getRobot(robotID1, vision::Team::Ally);
+  const ai::Robot& robot2 = getRobot(robotID2, vision::Team::Ally);
+  const rhoban_geometry::Point& robot_position_1 = robot1.getMovement().linearPosition(time);
+  const rhoban_geometry::Point& robot_position_2 = robot2.getMovement().linearPosition(time);
 
-  const Ai::Robot& robot_to_obstruct1 = get_robot(id_to_obstruct1, Vision::Team::Opponent);
-  const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.get_movement().linear_position(time);
+  const ai::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, vision::Team::Opponent);
+  const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.getMovement().linearPosition(time);
 
   double distance1 = (Vector2d(robot_position_1 - robot_to_obstruct_position1)).norm();
   double distance2 = (Vector2d(robot_position_2 - robot_to_obstruct_position1)).norm();
 
   if (distance1 < distance2)
   {
-    obstructeur1->declare_robot_to_obstruct(id_to_obstruct1, Vision::Team::Opponent);
-    obstructeur2->declare_robot_to_obstruct(id_to_obstruct2, Vision::Team::Opponent);
+    obstructeur1_->declareRobotToObstruct(id_to_obstruct1, vision::Team::Opponent);
+    obstructeur2_->declareRobotToObstruct(id_to_obstruct2, vision::Team::Opponent);
   }
   else
   {
-    obstructeur1->declare_robot_to_obstruct(id_to_obstruct2, Vision::Team::Opponent);
-    obstructeur2->declare_robot_to_obstruct(id_to_obstruct1, Vision::Team::Opponent);
+    obstructeur1_->declareRobotToObstruct(id_to_obstruct2, vision::Team::Opponent);
+    obstructeur2_->declareRobotToObstruct(id_to_obstruct1, vision::Team::Opponent);
   }
 
-  int nearest_ballID = get_shirt_number_of_closest_robot_to_the_ball(Vision::Team::Ally);
+  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
 
   if (nearest_ballID == robotID1)
   {
-    assign_behavior(robotID1, degageur1);
+    assign_behavior(robotID1, degageur1_);
   }
   else
   {
-    assign_behavior(robotID1, obstructeur1);
+    assign_behavior(robotID1, obstructeur1_);
   }
 
   if (nearest_ballID == robotID2)
   {
-    assign_behavior(robotID2, degageur2);
+    assign_behavior(robotID2, degageur2_);
   }
   else
   {
-    assign_behavior(robotID2, obstructeur2);
+    assign_behavior(robotID2, obstructeur2_);
   }
 
-  behaviors_are_assigned = true;
+  behaviors_are_assigned_ = true;
 }
 
 // We declare here the starting positions that are used to :
@@ -138,12 +138,12 @@ void Defensive2::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Defensive2::get_starting_positions(int number_of_avalaible_robots)
+Defensive2::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ally_goal_center(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
 }
 
 //
@@ -151,21 +151,21 @@ Defensive2::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Defensive2::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool Defensive2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                   ContinuousAngle& angular_position)
 {
-  linear_position = ally_goal_center();
+  linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-RhobanSSLAnnotation::Annotations Defensive2::get_annotations() const
+rhoban_ssl::annotations::Annotations Defensive2::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = get_robot(*it).get_movement().linear_position(time());
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
     // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }
@@ -173,4 +173,4 @@ RhobanSSLAnnotation::Annotations Defensive2::get_annotations() const
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

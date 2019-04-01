@@ -30,9 +30,9 @@
 #include <math/frame_changement.h>
 #include <math/position.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Ai
+namespace ai
 {
 struct RobotPlacement
 {
@@ -55,8 +55,8 @@ typedef enum
 class Object
 {
 public:
-  Vision::Object vision_data;
-  RhobanSSL::Movement* movement;
+  vision::Object vision_data;
+  rhoban_ssl::Movement* movement;
 
 public:
   int id() const
@@ -68,15 +68,15 @@ public:
   Object(const Object& object);
   Object& operator=(const Object& object);
 
-  void set_vision_data(const Vision::Object& vision_data);
-  void set_movement(Movement* movement);
+  void setVisionData(const vision::Object& vision_data);
+  void setMovement(Movement* movement);
 
   // We assume that v1 and v2 are orthonormal
-  void change_frame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
+  void changeFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
 
-  bool is_present_in_vision() const;
+  bool isPresentInVision() const;
 
-  const RhobanSSL::Movement& get_movement() const;
+  const rhoban_ssl::Movement& getMovement() const;
   virtual ~Object();
 };
 
@@ -93,9 +93,9 @@ class Ball : public Object
 {
 };
 
-struct Field : Vision::Field
+struct Field : vision::Field
 {
-  bool is_inside(const rhoban_geometry::Point& point) const
+  bool isInside(const rhoban_geometry::Point& point) const
   {
     if (not(present))
     {
@@ -166,21 +166,21 @@ public:
 
   bool force_ball_avoidance;  // This field is used by rhobot_behavior::Navigaion_inside_the_fiekd.
   std::string team_name;
-  Ai::Team team_color;
+  ai::Team team_color;
 
-  AiData(const std::string& config_path, bool is_in_simulation, Ai::Team team_color);
+  AiData(const std::string& config_path, bool is_in_simulation, ai::Team team_color);
 
-  typedef std::map<int, Robot> Robots_table;
-  typedef std::map<Vision::Team, Robots_table> Robots_table_by_team;
-  Robots_table_by_team robots;
+  typedef std::map<int, Robot> RobotsTable;
+  typedef std::map<vision::Team, RobotsTable> RobotsTableByTeam;
+  RobotsTableByTeam robots;
 
-  std::vector<std::pair<Vision::Team, Robot*> > all_robots;
+  std::vector<std::pair<vision::Team, Robot*> > all_robots;
 
   Ball ball;
   Field field;
 
-  RobotPlacement default_attacking_kickoff_placement() const;
-  RobotPlacement default_defending_kickoff_placement() const;
+  RobotPlacement defaultAttackingKickoffPlacement() const;
+  RobotPlacement defaultDefendingKickoffPlacement() const;
 
   /*
    * convert a linear position [x,y] in the inetrval [-1,1]X[-1,1]
@@ -194,27 +194,27 @@ public:
 
   Collision_times_table table_of_collision_times;
 
-  Frame_changement team_point_of_view;
+  FrameChangement team_point_of_view;
 
-  void change_frame_for_all_objects(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
-  void change_team_color(Ai::Team team_color);
+  void changeFrameForAllObjects(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
+  void changeTeamColor(ai::Team team_color);
 
   Constants constants;
 
-  void update(const Vision::VisionData vision_data);
+  void update(const vision::VisionData vision_data);
 
   // Rturn true is the robot is ready and inside the field
-  bool robot_is_valid(int robot_id) const;
-  bool robot_is_inside_the_field(int robot_id) const;
+  bool robotIsValid(int robot_id) const;
+  bool robotIsInsideTheField(int robot_id) const;
 
-  void visit_all_pair_of_robots(
-      std::function<void(Vision::Team robot_team_1, Robot& robot_1, Vision::Team robot_team_2, Robot& robot_2)>
+  void visitAllPairOfRobots(
+      std::function<void(vision::Team robot_team_1, Robot& robot_1, vision::Team robot_team_2, Robot& robot_2)>
           visitor);
 
-  const Collision_times_table& get_table_of_collision_times() const;
+  const Collision_times_table& getTableOfCollisionTimes() const;
 
-  void compute_table_of_collision_times();
-  std::list<std::pair<int, double> > get_collisions(int robot_id, const Vector2d& ctrl) const;
+  void computeTableOfCollisionTimes();
+  std::list<std::pair<int, double> > getCollisions(int robot_id, const Vector2d& ctrl) const;
 };
 
 }  // namespace Ai

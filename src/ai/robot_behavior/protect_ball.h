@@ -22,21 +22,21 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class ProtectBall : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  ProtectBall(Ai::AiData& ai_data);
+  ProtectBall(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual Control control() const;
 
@@ -44,4 +44,4 @@ public:
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

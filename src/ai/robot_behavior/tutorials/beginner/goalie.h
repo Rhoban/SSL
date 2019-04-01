@@ -22,9 +22,9 @@
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
@@ -44,18 +44,17 @@ private:
   ConsignFollower* follower_;
   /**
    * Not use in this package but set in a case of copy.
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
   /**
    * @brief Constructor.
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
-  Goalie(Ai::AiData& ai_data);
-
+  Goalie(ai::AiData& ai_data);
   /**
    * @brief Move the robot 0.5 meters from the goal center.
    * The robot will be align with the ally goal center and the ball position..
@@ -65,7 +64,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * @see Control.
@@ -73,9 +72,9 @@ public:
   virtual Control control() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
    * @brief Destructor.
@@ -86,3 +85,4 @@ public:
 }  // Namespace beginner
 }  // Namespace Robot_behavior
 }  // namespace RhobanSSL
+

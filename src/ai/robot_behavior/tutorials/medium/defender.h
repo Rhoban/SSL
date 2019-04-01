@@ -22,9 +22,9 @@
 #include "robot_behavior/factory.h"
 #include "robot_behavior/robot_behavior.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace medium
 {
@@ -36,29 +36,29 @@ class Defender : public RobotBehavior
 {
 private:
   /**
-   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   * @see rhoban_ssl::robot_behavior::ConsignFollower
    */
   ConsignFollower* follower_;
   /**
    * Not use in this package but set in a case of copy.
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
   /**
    * @brief Constructor.
    * The default value of the target_corner_ is set to left opponent corner.
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
-  Defender(Ai::AiData& ai_data);
+  Defender(ai::AiData& ai_data);
 
   /**
    * @brief Is the ball is inside the penalty area.
    * @return True if the ball is inside the penalty area.
    */
-  bool ball_is_inside_ally_penalty_area();
+  bool ballIsInsideAllyPenaltyArea();
   /**
    * @brief Put the robot between the ball and the ally goal zone.
    *
@@ -67,7 +67,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * @see Control.
@@ -75,11 +75,11 @@ public:
   virtual Control control() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    * The class don't draw any annotations.
    * The follower draw annotation.
    */
-  RhobanSSLAnnotation::Annotations get_annotations() const;
+  rhoban_ssl::annotations::Annotations getAnnotations() const;
   /**
    * @brief Destructor.
    */

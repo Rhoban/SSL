@@ -19,39 +19,39 @@
 #include "defender.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace medium
 {
-Defender::Defender(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
+Defender::Defender(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Defender::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
-  Vector2d ball_goal_vector = ally_goal_center() - ball_position();
+  Vector2d ball_goal_vector = allyGoalCenter() - ballPosition();
   double target_rotation = 0.0;
 
   rhoban_geometry::Point target_position = robot_position;
-  if (!ball_is_inside_ally_penalty_area())
+  if (!ballIsInsideAllyPenaltyArea())
   {
     double dist_ball_goal = ball_goal_vector.norm();
     if (dist_ball_goal > 0)
     {
       ball_goal_vector = ball_goal_vector / dist_ball_goal;
       // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
-      target_position = ball_position() + ball_goal_vector * 0.5;
+      target_position = ballPosition() + ball_goal_vector * 0.5;
 
       // We always look the ball
-      Vector2d direction_to_ball = ball_position() - robot_position;
+      Vector2d direction_to_ball = ballPosition() - robot_position;
       target_rotation = detail::vec2angle(direction_to_ball);
     }
   }
@@ -60,14 +60,14 @@ void Defender::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
     // The ball is inside the penalty area. Don't nothing.
   }
 
-  follower_->avoid_the_ball(true);
-  follower_->set_following_position(target_position, target_rotation);
+  follower_->avoidTheBall(true);
+  follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
 }
 
-bool Defender::ball_is_inside_ally_penalty_area()
+bool Defender::ballIsInsideAllyPenaltyArea()
 {
-  return ally_penalty_area().is_inside(ball_position());
+  return allyPenaltyArea().is_inside(ballPosition());
   ;
 }
 
@@ -82,11 +82,11 @@ Defender::~Defender()
   delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Defender::get_annotations() const
+rhoban_ssl::annotations::Annotations Defender::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations_);
-  annotations.addAnnotations(follower_->get_annotations());
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 }  // namespace medium

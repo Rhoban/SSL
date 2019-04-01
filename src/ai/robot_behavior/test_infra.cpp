@@ -22,51 +22,51 @@
 #include <math/vector2d.h>
 #include <math/continuous_angle.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-TestInfra::TestInfra(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+TestInfra::TestInfra(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void TestInfra::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void TestInfra::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
 
-  rhoban_geometry::Point target_position = robot.get_movement().linear_position(time);
+  rhoban_geometry::Point target_position = robot.getMovement().linearPosition(time);
 
-  bool value = GameInformations::infra_red(robot.id(), Vision::Team::Ally);
+  bool value = GameInformations::infraRed(robot.id(), vision::Team::Ally);
   std::cout << "Value infra red : " << value << '\n';
 
   // follower->avoid_the_ball(true);
-  double target_rotation = detail::vec2angle(ball_position() - target_position);
+  double target_rotation = detail::vec2angle(ballPosition() - target_position);
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control TestInfra::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
 TestInfra::~TestInfra()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations TestInfra::get_annotations() const
+rhoban_ssl::annotations::Annotations TestInfra::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

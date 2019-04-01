@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MATH__STABLE_MATCHING__H__
-#define __MATH__STABLE_MATCHING__H__
+#pragma once
 
 #include <vector>
 #include <algorithm>
@@ -30,7 +29,7 @@
 #include <debug.h>
 #include <core/print_collection.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace matching
 {
@@ -57,7 +56,7 @@ struct Matchings
  *
  */
 template <typename MAN, typename WOMAN, typename MAN_RANK, typename WOMAN_RANK>
-Matchings gale_shapley_algorithm(const std::vector<MAN>& man_set, const std::vector<WOMAN> woman_set,
+Matchings galeShapleyAlgorithm(const std::vector<MAN>& man_set, const std::vector<WOMAN> woman_set,
                                  std::function<MAN_RANK(const MAN& juge, const WOMAN& women)> man_rank,
                                  std::function<WOMAN_RANK(const WOMAN& juge, const MAN& man)> woman_rank,
                                  const bool man_rank_is_increasing = true, const bool woman_rank_is_increasing = true)
@@ -152,6 +151,4 @@ Matchings gale_shapley_algorithm(const std::vector<MAN>& man_set, const std::vec
 }
 
 };  // namespace matching
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace rhoban_ssl

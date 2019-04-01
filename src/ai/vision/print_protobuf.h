@@ -27,7 +27,7 @@
 #include <google/protobuf/util/json_util.h>
 #endif
 
-// namespace RhobanSSL {
+// namespace rhoban_ssl {
 // namespace vision {
 
 std::ostream& operator<<(std::ostream& out, const SSL_DetectionRobot& robot);

@@ -20,27 +20,27 @@
 #include "goalie.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
-Goalie::Goalie(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
+Goalie::Goalie(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   // The goalie moves between the position of the ally's goal center and the position of the ball.
   // The position of the goalie is at 0.5 meters of the goal center.
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
   rhoban_geometry::Point target_position = robot_position;
-  Vector2d goal_ball_vector = ball_position() - ally_goal_center();
+  Vector2d goal_ball_vector = ballPosition() - allyGoalCenter();
   double dist_goal_ball_vector = goal_ball_vector.norm();
   double target_rotation = 0;
 
@@ -50,11 +50,11 @@ void Goalie::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
 
     // Move the robot 0.5 meters from the goal center. The robot will be aligne with the ally
     // goal center and the ball position.
-    target_position = ally_goal_center() + goal_ball_vector * 0.5;
+    target_position = allyGoalCenter() + goal_ball_vector * 0.5;
     target_rotation = detail::vec2angle(goal_ball_vector);
   }
 
-  follower_->set_following_position(target_position, target_rotation);
+  follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
 }
 
@@ -69,13 +69,14 @@ Goalie::~Goalie()
   delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Goalie::get_annotations() const
+rhoban_ssl::annotations::Annotations Goalie::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations_);
-  annotations.addAnnotations(follower_->get_annotations());
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
+
 }  // namespace beginner
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

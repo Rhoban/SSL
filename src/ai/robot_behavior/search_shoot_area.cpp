@@ -23,65 +23,65 @@
 #include <debug.h>
 #include <core/print_collection.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-SearchShootArea::SearchShootArea(Ai::AiData& ai_data)
+SearchShootArea::SearchShootArea(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , obstructed_view(-1)
-  , period(3)
-  , last_time_changement(0)
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , obstructed_view_(-1)
+  , period_(3)
+  , last_time_changement_(0)
+  , follower_(Factory::fixedConsignFollower(ai_data))
   , well_positioned(false)
 {
-  p1 = Vector2d(opponent_goal_center()) + rhoban_geometry::Point(-1, 2);
-  p2 = Vector2d(center_mark()) + rhoban_geometry::Point(1, -2);
+  p1_ = Vector2d(opponentGoalCenter()) + rhoban_geometry::Point(-1, 2);
+  p2_ = Vector2d(centerMark()) + rhoban_geometry::Point(1, -2);
 }
 
-void SearchShootArea::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void SearchShootArea::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
 
-  annotations.clear();
+  annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
   // Vector2d opponent_goal_robot_vector = robot_position - opponent_goal_center();
 
-  std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move(robot_position);
+  std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(robot_position);
 
-  annotations.addArrow(robot_position, results.first, "red");
+  annotations_.addArrow(robot_position, results.first, "red");
 
   double seuil = 0.4;
 
   double pos_x = robot_position.getX();
   double pos_y = robot_position.getY();
-  Vector2d ball_robot_vector = ball_position() - robot_position;
+  Vector2d ball_robot_vector = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(ball_robot_vector);
 
   // DEBUG("obstructed_view AFTER : " << obstructed_view);
-  if ((results.second > seuil) && pos_x <= std::max(p1.x, p2.x) && pos_x > std::min(p1.x, p2.x) &&
-      pos_y <= std::max(p1.y, p2.y) && pos_y > std::min(p1.y, p2.y))
+  if ((results.second > seuil) && pos_x <= std::max(p1_.x, p2_.x) && pos_x > std::min(p1_.x, p2_.x) &&
+      pos_y <= std::max(p1_.y, p2_.y) && pos_y > std::min(p1_.y, p2_.y))
   {
     // DEBUG( "robot_position : " << robot_position );
-    target_position = robot_position;
+    target_position_ = robot_position;
     well_positioned = true;
     // DEBUG( "target_position : " << target_position );
   }
   else
   {
-    if (time > last_time_changement + period)
+    if (time > last_time_changement_ + period_)
     {
-      std::uniform_real_distribution<double> distribution_x(p1.x, p2.x);
-      std::uniform_real_distribution<double> distribution_y(p1.y, p2.y);
-      target_position = rhoban_geometry::Point(distribution_x(generator), distribution_y(generator));
-      last_time_changement = time;
+      std::uniform_real_distribution<double> distribution_x(p1_.x, p2_.x);
+      std::uniform_real_distribution<double> distribution_y(p1_.y, p2_.y);
+      target_position_ = rhoban_geometry::Point(distribution_x(generator_), distribution_y(generator_));
+      last_time_changement_ = time;
       well_positioned = false;
     }
   }
@@ -89,37 +89,37 @@ void SearchShootArea::update(double time, const Ai::Robot& robot, const Ai::Ball
   // target_position = robot_position;
   // target_position = robot_position;
 
-  annotations.addCross(target_position.x, target_position.y);
+  annotations_.addCross(target_position_.x, target_position_.y);
 
-  follower->avoid_the_ball(false);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(false);
+  follower_->setFollowingPosition(target_position_, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control SearchShootArea::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
-void SearchShootArea::declare_area(rhoban_geometry::Point p1, rhoban_geometry::Point p2)
+void SearchShootArea::declareArea(rhoban_geometry::Point p1, rhoban_geometry::Point p2)
 {
-  this->p1 = p1;
-  this->p2 = p2;
+  this->p1_ = p1;
+  this->p2_ = p2;
 }
 
 SearchShootArea::~SearchShootArea()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations SearchShootArea::get_annotations() const
+rhoban_ssl::annotations::Annotations SearchShootArea::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

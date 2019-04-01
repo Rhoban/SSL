@@ -20,9 +20,9 @@
 #include "robot_behavior.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace detail
 {
@@ -40,70 +40,70 @@ double vec2angle(Vector2d direction)
 
 }  // namespace detail
 
-RobotBehavior::RobotBehavior(Ai::AiData& ai_data)
-  : GameInformations(ai_data), robot_ptr(nullptr), birthday(-1.0), ai_data(ai_data){};
+RobotBehavior::RobotBehavior(ai::AiData& ai_data)
+  : GameInformations(ai_data), robot_ptr_(nullptr), birthday_(-1.0), ai_data_(ai_data){};
 
 double RobotBehavior::age() const
 {
-  return lastUpdate - birthday;
+  return last_update_ - birthday_;
 };
-bool RobotBehavior::is_born() const
+bool RobotBehavior::isBorn() const
 {
-  return birthday > 0;
+  return birthday_ > 0;
 };
-void RobotBehavior::set_birthday(double birthday)
+void RobotBehavior::setBirthday(double birthday)
 {
   assert(birthday > 0);
-  this->birthday = birthday;
+  birthday_ = birthday;
 };
 
-void RobotBehavior::update_time_and_position(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void RobotBehavior::updateTimeAndPosition(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
-  this->robot_ptr = &robot;
-  lastUpdate = time;
-  this->robot_linear_position = Vector2d(robot.get_movement().linear_position(time));
-  this->robot_angular_position = robot.get_movement().angular_position(time);
-  this->robot_linear_velocity = robot.get_movement().linear_velocity(time);
-  this->robot_angular_velocity = robot.get_movement().angular_velocity(time);
+  robot_ptr_ = &robot;
+  last_update_ = time;
+  robot_linear_position_ = Vector2d(robot.getMovement().linearPosition(time));
+  robot_angular_position_ = robot.getMovement().angularPosition(time);
+  robot_linear_velocity_ = robot.getMovement().linearVelocity(time);
+  robot_angular_velocity_ = robot.getMovement().angularVelocity(time);
 };
 
-const Ai::Robot& RobotBehavior::robot() const
+const ai::Robot& RobotBehavior::robot() const
 {
 #ifndef NDEBUG
-  if (not(robot_ptr))
+  if (not(robot_ptr_))
   {
     DEBUG("if you have this assert, that mean you have probably call a function using robot() before an update that "
           "lunch an update_time_and_position()");
   }
 #endif
-  assert(robot_ptr);
-  return *robot_ptr;
+  assert(robot_ptr_);
+  return *robot_ptr_;
 }
 
-rhoban_geometry::Point RobotBehavior::linear_position() const
+rhoban_geometry::Point RobotBehavior::linearPosition() const
 {
-  return robot().get_movement().linear_position(time());
+  return robot().getMovement().linearPosition(time());
 }
 
-ContinuousAngle RobotBehavior::angular_position() const
+ContinuousAngle RobotBehavior::angularPosition() const
 {
-  return robot().get_movement().angular_position(time());
+  return robot().getMovement().angularPosition(time());
 }
 
-bool RobotBehavior::is_goalie() const
+bool RobotBehavior::isGoalie() const
 {
   return robot().is_goalie;
 }
 
-RhobanSSLAnnotation::Annotations RobotBehavior::get_annotations() const
+rhoban_ssl::annotations::Annotations RobotBehavior::getAnnotations() const
 {
-  return RhobanSSLAnnotation::Annotations();
+  return rhoban_ssl::annotations::Annotations();
 }
 
-bool RobotBehavior::infra_red() const
+bool RobotBehavior::infraRed() const
 {
   return robot().infra_red;
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

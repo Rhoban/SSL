@@ -17,15 +17,14 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef ROBOT_BEHAVIOR__BEGINNER__SEE_BALL__
-#define ROBOT_BEHAVIOR__BEGINNER__SEE_BALL__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
@@ -43,9 +42,9 @@ private:
   ConsignFollower* follower_;
   /**
    * Not use in this package but set in a case of copy.
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
   /**
@@ -54,7 +53,7 @@ public:
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see Ai::AiData
    */
-  SeeBall(Ai::AiData& ai_data);
+  SeeBall(ai::AiData& ai_data);
 
   /**
    * @brief The robot stay in his position and always turns to the ball.
@@ -64,7 +63,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * @see Control
@@ -72,11 +71,11 @@ public:
   virtual Control control() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    * The class don't draw any annotations.
    * The follower draw annotation.
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
    * @brief Destructor.
@@ -84,8 +83,6 @@ public:
   virtual ~SeeBall();
 };
 
-};  // namespace beginner
-};  // Namespace Robot_behavior
-};  // Namespace RhobanSSL
-
-#endif
+}  // namespace beginner
+}  // Namespace Robot_behavior
+}  // Namespace RhobanSSL

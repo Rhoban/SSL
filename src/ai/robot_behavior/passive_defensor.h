@@ -22,33 +22,33 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-class Passive_defensor : public RobotBehavior
+class PassiveDefensor : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  int robot_to_obstale_id;
-  Vision::Team robot_to_obstale_team;
-  double barycenter;
+  ConsignFollower* follower_;
+  int robot_to_obstale_id_;
+  vision::Team robot_to_obstale_team_1;
+  double barycenter_;
 
 public:
-  Passive_defensor(Ai::AiData& ai_data);
+  PassiveDefensor(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  void set_robot_to_obstacle(int robot_id, Vision::Team team = Vision::Team::Opponent);
+  void set_robot_to_obstacle(int robot_id, vision::Team team = vision::Team::Opponent);
   void set_barycenter(double barycenter);
   // void obstacle_the_robot_closed_to_the_ally_goal_line();
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Passive_defensor();
+  virtual ~PassiveDefensor();
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

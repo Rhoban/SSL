@@ -57,16 +57,16 @@ template <typename ID, typename STATE_DATA>
 class State
 {
 private:
-  ID name_state;
+  ID name_state_;
 
 public:
-  State(const ID& name) : name_state(name)
+  State(const ID& name) : name_state_(name)
   {
   }
 
   const ID& name() const
   {
-    return name_state;
+    return name_state_;
   }
 
   virtual void run(STATE_DATA& state_data, unsigned int run_number, unsigned int atomic_run_number) = 0;
@@ -110,26 +110,26 @@ template <typename ID, typename EDGE_DATA>
 class Edge : public ConditionClass<ID, EDGE_DATA>
 {
 private:
-  ID name_edge;
-  ID origin_state;
-  ID end_state;
+  ID name_edge_;
+  ID origin_state_;
+  ID end_state_;
 
 public:
-  Edge(const ID& name, const ID& origin, const ID& end) : name_edge(name), origin_state(origin), end_state(end)
+  Edge(const ID& name, const ID& origin, const ID& end) : name_edge_(name), origin_state_(origin), end_state_(end)
   {
   }
 
   const ID& name() const
   {
-    return name_edge;
+    return name_edge_;
   }
   const ID& origin() const
   {
-    return origin_state;
+    return origin_state_;
   }
   const ID& end() const
   {
-    return end_state;
+    return end_state_;
   }
 
   virtual void run(EDGE_DATA& edge_data, unsigned int run_number, unsigned int atomic_run_number) = 0;
@@ -173,25 +173,25 @@ template <typename ID, typename EDGE_DATA>
 class AnonymousEdge : public machine_state::Edge<ID, EDGE_DATA>
 {
 private:
-  std::function<bool(const EDGE_DATA&, unsigned int, unsigned int)> condition_fct;
-  std::function<void(EDGE_DATA&, unsigned int, unsigned int)> run_fct;
+  std::function<bool(const EDGE_DATA&, unsigned int, unsigned int)> condition_fct_;
+  std::function<void(EDGE_DATA&, unsigned int, unsigned int)> run_fct_;
 
 public:
   AnonymousEdge(const ID& id, const ID& origin, const ID& end,
                 std::function<bool(const EDGE_DATA&, unsigned int, unsigned int)> condition_fct,
                 std::function<void(EDGE_DATA&, unsigned int, unsigned int)> run_fct)
-    : machine_state::Edge<ID, EDGE_DATA>(id, origin, end), condition_fct(condition_fct), run_fct(run_fct)
+    : machine_state::Edge<ID, EDGE_DATA>(id, origin, end), condition_fct_(condition_fct), run_fct_(run_fct)
   {
   }
 
   virtual bool condition(const EDGE_DATA& const_data, unsigned int run_number, unsigned int atomic_run_number) const
   {
-    return condition_fct(const_data, run_number, atomic_run_number);
+    return condition_fct_(const_data, run_number, atomic_run_number);
   }
 
   virtual void run(EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)
   {
-    run_fct(data, run_number, atomic_run_number);
+    run_fct_(data, run_number, atomic_run_number);
   }
   virtual ~AnonymousEdge()
   {
@@ -204,11 +204,11 @@ class MachineStateFollower
 public:
   virtual void update(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                       unsigned int atomic_run_number) = 0;
-  virtual void atomic_update(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
+  virtual void atomicUpdate(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                              unsigned int atomic_run_number) = 0;
-  virtual void edge_run(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
+  virtual void edgeRun(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                         unsigned int atomic_run_number){};
-  virtual void state_run(ID state_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
+  virtual void stateRun(ID state_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                          unsigned int atomic_run_number){};
   virtual ~MachineStateFollower()
   {
@@ -220,27 +220,27 @@ struct EdgeFollower : public MachineStateFollower<ID, STATE_DATA, EDGE_DATA>
 {
   typedef std::function<void(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                              unsigned int atomic_run_number)>
-      edge_run_type;
+      EdgeRun;
 
-  edge_run_type edge_run_fct;
+  EdgeRun edge_run_fct;
 
-  EdgeFollower(edge_run_type edge_run_fct) : edge_run_fct(edge_run_fct)
+  EdgeFollower(EdgeRun edge_run_fct) : edge_run_fct(edge_run_fct)
   {
   }
 
   void update(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number, unsigned int atomic_run_number)
   {
   }
-  void atomic_update(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
+  void atomicUpdate(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                      unsigned int atomic_run_number)
   {
   }
-  void edge_run(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
+  void edgeRun(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                 unsigned int atomic_run_number)
   {
     edge_run_fct(edge_id, state_data, edge_data, run_number, atomic_run_number);
   };
-  void state_run(ID state_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
+  void stateRun(ID state_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                  unsigned int atomic_run_number){};
 };
 
@@ -248,60 +248,60 @@ template <typename ID, typename STATE_DATA, typename EDGE_DATA>
 class MachineState
 {
 private:
-  STATE_DATA& state_data;
-  EDGE_DATA& edge_data;
+  STATE_DATA& state_data_;
+  EDGE_DATA& edge_data_;
 
   typedef State<ID, STATE_DATA> State_t;
   typedef Edge<ID, EDGE_DATA> Edge_t;
 
-  std::map<ID, std::shared_ptr<Edge_t> > edges;
-  std::map<ID, std::shared_ptr<State_t> > states;
-  std::map<ID, std::list<ID> > adjacence;
+  std::map<ID, std::shared_ptr<Edge_t> > edges_;
+  std::map<ID, std::shared_ptr<State_t> > states_;
+  std::map<ID, std::list<ID> > adjacence_;
 
-  std::set<ID> init_states_set;
-  std::set<ID> current_states_set;
+  std::set<ID> init_states_set_;
+  std::set<ID> current_states_set_;
 
-  std::list<MachineStateFollower<ID, STATE_DATA, EDGE_DATA>*> followers;
+  std::list<MachineStateFollower<ID, STATE_DATA, EDGE_DATA>*> followers_;
 
-  bool debug;
+  bool debug_;
 
-  unsigned int run_number;
-  unsigned int atomic_run_number;
+  unsigned int run_number_;
+  unsigned int atomic_run_number_;
 
-  void increase_atomic_run_number()
+  void increaseAtomicRunNumber()
   {
-    atomic_run_number += 1;
+    atomic_run_number_ += 1;
   }
-  void increase_run_number()
+  void increaseRunNumber()
   {
-    atomic_run_number = INIT_ATOMIC_RUN_NUMBER;
-    run_number += 1;
+    atomic_run_number_ = INIT_ATOMIC_RUN_NUMBER;
+    run_number_ += 1;
   }
 
-  std::set<ID> atomic_run()
+  std::set<ID> atomicRun()
   {
-    for (MachineStateFollower<ID, STATE_DATA, EDGE_DATA>* follower : followers)
+    for (MachineStateFollower<ID, STATE_DATA, EDGE_DATA>* follower : followers_)
     {
-      follower->atomic_update(state_data, edge_data, run_number, atomic_run_number);
+      follower->atomicUpdate(state_data_, edge_data_, run_number_, atomic_run_number_);
     }
     std::set<ID> new_states;
-    for (const ID& state_name : current_states_set)
+    for (const ID& state_name : current_states_set_)
     {
-      states.at(state_name)->run(state_data, run_number, atomic_run_number);
-      for (MachineStateFollower<ID, STATE_DATA, EDGE_DATA>* follower : followers)
+      states_.at(state_name)->run(state_data_, run_number_, atomic_run_number_);
+      for (MachineStateFollower<ID, STATE_DATA, EDGE_DATA>* follower : followers_)
       {
-        follower->state_run(state_name, state_data, edge_data, run_number, atomic_run_number);
+        follower->stateRun(state_name, state_data_, edge_data_, run_number_, atomic_run_number_);
       }
     }
     std::list<ID> edges_to_run;
-    for (const ID& state_name : current_states_set)
+    for (const ID& state_name : current_states_set_)
     {
       bool move = false;
-      for (const ID& edge_name : adjacence.at(state_name))
+      for (const ID& edge_name : adjacence_.at(state_name))
       {
-        std::shared_ptr<Edge_t>& edge = edges.at(edge_name);
-        const std::shared_ptr<Edge_t>& const_edge = edges.at(edge_name);
-        if (const_edge->condition(edge_data, run_number, atomic_run_number))
+        std::shared_ptr<Edge_t>& edge = edges_.at(edge_name);
+        const std::shared_ptr<Edge_t>& const_edge = edges_.at(edge_name);
+        if (const_edge->condition(edge_data_, run_number_, atomic_run_number_))
         {
           edges_to_run.push_back(edge_name);
           new_states.insert(edge->end());
@@ -315,167 +315,167 @@ private:
     }
     for (const ID& id : edges_to_run)
     {
-      edges.at(id)->run(edge_data, run_number, atomic_run_number);
-      for (MachineStateFollower<ID, STATE_DATA, EDGE_DATA>* follower : followers)
+      edges_.at(id)->run(edge_data_, run_number_, atomic_run_number_);
+      for (MachineStateFollower<ID, STATE_DATA, EDGE_DATA>* follower : followers_)
       {
-        follower->edge_run(id, state_data, edge_data, run_number, atomic_run_number);
+        follower->edgeRun(id, state_data_, edge_data_, run_number_, atomic_run_number_);
       }
     }
-    increase_atomic_run_number();
+    increaseAtomicRunNumber();
     return new_states;
   }
 
 public:
-  MachineState& add_edge(std::shared_ptr<Edge_t> edge)
+  MachineState& addEdge(std::shared_ptr<Edge_t> edge)
   {
-    assert(edges.find(edge->name()) == edges.end());
-    assert(states.find(edge->origin()) != states.end());
-    assert(states.find(edge->end()) != states.end());
+    assert(edges_.find(edge->name()) == edges_.end());
+    assert(states_.find(edge->origin()) != states_.end());
+    assert(states_.find(edge->end()) != states_.end());
 
-    adjacence[edge->origin()].push_back(edge->name());
-    edges[edge->name()] = edge;
+    adjacence_[edge->origin()].push_back(edge->name());
+    edges_[edge->name()] = edge;
     return *this;
   }
 
   MachineState&
-  add_edge(const ID& id, const ID& origin, const ID& end,
+  addEdge(const ID& id, const ID& origin, const ID& end,
            std::function<bool(const EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)>
                condition_fct =
                    [](const EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return true; },
            std::function<void(EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)> run_fct =
                [](EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return; })
   {
-    return add_edge(std::shared_ptr<AnonymousEdge<ID, EDGE_DATA> >(
+    return addEdge(std::shared_ptr<AnonymousEdge<ID, EDGE_DATA> >(
         new AnonymousEdge<ID, EDGE_DATA>(id, origin, end, condition_fct, run_fct)));
   }
 
-  MachineState& add_state(std::shared_ptr<State_t>&& state)
+  MachineState& addState(std::shared_ptr<State_t>&& state)
   {
-    assert(states.find(state->name()) == states.end());
-    assert(adjacence.find(state->name()) == adjacence.end());
+    assert(states_.find(state->name()) == states_.end());
+    assert(adjacence_.find(state->name()) == adjacence_.end());
 
-    adjacence[state->name()] = std::list<ID>();
-    states[state->name()] = state;
+    adjacence_[state->name()] = std::list<ID>();
+    states_[state->name()] = state;
     return *this;
   }
 
   MachineState&
-  add_state(const ID& id,
+  addState(const ID& id,
             std::function<void(STATE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)> run_fct =
                 [](STATE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return; })
   {
-    return add_state(std::shared_ptr<AnonymousState<ID, STATE_DATA> >(new AnonymousState<ID, STATE_DATA>(id, run_fct)));
+    return addState(std::shared_ptr<AnonymousState<ID, STATE_DATA> >(new AnonymousState<ID, STATE_DATA>(id, run_fct)));
   }
 
-  MachineState& register_follower(MachineStateFollower<ID, STATE_DATA, EDGE_DATA>& follower)
+  MachineState& registerFollower(MachineStateFollower<ID, STATE_DATA, EDGE_DATA>& follower)
   {
-    followers.push_back(&follower);
+    followers_.push_back(&follower);
     return *this;
   }
 
 private:
-  std::list<EdgeFollower<ID, STATE_DATA, EDGE_DATA> > edge_followers;
+  std::list<EdgeFollower<ID, STATE_DATA, EDGE_DATA> > edge_followers_;
 
 public:
-  void execute_at_each_edge(std::function<void(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data,
+  void executeAtEachEdge(std::function<void(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data,
                                                unsigned int run_number, unsigned int atomic_run_number)>
                                 edge_run)
   {
-    edge_followers.push_back(EdgeFollower<ID, STATE_DATA, EDGE_DATA>(edge_run));
-    register_follower(edge_followers.back());
+    edge_followers_.push_back(EdgeFollower<ID, STATE_DATA, EDGE_DATA>(edge_run));
+    registerFollower(edge_followers_.back());
   }
 
   MachineState(STATE_DATA& state_data, EDGE_DATA& edge_data)
-    : state_data(state_data)
-    , edge_data(edge_data)
-    , debug(false)
-    , run_number(CLEAR_RUN_NUMBER)
-    , atomic_run_number(CLEAR_ATOMIC_RUN_NUMBER)
+    : state_data_(state_data)
+    , edge_data_(edge_data)
+    , debug_(false)
+    , run_number_(CLEAR_RUN_NUMBER)
+    , atomic_run_number_(CLEAR_ATOMIC_RUN_NUMBER)
   {
   }
 
-  MachineState& add_init_state(const ID& state_name)
+  MachineState& addInitState(const ID& state_name)
   {
-    assert(states.find(state_name) != states.end());
-    init_states_set.insert(state_name);
+    assert(states_.find(state_name) != states_.end());
+    init_states_set_.insert(state_name);
     return *this;
   }
 
-  MachineState& add_init_state(const std::set<ID>& set_of_state_ids)
+  MachineState& addInitState(const std::set<ID>& set_of_state_ids)
   {
     for (const ID& id : set_of_state_ids)
     {
-      add_init_state(id);
+      addInitState(id);
     }
     return *this;
   }
 
-  unsigned int edge_number() const
+  unsigned int edgeNumber() const
   {
-    return edges.size();
+    return edges_.size();
   }
 
   const Edge_t& edge(const ID& edge_id) const
   {
-    assert(edges.find(edge_id) != edges.end());
-    return *edges.at(edge_id);
+    assert(edges_.find(edge_id) != edges_.end());
+    return *edges_.at(edge_id);
   }
 
-  unsigned int state_number() const
+  unsigned int stateNumber() const
   {
-    return states.size();
+    return states_.size();
   }
 
   unsigned int size() const
   {
-    return state_number();
+    return stateNumber();
   }
 
   void start()
   {
-    current_states_set = init_states_set;
-    run_number = INIT_RUN_NUMBER;
-    atomic_run_number = INIT_ATOMIC_RUN_NUMBER;
+    current_states_set_ = init_states_set_;
+    run_number_ = INIT_RUN_NUMBER;
+    atomic_run_number_ = INIT_ATOMIC_RUN_NUMBER;
   }
 
-  void set_debug(bool value)
+  void setDebug(bool value)
   {
-    this->debug = value;
+    this->debug_ = value;
   }
 
   const std::set<ID>& run()
   {
-    for (MachineStateFollower<ID, STATE_DATA, EDGE_DATA>* follower : followers)
+    for (MachineStateFollower<ID, STATE_DATA, EDGE_DATA>* follower : followers_)
     {
-      follower->update(state_data, edge_data, run_number, atomic_run_number);
+      follower->update(state_data_, edge_data_, run_number_, atomic_run_number_);
     }
     std::set<ID> old_states;
     do
     {
-      old_states = current_states_set;
-      current_states_set = atomic_run();
-    } while (old_states != current_states_set);
+      old_states = current_states_set_;
+      current_states_set_ = atomicRun();
+    } while (old_states != current_states_set_);
 
-    increase_run_number();
-    return current_states_set;
+    increaseRunNumber();
+    return current_states_set_;
   }
 
-  const std::set<ID>& current_states() const
+  const std::set<ID>& currentStates() const
   {
-    return current_states_set;
+    return current_states_set_;
   }
 
-  const std::set<ID>& initial_states() const
+  const std::set<ID>& initialStates() const
   {
-    return init_states_set;
+    return init_states_set_;
   }
 
-  unsigned int get_run_number() const
+  unsigned int getRunNumber() const
   {
-    return run_number;
+    return run_number_;
   }
 
-  std::string to_dot() const
+  std::string toDot() const
   {
     std::ostringstream result;
     result << "digraph G {";
@@ -483,12 +483,12 @@ public:
     result << std::endl;
     int cpt = 0;
     std::map<ID, int> states_id;
-    for (auto state_asso : states)
+    for (auto state_asso : states_)
     {
       const ID& id = state_asso.first;
       states_id[id] = cpt;
       result << "\n v" << cpt << " [label=\"" << id << "\"";
-      if (is_initial(id))
+      if (isInitial(id))
       {
         result << " shape=\"doubleoctagon\"";
       }
@@ -496,7 +496,7 @@ public:
       {
         result << " shape=\"oval\"";
       }
-      if (is_active(id))
+      if (isActive(id))
       {
         result << "style=\"filled\" fillcolor=\"gold\"";
       }
@@ -504,7 +504,7 @@ public:
       cpt += 1;
     }
     result << std::endl;
-    for (auto edge_asso : edges)
+    for (auto edge_asso : edges_)
     {
       result << std::endl
              << " v" << states_id.at(edge_asso.second->origin()) << "->"
@@ -515,24 +515,24 @@ public:
     return std::move(result.str());
   }
 
-  bool export_to_file(const std::string& path)
+  bool exportToFile(const std::string& path)
   {
     std::ofstream file(path);
     if (!file.is_open())
       return false;
-    file << to_dot();
+    file << toDot();
     file.close();
     return true;
   }
 
-  bool is_active(const ID& state) const
+  bool isActive(const ID& state) const
   {
-    return current_states_set.find(state) != current_states_set.end();
+    return current_states_set_.find(state) != current_states_set_.end();
   }
 
-  bool is_initial(const ID& state) const
+  bool isInitial(const ID& state) const
   {
-    return init_states_set.find(state) != init_states_set.end();
+    return init_states_set_.find(state) != init_states_set_.end();
   }
 
   friend std::ostream& operator<<<ID, STATE_DATA, EDGE_DATA>(std::ostream& out,
@@ -543,13 +543,13 @@ template <typename ID, typename STATE_DATA, typename EDGE_DATA>
 std::ostream& operator<<(std::ostream& out, const MachineState<ID, STATE_DATA, EDGE_DATA>& machine)
 {
   out << "States : ";
-  for (const std::pair<ID, std::shared_ptr<State<ID, STATE_DATA> > >& state_asso : machine.states)
+  for (const std::pair<ID, std::shared_ptr<State<ID, STATE_DATA> > >& state_asso : machine.states_)
   {
     out << *(state_asso.second) << ", ";
   }
   out << std::endl;
   out << "Edges : " << std::endl;
-  for (const std::pair<ID, std::shared_ptr<Edge<ID, EDGE_DATA> > >& edge_asso : machine.edges)
+  for (const std::pair<ID, std::shared_ptr<Edge<ID, EDGE_DATA> > >& edge_asso : machine.edges_)
   {
     out << " " << *(edge_asso.second) << ", " << std::endl;
   }
@@ -557,49 +557,49 @@ std::ostream& operator<<(std::ostream& out, const MachineState<ID, STATE_DATA, E
 }
 
 template <typename ID, typename STATE_DATA, typename EDGE_DATA>
-class RisingEdge_wrapper : public MachineStateFollower<ID, STATE_DATA, EDGE_DATA>
+class RisingEdgeWrapper : public MachineStateFollower<ID, STATE_DATA, EDGE_DATA>
 {
 private:
-  unsigned int run_number_for_last_rising;
-  unsigned int atomic_run_number_for_last_rising;
+  unsigned int run_number_for_last_rising_;
+  unsigned int atomic_run_number_for_last_rising_;
 
-  bool last_condition_value;
+  bool last_condition_value_;
 
   std::function<bool(const EDGE_DATA& const_data, unsigned int run_number, unsigned int atomic_run_number)>
-      condition_fct;
+      condition_fct_;
 
 public:
-  RisingEdge_wrapper(
+  RisingEdgeWrapper(
       std::function<bool(const EDGE_DATA& const_data, unsigned int run_number, unsigned int atomic_run_number)>
           condition_fct,
       MachineState<ID, STATE_DATA, EDGE_DATA>& machine)
-    : run_number_for_last_rising(CLEAR_RUN_NUMBER)
-    , atomic_run_number_for_last_rising(CLEAR_ATOMIC_RUN_NUMBER)
-    , last_condition_value(false)
-    , condition_fct(condition_fct)
+    : run_number_for_last_rising_(CLEAR_RUN_NUMBER)
+    , atomic_run_number_for_last_rising_(CLEAR_ATOMIC_RUN_NUMBER)
+    , last_condition_value_(false)
+    , condition_fct_(condition_fct)
   {
-    machine.register_follower(*this);
+    machine.registerFollower(*this);
   }
 
 public:
   void update(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number, unsigned int atomic_run_number){};
 
-  void atomic_update(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
+  void atomicUpdate(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                      unsigned int atomic_run_number)
   {
-    bool value = condition_fct(edge_data, run_number, atomic_run_number);
-    bool rising_edge = (!last_condition_value) and (value);
+    bool value = condition_fct_(edge_data, run_number, atomic_run_number);
+    bool rising_edge = (!last_condition_value_) and (value);
     if (rising_edge)
     {
-      run_number_for_last_rising = run_number;
-      atomic_run_number_for_last_rising = atomic_run_number;
+      run_number_for_last_rising_ = run_number;
+      atomic_run_number_for_last_rising_ = atomic_run_number;
     }
-    last_condition_value = value;
+    last_condition_value_ = value;
   }
 
   bool condition(const EDGE_DATA& edge_data, unsigned int run_number, unsigned int atomic_run_number) const
   {
-    return (run_number_for_last_rising == run_number);
+    return (run_number_for_last_rising_ == run_number);
   }
 };
 
@@ -607,19 +607,19 @@ template <typename ID, typename STATE_DATA, typename EDGE_DATA>
 class RisingEdge
 {
 private:
-  std::shared_ptr<RisingEdge_wrapper<ID, STATE_DATA, EDGE_DATA> > rising;
+  std::shared_ptr<RisingEdgeWrapper<ID, STATE_DATA, EDGE_DATA> > rising_;
 
 public:
   RisingEdge(std::function<bool(const EDGE_DATA& const_data, unsigned int run_number, unsigned int atomic_run_number)>
                  condition_fct,
              MachineState<ID, STATE_DATA, EDGE_DATA>& machine)
-    : rising(new RisingEdge_wrapper<ID, STATE_DATA, EDGE_DATA>(condition_fct, machine))
+    : rising_(new RisingEdgeWrapper<ID, STATE_DATA, EDGE_DATA>(condition_fct, machine))
   {
   }
 
   bool operator()(const EDGE_DATA& edge_data, unsigned int run_number, unsigned int atomic_run_number) const
   {
-    return rising->condition(edge_data, run_number, atomic_run_number);
+    return rising_->condition(edge_data, run_number, atomic_run_number);
   }
 };
 

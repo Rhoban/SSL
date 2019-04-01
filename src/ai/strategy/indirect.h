@@ -23,24 +23,24 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <memory>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class Indirect : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  int state;
-  std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
+  bool behaviors_are_assigned_;
+  int state_;
+  std::shared_ptr<robot_behavior::PassDribbler> pass_behavior_;
 
 public:
-  Indirect(Ai::AiData& ai_data);
+  Indirect(ai::AiData& ai_data);
   virtual ~Indirect();
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
@@ -49,16 +49,16 @@ public:
 
   virtual void update(double time);
 
-  virtual void assign_behavior_to_robots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+  virtual void assignBehaviorToRobots(
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots);
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+  getStartingPositions(int number_of_avalaible_robots);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

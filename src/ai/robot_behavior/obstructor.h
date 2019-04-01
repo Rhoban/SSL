@@ -22,30 +22,30 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Obstructor : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point point_to_obstruct;
-  int robot_to_obstruct_id;
-  Vision::Team robot_to_obstruct_team;
+  rhoban_geometry::Point point_to_obstruct_;
+  int robot_to_obstruct_id_;
+  vision::Team robot_to_obstruct_team_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  Obstructor(Ai::AiData& ai_data);
+  Obstructor(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
-  void declare_robot_to_obstruct(int robot_id, Vision::Team team = Vision::Team::Opponent);
+  void declareRobotToObstruct(int robot_id, vision::Team team = vision::Team::Opponent);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual ~Obstructor();
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

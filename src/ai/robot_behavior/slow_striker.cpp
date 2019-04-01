@@ -21,100 +21,100 @@
 #include <math/tangents.h>
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-SlowStriker::SlowStriker(Ai::AiData& ai_data)
+SlowStriker::SlowStriker(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , robot_to_pass_id(-1)
-  , robot_to_pass_team(Vision::Team::Ally)
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , robot_to_pass_id_(-1)
+  , robot_to_pass_team_(vision::Team::Ally)
+  , follower_(Factory::fixedConsignFollower(ai_data))
 {
-  tempo = 0.0;
+  tempo_ = 0.0;
 }
 
-void SlowStriker::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void SlowStriker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
-  if (robot_to_pass_id != -1)
+  if (robot_to_pass_id_ != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const Ai::Robot& robot_to_pass = get_robot(robot_to_pass_id, robot_to_pass_team);
-    striking_point = robot_to_pass.get_movement().linear_position(time);
+    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
+    striking_point_ = robot_to_pass.getMovement().linearPosition(time);
   }
 
-  Vector2d ball_striking_vector = striking_point - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_striking_vector = striking_point_ - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
   double dist_ball_robot = ball_robot_vector.norm();
 
   ball_striking_vector = ball_striking_vector / ball_striking_vector.norm();
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
   double target_radius_from_ball;
-  double scalar_ball_robot = -scalar_product(ball_robot_vector, ball_striking_vector);
-  if (tempo == 0.0)
+  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_striking_vector);
+  if (tempo_ == 0.0)
   {
     target_radius_from_ball = 0.3;
   }
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
 
     if (dist_ball_robot < target_radius_from_ball)
     {
-      follower->avoid_opponent(false);
+      follower_->avoidOpponent(false);
     }
   }
   // TODO Add hysteresis
   if (dist_ball_robot > target_radius_from_ball)
   {
-    follower->avoid_opponent(true);
+    follower_->avoidOpponent(true);
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_striking_vector * (target_radius_from_ball);
+  rhoban_geometry::Point target_position = ballPosition() - ball_striking_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_striking_vector);
 
   double position_margin = 0.05;
   double waiting_time = 3.0;
 
-  if ((Vector2d(target_position - robot_position).norm() < position_margin) && (tempo == 0.0))
+  if ((Vector2d(target_position - robot_position).norm() < position_margin) && (tempo_ == 0.0))
   {
-    tempo = time;
+    tempo_ = time;
   }
 
   // if( Vector2d(target_position - robot_position).norm() > position_margin ) {
   //     tempo = 0.0;
   // }
 
-  if ((Vector2d(target_position - robot_position).norm() < position_margin) && (tempo != 0.0))
+  if ((Vector2d(target_position - robot_position).norm() < position_margin) && (tempo_ != 0.0))
   {
-    if (std::abs(time - tempo) >= waiting_time)
+    if (std::abs(time - tempo_) >= waiting_time)
     {
       target_radius_from_ball = -0.5;
     }
   }
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control SlowStriker::control() const
 {
-  Control ctrl = follower->control();
-  if (robot_to_pass_id != -1)
+  Control ctrl = follower_->control();
+  if (robot_to_pass_id_ != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
     ctrl.kickPower = 0.5;
   }
@@ -127,26 +127,26 @@ Control SlowStriker::control() const
   return ctrl;
 }
 
-void SlowStriker::declare_point_to_strik(rhoban_geometry::Point point)
+void SlowStriker::declarePointToStrike(rhoban_geometry::Point point)
 {
-  striking_point = point;
+  striking_point_ = point;
 }
 
-void SlowStriker::declare_robot_to_pass(int robot_id, Vision::Team team)
+void SlowStriker::declareRobotToPass(int robot_id, vision::Team team)
 {
-  robot_to_pass_id = robot_id;
-  robot_to_pass_team = team;
+  robot_to_pass_id_ = robot_id;
+  robot_to_pass_team_ = team;
 }
 
 SlowStriker::~SlowStriker()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations SlowStriker::get_annotations() const
+rhoban_ssl::annotations::Annotations SlowStriker::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower_->getAnnotations();
 }
 
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

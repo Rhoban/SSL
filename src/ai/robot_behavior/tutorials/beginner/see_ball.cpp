@@ -20,28 +20,37 @@
 #include "see_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
+
+
 namespace beginner
 {
-SeeBall::SeeBall(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
+SeeBall::SeeBall(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void SeeBall::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void SeeBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  Vector2d direction = ballPosition() - robot_position;
+  ContinuousAngle target_rotation = vector2angle(direction);
 
-  Vector2d robot_ball = ball_position() - robot_position;
+  follower_->setFollowingPosition(robot_position, target_rotation);
+
+  follower_->avoidTheBall(false);
+  follower_->update(time, robot, ball);
+
+  Vector2d robot_ball = ballPosition() - robot_position;
   ContinuousAngle target_angular_position = vector2angle(robot_ball);
 
-  follower_->set_following_position(robot_position, target_angular_position);
+  follower_->setFollowingPosition(robot_position, target_angular_position);
   follower_->update(time, robot, ball);
 }
 
@@ -56,14 +65,14 @@ SeeBall::~SeeBall()
   delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations SeeBall::get_annotations() const
+rhoban_ssl::annotations::Annotations SeeBall::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
-  annotations.addAnnotations(follower_->get_annotations());
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
 }  // namespace beginner
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

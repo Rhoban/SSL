@@ -22,20 +22,20 @@
 #include <debug.h>
 namespace rhoban_geometry
 {
-Point center_of_cone_incircle(const rhoban_geometry::Point& cone_vertex, const rhoban_geometry::Point& cone_base_A,
+Point centerOfConeIncircle(const rhoban_geometry::Point& cone_vertex, const rhoban_geometry::Point& cone_base_A,
                               const rhoban_geometry::Point& cone_base_B, double circle_radius)
 {
   Vector2d u = normalized(cone_base_A - cone_vertex);
   Vector2d v = normalized(cone_base_B - cone_vertex);
-  double u_vec_v = vectorial_product(u, v);
+  double u_vec_v = vectorialProduct(u, v);
   assert(u_vec_v != 0.0);
   double signe = (u_vec_v >= 0) ? 1 : -1;
-  return vector2point(((u + v) * (signe * circle_radius) + v * vectorial_product(u, cone_vertex) +
-                       u * vectorial_product(cone_vertex, v)) /
+  return vector2point(((u + v) * (signe * circle_radius) + v * vectorialProduct(u, cone_vertex) +
+                       u * vectorialProduct(cone_vertex, v)) /
                       u_vec_v);
 }
 
-std::vector<rhoban_geometry::Segment> tangent_of_two_circle(const rhoban_geometry::Circle& circle_A,
+std::vector<rhoban_geometry::Segment> tangentOfTwoCircle(const rhoban_geometry::Circle& circle_A,
                                                             const rhoban_geometry::Circle& circle_B)
 {
   std::vector<rhoban_geometry::Segment> result(4);

@@ -7,7 +7,7 @@
 
 using namespace rhoban_utils;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 RefereeClient::RefereeClient() : MulticastClient(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT)
 {
@@ -42,4 +42,4 @@ bool RefereeClient::process(char* buffer, size_t len)
 
   return false;
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

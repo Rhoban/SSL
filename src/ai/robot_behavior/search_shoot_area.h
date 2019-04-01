@@ -23,45 +23,45 @@
 #include "factory.h"
 #include <random>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class SearchShootArea : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point p1;
-  rhoban_geometry::Point p2;
-  int obstructed_view;
+  rhoban_geometry::Point p1_;
+  rhoban_geometry::Point p2_;
+  int obstructed_view_;
 
-  std::default_random_engine generator;
+  std::default_random_engine generator_;
 
-  double period;
-  double last_time_changement;
+  double period_;
+  double last_time_changement_;
 
-  rhoban_geometry::Point target_position;
+  rhoban_geometry::Point target_position_;
 
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
   bool well_positioned;
 
-  SearchShootArea(Ai::AiData& ai_data);
+  SearchShootArea(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  void set_period(double period)
+  void setPeriod(double period)
   {
-    this->period = period;
+    period_ = period;
   }
 
-  void declare_area(rhoban_geometry::Point p1, rhoban_geometry::Point p2);
+  void declareArea(rhoban_geometry::Point p1, rhoban_geometry::Point p2);
 
   virtual Control control() const;
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual ~SearchShootArea();
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

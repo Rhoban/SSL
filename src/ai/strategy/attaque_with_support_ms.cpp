@@ -20,15 +20,15 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 #include "attaque_with_support_ms.h"
 #include "core/print_collection.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
-AttaqueWithSupportMs::AttaqueWithSupportMs(Ai::AiData& ai_data)
+AttaqueWithSupportMs::AttaqueWithSupportMs(ai::AiData& ai_data)
   : Strategy(ai_data)
-  , machine(ai_data, ai_data)
-  , striker_behavior(std::shared_ptr<Robot_behavior::StrikerAi>(new Robot_behavior::StrikerAi(ai_data)))
-  , search_behavior(std::shared_ptr<Robot_behavior::SearchShootArea>(new Robot_behavior::SearchShootArea(ai_data)))
+  , machine_(ai_data, ai_data)
+  , striker_behavior_(std::shared_ptr<robot_behavior::StrikerAi>(new robot_behavior::StrikerAi(ai_data)))
+  , search_behavior_(std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea(ai_data)))
   ,
   // pass_behavior(std::shared_ptr<Robot_behavior::Pass>(
   //   new Robot_behavior::Pass(ai_data)
@@ -39,101 +39,101 @@ AttaqueWithSupportMs::AttaqueWithSupportMs(Ai::AiData& ai_data)
   // pass_behavior(std::shared_ptr<Robot_behavior::SlowStriker>(
   //   new Robot_behavior::SlowStriker(ai_data)
   // )),
-  pass_behavior(std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data)))
-  , wait_pass_behavior(std::shared_ptr<Robot_behavior::WaitPass>(new Robot_behavior::WaitPass(ai_data)))
-  , seuil_fgbm(0.25)
-  , fgbm_score(1)
-  , tempo(2)
-  , begin_time(0)
-  , diff_distance_constante(0.5)
-  , fgbm_constante(0.05)
+  pass_behavior_(std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data)))
+  , wait_pass_behavior_(std::shared_ptr<robot_behavior::WaitPass>(new robot_behavior::WaitPass(ai_data)))
+  , seuil_fgbm_(0.25)
+  , fgbm_score_(1)
+  , tempo_(2)
+  , begin_time_(0)
+  , diff_distance_constante_(0.5)
+  , fgbm_constante_(0.05)
 {
   // STATES
-  machine.add_state(state_name::strike_search,
-                    [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+  machine_.addState(state_name::strike_search,
+                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::strike_search);
                     });
-  machine.add_state(state_name::search_strike,
-                    [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+  machine_.addState(state_name::search_strike,
+                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::search_strike);
                     });
 
-  machine.add_state(state_name::pass_search,
-                    [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+  machine_.addState(state_name::pass_search,
+                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::pass_search);
                     });
-  machine.add_state(state_name::search_pass,
-                    [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+  machine_.addState(state_name::search_pass,
+                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::search_pass);
                     });
 
-  machine.add_state(state_name::search_waitpass,
-                    [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+  machine_.addState(state_name::search_waitpass,
+                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::search_waitpass);
                     });
-  machine.add_state(state_name::waitpass_search,
-                    [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+  machine_.addState(state_name::waitpass_search,
+                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
                       // DEBUG(state_name::waitpass_search);
                     });
 
   // EDGES
-  machine.add_edge(edge_name::db1_sup_db2, state_name::strike_search, state_name::search_strike,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return is_db1_sup_db2();
+  machine_.addEdge(edge_name::db1_sup_db2, state_name::strike_search, state_name::search_strike,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return isDb1SupDb2();
                    });
-  machine.add_edge(edge_name::db1_inf_db2, state_name::search_strike, state_name::strike_search,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return is_db1_inf_db2();
-                   });
-
-  machine.add_edge(edge_name::fgbm_score_inf_seuil_1, state_name::strike_search, state_name::pass_search,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return is_fgbm_score_inf_seuil_1();
-                   });
-  machine.add_edge(edge_name::fgbm_score_inf_seuil_2, state_name::search_strike, state_name::search_pass,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return is_fgbm_score_inf_seuil_2();
+  machine_.addEdge(edge_name::db1_inf_db2, state_name::search_strike, state_name::strike_search,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return isDb1InfDb2();
                    });
 
-  machine.add_edge(edge_name::fgbm_score_sup_seuil_1_plus_constante, state_name::pass_search, state_name::strike_search,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return fgbm_score_sup_seuil_1_plus_constante();
+  machine_.addEdge(edge_name::fgbm_score_inf_seuil_1, state_name::strike_search, state_name::pass_search,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return isFgbmScoreInfSeuil_1();
                    });
-  machine.add_edge(edge_name::fgbm_score_sup_seuil_2_plus_constante, state_name::search_pass, state_name::search_strike,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return fgbm_score_sup_seuil_2_plus_constante();
-                   });
-
-  machine.add_edge(edge_name::infra_1_on, state_name::pass_search, state_name::search_waitpass,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     begin_time = time();
-                     return is_infra_1_on();
-                   });
-  machine.add_edge(edge_name::infra_2_on, state_name::search_pass, state_name::waitpass_search,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     begin_time = time();
-                     return is_infra_2_on();
+  machine_.addEdge(edge_name::fgbm_score_inf_seuil_2, state_name::search_strike, state_name::search_pass,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return isFgbmScoreInfSeuil_2();
                    });
 
-  machine.add_edge(edge_name::db2_inf_seuil_or_time_inf_tempo, state_name::search_waitpass, state_name::search_strike,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return is_db2_inf_seuil_or_time_inf_tempo();
+  machine_.addEdge(edge_name::fgbm_score_sup_seuil_1_plus_constante, state_name::pass_search, state_name::strike_search,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return fgbmScoreSupSeuil_1PlusConstante();
                    });
-  machine.add_edge(edge_name::db1_inf_seuil_or_time_inf_tempo, state_name::waitpass_search, state_name::strike_search,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return is_db1_inf_seuil_or_time_inf_tempo();
-                   });
-
-  machine.add_edge(edge_name::db1_sup_db2_plus_constante, state_name::pass_search, state_name::search_strike,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return is_db1_sup_db2_plus_constante();
-                   });
-  machine.add_edge(edge_name::db1_plus_constante_inf_db2, state_name::search_pass, state_name::strike_search,
-                   [this](const Ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     return is_db1_plus_constante_inf_db2();
+  machine_.addEdge(edge_name::fgbm_score_sup_seuil_2_plus_constante, state_name::search_pass, state_name::search_strike,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return fgbmScoreSupSeuil_2PlusConstante();
                    });
 
-  machine.export_to_file("/tmp/attaque_with_support_ms.dot");
+  machine_.addEdge(edge_name::infra_1_on, state_name::pass_search, state_name::search_waitpass,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     begin_time_ = time();
+                     return isInfra_1On();
+                   });
+  machine_.addEdge(edge_name::infra_2_on, state_name::search_pass, state_name::waitpass_search,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     begin_time_ = time();
+                     return isInfra_2On();
+                   });
+
+  machine_.addEdge(edge_name::db2_inf_seuil_or_time_inf_tempo, state_name::search_waitpass, state_name::search_strike,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return isDb2InfSeuilOrTimeInfTempo();
+                   });
+  machine_.addEdge(edge_name::db1_inf_seuil_or_time_inf_tempo, state_name::waitpass_search, state_name::strike_search,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return isDb1InfSeuilOrTimeInfTempo();
+                   });
+
+  machine_.addEdge(edge_name::db1_sup_db2_plus_constante, state_name::pass_search, state_name::search_strike,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return isDb1SupDb2PlusConstante();
+                   });
+  machine_.addEdge(edge_name::db1_plus_constante_inf_db2, state_name::search_pass, state_name::strike_search,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     return isDb1PlusConstanteInfDb2();
+                   });
+
+  machine_.exportToFile("/tmp/attaque_with_support_ms.dot");
 }
 
 AttaqueWithSupportMs::~AttaqueWithSupportMs()
@@ -144,7 +144,7 @@ AttaqueWithSupportMs::~AttaqueWithSupportMs()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int AttaqueWithSupportMs::min_robots() const
+int AttaqueWithSupportMs::minRobots() const
 {
   return 2;
 }
@@ -153,14 +153,14 @@ int AttaqueWithSupportMs::min_robots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int AttaqueWithSupportMs::max_robots() const
+int AttaqueWithSupportMs::maxRobots() const
 {
   return 2;
 }
 
-Goalie_need AttaqueWithSupportMs::needs_goalie() const
+GoalieNeed AttaqueWithSupportMs::needsGoalie() const
 {
-  return Goalie_need::NO;
+  return GoalieNeed::NO;
 }
 
 const std::string AttaqueWithSupportMs::name = "attaque_with_support_ms";
@@ -169,26 +169,26 @@ void AttaqueWithSupportMs::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
 
-  ID1 = player_id(0);
-  ID2 = player_id(1);  // we get the first if in get_player_ids()
+  ID1_ = playerId(0);
+  ID2_ = playerId(1);  // we get the first if in get_player_ids()
 
-  robot_1_position = get_robot(ID1, Vision::Team::Ally).get_movement().linear_position(time);
-  robot_2_position = get_robot(ID2, Vision::Team::Ally).get_movement().linear_position(time);
+  robot_1_position_ = getRobot(ID1_, vision::Team::Ally).getMovement().linearPosition(time);
+  robot_2_position_ = getRobot(ID2_, vision::Team::Ally).getMovement().linearPosition(time);
 
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position_)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position_)).norm();
 
   if (db1 > db2)
   {
-    machine.add_init_state(state_name::strike_search);
+    machine_.addInitState(state_name::strike_search);
   }
   else
   {
-    machine.add_init_state(state_name::search_strike);
+    machine_.addInitState(state_name::search_strike);
   }
-  machine.start();
+  machine_.start();
 
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 }
 void AttaqueWithSupportMs::stop(double time)
 {
@@ -199,54 +199,54 @@ void AttaqueWithSupportMs::update(double time)
 {
 }
 
-void AttaqueWithSupportMs::assign_behavior_to_robots(
-    std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+void AttaqueWithSupportMs::assignBehaviorToRobots(
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // we assign now all the other behavior
-  assert(get_player_ids().size() == 2);
+  assert(getPlayerIds().size() == 2);
 
-  robot_1_position = get_robot(ID1, Vision::Team::Ally).get_movement().linear_position(time);
-  robot_2_position = get_robot(ID2, Vision::Team::Ally).get_movement().linear_position(time);
-  fgbm_score = find_goal_best_move(ball_position()).second;
+  robot_1_position_ = getRobot(ID1_, vision::Team::Ally).getMovement().linearPosition(time);
+  robot_2_position_ = getRobot(ID2_, vision::Team::Ally).getMovement().linearPosition(time);
+  fgbm_score_ = findGoalBestMove(ballPosition()).second;
 
-  machine.run();
+  machine_.run();
 
-  std::string state = *machine.current_states().begin();
+  std::string state = *machine_.currentStates().begin();
   // DEBUG(machine.current_states());
   if (state == state_name::strike_search)
   {
-    assign_behavior(ID1, striker_behavior);
-    assign_behavior(ID2, search_behavior);
+    assign_behavior(ID1_, striker_behavior_);
+    assign_behavior(ID2_, search_behavior_);
   }
   else if (state == state_name::search_strike)
   {
-    assign_behavior(ID1, search_behavior);
-    assign_behavior(ID2, striker_behavior);
+    assign_behavior(ID1_, search_behavior_);
+    assign_behavior(ID2_, striker_behavior_);
   }
   else if (state == state_name::pass_search)
   {
-    assign_behavior(ID1, pass_behavior);
+    assign_behavior(ID1_, pass_behavior_);
     // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
-    pass_behavior->declare_point_to_strik(robot_2_position);
-    assign_behavior(ID2, search_behavior);
+    pass_behavior_->declarePointToStrike(robot_2_position_);
+    assign_behavior(ID2_, search_behavior_);
   }
   else if (state == state_name::search_pass)
   {
-    assign_behavior(ID1, search_behavior);
-    assign_behavior(ID2, pass_behavior);
+    assign_behavior(ID1_, search_behavior_);
+    assign_behavior(ID2_, pass_behavior_);
     // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
-    pass_behavior->declare_point_to_strik(robot_1_position);
+    pass_behavior_->declarePointToStrike(robot_1_position_);
   }
   else if (state == state_name::search_waitpass)
   {
-    assign_behavior(ID1, search_behavior);
+    assign_behavior(ID1_, search_behavior_);
     // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
-    assign_behavior(ID2, wait_pass_behavior);
+    assign_behavior(ID2_, wait_pass_behavior_);
   }
   else if (state == state_name::waitpass_search)
   {
-    assign_behavior(ID1, wait_pass_behavior);
-    assign_behavior(ID2, search_behavior);  // pass_behavior );
+    assign_behavior(ID1_, wait_pass_behavior_);
+    assign_behavior(ID2_, search_behavior_);  // pass_behavior );
     // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
   }
 }
@@ -258,12 +258,12 @@ void AttaqueWithSupportMs::assign_behavior_to_robots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-AttaqueWithSupportMs::get_starting_positions(int number_of_avalaible_robots)
+AttaqueWithSupportMs::getStartingPositions(int number_of_avalaible_robots)
 {
-  assert(min_robots() <= number_of_avalaible_robots);
-  assert(max_robots() == -1 or number_of_avalaible_robots <= max_robots());
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ball_position(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ballPosition(), 0.0) };
 }
 
 //
@@ -271,113 +271,113 @@ AttaqueWithSupportMs::get_starting_positions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool AttaqueWithSupportMs::get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
+bool AttaqueWithSupportMs::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                             ContinuousAngle& angular_position)
 {
-  linear_position = ally_goal_center();
+  linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-bool AttaqueWithSupportMs::is_db1_sup_db2()
+bool AttaqueWithSupportMs::isDb1SupDb2()
 {
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position_)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position_)).norm();
   // DEBUG("is_db1_sup_db2 " << db1 << " " << db2);
   // double fgbm_score = find_goal_best_move( ball_position() ).second;
   return (db1 >= db2);  // and (fgbm_score >= seuil_fgbm));
 }
-bool AttaqueWithSupportMs::is_db1_inf_db2()
+bool AttaqueWithSupportMs::isDb1InfDb2()
 {
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position_)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position_)).norm();
   // DEBUG("is_db1_inf_db2 " << db1 << " " << db2);
   // double fgbm_score = find_goal_best_move( ball_position() ).second;
   return (db1 < db2);  // and (fgbm_score >= seuil_fgbm));
 }
 
-bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_1()
+bool AttaqueWithSupportMs::isFgbmScoreInfSeuil_1()
 {
-  DEBUG(fgbm_score);
-  std::vector<int> vect_obstruct = get_robot_in_line(robot_1_position, robot_2_position);
+  DEBUG(fgbm_score_);
+  std::vector<int> vect_obstruct = getRobotInLine(robot_1_position_, robot_2_position_);
   bool free_for_pass = vect_obstruct.empty();
-  bool ready_for_pass = search_behavior->well_positioned;
-  return (fgbm_score < seuil_fgbm) and free_for_pass and ready_for_pass;
+  bool ready_for_pass = search_behavior_->well_positioned;
+  return (fgbm_score_ < seuil_fgbm_) and free_for_pass and ready_for_pass;
 }
-bool AttaqueWithSupportMs::is_fgbm_score_inf_seuil_2()
+bool AttaqueWithSupportMs::isFgbmScoreInfSeuil_2()
 {
-  DEBUG(fgbm_score);
-  std::vector<int> vect_obstruct = get_robot_in_line(robot_2_position, robot_1_position);
+  DEBUG(fgbm_score_);
+  std::vector<int> vect_obstruct = getRobotInLine(robot_2_position_, robot_1_position_);
   bool free_for_pass = vect_obstruct.empty();
-  bool ready_for_pass = search_behavior->well_positioned;
-  return (fgbm_score >= seuil_fgbm + fgbm_constante) and free_for_pass and ready_for_pass;
-}
-
-bool AttaqueWithSupportMs::fgbm_score_sup_seuil_1_plus_constante()
-{
-  std::vector<int> vect_obstruct = get_robot_in_line(robot_1_position, robot_2_position);
-  bool free_for_pass = vect_obstruct.empty();
-  // bool ready_for_pass = search_behavior->well_positioned;
-  return (fgbm_score >= seuil_fgbm + fgbm_constante) or not(free_for_pass);
-}
-bool AttaqueWithSupportMs::fgbm_score_sup_seuil_2_plus_constante()
-{
-  std::vector<int> vect_obstruct = get_robot_in_line(robot_2_position, robot_1_position);
-  bool free_for_pass = vect_obstruct.empty();
-  // bool ready_for_pass = search_behavior->well_positioned;
-  return (fgbm_score >= seuil_fgbm + fgbm_constante) or not(free_for_pass);
+  bool ready_for_pass = search_behavior_->well_positioned;
+  return (fgbm_score_ >= seuil_fgbm_ + fgbm_constante_) and free_for_pass and ready_for_pass;
 }
 
-bool AttaqueWithSupportMs::is_infra_1_on()
+bool AttaqueWithSupportMs::fgbmScoreSupSeuil_1PlusConstante()
 {
-  return infra_red(ID1, Vision::Team::Ally);
+  std::vector<int> vect_obstruct = getRobotInLine(robot_1_position_, robot_2_position_);
+  bool free_for_pass = vect_obstruct.empty();
+  // bool ready_for_pass = search_behavior->well_positioned;
+  return (fgbm_score_ >= seuil_fgbm_ + fgbm_constante_) or not(free_for_pass);
+}
+bool AttaqueWithSupportMs::fgbmScoreSupSeuil_2PlusConstante()
+{
+  std::vector<int> vect_obstruct = getRobotInLine(robot_2_position_, robot_1_position_);
+  bool free_for_pass = vect_obstruct.empty();
+  // bool ready_for_pass = search_behavior->well_positioned;
+  return (fgbm_score_ >= seuil_fgbm_ + fgbm_constante_) or not(free_for_pass);
+}
+
+bool AttaqueWithSupportMs::isInfra_1On()
+{
+  return infraRed(ID1_, vision::Team::Ally);
   // double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
   // // DEBUG("DB1 " << db1 );
   // return (db1 < get_robot_radius()+0.1);
 }
-bool AttaqueWithSupportMs::is_infra_2_on()
+bool AttaqueWithSupportMs::isInfra_2On()
 {
-  return infra_red(ID2, Vision::Team::Ally);
+  return infraRed(ID2_, vision::Team::Ally);
   // double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
   // // DEBUG("DB2 " << db2 );
   // return (db2 < get_robot_radius()+0.1);
 }
 
-bool AttaqueWithSupportMs::is_db1_inf_seuil_or_time_inf_tempo()
+bool AttaqueWithSupportMs::isDb1InfSeuilOrTimeInfTempo()
 {
   // return infra_red( ID1, Vision::Team::Ally);
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  bool t = (time() - begin_time > tempo);
-  return ((db1 < get_robot_radius() + 0.7) || t);
+  double db1 = (Vector2d(ballPosition() - robot_1_position_)).norm();
+  bool t = (time() - begin_time_ > tempo_);
+  return ((db1 < getRobotRadius() + 0.7) || t);
 }
-bool AttaqueWithSupportMs::is_db2_inf_seuil_or_time_inf_tempo()
+bool AttaqueWithSupportMs::isDb2InfSeuilOrTimeInfTempo()
 {
   // return infra_red( ID2, Vision::Team::Ally);
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
-  bool t = (time() - begin_time > tempo);
-  return ((db2 < get_robot_radius() + 0.7) || t);
+  double db2 = (Vector2d(ballPosition() - robot_2_position_)).norm();
+  bool t = (time() - begin_time_ > tempo_);
+  return ((db2 < getRobotRadius() + 0.7) || t);
 }
 
-bool AttaqueWithSupportMs::is_db1_sup_db2_plus_constante()
+bool AttaqueWithSupportMs::isDb1SupDb2PlusConstante()
 {
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position_)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position_)).norm();
   // DEBUG("is_db1_sup_db2_plus_constante " << db1 << " " << db2);
-  return (db1 > db2 + diff_distance_constante);
+  return (db1 > db2 + diff_distance_constante_);
   // return false;
 }
-bool AttaqueWithSupportMs::is_db1_plus_constante_inf_db2()
+bool AttaqueWithSupportMs::isDb1PlusConstanteInfDb2()
 {
-  double db1 = (Vector2d(ball_position() - robot_1_position)).norm();
-  double db2 = (Vector2d(ball_position() - robot_2_position)).norm();
+  double db1 = (Vector2d(ballPosition() - robot_1_position_)).norm();
+  double db2 = (Vector2d(ballPosition() - robot_2_position_)).norm();
   // DEBUG("is_db1_sup_db2_plus_constante " << db1 << " " << db2);
-  return (db1 + diff_distance_constante < db2);
+  return (db1 + diff_distance_constante_ < db2);
 }
 
-void AttaqueWithSupportMs::set_seuil_fgbm(double seuil)
+void AttaqueWithSupportMs::setSeuilFgbm(double seuil)
 {
-  seuil_fgbm = seuil;
+  seuil_fgbm_ = seuil;
 }
 
 }  // namespace Strategy
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

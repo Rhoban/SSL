@@ -22,30 +22,30 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-class Concept_proof_spinner : public RobotBehavior
+class ConceptProofSpinner : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
-  bool go_to_home;
-  bool save_ball_position;
-  rhoban_geometry::Point ball_pos;
+  bool go_to_home_;
+  bool save_ball_position_;
+  rhoban_geometry::Point ball_pos_;
 
 public:
-  Concept_proof_spinner(Ai::AiData& ai_data);
+  ConceptProofSpinner(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Concept_proof_spinner();
+  virtual ~ConceptProofSpinner();
 };
 
 };  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

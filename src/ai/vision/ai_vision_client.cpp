@@ -28,90 +28,90 @@
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-AIVisionClient::AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation,
-                               Vision::Part_of_the_field part_of_the_field)
-  : VisionClient(simulation), shared_data(shared_data), part_of_the_field_used(part_of_the_field), myTeam(myTeam)
+AIVisionClient::AIVisionClient(Data& shared_data, ai::Team myTeam, bool simulation,
+                               vision::PartOfTheField part_of_the_field)
+  : VisionClient(simulation), shared_data_(shared_data), part_of_the_field_used_(part_of_the_field), my_team_(myTeam)
 {
 }
 
-AIVisionClient::AIVisionClient(Data& shared_data, Ai::Team myTeam, bool simulation, std::string addr, std::string port,
-                               std::string sim_port, Vision::Part_of_the_field part_of_the_field)
+AIVisionClient::AIVisionClient(Data& shared_data, ai::Team myTeam, bool simulation, std::string addr, std::string port,
+                               std::string sim_port, vision::PartOfTheField part_of_the_field)
   : VisionClient(simulation, addr, port, sim_port)
-  , shared_data(shared_data)
-  , part_of_the_field_used(part_of_the_field)
-  , myTeam(myTeam)
+  , shared_data_(shared_data)
+  , part_of_the_field_used_(part_of_the_field)
+  , my_team_(myTeam)
 {
 }
 
-void AIVisionClient::setRobotPos(Ai::Team team, int id, double x, double y, double orientation)
+void AIVisionClient::setRobotPos(ai::Team team, int id, double x, double y, double orientation)
 {
-  Data_from_ai data_from_ai;
-  shared_data >> data_from_ai;
+  DataFromAi data_from_ai;
+  shared_data_ >> data_from_ai;
 
-  myTeam = data_from_ai.team_color;
+  my_team_ = data_from_ai.team_color;
 
-  RhobanSSL::Vision::Team visionTeam = RhobanSSL::Vision::Ally;
-  if (team != myTeam)
+  rhoban_ssl::vision::Team visionTeam = rhoban_ssl::vision::Ally;
+  if (team != my_team_)
   {
-    visionTeam = RhobanSSL::Vision::Opponent;
+    visionTeam = rhoban_ssl::vision::Opponent;
   }
 
   mutex.lock();
-  Vision::Robot& robot = visionData.robots.at(visionTeam).at(id);
+  vision::Robot& robot = vision_data_.robots.at(visionTeam).at(id);
   double t = robot.movement.time() + 0.01;
   Angle angle(rad2deg(orientation));
   robot.update(t, Point(x, y), angle);
   mutex.unlock();
 
-  shared_data << visionData;
-  oldVisionData = visionData;
+  shared_data_ << vision_data_;
+  old_vision_data_ = vision_data_;
 }
 
 void AIVisionClient::packetReceived()
 {
-  Data_from_ai data_from_ai;
-  shared_data >> data_from_ai;
+  DataFromAi data_from_ai;
+  shared_data_ >> data_from_ai;
 
-  myTeam = data_from_ai.team_color;
+  my_team_ = data_from_ai.team_color;
   // Retrieving field dimensions
-  auto geometry = data.geometry();
+  auto geometry = data_.geometry();
   if (geometry.has_field())
   {
-    visionData.field.present = true;
-    visionData.field.fieldLength = geometry.field().field_length() / 1000.0;
-    visionData.field.fieldWidth = geometry.field().field_width() / 1000.0;
-    visionData.field.goalWidth = geometry.field().goal_width() / 1000.0;
-    visionData.field.goalDepth = geometry.field().goal_depth() / 1000.0;
-    visionData.field.boundaryWidth = geometry.field().boundary_width() / 1000.0;
+    vision_data_.field.present = true;
+    vision_data_.field.fieldLength = geometry.field().field_length() / 1000.0;
+    vision_data_.field.fieldWidth = geometry.field().field_width() / 1000.0;
+    vision_data_.field.goalWidth = geometry.field().goal_width() / 1000.0;
+    vision_data_.field.goalDepth = geometry.field().goal_depth() / 1000.0;
+    vision_data_.field.boundaryWidth = geometry.field().boundary_width() / 1000.0;
     for (int i = 0; i < geometry.field().field_lines_size(); i++)
     {
       if (geometry.field().field_lines(i).name() == "LeftFieldLeftPenaltyStretch")
       {
-        visionData.field.penaltyAreaDepth =
+        vision_data_.field.penaltyAreaDepth =
             std::fabs(geometry.field().field_lines(i).p1().x() - geometry.field().field_lines(i).p2().x()) / 1000.0;
-        visionData.field.penaltyAreaWidth = std::fabs(2 * geometry.field().field_lines(i).p1().y()) / 1000.0;
+        vision_data_.field.penaltyAreaWidth = std::fabs(2 * geometry.field().field_lines(i).p1().y()) / 1000.0;
       }
     }
     // XXX: Receive other data?
   }
 
-  const SSL_DetectionFrame& detection = data.detection();
+  const SSL_DetectionFrame& detection = data_.detection();
 
   // DEBUG("DETECTION : " << detection);
 
   // Update the historic of camera detections
-  auto it = camera_detections.find(detection.camera_id());
-  if (it == camera_detections.end() or it->second.t_capture() < detection.t_capture())
+  auto it = camera_detections_.find(detection.camera_id());
+  if (it == camera_detections_.end() or it->second.t_capture() < detection.t_capture())
   {
-    camera_detections[detection.camera_id()] = detection;
+    camera_detections_[detection.camera_id()] = detection;
   }
 
   // Ball informations
   if (detection.balls().size())
   {
-    if (!visionData.ball.present || visionData.ball.age() > 1)
+    if (!vision_data_.ball.present || vision_data_.ball.age() > 1)
     {
       // std::cerr<<"IF"<<std::endl;
       // If the ball is outdated (> 1s) or not present, taking the first
@@ -122,17 +122,17 @@ void AIVisionClient::packetReceived()
       {
         double x = ball.x() / 1000.0;
         double y = ball.y() / 1000.0;
-        if (object_coordonate_is_valid(x, y, part_of_the_field_used))
+        if (objectCoordonateIsValid(x, y, part_of_the_field_used_))
         {
           ball_is_detected = detection.t_sent();
-          visionData.ball.update(detection.t_sent(), Point(x, y));  // TODO HACK : IL FAUT METTRE t_send() ?
-          ball_camera_detections[detection.camera_id()] = { detection.t_sent(), Point(x, y) };
+          vision_data_.ball.update(detection.t_sent(), Point(x, y));  // TODO HACK : IL FAUT METTRE t_send() ?
+          ball_camera_detections_[detection.camera_id()] = { detection.t_sent(), Point(x, y) };
           break;
         }
         // std::cerr<<"CONFIDENCE IF ("<<detection.camera_id()<<"): "<<ball.confidence()<<" t:
         // "<<detection.t_sent()<<std::endl;
       }
-      ball_camera_detections[detection.camera_id()].first = ball_is_detected;
+      ball_camera_detections_[detection.camera_id()].first = ball_is_detected;
       // ball_camera_detections[detection.camera_id()].first = -1.0;
     }
     else
@@ -150,7 +150,7 @@ void AIVisionClient::packetReceived()
         double y = ball.y() / 1000.0;
         // std::cerr<<"CONFIDENCE ELSE ("<<detection.camera_id()<<"): "<<ball.confidence()<<" t:
         // "<<detection.t_sent()<<std::endl;
-        if (not(object_coordonate_is_valid(x, y, part_of_the_field_used)
+        if (not(objectCoordonateIsValid(x, y, part_of_the_field_used_)
 
                     ))
         {
@@ -158,7 +158,7 @@ void AIVisionClient::packetReceived()
         }
         Point pos(x, y);
 
-        double distance = pos.getDist(visionData.ball.movement[0].linear_position);
+        double distance = pos.getDist(vision_data_.ball.movement[0].linear_position);
 
         if (!hasBall || distance < nearest)
         {
@@ -173,37 +173,37 @@ void AIVisionClient::packetReceived()
       if (hasBall)
       {
         // std::cout<<"HASBALL"<<std::endl;
-        ball_camera_detections[detection.camera_id()] = { detection.t_sent(), bestBall };
-        auto final_ball = average_filter(bestBall, ball_camera_detections, part_of_the_field_used);
+        ball_camera_detections_[detection.camera_id()] = { detection.t_sent(), bestBall };
+        auto final_ball = averageFilter(bestBall, ball_camera_detections_, part_of_the_field_used_);
         // std::cout<<"HASBALL final: "<<final_ball<<std::endl;
-        visionData.ball.update(detection.t_sent(), final_ball);  // TODO HACK : IL FAUT METTRE t_send() ?
+        vision_data_.ball.update(detection.t_sent(), final_ball);  // TODO HACK : IL FAUT METTRE t_send() ?
       }
       else
       {
         // ball_camera_detections[detection.camera_id()].first = false;
-        ball_camera_detections[detection.camera_id()].first = -1.0;
+        ball_camera_detections_[detection.camera_id()].first = -1.0;
       }
     }
   }
   else
   {
     // ball_camera_detections[detection.camera_id()].first = false;
-    ball_camera_detections[detection.camera_id()].first = -1.0;
+    ball_camera_detections_[detection.camera_id()].first = -1.0;
   }
 
   // We set to not present all robot that is too old
-  for (unsigned int i = 0; i < visionData.robots.at(Vision::Team::Ally).size(); i++)
+  for (unsigned int i = 0; i < vision_data_.robots.at(vision::Team::Ally).size(); i++)
   {
-    Vision::Robot& robot = visionData.robots.at(Vision::Team::Ally).at(i);
-    if (robot.is_too_old())
+    vision::Robot& robot = vision_data_.robots.at(vision::Team::Ally).at(i);
+    if (robot.isTooOld())
     {
       robot.present = false;
     }
   }
-  for (unsigned int i = 0; i < visionData.robots.at(Vision::Team::Opponent).size(); i++)
+  for (unsigned int i = 0; i < vision_data_.robots.at(vision::Team::Opponent).size(); i++)
   {
-    Vision::Robot& robot = visionData.robots.at(Vision::Team::Opponent).at(i);
-    if (robot.is_too_old())
+    vision::Robot& robot = vision_data_.robots.at(vision::Team::Opponent).at(i);
+    if (robot.isTooOld())
     {
       robot.present = false;
     }
@@ -212,34 +212,34 @@ void AIVisionClient::packetReceived()
   // Robots informations
   for (auto robot : detection.robots_blue())
   {
-    updateRobotInformation(detection, robot, myTeam == Ai::Blue, Ai::Blue);
+    updateRobotInformation(detection, robot, my_team_ == ai::Blue, ai::Blue);
   }
   for (auto robot : detection.robots_yellow())
   {
-    updateRobotInformation(detection, robot, myTeam == Ai::Yellow, Ai::Yellow);
+    updateRobotInformation(detection, robot, my_team_ == ai::Yellow, ai::Yellow);
   }
 
-  shared_data << visionData;
+  shared_data_ << vision_data_;
 }
 
 void AIVisionClient::updateRobotInformation(const SSL_DetectionFrame& detection, const SSL_DetectionRobot& robotFrame,
-                                            bool ally, Ai::Team team_color)
+                                            bool ally, ai::Team team_color)
 {
-  if (not(object_coordonate_is_valid(robotFrame.x() / 1000.0, robotFrame.y() / 1000.0, part_of_the_field_used)))
+  if (not(objectCoordonateIsValid(robotFrame.x() / 1000.0, robotFrame.y() / 1000.0, part_of_the_field_used_)))
   {
     return;
   }
   if (robotFrame.has_robot_id())
   {
-    if (robotFrame.robot_id() < Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+    if (robotFrame.robot_id() < ai::Constants::NB_OF_ROBOTS_BY_TEAM)
     {
-      Vision::Team team = ally ? Vision::Team::Ally : Vision::Team::Opponent;
-      Vision::Robot& robot = visionData.robots.at(team).at(robotFrame.robot_id());
+      vision::Team team = ally ? vision::Team::Ally : vision::Team::Opponent;
+      vision::Robot& robot = vision_data_.robots.at(team).at(robotFrame.robot_id());
 
       bool orientation_is_defined = false;
       std::pair<rhoban_geometry::Point, ContinuousAngle> position =
-          Vision::Factory::filter(robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections,
-                                  orientation_is_defined, oldVisionData, part_of_the_field_used);
+          vision::Factory::filter(robotFrame.robot_id(), robotFrame, team_color, ally, camera_detections_,
+                                  orientation_is_defined, old_vision_data_, part_of_the_field_used_);
       //                Point position = Point(robotFrame.x()/1000.0, robotFrame.y()/1000.0);
 
       if (orientation_is_defined)
@@ -259,12 +259,12 @@ void AIVisionClient::updateRobotInformation(const SSL_DetectionFrame& detection,
   }
 }
 
-rhoban_geometry::Point AIVisionClient::average_filter(const rhoban_geometry::Point& new_ball,
+rhoban_geometry::Point AIVisionClient::averageFilter(const rhoban_geometry::Point& new_ball,
                                                       std::map<int,               // CMAERA ID
                                                                std::pair<double,  // camera have found a ball
                                                                          rhoban_geometry::Point  // detecte ball
                                                                          > >& ball_camera_detections,
-                                                      Vision::Part_of_the_field part_of_the_field_used)
+                                                      vision::PartOfTheField part_of_the_field_used)
 {
   int n_linear = 0;
   rhoban_geometry::Point linear_average(0.0, 0.0);
@@ -296,4 +296,4 @@ rhoban_geometry::Point AIVisionClient::average_filter(const rhoban_geometry::Poi
   return linear_average * (1.0 / n_linear);
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

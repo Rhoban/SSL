@@ -22,9 +22,9 @@
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
@@ -36,14 +36,14 @@ class GoCorner : public RobotBehavior
 {
 private:
   /**
-   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   * @see rhoban_ssl::Robot_behavior::ConsignFollower
    */
   ConsignFollower* follower_;
   /**
    * Not use in this package but set in a case of copy.
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
   /**
    * @brief The target corner which the robot goes.
    */
@@ -54,9 +54,9 @@ public:
    * @brief Constructor.
    * The default value of the target_corner_ is set to left opponent corner.
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
-  GoCorner(Ai::AiData& ai_data);
+  GoCorner(ai::AiData& ai_data);
 
   /**
    * @brief Set the position of the robot in the target_corner_.
@@ -66,7 +66,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * Return the control of the behavior.
@@ -74,11 +74,11 @@ public:
   virtual Control control() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    * The class don't draw any annotations.
    * The follower draw annotation.
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
    * @brief Destructor.
@@ -87,4 +87,4 @@ public:
 };
 }  // namespace beginner
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

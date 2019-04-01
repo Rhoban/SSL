@@ -19,28 +19,28 @@
 #include <math/vector2d.h>
 #include "go_corner.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
 // Use opponent_corner_left() for the left corner.
-GoCorner::GoCorner(Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data)), target_corner_(opponent_corner_left())
+GoCorner::GoCorner(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), target_corner_(opponentCornerLeft())
 {
 }
 
-void GoCorner::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void GoCorner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
   const rhoban_geometry::Point& future_position = target_corner_;
   ContinuousAngle angle(0.0);
 
-  follower_->set_following_position(future_position, angle);
+  follower_->setFollowingPosition(future_position, angle);
   follower_->update(time, robot, ball);
 }
 
@@ -55,14 +55,14 @@ GoCorner::~GoCorner()
   delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations GoCorner::get_annotations() const
+rhoban_ssl::annotations::Annotations GoCorner::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
-  annotations.addAnnotations(follower_->get_annotations());
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
 }  // namespace beginner
 }  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

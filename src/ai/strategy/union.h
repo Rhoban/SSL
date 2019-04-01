@@ -23,25 +23,25 @@
 #include <string>
 #include <memory>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class Union : public Strategy
 {
 private:
-  std::list<std::shared_ptr<Strategy>> strategies_without_goal;
-  std::shared_ptr<Strategy> strategy_with_goal;
-  int min;
-  int max;
+  std::list<std::shared_ptr<Strategy>> strategies_without_goal_;
+  std::shared_ptr<Strategy> strategy_with_goal_;
+  int min_;
+  int max_;
 
 public:
-  Union(Ai::AiData& ai_data);
+  Union(ai::AiData& ai_data);
 
   void clear();
 
-  void add_goalie_strategy(std::shared_ptr<Strategy> strategy);
-  void add_strategy(std::shared_ptr<Strategy> strategy);
+  void addGoalieStrategy(std::shared_ptr<Strategy> strategy);
+  void addStrategy(std::shared_ptr<Strategy> strategy);
 
   virtual void update(double time);
 
@@ -50,15 +50,15 @@ public:
   virtual void pause(double time);
   virtual void resume(double time);
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
-  virtual void assign_behavior_to_robots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+  virtual void assignBehaviorToRobots(
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual ~Union();
 };
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl
