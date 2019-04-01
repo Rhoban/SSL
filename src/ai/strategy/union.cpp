@@ -23,43 +23,43 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Union::Union(ai::AiData& ai_data) : Strategy(ai_data), min(0), max(0)
+Union::Union(ai::AiData& ai_data) : Strategy(ai_data), min_(0), max_(0)
 {
 }
 
-void Union::add_goalie_strategy(std::shared_ptr<Strategy> strategy)
+void Union::addGoalieStrategy(std::shared_ptr<Strategy> strategy)
 {
-  min += strategy->minRobots();
-  strategy_with_goal = strategy;
+  min_ += strategy->minRobots();
+  strategy_with_goal_ = strategy;
 }
 
-void Union::add_strategy(std::shared_ptr<Strategy> strategy)
+void Union::addStrategy(std::shared_ptr<Strategy> strategy)
 {
   if (strategy->maxRobots() < 0)
   {
-    max = -1;
+    max_ = -1;
   }
   else
   {
-    if (max >= 0)
+    if (max_ >= 0)
     {
-      max += strategy->maxRobots();
+      max_ += strategy->maxRobots();
     }
   }
-  strategies_without_goal.push_back(strategy);
+  strategies_without_goal_.push_back(strategy);
 }
 
 int Union::minRobots() const
 {
-  return min;
+  return min_;
 }
 int Union::maxRobots() const
 {
-  return max;
+  return max_;
 }
 GoalieNeed Union::needsGoalie() const
 {
-  if (strategy_with_goal)
+  if (strategy_with_goal_)
   {
     return GoalieNeed::YES;
   }
@@ -75,19 +75,19 @@ Union::~Union()
 
 void Union::clear()
 {
-  strategies_without_goal.clear();
-  strategy_with_goal.reset();
-  min = 0;
-  max = 0;
+  strategies_without_goal_.clear();
+  strategy_with_goal_.reset();
+  min_ = 0;
+  max_ = 0;
 }
 
 void Union::update(double time)
 {
-  if (strategy_with_goal)
+  if (strategy_with_goal_)
   {
-    strategy_with_goal->update(time);
+    strategy_with_goal_->update(time);
   }
-  for (std::shared_ptr<Strategy>& elem : strategies_without_goal)
+  for (std::shared_ptr<Strategy>& elem : strategies_without_goal_)
   {
     elem->update(time);
   }
@@ -95,11 +95,11 @@ void Union::update(double time)
 
 void Union::start(double time)
 {
-  if (strategy_with_goal)
+  if (strategy_with_goal_)
   {
-    strategy_with_goal->start(time);
+    strategy_with_goal_->start(time);
   }
-  for (std::shared_ptr<Strategy>& elem : strategies_without_goal)
+  for (std::shared_ptr<Strategy>& elem : strategies_without_goal_)
   {
     elem->start(time);
   }
@@ -107,11 +107,11 @@ void Union::start(double time)
 
 void Union::stop(double time)
 {
-  if (strategy_with_goal)
+  if (strategy_with_goal_)
   {
-    strategy_with_goal->stop(time);
+    strategy_with_goal_->stop(time);
   }
-  for (std::shared_ptr<Strategy>& elem : strategies_without_goal)
+  for (std::shared_ptr<Strategy>& elem : strategies_without_goal_)
   {
     elem->stop(time);
   }
@@ -119,11 +119,11 @@ void Union::stop(double time)
 
 void Union::pause(double time)
 {
-  if (strategy_with_goal)
+  if (strategy_with_goal_)
   {
-    strategy_with_goal->pause(time);
+    strategy_with_goal_->pause(time);
   }
-  for (std::shared_ptr<Strategy>& elem : strategies_without_goal)
+  for (std::shared_ptr<Strategy>& elem : strategies_without_goal_)
   {
     elem->pause(time);
   }
@@ -131,11 +131,11 @@ void Union::pause(double time)
 
 void Union::resume(double time)
 {
-  if (strategy_with_goal)
+  if (strategy_with_goal_)
   {
-    strategy_with_goal->resume(time);
+    strategy_with_goal_->resume(time);
   }
-  for (std::shared_ptr<Strategy>& elem : strategies_without_goal)
+  for (std::shared_ptr<Strategy>& elem : strategies_without_goal_)
   {
     elem->resume(time);
   }
@@ -144,11 +144,11 @@ void Union::resume(double time)
 void Union::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (strategy_with_goal)
+  if (strategy_with_goal_)
   {
-    strategy_with_goal->assignBehaviorToRobots(assign_behavior, time, dt);
+    strategy_with_goal_->assignBehaviorToRobots(assign_behavior, time, dt);
   }
-  for (std::shared_ptr<Strategy>& elem : strategies_without_goal)
+  for (std::shared_ptr<Strategy>& elem : strategies_without_goal_)
   {
     elem->assignBehaviorToRobots(assign_behavior, time, dt);
   }

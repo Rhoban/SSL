@@ -30,18 +30,18 @@ namespace strategy
 class Union : public Strategy
 {
 private:
-  std::list<std::shared_ptr<Strategy>> strategies_without_goal;
-  std::shared_ptr<Strategy> strategy_with_goal;
-  int min;
-  int max;
+  std::list<std::shared_ptr<Strategy>> strategies_without_goal_;
+  std::shared_ptr<Strategy> strategy_with_goal_;
+  int min_;
+  int max_;
 
 public:
-  Union(ai::AiData& ai_data_);
+  Union(ai::AiData& ai_data);
 
   void clear();
 
-  void add_goalie_strategy(std::shared_ptr<Strategy> strategy);
-  void add_strategy(std::shared_ptr<Strategy> strategy);
+  void addGoalieStrategy(std::shared_ptr<Strategy> strategy);
+  void addStrategy(std::shared_ptr<Strategy> strategy);
 
   virtual void update(double time);
 
