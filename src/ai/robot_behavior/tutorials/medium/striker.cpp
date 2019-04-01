@@ -25,12 +25,12 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Intermediate_striker::Intermediate_striker(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), striking_point(opponentGoalCenter()), follower(Factory::fixedConsignFollower(ai_data))
+IntermediateStriker::IntermediateStriker(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), striking_point_(opponentGoalCenter()), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Intermediate_striker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void IntermediateStriker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
@@ -52,12 +52,12 @@ void Intermediate_striker::update(double time, const ai::Robot& robot, const ai:
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoidTheBall(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoidTheBall(false);
+    follower_->avoidTheBall(false);
 
     // Function used to place behind the ball and strike the ball cogently.
     // The limit when x (scalar_ball_robot) is set to 0, is equal to infinity.
@@ -66,40 +66,40 @@ void Intermediate_striker::update(double time, const ai::Robot& robot, const ai:
     // If the ball is near of the robot, we don't care about other robots.
     if (dist_ball_robot < 0.4)
     {
-      follower->avoidOpponent(false);
+      follower_->avoidOpponent(false);
     }
   }
 
   if (dist_ball_robot > 0.4)
   {
-    follower->avoidOpponent(true);
+    follower_->avoidOpponent(true);
   }
 
   rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->setFollowingPosition(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Intermediate_striker::control() const
+Control IntermediateStriker::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kick = true;
   return ctrl;
 }
 
-Intermediate_striker::~Intermediate_striker()
+IntermediateStriker::~IntermediateStriker()
 {
-  delete follower;
+  delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Intermediate_striker::getAnnotations() const
+rhoban_ssl::annotations::Annotations IntermediateStriker::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->getAnnotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 

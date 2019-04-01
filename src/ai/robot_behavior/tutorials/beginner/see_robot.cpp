@@ -26,20 +26,20 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-See_Robot::See_Robot(ai::AiData& ai_data, int target_id)
-  : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
+SeeRobot::SeeRobot(ai::AiData& ai_data, int target_id)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 
 {
-  target_robot_id = target_id;
+  target_robot_id_ = target_id;
 }
 
-void See_Robot::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void SeeRobot::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-  annotations.clear();
+  annotations_.clear();
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
@@ -47,47 +47,47 @@ void See_Robot::update(double time, const ai::Robot& robot, const ai::Ball& ball
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to look itself will do nothing.
-  if (target_robot_id != robot.id())
+  if (target_robot_id_ != robot.id())
   {
     const rhoban_geometry::Point& target_position =
-        getRobot(target_robot_id).getMovement().linearPosition(ai_data_.time);
+        getRobot(target_robot_id_).getMovement().linearPosition(ai_data_.time);
 
     Vector2d direction = target_position - robot_position;
     target_rotation = vector2angle(direction);
   }
 
-  follower->setFollowingPosition(robot_position, target_rotation);
+  follower_->setFollowingPosition(robot_position, target_rotation);
 
-  follower->avoidTheBall(false);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(false);
+  follower_->update(time, robot, ball);
 }
 
-void See_Robot::set_robot_id_to_see(int id)
+void SeeRobot::setRobotIdToSee(int id)
 {
-  target_robot_id = id;
+  target_robot_id_ = id;
 }
 
-int See_Robot::get_robot_id_to_see() const
+int SeeRobot::getRobotIdToSee() const
 {
-  return target_robot_id;
+  return target_robot_id_;
 }
 
-Control See_Robot::control() const
+Control SeeRobot::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
-See_Robot::~See_Robot()
+SeeRobot::~SeeRobot()
 {
-  delete follower;
+  delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations See_Robot::getAnnotations() const
+rhoban_ssl::annotations::Annotations SeeRobot::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->getAnnotations());
+  annotations.addAnnotations(annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 

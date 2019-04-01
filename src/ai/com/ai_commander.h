@@ -44,6 +44,7 @@ public:
     float kickPower;
     bool spin;
     bool charge;
+    bool tareOdom;
   };
   AICommander(bool yellow);
 
@@ -53,7 +54,7 @@ public:
    * Set the speed of the robot robot_id to the given speed
    */
   void set(uint8_t robot_id, bool enabled, double xSpeed, double ySpeed, double thetaSpeed, int kick = false,
-           float kickPower = 0, bool spin = false, bool charge = false);
+           float kickPower = 0, bool spin = false, bool charge = false, bool tareOdom = false);
 
   /**
    * Stop all the robots

@@ -40,7 +40,7 @@ AICommander::~AICommander()
 }
 
 void AICommander::set(uint8_t robot_id, bool enabled, double xSpeed, double ySpeed, double thetaSpeed, int kick,
-                      float kickPower, bool spin, bool charge)
+                      float kickPower, bool spin, bool charge, bool tareOdom)
 {
   assert(kickPower >= 0.0 && kickPower <= 1.0);
 
@@ -54,7 +54,7 @@ void AICommander::set(uint8_t robot_id, bool enabled, double xSpeed, double ySpe
   command.spin = spin;
   command.charge = charge;
   command.kickPower = kickPower;
-
+  command.tareOdom = tareOdom;
   commands_.push_back(command);
 }
 

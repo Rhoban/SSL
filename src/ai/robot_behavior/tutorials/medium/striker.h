@@ -19,23 +19,23 @@
 
 #pragma once
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
 /** Tutorial class to show how to move a robot in the side corner. */
-class Intermediate_striker : public RobotBehavior
+class IntermediateStriker : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point striking_point;
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  rhoban_geometry::Point striking_point_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Intermediate_striker(ai::AiData& ai_data_);
+  IntermediateStriker(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -43,7 +43,7 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Intermediate_striker();
+  virtual ~IntermediateStriker();
 };
 
 };  // namespace Robot_behavior

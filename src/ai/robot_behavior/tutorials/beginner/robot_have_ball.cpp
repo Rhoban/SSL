@@ -25,11 +25,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Begginer_robot_have_ball::Begginer_robot_have_ball(ai::AiData& ai_data) : RobotBehavior(ai_data)
+BeginnerRobotHaveBall::BeginnerRobotHaveBall (ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_robot_have_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void BeginnerRobotHaveBall ::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
@@ -45,38 +45,38 @@ void Begginer_robot_have_ball::update(double time, const ai::Robot& robot, const
   int ally_have_ball = GameInformations::infraRed(nb_ally_closest_to_the_ball, vision::Ally);
   int opponent_have_ball = GameInformations::infraRed(nb_opponent_closest_to_the_ball, vision::Opponent);
 
-  annotations.clear();
+  annotations_.clear();
 
   // Find the robot that have the ball.
   if (opponent_have_ball)
   {
-    annotations.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
   else if (ally_have_ball)
   {
-    annotations.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
   else
   {
-    annotations.addCross(ballPosition(), "red", false);
+    annotations_.addCross(ballPosition(), "red", false);
   }
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 }
 
-Control Begginer_robot_have_ball::control() const
+Control BeginnerRobotHaveBall::control() const
 {
   return Control();
 }
 
-Begginer_robot_have_ball::~Begginer_robot_have_ball()
+BeginnerRobotHaveBall::~BeginnerRobotHaveBall ()
 {
 }
 
-rhoban_ssl::annotations::Annotations Begginer_robot_have_ball::getAnnotations() const
+rhoban_ssl::annotations::Annotations BeginnerRobotHaveBall::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
+  annotations.addAnnotations(annotations_);
   return annotations;
 }
 

@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 SCHMITZ Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -24,50 +24,55 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Begginer_see_ball::Begginer_see_ball(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
+
+
+namespace beginner
+{
+SeeBall::SeeBall(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Begginer_see_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void SeeBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  // DO NOT REMOVE THAT LINE
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
-
-  annotations.clear();
+  annotations_.clear();
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
-
   Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
 
-  follower->setFollowingPosition(robot_position, target_rotation);
+  follower_->setFollowingPosition(robot_position, target_rotation);
 
-  follower->avoidTheBall(false);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(false);
+  follower_->update(time, robot, ball);
+
+  Vector2d robot_ball = ballPosition() - robot_position;
+  ContinuousAngle target_angular_position = vector2angle(robot_ball);
+
+  follower_->setFollowingPosition(robot_position, target_angular_position);
+  follower_->update(time, robot, ball);
 }
 
-Control Begginer_see_ball::control() const
+Control SeeBall::control() const
 {
-  Control ctrl = follower->control();
-  // ctrl.spin = true; // We active the dribler !
-  ctrl.kick = false;
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
-Begginer_see_ball::~Begginer_see_ball()
+SeeBall::~SeeBall()
 {
-  delete follower;
+  delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Begginer_see_ball::getAnnotations() const
+rhoban_ssl::annotations::Annotations SeeBall::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->getAnnotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
+}  // namespace beginner
 }  // namespace Robot_behavior
 }  // namespace rhoban_ssl

@@ -20,20 +20,20 @@
 #ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__NEAR__BALL__
 #define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ROBOT__NEAR__BALL__
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class Begginer_robot_near_ball : public RobotBehavior
+class BeginnerRobotNearBall : public RobotBehavior
 {
 private:
-  rhoban_ssl::annotations::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Begginer_robot_near_ball(ai::AiData& ai_data_);
+  BeginnerRobotNearBall(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -41,7 +41,7 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Begginer_robot_near_ball();
+  virtual ~BeginnerRobotNearBall();
 };
 
 };  // namespace Robot_behavior

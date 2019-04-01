@@ -23,12 +23,12 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Intermediate_Prepare_strike::Intermediate_Prepare_strike(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
+IntermediatePrepareStrike::IntermediatePrepareStrike(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Intermediate_Prepare_strike::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void IntermediatePrepareStrike::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
@@ -50,38 +50,38 @@ void Intermediate_Prepare_strike::update(double time, const ai::Robot& robot, co
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoidTheBall(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoidTheBall(false);
+    follower_->avoidTheBall(false);
     target_radius_from_ball = 0.3;
   }
 
   rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->setFollowingPosition(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Intermediate_Prepare_strike::control() const
+Control IntermediatePrepareStrike::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
-Intermediate_Prepare_strike::~Intermediate_Prepare_strike()
+IntermediatePrepareStrike::~IntermediatePrepareStrike()
 {
-  delete follower;
+  delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Intermediate_Prepare_strike::getAnnotations() const
+rhoban_ssl::annotations::Annotations IntermediatePrepareStrike::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->getAnnotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 

@@ -173,6 +173,11 @@ QString API::robotsStatus()
       jsonRobot["y"] = movement.linearPosition().getY();
       jsonRobot["orientation"] = movement.angularPosition().value();
 
+      jsonRobot["x_odom"] = 0.0;
+      jsonRobot["y_odom"] = 0.0;
+      jsonRobot["t_odom"] = 0.0;
+      jsonRobot["tareOdom"] = false;
+
       if (team == rhoban_ssl::vision::Ally)
       {
         auto final_control = shared.final_control_for_robots[robot.id];
@@ -187,7 +192,12 @@ QString API::robotsStatus()
           jsonRobot["voltage"] = masterRobot.status.voltage / 8.0;
           jsonRobot["capVoltage"] = masterRobot.status.cap_volt;
           jsonRobot["driversOk"] = !(masterRobot.status.status & STATUS_DRIVER_ERR);
+
           jsonRobot["ir"] = (masterRobot.status.status & STATUS_IR) ? true : false;
+
+          jsonRobot["x_odom"] = (double)masterRobot.status.xpos / 1000;
+          jsonRobot["y_odom"] = (double)masterRobot.status.ypos / 1000;
+          jsonRobot["t_odom"] = (masterRobot.status.ang);
         }
         else
         {
@@ -199,6 +209,7 @@ QString API::robotsStatus()
         jsonRobot["manual"] = final_control.is_manually_controled_by_viewer;
         jsonRobot["charge"] = control.charge;
         jsonRobot["spin"] = control.spin;
+        jsonRobot["tareOdom"] = control.tareOdom;
       }
       else
       {
@@ -384,6 +395,26 @@ void API::setSpin(int id, bool spin)
   if (!control.ignore)
   {
     control.spin = spin;
+  }
+  data << shared;
+  mutex.unlock();
+}
+
+void API::tareOdom(int id, bool tare, double xFix, double yFix, double tFix)
+{
+  mutex.lock();
+  rhoban_ssl::SharedData shared;
+  data >> shared;
+  Control& control = shared.final_control_for_robots[id].control;
+
+  if (!control.ignore)
+  {
+    control.tareOdom = tare;
+
+    // printf("MIAMMIAM\n\r");
+    control.fix_translation = Vector2d(xFix, yFix);
+    control.fix_rotation = tFix;  // rad
+    // printf("%f %f %f", xFix, yFix, tFix);
   }
   data << shared;
   mutex.unlock();

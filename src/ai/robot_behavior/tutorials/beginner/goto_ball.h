@@ -31,11 +31,11 @@ namespace Beginner
 class Goto_ball : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Goto_ball(ai::AiData& ai_data_);
+  Goto_ball(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

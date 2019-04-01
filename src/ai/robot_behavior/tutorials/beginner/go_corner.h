@@ -41,7 +41,7 @@ private:
   ConsignFollower* follower_;
   /**
    * Not use in this package but set in a case of copy.
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
   rhoban_ssl::annotations::Annotations annotations_;
   /**
@@ -56,7 +56,7 @@ public:
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see ai::AiData
    */
-  GoCorner(ai::AiData& ai_data_);
+  GoCorner(ai::AiData& ai_data);
 
   /**
    * @brief Set the position of the robot in the target_corner_.
@@ -74,7 +74,7 @@ public:
   virtual Control control() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    * The class don't draw any annotations.
    * The follower draw annotation.
    */

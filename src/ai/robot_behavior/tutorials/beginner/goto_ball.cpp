@@ -26,7 +26,7 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-Goto_ball::Goto_ball(ai::AiData& ai_data) : RobotBehavior(ai_data), follower(Factory::fixedConsignFollower(ai_data))
+Goto_ball::Goto_ball(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -36,32 +36,32 @@ void Goto_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball
   // DO NOT REMOVE THAT LINE
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-  annotations.clear();
+  annotations_.clear();
 
   rhoban_geometry::Point robot_position = ballPosition();
   ContinuousAngle angle = 0.0;
 
-  follower->setFollowingPosition(robot_position, angle);
-  follower->avoidTheBall(false);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(robot_position, angle);
+  follower_->avoidTheBall(false);
+  follower_->update(time, robot, ball);
 }
 
 Control Goto_ball::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
 Goto_ball::~Goto_ball()
 {
-  delete follower;
+  delete follower_;
 }
 
 rhoban_ssl::annotations::Annotations Goto_ball::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->getAnnotations());
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 

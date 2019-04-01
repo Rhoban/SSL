@@ -19,25 +19,24 @@
 
 #pragma once
 
-#include <robot_behavior/robot_behavior.h>
-#include <robot_behavior/factory.h>
+#include "robot_behavior/factory.h"
+#include "robot_behavior/robot_behavior.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
+namespace medium
 {
 /**
- * @class See Ball
- *
- * @brief Tutorial to show how to see the ball.
+ * @class Defender
+ * @brief Tutorial shows how to place a robot between the ally's goal and the ball. (Defend situation)
  */
-class SeeBall : public RobotBehavior
+class Defender : public RobotBehavior
 {
 private:
   /**
-   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   * @see rhoban_ssl::robot_behavior::ConsignFollower
    */
   ConsignFollower* follower_;
   /**
@@ -49,24 +48,29 @@ private:
 public:
   /**
    * @brief Constructor.
-   *
+   * The default value of the target_corner_ is set to left opponent corner.
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
-  SeeBall(ai::AiData& ai_data);
+  Defender(ai::AiData& ai_data);
 
   /**
-   * @brief The robot stay in his position and always turns to the ball.
+   * @brief Is the ball is inside the penalty area.
+   * @return True if the ball is inside the penalty area.
+   */
+  bool ballIsInsideAllyPenaltyArea();
+  /**
+   * @brief Put the robot between the ball and the ally goal zone.
    *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
-   * @see Control
+   * @see Control.
    */
   virtual Control control() const;
 
@@ -75,14 +79,13 @@ public:
    * The class don't draw any annotations.
    * The follower draw annotation.
    */
-  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
-
+  rhoban_ssl::annotations::Annotations getAnnotations() const;
   /**
    * @brief Destructor.
    */
-  virtual ~SeeBall();
+  virtual ~Defender();
 };
 
-}  // namespace beginner
+}  // namespace medium
 }  // Namespace Robot_behavior
-}  // Namespace RhobanSSL
+}  // namespace RhobanSSL

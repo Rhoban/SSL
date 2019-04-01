@@ -23,33 +23,34 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Begginer_annotations_ball_position::Begginer_annotations_ball_position(ai::AiData& ai_data) : RobotBehavior(ai_data)
+
+BeginnerAnnotationsBallPosition::BeginnerAnnotationsBallPosition(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_annotations_ball_position::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void BeginnerAnnotationsBallPosition::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // Do not remove this line.
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Clear all annotations write before
-  annotations.clear();
+  annotations_.clear();
   // Add an annotations
-  annotations.addCross(ballPosition(), "red", false);
+  annotations_.addCross(ballPosition(), "red", false);
 }
 
-Control Begginer_annotations_ball_position::control() const
+Control BeginnerAnnotationsBallPosition::control() const
 {
   return Control();
 }
 
-Begginer_annotations_ball_position::~Begginer_annotations_ball_position()
+BeginnerAnnotationsBallPosition::~BeginnerAnnotationsBallPosition()
 {
 }
 
-rhoban_ssl::annotations::Annotations Begginer_annotations_ball_position::getAnnotations() const
+rhoban_ssl::annotations::Annotations BeginnerAnnotationsBallPosition::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
+  annotations.addAnnotations(annotations_);
   return annotations;
 }
 

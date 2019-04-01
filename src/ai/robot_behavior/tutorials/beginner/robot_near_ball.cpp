@@ -25,11 +25,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Begginer_robot_near_ball::Begginer_robot_near_ball(ai::AiData& ai_data) : RobotBehavior(ai_data)
+BeginnerRobotNearBall::BeginnerRobotNearBall(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_robot_near_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void BeginnerRobotNearBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Find the ally and the opponent closest to the ball
@@ -48,39 +48,39 @@ void Begginer_robot_near_ball::update(double time, const ai::Robot& robot, const
   double dist_ally = vec_ally_to_ball.norm();
   double dist_opponent = vec_opponent_to_ball.norm();
 
-  annotations.clear();
+  annotations_.clear();
 
   // Search the nearest robot between the ally and the opponent.
   if (dist_ally > dist_opponent)
   {
-    annotations.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
   else if (dist_ally < dist_opponent)
   {
-    annotations.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
   else
   {
-    annotations.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
-    annotations.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 }
 
-Control Begginer_robot_near_ball::control() const
+Control BeginnerRobotNearBall::control() const
 {
   return Control();
 }
 
-Begginer_robot_near_ball::~Begginer_robot_near_ball()
+BeginnerRobotNearBall::~BeginnerRobotNearBall()
 {
 }
 
-rhoban_ssl::annotations::Annotations Begginer_robot_near_ball::getAnnotations() const
+rhoban_ssl::annotations::Annotations BeginnerRobotNearBall::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
+  annotations.addAnnotations(annotations_);
   return annotations;
 }
 

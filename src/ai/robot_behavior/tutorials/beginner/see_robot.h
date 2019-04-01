@@ -28,27 +28,27 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-class See_Robot : public RobotBehavior
+class SeeRobot : public RobotBehavior
 {
 private:
-  int target_robot_id;
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  int target_robot_id_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  See_Robot(ai::AiData& ai_data_, int target_id = 0);
+  SeeRobot(ai::AiData& ai_data, int target_id = 0);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  void set_robot_id_to_see(int id);
+  void setRobotIdToSee(int id);
 
-  int get_robot_id_to_see() const;
+  int getRobotIdToSee() const;
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~See_Robot();
+  virtual ~SeeRobot();
 };
 
 };  // namespace Beginner

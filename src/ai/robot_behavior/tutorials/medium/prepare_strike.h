@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace rhoban_ssl
 {
@@ -29,14 +29,14 @@ namespace robot_behavior
 /** Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
-class Intermediate_Prepare_strike : public RobotBehavior
+class IntermediatePrepareStrike : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  rhoban_ssl::annotations::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Intermediate_Prepare_strike(ai::AiData& ai_data_);
+  IntermediatePrepareStrike(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -44,7 +44,7 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Intermediate_Prepare_strike();
+  virtual ~IntermediatePrepareStrike();
 };
 
 };  // namespace Robot_behavior
