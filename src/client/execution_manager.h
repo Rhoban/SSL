@@ -2,7 +2,7 @@
 
 #include <list>
 
-namespace rhobanssl
+namespace rhoban_ssl
 {
 /**
  * @brief The Task class is an interface for job to be executed by the manager

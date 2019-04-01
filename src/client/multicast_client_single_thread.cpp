@@ -16,7 +16,7 @@
 
 using namespace rhoban_utils;
 
-namespace rhobanssl
+namespace rhoban_ssl
 {
 MulticastClientSingleThread::MulticastClientSingleThread(std::string addr, std::string port)
   : sockets_fds_(nullptr), addr(addr), port(port), receivedData(false), packets(0)

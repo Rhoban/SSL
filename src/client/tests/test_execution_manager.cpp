@@ -7,7 +7,7 @@
 #include <google/protobuf/stubs/common.h>
 
 static int counter = 0;
-class SimpleTask : public virtual rhobanssl::Task
+class SimpleTask : public virtual rhoban_ssl::Task
 {
   int ncalls;
   int& calls;
@@ -74,6 +74,6 @@ int main(int argc, char** argv)
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 
-  ::google::protobuf::ShutdownProtobufLibrary();
+  ::google::protobuf::ShutdownProtobufLibrary();  // clear global data allocated by protobuf
   return 0;
 }

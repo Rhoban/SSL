@@ -8,13 +8,13 @@
 
 #include "execution_manager.h"
 
-namespace rhobanssl
+namespace rhoban_ssl
 {
 /**
  * This is a generic multicast client that listens on all possible interfaces
  * (running one thread per interface) for incoming packets
  */
-class MulticastClientSingleThread : public virtual rhobanssl::Task
+class MulticastClientSingleThread : public virtual rhoban_ssl::Task
 {
 public:
   struct Interface

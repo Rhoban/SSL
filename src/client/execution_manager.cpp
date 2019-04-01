@@ -6,27 +6,27 @@
 #include <algorithm>
 #include <iostream>
 
-rhobanssl::Task::~Task()
+rhoban_ssl::Task::~Task()
 {
 }
 
-rhobanssl::ExecutionManager rhobanssl::ExecutionManager::execution_manager_singleton_;
+rhoban_ssl::ExecutionManager rhoban_ssl::ExecutionManager::execution_manager_singleton_;
 
-rhobanssl::ExecutionManager::ExecutionManager()
+rhoban_ssl::ExecutionManager::ExecutionManager()
 {
 }
 
-rhobanssl::ExecutionManager& rhobanssl::ExecutionManager::getManager()
+rhoban_ssl::ExecutionManager& rhoban_ssl::ExecutionManager::getManager()
 {
   return ExecutionManager::execution_manager_singleton_;
 }
 
-void rhobanssl::ExecutionManager::addTask(rhobanssl::Task* t)
+void rhoban_ssl::ExecutionManager::addTask(rhoban_ssl::Task* t)
 {
   add_buffer_.push_back(t);
 }
 
-void rhobanssl::ExecutionManager::run(double min_loop_duration)
+void rhoban_ssl::ExecutionManager::run(double min_loop_duration)
 {
   using std::chrono::high_resolution_clock;
   std::vector<Task*> to_remove;
