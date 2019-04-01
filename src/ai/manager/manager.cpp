@@ -503,7 +503,7 @@ void Manager::declareRobotPositionsInThePlacer()
   if (goal_has_to_be_placed_)
   {
     getStrategy<strategy::Placer>(MANAGER__PLACER)
-        .set_goalie_positions(goalie_linear_position_, goalie_angular_position_);
+        .setGoaliePositions(goalie_linear_position_, goalie_angular_position_);
   }
   // else{
   // TODO : should we declare in the strategy that goalie have to be ignored ?
@@ -511,7 +511,7 @@ void Manager::declareRobotPositionsInThePlacer()
 
   assert(starting_positions_.size() <= getValidTeamIds().size());
 
-  getStrategy<strategy::Placer>(MANAGER__PLACER).set_positions(robot_affectations_, robot_consigns_);
+  getStrategy<strategy::Placer>(MANAGER__PLACER).setPositions(robot_affectations_, robot_consigns_);
 }
 
 void Manager::placeAllTheRobots(double time, const std::list<std::string>& next_strategies)

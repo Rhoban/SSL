@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Placer::Placer(ai::AiData& ai_data) : Strategy(ai_data), goalie_is_defined(false)
+Placer::Placer(ai::AiData& ai_data) : Strategy(ai_data), goalie_is_defined_(false)
 {
 }
 
@@ -64,7 +64,7 @@ void Placer::assignBehaviorToRobots(
     if (have_to_manage_the_goalie())
     {
       Robot_behavior::ConsignFollower* follower =
-          Robot_behavior::Factory::fixed_consign_follower(ai_data_, goalie_linear_position, goalie_angular_position);
+          Robot_behavior::Factory::fixed_consign_follower(ai_data_, goalie_linear_position_, goalie_angular_position_);
       follower->avoid_the_ball(true);
       assign_behavior(getGoalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
     }
@@ -74,7 +74,7 @@ void Placer::assignBehaviorToRobots(
     {
       int id = playerId(i);
       Robot_behavior::ConsignFollower* follower = Robot_behavior::Factory::fixed_consign_follower(
-          ai_data_, player_positions[id].first, player_positions[id].second);
+          ai_data_, player_positions_[id].first, player_positions_[id].second);
       follower->avoid_the_ball(true);
       assign_behavior(id, std::shared_ptr<Robot_behavior::RobotBehavior>(follower));
     }
@@ -90,23 +90,23 @@ Placer::~Placer()
  *
  *
  */
-void Placer::set_positions(const std::vector<int>& robot_affectations,
+void Placer::setPositions(const std::vector<int>& robot_affectations,
                            const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns)
 {
   assert(robot_affectations.size() == robot_consigns.size());
 
-  player_positions.clear();
+  player_positions_.clear();
   for (unsigned int i = 0; i < robot_affectations.size(); i++)
   {
-    player_positions[robot_affectations[i]] = robot_consigns[i];
+    player_positions_[robot_affectations[i]] = robot_consigns[i];
   }
 }
 
-void Placer::set_goalie_positions(const rhoban_geometry::Point& linear_position,
+void Placer::setGoaliePositions(const rhoban_geometry::Point& linear_position,
                                   const ContinuousAngle& angular_position)
 {
-  this->goalie_linear_position = linear_position;
-  this->goalie_angular_position = angular_position;
+  this->goalie_linear_position_ = linear_position;
+  this->goalie_angular_position_ = angular_position;
 }
 
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
@@ -114,7 +114,7 @@ Placer::getStartingPositions(int number_of_avalaible_robots) const
 {
   std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> > result;
   int cpt = 0;
-  for (const std::pair<rhoban_geometry::Point, ContinuousAngle>& elem : starting_positions)
+  for (const std::pair<rhoban_geometry::Point, ContinuousAngle>& elem : starting_positions_)
   {
     if (cpt >= number_of_avalaible_robots)
     {
@@ -126,29 +126,29 @@ Placer::getStartingPositions(int number_of_avalaible_robots) const
   return result;
 }
 
-void Placer::set_starting_positions(
+void Placer::setStartingPositions(
     const std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >& starting_positions)
 {
-  this->starting_positions = starting_positions;
+  this->starting_positions_ = starting_positions;
 }
 
 bool Placer::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                               ContinuousAngle& angular_position) const
 {
-  if (goalie_is_defined)
+  if (goalie_is_defined_)
   {
-    linear_position = starting_position_for_goalie.first;
-    angular_position = starting_position_for_goalie.second;
+    linear_position = starting_position_for_goalie_.first;
+    angular_position = starting_position_for_goalie_.second;
   }
-  return goalie_is_defined;
+  return goalie_is_defined_;
 }
 
-void Placer::set_starting_position_for_goalie(const rhoban_geometry::Point& linear_position,
+void Placer::setStartingPositionForGoalie(const rhoban_geometry::Point& linear_position,
                                               const ContinuousAngle& angular_position)
 {
-  goalie_is_defined = true;
-  starting_position_for_goalie.first = linear_position;
-  starting_position_for_goalie.second = angular_position;
+  goalie_is_defined_ = true;
+  starting_position_for_goalie_.first = linear_position;
+  starting_position_for_goalie_.second = angular_position;
 }
 
 }  // namespace Strategy

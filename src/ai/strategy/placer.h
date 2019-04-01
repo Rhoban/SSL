@@ -31,29 +31,29 @@ namespace strategy
 class Placer : public Strategy
 {
 private:
-  std::map<int, std::pair<rhoban_geometry::Point, ContinuousAngle> > player_positions;
+  std::map<int, std::pair<rhoban_geometry::Point, ContinuousAngle> > player_positions_;
 
-  std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> > starting_positions;
+  std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> > starting_positions_;
 
 public:
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
   getStartingPositions(int number_of_avalaible_robots) const;
-  void set_starting_position(const std::vector<rhoban_geometry::Point>& starting_position);
+  void setStartingPosition(const std::vector<rhoban_geometry::Point>& starting_position);
 
 private:
-  rhoban_geometry::Point goalie_linear_position;
-  ContinuousAngle goalie_angular_position;
-  std::pair<rhoban_geometry::Point, ContinuousAngle> starting_position_for_goalie;
-  bool goalie_is_defined;
+  rhoban_geometry::Point goalie_linear_position_;
+  ContinuousAngle goalie_angular_position_;
+  std::pair<rhoban_geometry::Point, ContinuousAngle> starting_position_for_goalie_;
+  bool goalie_is_defined_;
 
 public:
   virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position) const;
 
-  void set_starting_position_for_goalie(const rhoban_geometry::Point& linear_position,
+  void setStartingPositionForGoalie(const rhoban_geometry::Point& linear_position,
                                         const ContinuousAngle& angular_position);
 
-  Placer(ai::AiData& ai_data_);
+  Placer(ai::AiData& ai_data);
   bool behavior_has_been_assigned;
   int minRobots() const;
   int maxRobots() const;
@@ -62,9 +62,9 @@ public:
   // Try to place one robot at each given position.
   // This function return which robot id have been placed.
   // the order of robot id correspond to the order of the given robot position
-  void set_positions(const std::vector<int>& robot_affectations,
+  void setPositions(const std::vector<int>& robot_affectations,
                      const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns);
-  void set_goalie_positions(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
+  void setGoaliePositions(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
 
   static const std::string name;
 
@@ -75,7 +75,7 @@ public:
       std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
   virtual ~Placer();
 
-  void set_starting_positions(const std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >& starting_positions);
+  void setStartingPositions(const std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >& starting_positions_);
 };
 
 };  // namespace Strategy

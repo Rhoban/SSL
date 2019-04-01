@@ -57,12 +57,12 @@ void Prepare_kickoff::update_starting_positions()
       [](const Position& position) {
         return std::pair<rhoban_geometry::Point, ContinuousAngle>(position.linear, position.angular);
       };
-  placer_when_kicking.set_starting_positions(map2list(attacking_placement.field_robot_position, cvrt));
-  placer_when_kicking.set_starting_position_for_goalie(attacking_placement.goalie_position.linear,
+  placer_when_kicking.setStartingPositions(map2list(attacking_placement.field_robot_position, cvrt));
+  placer_when_kicking.setStartingPositionForGoalie(attacking_placement.goalie_position.linear,
                                                        attacking_placement.goalie_position.angular);
 
-  placer_when_no_kicking.set_starting_positions(map2list(defending_placement.field_robot_position, cvrt));
-  placer_when_no_kicking.set_starting_position_for_goalie(defending_placement.goalie_position.linear,
+  placer_when_no_kicking.setStartingPositions(map2list(defending_placement.field_robot_position, cvrt));
+  placer_when_no_kicking.setStartingPositionForGoalie(defending_placement.goalie_position.linear,
                                                           defending_placement.goalie_position.angular);
 }
 void Prepare_kickoff::start(double time)
@@ -77,21 +77,21 @@ void Prepare_kickoff::start(double time)
   ContinuousAngle angular_position;
   if (is_kicking)
   {
-    placer_when_kicking.set_positions(getPlayerIds(),
+    placer_when_kicking.setPositions(getPlayerIds(),
                                       list2vector(placer_when_kicking.getStartingPositions(getPlayerIds().size())));
     if (placer_when_kicking.getStartingPositionForGoalie(linear_position, angular_position))
     {
-      placer_when_kicking.set_goalie_positions(linear_position, angular_position);
+      placer_when_kicking.setGoaliePositions(linear_position, angular_position);
     }
     placer_when_kicking.start(time);
   }
   else
   {
-    placer_when_no_kicking.set_positions(
+    placer_when_no_kicking.setPositions(
         getPlayerIds(), list2vector(placer_when_no_kicking.getStartingPositions(getPlayerIds().size())));
     if (placer_when_no_kicking.getStartingPositionForGoalie(linear_position, angular_position))
     {
-      placer_when_no_kicking.set_goalie_positions(linear_position, angular_position);
+      placer_when_no_kicking.setGoaliePositions(linear_position, angular_position);
     }
     placer_when_no_kicking.start(time);
   }
