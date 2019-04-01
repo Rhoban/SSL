@@ -29,11 +29,11 @@ namespace strategy
 class StrikerWithSupport : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  std::shared_ptr<Robot_behavior::Striker> striker;
+  bool behaviors_are_assigned_;
+  std::shared_ptr<Robot_behavior::Striker> striker_;
 
 public:
-  StrikerWithSupport(ai::AiData& ai_data_);
+  StrikerWithSupport(ai::AiData& ai_data);
   virtual ~StrikerWithSupport();
 
   virtual int minRobots() const;

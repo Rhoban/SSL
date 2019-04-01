@@ -63,9 +63,9 @@ const std::string StrikerWithSupport::name = "striker_with_support";
 void StrikerWithSupport::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  behaviors_are_assigned = false;
+  behaviors_are_assigned_ = false;
 
-  striker = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
+  striker_ = std::shared_ptr<Robot_behavior::Striker>(new Robot_behavior::Striker(ai_data_));
 }
 void StrikerWithSupport::stop(double time)
 {
@@ -83,12 +83,12 @@ void StrikerWithSupport::update(double time)
 void StrikerWithSupport::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (not(behaviors_are_assigned))
+  if (not(behaviors_are_assigned_))
   {
     // we assign now all the other behavior
     assert(getPlayerIds().size() == 3);
 
-    assign_behavior(playerId(0), striker);
+    assign_behavior(playerId(0), striker_);
     int supportLeft = playerId(1);  // we get the first if in get_player_ids()
     std::shared_ptr<Robot_behavior::RobotFollower> support_behaviorL(new Robot_behavior::RobotFollower(ai_data_));
     support_behaviorL->declare_robot_to_follow(playerId(0), Vector2d(1, 0.5), vision::Team::Ally);
@@ -99,7 +99,7 @@ void StrikerWithSupport::assignBehaviorToRobots(
     support_behaviorR->declare_robot_to_follow(playerId(0), Vector2d(1, -0.5), vision::Team::Ally);
     assign_behavior(supportRight, support_behaviorR);
 
-    behaviors_are_assigned = true;
+    behaviors_are_assigned_ = true;
   }
 }
 
