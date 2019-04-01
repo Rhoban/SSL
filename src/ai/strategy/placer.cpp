@@ -91,7 +91,7 @@ Placer::~Placer()
  *
  */
 void Placer::setPositions(const std::vector<int>& robot_affectations,
-                           const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns)
+                          const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns)
 {
   assert(robot_affectations.size() == robot_consigns.size());
 
@@ -102,8 +102,7 @@ void Placer::setPositions(const std::vector<int>& robot_affectations,
   }
 }
 
-void Placer::setGoaliePositions(const rhoban_geometry::Point& linear_position,
-                                  const ContinuousAngle& angular_position)
+void Placer::setGoaliePositions(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position)
 {
   this->goalie_linear_position_ = linear_position;
   this->goalie_angular_position_ = angular_position;
@@ -133,7 +132,7 @@ void Placer::setStartingPositions(
 }
 
 bool Placer::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                              ContinuousAngle& angular_position) const
+                                          ContinuousAngle& angular_position) const
 {
   if (goalie_is_defined_)
   {
@@ -144,12 +143,12 @@ bool Placer::getStartingPositionForGoalie(rhoban_geometry::Point& linear_positio
 }
 
 void Placer::setStartingPositionForGoalie(const rhoban_geometry::Point& linear_position,
-                                              const ContinuousAngle& angular_position)
+                                          const ContinuousAngle& angular_position)
 {
   goalie_is_defined_ = true;
   starting_position_for_goalie_.first = linear_position;
   starting_position_for_goalie_.second = angular_position;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

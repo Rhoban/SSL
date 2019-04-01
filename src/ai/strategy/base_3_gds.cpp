@@ -113,13 +113,12 @@ Base3Gds::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Base3Gds::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                  ContinuousAngle& angular_position)
+bool Base3Gds::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

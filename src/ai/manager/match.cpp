@@ -45,43 +45,43 @@ Match::Match(ai::AiData& ai_data, const GameState& game_state)
 {
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
   registerStrategy(strategy::Tare_and_synchronize::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::Tare_and_synchronize(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::Tare_and_synchronize(ai_data)));
   registerStrategy(strategy::Prepare_kickoff::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::Prepare_kickoff(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::Prepare_kickoff(ai_data)));
   registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
+                               ai_data,
+                               [&](double time, double dt) {
+                                 Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
+                                 return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                               },
+                               true  // it is a goal
+                               )));
+  registerStrategy(DEFENSOR1, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
+                                  ai_data,
+                                  [&](double time, double dt) {
+                                    Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
+                                    return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                                  },
+                                  false  // it is not a goal
+                                  )));
+  registerStrategy(DEFENSOR2, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
+                                  ai_data,
+                                  [&](double time, double dt) {
+                                    Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
+                                    return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
+                                  },
+                                  false  // it is not a goal
+                                  )));
+  registerStrategy(STRIKER, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
                                 ai_data,
                                 [&](double time, double dt) {
-                                  Robot_behavior::Goalie* goalie = new Robot_behavior::Goalie(ai_data);
-                                  return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
+                                  Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
+                                  return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
                                 },
-                                true  // it is a goal
+                                false  // it is not a goal
                                 )));
-  registerStrategy(DEFENSOR1, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
-                                   ai_data,
-                                   [&](double time, double dt) {
-                                     Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
-                                     return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
-                                   },
-                                   false  // it is not a goal
-                                   )));
-  registerStrategy(DEFENSOR2, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
-                                   ai_data,
-                                   [&](double time, double dt) {
-                                     Robot_behavior::Defensor* defensor = new Robot_behavior::Defensor(ai_data);
-                                     return std::shared_ptr<Robot_behavior::RobotBehavior>(defensor);
-                                   },
-                                   false  // it is not a goal
-                                   )));
-  registerStrategy(STRIKER, std::shared_ptr<strategy::Strategy>(new strategy::From_robot_behavior(
-                                 ai_data,
-                                 [&](double time, double dt) {
-                                   Robot_behavior::Striker* striker = new Robot_behavior::Striker(ai_data);
-                                   return std::shared_ptr<Robot_behavior::RobotBehavior>(striker);
-                                 },
-                                 false  // it is not a goal
-                                 )));
   assignStrategy(strategy::Halt::name, 0.0,
-                  getTeamIds());  // TODO TIME !
+                 getTeamIds());  // TODO TIME !
 }
 
 void Match::chooseAStrategy(double time)
@@ -147,5 +147,5 @@ Match::~Match()
 {
 }
 
-};  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace manager
+};  // namespace rhoban_ssl

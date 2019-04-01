@@ -10,7 +10,7 @@ Factory::filter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team te
                 const vision::VisionData& old_vision_data, vision::PartOfTheField part_of_the_field_used)
 {
   return RobotPositionFilter::averageFilter(robot_id, robot_frame, team_color, ally, camera_detections,
-                                               orientation_is_defined, old_vision_data, part_of_the_field_used);
+                                            orientation_is_defined, old_vision_data, part_of_the_field_used);
   // return Robot_position_filter::exponential_degression_filter(
   //    robot_id, robotFrame, team_color, ally, camera_detections, orientation_is_defined, old_vision_data
   //);
@@ -19,5 +19,5 @@ Factory::filter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team te
   //);
 }
 
-}  // namespace Vision
+}  // namespace vision
 }  // namespace rhoban_ssl

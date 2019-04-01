@@ -58,7 +58,7 @@ struct MovementSample : public CircularVector<PositionSample>
   void insert(const PositionSample& sample);
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
 
 std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample& pos);
 

@@ -31,7 +31,7 @@ AStarPath::AStarPath(ai::AiData& ai_data, double time, double dt)
 }
 
 void AStarPath::setFollowingPosition(const rhoban_geometry::Point& position_to_follow,
-                                         const ContinuousAngle& target_angle)
+                                     const ContinuousAngle& target_angle)
 {
   this->navigation_.setFollowingPosition(position_to_follow, target_angle);
 
@@ -91,11 +91,11 @@ void AStarPath::setOrientationPid(double kp, double ki, double kd)
 }
 
 void AStarPath::setLimits(double translation_velocity_limit, double rotation_velocity_limit,
-                             double translation_acceleration_limit, double rotation_acceleration_limit)
+                          double translation_acceleration_limit, double rotation_acceleration_limit)
 {
   navigation_.setLimits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
                         rotation_acceleration_limit);
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

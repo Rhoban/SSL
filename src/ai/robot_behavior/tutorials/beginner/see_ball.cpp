@@ -24,8 +24,6 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-
-
 namespace beginner
 {
 SeeBall::SeeBall(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
@@ -74,5 +72,5 @@ rhoban_ssl::annotations::Annotations SeeBall::getAnnotations() const
 }
 
 }  // namespace beginner
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

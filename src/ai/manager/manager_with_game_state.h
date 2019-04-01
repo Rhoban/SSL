@@ -64,5 +64,5 @@ public:
   virtual ~ManagerWithGameState();
 };
 
-};  // namespace Manager
+};  // namespace manager
 };  // namespace rhoban_ssl

@@ -24,15 +24,15 @@
 namespace rhoban_ssl
 {
 std::pair<bool, double> collisionTime(double radius_1, const Movement& movement_1, double radius_2,
-                                       const Movement& movement_2, double radius_error, double time)
+                                      const Movement& movement_2, double radius_error, double time)
 {
   return collisionTime(radius_1, movement_1.linearPosition(time), movement_1.linearVelocity(time), radius_2,
-                        movement_2.linearPosition(time), movement_2.linearVelocity(time), radius_error);
+                       movement_2.linearPosition(time), movement_2.linearVelocity(time), radius_error);
 }
 
 std::pair<bool, double> collisionTime(double radius_A, const rhoban_geometry::Point& A, const Vector2d& V_A,
-                                       double radius_B, const rhoban_geometry::Point& B, const Vector2d& V_B,
-                                       double radius_error)
+                                      double radius_B, const rhoban_geometry::Point& B, const Vector2d& V_B,
+                                      double radius_error)
 {
   std::pair<bool, double> result(false, 0.0);
 

@@ -24,8 +24,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-TestKicker::TestKicker(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+TestKicker::TestKicker(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
@@ -66,5 +65,5 @@ rhoban_ssl::annotations::Annotations TestKicker::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

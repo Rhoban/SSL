@@ -118,8 +118,7 @@ Patrol* Patrol::twoWayTripOnBorder(ai::AiData& ai_data, bool left)
   Patrol* res = new Patrol(ai_data);
   res->setTraject(
       { { rhoban_geometry::Point(-res->fieldHeight() / 4.0, sign * res->fieldWidth() / 4.0), ContinuousAngle(0.0) },
-        { rhoban_geometry::Point(+res->fieldHeight() / 4.0, sign * res->fieldWidth() / 4.0),
-          ContinuousAngle(0.0) } });
+        { rhoban_geometry::Point(+res->fieldHeight() / 4.0, sign * res->fieldWidth() / 4.0), ContinuousAngle(0.0) } });
   res->setWaitingTime(0.7);
   res->seeTheBall(false);
   return res;
@@ -143,9 +142,9 @@ Patrol* Patrol::twoWayTripOnWidth(ai::AiData& ai_data, bool ally_side)
   // auto ally_center = res->center_ally_field();
   // auto opp_center = res->center_opponent_field();
   res->setTraject({ { rhoban_geometry::Point(sign * res->fieldHeight() / 4.0, -res->fieldWidth() / 4.0),
-                       ContinuousAngle(M_PI / 2.0) },
-                     { rhoban_geometry::Point(sign * res->fieldHeight() / 4.0, +res->fieldWidth() / 4.0),
-                       ContinuousAngle(-M_PI / 2.0) } });
+                      ContinuousAngle(M_PI / 2.0) },
+                    { rhoban_geometry::Point(sign * res->fieldHeight() / 4.0, +res->fieldWidth() / 4.0),
+                      ContinuousAngle(-M_PI / 2.0) } });
   res->setWaitingTime(1.0);
   res->seeTheBall(false);
   return res;
@@ -195,8 +194,7 @@ Patrol* Patrol::testSWTranslationForPid(ai::AiData& ai_data)
   Patrol* res = new Patrol(ai_data);
   res->setTraject({
       { rhoban_geometry::Point(-res->fieldHeight() / 6.0, -res->fieldWidth() / 4.0), ContinuousAngle(M_PI / 2.0) },
-      { rhoban_geometry::Point(-2 * res->fieldHeight() / 6.0, -res->fieldWidth() / 4.0),
-        ContinuousAngle(M_PI / 2.0) },
+      { rhoban_geometry::Point(-2 * res->fieldHeight() / 6.0, -res->fieldWidth() / 4.0), ContinuousAngle(M_PI / 2.0) },
   });
   res->setWaitingTime(5.0);
   res->seeTheBall(false);
@@ -374,5 +372,5 @@ Patrol* Patrol::testSTranslationForPid(ai::AiData& ai_data)
   return res;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

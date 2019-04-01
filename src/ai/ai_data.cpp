@@ -343,7 +343,7 @@ void AiData::computeTableOfCollisionTimes()
       double radius_error = constants.radius_security_for_collision;
       std::pair<bool, double> collision =
           collisionTime(constants.robot_radius, robot_1.getMovement(), constants.robot_radius, robot_2.getMovement(),
-                         radius_error, time);
+                        radius_error, time);
       if (collision.first)
       {
         table_of_collision_times[std::pair<int, int>(i, j)] = collision.second;
@@ -417,5 +417,5 @@ Robot::Robot() : is_goalie(false), infra_red(false)
 {
 }
 
-}  // namespace Ai
+}  // namespace ai
 }  // namespace rhoban_ssl

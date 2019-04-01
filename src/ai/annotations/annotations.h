@@ -29,7 +29,6 @@ namespace rhoban_ssl
 {
 namespace annotations
 {
-
 class Annotations
 {
 public:
@@ -66,5 +65,5 @@ public:
 protected:
   Json::Value json_;
 };
-}  // namespace RhobanSSLAnnotation
-}
+}  // namespace annotations
+}  // namespace rhoban_ssl

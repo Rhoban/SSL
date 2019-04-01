@@ -60,5 +60,5 @@ public:
   virtual ~Union();
 };
 
-};  // namespace Strategy
+};  // namespace strategy
 };  // namespace rhoban_ssl

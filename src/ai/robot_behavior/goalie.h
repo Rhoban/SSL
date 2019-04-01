@@ -45,8 +45,8 @@ private:
   int defensive_approach_;
 
   static rhoban_geometry::Point calculateGoalPosition(const rhoban_geometry::Point& ballPosition,
-                                                        const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
-                                                        double goalie_radius_);
+                                                      const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
+                                                      double goalie_radius_);
 
 public:
   Goalie(ai::AiData& ai_data);
@@ -66,5 +66,5 @@ public:
   virtual ~Goalie();
 };
 
-};  // namespace Robot_behavior
+};  // namespace robot_behavior
 };  // namespace rhoban_ssl

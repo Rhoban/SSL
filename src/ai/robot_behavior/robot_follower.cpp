@@ -75,5 +75,5 @@ void RobotFollower::declare_robot_to_follow_(int robot_id, const Vector2d& trans
   robot_to_follow_team_ = team;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

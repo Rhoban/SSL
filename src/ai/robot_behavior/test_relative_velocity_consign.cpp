@@ -60,24 +60,25 @@ rhoban_ssl::annotations::Annotations TestRelativeVelocityConsign::getAnnotations
   return annotations;
 }
 
-TestRelativeVelocityConsign*
-TestRelativeVelocityConsign::getMovementAngularVelocityOnly(ai::AiData& ai_data, double angular_velocity)
+TestRelativeVelocityConsign* TestRelativeVelocityConsign::getMovementAngularVelocityOnly(ai::AiData& ai_data,
+                                                                                         double angular_velocity)
 {
   TestRelativeVelocityConsign* res = new TestRelativeVelocityConsign(ai_data);
   res->setAngularVelocity(angular_velocity);
   return res;
 }
 
-TestRelativeVelocityConsign*
-TestRelativeVelocityConsign::getMovementLinearVelocityOnly(ai::AiData& ai_data, Vector2d linear_velocity)
+TestRelativeVelocityConsign* TestRelativeVelocityConsign::getMovementLinearVelocityOnly(ai::AiData& ai_data,
+                                                                                        Vector2d linear_velocity)
 {
   TestRelativeVelocityConsign* res = new TestRelativeVelocityConsign(ai_data);
   res->setLinearVelocity(linear_velocity);
   return res;
 }
 
-TestRelativeVelocityConsign* TestRelativeVelocityConsign::getMovementAngularAndLinearVelocity(
-    ai::AiData& ai_data, Vector2d linear_velocity, double angular_velocity)
+TestRelativeVelocityConsign* TestRelativeVelocityConsign::getMovementAngularAndLinearVelocity(ai::AiData& ai_data,
+                                                                                              Vector2d linear_velocity,
+                                                                                              double angular_velocity)
 {
   TestRelativeVelocityConsign* res = new TestRelativeVelocityConsign(ai_data);
   res->setLinearVelocity(linear_velocity);
@@ -85,5 +86,5 @@ TestRelativeVelocityConsign* TestRelativeVelocityConsign::getMovementAngularAndL
   return res;
 }
 
-};  // namespace Robot_behavior
+};  // namespace robot_behavior
 };  // namespace rhoban_ssl

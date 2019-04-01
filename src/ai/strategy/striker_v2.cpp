@@ -111,8 +111,7 @@ StrikerV2::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool StrikerV2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                 ContinuousAngle& angular_position)
+bool StrikerV2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
@@ -132,5 +131,5 @@ rhoban_ssl::annotations::Annotations StrikerV2::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

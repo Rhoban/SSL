@@ -64,5 +64,5 @@ rhoban_ssl::annotations::Annotations GoCorner::getAnnotations() const
 }
 
 }  // namespace beginner
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

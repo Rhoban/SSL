@@ -84,4 +84,4 @@ protected:
 
   bool yellow_;
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -29,11 +29,11 @@ struct Box
 
   bool is_inside(const rhoban_geometry::Point& position);
   std::vector<rhoban_geometry::Point> segmentIntersection(const rhoban_geometry::Point& origin,
-                                                           const rhoban_geometry::Point& end) const;
+                                                          const rhoban_geometry::Point& end) const;
   bool closestSegmentIntersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
-                                    rhoban_geometry::Point& intersection) const;
+                                  rhoban_geometry::Point& intersection) const;
   bool closestSegmentIntersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
-                                    rhoban_geometry::Point& intersection, double error) const;
+                                  rhoban_geometry::Point& intersection, double error) const;
 };
 
 std::ostream& operator<<(std::ostream& out, const Box& box);

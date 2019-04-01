@@ -85,55 +85,55 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   goalie_strats_[1] = { strategy::GoalieStrat::name };
 
   kick_strats_[8] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
-                     strategy::Mur_2::name, strategy::Defensive2::name };
+                      strategy::Mur_2::name, strategy::Defensive2::name };
   kick_strats_[7] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
-                     strategy::Mur_2::name, strategy::Defensive::name };
+                      strategy::Mur_2::name, strategy::Defensive::name };
   kick_strats_[6] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
-                     strategy::Mur_2::name };
+                      strategy::Mur_2::name };
   kick_strats_[5] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
-                     strategy::Mur::name };
+                      strategy::Mur::name };
   kick_strats_[4] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
   kick_strats_[3] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur::name };
   kick_strats_[2] = { strategy::GoalieStrat::name, strategy::StrikerKick::name };
   kick_strats_[1] = { strategy::GoalieStrat::name };
 
   kick_strats_indirect_[8] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
-                              strategy::MurStop::name, strategy::Mur_2::name, strategy::Defensive::name };
+                               strategy::MurStop::name, strategy::Mur_2::name, strategy::Defensive::name };
   kick_strats_indirect_[7] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
-                              strategy::MurStop::name, strategy::Mur::name, strategy::Defensive::name };
+                               strategy::MurStop::name, strategy::Mur::name, strategy::Defensive::name };
   kick_strats_indirect_[6] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
-                              strategy::MurStop::name, strategy::Mur::name };
+                               strategy::MurStop::name, strategy::Mur::name };
   kick_strats_indirect_[5] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
-                              strategy::MurStop::name };
+                               strategy::MurStop::name };
   kick_strats_indirect_[4] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
   kick_strats_indirect_[3] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur::name };
   kick_strats_indirect_[2] = { strategy::GoalieStrat::name, strategy::StrikerKick::name };
   kick_strats_indirect_[1] = { strategy::GoalieStrat::name };
 
   offensive_strats_[8] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive2::name,
-                          strategy::StrikerV2::name, strategy::Offensive::name };
+                           strategy::StrikerV2::name, strategy::Offensive::name };
   offensive_strats_[7] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive2::name,
-                          strategy::StrikerV2::name, strategy::Offensive::name };
+                           strategy::StrikerV2::name, strategy::Offensive::name };
   offensive_strats_[6] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive2::name,
-                          strategy::StrikerV2::name, strategy::Offensive::name };
+                           strategy::StrikerV2::name, strategy::Offensive::name };
   offensive_strats_[5] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive2::name,
-                          strategy::StrikerV2::name };
+                           strategy::StrikerV2::name };
   offensive_strats_[4] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive::name,
-                          strategy::StrikerV2::name };
+                           strategy::StrikerV2::name };
   offensive_strats_[3] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::StrikerV2::name };
   offensive_strats_[2] = { strategy::GoalieStrat::name, strategy::StrikerV2::name };
   offensive_strats_[1] = { strategy::GoalieStrat::name };
 
   defensive_strats_[8] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name,
-                          strategy::Offensive::name };
+                           strategy::Offensive::name };
   defensive_strats_[7] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name,
-                          strategy::Offensive::name };
+                           strategy::Offensive::name };
   defensive_strats_[6] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name,
-                          strategy::Offensive::name };
+                           strategy::Offensive::name };
   defensive_strats_[5] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive::name,
-                          strategy::StrikerV2::name };
+                           strategy::StrikerV2::name };
   defensive_strats_[4] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive::name,
-                          strategy::StrikerV2::name };
+                           strategy::StrikerV2::name };
   defensive_strats_[3] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::StrikerV2::name };
   defensive_strats_[2] = { strategy::GoalieStrat::name, strategy::Offensive::name };
   defensive_strats_[1] = { strategy::GoalieStrat::name };
@@ -159,42 +159,42 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
   registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2(ai_data)));
   registerStrategy(strategy::TareAndSynchronize::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
   registerStrategy(strategy::PrepareKickoff::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff(ai_data)));
   registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                ai_data,
-                                [&](double time, double dt) {
-                                  robot_behavior::Goalie* goalie = new robot_behavior::Goalie(ai_data);
-                                  return std::shared_ptr<robot_behavior::RobotBehavior>(goalie);
-                                },
-                                true)));
+                               ai_data,
+                               [&](double time, double dt) {
+                                 robot_behavior::Goalie* goalie = new robot_behavior::Goalie(ai_data);
+                                 return std::shared_ptr<robot_behavior::RobotBehavior>(goalie);
+                               },
+                               true)));
   registerStrategy(PROTECT_BALL, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                      ai_data,
-                                      [&](double time, double dt) {
-                                        robot_behavior::ProtectBall* protect_ball =
-                                            new robot_behavior::ProtectBall(ai_data);
-                                        return std::shared_ptr<robot_behavior::RobotBehavior>(protect_ball);
-                                      },
-                                      false)));
+                                     ai_data,
+                                     [&](double time, double dt) {
+                                       robot_behavior::ProtectBall* protect_ball =
+                                           new robot_behavior::ProtectBall(ai_data);
+                                       return std::shared_ptr<robot_behavior::RobotBehavior>(protect_ball);
+                                     },
+                                     false)));
   registerStrategy(strategy::Offensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Offensive(ai_data)));
   registerStrategy(strategy::StrikerKick::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick(ai_data)));
   registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop(ai_data)));
   registerStrategy(strategy::Defensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive(ai_data)));
   registerStrategy(strategy::Defensive2::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive2(ai_data)));
   registerStrategy(strategy::Mur::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur(ai_data)));
   registerStrategy(strategy::Mur_2::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur_2(ai_data)));
   registerStrategy(strategy::Mur_2_passif::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::Mur_2_passif(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::Mur_2_passif(ai_data)));
   registerStrategy(strategy::AttaqueWithSupportMs::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs(ai_data)));
   registerStrategy(strategy::StrikerWithSupport::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::StrikerWithSupport(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::StrikerWithSupport(ai_data)));
   registerStrategy(strategy::GoalieStrat::name,
-                    std::shared_ptr<strategy::Strategy>(new strategy::GoalieStrat(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::GoalieStrat(ai_data)));
   assignStrategy(strategy::Halt::name, 0.0,
-                  getTeamIds());  // TODO TIME !
+                 getTeamIds());  // TODO TIME !
 }
 
 void PlanVeschambres::startStop()
@@ -357,5 +357,5 @@ PlanVeschambres::~PlanVeschambres()
 {
 }
 
-};  // namespace Manager
+};  // namespace manager
 };  // namespace rhoban_ssl

@@ -32,7 +32,7 @@ private:
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  BeginnerRobotHaveBall (ai::AiData& ai_data);
+  BeginnerRobotHaveBall(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
@@ -43,5 +43,5 @@ public:
   virtual ~BeginnerRobotHaveBall();
 };
 
-};  // namespace Robot_behavior
+};  // namespace robot_behavior
 };  // namespace rhoban_ssl

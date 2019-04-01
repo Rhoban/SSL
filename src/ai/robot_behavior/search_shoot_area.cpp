@@ -121,5 +121,5 @@ rhoban_ssl::annotations::Annotations SearchShootArea::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

@@ -29,30 +29,30 @@ ExampleMachineState::ExampleMachineState(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), machine(ai_data, ai_data)
 {
   machine.addState(StateName::wait_pass,
-                    [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                      DEBUG("WAIT PASS");
-                      this->printBallInfo();
-                    });
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     DEBUG("WAIT PASS");
+                     this->printBallInfo();
+                   });
   machine.addState(StateName::strike);
 
   machine.addEdge(EdgeName::can_strike, StateName::wait_pass, StateName::strike,  //,
-                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     DEBUG("IS is_closed_to_the_ball " << this->isClosedToTheBall());
-                     return this->isClosedToTheBall();
-                   },
-                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     DEBUG("IS Can_striker FUAZHeuh");
-                     this->printBallInfo();
-                   });
+                  [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    DEBUG("IS is_closed_to_the_ball " << this->isClosedToTheBall());
+                    return this->isClosedToTheBall();
+                  },
+                  [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    DEBUG("IS Can_striker FUAZHeuh");
+                    this->printBallInfo();
+                  });
 
   machine.addEdge(EdgeName::strike_is_finished, StateName::strike, StateName::wait_pass,
-                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     DEBUG("strike_is_finished");
-                     return not(this->isClosedToTheBall());
-                   },
-                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                     this->printBallInfo2();
-                   });
+                  [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    DEBUG("strike_is_finished");
+                    return not(this->isClosedToTheBall());
+                  },
+                  [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    this->printBallInfo2();
+                  });
   machine.addInitState(StateName::wait_pass);
 
   machine.start();
@@ -102,5 +102,5 @@ void ExampleMachineState::printArePass()
   DEBUG("ARE PASSING");
 };
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

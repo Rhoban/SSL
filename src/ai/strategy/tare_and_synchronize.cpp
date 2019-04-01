@@ -97,14 +97,14 @@ void TareAndSynchronize::assignBehaviorToRobots(
     {
       robot_behavior::PositionFollower* follower = new robot_behavior::PositionFollower(ai_data_, time, dt);
       follower->setFollowingPosition(movement.linearPosition(movement.lastTime()),
-                                       movement.angularPosition(movement.lastTime()) + M_PI / 2.0);
+                                     movement.angularPosition(movement.lastTime()) + M_PI / 2.0);
       follower->setTranslationPid(ai_data_.constants.p_translation, ai_data_.constants.i_translation,
-                                    ai_data_.constants.d_translation);
+                                  ai_data_.constants.d_translation);
       follower->setOrientationPid(ai_data_.constants.p_orientation, ai_data_.constants.i_orientation,
-                                    ai_data_.constants.d_orientation);
+                                  ai_data_.constants.d_orientation);
       follower->setLimits(ai_data_.constants.translation_velocity_limit, ai_data_.constants.rotation_velocity_limit,
-                           ai_data_.constants.translation_acceleration_limit,
-                           ai_data_.constants.rotation_acceleration_limit);
+                          ai_data_.constants.translation_acceleration_limit,
+                          ai_data_.constants.rotation_acceleration_limit);
 
       ai_time_command_ = time;
       assign_behavior(robotId(0), std::shared_ptr<robot_behavior::RobotBehavior>(follower));
@@ -131,5 +131,5 @@ TareAndSynchronize::~TareAndSynchronize()
 {
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

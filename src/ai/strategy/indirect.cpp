@@ -100,8 +100,7 @@ void Indirect::assignBehaviorToRobots(
       assign_behavior(wait_pass,
                       std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea(ai_data_)));
       pass_behavior_ = std::shared_ptr<robot_behavior::PassDribbler>(new robot_behavior::PassDribbler(ai_data_));
-      pass_behavior_->declarePointToPass(
-          getRobot(wait_pass, vision::Team::Ally).getMovement().linearPosition(time));
+      pass_behavior_->declarePointToPass(getRobot(wait_pass, vision::Team::Ally).getMovement().linearPosition(time));
       assign_behavior(pass, pass_behavior_);
     }
 
@@ -147,8 +146,7 @@ Indirect::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Indirect::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position)
+bool Indirect::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
@@ -168,5 +166,5 @@ rhoban_ssl::annotations::Annotations Indirect::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

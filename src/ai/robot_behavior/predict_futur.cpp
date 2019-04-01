@@ -127,5 +127,5 @@ rhoban_ssl::annotations::Annotations PredictFutur::getAnnotations() const
   ;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

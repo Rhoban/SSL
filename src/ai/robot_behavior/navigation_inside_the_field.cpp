@@ -45,7 +45,7 @@ NavigationInsideTheField::NavigationInsideTheField(ai::AiData& ai_data, double t
 }
 
 void NavigationInsideTheField::setFollowingPosition(const rhoban_geometry::Point& position_to_follow,
-                                                         const ContinuousAngle& target_angle)
+                                                    const ContinuousAngle& target_angle)
 {
   following_position_was_updated_ = true;
   this->target_position_ = position_to_follow;
@@ -66,7 +66,7 @@ void NavigationInsideTheField::update_control(double time, const ai::Robot& robo
   if (ai_data_.force_ball_avoidance)
   {
     this->position_follower_.setRadiusAvoidanceForTheBall(getRobotRadius() + getBallRadius() +
-                                                              ai_data_.constants.rules_avoidance_distance);
+                                                          ai_data_.constants.rules_avoidance_distance);
     this->avoidTheBall(true);
   }
   else
@@ -124,7 +124,7 @@ void NavigationInsideTheField::update_control(double time, const ai::Robot& robo
       if (not(isGoalie()) and ally_penalty.is_inside(deviation_position_))
       {
         ally_penalty_large.closestSegmentIntersection(robot_position, vector2point(deviation_position_),
-                                                        deviation_position_);
+                                                      deviation_position_);
         if (not(cropped_field.is_inside(deviation_position_)))
         {
           deviation_position_ = deviation_position_ + Vector2d(penaltyAreaHeight() + error, 0.0);
@@ -133,7 +133,7 @@ void NavigationInsideTheField::update_control(double time, const ai::Robot& robo
       else if (opponent_penalty.is_inside(deviation_position_))
       {
         opponent_penalty_large.closestSegmentIntersection(robot_position, vector2point(deviation_position_),
-                                                            deviation_position_);
+                                                          deviation_position_);
         if (not(cropped_field.is_inside(deviation_position_)))
         {
           deviation_position_ = deviation_position_ - Vector2d(penaltyAreaHeight() + error, 0.0);
@@ -189,7 +189,7 @@ void NavigationInsideTheField::avoidRobot(int id, bool value)
 }
 
 void NavigationInsideTheField::setLimits(double translation_velocity_limit, double rotation_velocity_limit,
-                                             double translation_acceleration_limit, double rotation_acceleration_limit)
+                                         double translation_acceleration_limit, double rotation_acceleration_limit)
 {
   position_follower_.setLimits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
                                rotation_acceleration_limit);
@@ -214,5 +214,5 @@ void NavigationInsideTheField::setRadiusAvoidanceForTheBall(double radius)
   saving_ball_radius_avoidance_ = radius;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

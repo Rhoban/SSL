@@ -97,5 +97,5 @@ public:
   virtual ~PlanVeschambres();
 };
 
-};  // namespace Manager
+};  // namespace manager
 };  // namespace rhoban_ssl

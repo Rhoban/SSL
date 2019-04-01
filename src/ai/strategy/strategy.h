@@ -102,7 +102,7 @@ public:
    * If the strategy have no goalie, this function have to return false.
    */
   virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position) const;
+                                            ContinuousAngle& angular_position) const;
 
   /*
    * This function give the minimal numer of non goalie robot
@@ -123,7 +123,7 @@ public:
 
   virtual void
   assignBehaviorToRobots(std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior,
-                            double time, double dt) = 0;
+                         double time, double dt) = 0;
 
   //
   // This function is used to draw annotations in the viewer.
@@ -153,5 +153,5 @@ public:
   bool have_to_manage_the_goalie() const;
 };
 
-};  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace strategy
+};  // namespace rhoban_ssl

@@ -102,7 +102,7 @@ public:
   void clearStrategyAssignement();
 
   void assignStrategy(const std::string& strategy_name, double time, const std::vector<int>& robot_ids,
-                       bool assign_goalie = false);
+                      bool assign_goalie = false);
   void declareAndAssignNextStrategies(const std::list<std::string>& future_strats);
 
   virtual void update(double time) = 0;
@@ -111,7 +111,7 @@ public:
   virtual void updateCurrentStrategies(double time);
 
   virtual void assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior>>& robot_behaviors,
-                                         double time, double dt);
+                                      double time, double dt);
 
   void changeAllyAndOpponentGoalieId(int blue_goalie_id, int yellow_goalie_id);
 
@@ -194,5 +194,5 @@ public:
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
-};  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace manager
+};  // namespace rhoban_ssl

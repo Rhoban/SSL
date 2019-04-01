@@ -50,6 +50,6 @@ public:
   virtual ~Movement();
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
 
 std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::Movement& movement);

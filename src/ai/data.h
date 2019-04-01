@@ -96,4 +96,4 @@ public:
       std::function<void(SharedData& shared_data)> shared_data_editor);
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

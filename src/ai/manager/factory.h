@@ -43,8 +43,8 @@ public:
   static const std::list<std::string>& availableManagers();
 
   static std::shared_ptr<Manager> constructManager(const std::string& manager_name, ai::AiData& ai,
-                                                    GameState& game_state);
+                                                   GameState& game_state);
 };
 
-};  // namespace Manager
+};  // namespace manager
 };  // namespace rhoban_ssl

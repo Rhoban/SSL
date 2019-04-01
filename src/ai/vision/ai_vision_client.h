@@ -67,10 +67,10 @@ private:
   std::map<int, SSL_DetectionFrame> historic_;
 
   rhoban_geometry::Point averageFilter(const rhoban_geometry::Point& new_ball,
-                                        std::map<int,                              // CMAERA ID
-                                                 std::pair<double,                 // camera have found a ball
-                                                           rhoban_geometry::Point  // detecte ball
-                                                           > >& ball_camera_detections_,
-                                        vision::PartOfTheField part_of_the_field_used_);
+                                       std::map<int,                              // CMAERA ID
+                                                std::pair<double,                 // camera have found a ball
+                                                          rhoban_geometry::Point  // detecte ball
+                                                          > >& ball_camera_detections_,
+                                       vision::PartOfTheField part_of_the_field_used_);
 };
 }  // namespace rhoban_ssl

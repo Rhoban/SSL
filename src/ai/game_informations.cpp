@@ -67,7 +67,7 @@ const ai::Robot& GameInformations::getRobot(int robot_number, vision::Team team)
 }
 
 void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                         vision::Team team, double distance, std::vector<int>& result) const
+                                      vision::Team team, double distance, std::vector<int>& result) const
 {
   if (normSquare(p1 - p2) == 0)
   {
@@ -89,7 +89,7 @@ void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rho
 }
 
 std::vector<int> GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                                     vision::Team team, double distance) const
+                                                  vision::Team team, double distance) const
 {
   std::vector<int> result;
   getRobotInLine(p1, p2, team, distance, result);
@@ -97,7 +97,7 @@ std::vector<int> GameInformations::getRobotInLine(const rhoban_geometry::Point p
 }
 
 std::vector<int> GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                                     double distance) const
+                                                  double distance) const
 {
   std::vector<int> result;
   getRobotInLine(p1, p2, vision::Team::Ally, distance, result);
@@ -106,7 +106,7 @@ std::vector<int> GameInformations::getRobotInLine(const rhoban_geometry::Point p
 }
 
 std::pair<rhoban_geometry::Point, double> GameInformations::findGoalBestMove(const rhoban_geometry::Point point,
-                                                                                const rhoban_geometry::Point goal) const
+                                                                             const rhoban_geometry::Point goal) const
 {
   rhoban_geometry::Point opponent_goal_point;
   if (goal == rhoban_geometry::Point(66, 66))
@@ -138,8 +138,7 @@ std::pair<rhoban_geometry::Point, double> GameInformations::findGoalBestMove(con
     analysed_point = right_post_position + rhoban_geometry::Point(0, dist_post / nb_analysed_point * i);
     std::vector<int> robot_in_line =
         GameInformations::getRobotInLine(point, analysed_point, vision::Team::Opponent, 0.15);
-    std::vector<int> robot_in_line2 =
-        GameInformations::getRobotInLine(point, analysed_point, vision::Team::Ally, 0.15);
+    std::vector<int> robot_in_line2 = GameInformations::getRobotInLine(point, analysed_point, vision::Team::Ally, 0.15);
     robot_in_line.insert(robot_in_line.end(), robot_in_line2.begin(), robot_in_line2.end());
     if (robot_in_line.empty())
     {

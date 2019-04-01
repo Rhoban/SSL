@@ -135,4 +135,4 @@ public:
   RefereeClient& getRefereeClient();
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

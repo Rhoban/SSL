@@ -15,5 +15,5 @@ public:
          const vision::VisionData& old_vision_data, vision::PartOfTheField part_of_the_field_used);
 };
 
-};  // namespace Vision
+};  // namespace vision
 };  // namespace rhoban_ssl

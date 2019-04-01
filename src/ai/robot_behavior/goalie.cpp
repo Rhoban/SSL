@@ -28,8 +28,8 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 rhoban_geometry::Point Goalie::calculateGoalPosition(const rhoban_geometry::Point& ball_position,
-                                                       const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
-                                                       double goalie_radius)
+                                                     const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
+                                                     double goalie_radius)
 {
   rhoban_geometry::Point defender_position = rhoban_geometry::centerOfConeIncircle(
       ball_position, vector2point(poteau_droit), vector2point(poteau_gauche), goalie_radius);
@@ -206,8 +206,7 @@ rhoban_ssl::annotations::Annotations Goalie::getAnnotations() const
     {
       annotations_text = "Dash";
     }
-    annotations_local.addText(annotations_text, linearPosition().getX() + 0.15, linearPosition().getY() + 0.60,
-                              "red");
+    annotations_local.addText(annotations_text, linearPosition().getX() + 0.15, linearPosition().getY() + 0.60, "red");
 
     // DEBUG("nb_future_ball = " << future_ball_positions.size() );
     // for (int i = 0; i < future_ball_positions.size(); i++) {
@@ -219,5 +218,5 @@ rhoban_ssl::annotations::Annotations Goalie::getAnnotations() const
   return annotations_local;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

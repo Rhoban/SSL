@@ -4,4 +4,4 @@
 #include <rhoban_geometry/segment.h>
 
 bool segmentIntersection(const rhoban_geometry::Segment& segment1, const rhoban_geometry::Segment& segment2,
-                          rhoban_geometry::Point& intersection);
+                         rhoban_geometry::Point& intersection);

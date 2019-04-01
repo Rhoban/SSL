@@ -56,10 +56,10 @@ public:
   void stop(double time);
   void update(double time);
 
-  void assignBehaviorToRobots(
-      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+  void assignBehaviorToRobots(std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior,
+                              double time, double dt);
   virtual ~TareAndSynchronize();
 };
 
-};  // namespace Strategy
+};  // namespace strategy
 };  // namespace rhoban_ssl

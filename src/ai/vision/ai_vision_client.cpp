@@ -260,11 +260,11 @@ void AIVisionClient::updateRobotInformation(const SSL_DetectionFrame& detection,
 }
 
 rhoban_geometry::Point AIVisionClient::averageFilter(const rhoban_geometry::Point& new_ball,
-                                                      std::map<int,               // CMAERA ID
-                                                               std::pair<double,  // camera have found a ball
-                                                                         rhoban_geometry::Point  // detecte ball
-                                                                         > >& ball_camera_detections,
-                                                      vision::PartOfTheField part_of_the_field_used)
+                                                     std::map<int,               // CMAERA ID
+                                                              std::pair<double,  // camera have found a ball
+                                                                        rhoban_geometry::Point  // detecte ball
+                                                                        > >& ball_camera_detections,
+                                                     vision::PartOfTheField part_of_the_field_used)
 {
   int n_linear = 0;
   rhoban_geometry::Point linear_average(0.0, 0.0);

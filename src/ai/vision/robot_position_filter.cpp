@@ -30,7 +30,8 @@ bool objectCoordonateIsValid(double x, double y, vision::PartOfTheField part_of_
   return false;
 }
 
-std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::averageFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
+std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::averageFilter(
+    int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
     const vision::VisionData& old_vision_data, PartOfTheField part_of_the_field_used)
 {
@@ -92,7 +93,8 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::averageF
   }
 }
 
-std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponentialDegressionFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
+std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponentialDegressionFilter(
+    int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
     const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
     const vision::VisionData& old_vision_data)
 {
@@ -150,13 +152,13 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponent
 
 std::pair<rhoban_geometry::Point, ContinuousAngle>
 RobotPositionFilter::noFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
-                                 const std::map<int, SSL_DetectionFrame>& camera_detections,
-                                 bool& orientation_is_defined, const vision::VisionData& old_vision_data)
+                              const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
+                              const vision::VisionData& old_vision_data)
 {
   orientation_is_defined = robot_frame.has_orientation();
   return { rhoban_geometry::Point(robot_frame.x() / 1000.0, robot_frame.y() / 1000.0),
            robot_frame.has_orientation() ? ContinuousAngle(robot_frame.orientation()) : ContinuousAngle(0.0) };
 }
 
-}  // namespace Vision
+}  // namespace vision
 }  // namespace rhoban_ssl

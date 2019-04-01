@@ -44,4 +44,4 @@ protected:
   Master master_;
   Kinematic kinematic_;
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

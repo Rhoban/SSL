@@ -90,5 +90,5 @@ rhoban_ssl::annotations::Annotations Defender::getAnnotations() const
   return annotations;
 }
 }  // namespace medium
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

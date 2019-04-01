@@ -50,7 +50,7 @@ API::API(std::string teamName, bool simulation, rhoban_ssl::ai::Team team, rhoba
 
   // Instanciating AI
   ai = new rhoban_ssl::AI(manager::names::MANUAL,  // avant : match
-                         teamName, team, data, commander, config_path, simulation);
+                          teamName, team, data, commander, config_path, simulation);
 
   /*
   comThread = new std::thread([this] {

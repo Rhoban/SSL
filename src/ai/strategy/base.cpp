@@ -139,5 +139,5 @@ bool Base::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
   return true;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

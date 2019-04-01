@@ -116,5 +116,5 @@ TestVelocityConsign* TestVelocityConsign::getSEMovement(ai::AiData& ai_data, dou
   return res;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

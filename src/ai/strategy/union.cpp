@@ -154,5 +154,5 @@ void Union::assignBehaviorToRobots(
   }
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-BeginnerRobotHaveBall::BeginnerRobotHaveBall (ai::AiData& ai_data) : RobotBehavior(ai_data)
+BeginnerRobotHaveBall::BeginnerRobotHaveBall(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
@@ -69,7 +69,7 @@ Control BeginnerRobotHaveBall::control() const
   return Control();
 }
 
-BeginnerRobotHaveBall::~BeginnerRobotHaveBall ()
+BeginnerRobotHaveBall::~BeginnerRobotHaveBall()
 {
 }
 
@@ -80,5 +80,5 @@ rhoban_ssl::annotations::Annotations BeginnerRobotHaveBall::getAnnotations() con
   return annotations;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

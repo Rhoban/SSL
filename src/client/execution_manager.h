@@ -37,4 +37,4 @@ public:
    */
   void run(double min_loop_duration);
 };
-}
+}  // namespace rhobanssl

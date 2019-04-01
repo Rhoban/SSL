@@ -23,7 +23,7 @@
 namespace rhoban_geometry
 {
 Point centerOfConeIncircle(const rhoban_geometry::Point& cone_vertex, const rhoban_geometry::Point& cone_base_A,
-                              const rhoban_geometry::Point& cone_base_B, double circle_radius)
+                           const rhoban_geometry::Point& cone_base_B, double circle_radius)
 {
   Vector2d u = normalized(cone_base_A - cone_vertex);
   Vector2d v = normalized(cone_base_B - cone_vertex);
@@ -36,7 +36,7 @@ Point centerOfConeIncircle(const rhoban_geometry::Point& cone_vertex, const rhob
 }
 
 std::vector<rhoban_geometry::Segment> tangentOfTwoCircle(const rhoban_geometry::Circle& circle_A,
-                                                            const rhoban_geometry::Circle& circle_B)
+                                                         const rhoban_geometry::Circle& circle_B)
 {
   std::vector<rhoban_geometry::Segment> result(4);
 

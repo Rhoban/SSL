@@ -50,9 +50,8 @@ public:
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
   getStartingPositions(int number_of_avalaible_robots);
-  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
 };
 
-};  // namespace Strategy
+};  // namespace strategy
 };  // namespace rhoban_ssl

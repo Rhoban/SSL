@@ -92,5 +92,5 @@ rhoban_ssl::annotations::Annotations SeeRobot::getAnnotations() const
 }
 
 }  // namespace Beginner
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

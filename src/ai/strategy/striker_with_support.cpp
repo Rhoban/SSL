@@ -129,7 +129,7 @@ StrikerWithSupport::getStartingPositions(int number_of_avalaible_robots)
 // a default position for you.
 //
 bool StrikerWithSupport::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                          ContinuousAngle& angular_position)
+                                                      ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
@@ -149,5 +149,5 @@ rhoban_ssl::annotations::Annotations StrikerWithSupport::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

@@ -39,7 +39,7 @@ const std::list<std::string>& Factory::availableManagers()
 }
 
 std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_name, ai::AiData& ai_data,
-                                                    GameState& game_state)
+                                                   GameState& game_state)
 {
   std::shared_ptr<Manager> manager;
 
@@ -51,9 +51,8 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
   if (manager_name == names::MANUAL)
   {
     manager = std::shared_ptr<Manager>(new Manual(ai_data));
-    dynamic_cast<Manual&>(*manager).changeTeamAndPointOfView(ai_data.team_color,
-                                                                  ai_data.team_color != ai::Team::Yellow
-                                                                  // false //ai_data.team_color != ai::Team::Yellow
+    dynamic_cast<Manual&>(*manager).changeTeamAndPointOfView(ai_data.team_color, ai_data.team_color != ai::Team::Yellow
+                                                             // false //ai_data.team_color != ai::Team::Yellow
     );
   }
   // if( manager_name == names::match ){
@@ -68,5 +67,5 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
   return manager;
 }
 
-};  // namespace Manager
+};  // namespace manager
 };  // namespace rhoban_ssl

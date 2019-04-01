@@ -143,5 +143,5 @@ rhoban_ssl::annotations::Annotations PassDribbler::getAnnotations() const
   return follower_->getAnnotations();
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

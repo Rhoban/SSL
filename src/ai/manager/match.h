@@ -44,5 +44,5 @@ public:
   virtual ~Match();
 };
 
-};  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace manager
+};  // namespace rhoban_ssl

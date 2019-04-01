@@ -6,8 +6,7 @@
 #include <multicast_client_single_thread.h>
 #include <google/protobuf/stubs/common.h>
 
-
-static int counter=0;
+static int counter = 0;
 class SimpleTask : public virtual rhobanssl::Task
 {
   int ncalls;
@@ -20,7 +19,7 @@ public:
   }
   virtual bool runTask() override
   {
-    counter+=1;
+    counter += 1;
     calls += 1;
     if (calls >= ncalls)
       return false;
@@ -28,11 +27,8 @@ public:
   }
 };
 
-
-
 TEST(test_execution_manager, add_task)
 {
-
   int simple1 = 0, simple2 = 0;
 
   using std::chrono::high_resolution_clock;
@@ -41,10 +37,10 @@ TEST(test_execution_manager, add_task)
   rhobanssl::ExecutionManager::getManager().addTask(new SimpleTask(200, simple2));
   rhobanssl::ExecutionManager::getManager().run(0.01);
   double loop_duration = std::chrono::duration<double>(high_resolution_clock::now() - start).count();
-  EXPECT_TRUE(simple1==100);
-  EXPECT_TRUE(simple2==200);
-  EXPECT_TRUE(counter==300);
-  EXPECT_TRUE((loop_duration>=2) && (loop_duration<=2.2));
+  EXPECT_TRUE(simple1 == 100);
+  EXPECT_TRUE(simple2 == 200);
+  EXPECT_TRUE(counter == 300);
+  EXPECT_TRUE((loop_duration >= 2) && (loop_duration <= 2.2));
 }
 
 /*

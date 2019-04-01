@@ -103,7 +103,7 @@ FromRobotBehavior::getStartingPositions(int number_of_avalaible_robots) const
 }
 
 bool FromRobotBehavior::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                           ContinuousAngle& angular_position) const
+                                                     ContinuousAngle& angular_position) const
 {
   assert(is_goalie_);  // This function should not called since strategy doesn't devaler a goalie.
   if (starting_position_.is_defined)
@@ -115,7 +115,7 @@ bool FromRobotBehavior::getStartingPositionForGoalie(rhoban_geometry::Point& lin
 }
 
 void FromRobotBehavior::setStartingPosition(const rhoban_geometry::Point& linear_position,
-                                                const ContinuousAngle& angular_position)
+                                            const ContinuousAngle& angular_position)
 {
   starting_position_.is_defined = true;
   starting_position_.linear_position = linear_position;
@@ -126,5 +126,5 @@ FromRobotBehavior::~FromRobotBehavior()
 {
 }
 
-};  // namespace Strategy
+};  // namespace strategy
 };  // namespace rhoban_ssl

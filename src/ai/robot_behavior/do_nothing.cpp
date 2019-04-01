@@ -36,5 +36,5 @@ Control DoNothing::control() const
   return Control();
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

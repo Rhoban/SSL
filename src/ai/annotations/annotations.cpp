@@ -20,7 +20,9 @@
 
 #include "annotations.h"
 
-namespace rhoban_ssl::annotations
+namespace rhoban_ssl
+{
+namespace annotations
 {
 void Annotations::mapPositions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct)
 {
@@ -188,5 +190,5 @@ void Annotations::addCircle(const Vector2d& origin, double r, std::string color,
 {
   addCircle(origin.getX(), origin.getY(), r, color, dashed);
 }
-
-}  // namespace RhobanSSLAnnotation
+}  // namespace annotations
+}  // namespace rhoban_ssl

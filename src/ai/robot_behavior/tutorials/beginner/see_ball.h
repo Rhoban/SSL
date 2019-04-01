@@ -84,5 +84,5 @@ public:
 };
 
 }  // namespace beginner
-}  // Namespace Robot_behavior
-}  // Namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

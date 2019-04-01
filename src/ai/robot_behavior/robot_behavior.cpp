@@ -105,5 +105,5 @@ bool RobotBehavior::infraRed() const
   return robot().infra_red;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

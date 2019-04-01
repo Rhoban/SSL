@@ -48,5 +48,5 @@ void ConsignFollower::setRadiusAvoidanceForTheBall(double radius)
 {
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

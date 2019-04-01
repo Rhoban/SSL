@@ -82,5 +82,5 @@ rhoban_ssl::annotations::Annotations Halt::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

@@ -224,7 +224,7 @@ void AI::sendControl(int robot_id, const Control& ctrl)
       if (ctrl.tareOdom)
       {
         commander_->set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(),
-                       kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom
+                        kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom
 
         );
         // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
@@ -232,7 +232,7 @@ void AI::sendControl(int robot_id, const Control& ctrl)
       else
       {
         commander_->set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1], ctrl.angular_velocity.value(),
-                       kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom);
+                        kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom);
       }
     }
   }
@@ -264,7 +264,7 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
 
   preventCollision(robot_id, ctrl);
   ctrl.changeToRelativeControl(ai_data_.robots[vision::Ally][robot_id].getMovement().angularPosition(ai_data_.time),
-                                  ai_data_.dt);
+                               ai_data_.dt);
   limitsVelocity(ctrl);
 }
 
@@ -447,7 +447,7 @@ void AI::run()
     if (manager_name_ != manager::names::MANUAL)
     {  // HACK TOT REMOVEE !
       strategy_manager_->changeTeamAndPointOfView(game_state_.getTeamColor(strategy_manager_->getTeamName()),
-                                                      game_state_.blueHaveItsGoalOnPositiveXAxis());
+                                                  game_state_.blueHaveItsGoalOnPositiveXAxis());
     }
     else
     {
@@ -545,7 +545,8 @@ void AI::printElectronicInfo()
   std::cout << "Electronic : " << std::endl;
   for (unsigned int id = 0; id < ai::Constants::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    std::cout << "robot id : " << id << " IR : " << ai_data_.robots.at(vision::Team::Ally).at(id).infra_red << std::endl;
+    std::cout << "robot id : " << id << " IR : " << ai_data_.robots.at(vision::Team::Ally).at(id).infra_red
+              << std::endl;
   }
 }
 

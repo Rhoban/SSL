@@ -90,5 +90,5 @@ namespace detail
 double vec2angle(Vector2d direction);
 };
 
-};  // namespace Robot_behavior
+};  // namespace robot_behavior
 };  // namespace rhoban_ssl

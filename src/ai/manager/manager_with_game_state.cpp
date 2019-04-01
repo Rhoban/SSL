@@ -12,8 +12,7 @@ ManagerWithGameState::ManagerWithGameState(ai::AiData& ai_data, const GameState&
 void ManagerWithGameState::analyseData(double time)
 {
   // We change the point of view of the team
-  changeTeamAndPointOfView(game_state_.getTeamColor(getTeamName()),
-                                game_state_.blueHaveItsGoalOnPositiveXAxis());
+  changeTeamAndPointOfView(game_state_.getTeamColor(getTeamName()), game_state_.blueHaveItsGoalOnPositiveXAxis());
   changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
 }
 
@@ -205,5 +204,5 @@ ManagerWithGameState::~ManagerWithGameState()
 {
 }
 
-};  // namespace Manager
+};  // namespace manager
 };  // namespace rhoban_ssl

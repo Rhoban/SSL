@@ -48,5 +48,5 @@ public:
   virtual ~Manual();
 };
 
-};  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace manager
+};  // namespace rhoban_ssl

@@ -66,7 +66,7 @@ const std::vector<int>& Strategy::getPlayerIds() const
 int Strategy::robotId(int id) const
 {
   assert(0 <= id and static_cast<unsigned int>(id) < player_ids_.size());  // Whent that line make an assertion, that
-                                                                          // means, you don't have updated
+                                                                           // means, you don't have updated
   // the minRobots() implementation inside your strategy code.
   return player_ids_[id];
 }
@@ -74,7 +74,7 @@ int Strategy::robotId(int id) const
 int Strategy::playerId(int id) const
 {
   assert(0 <= id and static_cast<unsigned int>(id) < player_ids_.size());  // Whent that line make an assertion, that
-                                                                          // means, you don't have updated
+                                                                           // means, you don't have updated
   // the minRobots() implementation inside your strategy code.
   return player_ids_[id];
 }
@@ -86,7 +86,7 @@ Strategy::getStartingPositions(int number_of_avalaible_robots) const
 };
 
 bool Strategy::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position) const
+                                            ContinuousAngle& angular_position) const
 {
   return false;
 }
@@ -100,5 +100,5 @@ rhoban_ssl::annotations::Annotations Strategy::getAnnotations() const
   return rhoban_ssl::annotations::Annotations();
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

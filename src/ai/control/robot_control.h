@@ -87,12 +87,12 @@ private:
 
 public:
   Control limitedControl(const Vector2d& robot_position, const ContinuousAngle& robot_orientation,
-                          const Vector2d& robot_linear_velocity, const ContinuousAngle& robot_angular_velocity) const;
+                         const Vector2d& robot_linear_velocity, const ContinuousAngle& robot_angular_velocity) const;
 
   RobotControl();
 
   void setLimits(double translation_velocity_limit, double rotation_velocity_limit,
-                  double translation_acceleration_limit, double rotation_acceleration_limit);
+                 double translation_acceleration_limit, double rotation_acceleration_limit);
 
   virtual Control noLimitedControl() const = 0;
 

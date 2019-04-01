@@ -205,11 +205,11 @@ public:
   virtual void update(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
                       unsigned int atomic_run_number) = 0;
   virtual void atomicUpdate(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
-                             unsigned int atomic_run_number) = 0;
+                            unsigned int atomic_run_number) = 0;
   virtual void edgeRun(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
-                        unsigned int atomic_run_number){};
+                       unsigned int atomic_run_number){};
   virtual void stateRun(ID state_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
-                         unsigned int atomic_run_number){};
+                        unsigned int atomic_run_number){};
   virtual ~MachineStateFollower()
   {
   }
@@ -232,16 +232,16 @@ struct EdgeFollower : public MachineStateFollower<ID, STATE_DATA, EDGE_DATA>
   {
   }
   void atomicUpdate(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
-                     unsigned int atomic_run_number)
+                    unsigned int atomic_run_number)
   {
   }
   void edgeRun(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
-                unsigned int atomic_run_number)
+               unsigned int atomic_run_number)
   {
     edge_run_fct(edge_id, state_data, edge_data, run_number, atomic_run_number);
   };
   void stateRun(ID state_id, STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
-                 unsigned int atomic_run_number){};
+                unsigned int atomic_run_number){};
 };
 
 template <typename ID, typename STATE_DATA, typename EDGE_DATA>
@@ -339,11 +339,11 @@ public:
 
   MachineState&
   addEdge(const ID& id, const ID& origin, const ID& end,
-           std::function<bool(const EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)>
-               condition_fct =
-                   [](const EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return true; },
-           std::function<void(EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)> run_fct =
-               [](EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return; })
+          std::function<bool(const EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)>
+              condition_fct =
+                  [](const EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return true; },
+          std::function<void(EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)> run_fct =
+              [](EDGE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return; })
   {
     return addEdge(std::shared_ptr<AnonymousEdge<ID, EDGE_DATA> >(
         new AnonymousEdge<ID, EDGE_DATA>(id, origin, end, condition_fct, run_fct)));
@@ -361,8 +361,8 @@ public:
 
   MachineState&
   addState(const ID& id,
-            std::function<void(STATE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)> run_fct =
-                [](STATE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return; })
+           std::function<void(STATE_DATA& data, unsigned int run_number, unsigned int atomic_run_number)> run_fct =
+               [](STATE_DATA& data, unsigned int run_number, unsigned int atomic_run_number) { return; })
   {
     return addState(std::shared_ptr<AnonymousState<ID, STATE_DATA> >(new AnonymousState<ID, STATE_DATA>(id, run_fct)));
   }
@@ -378,8 +378,8 @@ private:
 
 public:
   void executeAtEachEdge(std::function<void(ID edge_id, STATE_DATA& state_data, EDGE_DATA& edge_data,
-                                               unsigned int run_number, unsigned int atomic_run_number)>
-                                edge_run)
+                                            unsigned int run_number, unsigned int atomic_run_number)>
+                             edge_run)
   {
     edge_followers_.push_back(EdgeFollower<ID, STATE_DATA, EDGE_DATA>(edge_run));
     registerFollower(edge_followers_.back());
@@ -585,7 +585,7 @@ public:
   void update(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number, unsigned int atomic_run_number){};
 
   void atomicUpdate(STATE_DATA& state_data, EDGE_DATA& edge_data, unsigned int run_number,
-                     unsigned int atomic_run_number)
+                    unsigned int atomic_run_number)
   {
     bool value = condition_fct_(edge_data, run_number, atomic_run_number);
     bool rising_edge = (!last_condition_value_) and (value);

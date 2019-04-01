@@ -72,8 +72,7 @@ void Mur_2_passif::stop(double time)
 
 void Mur_2_passif::update(double time)
 {
-  int nearest_ally_robot_from_ball =
-      GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
+  int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
   is_closest_0_ = false;
   is_closest_1_ = false;
 
@@ -130,7 +129,7 @@ Mur_2_passif::getStartingPositions(int number_of_avalaible_robots)
 // a default position for you.
 //
 bool Mur_2_passif::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                    ContinuousAngle& angular_position)
+                                                ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
@@ -150,5 +149,5 @@ rhoban_ssl::annotations::Annotations Mur_2_passif::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

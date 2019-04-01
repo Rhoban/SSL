@@ -58,10 +58,10 @@ public:
       std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   void setPositions(const std::vector<int>& robot_affectations,
-                     const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns,
-                     bool allly_have_the_kickoff);
+                    const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns,
+                    bool allly_have_the_kickoff);
   void setGoaliePositions(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position,
-                            bool allly_have_the_kickoff);
+                          bool allly_have_the_kickoff);
 
   void setKicking(bool value = true);
 
@@ -69,13 +69,12 @@ public:
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
   getStartingPositions(int number_of_avalaible_robots);
-  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual void setGoalie(int id, bool to_be_managed);
 };
 
-};  // namespace Strategy
+};  // namespace strategy
 };  // namespace rhoban_ssl

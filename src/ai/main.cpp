@@ -40,7 +40,7 @@ AI* ai_ = NULL;
 
 void stop(int s)
 {
-  if (ai_!= NULL)
+  if (ai_ != NULL)
   {
     ai_->stop();
   }
@@ -181,8 +181,8 @@ int main(int argc, char** argv)
   }
 
   // Instantiationg the vision
-  AIVisionClient vision(data, yellow.getValue() ? ai::Yellow : ai::Blue, simulation.getValue(),
-                        addr.getValue(), theport, theport, part_of_the_field_used);
+  AIVisionClient vision(data, yellow.getValue() ? ai::Yellow : ai::Blue, simulation.getValue(), addr.getValue(),
+                        theport, theport, part_of_the_field_used);
 
   // AI Commander to control the robots
   AICommander* commander;
@@ -203,8 +203,8 @@ int main(int argc, char** argv)
   }
   else
   {
-    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue,
-                data, commander, config_path.getValue(), simulation.getValue());
+    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, data,
+                 commander, config_path.getValue(), simulation.getValue());
     ai_->run();
     delete ai_;
   }

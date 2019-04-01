@@ -216,7 +216,7 @@ public:
    * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
    */
   void getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, vision::Team team,
-                         double distance, std::vector<int>& result) const;
+                      double distance, std::vector<int>& result) const;
   /**
    * @brief same as void get_robot_in_line() but returns the result
    * instead of storing it in a variable.
@@ -233,7 +233,7 @@ public:
    * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
    */
   std::vector<int> getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                     vision::Team team = vision::Team::Opponent, double distance = 0.4) const;
+                                  vision::Team team = vision::Team::Opponent, double distance = 0.4) const;
   /**
    * @brief same as vector<int> get_robot_in_line() but doesn't
    * consider the robot's team.
@@ -244,7 +244,7 @@ public:
    * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
    */
   std::vector<int> getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                     double distance) const;
+                                  double distance) const;
   /**
    * @brief returns the robot's number which is closest to the point
    * given in parameter in the team given in parameter.

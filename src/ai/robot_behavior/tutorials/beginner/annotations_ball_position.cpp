@@ -23,7 +23,6 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-
 BeginnerAnnotationsBallPosition::BeginnerAnnotationsBallPosition(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
@@ -54,5 +53,5 @@ rhoban_ssl::annotations::Annotations BeginnerAnnotationsBallPosition::getAnnotat
   return annotations;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

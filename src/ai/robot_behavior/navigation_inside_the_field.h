@@ -61,7 +61,7 @@ public:
   void setOrientationPid(double kp, double ki, double kd);
 
   void setLimits(double translation_velocity_limit, double rotation_velocity_limit,
-                  double translation_acceleration_limit, double rotation_acceleration_limit);
+                 double translation_acceleration_limit, double rotation_acceleration_limit);
 
   virtual void setFollowingPosition(const rhoban_geometry::Point& position_to_follow, const ContinuousAngle& angle);
   virtual void avoidTheBall(bool value = true);
@@ -72,5 +72,5 @@ public:
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual void setRadiusAvoidanceForTheBall(double radius);
 };
-};  // namespace Robot_behavior
+};  // namespace robot_behavior
 };  // namespace rhoban_ssl

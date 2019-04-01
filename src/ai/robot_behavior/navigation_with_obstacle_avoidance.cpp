@@ -39,7 +39,7 @@ NavigationWithObstacleAvoidance::NavigationWithObstacleAvoidance(ai::AiData& ai_
 }
 
 void NavigationWithObstacleAvoidance::setFollowingPosition(const rhoban_geometry::Point& position_to_follow,
-                                                                const ContinuousAngle& target_angle)
+                                                           const ContinuousAngle& target_angle)
 {
   this->position_follower_.setFollowingPosition(position_to_follow, target_angle);
   this->target_position_ = position_to_follow;
@@ -60,8 +60,8 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
   std::list<std::pair<int, double> > collisions_with_ctrl = ai_data_.getCollisions(robot().id(), ctrl.linear_velocity);
   assert(ai_data_.constants.security_acceleration_ratio > ai_data_.constants.obstacle_avoidance_ratio);
   double ctrl_velocity_norm = ctrl.linear_velocity.norm();
-  double time_to_stop = ctrl_velocity_norm /
-                        (ai_data_.constants.obstacle_avoidance_ratio * ai_data_.constants.translation_acceleration_limit);
+  double time_to_stop = ctrl_velocity_norm / (ai_data_.constants.obstacle_avoidance_ratio *
+                                              ai_data_.constants.translation_acceleration_limit);
 
   for (const std::pair<int, double>& collision : collisions_with_ctrl)
   {
@@ -106,9 +106,9 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
     double radius_error = ai_data_.constants.radius_security_for_collision;
     std::pair<bool, double> collision =
         collisionTime(ai_data_.constants.robot_radius,
-                       robot().getMovement().linearPosition(robot().getMovement().lastTime()), ctrl.linear_velocity,
-                       ball_radius_avoidance_, ball().getMovement().linearPosition(ball().getMovement().lastTime()),
-                       ball().getMovement().linearVelocity(ball().getMovement().lastTime()), radius_error);
+                      robot().getMovement().linearPosition(robot().getMovement().lastTime()), ctrl.linear_velocity,
+                      ball_radius_avoidance_, ball().getMovement().linearPosition(ball().getMovement().lastTime()),
+                      ball().getMovement().linearVelocity(ball().getMovement().lastTime()), radius_error);
     if (collision.first)
     {
       double time_before_collision = collision.second;
@@ -133,16 +133,17 @@ void NavigationWithObstacleAvoidance::computeTheRadiusOfLimitCycle()
   if (ball_is_the_obstacle_)
   {
     assert(not(ignore_the_ball_));  // Normally determine_the_closest_obstacle() set ball_is_the_obstacle to false when
-                                   // we ignore the ball
+                                    // we ignore the ball
     radius_of_limit_cycle_ = ai_data_.constants.radius_ball + ai_data_.constants.robot_radius +
-                            ai_data_.constants.radius_security_for_avoidance;
+                             ai_data_.constants.radius_security_for_avoidance;
   }
   else
   {
     if (robot().getMovement().linearVelocity(ai_data_.time).norm() <
         ai_data_.constants.translation_velocity_limit / 4.0)
     {
-      radius_of_limit_cycle_ = 2 * ai_data_.constants.robot_radius;  // + ai_data.constants.radius_security_for_avoidance;
+      radius_of_limit_cycle_ =
+          2 * ai_data_.constants.robot_radius;  // + ai_data.constants.radius_security_for_avoidance;
     }
     else
     {
@@ -258,7 +259,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirection()
   if (ball_is_the_obstacle_)
   {
     assert(not(ignore_the_ball_));  // Normally determine_the_closest_obstacle() set ball_is_the_obstacle to false when
-                                   // we ignore the ball
+                                    // we ignore the ball
     computeTheLimitCycleDirectionForBall();
   }
   else
@@ -341,8 +342,8 @@ void NavigationWithObstacleAvoidance::avoidRobot(int id, bool value)
 }
 
 void NavigationWithObstacleAvoidance::setLimits(double translation_velocity_limit, double rotation_velocity_limit,
-                                                    double translation_acceleration_limit,
-                                                    double rotation_acceleration_limit)
+                                                double translation_acceleration_limit,
+                                                double rotation_acceleration_limit)
 {
   position_follower_.setLimits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
                                rotation_acceleration_limit);
@@ -387,5 +388,5 @@ double NavigationWithObstacleAvoidance::getRadiusAvoidanceForTheBall()
   return ball_radius_avoidance_;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

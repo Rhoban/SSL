@@ -64,8 +64,8 @@ void Defensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
     follower->avoidTheBall(false);
   }
 
-  rhoban_geometry::Point target_position = rhoban_geometry::centerOfConeIncircle(
-      ballPosition(), left_post_position, right_post_position, getRobotRadius());
+  rhoban_geometry::Point target_position =
+      rhoban_geometry::centerOfConeIncircle(ballPosition(), left_post_position, right_post_position, getRobotRadius());
   double target_rotation = detail::vec2angle(-ball_goal_vector);
 
   // This part will be remove once we have proper avoidance of the penalty area
@@ -101,5 +101,5 @@ rhoban_ssl::annotations::Annotations Defensor::getAnnotations() const
   return follower->getAnnotations();
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

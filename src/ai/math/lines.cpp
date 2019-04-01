@@ -23,7 +23,7 @@
 namespace rhoban_geometry
 {
 double distanceFromPointToLine(const rhoban_geometry::Point& point, const rhoban_geometry::Point& point_line_1,
-                                   const rhoban_geometry::Point& point_line_2)
+                               const rhoban_geometry::Point& point_line_2)
 {
   assert(normSquare(point_line_1 - point_line_2) != 0);
 

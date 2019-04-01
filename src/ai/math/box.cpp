@@ -25,7 +25,7 @@ bool Box::is_inside(const rhoban_geometry::Point& position)
 }
 
 std::vector<rhoban_geometry::Point> Box::segmentIntersection(const rhoban_geometry::Point& origin,
-                                                              const rhoban_geometry::Point& end) const
+                                                             const rhoban_geometry::Point& end) const
 {
   std::vector<rhoban_geometry::Point> result;
   rhoban_geometry::Segment segment(origin, end);
@@ -91,7 +91,7 @@ rhoban_geometry::Point Box::center() const
 }
 
 bool Box::closestSegmentIntersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
-                                       rhoban_geometry::Point& intersection) const
+                                     rhoban_geometry::Point& intersection) const
 {
   std::vector<rhoban_geometry::Point> intersections = segmentIntersection(origin, end);
   assert(intersections.size() <= 2);
@@ -115,7 +115,7 @@ bool Box::closestSegmentIntersection(const rhoban_geometry::Point& origin, const
 }
 
 bool Box::closestSegmentIntersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
-                                       rhoban_geometry::Point& intersection, double error) const
+                                     rhoban_geometry::Point& intersection, double error) const
 {
   return Box(this->SW - Vector2d(error, error), this->NE + Vector2d(error, error))
       .closestSegmentIntersection(origin, end, intersection);

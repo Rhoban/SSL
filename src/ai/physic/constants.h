@@ -25,4 +25,3 @@ static constexpr double EPSILON_VELOCITY = 0.00001;
 static constexpr double EPSILON_DISTANCE = 0.00001;
 
 };  // namespace rhoban_ssl
-

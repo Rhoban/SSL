@@ -64,5 +64,5 @@ rhoban_ssl::annotations::Annotations Begginer_defensor::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

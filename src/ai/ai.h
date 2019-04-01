@@ -96,4 +96,4 @@ protected:
 public:
   void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
 };
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

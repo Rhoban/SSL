@@ -1,7 +1,7 @@
 #include "intersection.h"
 
 bool segmentIntersection(const rhoban_geometry::Segment& segment1, const rhoban_geometry::Segment& segment2,
-                          rhoban_geometry::Point& intersection)
+                         rhoban_geometry::Point& intersection)
 {
   const rhoban_geometry::Point& A = segment1.A;
   const rhoban_geometry::Point& B = segment1.B;

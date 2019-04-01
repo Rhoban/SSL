@@ -102,7 +102,7 @@ void CurveForRobot::printRotationCurve(double dt) const
 }
 
 void RobotControl::setLimits(double translation_velocity_limit, double rotation_velocity_limit,
-                              double translation_acceleration_limit, double rotation_acceleration_limit)
+                             double translation_acceleration_limit, double rotation_acceleration_limit)
 {
   this->translation_velocity_limit_ = translation_velocity_limit;
   this->rotation_velocity_limit_ = ContinuousAngle(rotation_velocity_limit);
@@ -117,8 +117,8 @@ RobotControl::RobotControl()
   , rotation_acceleration_limit_(-1){};
 
 Control RobotControl::limitedControl(const Vector2d& robot_position, const ContinuousAngle& robot_orientation,
-                                      const Vector2d& robot_linear_velocity,
-                                      const ContinuousAngle& robot_angular_velocity) const
+                                     const Vector2d& robot_linear_velocity,
+                                     const ContinuousAngle& robot_angular_velocity) const
 {
   Control res = noLimitedControl();
   if (res.angular_velocity.value() != 0.0)

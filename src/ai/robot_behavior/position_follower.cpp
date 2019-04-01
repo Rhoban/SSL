@@ -30,7 +30,7 @@ PositionFollower::PositionFollower(ai::AiData& ai_data, double time, double dt)
 }
 
 void PositionFollower::setFollowingPosition(const rhoban_geometry::Point& position_to_follow,
-                                              const ContinuousAngle& angle)
+                                            const ContinuousAngle& angle)
 {
   this->position_ = position_to_follow;
   this->angle_ = angle;
@@ -79,7 +79,7 @@ void PositionFollower::setOrientationPid(double kp, double ki, double kd)
 }
 
 void PositionFollower::setLimits(double translation_velocity_limit, double rotation_velocity_limit,
-                                  double translation_acceleration_limit, double rotation_acceleration_limit)
+                                 double translation_acceleration_limit, double rotation_acceleration_limit)
 {
   robot_control_.setLimits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
                            rotation_acceleration_limit);
@@ -97,5 +97,5 @@ rhoban_ssl::annotations::Annotations PositionFollower::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

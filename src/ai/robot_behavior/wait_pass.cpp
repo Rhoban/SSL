@@ -108,5 +108,5 @@ rhoban_ssl::annotations::Annotations WaitPass::getAnnotations() const
   ;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

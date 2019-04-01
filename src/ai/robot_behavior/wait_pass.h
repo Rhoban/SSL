@@ -48,5 +48,5 @@ public:
   virtual ~WaitPass();
 };
 
-};  // namespace Robot_behavior
+};  // namespace robot_behavior
 };  // namespace rhoban_ssl

@@ -642,9 +642,9 @@ TEST(test_machine_state, anonym_state_anonym_edge)
     machine.addEdge("initialisation", "start", "middle");
     bool button_next = false;
     machine.addEdge("next", "middle", "end",
-                     [&](const msi_string::EdgeData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                       return button_next;
-                     });
+                    [&](const msi_string::EdgeData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                      return button_next;
+                    });
 
     machine.addInitState("start");
 
@@ -679,21 +679,21 @@ TEST(test_machine_state, anonym_state_anonym_edge)
     msi_string::MachineState machine(data, data);
 
     machine.addState("start",
-                      [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                        data << "#sr "
-                             << "START"
-                             << " "
-                                "("
-                             << run_number << ", " << atomic_run_number << "), ";
-                      });
+                     [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                       data << "#sr "
+                            << "START"
+                            << " "
+                               "("
+                            << run_number << ", " << atomic_run_number << "), ";
+                     });
     machine.addState("middle",
-                      [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                        data << "#sr "
-                             << "MIDDLE"
-                             << " "
-                                "("
-                             << run_number << ", " << atomic_run_number << "), ";
-                      });
+                     [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                       data << "#sr "
+                            << "MIDDLE"
+                            << " "
+                               "("
+                            << run_number << ", " << atomic_run_number << "), ";
+                     });
     machine.addState("end", [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
       data << "#sr "
            << "END"
@@ -788,7 +788,7 @@ public:
     fct(state_data);
   }
   virtual void atomicUpdate(std::ostream& state_data, std::ostream& edge_data, unsigned int run_number,
-                             unsigned int atomic_run_number)
+                            unsigned int atomic_run_number)
   {
     auto fct = [&](std::ostream& o) {
       o << "fau " << name
@@ -894,9 +894,9 @@ TEST(test_machine_state, rising_edge)
     machine.addEdge(1, 1, 2);
 
     machine.addEdge(2, 2, 3,
-                     msi_int::RisingEdge([&](const std::ostream& data, unsigned int run_number,
-                                             unsigned int atomic_run_number) { return machine.isActive(2); },
-                                         machine));
+                    msi_int::RisingEdge([&](const std::ostream& data, unsigned int run_number,
+                                            unsigned int atomic_run_number) { return machine.isActive(2); },
+                                        machine));
 
     machine.addInitState(1);
 

@@ -21,7 +21,10 @@
 #include <debug.h>
 
 FrameChangement::FrameChangement()
-  : origin_(0.0, 0.0), basis_(Matrix2d::identity()), basisChangement_(Matrix2d::identity()), rotation_angle_from_basis_(0.0)
+  : origin_(0.0, 0.0)
+  , basis_(Matrix2d::identity())
+  , basisChangement_(Matrix2d::identity())
+  , rotation_angle_from_basis_(0.0)
 {
 }
 

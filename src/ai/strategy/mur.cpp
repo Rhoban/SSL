@@ -99,8 +99,7 @@ void Mur::assignBehaviorToRobots(
 //     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
-std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Mur::getStartingPositions(int number_of_avalaible_robots)
+std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> > Mur::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
@@ -133,5 +132,5 @@ rhoban_ssl::annotations::Annotations Mur::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

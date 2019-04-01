@@ -42,4 +42,4 @@ public:
 protected:
   SimClient client_;
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

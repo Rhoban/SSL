@@ -232,8 +232,8 @@ GameState::GameState(ai::AiData& ai_data)
                          command_is_<SSL_Referee::HALT>);
 
   machine_state_.executeAtEachEdge([&](std::string edge_id, GameStateData& state_data, GameStateData& edge_data,
-                                         unsigned int run_number,
-                                         unsigned int atomic_run_number) { change_stamp_ += 1; });
+                                       unsigned int run_number,
+                                       unsigned int atomic_run_number) { change_stamp_ += 1; });
 
   machine_state_.exportToFile("/tmp/game_state.dot");
 

@@ -59,11 +59,11 @@ void PrepareKickoff::updateStartingPositions()
       };
   placer_when_kicking_.setStartingPositions(map2list(attacking_placement_.field_robot_position, cvrt));
   placer_when_kicking_.setStartingPositionForGoalie(attacking_placement_.goalie_position.linear,
-                                                       attacking_placement_.goalie_position.angular);
+                                                    attacking_placement_.goalie_position.angular);
 
   placer_when_no_kicking_.setStartingPositions(map2list(defending_placement_.field_robot_position, cvrt));
   placer_when_no_kicking_.setStartingPositionForGoalie(defending_placement_.goalie_position.linear,
-                                                          defending_placement_.goalie_position.angular);
+                                                       defending_placement_.goalie_position.angular);
 }
 void PrepareKickoff::start(double time)
 {
@@ -143,7 +143,7 @@ PrepareKickoff::~PrepareKickoff()
 void PrepareKickoff::setKicking(bool value)
 {
   assert(not(strategy_is_active_));  // You don't have to call set_kicking when the strategy is active. Wait to stop the
-                                    // strategy befor usig this function.
+                                     // strategy befor usig this function.
   is_kicking_ = value;
 }
 
@@ -161,7 +161,7 @@ PrepareKickoff::getStartingPositions(int number_of_avalaible_robots)
 }
 
 bool PrepareKickoff::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                       ContinuousAngle& angular_position)
+                                                  ContinuousAngle& angular_position)
 {
   if (is_kicking_)
   {
@@ -212,5 +212,5 @@ rhoban_ssl::annotations::Annotations PrepareKickoff::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Strategy
+}  // namespace strategy
 }  // namespace rhoban_ssl

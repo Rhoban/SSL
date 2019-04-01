@@ -102,5 +102,5 @@ public:
 
 std::ostream& operator<<(std::ostream& out, const VisionData& vision);
 
-}  // namespace Vision
-}  // namespace RhobanSSL
+}  // namespace vision
+}  // namespace rhoban_ssl

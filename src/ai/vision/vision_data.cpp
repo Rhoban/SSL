@@ -181,5 +181,5 @@ std::ostream& operator<<(std::ostream& out, const Field& field)
   return out;
 }
 
-}  // namespace Vision
+}  // namespace vision
 }  // namespace rhoban_ssl

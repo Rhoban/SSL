@@ -45,14 +45,12 @@ public:
 
   // Tests
 public:
-  static TestRelativeVelocityConsign* getMovementAngularVelocityOnly(ai::AiData& ai_data_,
-                                                                            double angular_velocity);
-  static TestRelativeVelocityConsign* getMovementLinearVelocityOnly(ai::AiData& ai_data_,
-                                                                           Vector2d linear_velocity);
+  static TestRelativeVelocityConsign* getMovementAngularVelocityOnly(ai::AiData& ai_data_, double angular_velocity);
+  static TestRelativeVelocityConsign* getMovementLinearVelocityOnly(ai::AiData& ai_data_, Vector2d linear_velocity);
   static TestRelativeVelocityConsign* getMovementAngularAndLinearVelocity(ai::AiData& ai_data_,
-                                                                                  Vector2d linear_velocity,
-                                                                                  double angular_velocity);
+                                                                          Vector2d linear_velocity,
+                                                                          double angular_velocity);
 };
 
-};  // namespace Robot_behavior
+};  // namespace robot_behavior
 };  // namespace rhoban_ssl

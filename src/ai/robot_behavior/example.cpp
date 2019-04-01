@@ -88,5 +88,5 @@ rhoban_ssl::annotations::Annotations Example::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Robot_behavior
+}  // namespace robot_behavior
 }  // namespace rhoban_ssl

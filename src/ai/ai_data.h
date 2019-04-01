@@ -217,5 +217,5 @@ public:
   std::list<std::pair<int, double> > getCollisions(int robot_id, const Vector2d& ctrl) const;
 };
 
-}  // namespace Ai
-}  // namespace RhobanSSL
+}  // namespace ai
+}  // namespace rhoban_ssl

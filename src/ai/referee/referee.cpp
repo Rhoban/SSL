@@ -312,4 +312,4 @@ RefereeClient& Referee::getRefereeClient()
   return referee;
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
