@@ -53,6 +53,7 @@
 #include <robot_behavior/tutorials/medium/striker.h>
 #include <robot_behavior/tutorials/medium/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
+#include <robot_behavior/tutorials/beginner/choose_rotation.h>
 
 namespace rhoban_ssl
 {
@@ -435,6 +436,15 @@ Manual::Manual(ai::AiData& ai_data)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
+  registerStrategy("Choose rotation", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                          ai_data,
+                                          [&](double time, double dt) {
+                                            robot_behavior::beginner::ChooseRotation* choose_rotation =
+                                                new robot_behavior::beginner::ChooseRotation(ai_data);
+                                            return std::shared_ptr<robot_behavior::RobotBehavior>(choose_rotation);
+                                          },
+                                          false  // we don't want to define a goal here !
+                                          )));
   registerStrategy("Intermediate Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                ai_data,
                                                [&](double time, double dt) {

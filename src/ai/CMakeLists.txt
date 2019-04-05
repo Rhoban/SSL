@@ -68,6 +68,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
+    robot_behavior/tutorials/beginner/choose_rotation.cpp
     robot_behavior/tutorials/medium/prepare_strike.cpp
     robot_behavior/tutorials/medium/striker.cpp
     robot_behavior/tutorials/medium/defender.cpp
