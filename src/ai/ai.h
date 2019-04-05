@@ -29,17 +29,17 @@
 #include <manager/manager.h>
 #include <annotations/annotations.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class AI
 {
 private:
-  std::string team_name;
-  Ai::Team default_team;
+  std::string team_name_;
+  ai::Team default_team_;
 
 public:
   bool is_in_simulation;
-  AI(std::string manager_name, std::string team_name, Ai::Team default_team, Data& data, AICommander* commander,
+  AI(std::string manager_name, std::string team_name, ai::Team default_team, Data& data, AICommander* commander,
      const std::string& config_path, bool is_in_simulation);
 
   void run();
@@ -47,53 +47,53 @@ public:
 
   std::vector<std::string> getAvailableManagers();
   void setManager(std::string manager);
-  std::shared_ptr<Manager::Manager> getManager() const;
-  std::shared_ptr<Manager::Manager> getManualManager();
+  std::shared_ptr<manager::Manager> getManager() const;
+  std::shared_ptr<manager::Manager> getManualManager();
 
   GameState& getGameState();
 
   double getCurrentTime();
 
 protected:
-  bool running;
+  bool running_;
 
-  Vision::VisionData visionData;
-  Ai::AiData ai_data;
+  vision::VisionData visionData_;
+  ai::AiData ai_data_;
 
-  bool enable_kicking;
+  bool enable_kicking_;
 
-  AICommander* commander;
+  AICommander* commander_;
 
-  std::map<int, std::shared_ptr<Robot_behavior::RobotBehavior> > robot_behaviors;
+  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
 
-  void init_robot_behaviors();
-  void update_robots();
-  double current_time;
-  double current_dt;
+  void initRobotBehaviors();
+  void updateRobots();
+  double current_time_;
+  double current_dt_;
 
-  Shared_data shared_data;
+  SharedData shared_data_;
 
-  Data& data;
-  GameState game_state;
-  std::string manager_name;
-  std::shared_ptr<Manager::Manager> strategy_manager;
-  std::shared_ptr<Manager::Manager> manual_manager;
+  Data& data_;
+  GameState game_state_;
+  std::string manager_name_;
+  std::shared_ptr<manager::Manager> strategy_manager_;
+  std::shared_ptr<manager::Manager> manual_manager_;
 
-  Control update_robot(Robot_behavior::RobotBehavior& robot_behavior, double time, Ai::Robot& robot, Ai::Ball& ball);
-  void update_electronic_informations();
-  void print_electronic_info();
+  Control updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball);
+  void updateElectronicInformations();
+  void printElectronicInfo();
 
-  void send_control(int robot_id, const Control& control);
-  void prepare_to_send_control(int robot_id, Control& control);
+  void sendControl(int robot_id, const Control& control);
+  void prepareToSendControl(int robot_id, Control& control);
 
-  void limits_velocity(Control& ctrl) const;
-  void check_time_is_coherent() const;
+  void limitsVelocity(Control& ctrl) const;
+  void checkTimeIsCoherent() const;
 
-  void share_data();
-  void prevent_collision(int robot_id, Control& ctrl);
-  RhobanSSLAnnotation::Annotations get_robot_behavior_annotations() const;
+  void shareData();
+  void preventCollision(int robot_id, Control& ctrl);
+  rhoban_ssl::annotations::Annotations getRobotBehaviorAnnotations() const;
 
 public:
-  void get_annotations(RhobanSSLAnnotation::Annotations& annotations) const;
+  void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
 };
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl

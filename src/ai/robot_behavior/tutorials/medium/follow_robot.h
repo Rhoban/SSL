@@ -18,9 +18,9 @@
 #include "robot_behavior/factory.h"
 #include "robot_behavior/robot_behavior.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace medium
 {
@@ -32,13 +32,13 @@ class FollowRobot : public RobotBehavior
 {
 private:
   /**
-   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   * @see rhoban_ssl::robot_behavior::ConsignFollower
    */
   ConsignFollower* follower_;
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
   /**
    * @brief Constant value to define distance from which the robot is close enough the target.
    */
@@ -54,9 +54,9 @@ public:
    * The default value of the target_id is set to the id 0.
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @param target_id : ID of robot to follow.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
-  FollowRobot(Ai::AiData& ai_data, int target_id = 0);
+  FollowRobot(ai::AiData& ai_data, int target_id = 0);
 
   /**
    * @brief At each iteration of this function, the robot go to a point on the line between it and the target, at a
@@ -68,7 +68,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * @return the control of the behavior.
@@ -88,11 +88,11 @@ public:
   int getRobotIdToFollow() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    * The class don't draw any annotations.
    * The follower draw annotation.
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
    * @brief Destructor.
@@ -101,5 +101,5 @@ public:
 };
 
 };  // namespace medium
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

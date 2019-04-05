@@ -26,15 +26,15 @@
 
 class Plot
 {
-  std::ofstream log_file;
+  std::ofstream log_file_;
 
-  std::vector<std::string> value_names;
-  //    std::map<std::string, int> value_name_id;
-  std::map<std::string, double> current_values;
-  std::map<std::string, bool> loged_values;
-  int n;
+  std::vector<std::string> value_names_;
+  //    std::map<std::string, int> value_name_id_;
+  std::map<std::string, double> current_values_;
+  std::map<std::string, bool> loged_values_;
+  int n_;
 
-  void create_plot_script(const std::vector<std::string>& value_names);
+  void createPlotScript(const std::vector<std::string>& value_names);
 
 public:
   std::string name;

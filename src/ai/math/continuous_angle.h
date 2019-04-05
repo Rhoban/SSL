@@ -24,7 +24,7 @@
 class ContinuousAngle
 {
 private:
-  double angle_value;
+  double angle_value_;
 
 public:
   ContinuousAngle();
@@ -62,7 +62,7 @@ public:
   ContinuousAngle& operator*=(double scalar);
 
   double turn() const;
-  int nb_turn() const;
+  int nbTurn() const;
 
   bool operator==(const ContinuousAngle& angle) const;
   bool operator!=(const ContinuousAngle& angle) const;
@@ -71,9 +71,9 @@ public:
   bool operator>(const ContinuousAngle& angle) const;
   bool operator>=(const ContinuousAngle& angle) const;
 
-  void set_to_nearest(double angle);
-  void set_to_nearest(const ContinuousAngle& angle);
-  void set_to_nearest(const rhoban_utils::Angle& angle);
+  void setToNearest(double angle);
+  void setToNearest(const ContinuousAngle& angle);
+  void setToNearest(const rhoban_utils::Angle& angle);
 };
 
 std::ostream& operator<<(std::ostream& out, const ContinuousAngle& a);

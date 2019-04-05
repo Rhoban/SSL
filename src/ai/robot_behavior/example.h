@@ -22,31 +22,31 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Example : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
-  double period;
-  double last_time;
-  int cpt;
+  double period_;
+  double last_time_;
+  int cpt_;
 
 public:
-  Example(Ai::AiData& ai_data);
+  Example(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Example();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

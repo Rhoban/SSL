@@ -6,7 +6,7 @@
 #include <referee.pb.h>
 #include "MulticastClient.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class RefereeClient : public MulticastClient
 {
@@ -19,4 +19,4 @@ public:
 protected:
   SSL_Referee data;
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

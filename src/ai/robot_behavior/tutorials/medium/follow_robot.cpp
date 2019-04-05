@@ -16,9 +16,9 @@
 #include "follow_robot.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace medium
 {
@@ -26,30 +26,30 @@ namespace medium
  * With this behavior, the robot will go to its target until it reach a defined distance.
  * In short it follow its target without collide it.
  */
-FollowRobot::FollowRobot(Ai::AiData& ai_data, int target_id)
-  : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
+FollowRobot::FollowRobot(ai::AiData& ai_data, int target_id)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 
 {
   target_id_ = target_id;
 }
 
-void FollowRobot::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void FollowRobot::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   annotations_.clear();
 
-  rhoban_geometry::Point follow_position = robot.get_movement().linear_position(ai_data.time);
-  ContinuousAngle follow_rotation = robot.get_movement().angular_position(ai_data.time);
+  rhoban_geometry::Point follow_position = robot.getMovement().linearPosition(ai_data_.time);
+  ContinuousAngle follow_rotation = robot.getMovement().angularPosition(ai_data_.time);
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to follow itself will do nothing.
   if (target_id_ != robot.id())
   {
-    rhoban_geometry::Point target_position = get_robot(target_id_).get_movement().linear_position(ai_data.time);
-    rhoban_geometry::Point robot_position = robot.get_movement().linear_position(ai_data.time);
+    rhoban_geometry::Point target_position = getRobot(target_id_).getMovement().linearPosition(ai_data_.time);
+    rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
     Vector2d vect_robot_target = target_position - robot_position;
     follow_rotation = vector2angle(vect_robot_target);
@@ -65,9 +65,9 @@ void FollowRobot::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
 
   // Disabled avoidance with the target to correclty follow it:
   follower_->avoidRobot(target_id_, false);
-  follower_->set_following_position(follow_position, follow_rotation);
+  follower_->setFollowingPosition(follow_position, follow_rotation);
 
-  follower_->avoid_the_ball(false);
+  follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }
 
@@ -92,14 +92,14 @@ FollowRobot::~FollowRobot()
   delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations FollowRobot::get_annotations() const
+rhoban_ssl::annotations::Annotations FollowRobot::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(annotations_);
-  annotations.addAnnotations(follower_->get_annotations());
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
 }  // namespace medium
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

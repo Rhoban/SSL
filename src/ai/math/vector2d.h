@@ -40,7 +40,7 @@ public:
   double& operator[](unsigned int i);
 
   double norm() const;
-  double norm_square() const;
+  double normSquare() const;
 
   Vector2d operator-() const;
   const Vector2d& operator+() const;
@@ -68,12 +68,12 @@ rhoban_geometry::Point operator+(const rhoban_geometry::Point& p, const Vector2d
 rhoban_geometry::Point operator+(const Vector2d& v, const rhoban_geometry::Point& p);
 rhoban_geometry::Point operator-(const rhoban_geometry::Point& p, const Vector2d& v);
 
-double vectorial_product(const Vector2d& v1, const Vector2d& v2);
-double scalar_product(const Vector2d& v1, const Vector2d& v2);
+double vectorialProduct(const Vector2d& v1, const Vector2d& v2);
+double scalarProduct(const Vector2d& v1, const Vector2d& v2);
 
 double norm(const Vector2d& v1);
 double norm_2(const Vector2d& v1);
-double norm_square(const Vector2d& v1);
+double normSquare(const Vector2d& v1);
 Vector2d normalized(const Vector2d& v1);
 
 ContinuousAngle vector2angle(Vector2d direction);

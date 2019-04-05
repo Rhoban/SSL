@@ -19,31 +19,31 @@
 
 #pragma once
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 /** Tutorial class to show how to move a robot in the side corner. */
 class Begginer_defensor : public RobotBehavior
 {
 private:
   ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 
 public:
-  Begginer_defensor(Ai::AiData& ai_data);
+  Begginer_defensor(ai::AiData& ai_data_);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Begginer_defensor();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl
