@@ -10,7 +10,7 @@
 
 #include "Joystick.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 bool Joystick::JoystickEvent::isPressed()
 {
@@ -93,4 +93,4 @@ std::vector<std::string> Joystick::getAvailablePads()
 
   return joysticks;
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -24,9 +24,9 @@
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Vision
+namespace vision
 {
 Field::Field()
   : present(false)
@@ -48,7 +48,7 @@ void Object::update(double time, const Point& linear_position)
 void Object::update(double time, const Point& linear_position, const Angle& angular_position)
 {
   ContinuousAngle angle(movement[0].angular_position);
-  angle.set_to_nearest(angular_position);
+  angle.setToNearest(angular_position);
   update(time, linear_position, angle);
 }
 
@@ -60,7 +60,7 @@ void Object::update(double time, const Point& linear_position, const ContinuousA
     // DEBUG("TODO");
     return;
   }
-  lastUpdate = rhoban_utils::TimeStamp::now();
+  last_update = rhoban_utils::TimeStamp::now();
   present = true;
 
   movement.insert(PositionSample(time, linear_position, angular_position));
@@ -68,10 +68,10 @@ void Object::update(double time, const Point& linear_position, const ContinuousA
 
 double Object::age() const
 {
-  return diffSec(lastUpdate, rhoban_utils::TimeStamp::now());
+  return diffSec(last_update, rhoban_utils::TimeStamp::now());
 }
 
-bool Object::is_too_old() const
+bool Object::isTooOld() const
 {
   return not(present) or age() > 4.0;
 }
@@ -81,7 +81,7 @@ bool Object::isOk() const
   return present && age() < 2.0;
 }
 
-Object::Object() : movement(history_size), present(false), id(-1), lastUpdate(rhoban_utils::TimeStamp::now())
+Object::Object() : movement(history_size), present(false), id(-1), last_update(rhoban_utils::TimeStamp::now())
 {
   for (int i = 0; i < history_size; i++)
   {
@@ -131,7 +131,7 @@ void VisionData::checkAssert(double time) const
   ball.checkAssert(time);
 }
 
-double VisionData::older_time() const
+double VisionData::olderTime() const
 {
   double older = ball.movement.time(0);
   for (auto team : { Ally, Opponent })
@@ -148,12 +148,12 @@ double VisionData::older_time() const
   return older;
 };
 
-std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::VisionData& vision)
+std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision)
 {
-  for (auto team : { RhobanSSL::Vision::Ally, RhobanSSL::Vision::Opponent })
+  for (auto team : { rhoban_ssl::vision::Ally, rhoban_ssl::vision::Opponent })
   {
     out << team << " : " << std::endl;
-    for (int k = 0; k < RhobanSSL::Vision::Robots; k++)
+    for (int k = 0; k < rhoban_ssl::vision::Robots; k++)
     {
       out << "robot " << k << std::endl;
       out << vision.robots.at(team).at(k);
@@ -165,12 +165,12 @@ std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::VisionData&
   return out;
 }
 
-std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::Object& object)
+std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::Object& object)
 {
   out << " id : " << object.id << std::endl;
   out << " present : " << object.present << std::endl;
   out << " age : " << object.age() << std::endl;
-  out << " lastUpdate : " << object.lastUpdate.getTimeMS() / 1000.0 << std::endl;
+  out << " lastUpdate : " << object.last_update.getTimeMS() / 1000.0 << std::endl;
   out << " movement : " << object.movement << std::endl;
   return out;
 }
@@ -181,5 +181,5 @@ std::ostream& operator<<(std::ostream& out, const Field& field)
   return out;
 }
 
-}  // namespace Vision
-}  // namespace RhobanSSL
+}  // namespace vision
+}  // namespace rhoban_ssl

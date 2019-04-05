@@ -23,33 +23,33 @@
 #include <iostream>
 #include "movement_sample.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class Movement
 {
 public:
   virtual Movement* clone() const = 0;
 
-  virtual void set_sample(const MovementSample& samples) = 0;
-  virtual const MovementSample& get_sample() const = 0;
+  virtual void setSample(const MovementSample& samples) = 0;
+  virtual const MovementSample& getSample() const = 0;
 
   /* Return the last time of the samples */
-  virtual double last_time() const = 0;
+  virtual double lastTime() const = 0;
 
-  virtual rhoban_geometry::Point linear_position(double time) const = 0;
-  virtual ContinuousAngle angular_position(double time) const = 0;
+  virtual rhoban_geometry::Point linearPosition(double time) const = 0;
+  virtual ContinuousAngle angularPosition(double time) const = 0;
 
-  virtual Vector2d linear_velocity(double time) const = 0;
-  virtual ContinuousAngle angular_velocity(double time) const = 0;
+  virtual Vector2d linearVelocity(double time) const = 0;
+  virtual ContinuousAngle angularVelocity(double time) const = 0;
 
-  virtual Vector2d linear_acceleration(double time) const = 0;
-  virtual ContinuousAngle angular_acceleration(double time) const = 0;
+  virtual Vector2d linearAcceleration(double time) const = 0;
+  virtual ContinuousAngle angularAcceleration(double time) const = 0;
 
   virtual void print(std::ostream& stream) const = 0;
 
   virtual ~Movement();
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::Movement& movement);
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::Movement& movement);

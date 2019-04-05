@@ -23,7 +23,7 @@
 
 using namespace rhoban_geometry;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 PositionSample::PositionSample() : PositionSample(0.0, Point(0.0, 0.0), ContinuousAngle(0.0))
 {
@@ -52,7 +52,7 @@ void MovementSample::insert(const PositionSample& sample)
   }
   else
   {
-    circular_vector<PositionSample>::insert(sample);
+    CircularVector<PositionSample>::insert(sample);
     double filtered_dt = 0.0;
     // small filter
     for (int it = 0; it < (this->size() - 2); it++)
@@ -63,7 +63,7 @@ void MovementSample::insert(const PositionSample& sample)
   }
 }
 
-bool MovementSample::is_valid() const
+bool MovementSample::isValid() const
 {
   assert(this->size() >= 1);
   for (unsigned int i = 0; i < this->size() - 1; i++)
@@ -76,7 +76,7 @@ bool MovementSample::is_valid() const
   return true;
 }
 
-MovementSample::MovementSample(unsigned int size, double default_dt) : circular_vector<PositionSample>(size), dts(size)
+MovementSample::MovementSample(unsigned int size, double default_dt) : CircularVector<PositionSample>(size), dts(size)
 {
   for (unsigned int i = 0; i < size; i++)
   {
@@ -84,7 +84,7 @@ MovementSample::MovementSample(unsigned int size, double default_dt) : circular_
   }
 }
 
-MovementSample::MovementSample() : circular_vector<PositionSample>(), dts()
+MovementSample::MovementSample() : CircularVector<PositionSample>(), dts()
 {
 }
 
@@ -98,53 +98,55 @@ double MovementSample::dt(unsigned int i) const
   return this->dts[i];
 }
 
-Point MovementSample::linear_position(unsigned int i) const
+Point MovementSample::linearPosition(unsigned int i) const
 {
   return (*this)[i].linear_position;
 }
 
-ContinuousAngle MovementSample::angular_position(unsigned int i) const
+ContinuousAngle MovementSample::angularPosition(unsigned int i) const
 {
   return (*this)[i].angular_position;
 }
 
-Vector2d MovementSample::linear_velocity(unsigned int i) const
+Vector2d MovementSample::linearVelocity(unsigned int i) const
 {
-  return (linear_position(i) - linear_position(i + 1)) / dt(i);
+  return (linearPosition(i) - linearPosition(i + 1)) / dt(i);
 }
 
-ContinuousAngle MovementSample::angular_velocity(unsigned int i) const
+ContinuousAngle MovementSample::angularVelocity(unsigned int i) const
 {
   // TODO Check this
-  return (angular_position(i) - angular_position(i + 1)) / dt(i);
+  return (angularPosition(i) - angularPosition(i + 1)) / dt(i);
 }
 
-Vector2d MovementSample::linear_acceleration(unsigned int i) const
+Vector2d MovementSample::linearAcceleration(unsigned int i) const
 {
-  return (linear_velocity(i) - linear_velocity(i + 1)) / dt(i);
+  return (linearVelocity(i) - linearVelocity(i + 1)) / dt(i);
 }
 
-ContinuousAngle MovementSample::angular_acceleration(unsigned int i) const
+ContinuousAngle MovementSample::angularAcceleration(unsigned int i) const
 {
-  return (angular_velocity(i) - angular_velocity(i + 1)) / dt(i);
+  return (angularVelocity(i) - angularVelocity(i + 1)) / dt(i);
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& pos)
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample& pos)
 {
   stream << "("
             "t="
-         << pos.time << ", "
-                        "lin="
-         << pos.linear_position << ", "
-                                   "ang="
+         << pos.time
+         << ", "
+            "lin="
+         << pos.linear_position
+         << ", "
+            "ang="
          << pos.angular_position << ")";
   return stream;
 }
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::MovementSample& mov)
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::MovementSample& mov)
 {
-  stream << static_cast<circular_vector<RhobanSSL::PositionSample>>(mov);
+  stream << static_cast<CircularVector<rhoban_ssl::PositionSample>>(mov);
   return stream;
 }

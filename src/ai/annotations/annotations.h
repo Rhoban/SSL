@@ -25,7 +25,9 @@
 #include <rhoban_geometry/segment.h>
 #include <math/box.h>
 
-namespace RhobanSSLAnnotation
+namespace rhoban_ssl
+{
+namespace annotations
 {
 class Annotations
 {
@@ -37,7 +39,7 @@ public:
   void addCircle(const rhoban_geometry::Point& origin, double r, std::string color = "white", bool dashed = false);
   void addCircle(const Vector2d& origin, double r, std::string color = "white", bool dashed = false);
 
-  void addBox(const RhobanSSL::Box& box, std::string color = "white", bool dashed = false);
+  void addBox(const rhoban_ssl::Box& box, std::string color = "white", bool dashed = false);
 
   void addText(const std::string& text, double x, double y, std::string color = "white");
   void addText(const std::string& text, const rhoban_geometry::Point& point, std::string color = "white");
@@ -58,9 +60,10 @@ public:
   Json::Value toJson() const;
   std::string toJsonString() const;
 
-  void map_positions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct);
+  void mapPositions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct);
 
 protected:
-  Json::Value json;
+  Json::Value json_;
 };
-}  // namespace RhobanSSLAnnotation
+}  // namespace annotations
+}  // namespace rhoban_ssl

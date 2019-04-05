@@ -26,14 +26,18 @@
 #include <physic/movement_sample.h>
 #include <iostream>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Vision
+namespace vision
 {
 static const int history_size = 10;
 static const int Robots = 16;
 
-typedef enum { Ally, Opponent } Team;
+typedef enum
+{
+  Ally,
+  Opponent
+} Team;
 
 struct Object
 {
@@ -41,7 +45,7 @@ struct Object
 
   bool present;
   int id;
-  rhoban_utils::TimeStamp lastUpdate;
+  rhoban_utils::TimeStamp last_update;
 
   void update(double time, const rhoban_geometry::Point& linear_position, const rhoban_utils::Angle& angular_position);
   void update(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
@@ -49,7 +53,7 @@ struct Object
 
   double age() const;
   bool isOk() const;
-  bool is_too_old() const;
+  bool isTooOld() const;
 
   Object();
   void checkAssert(double time) const;
@@ -88,15 +92,15 @@ public:
   Ball ball;
   Field field;
 
-  double older_time() const;
+  double olderTime() const;
   void checkAssert(double time) const;
 
   void print() const;
 
-  friend std::ostream& operator<<(std::ostream& out, const RhobanSSL::Vision::VisionData& vision);
+  friend std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision);
 };
 
 std::ostream& operator<<(std::ostream& out, const VisionData& vision);
 
-}  // namespace Vision
-}  // namespace RhobanSSL
+}  // namespace vision
+}  // namespace rhoban_ssl

@@ -21,31 +21,31 @@
 #include <rhoban_geometry/segment.h>
 #include <physic/constants.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-A_star_path::A_star_path(Ai::AiData& ai_data, double time, double dt)
-  : ConsignFollower(ai_data), navigation(ai_data, time, dt), target_position(0.0, 0.0), target_angle(0.0)
+AStarPath::AStarPath(ai::AiData& ai_data, double time, double dt)
+  : ConsignFollower(ai_data), navigation_(ai_data, time, dt), target_position_(0.0, 0.0), target_angle_(0.0)
 {
 }
 
-void A_star_path::set_following_position(const rhoban_geometry::Point& position_to_follow,
-                                         const ContinuousAngle& target_angle)
+void AStarPath::setFollowingPosition(const rhoban_geometry::Point& position_to_follow,
+                                     const ContinuousAngle& target_angle)
 {
-  this->navigation.set_following_position(position_to_follow, target_angle);
+  this->navigation_.setFollowingPosition(position_to_follow, target_angle);
 
-  this->target_position = position_to_follow;
-  this->target_angle = target_angle;
-  this->target_angle = this->robot_angular_position;
-  this->target_angle.set_to_nearest(target_angle);
+  this->target_position_ = position_to_follow;
+  this->target_angle_ = target_angle;
+  this->target_angle_ = this->robot_angular_position_;
+  this->target_angle_.setToNearest(target_angle);
 }
 
-void A_star_path::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void AStarPath::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->ball_position
@@ -56,7 +56,7 @@ void A_star_path::update(double time, const Ai::Robot& robot, const Ai::Ball& ba
   update_control(time, robot, ball);
 }
 
-void A_star_path::update_control(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void AStarPath::update_control(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // TODO update graph + compute closest path and point control
 
@@ -73,29 +73,29 @@ void A_star_path::update_control(double time, const Ai::Robot& robot, const Ai::
   //    rhoban_geometry::Point(0.0,0.0)
   //    , target_angle
   //);
-  navigation.update(time, robot, ball);
+  navigation_.update(time, robot, ball);
 }
 
-Control A_star_path::control() const
+Control AStarPath::control() const
 {
-  return navigation.control();
+  return navigation_.control();
 }
 
-void A_star_path::set_translation_pid(double kp, double ki, double kd)
+void AStarPath::setTranslationPid(double kp, double ki, double kd)
 {
-  navigation.set_translation_pid(kp, ki, kd);
+  navigation_.setTranslationPid(kp, ki, kd);
 }
-void A_star_path::set_orientation_pid(double kp, double ki, double kd)
+void AStarPath::setOrientationPid(double kp, double ki, double kd)
 {
-  navigation.set_orientation_pid(kp, ki, kd);
+  navigation_.setOrientationPid(kp, ki, kd);
 }
 
-void A_star_path::set_limits(double translation_velocity_limit, double rotation_velocity_limit,
-                             double translation_acceleration_limit, double rotation_acceleration_limit)
+void AStarPath::setLimits(double translation_velocity_limit, double rotation_velocity_limit,
+                          double translation_acceleration_limit, double rotation_acceleration_limit)
 {
-  navigation.set_limits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
+  navigation_.setLimits(translation_velocity_limit, rotation_velocity_limit, translation_acceleration_limit,
                         rotation_acceleration_limit);
 }
 
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

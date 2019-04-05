@@ -22,19 +22,19 @@
 #include <rhoban_utils/angle.h>
 #include <robot_behavior/robot_behavior.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-AICommanderSimulation::AICommanderSimulation(bool yellow) : AICommander(yellow), client()
+AICommanderSimulation::AICommanderSimulation(bool yellow) : AICommander(yellow), client_()
 {
 }
 
 void AICommanderSimulation::flush()
 {
   grSim_Packet packet;
-  packet.mutable_commands()->set_isteamyellow(yellow);
+  packet.mutable_commands()->set_isteamyellow(yellow_);
   packet.mutable_commands()->set_timestamp(0.0);
 
-  for (auto& command : commands)
+  for (auto& command : commands_)
   {
     double factor = command.enabled ? 1 : 0;
 
@@ -69,22 +69,22 @@ void AICommanderSimulation::flush()
     simCommand->set_spinner(command.enabled ? command.spin : false);
   }
 
-  client.sendPacket(packet);
-  commands.clear();
+  client_.sendPacket(packet);
+  commands_.clear();
 }
 
 void AICommanderSimulation::moveBall(double x, double y, double vx, double vy)
 {
-  client.moveBall(x, y, vx, vy);
+  client_.moveBall(x, y, vx, vy);
 }
 
 void AICommanderSimulation::moveRobot(bool yellow, int id, double x, double y, double theta, bool turnon)
 {
-  client.moveRobot(yellow, id, x, y, theta * 180 / M_PI, turnon);
+  client_.moveRobot(yellow, id, x, y, theta * 180 / M_PI, turnon);
 }
 
 AICommanderSimulation::~AICommanderSimulation()
 {
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

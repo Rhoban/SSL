@@ -22,28 +22,28 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-class Mur_defensor : public RobotBehavior
+class MurDefensor : public RobotBehavior
 {
 private:
-  int mur_robot_id;
-  int mur_nb_robot;
-  ConsignFollower* follower;
+  int mur_robot_id_;
+  int mur_nb_robot_;
+  ConsignFollower* follower_;
 
 public:
-  Mur_defensor(Ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
+  MurDefensor(ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
-  void declare_mur_robot_id(int id, int mur_nb_robots);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void declareMurRobotId(int id, int mur_nb_robots);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-  virtual ~Mur_defensor();
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+  virtual ~MurDefensor();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

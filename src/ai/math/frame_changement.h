@@ -23,36 +23,36 @@
 #include "continuous_angle.h"
 #include <math/matrix2d.h>
 
-class Frame_changement
+class FrameChangement
 {
 private:
-  rhoban_geometry::Point origin;
-  Matrix2d basis;
-  Matrix2d basisChangement;
-  ContinuousAngle rotation_angle_from_basis;
+  rhoban_geometry::Point origin_;
+  Matrix2d basis_;
+  Matrix2d basisChangement_;
+  ContinuousAngle rotation_angle_from_basis_;
 
 public:
-  Frame_changement();
+  FrameChangement();
 
   // We assume that the vector v1 and v2 are orthonormal
-  void set_frame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
+  void setFrame(const rhoban_geometry::Point& origin_, const Vector2d& v1, const Vector2d& v2);
 
   // Convert a point in absolute coordiante to frame coordiante
-  rhoban_geometry::Point to_frame(const rhoban_geometry::Point& point) const;
+  rhoban_geometry::Point toFrame(const rhoban_geometry::Point& point) const;
 
   // Convert a vector in absolute coordiante to a vector in the basis coordiante of
   // the frame
-  Vector2d to_basis(const Vector2d& vector) const;
+  Vector2d toBasis(const Vector2d& vector) const;
 
   // Convert a point in the frame coordinate to a point in an absolute coordiante
-  rhoban_geometry::Point from_frame(const rhoban_geometry::Point& point) const;
+  rhoban_geometry::Point fromFrame(const rhoban_geometry::Point& point) const;
 
   // Convert a vector in the basis of the frame coordinate to a vector in the absolute    // basis
-  Vector2d from_basis(const Vector2d& vector) const;
+  Vector2d fromBasis(const Vector2d& vector) const;
 
-  ContinuousAngle from_frame(const ContinuousAngle& angle) const;
-  ContinuousAngle from_basis(const ContinuousAngle& angle) const;
+  ContinuousAngle fromFrame(const ContinuousAngle& angle) const;
+  ContinuousAngle fromBasis(const ContinuousAngle& angle) const;
 
-  ContinuousAngle to_frame(const ContinuousAngle& angle) const;
-  ContinuousAngle to_basis(const ContinuousAngle& angle) const;
+  ContinuousAngle toFrame(const ContinuousAngle& angle) const;
+  ContinuousAngle toBasis(const ContinuousAngle& angle) const;
 };

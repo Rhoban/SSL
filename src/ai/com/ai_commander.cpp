@@ -21,17 +21,17 @@
 #include "ai_commander.h"
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-AICommander::AICommander(bool yellow) : yellow(yellow)
+AICommander::AICommander(bool yellow) : yellow_(yellow)
 {
 }
 
-void AICommander::set_yellow(bool value)
+void AICommander::setYellow(bool value)
 {
-  if (this->yellow != value)
+  if (this->yellow_ != value)
   {
-    this->yellow = value;
+    this->yellow_ = value;
   }
 }
 
@@ -40,7 +40,7 @@ AICommander::~AICommander()
 }
 
 void AICommander::set(uint8_t robot_id, bool enabled, double xSpeed, double ySpeed, double thetaSpeed, int kick,
-                      float kickPower, bool spin, bool charge)
+                      float kickPower, bool spin, bool charge, bool tareOdom)
 {
   assert(kickPower >= 0.0 && kickPower <= 1.0);
 
@@ -54,8 +54,8 @@ void AICommander::set(uint8_t robot_id, bool enabled, double xSpeed, double ySpe
   command.spin = spin;
   command.charge = charge;
   command.kickPower = kickPower;
-
-  commands.push_back(command);
+  command.tareOdom = tareOdom;
+  commands_.push_back(command);
 }
 
 void AICommander::stopAll()
@@ -65,4 +65,4 @@ void AICommander::stopAll()
     set(k, false, 0, 0, 0);
   }
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
