@@ -84,7 +84,9 @@ void FromRobotBehavior::assignBehaviorToRobots(
     }
     else
     {
-      assign_behavior(playerId(0), robot_behavior_allocator_(time, dt));
+      for (size_t i = 0; i < getPlayerIds().size(); ++i) {
+        assign_behavior(playerId(i), robot_behavior_allocator_(time, dt));
+      }
     }
     behavior_has_been_assigned_ = true;
   }
