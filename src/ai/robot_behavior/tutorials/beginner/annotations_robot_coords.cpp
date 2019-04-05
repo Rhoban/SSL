@@ -20,25 +20,25 @@
 #include "annotations_robot_coords.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-AnnotationsRobotCoords::AnnotationsRobotCoords(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+AnnotationsRobotCoords::AnnotationsRobotCoords(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void AnnotationsRobotCoords::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void AnnotationsRobotCoords::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   annotations_.clear();
 
-  rhoban_geometry::Point robot_coords = robot.get_movement().linear_position(ai_data.time);
+  rhoban_geometry::Point robot_coords = robot.getMovement().linearPosition(ai_data_.time);
   float x = robot_coords.x;
   float y = robot_coords.y;
 
@@ -60,13 +60,13 @@ AnnotationsRobotCoords::~AnnotationsRobotCoords()
 {
 }
 
-RhobanSSLAnnotation::Annotations AnnotationsRobotCoords::get_annotations() const
+rhoban_ssl::annotations::Annotations AnnotationsRobotCoords::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
   return annotations;
 }
 
-}  // namespace Beginner
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace beginner
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

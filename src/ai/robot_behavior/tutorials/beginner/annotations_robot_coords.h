@@ -17,16 +17,15 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__ANNOTATIONS_ROBOT_COORDS__H__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__ANNOTATIONS_ROBOT_COORDS__H__
+#pragma once
 
 #include "robot_behavior/robot_behavior.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
 /**
  * @class AnnotationsRobotCoords
@@ -36,17 +35,17 @@ class AnnotationsRobotCoords : public RobotBehavior
 {
 private:
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
   /**
    * @brief Constructor.
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
-  AnnotationsRobotCoords(Ai::AiData& ai_data);
+  AnnotationsRobotCoords(ai::AiData& ai_data);
 
   /**
    * @brief Update
@@ -55,7 +54,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * Return the control of the behavior.
@@ -63,9 +62,9 @@ public:
   virtual Control control() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
    *  @brief Destructor.
@@ -73,8 +72,6 @@ public:
   virtual ~AnnotationsRobotCoords();
 };
 
-};  // namespace Beginner
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace beginner
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

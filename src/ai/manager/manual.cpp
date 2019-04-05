@@ -446,16 +446,16 @@ Manual::Manual(ai::AiData& ai_data)
                                                false  // we don't want to define a goal here !
                                                )));
 
-  register_strategy("Begginer - Annotations robot coords",
-                    std::shared_ptr<Strategy::Strategy>(new Strategy::From_robot_behavior(
-                        ai_data,
-                        [&](double time, double dt) {
-                          Robot_behavior::Beginner::AnnotationsRobotCoords* annot =
-                              new Robot_behavior::Beginner::AnnotationsRobotCoords(ai_data);
-                          return std::shared_ptr<Robot_behavior::RobotBehavior>(annot);
-                        },
-                        false  // we don't want to define a goal here !
-                        )));
+  registerStrategy("Begginer - Annotations robot coords",
+                  std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                      ai_data,
+                      [&](double time, double dt) {
+                        robot_behavior::beginner::AnnotationsRobotCoords* annot =
+                            new robot_behavior::beginner::AnnotationsRobotCoords(ai_data);
+                        return std::shared_ptr<robot_behavior::RobotBehavior>(annot);
+                      },
+                      false  // we don't want to define a goal here !
+                      )));
   registerStrategy("Intermediate Prepare to strike",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        ai_data,
