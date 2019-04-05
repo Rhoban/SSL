@@ -34,7 +34,7 @@ void Strategy::setGoalie(int id, bool to_be_managed)
   manage_a_goalie_ = to_be_managed;
 }
 
-bool Strategy::have_to_manage_the_goalie() const
+bool Strategy::haveToManageTheGoalie() const
 {
   return ((needsGoalie() != GoalieNeed::NO) and manage_a_goalie_ and goalie_id_ >= 0);
 }

@@ -61,7 +61,7 @@ void Placer::assignBehaviorToRobots(
 {
   if (!behavior_has_been_assigned)
   {
-    if (have_to_manage_the_goalie())
+    if (haveToManageTheGoalie())
     {
       robot_behavior::ConsignFollower* follower =
           robot_behavior::Factory::fixedConsignFollower(ai_data_, goalie_linear_position_, goalie_angular_position_);

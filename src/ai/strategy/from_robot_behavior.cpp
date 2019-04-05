@@ -77,7 +77,7 @@ void FromRobotBehavior::assignBehaviorToRobots(
     if (is_goalie_)
     {
       DEBUG("GOALIE : " << getGoalie());
-      if (have_to_manage_the_goalie())
+      if (haveToManageTheGoalie())
       {
         assign_behavior(getGoalie(), robot_behavior_allocator_(time, dt));
       }

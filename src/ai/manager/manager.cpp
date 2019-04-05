@@ -186,7 +186,7 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
               break;
             }
           }
-          if (this->getStrategy(name).have_to_manage_the_goalie() and getGoalieId() == id)
+          if (this->getStrategy(name).haveToManageTheGoalie() and getGoalieId() == id)
           {
             id_is_present = true;
           }
