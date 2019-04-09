@@ -52,6 +52,7 @@
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/tutorials/medium/striker.h>
 #include <robot_behavior/tutorials/medium/prepare_strike.h>
+#include <robot_behavior/tutorials/medium/obstruct_between_2_bots.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
 
 namespace rhoban_ssl
@@ -388,6 +389,17 @@ Manual::Manual(ai::AiData& ai_data)
                                             },
                                             false  // we don't want to define a goal here !
                                             )));
+  registerStrategy("Medium - Obstruct between 1 & 2",
+                   std::shared_ptr<strategy::Strategy>(
+                       new strategy::FromRobotBehavior(ai_data,
+                                                       [&](double time, double dt) {
+                                                         robot_behavior::medium::ObstructBetween2Bots* obs =
+                                                             new robot_behavior::medium::ObstructBetween2Bots(ai_data);
+                                                         obs->setRobotIDsToObstruct(1, 2);
+                                                         return std::shared_ptr<robot_behavior::RobotBehavior>(obs);
+                                                       },
+                                                       false  // we don't want to define a goal here !
+                                                       )));
   registerStrategy("Beginner Annotations - Ball position",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        ai_data,

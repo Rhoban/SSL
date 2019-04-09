@@ -57,7 +57,7 @@ public:
    * @param target_id_2_ : ID of robot 2.
    * @see ai::AiData
    */
-  ObstructBetween2Bots(ai::AiData& ai_data, int target_id_1_ = 0, int target_id_2_ = 1);
+  ObstructBetween2Bots(ai::AiData& ai_data, int target_id_1 = 0, int target_id__ = 1);
 
   /**
    * @brief At each iteration of this function, the folower order to the robot to go to the middle point on the line
@@ -86,7 +86,7 @@ public:
    * @brief target IDs getter.
    * @return a tuple with the two IDs.
    */
-  std::tuple<int,int> getRobotIDsToObstruct() const;
+  std::tuple<int, int> getRobotIDsToObstruct() const;
 
   /**
    * @see rhoban_ssl::annotations::Annotations
