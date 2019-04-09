@@ -26,7 +26,7 @@ namespace medium
 {
 /**
  * @class ObstructBetween2Bots
- * @brief Tutorial to show how to go between two other robots.
+ * @brief Tutorial to show how to go between two other robots (and look the target 1).
  */
 class ObstructBetween2Bots : public RobotBehavior
 {

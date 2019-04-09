@@ -46,7 +46,7 @@ void ObstructBetween2Bots::update(double time, const ai::Robot& robot, const ai:
   if (target_id_1_ != robot.id() && target_id_2_ != robot.id())
   {
     rhoban_geometry::Point target_position_1 = getRobot(target_id_1_).getMovement().linearPosition(ai_data_.time);
-    rhoban_geometry::Point target_position_2 = getRobot(target_id_1_).getMovement().linearPosition(ai_data_.time);
+    rhoban_geometry::Point target_position_2 = getRobot(target_id_2_).getMovement().linearPosition(ai_data_.time);
 
     Vector2d vect_targets = target_position_1 - target_position_2;
 
