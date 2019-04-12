@@ -62,7 +62,7 @@ void AICommanderReal::flush()
       {
         packet.actions |= ACTION_DRIBBLE;
       }
-      if (command.tareOdom)
+      if (command.tare_odom)
       {
         packet.actions |= ACTION_TARE_ODOM;
       }
@@ -72,19 +72,19 @@ void AICommanderReal::flush()
       packet.actions = 0;
     }
 
-    packet.kickPower = 120 * command.kickPower;
+    packet.kickPower = 120 * command.kick_power;
 
-    if (command.tareOdom)
+    if (command.tare_odom)
     {
-      packet.t_speed = command.thetaSpeed * 10000;
+      packet.t_speed = command.theta_speed * 10000;
     }
     else
     {
-      packet.t_speed = command.thetaSpeed * 1000;
+      packet.t_speed = command.theta_speed * 1000;
     }
-    packet.x_speed = command.xSpeed * 1000;
-    packet.y_speed = command.ySpeed * 1000;
-    packet.t_speed = command.thetaSpeed * 1000;
+    packet.x_speed = command.x_speed * 1000;
+    packet.y_speed = command.y_speed * 1000;
+    packet.t_speed = command.theta_speed * 1000;
 
     master_.addRobotPacket(command.robot_id, packet);
   }

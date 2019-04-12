@@ -48,22 +48,22 @@ void AICommanderSimulation::flush()
     {
       if (command.kick == 1)
       {
-        kickX = 6 * command.kickPower;
+        kickX = 6 * command.kick_power;
         kickY = 0;
       }
       else if (command.kick == 2)
       {
-        kickX = 4 * command.kickPower;
-        kickY = 4 * command.kickPower;
+        kickX = 4 * command.kick_power;
+        kickY = 4 * command.kick_power;
       }
     }
 
     // Appending data
     simCommand->set_id(command.robot_id);
     simCommand->set_wheelsspeed(false);
-    simCommand->set_veltangent(command.xSpeed * factor);
-    simCommand->set_velnormal(command.ySpeed * factor);
-    simCommand->set_velangular(command.thetaSpeed * factor);
+    simCommand->set_veltangent(command.x_speed * factor);
+    simCommand->set_velnormal(command.y_speed * factor);
+    simCommand->set_velangular(command.theta_speed * factor);
     simCommand->set_kickspeedx(kickX);
     simCommand->set_kickspeedz(kickY);
     simCommand->set_spinner(command.enabled ? command.spin : false);
