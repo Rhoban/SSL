@@ -25,7 +25,9 @@ namespace robot_behavior
 PositionFollowerWithTargetTracking::PositionFollowerWithTargetTracking(RhobanSSL::Ai::AiData& ai_data)
   : RhobanSSL::Robot_behavior::RobotBehavior(ai_data)
 {
+  initTime(ai_data.time, ai_data.dt);
 }
+
 
 void PositionFollowerWithTargetTracking::update(double time, const RhobanSSL::Ai::Robot& robot,
                                                 const RhobanSSL::Ai::Ball& ball)
@@ -35,11 +37,11 @@ void PositionFollowerWithTargetTracking::update(double time, const RhobanSSL::Ai
   RobotBehavior::update_time_and_position(time, robot, ball);
 
   //TODO MOVE TO RobotControlWithTargetTrackingAndPositionFollowing
-  if (!isStatic() && !is_time_init_)
-  {
-    this->initTime(time, ai_data.dt);
-    is_time_init_ = true;
-  }
+//  if (!isStatic() && !is_time_init_)
+//  {
+
+//    is_time_init_ = true;
+//  }
 
   RobotControlWithTargetTrackingAndPositionFollowing::update(time,
                                                              robot.get_movement().linear_position(time),

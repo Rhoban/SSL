@@ -28,17 +28,25 @@ namespace tracking
 void RobotControl::update(double current_time, const Vector2d& robot_linear_position,
                           const Vector2d& robot_linear_velocity, const ContinuousAngle& robot_angular_position)
 {
+  if ( !init && current_linear_position_ != robot_linear_position) {
+    linear_position_at_start_ = robot_linear_position;
+    angular_position_at_start_ = robot_angular_position;
+
+    const double DELAY_ROBOT_AI = 0.16;
+    initTime(current_time+DELAY_ROBOT_AI, dt_);
+    init = true;
+  }
+  if ( !init ) {
+  }
+
   double dt = (current_time - start_time_) - time_;
   if (dt > 0.0)
   {
     dt_ = (current_time - start_time_) - time_;
     time_ = (current_time - start_time_);
   }
-  else
-  {
-    linear_position_at_start_ = robot_linear_position;
-    angular_position_at_start_ = robot_angular_position;
-  }
+
+  //DEBUG(time_);
 
   current_angular_position_ = robot_angular_position;
   current_linear_velocity_ = robot_linear_velocity;
@@ -61,6 +69,7 @@ bool RobotControl::isStatic() const
 
 void RobotControl::initTime(double start_time, double dt)
 {
+  DEBUG("coucou");
   assert(dt > 0.0);
   start_time_ = start_time;
   dt_ = dt;

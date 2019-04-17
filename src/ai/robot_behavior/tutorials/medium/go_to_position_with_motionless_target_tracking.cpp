@@ -36,15 +36,24 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const RhobanS
   // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position(time, robot, ball);
 
+  annotations_.clear();
+
   if (!robot_destination_set_)
   {
     rhoban_geometry::Point robot_destination;
     robot_destination.x = linear_position().x;
-    robot_destination.y = ai_data.field.fieldWidth / 2.0;
+    robot_destination.y = ai_data.field.fieldWidth/2;
     follower_.setGoal(robot_destination, rhoban_geometry::Point(0, 0), Vector2d(0.0, 0.0));
-    annotations_.addCross(robot_destination);
     robot_destination_set_ = true;
   }
+
+  //DEBUG(follower_.linearPosition(time));
+  annotations_.addCross(follower_.linearPosition(time), "green");
+
+  annotations_.addArrow(follower_.linearPosition(time),
+                       follower_.linearPosition(time)+
+                            Vector2d(std::cos(follower_.angularPosition(time).value()), std::sin(follower_.angularPosition(time).value())),
+                       "green", false);
 
   follower_.update(time, robot, ball);
 }

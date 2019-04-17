@@ -75,6 +75,8 @@ protected:
   ContinuousAngle angular_position_at_start_;
 
   std::ofstream logs;
+private:
+  bool init = false;
 };
 
 }  // namespace tracking

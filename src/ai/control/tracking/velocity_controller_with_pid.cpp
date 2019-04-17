@@ -27,7 +27,7 @@
 #define LIMITE_LINEAR_ACCELERATION 200.0
 #define LIMITE_ANGULAR_ACCELERATION 3.0
 
-#define USE_PID false
+#define USE_PID true
 
 namespace rhoban_ssl
 {
@@ -62,7 +62,7 @@ void VelocityControllerWithPid::computeLimitedControl()
   computed_limited_linear_velocity_ = no_limited_linear_velocity;
   computed_limited_angular_velocity_ = no_limited_angular_velocity;
 
-  computed_limited_angular_velocity_ = 0;
+  //  computed_limited_angular_velocity_ = 0;
 }
 
 void VelocityControllerWithPid::setLinearVelocityPid(double kp, double ki, double kd)
@@ -85,14 +85,22 @@ Vector2d VelocityControllerWithPid::computeNoLimitedLinearVelocity(const Vector2
   }
 
   Vector2d no_limited_linear_velocity = linearVelocity(time_);
+  //DEBUG("Error L: " << no_limited_linear_velocity );
 
-#if USE_PID
+#if true
+  Vector2d error = linearPosition(time_) - robot_position;
 
-  Vector2d error = current_linear_position_ - linearPosition(time_);
+//  if( error.getX() <= 0.001 && error.getY() <= 0.001 ) {
+//    linear_velocity_pid_.resetIntegration();
+//    DEBUG("reset PID integration -> CALIBRATE");
+//  } else {
+    linear_velocity_pid_.setPid(1.5,0,0);
+    Vector2d correction = linear_velocity_pid_.compute(dt_, error);
+    DEBUG("error " << error);
+    DEBUG("correction " << correction );
+    no_limited_linear_velocity += correction;
+//  }
 
-  DEBUG("Error L: " << error);
-
-  no_limited_linear_velocity += linear_velocity_pid_.compute(dt_, error);
 #endif
   return no_limited_linear_velocity;
 }
@@ -108,10 +116,10 @@ VelocityControllerWithPid::computeNoLimitedAngularVelocity(const ContinuousAngle
 
   ContinuousAngle no_limited_angular_velocity = angularVelocity(time_);
 
-#if USE_PID
+#if 1
   ContinuousAngle error = angularPosition(time_) - robot_angular_position;
 
-  DEBUG("theta error : " << error.value());
+ // DEBUG("theta error : " << error.value());
 
   no_limited_angular_velocity += angular_velocity_pid_.compute(dt_, error);
 #endif

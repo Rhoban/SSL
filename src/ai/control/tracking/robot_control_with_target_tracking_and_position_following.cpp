@@ -23,7 +23,7 @@
 /// or
 /// add an equation that take the distance between the robot's position and
 /// the robot's destination and returns the velocity
-#define NORM_OF_THE_VELOCITY 4
+#define NORM_OF_THE_VELOCITY 0.05
 
 namespace rhoban_ssl
 {
@@ -43,7 +43,7 @@ void RobotControlWithTargetTrackingAndPositionFollowing::setGoal(
 
 Vector2d RobotControlWithTargetTrackingAndPositionFollowing::linearVelocity(double) const
 {
-  Vector2d linear_velocity = robot_destination_ - current_linear_position_;
+  Vector2d linear_velocity = robot_destination_ - linear_position_at_start_;
   linear_velocity /= linear_velocity.norm();
   linear_velocity *= NORM_OF_THE_VELOCITY;
 
@@ -53,7 +53,7 @@ Vector2d RobotControlWithTargetTrackingAndPositionFollowing::linearVelocity(doub
 
 Vector2d RobotControlWithTargetTrackingAndPositionFollowing::linearPosition(double time) const
 {
-  return linear_position_at_start_ + linearVelocity(0) * (time);
+  return linear_position_at_start_ + linearVelocity(0) * (time_);
 }
 
 }  // namespace tracking
