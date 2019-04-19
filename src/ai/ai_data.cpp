@@ -172,11 +172,11 @@ void Constants::load(const std::string& config_path)
     std::exit(EXIT_FAILURE);
   }
 
-  enable_integration = root["prediction"]["frame_per_second"].asBool();
+  enable_integration = root["prediction"]["enable_integration"].asBool();
 
   auto robot_conf = root["robot"];
 
-  frame_per_second = root["time"]["enable_integration"].asInt();
+  frame_per_second = root["time"]["frame_per_second"].asInt();
   assert(frame_per_second > 0);
   period = 1.0 / frame_per_second;
 

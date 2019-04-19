@@ -1,6 +1,6 @@
 {
     "prediction" : {
-	"enable_integration" : false
+	"enable_integration" : true
     },
     "time" : {
         "frame_per_second" : 60

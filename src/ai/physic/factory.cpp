@@ -31,14 +31,10 @@ namespace physic
 {
 Movement* Factory::movement(ai::AiData& ai_data)
 {
-  Movement* movement = nullptr;
+  Movement* movement = (ai_data.constants.enable_integration) ? new MovementPredictedByIntegration() :
+                                                                movement = new MovementWithNoPrediction();
 
-if (ai_data.constants.enable_integration)  {
-	movement = new MovementPredictedByIntegration();
-} else {
-	movement = new MovementWithNoPrediction();
-}
-   return new MovementWithTemporalShift(movement, [&ai_data]() { return ai_data.time_shift_with_vision; });
+  return new MovementWithTemporalShift(movement, [&ai_data]() { return ai_data.time_shift_with_vision; });
 }
 
 Movement* Factory::robotMovement(ai::AiData& ai_data)
