@@ -18,14 +18,19 @@
 */
 #include "go_to_position_with_motionless_target_tracking.h"
 
+
+
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
 namespace medium
 {
+
+
+
 GoToPositionWithMotionlessTargetTracking::GoToPositionWithMotionlessTargetTracking(RhobanSSL::Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower_(ai_data)
+  : RobotBehavior(ai_data), follower_(ai_data), circle_follower_(ai_data)
 {
 }
 
@@ -38,6 +43,23 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const RhobanS
 
   annotations_.clear();
 
+#if 0
+  if (!robot_destination_set_)
+  {
+    ContinuousAngle angle_destination( M_PI_2 );
+
+    circle_follower_.setGoal(angle_destination, ball_position(), Vector2d(0.0, 0.0));
+    robot_destination_set_ = true;
+  }
+  annotations_.addCross(circle_follower_.linearPosition(time), "green");
+
+  annotations_.addArrow(circle_follower_.linearPosition(time),
+                        circle_follower_.linearPosition(time)+
+                            Vector2d(std::cos(circle_follower_.angularPosition(time).value()), std::sin(circle_follower_.angularPosition(time).value())),
+                        "green", false);
+
+  circle_follower_.update(time, robot, ball);
+#else
   if (!robot_destination_set_)
   {
     rhoban_geometry::Point robot_destination;
@@ -56,6 +78,7 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const RhobanS
                        "green", false);
 
   follower_.update(time, robot, ball);
+#endif
 }
 
 Control GoToPositionWithMotionlessTargetTracking::control() const

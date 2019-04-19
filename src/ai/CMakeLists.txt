@@ -74,6 +74,7 @@ set (SOURCES
     robot_behavior/test_relative_velocity_consign.cpp
     robot_behavior/position_follower_with_target_tracking.cpp
     robot_behavior/tutorials/medium/go_to_position_with_motionless_target_tracking.cpp
+    robot_behavior/circle_follower_with_target_tracking.cpp
     Ai.cpp
     AiData.cpp
     debug.cpp
@@ -119,6 +120,7 @@ set (SOURCES
     control/tracking/velocity_controller_with_pid.cpp
     control/tracking/robot_control_with_target_tracking.cpp
     control/tracking/robot_control_with_target_tracking_and_position_following.cpp
+    control/tracking/robot_control_with_target_tracking_and_circle_following.cpp
     physic/movement_predicted_by_integration.cpp
     physic/movement_with_no_prediction.cpp
     physic/movement_on_new_frame.cpp

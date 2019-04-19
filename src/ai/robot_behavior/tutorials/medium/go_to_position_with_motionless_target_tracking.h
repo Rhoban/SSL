@@ -21,6 +21,7 @@
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/position_follower_with_target_tracking.h>
+#include <robot_behavior/circle_follower_with_target_tracking.h>
 
 namespace rhoban_ssl
 {
@@ -45,6 +46,7 @@ public:
 
 private:
   PositionFollowerWithTargetTracking follower_;
+  CircleFollowerWithTargetTracking circle_follower_;
   bool robot_destination_set_ = false;
   RhobanSSLAnnotation::Annotations annotations_;
 };

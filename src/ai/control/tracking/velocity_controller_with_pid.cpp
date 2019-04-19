@@ -87,7 +87,7 @@ Vector2d VelocityControllerWithPid::computeNoLimitedLinearVelocity(const Vector2
   Vector2d no_limited_linear_velocity = linearVelocity(time_);
   //DEBUG("Error L: " << no_limited_linear_velocity );
 
-#if true
+#if false
   Vector2d error = linearPosition(time_) - robot_position;
 
 //  if( error.getX() <= 0.001 && error.getY() <= 0.001 ) {
@@ -116,7 +116,7 @@ VelocityControllerWithPid::computeNoLimitedAngularVelocity(const ContinuousAngle
 
   ContinuousAngle no_limited_angular_velocity = angularVelocity(time_);
 
-#if 1
+#if false
   ContinuousAngle error = angularPosition(time_) - robot_angular_position;
 
  // DEBUG("theta error : " << error.value());

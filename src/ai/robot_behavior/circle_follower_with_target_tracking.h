@@ -19,29 +19,25 @@
 #pragma once
 
 #include "robot_behavior.h"
-#include <control/tracking/robot_control_with_target_tracking_and_position_following.h>
+#include <control/tracking/robot_control_with_target_tracking_and_circle_following.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class PositionFollowerWithTargetTracking
-  : public robot_control::tracking::RobotControlWithTargetTrackingAndPositionFollowing,
+class CircleFollowerWithTargetTracking
+  : public robot_control::tracking::RobotControlWithTargetTrackingAndCircleFollowing,
     public RhobanSSL::Robot_behavior::RobotBehavior
 {
 public:
-  PositionFollowerWithTargetTracking(RhobanSSL::Ai::AiData& ai_data);
+  CircleFollowerWithTargetTracking(RhobanSSL::Ai::AiData& ai_data);
 
   // RobotBehavior interface
 public:
-  void update(double time, const RhobanSSL::Ai::Robot& robot, const RhobanSSL::Ai::Ball& ball);
+  void update(double time, const RhobanSSL::Ai::Robot &robot, const RhobanSSL::Ai::Ball &ball);
   Control control() const;
   RhobanSSLAnnotation::Annotations get_annotations() const;
-
-private:
-  bool is_time_init_ = false;
 };
 
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl
-
