@@ -172,6 +172,8 @@ void Constants::load(const std::string& config_path)
     std::exit(EXIT_FAILURE);
   }
 
+  enable_movement_with_integration = root["movement_prediction"]["enable_integration"].asBool();
+
   auto robot_conf = root["robot"];
 
   frame_per_second = root["time"]["frame_per_second"].asInt();

@@ -1,4 +1,7 @@
 {
+    "movement_prediction" : {
+	"enable_integration" : true
+    },
     "time" : {
         "frame_per_second" : 60
     },
