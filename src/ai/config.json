@@ -1,4 +1,7 @@
 {
+    "prediction" : {
+	"enable_integration" : false
+    },
     "time" : {
         "frame_per_second" : 60
     },
