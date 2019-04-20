@@ -23,7 +23,7 @@
 #include <math/continuous_angle.h>
 #include <math/vector2d.h>
 #include <math/circular_vector.h>
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 struct PositionSample
 {
@@ -35,9 +35,9 @@ struct PositionSample
   PositionSample(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
 };
 
-struct MovementSample : public circular_vector<PositionSample>
+struct MovementSample : public CircularVector<PositionSample>
 {
-  circular_vector<double> dts;
+  CircularVector<double> dts;
 
   MovementSample(unsigned int, double default_dt = 1.0 / 60.0);
   MovementSample();
@@ -45,21 +45,21 @@ struct MovementSample : public circular_vector<PositionSample>
   double time(unsigned int i = 0) const;
   double dt(unsigned int i = 0) const;
 
-  rhoban_geometry::Point linear_position(unsigned int i = 0) const;
-  ContinuousAngle angular_position(unsigned int i = 0) const;
+  rhoban_geometry::Point linearPosition(unsigned int i = 0) const;
+  ContinuousAngle angularPosition(unsigned int i = 0) const;
 
-  Vector2d linear_velocity(unsigned int i = 0) const;
-  ContinuousAngle angular_velocity(unsigned int i = 0) const;
+  Vector2d linearVelocity(unsigned int i = 0) const;
+  ContinuousAngle angularVelocity(unsigned int i = 0) const;
 
-  Vector2d linear_acceleration(unsigned int i = 0) const;
-  ContinuousAngle angular_acceleration(unsigned int i = 0) const;
+  Vector2d linearAcceleration(unsigned int i = 0) const;
+  ContinuousAngle angularAcceleration(unsigned int i = 0) const;
 
-  bool is_valid() const;
+  bool isValid() const;
   void insert(const PositionSample& sample);
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::PositionSample& pos);
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample& pos);
 
-std::ostream& operator<<(std::ostream& stream, const RhobanSSL::MovementSample& mov);
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::MovementSample& mov);

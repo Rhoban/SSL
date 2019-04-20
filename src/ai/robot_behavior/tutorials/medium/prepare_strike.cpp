@@ -19,23 +19,23 @@
 #include "prepare_strike.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-Intermediate_Prepare_strike::Intermediate_Prepare_strike(Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data))
+IntermediatePrepareStrike::IntermediatePrepareStrike(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Intermediate_Prepare_strike::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void IntermediatePrepareStrike::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
-  Vector2d ball_goal_vector = opponent_goal_center() - ball_position();
-  Vector2d ball_robot_vector = robot_position - ball_position();
+  Vector2d ball_goal_vector = opponentGoalCenter() - ballPosition();
+  Vector2d ball_robot_vector = robot_position - ballPosition();
 
   double dist_ball_robot = ball_robot_vector.norm();
 
@@ -43,47 +43,47 @@ void Intermediate_Prepare_strike::update(double time, const Ai::Robot& robot, co
   ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
 
   double target_radius_from_ball;
-  double scalar_ball_robot = -scalar_product(ball_robot_vector, ball_goal_vector);
+  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_goal_vector);
 
   // If the robot is between the x-axis of the ball and the x-axis of the opponent_goal_center, the scalar is lesser
   // than to 0. If the robot is behind the x-axis of the ball, the scalar is greater than to 0.
 
   if (scalar_ball_robot < 0)
   {
-    follower->avoid_the_ball(true);
+    follower_->avoidTheBall(true);
     target_radius_from_ball = 0.4;
   }
   else
   {
-    follower->avoid_the_ball(false);
+    follower_->avoidTheBall(false);
     target_radius_from_ball = 0.3;
   }
 
-  rhoban_geometry::Point target_position = ball_position() - ball_goal_vector * (target_radius_from_ball);
+  rhoban_geometry::Point target_position = ballPosition() - ball_goal_vector * (target_radius_from_ball);
   double target_rotation = detail::vec2angle(ball_goal_vector);
 
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Intermediate_Prepare_strike::control() const
+Control IntermediatePrepareStrike::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   return ctrl;
 }
 
-Intermediate_Prepare_strike::~Intermediate_Prepare_strike()
+IntermediatePrepareStrike::~IntermediatePrepareStrike()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Intermediate_Prepare_strike::get_annotations() const
+rhoban_ssl::annotations::Annotations IntermediatePrepareStrike::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

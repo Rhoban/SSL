@@ -20,13 +20,15 @@
 
 #include "annotations.h"
 
-namespace RhobanSSLAnnotation
+namespace rhoban_ssl
 {
-void Annotations::map_positions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct)
+namespace annotations
 {
-  for (unsigned int i = 0; i < json.size(); i++)
+void Annotations::mapPositions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct)
+{
+  for (unsigned int i = 0; i < json_.size(); i++)
   {
-    Json::Value& annotation = json[i];
+    Json::Value& annotation = json_[i];
     std::string type = annotation["type"].asString();
     rhoban_geometry::Point point;
     if (type == "arrow")
@@ -52,13 +54,13 @@ void Annotations::map_positions(std::function<rhoban_geometry::Point(const rhoba
   }
 }
 
-Annotations::Annotations() : json(Json::arrayValue)
+Annotations::Annotations() : json_(Json::arrayValue)
 {
 }
 
 void Annotations::clear()
 {
-  json = Json::Value(Json::arrayValue);
+  json_ = Json::Value(Json::arrayValue);
 }
 
 void Annotations::addCircle(double x, double y, double r, std::string color, bool dashed)
@@ -73,7 +75,7 @@ void Annotations::addCircle(double x, double y, double r, std::string color, boo
   annotation["y"] = y;
   annotation["r"] = r;
 
-  json.append(annotation);
+  json_.append(annotation);
 }
 
 void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color, bool dashed)
@@ -94,14 +96,14 @@ void Annotations::addArrow(double x, double y, double toX, double toY, std::stri
   annotation["toX"] = toX;
   annotation["toY"] = toY;
 
-  json.append(annotation);
+  json_.append(annotation);
 }
 
 void Annotations::addAnnotations(const Annotations& annotations)
 {
-  for (unsigned int i = 0; i < annotations.json.size(); i++)
+  for (unsigned int i = 0; i < annotations.json_.size(); i++)
   {
-    json.append(annotations.json[i]);
+    json_.append(annotations.json_[i]);
   }
 }
 
@@ -116,7 +118,7 @@ void Annotations::addCross(double x, double y, std::string color, bool dashed)
   annotation["x"] = x;
   annotation["y"] = y;
 
-  json.append(annotation);
+  json_.append(annotation);
 }
 
 void Annotations::addCross(const rhoban_geometry::Point& position, std::string color, bool dashed)
@@ -130,14 +132,14 @@ void Annotations::addCross(const Vector2d& position, std::string color, bool das
 
 Json::Value Annotations::toJson() const
 {
-  return json;
+  return json_;
 }
 
 std::string Annotations::toJsonString() const
 {
   Json::FastWriter writer;
 
-  return writer.write(json);
+  return writer.write(json_);
 }
 void Annotations::addArrow(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end, std::string color,
                            bool dashed)
@@ -161,7 +163,7 @@ void Annotations::addText(const std::string& text, double x, double y, std::stri
   annotation["x"] = x;
   annotation["y"] = y;
 
-  json.append(annotation);
+  json_.append(annotation);
 }
 void Annotations::addText(const std::string& text, const rhoban_geometry::Point& point, std::string color)
 {
@@ -172,12 +174,12 @@ void Annotations::addText(const std::string& text, const Vector2d& point, std::s
   addText(text, point.getX(), point.getY(), color);
 }
 
-void Annotations::addBox(const RhobanSSL::Box& box, std::string color, bool dashed)
+void Annotations::addBox(const rhoban_ssl::Box& box, std::string color, bool dashed)
 {
-  addArrow(box.get_W_segment(), color, dashed);
-  addArrow(box.get_E_segment(), color, dashed);
-  addArrow(box.get_N_segment(), color, dashed);
-  addArrow(box.get_S_segment(), color, dashed);
+  addArrow(box.getWestSegment(), color, dashed);
+  addArrow(box.getEastSegment(), color, dashed);
+  addArrow(box.getNorthSegment(), color, dashed);
+  addArrow(box.getSouthSegment(), color, dashed);
 }
 
 void Annotations::addCircle(const rhoban_geometry::Point& origin, double r, std::string color, bool dashed)
@@ -188,5 +190,5 @@ void Annotations::addCircle(const Vector2d& origin, double r, std::string color,
 {
   addCircle(origin.getX(), origin.getY(), r, color, dashed);
 }
-
-}  // namespace RhobanSSLAnnotation
+}  // namespace annotations
+}  // namespace rhoban_ssl

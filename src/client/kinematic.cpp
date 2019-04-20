@@ -4,7 +4,7 @@
 
 int main()
 {
-  RhobanSSL::Kinematic kinematic;
+  rhoban_ssl::Kinematic kinematic;
 
   auto wheels = kinematic.compute(0, 1, 0);
   std::cout << "wheels: " << std::endl;

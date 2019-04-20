@@ -21,68 +21,68 @@
 #include "robot_near_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-Begginer_robot_near_ball::Begginer_robot_near_ball(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+BeginnerRobotNearBall::BeginnerRobotNearBall(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_robot_near_ball::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void BeginnerRobotNearBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Find the ally and the opponent closest to the ball
-  int nb_ally_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Ally);
-  int nb_opponent_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Opponent);
+  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
+  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Opponent);
 
   // Get the robot ally and opponent.
-  Ai::Robot ally_closest = get_robot(nb_ally_closest_to_the_ball, Vision::Ally);
-  Ai::Robot opponent_closest = get_robot(nb_opponent_closest_to_the_ball, Vision::Opponent);
+  ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, vision::Ally);
+  ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, vision::Opponent);
 
   // Create the vector between the robots and the ball.
-  Vector2d vec_ally_to_ball = ball_position() - ally_closest.get_movement().linear_position(ai_data.time);
-  Vector2d vec_opponent_to_ball = ball_position() - opponent_closest.get_movement().linear_position(ai_data.time);
+  Vector2d vec_ally_to_ball = ballPosition() - ally_closest.getMovement().linearPosition(ai_data_.time);
+  Vector2d vec_opponent_to_ball = ballPosition() - opponent_closest.getMovement().linearPosition(ai_data_.time);
 
   // Find the distance between them and the ball.
   double dist_ally = vec_ally_to_ball.norm();
   double dist_opponent = vec_opponent_to_ball.norm();
 
-  annotations.clear();
+  annotations_.clear();
 
   // Search the nearest robot between the ally and the opponent.
   if (dist_ally > dist_opponent)
   {
-    annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
   else if (dist_ally < dist_opponent)
   {
-    annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
   else
   {
-    annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);
-    annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
   }
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 }
 
-Control Begginer_robot_near_ball::control() const
+Control BeginnerRobotNearBall::control() const
 {
   return Control();
 }
 
-Begginer_robot_near_ball::~Begginer_robot_near_ball()
+BeginnerRobotNearBall::~BeginnerRobotNearBall()
 {
 }
 
-RhobanSSLAnnotation::Annotations Begginer_robot_near_ball::get_annotations() const
+rhoban_ssl::annotations::Annotations BeginnerRobotNearBall::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
   return annotations;
 }
 
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

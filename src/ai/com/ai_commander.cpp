@@ -21,17 +21,17 @@
 #include "ai_commander.h"
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-AICommander::AICommander(bool yellow) : yellow(yellow)
+AICommander::AICommander(bool yellow) : yellow_(yellow)
 {
 }
 
-void AICommander::set_yellow(bool value)
+void AICommander::setYellow(bool value)
 {
-  if (this->yellow != value)
+  if (this->yellow_ != value)
   {
-    this->yellow = value;
+    this->yellow_ = value;
   }
 }
 
@@ -39,23 +39,23 @@ AICommander::~AICommander()
 {
 }
 
-void AICommander::set(uint8_t robot_id, bool enabled, double xSpeed, double ySpeed, double thetaSpeed, int kick,
-                      float kickPower, bool spin, bool charge)
+void AICommander::set(uint8_t robot_id, bool enabled, double x_speed, double y_speed, double theta_speed, int kick,
+                      float kick_power, bool spin, bool charge, bool tare_odom)
 {
-  assert(kickPower >= 0.0 && kickPower <= 1.0);
+  assert(kick_power >= 0.0 && kick_power <= 1.0);
 
   Command command;
   command.enabled = enabled;
   command.robot_id = robot_id;
-  command.xSpeed = xSpeed;
-  command.ySpeed = ySpeed;
-  command.thetaSpeed = thetaSpeed;
+  command.x_speed = x_speed;
+  command.y_speed = y_speed;
+  command.theta_speed = theta_speed;
   command.kick = kick;
   command.spin = spin;
   command.charge = charge;
-  command.kickPower = kickPower;
-
-  commands.push_back(command);
+  command.kick_power = kick_power;
+  command.tare_odom = tare_odom;
+  commands_.push_back(command);
 }
 
 void AICommander::stopAll()
@@ -65,4 +65,4 @@ void AICommander::stopAll()
     set(k, false, 0, 0, 0);
   }
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
