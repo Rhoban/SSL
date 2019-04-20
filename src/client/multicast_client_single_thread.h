@@ -78,4 +78,4 @@ protected:
   virtual void packetReceived();
 };
 
-}  // namespace rhobanssl
+}  // namespace rhoban_ssl
