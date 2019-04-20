@@ -22,9 +22,9 @@
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
@@ -36,17 +36,18 @@ class AnnotationClosestRobotToTheBall : public RobotBehavior
 {
 private:
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
+  ai::AiData& ai_data_;
 
 public:
   /**
    * @brief Constructor.
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
-  AnnotationClosestRobotToTheBall(Ai::AiData& ai_data);
+  AnnotationClosestRobotToTheBall(ai::AiData& ai_data);
 
   /**
    * @brief Find the closest robot of the ball with the information of the class GameInformations
@@ -57,7 +58,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * @see Control
@@ -67,11 +68,11 @@ public:
   /**
    * @see RhobanSSLAnnotation::Annotations
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~AnnotationClosestRobotToTheBall();
 };
 
 }  // Namespace beginner
-}  // Namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // Namespace robot_behavior
+}  // namespace rhoban_ssl

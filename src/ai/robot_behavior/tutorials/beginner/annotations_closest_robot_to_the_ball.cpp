@@ -19,31 +19,32 @@
 
 #include "annotations_closest_robot_to_the_ball.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
-AnnotationClosestRobotToTheBall::AnnotationClosestRobotToTheBall(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+AnnotationClosestRobotToTheBall::AnnotationClosestRobotToTheBall(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), ai_data_(ai_data)
 {
 }
 
-void AnnotationClosestRobotToTheBall::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void AnnotationClosestRobotToTheBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Find the ally and the opponent closest to the ball
 
-  int ally_shirt_number = get_shirt_number_of_closest_robot_to_the_ball(Vision::Ally);
-  int opponent_shirt_number = get_shirt_number_of_closest_robot_to_the_ball(Vision::Opponent);
+  int ally_shirt_number = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
+  int opponent_shirt_number = getShirtNumberOfClosestRobotToTheBall(vision::Opponent);
 
   // Get the robot ally and opponent.
-  Ai::Robot closest_ally = get_robot(ally_shirt_number, Vision::Ally);
-  Ai::Robot closest_opponent = get_robot(opponent_shirt_number, Vision::Opponent);
+  ai::Robot closest_ally = getRobot(ally_shirt_number, vision::Ally);
+  ai::Robot closest_opponent = getRobot(opponent_shirt_number, vision::Opponent);
 
   // Create the vector between the robots and the ball.
-  Vector2d vec_ally_to_ball = ball_position() - closest_ally.get_movement().linear_position(ai_data.time);
-  Vector2d vec_opponent_to_ball = ball_position() - closest_opponent.get_movement().linear_position(ai_data.time);
+  Vector2d vec_ally_to_ball = ballPosition() - closest_ally.getMovement().linearPosition(ai_data_.time);
+  Vector2d vec_opponent_to_ball = ballPosition() - closest_opponent.getMovement().linearPosition(ai_data_.time);
 
   // Find the distance between them and the ball.
   double dist_ally = vec_ally_to_ball.norm();
@@ -54,9 +55,8 @@ void AnnotationClosestRobotToTheBall::update(double time, const Ai::Robot& robot
   std::string ally_color = "green";
   std::string opponnent_color = "red";
   bool dashed = false;
-  const rhoban_geometry::Point closest_ally_position = closest_ally.get_movement().linear_position(ai_data.time);
-  const rhoban_geometry::Point closest_opponent_position =
-      closest_opponent.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point closest_ally_position = closest_ally.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point closest_opponent_position = closest_opponent.getMovement().linearPosition(ai_data_.time);
 
   // Search the nearest robot between the ally and the opponent.
   if (dist_ally > dist_opponent)
@@ -79,9 +79,9 @@ Control AnnotationClosestRobotToTheBall::control() const
   return Control();
 }
 
-RhobanSSLAnnotation::Annotations AnnotationClosestRobotToTheBall::get_annotations() const
+rhoban_ssl::annotations::Annotations AnnotationClosestRobotToTheBall::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
   return annotations;
 }
@@ -91,5 +91,5 @@ AnnotationClosestRobotToTheBall::~AnnotationClosestRobotToTheBall()
 }
 
 }  // namespace beginner
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl
