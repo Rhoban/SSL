@@ -19,18 +19,22 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CONTROL__H__
-#define __CONTROL__H__
+#pragma once
 
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <math/vector2d.h>
 
 class Control
 {
 private:
-  bool m_is_absolute;
+  bool is_absolute_;
 
 public:
+  // TODO : REFACTOR THIS PART ?
+  // fix_translation and fix_rotation is used to set odometry: to give the absolute position to the robot.
+  Vector2d fix_translation = Vector2d(0, 0);  // References for Odometry
+  ContinuousAngle fix_rotation = ContinuousAngle(0);
+
   Vector2d linear_velocity = Vector2d(0, 0);
   ContinuousAngle angular_velocity = ContinuousAngle(0);
 
@@ -42,26 +46,25 @@ public:
 
   bool active = true;
   bool ignore = false;
+  bool tareOdom = false;  // Reset references for Odometry robot
 
-  Control(bool is_absolute = true);
+  Control(bool isAbsolute = true);
 
-  Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool is_absolute = true);
+  Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool isAbsolute = true);
 
   Control(bool kick, bool active, bool ignore);
 
-  void change_to_relative_control(const ContinuousAngle& robot_orientation, double dt);
+  void changeToRelativeControl(const ContinuousAngle& robot_orientation, double dt);
 
-  void change_to_absolute_control(const ContinuousAngle& robot_orientation, double dt);
+  void changeToAbsoluteControl(const ContinuousAngle& robot_orientation, double dt);
 
-  bool is_absolute();
+  bool isAbsolute();
 
-  bool is_relative();
+  bool isRelative();
 
-  static Control make_desactivated();
-  static Control make_ignored();
-  static Control make_null();
+  static Control makeDesactivated();
+  static Control makeIgnored();
+  static Control makeNull();
 };
 
 std::ostream& operator<<(std::ostream& out, const Control& control);
-
-#endif

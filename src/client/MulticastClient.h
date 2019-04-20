@@ -5,7 +5,7 @@
 #include <thread>
 #include <rhoban_utils/timing/time_stamp.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 /**
  * This is a generic multicast client that listens on all possible interfaces
@@ -78,4 +78,4 @@ protected:
    */
   virtual void packetReceived();
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

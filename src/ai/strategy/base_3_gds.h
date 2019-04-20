@@ -17,27 +17,26 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__BASE_3_GDS__H__
-#define __STRATEGY__BASE_3_GDS__H__
+#pragma once
 
-#include "Strategy.h"
+#include "strategy.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
-class Base_3_gds : public Strategy
+class Base3Gds : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
+  bool behaviors_are_assigned_;
 
 public:
-  Base_3_gds(Ai::AiData& ai_data);
-  virtual ~Base_3_gds();
+  Base3Gds(ai::AiData& ai_data);
+  virtual ~Base3Gds();
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
@@ -46,15 +45,13 @@ public:
 
   virtual void update(double time);
 
-  virtual void assign_behavior_to_robots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+  virtual void assignBehaviorToRobots(
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots);
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position);
+  getStartingPositions(int number_of_avalaible_robots);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
 };
 
-};  // namespace Strategy
-};  // namespace RhobanSSL
-#endif
+};  // namespace strategy
+};  // namespace rhoban_ssl

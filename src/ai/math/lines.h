@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __LINES__H__
-#define __LINES__H__
+#pragma once
 
 #include <rhoban_geometry/point.h>
 #include <rhoban_geometry/segment.h>
@@ -26,8 +25,6 @@
 
 namespace rhoban_geometry
 {
-double distance_from_point_to_line(const rhoban_geometry::Point& point, const rhoban_geometry::Point& point_line_1,
-                                   const rhoban_geometry::Point& point_line_2);
+double distanceFromPointToLine(const rhoban_geometry::Point& point, const rhoban_geometry::Point& point_line_1,
+                               const rhoban_geometry::Point& point_line_2);
 }
-
-#endif

@@ -19,39 +19,39 @@
 #include "annotations_ball_position.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-Begginer_annotations_ball_position::Begginer_annotations_ball_position(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+BeginnerAnnotationsBallPosition::BeginnerAnnotationsBallPosition(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_annotations_ball_position::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void BeginnerAnnotationsBallPosition::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // Do not remove this line.
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Clear all annotations write before
-  annotations.clear();
+  annotations_.clear();
   // Add an annotations
-  annotations.addCross(ball_position(), "red", false);
+  annotations_.addCross(ballPosition(), "red", false);
 }
 
-Control Begginer_annotations_ball_position::control() const
+Control BeginnerAnnotationsBallPosition::control() const
 {
   return Control();
 }
 
-Begginer_annotations_ball_position::~Begginer_annotations_ball_position()
+BeginnerAnnotationsBallPosition::~BeginnerAnnotationsBallPosition()
 {
 }
 
-RhobanSSLAnnotation::Annotations Begginer_annotations_ball_position::get_annotations() const
+rhoban_ssl::annotations::Annotations BeginnerAnnotationsBallPosition::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
   return annotations;
 }
 
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

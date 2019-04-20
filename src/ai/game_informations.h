@@ -20,21 +20,20 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GAME_INFORMATIONS__H__
-#define __GAME_INFORMATIONS__H__
+#pragma once
 
-#include <AiData.h>
+#include <ai_data.h>
 #include <math/box.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class GameInformations
 {
 private:
-  Ai::AiData& ai_data;
+  ai::AiData& ai_data;
 
 public:
-  GameInformations(Ai::AiData& ai_data);
+  GameInformations(ai::AiData& ai_data);
   virtual ~GameInformations();
 
   double time() const;
@@ -44,17 +43,17 @@ public:
    * @brief returns the ball.
    * @return a ball.
    */
-  const Ai::Ball& ball() const;
+  const ai::Ball& ball() const;
   /**
    * @brief returns the current ball's position.
    * @return a point
    */
-  rhoban_geometry::Point ball_position() const;
+  rhoban_geometry::Point ballPosition() const;
   /**
    * @brief returns the ball's radius.
    * @return a real.
    */
-  double get_ball_radius() const;
+  double getBallRadius() const;
 
   /**************************  Field INFORMATIONS ***************************/
   /**
@@ -67,98 +66,98 @@ public:
    * @brief returns the position of the center mark of the field.
    * @return a point
    */
-  rhoban_geometry::Point center_mark() const;
+  rhoban_geometry::Point centerMark() const;
   /**
    * @brief returns a box that represent the ally penalty area.
    * @return a box
    */
-  Box ally_penalty_area() const;
+  Box allyPenaltyArea() const;
   /**
    * @brief returns a box that represent the opponent penalty area.
    * @return a box
    */
-  Box opponent_penalty_area() const;
+  Box opponentPenaltyArea() const;
   /**
    * @brief returns the position of the ally goal center.
    * @return a point
    */
-  rhoban_geometry::Point ally_goal_center() const;
+  rhoban_geometry::Point allyGoalCenter() const;
   /**
    * @brief returns the position of the opponent goal center.
    * @return a point
    */
-  rhoban_geometry::Point opponent_goal_center() const;
+  rhoban_geometry::Point opponentGoalCenter() const;
 
   /**
    * @brief returns the position of the opponant right corner.
    * @return a point
    */
-  rhoban_geometry::Point opponent_corner_right() const;
+  rhoban_geometry::Point opponentCornerRight() const;
   /**
    * @brief returns the position of the opponant left corner.
    * @return a point
    */
-  rhoban_geometry::Point opponent_corner_left() const;
+  rhoban_geometry::Point opponentCornerLeft() const;
   /**
    * @brief returns an array which contains the center position
    * of the four field's quarter.
    * @return a point
    */
-  std::vector<rhoban_geometry::Point> center_quarter_field() const;
+  std::vector<rhoban_geometry::Point> centerQuarterField() const;
   /**
    * @brief returns the position of the center ally field.
    * @return a point
    */
-  rhoban_geometry::Point center_ally_field() const;
+  rhoban_geometry::Point centerAllyField() const;
   /**
    * @brief returns the position of the center opponant field.
    * @return a point
    */
-  rhoban_geometry::Point center_opponent_field() const;
+  rhoban_geometry::Point centerOpponentField() const;
   /**
    * @brief returns the field's width.
    * the width correspond to the x axis
    * @return width in meter
    */
-  double field_width() const;
+  double fieldWidth() const;
   /**
    * @brief returns field's height.
    * the length correspond to the y axis
    * @return length in meter
    */
-  double field_height() const;
+  double fieldHeight() const;
   /**
    * @brief returns penalty area's width.
    * the width correspond to the x axis
    * @return width in meter
    */
-  double penalty_area_width() const;
+  double penaltyAreaWidth() const;
   /**
    * @brief returns penalty area's height.
    * the length correspond to the y axis
    * @return length in meter
    */
-  double penalty_area_height() const;
+  double penaltyAreaHeight() const;
   /**
    * @brief returns the South West point of the field.
    * @return a point
    */
-  rhoban_geometry::Point field_SW() const;
+  rhoban_geometry::Point fieldSW() const;
   /**
    * @brief returns the North West point of the field.
    * @return a point
    */
-  rhoban_geometry::Point field_NW() const;
+  rhoban_geometry::Point fieldNW() const;
   /**
    * @brief returns the South East point of the field.
    * @return a point
    */
-  rhoban_geometry::Point field_NE() const;
+  rhoban_geometry::Point fieldNE() const;
   /**
    * @brief returns the South East point of the field.
    * @return a point
    */
-  rhoban_geometry::Point field_SE() const;
+  rhoban_geometry::Point fieldSE() const;
 
   /*************************  Robot INFORMATIONS ***************************/
   /**
@@ -176,12 +175,12 @@ public:
    * the team of the robot
    * @return a reference on a robot
    */
-  const Ai::Robot& get_robot(int robot_number, Vision::Team team = Vision::Team::Ally) const;
+  const ai::Robot& getRobot(int robot_number, vision::Team team = vision::Team::Ally) const;
   /**
    * @brief returns the robot's radius.
    * @return a radius in meter
    */
-  double get_robot_radius() const;
+  double getRobotRadius() const;
   /**
    * @brief returns true if the ball is closed to the kicker.
    *
@@ -197,7 +196,7 @@ public:
    * @param team the team of the robot (ally or opponent)
    * @return a boolean
    */
-  bool infra_red(int robot_number, Vision::Team team = Vision::Team::Ally) const;
+  bool infraRed(int robot_number, vision::Team team = vision::Team::Ally) const;
   /**
    * @brief Computes all the robots of a given team at a distance `distance` of the line
    * ( `P1`, `P2` ).
@@ -217,8 +216,8 @@ public:
    * a vector of robot's number
    * @see get_robot() to know the difference between robot'id and robot's number).
    */
-  void get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Vision::Team team,
-                         double distance, std::vector<int>& result) const;
+  void getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, vision::Team team,
+                      double distance, std::vector<int>& result) const;
   /**
    * @brief same as void get_robot_in_line() but returns the result
    * instead of storing it in a variable.
@@ -234,8 +233,8 @@ public:
    * @return a vector of robot's number
    * @see get_robot() to know the difference between robot'id and robot's number).
    */
-  std::vector<int> get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                     Vision::Team team = Vision::Team::Opponent, double distance = 0.4) const;
+  std::vector<int> getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
+                                  vision::Team team = vision::Team::Opponent, double distance = 0.4) const;
   /**
    * @brief same as vector<int> get_robot_in_line() but doesn't
    * consider the robot's team.
@@ -245,8 +244,8 @@ public:
    * @return a vector of robot's shirt number
    * @see get_robot() to know the difference between robot'id and robot's number).
    */
-  std::vector<int> get_robot_in_line(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                     double distance) const;
+  std::vector<int> getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
+                                  double distance) const;
   /**
    * @brief returns the robot's number which is closest to the point
    * given in parameter in the team given in parameter.
@@ -255,7 +254,7 @@ public:
    * @return robot's shirt number (-1 if not found)
    * @see get_robot() to know the difference between robot'id and robot's number).
    */
-  int get_shirt_number_of_closest_robot(Vision::Team team, rhoban_geometry::Point point) const;
+  int getShirtNumberOfClosestRobot(vision::Team team, rhoban_geometry::Point point) const;
   /**
    * @brief returns the robot's shirt number which is closest robot to the ball
    * from the team given in parameter.
@@ -264,7 +263,7 @@ public:
    * @return robot's shirt number(-1 if not found)
    * @see get_robot() to know the difference between robot'id and robot's number).
    */
-  int get_shirt_number_of_closest_robot_to_the_ball(Vision::Team team) const;
+  int getShirtNumberOfClosestRobotToTheBall(vision::Team team) const;
 
   /**************************  Algos INFORMATIONS *************************/
   /**
@@ -283,7 +282,7 @@ public:
    * @return pair<rhoban_geometry::Point, double>
    * (double correspond of his "efficiency rate" )
    */
-  std::pair<rhoban_geometry::Point, double> find_goal_best_move(
+  std::pair<rhoban_geometry::Point, double> findGoalBestMove(
       const rhoban_geometry::Point point, const rhoban_geometry::Point goal = rhoban_geometry::Point(66, 66)) const;
   /**
    * @brief returns the distance between a robot with the shirt number given in parameter
@@ -295,7 +294,7 @@ public:
    * the team of the robot (opponent by default)
    * @return a distance
    */
-  double get_robot_distance_from_ally_goal_center(int robot_number, Vision::Team team = Vision::Team::Opponent) const;
+  double getRobotDistanceFromAllyGoalCenter(int robot_number, vision::Team team = vision::Team::Opponent) const;
   /**
    * @brief returns the distance between all robots in the team given in parameter and
    * the ally goal center.
@@ -307,7 +306,7 @@ public:
    * [1] = distance of the second robot
    * ...
    */
-  std::vector<double> threat(Vision::Team team = Vision::Team::Opponent) const;
+  std::vector<double> threat(vision::Team team = vision::Team::Opponent) const;
   /**
    * @brief returns the robot's number of the biggest threat belonging
    * to the team given in parameter.
@@ -318,7 +317,7 @@ public:
    * @return a robot's shirt number
    * @see get_robot() to know the difference between robot'id and robot's number).
    */
-  int shirt_number_of_threat_max(Vision::Team team) const;
+  int shirtNumberOfThreatMax(vision::Team team) const;
   /**
    * @brief returns the robot's number of the second biggest threat belonging
    * to the team given in parameter.
@@ -330,9 +329,7 @@ public:
    * @return a robot's shirt number
    * @see get_robot() to know the difference between robot'id and robot's number).
    */
-  int shirt_number_of_threat_max_2(Vision::Team team) const;  // second threat max
+  int shirtNumberOfThreatMax2(vision::Team team) const;  // second threat max
 };
 
-}  // namespace RhobanSSL
-
-#endif
+}  // namespace rhoban_ssl

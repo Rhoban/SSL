@@ -20,56 +20,56 @@
 #include "example.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 #define PERIOD 10.0
 
-Example::Example(Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data)), period(PERIOD), last_time(0)
+Example::Example(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), period_(PERIOD), last_time_(0)
 {
 }
 
-void Example::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Example::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-  annotations.clear();
+  annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
   // On ajoute un text à la position du robot.
   // annotations.addText("Exemple :)", robot_position, "blue");
 
-  Vector2d direction = ball_position() - robot_position;
+  Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
 
-  if (time - last_time > period)
+  if (time - last_time_ > period_)
   {
     rhoban_geometry::Point target;
-    if (cpt % 2 == 0)
+    if (cpt_ % 2 == 0)
     {
-      target = center_ally_field();
+      target = centerAllyField();
     }
     else
     {
-      target = center_opponent_field();
+      target = centerOpponentField();
     }
-    follower->set_following_position(target, target_rotation);
-    cpt = (cpt + 1) % 2;
-    last_time = time;
+    follower_->setFollowingPosition(target, target_rotation);
+    cpt_ = (cpt_ + 1) % 2;
+    last_time_ = time;
   }
 
-  follower->avoid_the_ball(false);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(false);
+  follower_->update(time, robot, ball);
 }
 
 Control Example::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   // ctrl.spin = true; // We active the dribler !
   ctrl.kick = false;
   return ctrl;
@@ -77,16 +77,16 @@ Control Example::control() const
 
 Example::~Example()
 {
-  delete follower;
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Example::get_annotations() const
+rhoban_ssl::annotations::Annotations Example::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations(this->annotations);
-  annotations.addAnnotations(follower->get_annotations());
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

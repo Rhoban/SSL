@@ -17,8 +17,8 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CORE__EXPORT_TO_PLOT__H__
-#define __CORE__EXPORT_TO_PLOT__H__
+#pragma once
+
 #include <fstream>
 #include <functional>
 #include <vector>
@@ -26,15 +26,15 @@
 
 class Plot
 {
-  std::ofstream log_file;
+  std::ofstream log_file_;
 
-  std::vector<std::string> value_names;
-  //    std::map<std::string, int> value_name_id;
-  std::map<std::string, double> current_values;
-  std::map<std::string, bool> loged_values;
-  int n;
+  std::vector<std::string> value_names_;
+  //    std::map<std::string, int> value_name_id_;
+  std::map<std::string, double> current_values_;
+  std::map<std::string, bool> loged_values_;
+  int n_;
 
-  void create_plot_script(const std::vector<std::string>& value_names);
+  void createPlotScript(const std::vector<std::string>& value_names);
 
 public:
   std::string name;
@@ -47,5 +47,3 @@ public:
   void store();
   void close();
 };
-
-#endif

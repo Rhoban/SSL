@@ -33,6 +33,8 @@ PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS
 )
 
 set (SOURCES
+    multicast_client_single_thread.cpp
+    execution_manager.cpp
     MulticastClient.cpp
     RefereeClient.cpp
     VisionClient.cpp
@@ -46,6 +48,8 @@ set (SOURCES
 
 add_library(ssl_client ${SOURCES})
 target_link_libraries (ssl_client ${PROTOBUF_LIBRARIES} ${catkin_LIBRARIES})
+target_include_directories(ssl_client PUBLIC ${CMAKE_SOURCE_DIR})
+
 
 add_executable (referee referee.cpp ${SOURCES})
 target_link_libraries (referee ssl_client)
@@ -61,3 +65,34 @@ target_link_libraries (kinematic ssl_client)
 
 add_executable (master master.cpp ${SOURCES})
 target_link_libraries (master ssl_client)
+
+message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
+
+if(CATKIN_ENABLE_TESTING)
+  include(CTest)
+
+  
+  if(ENABLE_COVERAGE_TESTING)
+    find_package(code_coverage REQUIRED)
+    include(CodeCoverage)
+    APPEND_COVERAGE_COMPILER_FLAGS()
+  endif()
+  
+  set (TEST_SOURCES
+    tests/test_execution_manager.cpp
+    )
+  
+  foreach(test_source ${TEST_SOURCES})
+    get_filename_component(name_test ${test_source} NAME_WE)
+    catkin_add_gtest(${name_test} ${test_source})
+    target_link_libraries(${name_test} ssl_client)
+  endforeach(test_source)
+
+  if(ENABLE_COVERAGE_TESTING)
+    set(COVERAGE_EXCLUDES "*/${PROJECT_NAME}/test*")
+    add_code_coverage(
+      NAME ${PROJECT_NAME}_coverage
+      DEPENDS tests
+      )
+  endif()
+endif(CATKIN_ENABLE_TESTING)

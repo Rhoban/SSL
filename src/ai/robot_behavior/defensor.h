@@ -17,15 +17,14 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__DEFENSOR__H__
-#define __ROBOT_BEHAVIOR__DEFENSOR__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class Defensor : public RobotBehavior
 {
@@ -33,17 +32,15 @@ private:
   ConsignFollower* follower;
 
 public:
-  Defensor(Ai::AiData& ai_data);
+  Defensor(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual ~Defensor();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

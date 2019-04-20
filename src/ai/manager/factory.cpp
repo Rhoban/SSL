@@ -19,41 +19,40 @@
 
 #include "factory.h"
 
-#include "Manual.h"
+#include "manual.h"
 // #include "Match.h"
 #include "plan_veschambres.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
-std::list<std::string> Factory::list_of_avalaible_managers = {
-  names::manual,
+std::list<std::string> Factory::list_of_avalaible_managers_ = {
+  names::MANUAL,
   // names::match,
-  names::plan_veschambres,
+  names::PLAN_VESCHAMBRES,
 };
 
-const std::list<std::string>& Factory::avalaible_managers()
+const std::list<std::string>& Factory::availableManagers()
 {
-  return Factory::list_of_avalaible_managers;
+  return Factory::list_of_avalaible_managers_;
 }
 
-std::shared_ptr<Manager> Factory::construct_manager(const std::string& manager_name, Ai::AiData& ai_data,
-                                                    GameState& game_state)
+std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_name, ai::AiData& ai_data,
+                                                   GameState& game_state)
 {
   std::shared_ptr<Manager> manager;
 
 #ifndef NDEBUG
-  const std::list<std::string>& l = Factory::avalaible_managers();
+  const std::list<std::string>& l = Factory::availableManagers();
   assert(std::find(l.begin(), l.end(), manager_name) != l.end());  // the manager doesn't exist !
 #endif
 
-  if (manager_name == names::manual)
+  if (manager_name == names::MANUAL)
   {
     manager = std::shared_ptr<Manager>(new Manual(ai_data));
-    dynamic_cast<Manual&>(*manager).change_team_and_point_of_view(ai_data.team_color,
-                                                                  ai_data.team_color != Ai::Team::Yellow
-                                                                  // false //ai_data.team_color != Ai::Team::Yellow
+    dynamic_cast<Manual&>(*manager).changeTeamAndPointOfView(ai_data.team_color, ai_data.team_color != ai::Team::Yellow
+                                                             // false //ai_data.team_color != ai::Team::Yellow
     );
   }
   // if( manager_name == names::match ){
@@ -61,12 +60,12 @@ std::shared_ptr<Manager> Factory::construct_manager(const std::string& manager_n
   //         new Match(ai_data, game_state)
   //     );
   // }
-  if (manager_name == names::plan_veschambres)
+  if (manager_name == names::PLAN_VESCHAMBRES)
   {
     manager = std::shared_ptr<Manager>(new PlanVeschambres(ai_data, game_state));
   }
   return manager;
 }
 
-};  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace manager
+};  // namespace rhoban_ssl
