@@ -35,7 +35,7 @@ namespace beginner
 class AnnotationsBallPosition : public RobotBehavior
 {
 private:
-  RhobanSSLAnnotation::Annotations annotations_;
+  annotations::Annotations annotations_;
 
 public:
   /**
@@ -43,7 +43,7 @@ public:
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see Ai::AiData
    */
-  AnnotationsBallPosition(Ai::AiData& ai_data);
+  AnnotationsBallPosition(ai::AiData& ai_data);
 
   /**
    * @brief Set an annotations in the ball position.
@@ -53,7 +53,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * @see Control
@@ -63,7 +63,7 @@ public:
   /**
    * @see RhobanSSLAnnotation::Annotations
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual annotations::Annotations getAnnotations() const;
 
   /**
    * @brief Destructor.

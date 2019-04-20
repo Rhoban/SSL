@@ -26,21 +26,21 @@ namespace robot_behavior
 {
 namespace beginner
 {
-AnnotationsBallPosition::AnnotationsBallPosition(Ai::AiData& ai_data) : RobotBehavior(ai_data)
+AnnotationsBallPosition::AnnotationsBallPosition(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void AnnotationsBallPosition::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void AnnotationsBallPosition::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Clear all annotations write before
   annotations_.clear();
 
   // Add a cross on the ball.
   std::string color = "red";
   bool dash = false;
-  rhoban_geometry::Point target_annotations = ball_position();
+  rhoban_geometry::Point target_annotations = ballPosition();
   annotations_.addCross(target_annotations, color, dash);
 }
 
@@ -53,9 +53,9 @@ AnnotationsBallPosition::~AnnotationsBallPosition()
 {
 }
 
-RhobanSSLAnnotation::Annotations AnnotationsBallPosition::get_annotations() const
+annotations::Annotations AnnotationsBallPosition::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
   return annotations;
 }
