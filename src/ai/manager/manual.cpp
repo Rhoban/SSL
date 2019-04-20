@@ -435,11 +435,11 @@ Manual::Manual(ai::AiData& ai_data)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
-  registerStrategy("Intermediate Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+  registerStrategy("Medium - Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                ai_data,
                                                [&](double time, double dt) {
-                                                 robot_behavior::IntermediateStriker* striker =
-                                                     new robot_behavior::IntermediateStriker(ai_data);
+                                                 robot_behavior::medium::Striker * striker =
+                                                     new robot_behavior::medium::Striker(ai_data);
                                                  return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
                                                },
                                                false  // we don't want to define a goal here !
