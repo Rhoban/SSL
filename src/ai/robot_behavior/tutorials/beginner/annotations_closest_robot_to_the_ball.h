@@ -39,7 +39,6 @@ private:
    * @see rhoban_ssl::annotations::Annotations
    */
   rhoban_ssl::annotations::Annotations annotations_;
-  ai::AiData& ai_data_;
 
 public:
   /**

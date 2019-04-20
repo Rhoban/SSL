@@ -25,8 +25,7 @@ namespace robot_behavior
 {
 namespace beginner
 {
-AnnotationClosestRobotToTheBall::AnnotationClosestRobotToTheBall(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), ai_data_(ai_data)
+AnnotationClosestRobotToTheBall::AnnotationClosestRobotToTheBall(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
