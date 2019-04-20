@@ -17,38 +17,72 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
-#define __ROBOT_BEHAVIOR__BEGGINER__SEE_BALL__
+#pragma once
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior {
+namespace robot_behavior
+{
+namespace beginner
+{
+/**
+ * @class See Ball
+ *
+ * @brief Tutorial to show how to see the ball.
+ */
+class SeeBall : public RobotBehavior
+{
+private:
+  /**
+   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   */
+  ConsignFollower* follower_;
+  /**
+   * Not use in this package but set in a case of copy.
+   * @see rhoban_ssl::annotations::Annotations
+   */
+  rhoban_ssl::annotations::Annotations annotations_;
 
-class Begginer_see_ball : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+public:
+  /**
+   * @brief Constructor.
+   *
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see Ai::AiData
+   */
+  SeeBall(ai::AiData& ai_data);
 
-    public:
-    Begginer_see_ball(Ai::AiData& ai_data);
+  /**
+   * @brief The robot stay in his position and always turns to the ball.
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  /**
+   * @see Control
+   */
+  virtual Control control() const;
 
-	virtual Control control() const;
+  /**
+   * @see rhoban_ssl::annotations::Annotations
+   * The class don't draw any annotations.
+   * The follower draw annotation.
+   */
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Begginer_see_ball();
+  /**
+   * @brief Destructor.
+   */
+  virtual ~SeeBall();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+}  // namespace beginner
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

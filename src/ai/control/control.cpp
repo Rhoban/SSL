@@ -22,98 +22,92 @@
 
 #define CALCULUS_ERROR 0.000
 
-Control::Control(
-    bool is_absolute
-):
-    m_is_absolute(is_absolute)
-{}
-
-Control::Control(
-    const Vector2d &linear_velocity, const ContinuousAngle &angular_velocity,
-    bool is_absolute
-):
-    m_is_absolute(is_absolute), linear_velocity(linear_velocity), angular_velocity(angular_velocity)
-{}
-
-Control::Control(
-    bool kick, bool active, bool ignore
-):
-    kick(kick), active(active), ignore(ignore)
-{}
-
-void Control::change_to_relative_control(const ContinuousAngle &robot_orientation, double dt)
+Control::Control(bool is_absolute) : is_absolute_(is_absolute)
 {
-    if( ! is_absolute() ) {
-        return;
-    }
-
-    Matrix2d rotation_matrix;
-
-    const Vector2d & a_t = linear_velocity;
-    const ContinuousAngle & a_r =  angular_velocity;
-
-    if( std::fabs(a_r.value()) > CALCULUS_ERROR ){
-        rotation_matrix = Matrix2d(
-            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value()),
-            std::cos((a_r*dt+robot_orientation).value()) - std::cos(robot_orientation.value()),
-        - std::cos((a_r*dt+robot_orientation).value()) + std::cos(robot_orientation.value()),
-            std::sin((a_r*dt+robot_orientation).value()) - std::sin(robot_orientation.value())
-                                        );
-        rotation_matrix = (a_r*dt).value()*( rotation_matrix.inverse() );
-    }else{
-        rotation_matrix = Matrix2d(
-            std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
-            - std::sin(robot_orientation.value()), std::cos(robot_orientation.value())
-                                        );
-    }
-
-    this->linear_velocity = rotation_matrix * a_t;
-    this->angular_velocity =  a_r;
 }
 
-void Control::change_to_absolute_control(const ContinuousAngle &robot_orientation, double dt)
+Control::Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool is_absolute)
+  : is_absolute_(is_absolute), linear_velocity(linear_velocity), angular_velocity(angular_velocity)
 {
-    if( is_absolute() ) {
-        return;
-    }
-
-    assert(false);
-    //TODO
 }
 
-bool Control::is_absolute()
+Control::Control(bool kick, bool active, bool ignore) : kick(kick), active(active), ignore(ignore)
 {
-    return m_is_absolute;
 }
 
-bool Control::is_relative()
+void Control::changeToRelativeControl(const ContinuousAngle& robot_orientation, double dt)
 {
-    return !m_is_absolute;
+  if (!isAbsolute())
+  {
+    return;
+  }
+
+  Matrix2d rotation_matrix;
+
+  const Vector2d& a_t = linear_velocity;
+  const ContinuousAngle& a_r = angular_velocity;
+
+  if (std::fabs(a_r.value()) > CALCULUS_ERROR)
+  {
+    rotation_matrix = Matrix2d(std::sin((a_r * dt + robot_orientation).value()) - std::sin(robot_orientation.value()),
+                               std::cos((a_r * dt + robot_orientation).value()) - std::cos(robot_orientation.value()),
+                               -std::cos((a_r * dt + robot_orientation).value()) + std::cos(robot_orientation.value()),
+                               std::sin((a_r * dt + robot_orientation).value()) - std::sin(robot_orientation.value()));
+    rotation_matrix = (a_r * dt).value() * (rotation_matrix.inverse());
+  }
+  else
+  {
+    rotation_matrix = Matrix2d(std::cos(robot_orientation.value()), std::sin(robot_orientation.value()),
+                               -std::sin(robot_orientation.value()), std::cos(robot_orientation.value()));
+  }
+
+  this->linear_velocity = rotation_matrix * a_t;
+  this->angular_velocity = a_r;
 }
 
-Control Control::make_null(){
-    return Control(false, true, false);
+void Control::changeToAbsoluteControl(const ContinuousAngle& robot_orientation, double dt)
+{
+  if (isAbsolute())
+  {
+    return;
+  }
+
+  assert(false);
+  // TODO
 }
 
-Control Control::make_desactivated(){
-    return Control(false, false, false);
+bool Control::isAbsolute()
+{
+  return is_absolute_;
 }
 
-Control Control::make_ignored(){
-    return Control(false, false, true);
+bool Control::isRelative()
+{
+  return !is_absolute_;
 }
 
-std::ostream& operator << ( std::ostream & out, const Control& control  ){
-    out << "{ctrl : "
-        << "[lin vel. : " << control.linear_velocity
-        << ", ang vel. : " << control.angular_velocity<< "]"
-        << ", kick : " << control.kick
-        << ", chip kick : " << control.chipKick
-        << ", kickPower : " << control.kickPower
-        << ", spin : " << control.spin
-        << ", charge : " << control.charge
-        << ", acitve : " << control.active
-        << ", ignore : " << control.ignore <<"}";
+Control Control::makeNull()
+{
+  return Control(false, true, false);
+}
 
-    return out;
+Control Control::makeDesactivated()
+{
+  return Control(false, false, false);
+}
+
+Control Control::makeIgnored()
+{
+  return Control(false, false, true);
+}
+
+std::ostream& operator<<(std::ostream& out, const Control& control)
+{
+  out << "{ctrl : "
+      << "[lin vel. : " << control.linear_velocity << ", ang vel. : " << control.angular_velocity << "]"
+      << ", kick : " << control.kick << ", chip kick : " << control.chipKick << ", kickPower : " << control.kickPower
+      << ", spin : " << control.spin << ", charge : " << control.charge << ", acitve : " << control.active
+      << ", ignore : " << control.ignore << "}";
+
+  return out;
 }

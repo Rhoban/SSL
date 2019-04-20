@@ -19,19 +19,19 @@
 
 #include "robot_control_with_position_following.h"
 
-void RobotControlWithPositionFollowing::set_goal(
-    const Vector2d & position, ContinuousAngle orientation
-){
-    this->position = position;
-    this->orientation = orientation;
-    set_static(false);
+void RobotControlWithPositionFollowing::setGoal(const Vector2d& position, ContinuousAngle orientation)
+{
+  this->position_ = position;
+  this->orientation_ = orientation;
+  setStatic(false);
 }
 
-ContinuousAngle RobotControlWithPositionFollowing::goal_orientation( double t ) const {
-    return orientation;
+ContinuousAngle RobotControlWithPositionFollowing::goalOrientation(double t) const
+{
+  return orientation_;
 }
 
-Vector2d RobotControlWithPositionFollowing::goal_position( double t ) const {
-    return position;
+Vector2d RobotControlWithPositionFollowing::goalPosition(double t) const
+{
+  return position_;
 }
-

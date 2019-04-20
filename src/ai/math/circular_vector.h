@@ -16,81 +16,89 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#ifndef __CIRCULAR_VECTOR_H__
-#define __CIRCULAR_VECTOR_H__
+#pragma once
 
 #include <vector>
 #include <algorithm>
 #include <assert.h>
 
 template <typename T>
-class circular_vector {
-    private:
-        std::vector<T> vector;
-        unsigned int index;
-    public:
-        circular_vector():
-            vector(0), index(0)
-        { }
-        circular_vector( unsigned int size):
-            vector(size), index(0)
-        { }
-        circular_vector( const circular_vector<T> & cv ):
-            vector(cv.vector), index(cv.index)
-        { }
+class CircularVector
+{
+private:
+  std::vector<T> vector_;
+  unsigned int index_;
 
-        unsigned int size() const { return vector.size(); }
-        void resize( unsigned int size ){
-            std::rotate(
-                vector.begin(), vector.begin()+index,
-                vector.end()
-            );
-            index = 0;
-            vector.resize(size);
-        }
+public:
+  CircularVector() : vector_(0), index_(0)
+  {
+  }
+  CircularVector(unsigned int size) : vector_(size), index_(0)
+  {
+  }
+  CircularVector(const CircularVector<T>& cv) : vector_(cv.vector_), index_(cv.index_)
+  {
+  }
 
-        void insert( const T& element){
-            if( index == 0 ){
-                index = vector.size();
-            }
-            index -= 1;
-            vector[ index ] = element;
-        }
+  unsigned int size() const
+  {
+    return vector_.size();
+  }
+  void resize(unsigned int size)
+  {
+    std::rotate(vector_.begin(), vector_.begin() + index_, vector_.end());
+    index_ = 0;
+    vector_.resize(size);
+  }
 
-        const T& operator[]( unsigned int i) const {
-            assert( i < vector.size() );
-            if( index+i < vector.size() ){
-                return vector[index+i];
-            }else{
-                return vector[index+i-vector.size()];
-            }
-        }
-        T& operator[]( unsigned int i){
-            assert( i < vector.size() );
-            if( index+i < vector.size() ){
-                return vector[index+i];
-            }else{
-                return vector[index+i-vector.size()];
-            }
-        }
-    template <typename U>
-    friend std::ostream& operator<< (
-        std::ostream& stream, const circular_vector<U> & vec
-    );
+  void insert(const T& element)
+  {
+    if (index_ == 0)
+    {
+      index_ = vector_.size();
+    }
+    index_ -= 1;
+    vector_[index_] = element;
+  }
+
+  const T& operator[](unsigned int i) const
+  {
+    assert(i < vector_.size());
+    if (index_ + i < vector_.size())
+    {
+      return vector_[index_ + i];
+    }
+    else
+    {
+      return vector_[index_ + i - vector_.size()];
+    }
+  }
+  T& operator[](unsigned int i)
+  {
+    assert(i < vector_.size());
+    if (index_ + i < vector_.size())
+    {
+      return vector_[index_ + i];
+    }
+    else
+    {
+      return vector_[index_ + i - vector_.size()];
+    }
+  }
+  template <typename U>
+  friend std::ostream& operator<<(std::ostream& stream, const CircularVector<U>& vec);
 };
 
 template <typename T>
-std::ostream& operator<<(
-    std::ostream& stream, const circular_vector<T> & vec
-){
-    assert( vec.size() >= 1 );
-    stream << "(";
-    for( unsigned int i=0; i< vec.size()-1; i++ ){
-        stream << vec[i] << ", ";  
-    }
-    stream << vec[vec.size()-1];
-    stream << ")";
-    return stream;
+std::ostream& operator<<(std::ostream& stream, const CircularVector<T>& vec)
+{
+  assert(vec.size() >= 1);
+  stream << "(";
+  for (unsigned int i = 0; i < vec.size() - 1; i++)
+  {
+    stream << vec[i] << ", ";
+  }
+  stream << vec[vec.size() - 1];
+  stream << ")";
+  return stream;
 }
-#endif

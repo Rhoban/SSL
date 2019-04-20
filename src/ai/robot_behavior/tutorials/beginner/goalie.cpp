@@ -1,6 +1,6 @@
 /*
     This file is part of SSL.
-    
+
     Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
@@ -20,52 +20,63 @@
 #include "goalie.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-Begginer_goalie::Begginer_goalie(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+namespace beginner
+{
+Goalie::Goalie(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Begginer_goalie::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
-    
-    Vector2d ball_goal_vector = ally_goal_center() - ball_position();
-    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+{
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-    // Put the robot at 0.5 meters on the ball on the vector opponent_goal and ball.
-    rhoban_geometry::Point target_position = ally_goal_center() - ball_goal_vector * 0.5;
-    double target_rotation = detail::vec2angle(ball_goal_vector);
+  // The goalie moves between the position of the ally's goal center and the position of the ball.
+  // The position of the goalie is at 0.5 meters of the goal center.
+  annotations_.clear();
 
-    follower->set_following_position(target_position, target_rotation);
-    follower->update(time, robot, ball);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  rhoban_geometry::Point target_position = robot_position;
+  Vector2d goal_ball_vector = ballPosition() - allyGoalCenter();
+  double dist_goal_ball_vector = goal_ball_vector.norm();
+  double target_rotation = 0;
+
+  if (dist_goal_ball_vector != 0)
+  {
+    goal_ball_vector = goal_ball_vector / dist_goal_ball_vector;
+
+    // Move the robot 0.5 meters from the goal center. The robot will be aligne with the ally
+    // goal center and the ball position.
+    target_position = allyGoalCenter() + goal_ball_vector * 0.5;
+    target_rotation = detail::vec2angle(goal_ball_vector);
+  }
+
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Begginer_goalie::control() const {
-    Control ctrl = follower->control();
-    return ctrl; 
+Control Goalie::control() const
+{
+  Control ctrl = follower_->control();
+  return ctrl;
 }
 
-Begginer_goalie::~Begginer_goalie(){
-    delete follower;
+Goalie::~Goalie()
+{
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Begginer_goalie::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
-    return annotations;
+rhoban_ssl::annotations::Annotations Goalie::getAnnotations() const
+{
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
+  return annotations;
 }
 
-}
-}
+}  // namespace beginner
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

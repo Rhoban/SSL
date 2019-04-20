@@ -17,30 +17,23 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PHYSIC__COLLISION__H__
-#define __PHYSIC__COLLISION__H__
+#pragma once
 
-#include "Movement.h"
+#include "movement.h"
 
-namespace RhobanSSL {
-
+namespace rhoban_ssl
+{
 /*
  * This function computes the future time of collision of two movement with respect to
  * the current time `time`.
- * Let res be the result of this function. If, in the future, there is no collision then 
- * res.first is set to false. Suppose now that we have a collision in the futre at t_m (t<timeà. Then, than res.second is equal to t_m.
+ * Let res be the result of this function. If, in the future, there is no collision then
+ * res.first is set to false. Suppose now that we have a collision in the futre at t_m (t<timeà. Then, than res.second
+ * is equal to t_m.
  */
-std::pair<bool, double> collision_time(
-    double radius_1, const Movement & movement_1,
-    double radius_2, const Movement & movement_2,
-    double radius_error, double time
-);
-std::pair<bool, double> collision_time(
-    double radius_A, const rhoban_geometry::Point & A, const Vector2d & V_A,
-    double radius_B, const rhoban_geometry::Point & B, const Vector2d & V_B,
-    double radius_error
-);
+std::pair<bool, double> collisionTime(double radius_1, const Movement& movement_1, double radius_2,
+                                      const Movement& movement_2, double radius_error, double time);
+std::pair<bool, double> collisionTime(double radius_A, const rhoban_geometry::Point& A, const Vector2d& V_A,
+                                      double radius_B, const rhoban_geometry::Point& B, const Vector2d& V_B,
+                                      double radius_error);
 
-};
-
-#endif
+};  // namespace rhoban_ssl

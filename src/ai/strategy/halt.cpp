@@ -20,70 +20,67 @@
 #include "halt.h"
 #include <robot_behavior/do_nothing.h>
 
-namespace RhobanSSL {
-namespace Strategy {
+namespace rhoban_ssl
+{
+namespace strategy
+{
+const std::string Halt::name = "halt";
 
-const std::string Halt::name="halt";
-
-Halt::Halt(Ai::AiData & ai_data):
-    Strategy(ai_data)
-{ }
-
-int Halt::min_robots() const {
-    return 0;
-}
-int Halt::max_robots() const {
-    return -1;
-}
-Goalie_need Halt::needs_goalie() const {
-    return Goalie_need::IF_POSSIBLE;
+Halt::Halt(ai::AiData& ai_data) : Strategy(ai_data)
+{
 }
 
-void Halt::start(double time){
+int Halt::minRobots() const
+{
+  return 0;
+}
+int Halt::maxRobots() const
+{
+  return -1;
+}
+GoalieNeed Halt::needsGoalie() const
+{
+  return GoalieNeed::IF_POSSIBLE;
 }
 
-void Halt::stop(double time){
+void Halt::start(double time)
+{
 }
 
-void Halt::assign_behavior_to_robots(
-    std::function<
-        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-    > assign_behavior,
-    double time, double dt
-){
-    if( have_to_manage_the_goalie() ){
-        assign_behavior(
-            get_goalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::DoNothing(ai_data)
-            )
-        );
-    }
-    for(
-        int id : get_player_ids()
-    ){
-        assign_behavior(
-            id, std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::DoNothing(ai_data)
-            )
-        );
-    }
+void Halt::stop(double time)
+{
 }
 
-Halt::~Halt(){
+void Halt::assignBehaviorToRobots(
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+{
+  if (haveToManageTheGoalie())
+  {
+    assign_behavior(getGoalie(),
+                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
+  }
+  for (int id : getPlayerIds())
+  {
+    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
+  }
 }
 
-RhobanSSLAnnotation::Annotations Halt::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-
-    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
-    {
-        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
-        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
-    }
-    return annotations;
+Halt::~Halt()
+{
 }
 
+rhoban_ssl::annotations::Annotations Halt::getAnnotations() const
+{
+  rhoban_ssl::annotations::Annotations annotations;
 
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
+  {
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
+    // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+    annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+  }
+  return annotations;
 }
-}
+
+}  // namespace strategy
+}  // namespace rhoban_ssl

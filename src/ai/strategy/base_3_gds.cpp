@@ -23,120 +23,102 @@
 #include <robot_behavior/striker.h>
 #include <robot_behavior/defensor.h>
 
-namespace RhobanSSL {
-namespace Strategy {
-
-Base_3_gds::Base_3_gds(Ai::AiData & ai_data):
-    Strategy(ai_data)
+namespace rhoban_ssl
+{
+namespace strategy
+{
+Base3Gds::Base3Gds(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
-    
-Base_3_gds::~Base_3_gds(){
-}        
+
+Base3Gds::~Base3Gds()
+{
+}
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
- */ 
-int Base_3_gds::min_robots() const {
-    return 3;
+ */
+int Base3Gds::minRobots() const
+{
+  return 3;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
- */ 
-int Base_3_gds::max_robots() const {
-    return 3;
+ */
+int Base3Gds::maxRobots() const
+{
+  return 3;
 }
 
-Goalie_need Base_3_gds::needs_goalie() const {
-    return Goalie_need::YES;
+GoalieNeed Base3Gds::needsGoalie() const
+{
+  return GoalieNeed::YES;
 }
 
-const std::string Base_3_gds::name = "Base_3_gds";
+const std::string Base3Gds::name = "Base_3_gds";
 
-void Base_3_gds::start(double time){
-    DEBUG("START PREPARE KICKOFF");
-    behaviors_are_assigned = false;
+void Base3Gds::start(double time)
+{
+  DEBUG("START PREPARE KICKOFF");
+  behaviors_are_assigned_ = false;
 }
-void Base_3_gds::stop(double time){
-    DEBUG("STOP PREPARE KICKOFF");
+void Base3Gds::stop(double time)
+{
+  DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Base_3_gds::update(double time){
+void Base3Gds::update(double time)
+{
 }
 
-void Base_3_gds::assign_behavior_to_robots(
-    std::function<
-        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-    > assign_behavior,
-    double time, double dt
-){
-    if( not(behaviors_are_assigned) ){
-        // We first assign the behhavior of the goalie.
-        assign_behavior(
-            get_goalie(), std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::Goalie(ai_data)
-            )
-        );
+void Base3Gds::assignBehaviorToRobots(
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+{
+  if (not(behaviors_are_assigned_))
+  {
+    // We first assign the behhavior of the goalie.
+    assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Goalie(ai_data_)));
 
-        //we assign now all the other behavior 
-        assert( get_player_ids().size() == 3 );
+    // we assign now all the other behavior
+    assert(getPlayerIds().size() == 3);
 
-        assign_behavior(
-            player_id(0), std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::Striker(ai_data)
-            )
-        );
-        assign_behavior(
-            player_id(1), std::shared_ptr<Robot_behavior::RobotBehavior>(
-                new Robot_behavior::Defensor(ai_data)
-            )
-        );
+    assign_behavior(playerId(0), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Striker(ai_data_)));
+    assign_behavior(playerId(1),
+                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::Defensor(ai_data_)));
 
-        behaviors_are_assigned = true;
-    }
+    behaviors_are_assigned_ = true;
+  }
 }
 
 // We declare here the starting positions that are used to :
 //   - place the robot during STOP referee state
 //   - to compute the robot order of get_player_ids(),
-//     we minimize the distance between 
+//     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
-std::list<
-    std::pair<rhoban_geometry::Point,ContinuousAngle>
-> Base_3_gds::get_starting_positions( int number_of_avalaible_robots ){
-    assert( min_robots() <= number_of_avalaible_robots );
-    assert(
-        max_robots()==-1 or
-        number_of_avalaible_robots <= max_robots() 
-    );
+std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+Base3Gds::getStartingPositions(int number_of_avalaible_robots)
+{
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-    return {
-        std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            ai_data.relative2absolute(-1.0/3.0, 0.0),
-            0.0
-        )
-    };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ai_data_.relative2absolute(-1.0 / 3.0, 0.0), 0.0) };
 }
 
 //
-// This function return false if you don't want to 
-// give a staring position. So the manager will chose 
+// This function return false if you don't want to
+// give a staring position. So the manager will chose
 // a default position for you.
-// 
-bool Base_3_gds::get_starting_position_for_goalie(
-    rhoban_geometry::Point & linear_position, 
-    ContinuousAngle & angular_position
-){
-    linear_position =  ally_goal_center();
-    angular_position = ContinuousAngle(0.0);
-    return true;
-} 
-
-
-
+//
+bool Base3Gds::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+{
+  linear_position = allyGoalCenter();
+  angular_position = ContinuousAngle(0.0);
+  return true;
 }
-}
+
+}  // namespace strategy
+}  // namespace rhoban_ssl

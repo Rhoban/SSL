@@ -17,92 +17,85 @@ You should have received a copy of the GNU Lesser General Public License
 along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__PLANVESCHAMBRES__H__
-#define __MANAGER__PLANVESCHAMBRES__H__
+#pragma once
 
 #include <manager/manager_with_game_state.h>
 
-namespace RhobanSSL {
-  namespace Manager {
+namespace rhoban_ssl
+{
+namespace manager
+{
+class PlanVeschambres : public ManagerWithGameState
+{
+private:
+  const GameState& game_state_;
 
-    class PlanVeschambres : public ManagerWithGameState {
-    private:
+  // penalty
+  std::vector<std::list<std::string> > penalty_strats_;
+  // goale
+  std::vector<std::list<std::string> > goalie_strats_;
+  // offensive
+  std::vector<std::list<std::string> > offensive_strats_;
+  // stop
+  std::vector<std::list<std::string> > stop_strats_;
+  // halt
+  std::vector<std::list<std::string> > halt_strats_;
+  // defensive
+  std::vector<std::list<std::string> > defensive_strats_;
+  // kick
+  std::vector<std::list<std::string> > kick_strats_;
+  // kick_strats_indirect
+  std::vector<std::list<std::string> > kick_strats_indirect_;
 
-      const GameState & game_state;
+  bool ball_was_in_ally_part_ = true;
 
-      //penalty
-      std::vector< std::list<std::string> > penalty_strats;
-      //goale
-      std::vector< std::list<std::string> > goalie_strats;
-      //offensive
-      std::vector< std::list<std::string> > offensive_strats;
-      //stop
-      std::vector< std::list<std::string> > stop_strats;
-      //halt
-      std::vector< std::list<std::string> > halt_strats;
-      //defensive
-      std::vector< std::list<std::string> > defensive_strats;
-      //kick
-      std::vector< std::list<std::string> > kick_strats;
-      //kick_strats_indirect
-      std::vector< std::list<std::string> > kick_strats_indirect;
-      
-      bool ball_was_in_ally_part = true;
+  std::list<std::string> future_strats_;
 
-      std::list<std::string> future_strats;
+public:
+  PlanVeschambres(ai::AiData& ai_data, const GameState& game_state);
 
-    public:
+  // Begin of a new state
+  virtual void startStop();
+  virtual void startRunning();
+  virtual void startHalt();
 
-      PlanVeschambres(
-        Ai::AiData & ai_data,
-        const GameState & game_state
-      );
+  virtual void startDirectKickAlly();
+  virtual void startDirectKickOpponent();
 
-      // Begin of a new state
-      virtual void start_stop();
-      virtual void start_running();
-      virtual void start_halt();
+  virtual void startIndirectKickAlly();
+  virtual void startIndirectKickOpponent();
 
-      virtual void start_direct_kick_ally();
-      virtual void start_direct_kick_opponent();
+  virtual void startPrepareKickoffAlly();
+  virtual void startPrepareKickoffOpponent();
 
-      virtual void start_indirect_kick_ally();
-      virtual void start_indirect_kick_opponent();
+  virtual void startKickoffAlly();
+  virtual void startKickoffOpponent();
 
-      virtual void start_prepare_kickoff_ally();
-      virtual void start_prepare_kickoff_opponent();
+  virtual void startPenaltyAlly();
+  virtual void startPenaltyOpponent();
 
-      virtual void start_kickoff_ally();
-      virtual void start_kickoff_opponent();
+  // During a state
+  virtual void continueStop();
+  virtual void continueRunning();
+  virtual void continueHalt();
 
-      virtual void start_penalty_ally();
-      virtual void start_penalty_opponent();
+  virtual void continueDirectKickAlly();
+  virtual void continueDirectKickOpponent();
 
-      // During a state
-      virtual void continue_stop();
-      virtual void continue_running();
-      virtual void continue_halt();
+  virtual void continueIndirectKickAlly();
+  virtual void continueIndirectKickOpponent();
 
-      virtual void continue_direct_kick_ally();
-      virtual void continue_direct_kick_opponent();
+  virtual void continuePrepareKickoffAlly();
+  virtual void continuePrepareKickoffOpponent();
 
-      virtual void continue_indirect_kick_ally();
-      virtual void continue_indirect_kick_opponent();
+  virtual void continueKickoffAlly();
+  virtual void continueKickoffOpponent();
 
-      virtual void continue_prepare_kickoff_ally();
-      virtual void continue_prepare_kickoff_opponent();
+  virtual void continuePenaltyAlly();
+  virtual void continuePenaltyOpponent();
 
-      virtual void continue_kickoff_ally();
-      virtual void continue_kickoff_opponent();
-
-      virtual void continue_penalty_ally();
-      virtual void continue_penalty_opponent();
-
-      virtual ~PlanVeschambres();
-
-    };
-
-  };
+  virtual ~PlanVeschambres();
 };
 
-#endif
+};  // namespace manager
+};  // namespace rhoban_ssl

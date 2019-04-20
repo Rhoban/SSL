@@ -24,106 +24,112 @@
 #include <robot_behavior/mur_defensor.h>
 #include <robot_behavior/degageur.h>
 
-namespace RhobanSSL {
-namespace Strategy {
-
-Mur_2::Mur_2(Ai::AiData & ai_data):
-    Strategy(ai_data)
+namespace rhoban_ssl
+{
+namespace strategy
+{
+Mur_2::Mur_2(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-Mur_2::~Mur_2(){
+Mur_2::~Mur_2()
+{
 }
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2::min_robots() const {
-    return 2;
+int Mur_2::minRobots() const
+{
+  return 2;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2::max_robots() const {
-    return 2;
+int Mur_2::maxRobots() const
+{
+  return 2;
 }
 
-Goalie_need Mur_2::needs_goalie() const {
-    return Goalie_need::NO;
+GoalieNeed Mur_2::needsGoalie() const
+{
+  return GoalieNeed::NO;
 }
 
 const std::string Mur_2::name = "mur_2";
 
-void Mur_2::start(double time){
-    DEBUG("START PREPARE KICKOFF");
-    behaviors_are_assigned = false;
+void Mur_2::start(double time)
+{
+  DEBUG("START PREPARE KICKOFF");
+  behaviors_are_assigned_ = false;
 }
-void Mur_2::stop(double time){
-    DEBUG("STOP PREPARE KICKOFF");
+void Mur_2::stop(double time)
+{
+  DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Mur_2::update(double time){
+void Mur_2::update(double time)
+{
+  int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
+  is_closest_0_ = false;
+  is_closest_1_ = false;
 
-  int nearest_ally_robot_from_ball = GameInformations::get_shirt_number_of_closest_robot_to_the_ball( Vision::Team::Ally );
-  is_closest_0 = false;
-  is_closest_1 = false;
-
-  if ( nearest_ally_robot_from_ball == player_id(0) ){
-      is_closest_0 = true;
-  } else {
-      if (nearest_ally_robot_from_ball == player_id(1)) {
-        is_closest_1 = true;
-      }
+  if (nearest_ally_robot_from_ball == playerId(0))
+  {
+    is_closest_0_ = true;
   }
-
+  else
+  {
+    if (nearest_ally_robot_from_ball == playerId(1))
+    {
+      is_closest_1_ = true;
+    }
+  }
 }
 
-void Mur_2::assign_behavior_to_robots(
-    std::function<
-        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-    > assign_behavior,
-    double time, double dt
-){
+void Mur_2::assignBehaviorToRobots(
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+{
+  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefensor(ai_data_, 1));
+  static_cast<robot_behavior::MurDefensor*>(mur1.get())->declareMurRobotId(0, 2);
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> mur1(
-            new Robot_behavior::Mur_defensor(ai_data, 1)
-    );
-    static_cast<Robot_behavior::Mur_defensor*>( mur1.get() )->declare_mur_robot_id( 0, 2 );
+  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefensor(ai_data_, 1));
+  static_cast<robot_behavior::MurDefensor*>(mur2.get())->declareMurRobotId(1, 2);
+  std::shared_ptr<robot_behavior::RobotBehavior> deg1(new robot_behavior::Degageur(ai_data_));
 
-    std::shared_ptr<Robot_behavior::RobotBehavior> mur2(
-            new Robot_behavior::Mur_defensor(ai_data, 1)
-    );
-    static_cast<Robot_behavior::Mur_defensor*>( mur2.get() )->declare_mur_robot_id( 1, 2 );
-    std::shared_ptr<Robot_behavior::RobotBehavior> deg1(
-            new Robot_behavior::Degageur(ai_data)
-    );
+  if (not(behaviors_are_assigned_))
+  {
+    assert(getPlayerIds().size() == 2);
 
-    if( not(behaviors_are_assigned) ){
+    assign_behavior(playerId(0), mur1);
+    assign_behavior(playerId(1), mur2);
 
-        assert( get_player_ids().size() == 2 );
-
-        assign_behavior( player_id(0), mur1 );
-        assign_behavior( player_id(1), mur2 );
-
-        behaviors_are_assigned = true;
-    } else {
-        if ( is_closest_0 ) {
-            assign_behavior( player_id(0), deg1 );
-            assign_behavior( player_id(1), mur2 );
-        } else {
-            if ( is_closest_1 ) {
-                assign_behavior( player_id(0), mur1 );
-                assign_behavior( player_id(1), deg1 );
-            } else {
-                assign_behavior( player_id(0), mur1 );
-                assign_behavior( player_id(1), mur2 );
-            }
-
-        }
+    behaviors_are_assigned_ = true;
+  }
+  else
+  {
+    if (is_closest_0_)
+    {
+      assign_behavior(playerId(0), deg1);
+      assign_behavior(playerId(1), mur2);
     }
+    else
+    {
+      if (is_closest_1_)
+      {
+        assign_behavior(playerId(0), mur1);
+        assign_behavior(playerId(1), deg1);
+      }
+      else
+      {
+        assign_behavior(playerId(0), mur1);
+        assign_behavior(playerId(1), mur2);
+      }
+    }
+  }
 }
 
 // We declare here the starting positions that are used to :
@@ -132,21 +138,13 @@ void Mur_2::assign_behavior_to_robots(
 //     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
-std::list<
-    std::pair<rhoban_geometry::Point,ContinuousAngle>
-> Mur_2::get_starting_positions( int number_of_avalaible_robots ){
-    assert( min_robots() <= number_of_avalaible_robots );
-    assert(
-        max_robots()==-1 or
-        number_of_avalaible_robots <= max_robots()
-    );
+std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+Mur_2::getStartingPositions(int number_of_avalaible_robots)
+{
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-    return {
-        std::pair<rhoban_geometry::Point,ContinuousAngle>(
-            ally_goal_center(),
-            0.0
-        )
-    };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
 }
 
 //
@@ -154,27 +152,25 @@ std::list<
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Mur_2::get_starting_position_for_goalie(
-    rhoban_geometry::Point & linear_position,
-    ContinuousAngle & angular_position
-){
-    linear_position =  ally_goal_center();
-    angular_position = ContinuousAngle(0.0);
-    return true;
+bool Mur_2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+{
+  linear_position = allyGoalCenter();
+  angular_position = ContinuousAngle(0.0);
+  return true;
 }
 
-RhobanSSLAnnotation::Annotations Mur_2::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
+rhoban_ssl::annotations::Annotations Mur_2::getAnnotations() const
+{
+  rhoban_ssl::annotations::Annotations annotations;
 
-    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
-    {
-        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
-        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
-    }
-    return annotations;
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
+  {
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
+    // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+    annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+  }
+  return annotations;
 }
 
-
-}
-}
+}  // namespace strategy
+}  // namespace rhoban_ssl

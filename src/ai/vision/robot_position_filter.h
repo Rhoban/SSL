@@ -1,60 +1,41 @@
-#ifndef __VISION__ROBOT_POSITION_FILTER__H__
-#define __VISION__ROBOT_POSITION_FILTER__H__
+#pragma once
 
-#include <AiData.h>
+#include <ai_data.h>
 #include <VisionClient.h>
-#include <math/ContinuousAngle.h>
-#include <AiData.h>
-#include "VisionData.h"
+#include <math/continuous_angle.h>
+#include "vision_data.h"
 
-namespace RhobanSSL {
-namespace Vision {
-
-enum Part_of_the_field {
-    POSIVE_HALF_FIELD,
-    NEGATIVE_HALF_FIELD,
-    ALL_FIELD
+namespace rhoban_ssl
+{
+namespace vision
+{
+enum PartOfTheField
+{
+  POSIVE_HALF_FIELD,
+  NEGATIVE_HALF_FIELD,
+  ALL_FIELD
 };
 
-bool object_coordonate_is_valid(
-    double x,double y,
-    Part_of_the_field part_of_the_field_used
-);
+bool objectCoordonateIsValid(double x, double y, PartOfTheField part_of_the_field_used);
 
+class RobotPositionFilter
+{
+public:
+  static std::pair<rhoban_geometry::Point, ContinuousAngle>
+  averageFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
+                const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
+                const vision::VisionData& old_vision_data, vision::PartOfTheField part_of_the_field_used);
 
-class Robot_position_filter {
-    public:
-    static std::pair<
-        rhoban_geometry::Point,
-        ContinuousAngle
-    > average_filter(
-        int robot_id, const SSL_DetectionRobot & robotFrame, Ai::Team team_color, bool ally, 
-        const std::map<int, SSL_DetectionFrame> & camera_detections,
-        bool & orientation_is_defined, const Vision::VisionData & old_vision_data,
-        Vision::Part_of_the_field part_of_the_field_used
-    );
+  static std::pair<rhoban_geometry::Point, ContinuousAngle>
+  exponentialDegressionFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
+                              const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
+                              const vision::VisionData& old_vision_data);
 
-    static std::pair<
-        rhoban_geometry::Point,
-        ContinuousAngle
-    > exponential_degression_filter(
-        int robot_id, const SSL_DetectionRobot & robotFrame, Ai::Team team_color, bool ally,
-        const std::map<int, SSL_DetectionFrame> & camera_detections,
-        bool & orientation_is_defined, const Vision::VisionData & old_vision_data
-    );
-
-    static std::pair<
-        rhoban_geometry::Point,
-        ContinuousAngle
-    > no_filter(
-        int robot_id, const SSL_DetectionRobot & robotFrame, Ai::Team team_color, bool ally,
-        const std::map<int, SSL_DetectionFrame> & camera_detections,
-        bool & orientation_is_defined, const Vision::VisionData & old_vision_data
-    );
-
+  static std::pair<rhoban_geometry::Point, ContinuousAngle>
+  noFilter(int robot_id, const SSL_DetectionRobot& robot_frame, ai::Team team_color, bool ally,
+           const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
+           const vision::VisionData& old_vision_data);
 };
 
-};
-};
-#endif
-
+};  // namespace vision
+};  // namespace rhoban_ssl

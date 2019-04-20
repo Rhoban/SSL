@@ -17,41 +17,71 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GOALIE__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__GOALIE__
+#pragma once
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior {
-
-/** Tutorial class to show how to place the robot behind the
+namespace robot_behavior
+{
+namespace beginner
+{
+/**
+ */
+/**
+ * @class Goalie
+ * @brief Tutorial class to show how to place the robot behind the
  *  ball which aiming the center of ball.
  */
-class Begginer_goalie : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
+class Goalie : public RobotBehavior
+{
+private:
+  /**
+   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   */
+  ConsignFollower* follower_;
+  /**
+   * Not use in this package but set in a case of copy.
+   * @see rhoban_ssl::annotations::Annotations
+   */
+  rhoban_ssl::annotations::Annotations annotations_;
 
-    public:
-    Begginer_goalie(Ai::AiData& ai_data);
+public:
+  /**
+   * @brief Constructor.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see ai::AiData
+   */
+  Goalie(ai::AiData& ai_data);
+  /**
+   * @brief Move the robot 0.5 meters from the goal center.
+   * The robot will be align with the ally goal center and the ball position..
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  /**
+   * @see Control.
+   */
+  virtual Control control() const;
 
-	virtual Control control() const;
+  /**
+   * @see rhoban_ssl::annotations::Annotations
+   */
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Begginer_goalie();
+  /**
+   * @brief Destructor.
+   */
+  virtual ~Goalie();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+}  // Namespace beginner
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

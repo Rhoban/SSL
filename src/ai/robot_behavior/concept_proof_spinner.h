@@ -17,41 +17,35 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__CONCEPT_PROOF_SPINNER__H__
-#define __ROBOT_BEHAVIOR__CONCEPT_PROOF_SPINNER__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior {
+namespace robot_behavior
+{
+class ConceptProofSpinner : public RobotBehavior
+{
+private:
+  ConsignFollower* follower_;
 
-class Concept_proof_spinner : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
+  bool go_to_home_;
+  bool save_ball_position_;
+  rhoban_geometry::Point ball_pos_;
 
-    bool go_to_home;
-    bool save_ball_position;
-    rhoban_geometry::Point ball_pos;
+public:
+  ConceptProofSpinner(ai::AiData& ai_data);
 
-    public:
-    Concept_proof_spinner(Ai::AiData& ai_data);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual Control control() const;
 
-	virtual Control control() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Concept_proof_spinner();
+  virtual ~ConceptProofSpinner();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

@@ -3,13 +3,13 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(API *api, QWidget *parent) :
-    QMainWindow(parent),
-    accessibility(false),
-    superBigleuxMode(false),
-    inspector(NULL),
-    ui(new Ui::MainWindow),
-    api(api)
+MainWindow::MainWindow(API* api, QWidget* parent)
+  : QMainWindow(parent)
+  , accessibility(false)
+  , superBigleuxMode(false)
+  , inspector(NULL)
+  , ui(new Ui::MainWindow)
+  , api(api)
 {
   ui->setupUi(this);
 
@@ -39,7 +39,8 @@ MainWindow::MainWindow(API *api, QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-  if (inspector) {
+  if (inspector)
+  {
     delete inspector;
   }
   delete accessibilityAction;
@@ -50,7 +51,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_actionInspector_triggered()
 {
-  if (inspector == NULL) {
+  if (inspector == NULL)
+  {
     inspector = new QWebInspector;
     inspector->setPage(ui->webView->page());
   }
@@ -61,12 +63,15 @@ void MainWindow::on_actionAccessibility_triggered()
 {
   accessibility = !accessibility;
 
-  if (accessibility) {
+  if (accessibility)
+  {
     ui->webView->setZoomFactor(1.5);
-    setGeometry(x(), y(), 1.5*width(), 1.5*height());
-  } else {
+    setGeometry(x(), y(), 1.5 * width(), 1.5 * height());
+  }
+  else
+  {
     ui->webView->setZoomFactor(1);
-    setGeometry(x(), y(), width()/1.5, height()/1.5);
+    setGeometry(x(), y(), width() / 1.5, height() / 1.5);
   }
 }
 
@@ -74,11 +79,14 @@ void MainWindow::on_actionSuperBigleux_triggered()
 {
   superBigleuxMode = !superBigleuxMode;
 
-  if (superBigleuxMode) {
+  if (superBigleuxMode)
+  {
     ui->webView->setZoomFactor(2.5);
-    setGeometry(x(), y(), 2.5*width(), 2.5*height());
-  } else {
+    setGeometry(x(), y(), 2.5 * width(), 2.5 * height());
+  }
+  else
+  {
     ui->webView->setZoomFactor(1);
-    setGeometry(x(), y(), width()/2.5, height()/2.5);
+    setGeometry(x(), y(), width() / 2.5, height() / 2.5);
   }
 }

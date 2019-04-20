@@ -20,67 +20,69 @@
 #include "movement_with_no_prediction.h"
 #include <debug.h>
 
-namespace RhobanSSL {
-
-
-double Movement_with_no_prediction::last_time() const {
-    return samples.time(0);
+namespace rhoban_ssl
+{
+double MovementWithNoPrediction::lastTime() const
+{
+  return samples_.time(0);
 }
 
-void
-Movement_with_no_prediction::print(std::ostream& stream) const {
-    stream << samples; 
+void MovementWithNoPrediction::print(std::ostream& stream) const
+{
+  stream << samples_;
 }
 
-void
-Movement_with_no_prediction::set_sample( const MovementSample & samples ) {
-    //TODO
-    //assert( samples.is_valid() );
-    this->samples = samples;
+void MovementWithNoPrediction::setSample(const MovementSample& samples)
+{
+  // TODO
+  // assert( samples.is_valid() );
+  samples_ = samples;
 }
 
-const MovementSample & Movement_with_no_prediction::get_sample() const {
-    return samples;
+const MovementSample& MovementWithNoPrediction::getSample() const
+{
+  return samples_;
 }
 
-rhoban_geometry::Point
-Movement_with_no_prediction::linear_position( double time ) const {
-    return samples.linear_position(0);
-}
-        
-ContinuousAngle
-Movement_with_no_prediction::angular_position( double time ) const {
-    return samples.angular_position(0);
-}
-       
-Vector2d
-Movement_with_no_prediction::linear_velocity( double time ) const {
-    return samples.linear_velocity(0);
-}
-        
-ContinuousAngle
-Movement_with_no_prediction::angular_velocity( double time ) const {
-    return samples.angular_velocity(0);
-}
-        
-Vector2d
-Movement_with_no_prediction::linear_acceleration( double time ) const {
-    return samples.linear_acceleration(0);
-}
-       
-ContinuousAngle
-Movement_with_no_prediction::angular_acceleration( double time ) const {
-    return samples.angular_acceleration(0);
+rhoban_geometry::Point MovementWithNoPrediction::linearPosition(double time) const
+{
+  return samples_.linearPosition(0);
 }
 
-Movement * 
-Movement_with_no_prediction::clone() const {
-    Movement_with_no_prediction* mov = new Movement_with_no_prediction();
-    *mov = *this;
-    return mov;
+ContinuousAngle MovementWithNoPrediction::angularPosition(double time) const
+{
+  return samples_.angularPosition(0);
 }
 
-Movement_with_no_prediction::~Movement_with_no_prediction(){
+Vector2d MovementWithNoPrediction::linearVelocity(double time) const
+{
+  return samples_.linearVelocity(0);
 }
 
+ContinuousAngle MovementWithNoPrediction::angularVelocity(double time) const
+{
+  return samples_.angularVelocity(0);
 }
+
+Vector2d MovementWithNoPrediction::linearAcceleration(double time) const
+{
+  return samples_.linearAcceleration(0);
+}
+
+ContinuousAngle MovementWithNoPrediction::angularAcceleration(double time) const
+{
+  return samples_.angularAcceleration(0);
+}
+
+Movement* MovementWithNoPrediction::clone() const
+{
+  MovementWithNoPrediction* mov = new MovementWithNoPrediction();
+  *mov = *this;
+  return mov;
+}
+
+MovementWithNoPrediction::~MovementWithNoPrediction()
+{
+}
+
+}  // namespace rhoban_ssl

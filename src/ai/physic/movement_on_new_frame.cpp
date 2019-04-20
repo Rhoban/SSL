@@ -20,85 +20,82 @@
 #include "movement_on_new_frame.h"
 #include <debug.h>
 
-namespace RhobanSSL {
-
-void Movement_on_new_frame::set_frame(
-    const rhoban_geometry::Point & origin,
-    const Vector2d & v1, const Vector2d & v2
-){
-    frame.set_frame(origin, v1, v2);
+namespace rhoban_ssl
+{
+void MovementOnNewFrame::setFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
+{
+  frame_.setFrame(origin, v1, v2);
 }
 
-
-Movement_on_new_frame::Movement_on_new_frame(
-    Movement* movement
-):movement(movement)
+MovementOnNewFrame::MovementOnNewFrame(Movement* movement) : movement_(movement)
 {
 }
 
-const Movement* Movement_on_new_frame::get_original_movement() const {
-    return this->movement;
+const Movement* MovementOnNewFrame::getOriginalMovement() const
+{
+  return movement_;
 };
 
-void
-Movement_on_new_frame::print(std::ostream& stream) const {
-    stream << "TODO !";
+void MovementOnNewFrame::print(std::ostream& stream) const
+{
+  stream << "TODO !";
 }
 
-void
-Movement_on_new_frame::set_sample( const MovementSample & samples ) {
-    movement->set_sample(samples);
+void MovementOnNewFrame::setSample(const MovementSample& samples)
+{
+  movement_->setSample(samples);
 }
 
-const MovementSample & Movement_on_new_frame::get_sample() const {
-    return movement->get_sample();
+const MovementSample& MovementOnNewFrame::getSample() const
+{
+  return movement_->getSample();
 }
 
-rhoban_geometry::Point
-Movement_on_new_frame::linear_position( double time ) const {
-    return frame.to_frame(movement->linear_position(time));
+rhoban_geometry::Point MovementOnNewFrame::linearPosition(double time) const
+{
+  return frame_.toFrame(movement_->linearPosition(time));
 }
 
-double Movement_on_new_frame::last_time() const {
-    return movement->last_time();
+double MovementOnNewFrame::lastTime() const
+{
+  return movement_->lastTime();
 }
 
-
-
-ContinuousAngle
-Movement_on_new_frame::angular_position( double time ) const {
-    return frame.to_frame(movement->angular_position(time));
+ContinuousAngle MovementOnNewFrame::angularPosition(double time) const
+{
+  return frame_.toFrame(movement_->angularPosition(time));
 }
 
-Vector2d
-Movement_on_new_frame::linear_velocity( double time ) const {
-    return frame.to_basis(movement->linear_velocity(time));
+Vector2d MovementOnNewFrame::linearVelocity(double time) const
+{
+  return frame_.toBasis(movement_->linearVelocity(time));
 }
 
-ContinuousAngle
-Movement_on_new_frame::angular_velocity( double time ) const {
-    return movement->angular_velocity(time);
+ContinuousAngle MovementOnNewFrame::angularVelocity(double time) const
+{
+  return movement_->angularVelocity(time);
 }
 
-Vector2d
-Movement_on_new_frame::linear_acceleration( double time ) const {
-    return frame.to_basis(movement->linear_acceleration(time));
+Vector2d MovementOnNewFrame::linearAcceleration(double time) const
+{
+  return frame_.toBasis(movement_->linearAcceleration(time));
 }
 
-ContinuousAngle
-Movement_on_new_frame::angular_acceleration( double time ) const {
-    return movement->angular_acceleration(time);
+ContinuousAngle MovementOnNewFrame::angularAcceleration(double time) const
+{
+  return movement_->angularAcceleration(time);
 }
 
-Movement *
-Movement_on_new_frame::clone() const {
-    Movement_on_new_frame* mov = new Movement_on_new_frame( movement->clone() );
-    mov->frame = this->frame;
-    return mov;
+Movement* MovementOnNewFrame::clone() const
+{
+  MovementOnNewFrame* mov = new MovementOnNewFrame(movement_->clone());
+  mov->frame_ = frame_;
+  return mov;
 }
 
-Movement_on_new_frame::~Movement_on_new_frame(){
-    delete movement;
+MovementOnNewFrame::~MovementOnNewFrame()
+{
+  delete movement_;
 }
 
-}
+}  // namespace rhoban_ssl

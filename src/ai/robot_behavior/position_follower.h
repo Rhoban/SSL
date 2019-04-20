@@ -17,56 +17,43 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
-#define __ROBOT_BEHAVIOR__POSITION_FOLLOWER__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "consign_follower.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior {
+namespace robot_behavior
+{
+class PositionFollower : public ConsignFollower
+{
+private:
+  rhoban_geometry::Point position_;
+  ContinuousAngle angle_;
 
+  RobotControlWithPositionFollowing robot_control_;
 
-class PositionFollower : public ConsignFollower {
-    private:
-        rhoban_geometry::Point position;
-        ContinuousAngle angle;
+public:
+  PositionFollower(ai::AiData& ai_data, double time, double dt);
 
-        RobotControlWithPositionFollowing robot_control;
+  void setTranslationPid(double kp, double ki, double kd);
+  void setOrientationPid(double kp, double ki, double kd);
 
-    public:
-        PositionFollower( Ai::AiData& ai_data, double time, double dt ); 
+  void setLimits(double translation_velocity_limit, double rotation_velocity_limit,
+                 double translation_acceleration_limit, double rotation_acceleration_limit);
 
-        void set_translation_pid( double kp, double ki, double kd );
-        void set_orientation_pid( double kp, double ki, double kd );
+  virtual void setFollowingPosition(const rhoban_geometry::Point& position_to_follow, const ContinuousAngle& angle);
 
-        void set_limits(
-            double translation_velocity_limit,
-            double rotation_velocity_limit,
-            double translation_acceleration_limit,
-            double rotation_acceleration_limit
-        );
+protected:
+  void updateControl(double time);
 
-        virtual void set_following_position(
-            const rhoban_geometry::Point & position_to_follow,
-            const ContinuousAngle & angle
-        );
+public:
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-    protected:
-        void update_control(double time);
-
-    public:
-        virtual void update(
-            double time, 
-            const Ai::Robot & robot, const Ai::Ball & ball
-        );
-
-        virtual Control control() const;
-        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual Control control() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

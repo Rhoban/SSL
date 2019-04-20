@@ -17,38 +17,33 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CORE__EXPORT_TO_PLOT__H__
-#define __CORE__EXPORT_TO_PLOT__H__
+#pragma once
+
 #include <fstream>
 #include <functional>
 #include <vector>
 #include <map>
 
-class Plot {
-    std::ofstream log_file;
-    
-    std::vector<std::string> value_names;
-//    std::map<std::string, int> value_name_id;
-    std::map<std::string, double> current_values;
-    std::map<std::string, bool> loged_values;
-    int n;
+class Plot
+{
+  std::ofstream log_file_;
 
-    void create_plot_script(
-        const std::vector<std::string> & value_names
-    );
+  std::vector<std::string> value_names_;
+  //    std::map<std::string, int> value_name_id_;
+  std::map<std::string, double> current_values_;
+  std::map<std::string, bool> loged_values_;
+  int n_;
 
-    public: 
-    std::string name;
+  void createPlotScript(const std::vector<std::string>& value_names);
 
-    virtual ~Plot();
-        
-    void init( 
-        const std::string & name, const std::vector<std::string> & value_names 
-    );
-    void log( std::function< std::vector<double>() > fct );
-    void log( const std::string & name_value, double value );
-    void store();
-    void close(); 
+public:
+  std::string name;
+
+  virtual ~Plot();
+
+  void init(const std::string& name, const std::vector<std::string>& value_names);
+  void log(std::function<std::vector<double>()> fct);
+  void log(const std::string& name_value, double value);
+  void store();
+  void close();
 };
-
-#endif

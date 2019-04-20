@@ -17,40 +17,37 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MOVEMENT_WITH_NO_PREDICTION_H__ 
-#define __MOVEMENT_WITH_NO_PREDICTION_H__ 
+#pragma once
 
-#include <physic/Movement.h>
+#include <physic/movement.h>
 
-namespace RhobanSSL {
+namespace rhoban_ssl
+{
+class MovementWithNoPrediction : public Movement
+{
+private:
+  MovementSample samples_;
 
-class Movement_with_no_prediction : public Movement {
-    private:
-        MovementSample samples;
+public:
+  virtual Movement* clone() const;
 
-    public:
-        virtual Movement * clone() const;
+  virtual double lastTime() const;
 
-        virtual double last_time() const;
+  virtual void setSample(const MovementSample& samples);
+  virtual const MovementSample& getSample() const;
 
-        virtual void set_sample( const MovementSample & samples );
-        virtual const MovementSample & get_sample() const;
+  virtual rhoban_geometry::Point linearPosition(double time) const;
+  virtual ContinuousAngle angularPosition(double time) const;
 
-        virtual rhoban_geometry::Point linear_position( double time ) const;
-        virtual ContinuousAngle angular_position( double time ) const;
+  virtual Vector2d linearVelocity(double time) const;
+  virtual ContinuousAngle angularVelocity(double time) const;
 
-        virtual Vector2d linear_velocity( double time ) const;
-        virtual ContinuousAngle angular_velocity( double time ) const;
+  virtual Vector2d linearAcceleration(double time) const;
+  virtual ContinuousAngle angularAcceleration(double time) const;
 
-        virtual Vector2d linear_acceleration( double time ) const;
-        virtual ContinuousAngle angular_acceleration( double time ) const;
+  virtual void print(std::ostream& stream) const;
 
-        virtual void print(std::ostream& stream) const;
-
-        virtual ~Movement_with_no_prediction();
+  virtual ~MovementWithNoPrediction();
 };
 
-
-}
-
-#endif
+}  // namespace rhoban_ssl
