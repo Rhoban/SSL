@@ -2,7 +2,7 @@
 #include "client_config.h"
 #include <string>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 SimClient::SimClient() : broadcast(-1, SSL_SIM_PORT)
 {
@@ -73,4 +73,4 @@ void SimClient::sendPacket(grSim_Packet& packet)
   packet.SerializeToArray(buffer, len);
   broadcast.broadcastMessage(buffer, len);
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -25,7 +25,7 @@
 #if GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION >= 3000000
 #include <google/protobuf/util/json_util.h>
 #endif
-// namespace RhobanSSL {
+// namespace rhoban_ssl {
 // namespace vision {
 
 std::ostream& operator<<(std::ostream& out, const SSL_Referee& referee);

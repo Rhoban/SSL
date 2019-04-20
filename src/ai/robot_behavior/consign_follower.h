@@ -21,27 +21,26 @@
 
 #include "robot_behavior.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class ConsignFollower : public RobotBehavior
 {
 public:
-  ConsignFollower(Ai::AiData& ai_data);
+  ConsignFollower(ai::AiData& ai_data);
 
-  virtual void set_following_position(const rhoban_geometry::Point& position_to_follow,
-                                      const ContinuousAngle& angle) = 0;
+  virtual void setFollowingPosition(const rhoban_geometry::Point& position_to_follow, const ContinuousAngle& angle) = 0;
 
-  virtual void avoid_the_ball(bool value);
-  virtual void avoid_ally(bool value);
-  virtual void avoid_opponent(bool value);
+  virtual void avoidTheBall(bool value);
+  virtual void avoidAlly(bool value);
+  virtual void avoidOpponent(bool value);
   virtual void avoidRobot(int id, bool value);
 
-  virtual void set_radius_avoidance_for_the_ball(double radius);
+  virtual void setRadiusAvoidanceForTheBall(double radius);
 
   virtual ~ConsignFollower();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

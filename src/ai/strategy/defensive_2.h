@@ -23,26 +23,26 @@
 #include <robot_behavior/degageur.h>
 #include <robot_behavior/obstructor.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class Defensive2 : public Strategy
 {
 private:
-  bool behaviors_are_assigned;
-  std::shared_ptr<Robot_behavior::Degageur> degageur1;
-  std::shared_ptr<Robot_behavior::Obstructor> obstructeur1;
-  std::shared_ptr<Robot_behavior::Degageur> degageur2;
-  std::shared_ptr<Robot_behavior::Obstructor> obstructeur2;
+  bool behaviors_are_assigned_;
+  std::shared_ptr<robot_behavior::Degageur> degageur1_;
+  std::shared_ptr<robot_behavior::Obstructor> obstructeur1_;
+  std::shared_ptr<robot_behavior::Degageur> degageur2_;
+  std::shared_ptr<robot_behavior::Obstructor> obstructeur2_;
 
 public:
-  Defensive2(Ai::AiData& ai_data);
+  Defensive2(ai::AiData& ai_data);
   virtual ~Defensive2();
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
@@ -51,16 +51,15 @@ public:
 
   virtual void update(double time);
 
-  virtual void assign_behavior_to_robots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+  virtual void assignBehaviorToRobots(
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots);
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position);
+  getStartingPositions(int number_of_avalaible_robots);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
-};  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace strategy
+};  // namespace rhoban_ssl

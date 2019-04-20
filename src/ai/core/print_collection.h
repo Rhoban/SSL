@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PRINT_COLLECTION__H__
-#define __PRINT_COLLECTION__H__
+#pragma once
 
 #include <iostream>
 #include <set>
@@ -85,5 +84,3 @@ std::ostream& operator<<(std::ostream& out, const std::vector<V>& vector)
 }
 
 }  // namespace std
-
-#endif

@@ -22,31 +22,31 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class PredictFutur : public RobotBehavior
 {
 private:
-  bool use_custom_vector;
-  rhoban_geometry::Point striking_point;
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  bool use_custom_vector_;
+  rhoban_geometry::Point striking_point_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  PredictFutur(Ai::AiData& ai_data);
+  PredictFutur(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  void declare_point_to_strik(rhoban_geometry::Point point);
+  void declarePointToStrik(rhoban_geometry::Point point);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~PredictFutur();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

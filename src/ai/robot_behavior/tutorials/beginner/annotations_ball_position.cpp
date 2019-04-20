@@ -20,9 +20,9 @@
 #include "annotations_ball_position.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace beginner
 {
@@ -60,5 +60,5 @@ RhobanSSLAnnotation::Annotations AnnotationsBallPosition::get_annotations() cons
   return annotations;
 }
 }  // namespace beginner
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

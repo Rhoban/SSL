@@ -1,5 +1,3 @@
-
-
 /*
     This file is part of SSL.
 
@@ -26,34 +24,34 @@
 #include <ai_data.h>
 #include <robot_behavior/robot_behavior.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-struct Data_from_ai
+struct DataFromAi
 {
-  Ai::Team team_color;
+  ai::Team team_color;
 };
 
-struct Data_for_viewer
+struct DataForViewer
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
 };
 
-struct Shared_data
+struct SharedData
 {
-  struct Final_control
+  struct FinalControl
   {
     bool hardware_is_responding;           // Wrie access by AICommander only
     bool is_disabled_by_viewer;            // Write access for viewer only
     bool is_manually_controled_by_viewer;  // Write acces for viewer only
     Control control;  // Write access for viewer when is_manually_controled_by_viewer is set to true
                       // Write access for Ai
-    Final_control();
-    Final_control(const Final_control& control);
+    FinalControl();
+    FinalControl(const FinalControl& control);
   };
 
-  std::vector<Final_control> final_control_for_robots;
+  std::vector<FinalControl> final_control_for_robots;
 
-  Shared_data();
+  SharedData();
 };
 
 /**
@@ -62,40 +60,40 @@ struct Shared_data
 class Data
 {
 private:  // Do not remove !
-  std::mutex mutex_for_vision_data;
-  Vision::VisionData vision_data;
+  std::mutex mutex_for_vision_data_;
+  vision::VisionData vision_data_;
 
-  std::mutex mutex_for_ai_data;
-  Data_from_ai data_from_ai;
+  std::mutex mutex_for_ai_data_;
+  DataFromAi data_from_ai_;
 
-  std::mutex mutex_for_shared_data;
-  Shared_data shared_data;
+  std::mutex mutex_for_shared_data_;
+  SharedData shared_data_;
 
-  std::mutex mutex_for_viewer_data;
-  Data_for_viewer data_for_viewer;
+  std::mutex mutex_for_viewer_data_;
+  DataForViewer data_for_viewer_;
 
 public:
-  Data(Ai::Team initial_team_color);
+  Data(ai::Team initial_team_color);
 
-  Data& operator<<(const Vision::VisionData& vision_data);
-  Data& operator>>(Vision::VisionData& vision_data);
-  void edit_vision_data(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(Vision::VisionData& vision_data)> vision_data_editor);
+  Data& operator<<(const vision::VisionData& vision_data);
+  Data& operator>>(vision::VisionData& vision_data);
+  void editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
+      std::function<void(vision::VisionData& vision_data)> vision_data_editor);
 
-  Data& operator<<(const Data_from_ai& data_from_ai);
-  Data& operator>>(Data_from_ai& data_from_ai);
-  void edit_data_from_ai(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(Data_from_ai& data_from_ai)> data_from_ai_editor);
+  Data& operator<<(const DataFromAi& data_from_ai);
+  Data& operator>>(DataFromAi& data_from_ai);
+  void editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
+      std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor);
 
-  Data& operator<<(const Data_for_viewer& data_for_viewer);
-  Data& operator>>(Data_for_viewer& data_for_viewer);
-  void edit_data_for_viewer(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(Data_for_viewer& data_for_viewer)> data_for_viewer_editor);
+  Data& operator<<(const DataForViewer& data_for_viewer);
+  Data& operator>>(DataForViewer& data_for_viewer);
+  void editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
+      std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor);
 
-  Data& operator<<(const Shared_data& shared_data);
-  Data& operator>>(Shared_data& shared_data);
-  void edit_shared_data(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(Shared_data& shared_data)> shared_data_editor);
+  Data& operator<<(const SharedData& shared_data);
+  Data& operator>>(SharedData& shared_data);
+  void editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
+      std::function<void(SharedData& shared_data)> shared_data_editor);
 };
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

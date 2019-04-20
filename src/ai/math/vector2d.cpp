@@ -34,29 +34,29 @@ rhoban_geometry::Point operator+(const Vector2d& v, const rhoban_geometry::Point
   return rhoban_geometry::Point(p.getX() + v[0], p.getY() + v[1]);
 }
 
-double vectorial_product(const Vector2d& v1, const Vector2d& v2)
+double vectorialProduct(const Vector2d& v1, const Vector2d& v2)
 {
   return v1[0] * v2[1] - v1[1] * v2[0];
 }
 
-double scalar_product(const Vector2d& v1, const Vector2d& v2)
+double scalarProduct(const Vector2d& v1, const Vector2d& v2)
 {
   return v1[0] * v2[0] + v1[1] * v2[1];
 }
 
 double norm(const Vector2d& v)
 {
-  return std::sqrt(scalar_product(v, v));
+  return std::sqrt(scalarProduct(v, v));
 }
 
 double norm_2(const Vector2d& v)
 {
-  return std::sqrt(scalar_product(v, v));
+  return std::sqrt(scalarProduct(v, v));
 }
 
-double norm_square(const Vector2d& v)
+double normSquare(const Vector2d& v)
 {
-  return scalar_product(v, v);
+  return scalarProduct(v, v);
 }
 
 Vector2d normalized(const Vector2d& v)
@@ -124,10 +124,10 @@ double Vector2d::getY() const
 
 double Vector2d::norm() const
 {
-  return std::sqrt(norm_square());
+  return std::sqrt(normSquare());
 }
 
-double Vector2d::norm_square() const
+double Vector2d::normSquare() const
 {
   return vec[0] * vec[0] + vec[1] * vec[1];
 }

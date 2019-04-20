@@ -23,7 +23,7 @@
 #include <manager/Manager.h>
 #include <referee/game_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Manager
 {
@@ -57,7 +57,7 @@ private:
   std::list<std::string> future_strats;
 
 public:
-  PlanVeschambres(Ai::AiData& ai_data, const GameState& game_state);
+  PlanVeschambres(ai::AiData& ai, const GameState& game_state);
 
   void update(double time);
   void analyse_data(double time);
@@ -67,6 +67,6 @@ public:
 };
 
 };  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl
 
 #endif

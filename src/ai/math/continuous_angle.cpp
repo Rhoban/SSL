@@ -24,13 +24,13 @@
 
 using namespace rhoban_utils;
 
-ContinuousAngle::ContinuousAngle() : angle_value(0.0)
+ContinuousAngle::ContinuousAngle() : angle_value_(0.0)
 {
 }
-ContinuousAngle::ContinuousAngle(double angle) : angle_value(angle)
+ContinuousAngle::ContinuousAngle(double angle) : angle_value_(angle)
 {
 }
-ContinuousAngle::ContinuousAngle(const ContinuousAngle& angle) : angle_value(angle.angle_value)
+ContinuousAngle::ContinuousAngle(const ContinuousAngle& angle) : angle_value_(angle.angle_value_)
 {
 }
 // ContinuousAngle::ContinuousAngle(const Angle& angle) :
@@ -39,7 +39,7 @@ ContinuousAngle::ContinuousAngle(const ContinuousAngle& angle) : angle_value(ang
 
 ContinuousAngle& ContinuousAngle::operator=(double angle)
 {
-  this->angle_value = angle;
+  this->angle_value_ = angle;
   return *this;
 }
 // ContinuousAngle& ContinuousAngle::operator=( const Angle & angle ){
@@ -50,138 +50,138 @@ ContinuousAngle& ContinuousAngle::operator=(const ContinuousAngle& angle)
 {
   if (this != &angle)
   {
-    this->angle_value = angle.angle_value;
+    this->angle_value_ = angle.angle_value_;
   }
   return *this;
 }
 
 Angle ContinuousAngle::angle() const
 {
-  return Angle(rad2deg(this->angle_value));
+  return Angle(rad2deg(this->angle_value_));
 }
 
 double ContinuousAngle::value() const
 {
-  return this->angle_value;
+  return this->angle_value_;
 }
 
 ContinuousAngle ContinuousAngle::abs() const
 {
-  return ContinuousAngle(std::fabs(this->angle_value));
+  return ContinuousAngle(std::fabs(this->angle_value_));
 }
 
 ContinuousAngle ContinuousAngle::operator-() const
 {
-  return ContinuousAngle(-this->angle_value);
+  return ContinuousAngle(-this->angle_value_);
 }
 ContinuousAngle ContinuousAngle::operator+() const
 {
-  return ContinuousAngle(this->angle_value);
+  return ContinuousAngle(this->angle_value_);
 }
 
 ContinuousAngle ContinuousAngle::operator-(double angle) const
 {
-  return ContinuousAngle(this->angle_value - angle);
+  return ContinuousAngle(this->angle_value_ - angle);
 }
 ContinuousAngle ContinuousAngle::operator-(const ContinuousAngle& angle) const
 {
-  return ContinuousAngle(this->angle_value - angle.angle_value);
+  return ContinuousAngle(this->angle_value_ - angle.angle_value_);
 }
 
 ContinuousAngle& ContinuousAngle::operator-=(double angle)
 {
-  this->angle_value -= angle;
+  this->angle_value_ -= angle;
   return *this;
 }
 ContinuousAngle& ContinuousAngle::operator-=(const ContinuousAngle& angle)
 {
-  this->angle_value -= angle.angle_value;
+  this->angle_value_ -= angle.angle_value_;
   return *this;
 }
 
 ContinuousAngle ContinuousAngle::operator+(double angle) const
 {
-  return ContinuousAngle(this->angle_value + angle);
+  return ContinuousAngle(this->angle_value_ + angle);
 }
 ContinuousAngle ContinuousAngle::operator+(const ContinuousAngle& angle) const
 {
-  return ContinuousAngle(this->angle_value + angle.angle_value);
+  return ContinuousAngle(this->angle_value_ + angle.angle_value_);
 }
 
 ContinuousAngle& ContinuousAngle::operator+=(double angle)
 {
-  this->angle_value += angle;
+  this->angle_value_ += angle;
   return *this;
 }
 ContinuousAngle& ContinuousAngle::operator+=(const ContinuousAngle& angle)
 {
-  this->angle_value += angle.angle_value;
+  this->angle_value_ += angle.angle_value_;
   return *this;
 }
 
 ContinuousAngle ContinuousAngle::operator/(double scalar) const
 {
-  return ContinuousAngle(this->angle_value / scalar);
+  return ContinuousAngle(this->angle_value_ / scalar);
 }
 ContinuousAngle& ContinuousAngle::operator/=(double scalar)
 {
-  this->angle_value /= scalar;
+  this->angle_value_ /= scalar;
   return *this;
 }
 
 ContinuousAngle ContinuousAngle::operator*(double scalar) const
 {
-  return ContinuousAngle(this->angle_value * scalar);
+  return ContinuousAngle(this->angle_value_ * scalar);
 }
 ContinuousAngle& ContinuousAngle::operator*=(double scalar)
 {
-  this->angle_value *= scalar;
+  this->angle_value_ *= scalar;
   return *this;
 }
 
 double ContinuousAngle::turn() const
 {
-  return this->angle_value / (2 * M_PI);
+  return this->angle_value_ / (2 * M_PI);
 };
 
-int ContinuousAngle::nb_turn() const
+int ContinuousAngle::nbTurn() const
 {
-  return std::trunc(this->angle_value / (2 * M_PI));
+  return std::trunc(this->angle_value_ / (2 * M_PI));
 };
 
 bool ContinuousAngle::operator==(const ContinuousAngle& angle) const
 {
-  return this->angle_value == angle.angle_value;
+  return this->angle_value_ == angle.angle_value_;
 }
 
 bool ContinuousAngle::operator!=(const ContinuousAngle& angle) const
 {
-  return this->angle_value != angle.angle_value;
+  return this->angle_value_ != angle.angle_value_;
 }
 
 bool ContinuousAngle::operator<(const ContinuousAngle& angle) const
 {
-  return this->angle_value < angle.angle_value;
+  return this->angle_value_ < angle.angle_value_;
 }
 
 bool ContinuousAngle::operator<=(const ContinuousAngle& angle) const
 {
-  return this->angle_value <= angle.angle_value;
+  return this->angle_value_ <= angle.angle_value_;
 }
 
 bool ContinuousAngle::operator>(const ContinuousAngle& angle) const
 {
-  return this->angle_value > angle.angle_value;
+  return this->angle_value_ > angle.angle_value_;
 }
 
 bool ContinuousAngle::operator>=(const ContinuousAngle& angle) const
 {
-  return this->angle_value >= angle.angle_value;
+  return this->angle_value_ >= angle.angle_value_;
 }
 
-void ContinuousAngle::set_to_nearest(double angle)
+void ContinuousAngle::setToNearest(double angle)
 {
-  double diff = std::fmod(angle - this->angle_value, 2 * M_PI);
+  double diff = std::fmod(angle - this->angle_value_, 2 * M_PI);
   if (diff >= M_PI)
   {
     diff -= 2 * M_PI;
@@ -190,20 +190,20 @@ void ContinuousAngle::set_to_nearest(double angle)
   {
     diff += 2 * M_PI;
   }
-  this->angle_value += diff;
+  this->angle_value_ += diff;
 }
-void ContinuousAngle::set_to_nearest(const Angle& angle)
+void ContinuousAngle::setToNearest(const Angle& angle)
 {
-  set_to_nearest(deg2rad(angle.getSignedValue()));
+  setToNearest(deg2rad(angle.getSignedValue()));
 }
-void ContinuousAngle::set_to_nearest(const ContinuousAngle& angle)
+void ContinuousAngle::setToNearest(const ContinuousAngle& angle)
 {
-  set_to_nearest(angle.value());
+  setToNearest(angle.value());
 }
 
 std::ostream& operator<<(std::ostream& out, const ContinuousAngle& a)
 {
-  double n = a.nb_turn();
+  double n = a.nbTurn();
   double r = std::fmod(a.value(), 2 * M_PI);
 
   if (n != 0)

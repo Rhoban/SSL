@@ -22,30 +22,30 @@
 #include "strategy.h"
 #include <string>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class Halt : public Strategy
 {
 public:
-  Halt(Ai::AiData& ai_data);
+  Halt(ai::AiData& ai_data);
 
-  int min_robots() const;
-  int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  int minRobots() const;
+  int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
   void start(double time);
   void stop(double time);
 
-  void assign_behavior_to_robots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+  void assignBehaviorToRobots(std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior,
+                              double time, double dt);
   virtual ~Halt();
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
-};  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace strategy
+};  // namespace rhoban_ssl

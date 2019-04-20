@@ -28,21 +28,21 @@ using namespace rhoban_geometry;
 TEST(test_MovementSample, position_sample)
 {
   {
-    RhobanSSL::PositionSample pos;
+    rhoban_ssl::PositionSample pos;
     EXPECT_TRUE(pos.time == 0);
     EXPECT_TRUE(pos.linear_position == Point(0.0, 0.0));
     EXPECT_TRUE(pos.angular_position == ContinuousAngle(0.0));
   }
 
   {
-    RhobanSSL::PositionSample pos(3.0, Point(4.0, 5.0), ContinuousAngle(6.0));
+    rhoban_ssl::PositionSample pos(3.0, Point(4.0, 5.0), ContinuousAngle(6.0));
     EXPECT_TRUE(pos.time == 3.0);
     EXPECT_TRUE(pos.linear_position == Point(4.0, 5.0));
     EXPECT_TRUE(pos.angular_position == ContinuousAngle(6.0));
   }
 
   {
-    RhobanSSL::PositionSample pos(3.0, Point(4.0, 5.0), ContinuousAngle(6.0));
+    rhoban_ssl::PositionSample pos(3.0, Point(4.0, 5.0), ContinuousAngle(6.0));
 
     std::ostringstream s1;
     s1 << pos;
@@ -54,14 +54,14 @@ TEST(test_MovementSample, position_sample)
 TEST(test_MovementSample, some_use_cases)
 {
   {
-    RhobanSSL::MovementSample mov;
+    rhoban_ssl::MovementSample mov;
     EXPECT_TRUE(mov.size() == 0);
   }
   {
-    RhobanSSL::MovementSample mov(3);
-    mov.insert(RhobanSSL::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
-    mov.insert(RhobanSSL::PositionSample(2, Point(8, 16), ContinuousAngle(32)));
-    mov.insert(RhobanSSL::PositionSample(3, Point(27, 54), ContinuousAngle(108)));
+    rhoban_ssl::MovementSample mov(3);
+    mov.insert(rhoban_ssl::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
+    mov.insert(rhoban_ssl::PositionSample(2, Point(8, 16), ContinuousAngle(32)));
+    mov.insert(rhoban_ssl::PositionSample(3, Point(27, 54), ContinuousAngle(108)));
 
     EXPECT_TRUE(mov.linear_position(2) == Point(1, 2));
     EXPECT_TRUE(mov.linear_position(1) == Point(8, 16));
@@ -82,10 +82,10 @@ TEST(test_MovementSample, some_use_cases)
     EXPECT_TRUE(mov.angular_acceleration(0) == ContinuousAngle(48));
   }
   {
-    RhobanSSL::MovementSample mov(3);
-    mov.insert(RhobanSSL::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
-    mov.insert(RhobanSSL::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
-    mov.insert(RhobanSSL::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
+    rhoban_ssl::MovementSample mov(3);
+    mov.insert(rhoban_ssl::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
+    mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
+    mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
     EXPECT_TRUE(mov.linear_position(2) == Point(1, 2));
     EXPECT_TRUE(mov.linear_position(1) == Point(8, 16));
@@ -106,11 +106,11 @@ TEST(test_MovementSample, some_use_cases)
     EXPECT_TRUE(std::fabs((mov.angular_acceleration(0) - ContinuousAngle(68) / (2 * 3 * 3)).value()) < 0.0001);
   }
   {
-    RhobanSSL::MovementSample mov(4);
-    mov.insert(RhobanSSL::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
-    mov.insert(RhobanSSL::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
-    mov.insert(RhobanSSL::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
-    mov.insert(RhobanSSL::PositionSample(10, Point(343, 686), ContinuousAngle(1029)));
+    rhoban_ssl::MovementSample mov(4);
+    mov.insert(rhoban_ssl::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
+    mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
+    mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
+    mov.insert(rhoban_ssl::PositionSample(10, Point(343, 686), ContinuousAngle(1029)));
 
     EXPECT_TRUE(mov.linear_position(3) == Point(1, 2));
     EXPECT_TRUE(mov.linear_position(2) == Point(8, 16));

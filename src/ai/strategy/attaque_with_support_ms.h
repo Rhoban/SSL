@@ -30,9 +30,9 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 #include <robot_behavior/slow_striker.h>
 #include <core/machine_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
 class AttaqueWithSupportMs : public Strategy
 {
@@ -76,40 +76,40 @@ class AttaqueWithSupportMs : public Strategy
     static const constexpr char* db1_plus_constante_inf_db2 = "db1_inf_db2_plus_constante";
   };
 
-  typedef construct_machine_state_infrastructure<std::string, Ai::AiData, Ai::AiData> machine_state_infrastructure;
+  typedef construct_machine_state_infrastructure<std::string, ai::AiData, ai::AiData> machine_state_infrastructure;
 
 private:
-  machine_state_infrastructure::MachineState machine;
+  machine_state_infrastructure::MachineState machine_;
 
-  bool behaviors_are_assigned;
-  std::shared_ptr<Robot_behavior::StrikerAi> striker_behavior;
-  std::shared_ptr<Robot_behavior::SearchShootArea> search_behavior;
+  bool behaviors_are_assigned_;
+  std::shared_ptr<robot_behavior::StrikerAi> striker_behavior_;
+  std::shared_ptr<robot_behavior::SearchShootArea> search_behavior_;
   // std::shared_ptr<Robot_behavior::Pass> pass_behavior;
   // std::shared_ptr<Robot_behavior::Pass_dribbler> pass_behavior;
   // std::shared_ptr<Robot_behavior::SlowStriker> pass_behavior;
-  std::shared_ptr<Robot_behavior::Striker> pass_behavior;
-  std::shared_ptr<Robot_behavior::WaitPass> wait_pass_behavior;
+  std::shared_ptr<robot_behavior::Striker> pass_behavior_;
+  std::shared_ptr<robot_behavior::WaitPass> wait_pass_behavior_;
 
-  double seuil_fgbm;  // fgbm = find_goal_best_move
-  double fgbm_score;
-  double tempo;
+  double seuil_fgbm_;  // fgbm = find_goal_best_move
+  double fgbm_score_;
+  double tempo_;
 
-  double begin_time;
-  int ID1;
-  int ID2;
-  double diff_distance_constante;
-  double fgbm_constante;
+  double begin_time_;
+  int ID1_;
+  int ID2_;
+  double diff_distance_constante_;
+  double fgbm_constante_;
 
-  rhoban_geometry::Point robot_1_position;
-  rhoban_geometry::Point robot_2_position;
+  rhoban_geometry::Point robot_1_position_;
+  rhoban_geometry::Point robot_2_position_;
 
 public:
-  AttaqueWithSupportMs(Ai::AiData& ai_data);
+  AttaqueWithSupportMs(ai::AiData& ai_data);
   virtual ~AttaqueWithSupportMs();
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
@@ -118,34 +118,33 @@ public:
 
   virtual void update(double time);
 
-  virtual void assign_behavior_to_robots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+  virtual void assignBehaviorToRobots(
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots);
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position);
+  getStartingPositions(int number_of_avalaible_robots);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
 
-  bool is_db1_sup_db2();
-  bool is_db1_inf_db2();
+  bool isDb1SupDb2();
+  bool isDb1InfDb2();
 
-  bool is_fgbm_score_inf_seuil_1();
-  bool is_fgbm_score_inf_seuil_2();
+  bool isFgbmScoreInfSeuil_1();
+  bool isFgbmScoreInfSeuil_2();
 
-  bool fgbm_score_sup_seuil_1_plus_constante();
-  bool fgbm_score_sup_seuil_2_plus_constante();
+  bool fgbmScoreSupSeuil_1PlusConstante();
+  bool fgbmScoreSupSeuil_2PlusConstante();
 
-  bool is_infra_1_on();
-  bool is_infra_2_on();
+  bool isInfra_1On();
+  bool isInfra_2On();
 
-  bool is_db1_inf_seuil_or_time_inf_tempo();
-  bool is_db2_inf_seuil_or_time_inf_tempo();
+  bool isDb1InfSeuilOrTimeInfTempo();
+  bool isDb2InfSeuilOrTimeInfTempo();
 
-  bool is_db1_sup_db2_plus_constante();
-  bool is_db1_plus_constante_inf_db2();
+  bool isDb1SupDb2PlusConstante();
+  bool isDb1PlusConstanteInfDb2();
 
-  void set_seuil_fgbm(double seuil);
+  void setSeuilFgbm(double seuil);
 };
 
-};  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace strategy
+};  // namespace rhoban_ssl

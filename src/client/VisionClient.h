@@ -7,7 +7,7 @@
 #include "MulticastClient.h"
 #include "client_config.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class VisionClient : public MulticastClient
 {
@@ -19,6 +19,6 @@ public:
   SSL_WrapperPacket getData();
 
 protected:
-  SSL_WrapperPacket data;
+  SSL_WrapperPacket data_;
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

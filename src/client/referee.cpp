@@ -14,7 +14,7 @@ void stop(int s)
 int main()
 {
   signal(SIGINT, stop);
-  RhobanSSL::RefereeClient client;
+  rhoban_ssl::RefereeClient client;
 
   while (running)
   {

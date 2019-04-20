@@ -20,23 +20,23 @@
 
 #include "ai_commander_real.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-AICommanderReal::AICommanderReal(bool yellow) : AICommander(yellow), kicking(false), master("/dev/ttyACM0", 1000000)
+AICommanderReal::AICommanderReal(bool yellow) : AICommander(yellow), kicking_(false), master_("/dev/ttyACM0", 1000000)
 // master("/dev/ttyACM1", 1000000)
 {
 }
 
 void AICommanderReal::kick()
 {
-  kicking = true;
+  kicking_ = true;
   // XXX Should not be used anymore
 }
 
 void AICommanderReal::flush()
 {
   // Transferring abstract commands to the master implementation
-  for (auto& command : commands)
+  for (auto& command : commands_)
   {
     struct packet_master packet;
     if (command.enabled)
@@ -62,32 +62,44 @@ void AICommanderReal::flush()
       {
         packet.actions |= ACTION_DRIBBLE;
       }
+      if (command.tare_odom)
+      {
+        packet.actions |= ACTION_TARE_ODOM;
+      }
     }
     else
     {
       packet.actions = 0;
     }
 
-    packet.kickPower = 120 * command.kickPower;
+    packet.kickPower = 120 * command.kick_power;
 
-    packet.x_speed = command.xSpeed * 1000;
-    packet.y_speed = command.ySpeed * 1000;
-    packet.t_speed = command.thetaSpeed * 1000;
+    if (command.tare_odom)
+    {
+      packet.t_speed = command.theta_speed * 10000;
+    }
+    else
+    {
+      packet.t_speed = command.theta_speed * 1000;
+    }
+    packet.x_speed = command.x_speed * 1000;
+    packet.y_speed = command.y_speed * 1000;
+    packet.t_speed = command.theta_speed * 1000;
 
-    master.addRobotPacket(command.robot_id, packet);
+    master_.addRobotPacket(command.robot_id, packet);
   }
 
-  master.send();
-  commands.clear();
+  master_.send();
+  commands_.clear();
 }
 
 Master* AICommanderReal::getMaster()
 {
-  return &master;
+  return &master_;
 }
 
 AICommanderReal::~AICommanderReal()
 {
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
