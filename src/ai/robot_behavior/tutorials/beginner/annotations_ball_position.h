@@ -41,7 +41,7 @@ public:
   /**
    * @brief Constructor.
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
   AnnotationsBallPosition(ai::AiData& ai_data);
 
@@ -61,7 +61,7 @@ public:
   virtual Control control() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
   virtual annotations::Annotations getAnnotations() const;
 
