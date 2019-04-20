@@ -17,35 +17,27 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__FACTORY__H__
-#define __ROBOT_BEHAVIOR__FACTORY__H__
+#pragma once
 
-#include <AiData.h>
+#include <ai_data.h>
 #include "robot_behavior.h"
 #include "consign_follower.h"
 
-namespace RhobanSSL {
-namespace Robot_behavior {
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+class Factory
+{
+public:
+  static ConsignFollower*
+  fixedConsignFollower(ai::AiData& ai, const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0, 0.0),
+                       const ContinuousAngle& angle = ContinuousAngle(0.0), bool ignore_the_ball = false);
 
-class Factory {
-    public:
-    static ConsignFollower* fixed_consign_follower(
-        Ai::AiData & ai_data,
-        const rhoban_geometry::Point & position = rhoban_geometry::Point(0.0, 0.0), 
-        const ContinuousAngle & angle = ContinuousAngle(0.0),
-        bool ignore_the_ball = false
-    );
-    
-    static ConsignFollower* fixed_consign_follower_without_repsecting_authorized_location(
-        Ai::AiData & ai_data,
-        const rhoban_geometry::Point & position = rhoban_geometry::Point(0.0, 0.0), 
-        const ContinuousAngle & angle = ContinuousAngle(0.0),
-        bool ignore_the_ball = false
-    );
-
+  static ConsignFollower* fixedConsignFollowerWithoutRepsectingAuthorizedLocation(
+      ai::AiData& ai, const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0, 0.0),
+      const ContinuousAngle& angle = ContinuousAngle(0.0), bool ignore_the_ball = false);
 };
 
-};
-} ;
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

@@ -19,22 +19,34 @@
 
 #include "consign_follower.h"
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-ConsignFollower::ConsignFollower( Ai::AiData & ai_data ):
-    RobotBehavior(ai_data)
-{ }
-
-ConsignFollower::~ConsignFollower(){ }
-
-void ConsignFollower::avoid_the_ball( bool value ){ }
-void ConsignFollower::avoid_ally(bool value){ }
-void ConsignFollower::avoid_opponent(bool value){ }
-
-void ConsignFollower::set_radius_avoidance_for_the_ball(
-    double radius
-){ }
-
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+ConsignFollower::ConsignFollower(ai::AiData& ai_data) : RobotBehavior(ai_data)
+{
 }
+
+ConsignFollower::~ConsignFollower()
+{
 }
+
+void ConsignFollower::avoidTheBall(bool value)
+{
+}
+void ConsignFollower::avoidAlly(bool value)
+{
+}
+void ConsignFollower::avoidOpponent(bool value)
+{
+}
+void ConsignFollower::avoidRobot(int id, bool value)
+{
+}
+
+void ConsignFollower::setRadiusAvoidanceForTheBall(double radius)
+{
+}
+
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

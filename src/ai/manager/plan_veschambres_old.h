@@ -23,53 +23,50 @@
 #include <manager/Manager.h>
 #include <referee/game_state.h>
 
-namespace RhobanSSL {
-namespace Manager {
+namespace rhoban_ssl
+{
+namespace Manager
+{
+class PlanVeschambres : public Manager
+{
+private:
+  const Referee& referee;
 
-class PlanVeschambres : public Manager {
-    private:
-    const Referee & referee;
+  // penalty
+  std::vector<std::list<std::string> > penalty_strats;
+  // goale
+  std::vector<std::list<std::string> > goalie_strats;
+  // kick
+  std::vector<std::list<std::string> > kick_strats;
+  // kick_strats_indirect
+  std::vector<std::list<std::string> > kick_strats_indirect;
+  // offensiv
+  std::vector<std::list<std::string> > offensive_strats;
+  // defensive
+  std::vector<std::list<std::string> > defensive_strats;
 
-    //penalty
-    std::vector< std::list<std::string> >  penalty_strats;
-    //goale
-    std::vector< std::list<std::string> > goalie_strats;
-    //kick
-    std::vector< std::list<std::string> > kick_strats;
-    //kick_strats_indirect
-    std::vector< std::list<std::string> > kick_strats_indirect;
-    //offensiv
-    std::vector< std::list<std::string> > offensive_strats;
-    //defensive
-    std::vector< std::list<std::string> > defensive_strats;
+  std::vector<std::list<std::string> > stop_strats;
 
-    std::vector< std::list<std::string> >stop_strats;
+  std::string strategy_applied = "";
 
-    std::string strategy_applied = "";
+  bool hold_ball_position = true;
+  rhoban_geometry::Point ball_last_position;
 
-    bool hold_ball_position = true;
-    rhoban_geometry::Point ball_last_position;
+  unsigned int last_referee_changement;
 
-    unsigned int last_referee_changement;
+  std::list<std::string> future_strats;
 
-    std::list<std::string> future_strats;
+public:
+  PlanVeschambres(ai::AiData& ai, const GameState& game_state);
 
-    public:
+  void update(double time);
+  void analyse_data(double time);
+  void choose_a_strategy(double time);
 
-    PlanVeschambres(
-        Ai::AiData & ai_data,
-        const GameState & game_state
-    );
-
-    void update(double time);
-    void analyse_data(double time);
-    void choose_a_strategy(double time);
-
-    virtual ~PlanVeschambres();
-
+  virtual ~PlanVeschambres();
 };
 
-};
-};
+};  // namespace Manager
+};  // namespace rhoban_ssl
 
 #endif

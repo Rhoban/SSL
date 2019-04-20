@@ -1,6 +1,6 @@
 /*
     This file is part of SSL.
-    
+
     Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
@@ -19,40 +19,39 @@
 #include "annotations_ball_position.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-Begginer_annotations_ball_position::Begginer_annotations_ball_position(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data)
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+BeginnerAnnotationsBallPosition::BeginnerAnnotationsBallPosition(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_annotations_ball_position::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // Do not remove this line.
-    RobotBehavior::update_time_and_position(time, robot, ball);
-    // Clear all annotations write before
-    annotations.clear();
-    // Add an annotations
-    annotations.addCross(ball_position(), "red", false);
+void BeginnerAnnotationsBallPosition::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+{
+  // Do not remove this line.
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
+  // Clear all annotations write before
+  annotations_.clear();
+  // Add an annotations
+  annotations_.addCross(ballPosition(), "red", false);
 }
 
-Control Begginer_annotations_ball_position::control() const {
-    return Control();
+Control BeginnerAnnotationsBallPosition::control() const
+{
+  return Control();
 }
 
-Begginer_annotations_ball_position::~Begginer_annotations_ball_position(){}
-
-RhobanSSLAnnotation::Annotations Begginer_annotations_ball_position::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    return annotations;
+BeginnerAnnotationsBallPosition::~BeginnerAnnotationsBallPosition()
+{
 }
 
+rhoban_ssl::annotations::Annotations BeginnerAnnotationsBallPosition::getAnnotations() const
+{
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
+  return annotations;
 }
-}
+
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

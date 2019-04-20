@@ -17,53 +17,44 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__STRIKER_KICK__H__
-#define __STRATEGY__STRIKER_KICK__H__
+#pragma once
 
 #include <robot_behavior/slow_striker.h>
-#include "Strategy.h"
+#include "strategy.h"
 
-namespace RhobanSSL {
-namespace Strategy {
+namespace rhoban_ssl
+{
+namespace strategy
+{
+class StrikerKick : public Strategy
+{
+private:
+  bool behaviors_are_assigned_;
+  std::shared_ptr<robot_behavior::SlowStriker> slow_striker_;
 
-class StrikerKick : public Strategy {
-    private:
-    bool behaviors_are_assigned;
-    std::shared_ptr<Robot_behavior::SlowStriker> Slowstriker;
+public:
+  StrikerKick(ai::AiData& ai_data);
+  virtual ~StrikerKick();
 
-    public:
-    StrikerKick(Ai::AiData & ai_data);
-    virtual ~StrikerKick();
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
-    virtual int min_robots() const;
-    virtual int max_robots() const;
-    virtual Goalie_need needs_goalie() const;
+  static const std::string name;
 
-    static const std::string name;
+  virtual void start(double time);
+  virtual void stop(double time);
 
-    virtual void start(double time);
-    virtual void stop(double time);
+  virtual void update(double time);
 
-    virtual void update(double time);
+  virtual void assignBehaviorToRobots(
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
-    virtual void assign_behavior_to_robots(
-        std::function<
-            void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-        > assign_behavior,
-        double time, double dt
-    );
-
-    virtual std::list<
-        std::pair<rhoban_geometry::Point,ContinuousAngle>
-    > get_starting_positions( int number_of_avalaible_robots ) ;
-    virtual bool get_starting_position_for_goalie(
-        rhoban_geometry::Point & linear_position,
-        ContinuousAngle & angular_position
-    ) ;
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
+  virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+  getStartingPositions(int number_of_avalaible_robots);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
-};
-};
-#endif
+};  // namespace strategy
+};  // namespace rhoban_ssl

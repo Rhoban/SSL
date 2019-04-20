@@ -17,44 +17,40 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__SEE_ROBOT__H__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__SEE_ROBOT__H__
+#pragma once
 
 #include "robot_behavior/factory.h"
 #include "robot_behavior/robot_behavior.h"
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Beginner {
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+namespace Beginner
+{
+class SeeRobot : public RobotBehavior
+{
+private:
+  int target_robot_id_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
-class See_Robot : public RobotBehavior {
-   private:
-    int target_robot_id;
-    ConsignFollower *follower;
-    RhobanSSLAnnotation::Annotations annotations;
+public:
+  SeeRobot(ai::AiData& ai_data, int target_id = 0);
 
-   public:
-    See_Robot(Ai::AiData &ai_data, int target_id = 0);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot &robot,
-        const Ai::Ball &ball
-    );
+  virtual Control control() const;
 
-    virtual Control control() const;
+  void setRobotIdToSee(int id);
 
-    void set_robot_id_to_see (int id);
+  int getRobotIdToSee() const;
 
-    int get_robot_id_to_see() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-    virtual ~See_Robot();
+  virtual ~SeeRobot();
 };
 
 };  // namespace Beginner
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

@@ -20,132 +20,131 @@
 #include "movement_predicted_by_integration.h"
 #include <debug.h>
 
-namespace RhobanSSL {
-
-
-        
-Movement * 
-Movement_predicted_by_integration::clone() const {
-    Movement_predicted_by_integration * res = new Movement_predicted_by_integration();
-    *res = *this;
-    return res;
+namespace rhoban_ssl
+{
+Movement* MovementPredictedByIntegration::clone() const
+{
+  MovementPredictedByIntegration* res = new MovementPredictedByIntegration();
+  *res = *this;
+  return res;
 }
 
-void
-Movement_predicted_by_integration::print(std::ostream& stream) const {
-    stream << samples; 
+void MovementPredictedByIntegration::print(std::ostream& stream) const
+{
+  stream << samples_;
 };
 
-void
-Movement_predicted_by_integration::set_sample( const MovementSample & samples ){
-    assert( samples.is_valid() );
-    this->samples = samples;
+void MovementPredictedByIntegration::setSample(const MovementSample& samples)
+{
+  assert(samples.isValid());
+  samples_ = samples;
 }
 
-const MovementSample & Movement_predicted_by_integration::get_sample() const {
-    return samples;
+const MovementSample& MovementPredictedByIntegration::getSample() const
+{
+  return samples_;
 }
 
-double Movement_predicted_by_integration::last_time() const {
-    return samples.time(0);
-}
- 
-rhoban_geometry::Point
-Movement_predicted_by_integration::linear_position( double time ) const {
-    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
-        time = samples[0].time;
-    }
-    // assert( samples[0].time <= time );
-    // double dt=samples.dt(0);
-    double dt = time - samples.time(0);
-
-    if(!(samples[0].time <= time))
-    {
-      DEBUG("WARNING! non monotonous time");
-
-    }
-    return (
-      samples.linear_position(0) + samples.linear_velocity(0) * dt// + samples.linear_acceleration(0) * dt*dt/2.0
-      );
-
-}
-        
-ContinuousAngle
-Movement_predicted_by_integration::angular_position( double time ) const {
-    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
-        time = samples[0].time;
-    }
-    if(!(samples[0].time <= time))
-    {
-      DEBUG("WARNING! non monotonous time");
-
-    }
-    // assert( samples[0].time <= time );
-    double dt = time - samples.time(0);
-    return (
-      samples.angular_position(0) + (samples.angular_velocity(0) * dt)// + (samples.angular_acceleration(0) * (dt*dt/2.0))
-      );
-}
-       
-Vector2d
-Movement_predicted_by_integration::linear_velocity( double time ) const {
-    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
-        time = samples[0].time;
-    }
-    if(!(samples[0].time <= time))
-    {
-      DEBUG("WARNING! non monotonous time");
-
-    }
-    // assert( samples[0].time <= time );
-    double dt = time - samples.time(0);
-    return samples.linear_velocity(0) + samples.linear_acceleration(0) * dt;
-}
-        
-ContinuousAngle
-Movement_predicted_by_integration::angular_velocity( double time ) const {
-    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
-        time = samples[0].time;
-    }
-    // assert( samples[0].time <= time );
-    if(!(samples[0].time <= time))
-    {
-      DEBUG("WARNING! non monotonous time");
-
-    }
-    double dt = time - samples.time(0);
-    return samples.angular_velocity(0) + samples.angular_acceleration(0) * dt;
-}
-        
-Vector2d
-Movement_predicted_by_integration::linear_acceleration( double time ) const {
-    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
-        time = samples[0].time;
-    }
-    // assert( samples[0].time <= time );
-    if(!(samples[0].time <= time))
-    {
-      DEBUG("WARNING! non monotonous time");
-
-    }
-    return samples.linear_acceleration(0);
-}
-       
-ContinuousAngle
-Movement_predicted_by_integration::angular_acceleration( double time ) const {
-    if( std::fabs( samples[0].time - time ) <= 0.000001 ){
-        time = samples[0].time;
-    }
-    // assert( samples[0].time <= time );
-    if(!(samples[0].time <= time))
-    {
-      DEBUG("WARNING! non monotonous time");
-
-    }
-    return samples.angular_acceleration(0);
+double MovementPredictedByIntegration::lastTime() const
+{
+  return samples_.time(0);
 }
 
-Movement_predicted_by_integration::~Movement_predicted_by_integration(){
+rhoban_geometry::Point MovementPredictedByIntegration::linearPosition(double time) const
+{
+  if (std::fabs(samples_[0].time - time) <= 0.000001)
+  {
+    time = samples_[0].time;
+  }
+  // assert( samples[0].time <= time );
+  // double dt=samples.dt(0);
+  double dt = time - samples_.time(0);
+
+  if (!(samples_[0].time <= time))
+  {
+    DEBUG("WARNING! non monotonous time");
+  }
+  return (samples_.linearPosition(0) + samples_.linearVelocity(0) * dt  // + samples.linear_acceleration(0) * dt*dt/2.0
+  );
 }
 
+ContinuousAngle MovementPredictedByIntegration::angularPosition(double time) const
+{
+  if (std::fabs(samples_[0].time - time) <= 0.000001)
+  {
+    time = samples_[0].time;
+  }
+  if (!(samples_[0].time <= time))
+  {
+    DEBUG("WARNING! non monotonous time");
+  }
+  // assert( samples[0].time <= time );
+  double dt = time - samples_.time(0);
+  return (samples_.angularPosition(0) + (samples_.angularVelocity(0) * dt)  // + (samples.angular_acceleration(0) *
+                                                                            // (dt*dt/2.0))
+  );
 }
+
+Vector2d MovementPredictedByIntegration::linearVelocity(double time) const
+{
+  if (std::fabs(samples_[0].time - time) <= 0.000001)
+  {
+    time = samples_[0].time;
+  }
+  if (!(samples_[0].time <= time))
+  {
+    DEBUG("WARNING! non monotonous time");
+  }
+  // assert( samples[0].time <= time );
+  double dt = time - samples_.time(0);
+  return samples_.linearVelocity(0) + samples_.linearAcceleration(0) * dt;
+}
+
+ContinuousAngle MovementPredictedByIntegration::angularVelocity(double time) const
+{
+  if (std::fabs(samples_[0].time - time) <= 0.000001)
+  {
+    time = samples_[0].time;
+  }
+  // assert( samples[0].time <= time );
+  if (!(samples_[0].time <= time))
+  {
+    DEBUG("WARNING! non monotonous time");
+  }
+  double dt = time - samples_.time(0);
+  return samples_.angularVelocity(0) + samples_.angularAcceleration(0) * dt;
+}
+
+Vector2d MovementPredictedByIntegration::linearAcceleration(double time) const
+{
+  if (std::fabs(samples_[0].time - time) <= 0.000001)
+  {
+    time = samples_[0].time;
+  }
+  // assert( samples[0].time <= time );
+  if (!(samples_[0].time <= time))
+  {
+    DEBUG("WARNING! non monotonous time");
+  }
+  return samples_.linearAcceleration(0);
+}
+
+ContinuousAngle MovementPredictedByIntegration::angularAcceleration(double time) const
+{
+  if (std::fabs(samples_[0].time - time) <= 0.000001)
+  {
+    time = samples_[0].time;
+  }
+  // assert( samples[0].time <= time );
+  if (!(samples_[0].time <= time))
+  {
+    DEBUG("WARNING! non monotonous time");
+  }
+  return samples_.angularAcceleration(0);
+}
+
+MovementPredictedByIntegration::~MovementPredictedByIntegration()
+{
+}
+
+}  // namespace rhoban_ssl

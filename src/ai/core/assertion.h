@@ -17,13 +17,14 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CORE__ASSERTION__H__
-#define __CORE__ASSERTION__H__
+#pragma once
 
 #ifndef NDEBUG
-    #define assert_message(cond, message) {std::cerr << message << std::endl; assert(cond)}
+#define assert_message(cond, message)                                                                                  \
+  {                                                                                                                    \
+    std::cerr << message << std::endl;                                                                                 \
+    assert(cond)                                                                                                       \
+  }
 #else
-    #define assert_message(cond, message) assert(cond)
+#define assert_message(cond, message) assert(cond)
 #enduf
-
-#endif

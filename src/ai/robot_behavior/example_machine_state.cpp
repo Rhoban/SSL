@@ -21,99 +21,86 @@
 #include <math/vector2d.h>
 #include <debug.h>
 
-
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-
-Example_machine_state::Example_machine_state(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) ),
-    machine(ai_data, ai_data)
+namespace rhoban_ssl
 {
+namespace robot_behavior
+{
+ExampleMachineState::ExampleMachineState(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), machine(ai_data, ai_data)
+{
+  machine.addState(StateName::wait_pass,
+                   [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                     DEBUG("WAIT PASS");
+                     this->printBallInfo();
+                   });
+  machine.addState(StateName::strike);
 
+  machine.addEdge(EdgeName::can_strike, StateName::wait_pass, StateName::strike,  //,
+                  [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    DEBUG("IS is_closed_to_the_ball " << this->isClosedToTheBall());
+                    return this->isClosedToTheBall();
+                  },
+                  [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    DEBUG("IS Can_striker FUAZHeuh");
+                    this->printBallInfo();
+                  });
 
-    machine.add_state(
-        state_name::wait_pass,
-        [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-            DEBUG("WAIT PASS");
-            this->print_ball_info();
-        }
-    );
-    machine.add_state( state_name::strike );
+  machine.addEdge(EdgeName::strike_is_finished, StateName::strike, StateName::wait_pass,
+                  [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    DEBUG("strike_is_finished");
+                    return not(this->isClosedToTheBall());
+                  },
+                  [this](const ai::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                    this->printBallInfo2();
+                  });
+  machine.addInitState(StateName::wait_pass);
 
-    machine.add_edge(
-        edge_name::can_strike,
-        state_name::wait_pass, state_name::strike, //,
-        [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-            DEBUG("IS is_closed_to_the_ball "<< this->is_closed_to_the_ball());
-            return this->is_closed_to_the_ball();
-        },
-        [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-            DEBUG("IS Can_striker FUAZHeuh");
-            this->print_ball_info();
-        }
-    );
+  machine.start();
 
-    machine.add_edge(
-        edge_name::strike_is_finished,
-        state_name::strike, state_name::wait_pass,
-        [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-            DEBUG("strike_is_finished");
-            return not( this->is_closed_to_the_ball() );
-        },
-        [this]( const Ai::AiData & data, unsigned int run_number, unsigned int atomic_run_number ){
-
-            this->print_ball_info2();
-        }
-    );
-    machine.add_init_state(state_name::wait_pass);
-
-    machine.start();
-
-    machine.export_to_file("/tmp/toto.dot");
+  machine.exportToFile("/tmp/toto.dot");
 }
 
+void ExampleMachineState::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-void Example_machine_state::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
+  machine.run();
 
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-
-    machine.run();
-
-    follower->avoid_the_ball(true);
-    //follower->set_following_position(target_position, target_rotation);
-    follower->update(time, robot, ball);
+  follower_->avoidTheBall(true);
+  // follower->set_following_position(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Example_machine_state::control() const {
-    Control ctrl = follower->control();
-    // ctrl.spin = true; // We active the dribler !
-    ctrl.kick = false;
-    return ctrl;
+Control ExampleMachineState::control() const
+{
+  Control ctrl = follower_->control();
+  // ctrl.spin = true; // We active the dribler !
+  ctrl.kick = false;
+  return ctrl;
 }
 
-Example_machine_state::~Example_machine_state(){
-    delete follower;
+ExampleMachineState::~ExampleMachineState()
+{
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Example_machine_state::get_annotations() const {
-    return follower->get_annotations() ;
+rhoban_ssl::annotations::Annotations ExampleMachineState::getAnnotations() const
+{
+  return follower_->getAnnotations();
 }
 
-bool Example_machine_state::is_closed_to_the_ball() const {
-    DEBUG("is_closed fcttt" << (norm_square( this->linear_position()-this->ball_position() )<0.05));
-    return norm_square( this->linear_position()-this->ball_position() )<0.05;
+bool ExampleMachineState::isClosedToTheBall() const
+{
+  DEBUG("is_closed fcttt" << (normSquare(this->linearPosition() - this->ballPosition()) < 0.05));
+  return normSquare(this->linearPosition() - this->ballPosition()) < 0.05;
+}
+
+void ExampleMachineState::printArePass()
+{
+  DEBUG("ARE PASSING");
 };
 
-
-}
-}
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

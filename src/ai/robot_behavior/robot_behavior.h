@@ -17,85 +17,78 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__ROBOT_BEHAVIOR__H__
-#define __ROBOT_BEHAVIOR__ROBOT_BEHAVIOR__H__
+#pragma once
 
 #include <game_informations.h>
 #include <control/robot_control_with_position_following.h>
 #include <control/robot_control_with_curve.h>
 #include <control/control.h>
 #include <rhoban_utils/angle.h>
-#include <AiData.h>
-#include <annotations/Annotations.h>
+#include <ai_data.h>
+#include <annotations/annotations.h>
 
-namespace RhobanSSL {
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+class RobotBehavior : public GameInformations
+{
+protected:
+  const ai::Robot* robot_ptr_;
+  double birthday_;
+  double last_update_;
+  std::string name_;
 
-namespace Robot_behavior {
+  Vector2d robot_linear_position_;
+  ContinuousAngle robot_angular_position_;
+  Vector2d robot_linear_velocity_;
+  ContinuousAngle robot_angular_velocity_;
 
-class RobotBehavior : public GameInformations {
-    protected:
-        const Ai::Robot* robot_ptr;
-        double birthday;
-        double lastUpdate;
-        std::string name;
+  ai::AiData& ai_data_;
 
-        Vector2d robot_linear_position;
-        ContinuousAngle robot_angular_position;
-        Vector2d robot_linear_velocity;
-        ContinuousAngle robot_angular_velocity;
+public:
+  RobotBehavior(ai::AiData& ia_data);
 
-        Ai::AiData & ai_data;
-    public:
-        RobotBehavior( Ai::AiData & ia_data );
+  double age() const;
+  bool isBorn() const;
+  void setBirthday(double birthday);
 
-        double age() const;
-        bool is_born() const;
-        void set_birthday( double birthday );
+  void updateTimeAndPosition(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-        void update_time_and_position(
-            double time,
-            const Ai::Robot & robot, const Ai::Ball & ball
-        );
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball) = 0;
+  virtual Control control() const = 0;
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot, const Ai::Ball & ball
-        ) = 0;
-        virtual Control control() const = 0;
+  //
+  // This function is used to draw annotations in the viewer.
+  // You can use it to print what you want.
+  //
+  // For example :
+  //
+  //
+  //  RhobanSSLAnnotation::Annotations get_annotations() const{
+  //      RhobanSSLAnnotation::Annotations annotations;
+  //      static double d = 0;
+  //      d += 0.01;
+  //
+  //      annotations.addCircle(3, 3, 1, "cyan");
+  //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+  //      return annotations;
+  //  }
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-        //
-        // This function is used to draw annotations in the viewer.
-        // You can use it to print what you want.
-        //
-        // For example :
-        //
-        //
-        //  RhobanSSLAnnotation::Annotations get_annotations() const{
-        //      RhobanSSLAnnotation::Annotations annotations;
-        //      static double d = 0;
-        //      d += 0.01;
-        //
-        //      annotations.addCircle(3, 3, 1, "cyan");
-        //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
-        //      return annotations;
-        //  }
-        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  const ai::Robot& robot() const;
 
-        const Ai::Robot & robot() const ;
+  rhoban_geometry::Point linearPosition() const;
+  ContinuousAngle angularPosition() const;
+  bool isGoalie() const;
 
-        rhoban_geometry::Point linear_position() const ;
-        ContinuousAngle angular_position() const;
-        bool is_goalie() const;
-
-        bool infra_red() const;
-
+  bool infraRed() const;
 };
 
-namespace detail {
-    double vec2angle( Vector2d direction );
+namespace detail
+{
+double vec2angle(Vector2d direction);
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

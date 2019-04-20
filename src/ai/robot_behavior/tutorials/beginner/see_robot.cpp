@@ -20,81 +20,77 @@
 #include "see_robot.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Beginner {
-
-
-See_Robot::See_Robot(
-    Ai::AiData & ai_data, int target_id
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
-    
+namespace rhoban_ssl
 {
-    target_robot_id = target_id;
+namespace robot_behavior
+{
+namespace Beginner
+{
+SeeRobot::SeeRobot(ai::AiData& ai_data, int target_id)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+
+{
+  target_robot_id_ = target_id;
 }
 
-void See_Robot::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    
-    annotations.clear();
-    
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
-    
-    ContinuousAngle target_rotation = robot.get_movement().angular_position( ai_data.time );
+void SeeRobot::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-    // Condition to check if the target robot is not the robot itself.
-    // A robot which try to look itself will do nothing.
-    if(target_robot_id != robot.id()){
-        const rhoban_geometry::Point & target_position = get_robot(target_robot_id).get_movement().linear_position( ai_data.time );
+  annotations_.clear();
 
-        Vector2d direction = target_position - robot_position;
-        target_rotation = vector2angle( direction );
-    }
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
-    follower->set_following_position( robot_position, target_rotation );
+  ContinuousAngle target_rotation = robot.getMovement().angularPosition(ai_data_.time);
 
+  // Condition to check if the target robot is not the robot itself.
+  // A robot which try to look itself will do nothing.
+  if (target_robot_id_ != robot.id())
+  {
+    const rhoban_geometry::Point& target_position =
+        getRobot(target_robot_id_).getMovement().linearPosition(ai_data_.time);
 
-    follower->avoid_the_ball(false);
-    follower->update(time, robot, ball);
+    Vector2d direction = target_position - robot_position;
+    target_rotation = vector2angle(direction);
+  }
+
+  follower_->setFollowingPosition(robot_position, target_rotation);
+
+  follower_->avoidTheBall(false);
+  follower_->update(time, robot, ball);
 }
 
-
-void See_Robot::set_robot_id_to_see (int id){
-    target_robot_id = id;
+void SeeRobot::setRobotIdToSee(int id)
+{
+  target_robot_id_ = id;
 }
 
-int See_Robot::get_robot_id_to_see() const{
-    return target_robot_id;
+int SeeRobot::getRobotIdToSee() const
+{
+  return target_robot_id_;
 }
 
-
-
-Control See_Robot::control() const {
-    Control ctrl = follower->control();
-    return ctrl; 
+Control SeeRobot::control() const
+{
+  Control ctrl = follower_->control();
+  return ctrl;
 }
 
-See_Robot::~See_Robot(){
-    delete follower;
+SeeRobot::~SeeRobot()
+{
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations See_Robot::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
-    return annotations;
+rhoban_ssl::annotations::Annotations SeeRobot::getAnnotations() const
+{
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
+  return annotations;
 }
 
-
-
-}
-}
-}
+}  // namespace Beginner
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

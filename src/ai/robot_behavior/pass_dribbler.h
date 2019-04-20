@@ -17,49 +17,41 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__PASS_DRIBBLER__H__
-#define __ROBOT_BEHAVIOR__PASS_DRIBBLER__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior {
+namespace robot_behavior
+{
+class PassDribbler : public RobotBehavior
+{
+private:
+  rhoban_geometry::Point point_to_pass_;
+  int robot_to_pass_id_;
+  vision::Team robot_to_pass_team_;
+  double kick_power_;
 
-class Pass_dribbler : public RobotBehavior  {
-    private:
-        rhoban_geometry::Point point_to_pass;
-        int robot_to_pass_id;
-        Vision::Team robot_to_pass_team;
-        double kick_power;
+  ConsignFollower* follower_;
 
+public:
+  bool need_to_kick;
+  PassDribbler(ai::AiData& ai_data);
 
-        ConsignFollower* follower;
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  // TODO: portée des variables ?
+  void declarePointToPass(rhoban_geometry::Point point);
+  void declareRobotToPass(int robot_id, vision::Team team = vision::Team::Ally);
+  void calcKickPower(rhoban_geometry::Point start, rhoban_geometry::Point end);
 
-    public:
-        bool need_to_kick;
-        Pass_dribbler(Ai::AiData& ai_data);
+  virtual Control control() const;
 
-        virtual void update(
-            double time,
-            const Ai::Robot & robot,
-            const Ai::Ball & ball
-        );
-        //TODO: portée des variables ?
-        void declare_point_to_pass( rhoban_geometry::Point point );
-        void declare_robot_to_pass( int robot_id, Vision::Team team = Vision::Team::Ally );
-        void calc_kick_power( rhoban_geometry::Point start, rhoban_geometry::Point end );
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-
-	virtual Control control() const;
-
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Pass_dribbler();
+  virtual ~PassDribbler();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

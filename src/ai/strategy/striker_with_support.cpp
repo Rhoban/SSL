@@ -23,87 +23,84 @@
 #include <robot_behavior/striker.h>
 #include <robot_behavior/robot_follower.h>
 
-namespace RhobanSSL {
-namespace Strategy {
-
-StrikerWithSupport::StrikerWithSupport(Ai::AiData & ai_data):
-    Strategy(ai_data)
+namespace rhoban_ssl
+{
+namespace strategy
+{
+StrikerWithSupport::StrikerWithSupport(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-StrikerWithSupport::~StrikerWithSupport(){
+StrikerWithSupport::~StrikerWithSupport()
+{
 }
 
 /*
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int StrikerWithSupport::min_robots() const {
-    return 3;
+int StrikerWithSupport::minRobots() const
+{
+  return 3;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int StrikerWithSupport::max_robots() const {
-    return 3;
+int StrikerWithSupport::maxRobots() const
+{
+  return 3;
 }
 
-Goalie_need StrikerWithSupport::needs_goalie() const {
-    return Goalie_need::NO;
+GoalieNeed StrikerWithSupport::needsGoalie() const
+{
+  return GoalieNeed::NO;
 }
 
 const std::string StrikerWithSupport::name = "striker_with_support";
 
-void StrikerWithSupport::start(double time){
-    DEBUG("START PREPARE KICKOFF");
-    behaviors_are_assigned = false;
+void StrikerWithSupport::start(double time)
+{
+  DEBUG("START PREPARE KICKOFF");
+  behaviors_are_assigned_ = false;
 
-    striker = std::shared_ptr<Robot_behavior::Striker>(
-      new Robot_behavior::Striker(ai_data)
-    );
-    
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
 }
-void StrikerWithSupport::stop(double time){
-    DEBUG("STOP PREPARE KICKOFF");
-}
-
-void StrikerWithSupport::update(double time){
-
-    //std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move( ball_position() );
-    //rhoban_geometry::Point goal_point = results.first;
-
-    //static_cast<Robot_behavior::Striker*>( striker.get() )->declare_point_to_strik( goal_point );
+void StrikerWithSupport::stop(double time)
+{
+  DEBUG("STOP PREPARE KICKOFF");
 }
 
-void StrikerWithSupport::assign_behavior_to_robots(
-    std::function<
-        void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-    > assign_behavior,
-    double time, double dt
-){
-    if( not(behaviors_are_assigned) ){
-        //we assign now all the other behavior
-        assert( get_player_ids().size() == 3 );
+void StrikerWithSupport::update(double time)
+{
+  // std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move( ball_position() );
+  // rhoban_geometry::Point goal_point = results.first;
 
-        assign_behavior( player_id(0), striker );
-        int supportLeft = player_id(1); // we get the first if in get_player_ids()
-        std::shared_ptr<Robot_behavior::RobotFollower> support_behaviorL(
-            new Robot_behavior::RobotFollower(ai_data)
-        );
-        support_behaviorL->declare_robot_to_follow(player_id(0), Vector2d(1, 0.5), Vision::Team::Ally);
-        assign_behavior( supportLeft, support_behaviorL );
+  // static_cast<Robot_behavior::Striker*>( striker.get() )->declare_point_to_strik( goal_point );
+}
 
-        int supportRight = player_id(2); // we get the first if in get_player_ids()
-        std::shared_ptr<Robot_behavior::RobotFollower> support_behaviorR(
-          new Robot_behavior::RobotFollower(ai_data)
-        );
-        support_behaviorR->declare_robot_to_follow(player_id(0), Vector2d(1, -0.5), Vision::Team::Ally);
-        assign_behavior(supportRight, support_behaviorR);
+void StrikerWithSupport::assignBehaviorToRobots(
+    std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
+{
+  if (not(behaviors_are_assigned_))
+  {
+    // we assign now all the other behavior
+    assert(getPlayerIds().size() == 3);
 
-        behaviors_are_assigned = true;
-    }
+    assign_behavior(playerId(0), striker_);
+    int supportLeft = playerId(1);  // we get the first if in get_player_ids()
+    std::shared_ptr<robot_behavior::RobotFollower> support_behaviorL(new robot_behavior::RobotFollower(ai_data_));
+    support_behaviorL->declare_robot_to_follow_(playerId(0), Vector2d(1, 0.5), vision::Team::Ally);
+    assign_behavior(supportLeft, support_behaviorL);
+
+    int supportRight = playerId(2);  // we get the first if in get_player_ids()
+    std::shared_ptr<robot_behavior::RobotFollower> support_behaviorR(new robot_behavior::RobotFollower(ai_data_));
+    support_behaviorR->declare_robot_to_follow_(playerId(0), Vector2d(1, -0.5), vision::Team::Ally);
+    assign_behavior(supportRight, support_behaviorR);
+
+    behaviors_are_assigned_ = true;
+  }
 }
 
 // We declare here the starting positions that are used to :
@@ -112,21 +109,18 @@ void StrikerWithSupport::assign_behavior_to_robots(
 //     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
-std::list<
-    std::pair<rhoban_geometry::Point,ContinuousAngle>
-> StrikerWithSupport::get_starting_positions( int number_of_avalaible_robots ){
-    assert( min_robots() <= number_of_avalaible_robots );
-    assert(
-        max_robots()==-1 or
-        number_of_avalaible_robots <= max_robots()
-    );
+std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+StrikerWithSupport::getStartingPositions(int number_of_avalaible_robots)
+{
+  assert(minRobots() <= number_of_avalaible_robots);
+  assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-    return {
-        // std::pair<rhoban_geometry::Point,ContinuousAngle>(
-        //     ai_data.relative2absolute(-1.0/3.0, 0.0),
-        //     0.0
-        // )
-    };
+  return {
+    // std::pair<rhoban_geometry::Point,ContinuousAngle>(
+    //     ai_data.relative2absolute(-1.0/3.0, 0.0),
+    //     0.0
+    // )
+  };
 }
 
 //
@@ -134,28 +128,26 @@ std::list<
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool StrikerWithSupport::get_starting_position_for_goalie(
-    rhoban_geometry::Point & linear_position,
-    ContinuousAngle & angular_position
-){
-    linear_position =  ally_goal_center();
-    angular_position = ContinuousAngle(0.0);
-    return true;
+bool StrikerWithSupport::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
+                                                      ContinuousAngle& angular_position)
+{
+  linear_position = allyGoalCenter();
+  angular_position = ContinuousAngle(0.0);
+  return true;
 }
 
-RhobanSSLAnnotation::Annotations StrikerWithSupport::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
+rhoban_ssl::annotations::Annotations StrikerWithSupport::getAnnotations() const
+{
+  rhoban_ssl::annotations::Annotations annotations;
 
-    for (auto it = this->get_player_ids().begin(); it != this->get_player_ids().end(); it++)
-    {
-        const rhoban_geometry::Point & robot_position = get_robot(*it).get_movement().linear_position( time() );
-        //annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-        annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
-    }
-    return annotations;
+  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
+  {
+    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
+    // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+    annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+  }
+  return annotations;
 }
 
-
-
-}
-}
+}  // namespace strategy
+}  // namespace rhoban_ssl

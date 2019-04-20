@@ -17,43 +17,35 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__HALT__H__
-#define __STRATEGY__HALT__H__
+#pragma once
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <string>
 
-namespace RhobanSSL {
-namespace Strategy {
+namespace rhoban_ssl
+{
+namespace strategy
+{
+class Halt : public Strategy
+{
+public:
+  Halt(ai::AiData& ai_data);
 
+  int minRobots() const;
+  int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
-class Halt : public Strategy {
-    public:
-        Halt(Ai::AiData & ai_data);
+  static const std::string name;
 
-        int min_robots() const;
-        int max_robots() const;
-        virtual Goalie_need needs_goalie() const;
+  void start(double time);
+  void stop(double time);
 
-        static const std::string name;
+  void assignBehaviorToRobots(std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior,
+                              double time, double dt);
+  virtual ~Halt();
 
-        void start(double time);
-        void stop(double time);
-        
-        void assign_behavior_to_robots(
-            std::function<
-                void (int, std::shared_ptr<Robot_behavior::RobotBehavior>)
-            > assign_behavior,
-            double time, double dt
-        );
-        virtual ~Halt();
-
-        virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-}; 
-
-
-
-};
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
-#endif
+};  // namespace strategy
+};  // namespace rhoban_ssl

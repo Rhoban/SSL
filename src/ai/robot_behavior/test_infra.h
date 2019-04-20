@@ -17,41 +17,34 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TEST_INFRA__H__
-#define __ROBOT_BEHAVIOR__TEST_INFRA__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior {
+namespace robot_behavior
+{
+class TestInfra : public RobotBehavior
+{
+private:
+  Vector2d translation_;
+  vision::Team team_;
 
-class TestInfra : public RobotBehavior  {
-    private:
+  ConsignFollower* follower_;
 
-    Vector2d translation;
-    Vision::Team team;
+public:
+  TestInfra(ai::AiData& ai_data);
 
-    ConsignFollower* follower;
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-    public:
-    TestInfra(Ai::AiData& ai_data);
+  virtual Control control() const;
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-	virtual Control control() const;
-
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~TestInfra();
+  virtual ~TestInfra();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

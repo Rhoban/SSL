@@ -17,44 +17,70 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__INTERMEDIATE__PREPARE_STRIKE__
-#define __ROBOT_BEHAVIOR__TUTORIALS__INTERMEDIATE__PREPARE_STRIKE__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior 
+namespace robot_behavior
 {
-namespace Medium 
+namespace medium
 {
-/** Tutorial class show how to prepare the robot to strike the ball.
+/**
+ * @class PrepareStrike
+ * @brief Tutorial to show how to prepare to strike in the ball.
  */
-class Prepare_strike : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    RhobanSSLAnnotation::Annotations annotations;
-    rhoban_geometry::Point striking_point;
+class PrepareStrike : public RobotBehavior
+{
+private:
+  /**
+   * @see rhoban_ssl::Robot_behavior::ConsignFollower
+   */
+  ConsignFollower* follower_;
+  /**
+   * Not use in this package but set in a case of copy.
+   * @see rhoban_ssl::annotations::Annotations
+   */
+  rhoban_ssl::annotations::Annotations annotations_;
+  /**
+   * @brief The target point that you want to aim.
+   */
+  rhoban_geometry::Point striking_point_;
 
-    public:
-    Prepare_strike(Ai::AiData& ai_data);
+public:
+  /**
+   * @brief Constructor.
+   *
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see ai::AiData
+   */
+  PrepareStrike(ai::AiData& ai_data);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  /**
+   * @brief Prepare to strike a ball.
+   *
+   * We put behind the ball in the direction of the opponent goal.
+   *
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-	virtual Control control() const;
+  /**
+   * @see Control
+   */
+  virtual Control control() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  /**
+   * @see rhoban_ssl::annotations::Annotations
+   */
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-	virtual ~Prepare_strike();
+  virtual ~PrepareStrike();
 };
-
-};
-};
-};  //Namespace Rhoban
-
-#endif
+};  // namespace medium
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

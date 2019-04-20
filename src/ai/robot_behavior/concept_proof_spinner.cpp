@@ -22,78 +22,72 @@
 #include <math/vector2d.h>
 #include <debug.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-
-Concept_proof_spinner::Concept_proof_spinner(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) ),
-    go_to_home(false),
-    save_ball_position(false)
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+ConceptProofSpinner::ConceptProofSpinner(ai::AiData& ai_data)
+  : RobotBehavior(ai_data)
+  , follower_(Factory::fixedConsignFollower(ai_data))
+  , go_to_home_(false)
+  , save_ball_position_(false)
 {
 }
 
-void Concept_proof_spinner::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
+void ConceptProofSpinner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
+  rhoban_geometry::Point pos = robot.getMovement().linearPosition(time);
+  Vector2d direction = Vector2d(ballPosition()) - Vector2d(pos);
+  direction = direction / direction.norm();
 
-    rhoban_geometry::Point pos = robot.get_movement().linear_position(time);
-    Vector2d direction = Vector2d(ball_position()) - Vector2d(pos);
-    direction = direction / direction.norm();
-    
-    rhoban_geometry::Point target_position;
+  rhoban_geometry::Point target_position;
 
+  if (not(save_ball_position_) &&
+      (norm(Vector2d(ballPosition()) - Vector2d(pos)) < (2 * getBallRadius() + getRobotRadius())))
+  {
+    save_ball_position_ = true;
+    ball_pos_ = ballPosition();
+  }
+  if (not(go_to_home_) && save_ball_position_ && norm(Vector2d(ball_pos_) - Vector2d(pos)) < getRobotRadius())
+  {
+    go_to_home_ = true;
+  }
 
-    if(
-        not(save_ball_position) && (
-            norm( Vector2d( ball_position()) - Vector2d(pos ) ) < ( 2*get_ball_radius() + get_robot_radius() )
-        )
-    ){
-        save_ball_position = true;
-        ball_pos = ball_position();
-    }
-    if( not(go_to_home) && save_ball_position && norm( Vector2d( ball_pos )  - Vector2d( pos ) ) < get_robot_radius() ){
-        go_to_home = true;   
-    }
+  if (not(go_to_home_))
+  {
+    target_position = (ballPosition() + direction * ai_data_.constants.robot_radius);
+  }
+  else
+  {
+    target_position = centerMark();
+  }
+  ContinuousAngle angle = vector2angle(direction);
 
-
-    if( not(go_to_home) ){
-        target_position = (
-            ball_position() + 
-            direction * ai_data.constants.robot_radius
-        );
-    }else{
-        target_position = center_mark();
-    }
-    ContinuousAngle angle = vector2angle( direction  );
-
-    follower->avoid_the_ball(false); 
-    follower->set_following_position(target_position, angle);
-    follower->update(time, robot, ball);   
+  follower_->avoidTheBall(false);
+  follower_->setFollowingPosition(target_position, angle);
+  follower_->update(time, robot, ball);
 }
 
-Control Concept_proof_spinner::control() const {
-    Control ctrl = follower->control();
-    ctrl.spin = true;
-    return ctrl; 
+Control ConceptProofSpinner::control() const
+{
+  Control ctrl = follower_->control();
+  ctrl.spin = true;
+  return ctrl;
 }
 
-Concept_proof_spinner::~Concept_proof_spinner(){
-    delete follower;
+ConceptProofSpinner::~ConceptProofSpinner()
+{
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Concept_proof_spinner::get_annotations() const {
-    return follower->get_annotations();
+rhoban_ssl::annotations::Annotations ConceptProofSpinner::getAnnotations() const
+{
+  return follower_->getAnnotations();
 }
 
-}
-}
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

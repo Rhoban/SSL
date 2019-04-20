@@ -50,309 +50,312 @@
 #define GOALIE "goalie"
 #define PROTECT_BALL "protect_ball"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
-
-PlanVeschambres::PlanVeschambres(
-    Ai::AiData &ai_data,
-    const GameState &game_state) : ManagerWithGameState(ai_data, game_state),
-                              game_state(game_state),
-                              penalty_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              goalie_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              offensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              stop_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              halt_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              defensive_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              kick_strats(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM),
-                              kick_strats_indirect(1 + Ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_state)
+  : ManagerWithGameState(ai_data, game_state)
+  , game_state_(game_state)
+  , penalty_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , goalie_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , offensive_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , stop_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , halt_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , defensive_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , kick_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , kick_strats_indirect_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
 {
+  penalty_strats_[8] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name, PROTECT_BALL };
+  penalty_strats_[7] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name, PROTECT_BALL };
+  penalty_strats_[6] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name, PROTECT_BALL };
+  penalty_strats_[5] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive::name, PROTECT_BALL };
+  penalty_strats_[4] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive::name, PROTECT_BALL };
+  penalty_strats_[3] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive::name };
+  penalty_strats_[2] = { strategy::GoalieStrat::name, strategy::Defensive::name };
+  penalty_strats_[1] = { strategy::GoalieStrat::name };
 
-    penalty_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
-    penalty_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
-    penalty_strats[6] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, PROTECT_BALL};
-    penalty_strats[5] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive::name, PROTECT_BALL};
-    penalty_strats[4] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, PROTECT_BALL};
-    penalty_strats[3] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name};
-    penalty_strats[2] = {Strategy::GoalieStrat::name, Strategy::Defensive::name};
-    penalty_strats[1] = {Strategy::GoalieStrat::name};
+  goalie_strats_[8] = { strategy::GoalieStrat::name };
+  goalie_strats_[7] = { strategy::GoalieStrat::name };
+  goalie_strats_[6] = { strategy::GoalieStrat::name };
+  goalie_strats_[5] = { strategy::GoalieStrat::name };
+  goalie_strats_[4] = { strategy::GoalieStrat::name };
+  goalie_strats_[3] = { strategy::GoalieStrat::name };
+  goalie_strats_[2] = { strategy::GoalieStrat::name };
+  goalie_strats_[1] = { strategy::GoalieStrat::name };
 
-    goalie_strats[8] = {Strategy::GoalieStrat::name};
-    goalie_strats[7] = {Strategy::GoalieStrat::name};
-    goalie_strats[6] = {Strategy::GoalieStrat::name};
-    goalie_strats[5] = {Strategy::GoalieStrat::name};
-    goalie_strats[4] = {Strategy::GoalieStrat::name};
-    goalie_strats[3] = {Strategy::GoalieStrat::name};
-    goalie_strats[2] = {Strategy::GoalieStrat::name};
-    goalie_strats[1] = {Strategy::GoalieStrat::name};
+  kick_strats_[8] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
+                      strategy::Mur_2::name, strategy::Defensive2::name };
+  kick_strats_[7] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
+                      strategy::Mur_2::name, strategy::Defensive::name };
+  kick_strats_[6] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
+                      strategy::Mur_2::name };
+  kick_strats_[5] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
+                      strategy::Mur::name };
+  kick_strats_[4] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
+  kick_strats_[3] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur::name };
+  kick_strats_[2] = { strategy::GoalieStrat::name, strategy::StrikerKick::name };
+  kick_strats_[1] = { strategy::GoalieStrat::name };
 
-    kick_strats[8] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Defensive2::name};
-    kick_strats[7] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Defensive::name};
-    kick_strats[6] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name, Strategy::Mur_2::name};
-    kick_strats[5] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name, Strategy::Mur::name};
-    kick_strats[4] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name};
-    kick_strats[3] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur::name};
-    kick_strats[2] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name};
-    kick_strats[1] = {Strategy::GoalieStrat::name};
+  kick_strats_indirect_[8] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
+                               strategy::MurStop::name, strategy::Mur_2::name, strategy::Defensive::name };
+  kick_strats_indirect_[7] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
+                               strategy::MurStop::name, strategy::Mur::name, strategy::Defensive::name };
+  kick_strats_indirect_[6] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
+                               strategy::MurStop::name, strategy::Mur::name };
+  kick_strats_indirect_[5] = { strategy::GoalieStrat::name, strategy::AttaqueWithSupportMs::name,
+                               strategy::MurStop::name };
+  kick_strats_indirect_[4] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
+  kick_strats_indirect_[3] = { strategy::GoalieStrat::name, strategy::StrikerKick::name, strategy::Mur::name };
+  kick_strats_indirect_[2] = { strategy::GoalieStrat::name, strategy::StrikerKick::name };
+  kick_strats_indirect_[1] = { strategy::GoalieStrat::name };
 
-    kick_strats_indirect[8] = {Strategy::GoalieStrat::name, Strategy::AttaqueWithSupportMs::name, Strategy::Mur_stop::name, Strategy::Mur_2::name, Strategy::Defensive::name};
-    kick_strats_indirect[7] = {Strategy::GoalieStrat::name, Strategy::AttaqueWithSupportMs::name, Strategy::Mur_stop::name, Strategy::Mur::name, Strategy::Defensive::name};
-    kick_strats_indirect[6] = {Strategy::GoalieStrat::name, Strategy::AttaqueWithSupportMs::name, Strategy::Mur_stop::name, Strategy::Mur::name};
-    kick_strats_indirect[5] = {Strategy::GoalieStrat::name, Strategy::AttaqueWithSupportMs::name, Strategy::Mur_stop::name};
-    kick_strats_indirect[4] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur_stop::name};
-    kick_strats_indirect[3] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name, Strategy::Mur::name};
-    kick_strats_indirect[2] = {Strategy::GoalieStrat::name, Strategy::StrikerKick::name};
-    kick_strats_indirect[1] = {Strategy::GoalieStrat::name};
+  offensive_strats_[8] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive2::name,
+                           strategy::StrikerV2::name, strategy::Offensive::name };
+  offensive_strats_[7] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive2::name,
+                           strategy::StrikerV2::name, strategy::Offensive::name };
+  offensive_strats_[6] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive2::name,
+                           strategy::StrikerV2::name, strategy::Offensive::name };
+  offensive_strats_[5] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive2::name,
+                           strategy::StrikerV2::name };
+  offensive_strats_[4] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive::name,
+                           strategy::StrikerV2::name };
+  offensive_strats_[3] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::StrikerV2::name };
+  offensive_strats_[2] = { strategy::GoalieStrat::name, strategy::StrikerV2::name };
+  offensive_strats_[1] = { strategy::GoalieStrat::name };
 
-    offensive_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name, Strategy::Offensive::name};
-    offensive_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name, Strategy::Offensive::name};
-    offensive_strats[6] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name, Strategy::Offensive::name};
-    offensive_strats[5] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive2::name, Strategy::StrikerV2::name};
-    offensive_strats[4] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::StrikerV2::name};
-    offensive_strats[3] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::StrikerV2::name};
-    offensive_strats[2] = {Strategy::GoalieStrat::name, Strategy::StrikerV2::name};
-    offensive_strats[1] = {Strategy::GoalieStrat::name};
+  defensive_strats_[8] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name,
+                           strategy::Offensive::name };
+  defensive_strats_[7] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name,
+                           strategy::Offensive::name };
+  defensive_strats_[6] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name,
+                           strategy::Offensive::name };
+  defensive_strats_[5] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive::name,
+                           strategy::StrikerV2::name };
+  defensive_strats_[4] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::Defensive::name,
+                           strategy::StrikerV2::name };
+  defensive_strats_[3] = { strategy::GoalieStrat::name, strategy::Mur::name, strategy::StrikerV2::name };
+  defensive_strats_[2] = { strategy::GoalieStrat::name, strategy::Offensive::name };
+  defensive_strats_[1] = { strategy::GoalieStrat::name };
 
-    defensive_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name};
-    defensive_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name};
-    defensive_strats[6] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive2::name, Strategy::Offensive::name};
-    defensive_strats[5] = {Strategy::GoalieStrat::name, Strategy::Mur_2::name, Strategy::Defensive::name, Strategy::StrikerV2::name};
-    defensive_strats[4] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::Defensive::name, Strategy::StrikerV2::name};
-    defensive_strats[3] = {Strategy::GoalieStrat::name, Strategy::Mur::name, Strategy::StrikerV2::name};
-    defensive_strats[2] = {Strategy::GoalieStrat::name, Strategy::Offensive::name};
-    defensive_strats[1] = {Strategy::GoalieStrat::name};
+  stop_strats_[8] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+  stop_strats_[7] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+  stop_strats_[6] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+  stop_strats_[5] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Mur_2::name };
+  stop_strats_[4] = { strategy::GoalieStrat::name, strategy::MurStop::name, strategy::Mur::name };
+  stop_strats_[3] = { strategy::GoalieStrat::name, strategy::MurStop::name };
+  stop_strats_[2] = { strategy::GoalieStrat::name, strategy::Mur::name };
+  stop_strats_[1] = { strategy::GoalieStrat::name };
 
-    stop_strats[8] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Prepare_kickoff::name};
-    stop_strats[7] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Prepare_kickoff::name};
-    stop_strats[6] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Prepare_kickoff::name};
-    stop_strats[5] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur_2::name};
-    stop_strats[4] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name, Strategy::Mur::name};
-    stop_strats[3] = {Strategy::GoalieStrat::name, Strategy::Mur_stop::name};
-    stop_strats[2] = {Strategy::GoalieStrat::name, Strategy::Mur::name};
-    stop_strats[1] = {Strategy::GoalieStrat::name};
+  halt_strats_[8] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[7] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[6] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[5] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[4] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[3] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[2] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
+  halt_strats_[1] = { strategy::TareAndSynchronize::name };
 
-    halt_strats[8] = {Strategy::Tare_and_synchronize::name, Strategy::Halt::name};
-    halt_strats[7] = {Strategy::Tare_and_synchronize::name, Strategy::Halt::name};
-    halt_strats[6] = {Strategy::Tare_and_synchronize::name, Strategy::Halt::name};
-    halt_strats[5] = {Strategy::Tare_and_synchronize::name, Strategy::Halt::name};
-    halt_strats[4] = {Strategy::Tare_and_synchronize::name, Strategy::Halt::name};
-    halt_strats[3] = {Strategy::Tare_and_synchronize::name, Strategy::Halt::name};
-    halt_strats[2] = {Strategy::Tare_and_synchronize::name, Strategy::Halt::name};
-    halt_strats[1] = {Strategy::Tare_and_synchronize::name};
-    
-
-    register_strategy(
-        Strategy::Halt::name, std::shared_ptr<Strategy::Strategy>(
-                                  new Strategy::Halt(ai_data)));
-    register_strategy(
-        Strategy::StrikerV2::name, std::shared_ptr<Strategy::Strategy>(
-                                       new Strategy::StrikerV2(ai_data)));
-    register_strategy(
-        Strategy::Tare_and_synchronize::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Tare_and_synchronize(ai_data)));
-    register_strategy(
-        Strategy::Prepare_kickoff::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Prepare_kickoff(ai_data)));
-    register_strategy(
-        GOALIE, std::shared_ptr<Strategy::Strategy>(
-                    new Strategy::From_robot_behavior(
-                        ai_data,
-                        [&](double time, double dt) {
-                            Robot_behavior::Goalie *goalie = new Robot_behavior::Goalie(ai_data);
-                            return std::shared_ptr<Robot_behavior::RobotBehavior>(goalie);
-                        },
-                        true)));
-    register_strategy(
-        PROTECT_BALL, std::shared_ptr<Strategy::Strategy>(
-                          new Strategy::From_robot_behavior(
-                              ai_data,
-                              [&](double time, double dt) {
-                                  Robot_behavior::ProtectBall *protect_ball = new Robot_behavior::ProtectBall(ai_data);
-                                  return std::shared_ptr<Robot_behavior::RobotBehavior>(protect_ball);
-                              },
-                              false)));
-    register_strategy(
-        Strategy::Offensive::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Offensive(ai_data)));
-    register_strategy(
-        Strategy::StrikerKick::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::StrikerKick(ai_data)));
-    register_strategy(
-        Strategy::Mur_stop::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Mur_stop(ai_data)));
-    register_strategy(
-        Strategy::Defensive::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Defensive(ai_data)));
-    register_strategy(
-        Strategy::Defensive2::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Defensive2(ai_data)));
-    register_strategy(
-        Strategy::Mur::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Mur(ai_data)));
-    register_strategy(
-        Strategy::Mur_2::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Mur_2(ai_data)));
-    register_strategy(
-        Strategy::Mur_2_passif::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::Mur_2_passif(ai_data)));
-    register_strategy(
-        Strategy::AttaqueWithSupportMs::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::AttaqueWithSupportMs(ai_data)));
-    register_strategy(
-        Strategy::StrikerWithSupport::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::StrikerWithSupport(ai_data)));
-    register_strategy(
-        Strategy::GoalieStrat::name,
-        std::shared_ptr<Strategy::Strategy>(
-            new Strategy::GoalieStrat(ai_data)));
-    assign_strategy(
-        Strategy::Halt::name, 0.0,
-        get_team_ids()); // TODO TIME !
+  registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
+  registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2(ai_data)));
+  registerStrategy(strategy::TareAndSynchronize::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
+  registerStrategy(strategy::PrepareKickoff::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff(ai_data)));
+  registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                               ai_data,
+                               [&](double time, double dt) {
+                                 robot_behavior::Goalie* goalie = new robot_behavior::Goalie(ai_data);
+                                 return std::shared_ptr<robot_behavior::RobotBehavior>(goalie);
+                               },
+                               true)));
+  registerStrategy(PROTECT_BALL, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                     ai_data,
+                                     [&](double time, double dt) {
+                                       robot_behavior::ProtectBall* protect_ball =
+                                           new robot_behavior::ProtectBall(ai_data);
+                                       return std::shared_ptr<robot_behavior::RobotBehavior>(protect_ball);
+                                     },
+                                     false)));
+  registerStrategy(strategy::Offensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Offensive(ai_data)));
+  registerStrategy(strategy::StrikerKick::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick(ai_data)));
+  registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop(ai_data)));
+  registerStrategy(strategy::Defensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive(ai_data)));
+  registerStrategy(strategy::Defensive2::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive2(ai_data)));
+  registerStrategy(strategy::Mur::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur(ai_data)));
+  registerStrategy(strategy::Mur_2::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur_2(ai_data)));
+  registerStrategy(strategy::Mur_2_passif::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::Mur_2_passif(ai_data)));
+  registerStrategy(strategy::AttaqueWithSupportMs::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs(ai_data)));
+  registerStrategy(strategy::StrikerWithSupport::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::StrikerWithSupport(ai_data)));
+  registerStrategy(strategy::GoalieStrat::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::GoalieStrat(ai_data)));
+  assignStrategy(strategy::Halt::name, 0.0,
+                 getTeamIds());  // TODO TIME !
 }
 
-void PlanVeschambres::start_stop(){
-    set_ball_avoidance_for_all_robots(true);
-    future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
+void PlanVeschambres::startStop()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
-void PlanVeschambres::start_running(){
-    set_ball_avoidance_for_all_robots(false);
-    if(ball_position().getX() <= 0){
-        future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-        ball_was_in_ally_part = true;
-    }
-    else{
-        future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
-        ball_was_in_ally_part = false;
-    }
-    declare_and_assign_next_strategies(future_strats);
+void PlanVeschambres::startRunning()
+{
+  setBallAvoidanceForAllRobots(false);
+  if (ballPosition().getX() <= 0)
+  {
+    future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+    ball_was_in_ally_part_ = true;
+  }
+  else
+  {
+    future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+    ball_was_in_ally_part_ = false;
+  }
+  declareAndAssignNextStrategies(future_strats_);
 }
-void PlanVeschambres::start_halt(){
-    set_ball_avoidance_for_all_robots(true);
-    future_strats = halt_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
-}
-
-void PlanVeschambres::start_direct_kick_ally(){
-    set_ball_avoidance_for_all_robots(false);
-    future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
-}
-void PlanVeschambres::start_direct_kick_opponent(){
-    set_ball_avoidance_for_all_robots(true);
-    future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
+void PlanVeschambres::startHalt()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = halt_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
-void PlanVeschambres::start_indirect_kick_ally(){
-    set_ball_avoidance_for_all_robots(false);
-    future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
+void PlanVeschambres::startDirectKickAlly()
+{
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = kick_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
-void PlanVeschambres::start_indirect_kick_opponent(){
-    set_ball_avoidance_for_all_robots(true);
-    future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
-}
-
-void PlanVeschambres::start_prepare_kickoff_ally(){
-    set_ball_avoidance_for_all_robots(true);
-    future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
-}
-void PlanVeschambres::start_prepare_kickoff_opponent(){
-    set_ball_avoidance_for_all_robots(true);
-    future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
+void PlanVeschambres::startDirectKickOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
-void PlanVeschambres::start_kickoff_ally(){
-    set_ball_avoidance_for_all_robots(false);
-    future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
+void PlanVeschambres::startIndirectKickAlly()
+{
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = kick_strats_indirect_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
-void PlanVeschambres::start_kickoff_opponent(){
-    set_ball_avoidance_for_all_robots(true);
-    future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
-}
-
-void PlanVeschambres::start_penalty_ally(){
-    set_ball_avoidance_for_all_robots(false);
-    future_strats = penalty_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
-}
-void PlanVeschambres::start_penalty_opponent(){
-    set_ball_avoidance_for_all_robots(true);
-    future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
-    declare_and_assign_next_strategies(future_strats);
+void PlanVeschambres::startIndirectKickOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
-
-//Continue
-
-void PlanVeschambres::continue_stop(){
+void PlanVeschambres::startPrepareKickoffAlly()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
+}
+void PlanVeschambres::startPrepareKickoffOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
-void PlanVeschambres::continue_running(){
-    if(ball_position().getX() <= 0 and not(ball_was_in_ally_part)){
-        clear_strategy_assignement();
-        future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-        ball_was_in_ally_part = true;
-        declare_and_assign_next_strategies(future_strats);
-    }
-    else if(ball_position().getX() > 0 and ball_was_in_ally_part){
-        clear_strategy_assignement();
-        future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
-        ball_was_in_ally_part = false;
-        declare_and_assign_next_strategies(future_strats);
-    }
-    
+void PlanVeschambres::startKickoffAlly()
+{
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
-void PlanVeschambres::continue_halt(){
+void PlanVeschambres::startKickoffOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
-void PlanVeschambres::continue_direct_kick_ally(){
+void PlanVeschambres::startPenaltyAlly()
+{
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = penalty_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
-void PlanVeschambres::continue_direct_kick_opponent(){
-}
-
-void PlanVeschambres::continue_indirect_kick_ally(){
-}
-void PlanVeschambres::continue_indirect_kick_opponent(){
-}
-
-void PlanVeschambres::continue_prepare_kickoff_ally(){
-}
-void PlanVeschambres::continue_prepare_kickoff_opponent(){
+void PlanVeschambres::startPenaltyOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
-void PlanVeschambres::continue_kickoff_ally(){
-}
-void PlanVeschambres::continue_kickoff_opponent(){
-}
+// Continue
 
-void PlanVeschambres::continue_penalty_ally(){
-}
-void PlanVeschambres::continue_penalty_opponent(){
+void PlanVeschambres::continueStop()
+{
 }
 
+void PlanVeschambres::continueRunning()
+{
+  if (ballPosition().getX() <= 0 and not(ball_was_in_ally_part_))
+  {
+    clearStrategyAssignement();
+    future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+    ball_was_in_ally_part_ = true;
+    declareAndAssignNextStrategies(future_strats_);
+  }
+  else if (ballPosition().getX() > 0 and ball_was_in_ally_part_)
+  {
+    clearStrategyAssignement();
+    future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+    ball_was_in_ally_part_ = false;
+    declareAndAssignNextStrategies(future_strats_);
+  }
+}
+void PlanVeschambres::continueHalt()
+{
+}
 
-PlanVeschambres::~PlanVeschambres() {}
+void PlanVeschambres::continueDirectKickAlly()
+{
+}
+void PlanVeschambres::continueDirectKickOpponent()
+{
+}
 
-}; // namespace Manager
-}; // namespace RhobanSSL
+void PlanVeschambres::continueIndirectKickAlly()
+{
+}
+void PlanVeschambres::continueIndirectKickOpponent()
+{
+}
+
+void PlanVeschambres::continuePrepareKickoffAlly()
+{
+}
+void PlanVeschambres::continuePrepareKickoffOpponent()
+{
+}
+
+void PlanVeschambres::continueKickoffAlly()
+{
+}
+void PlanVeschambres::continueKickoffOpponent()
+{
+}
+
+void PlanVeschambres::continuePenaltyAlly()
+{
+}
+void PlanVeschambres::continuePenaltyOpponent()
+{
+}
+
+PlanVeschambres::~PlanVeschambres()
+{
+}
+
+};  // namespace manager
+};  // namespace rhoban_ssl

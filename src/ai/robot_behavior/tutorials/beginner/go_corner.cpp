@@ -1,6 +1,6 @@
 /*
     This file is part of SSL.
-    
+
     Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
@@ -16,58 +16,53 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#include "go_corner.h"
 #include <math/vector2d.h>
+#include "go_corner.h"
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-namespace Beginner {
-
-// REVIEW AB : Mettre un namespace beginner
-
-Go_corner::Go_corner(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data),
-    follower( Factory::fixed_consign_follower(ai_data) )
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+namespace beginner
+{
+// Use opponent_corner_left() for the left corner.
+GoCorner::GoCorner(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), target_corner_(opponentCornerLeft())
 {
 }
 
-void Go_corner::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    // At First, we update time and update potition from the abstract class robot_behavior.
-    // DO NOT REMOVE THAT LINE
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    annotations.clear();
-    
-    // Set the robot_position to the right corner. (Use opponent_corner_left() for the left corner).
-    const rhoban_geometry::Point & future_position = opponent_corner_right();
+void GoCorner::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+{
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
+  annotations_.clear();
 
-    ContinuousAngle angle(0.0);
+  const rhoban_geometry::Point& future_position = target_corner_;
+  ContinuousAngle angle(0.0);
 
-    follower->set_following_position( future_position, angle); 
-    follower->update(time, robot, ball);
+  follower_->setFollowingPosition(future_position, angle);
+  follower_->update(time, robot, ball);
 }
 
-Control Go_corner::control() const {
-    Control ctrl = follower->control();
-    return ctrl; 
+Control GoCorner::control() const
+{
+  Control ctrl = follower_->control();
+  return ctrl;
 }
 
-Go_corner::~Go_corner(){
-    delete follower;
+GoCorner::~GoCorner()
+{
+  delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Go_corner::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    annotations.addAnnotations( follower->get_annotations() );
-    return annotations;
+rhoban_ssl::annotations::Annotations GoCorner::getAnnotations() const
+{
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(this->annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
+  return annotations;
 }
 
-}
-}
-}
+}  // namespace beginner
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

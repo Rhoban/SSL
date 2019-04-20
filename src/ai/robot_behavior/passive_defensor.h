@@ -17,44 +17,38 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__PASSIVE_DEFENSOR__H__
-#define __ROBOT_BEHAVIOR__PASSIVE_DEFENSOR__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior {
+namespace robot_behavior
+{
+class PassiveDefensor : public RobotBehavior
+{
+private:
+  ConsignFollower* follower_;
+  int robot_to_obstale_id_;
+  vision::Team robot_to_obstale_team_1;
+  double barycenter_;
 
-class Passive_defensor : public RobotBehavior  {
-    private:
-	ConsignFollower* follower;
-    int robot_to_obstale_id;
-    Vision::Team robot_to_obstale_team;
-    double barycenter;
+public:
+  PassiveDefensor(ai::AiData& ai_data);
 
-    public:
-    Passive_defensor(Ai::AiData& ai_data);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-    virtual void update(
-        double time,
-        const Ai::Robot & robot,
-        const Ai::Ball & ball
-    );
+  void set_robot_to_obstacle(int robot_id, vision::Team team = vision::Team::Opponent);
+  void set_barycenter(double barycenter);
+  // void obstacle_the_robot_closed_to_the_ally_goal_line();
 
-    void set_robot_to_obstacle( int robot_id, Vision::Team team = Vision::Team::Opponent );
-    void set_barycenter( double barycenter );
-    //void obstacle_the_robot_closed_to_the_ally_goal_line();
+  virtual Control control() const;
 
-	virtual Control control() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-    virtual RhobanSSLAnnotation::Annotations get_annotations() const;
-
-	virtual ~Passive_defensor();
+  virtual ~PassiveDefensor();
 };
 
-};
-}; //Namespace Rhoban
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

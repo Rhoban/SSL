@@ -1,6 +1,6 @@
 /*
     This file is part of SSL.
-    
+
     Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
@@ -21,60 +21,64 @@
 #include "robot_have_ball.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL {
-namespace Robot_behavior {
-
-Begginer_robot_have_ball::Begginer_robot_have_ball(
-    Ai::AiData & ai_data
-):
-    RobotBehavior(ai_data)
+namespace rhoban_ssl
+{
+namespace robot_behavior
+{
+BeginnerRobotHaveBall::BeginnerRobotHaveBall(ai::AiData& ai_data) : RobotBehavior(ai_data)
 {
 }
 
-void Begginer_robot_have_ball::update(
-    double time,
-    const Ai::Robot & robot,
-    const Ai::Ball & ball
-){
-    RobotBehavior::update_time_and_position( time, robot, ball );
-    
-    // Find the ally and the opponent closest to the ball
-    int nb_ally_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Ally);
-    int nb_opponent_closest_to_the_ball = get_shirt_number_of_closest_robot_to_the_ball(Vision::Opponent);
-    
-    // Get the robot ally and opponent.
-    Ai::Robot ally_closest = get_robot(nb_ally_closest_to_the_ball, Vision::Ally);
-    Ai::Robot opponent_closest = get_robot(nb_opponent_closest_to_the_ball, Vision::Opponent);
+void BeginnerRobotHaveBall ::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+{
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-    // Find if the robot has the ball.
-    int ally_have_ball = GameInformations::infra_red(nb_ally_closest_to_the_ball, Vision::Ally);
-    int opponent_have_ball = GameInformations::infra_red(nb_opponent_closest_to_the_ball, Vision::Opponent);
+  // Find the ally and the opponent closest to the ball
+  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
+  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Opponent);
 
-    annotations.clear();
-    
-    // Find the robot that have the ball.
-    if(opponent_have_ball ) {
-        annotations.addCross(opponent_closest.get_movement().linear_position(ai_data.time), "blue", false);
-    } else if(ally_have_ball) {
-        annotations.addCross(ally_closest.get_movement().linear_position(ai_data.time), "blue", false);
-    } else {
-        annotations.addCross(ball_position(), "red", false);
-    }
- 
-    const rhoban_geometry::Point & robot_position = robot.get_movement().linear_position( ai_data.time );
+  // Get the robot ally and opponent.
+  ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, vision::Ally);
+  ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, vision::Opponent);
+
+  // Find if the robot has the ball.
+  int ally_have_ball = GameInformations::infraRed(nb_ally_closest_to_the_ball, vision::Ally);
+  int opponent_have_ball = GameInformations::infraRed(nb_opponent_closest_to_the_ball, vision::Opponent);
+
+  annotations_.clear();
+
+  // Find the robot that have the ball.
+  if (opponent_have_ball)
+  {
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+  }
+  else if (ally_have_ball)
+  {
+    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+  }
+  else
+  {
+    annotations_.addCross(ballPosition(), "red", false);
+  }
+
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 }
 
-Control Begginer_robot_have_ball::control() const {
-    return Control();
+Control BeginnerRobotHaveBall::control() const
+{
+  return Control();
 }
 
-Begginer_robot_have_ball::~Begginer_robot_have_ball(){}
-
-RhobanSSLAnnotation::Annotations Begginer_robot_have_ball::get_annotations() const {
-    RhobanSSLAnnotation::Annotations annotations;
-    annotations.addAnnotations( this->annotations );
-    return annotations;
+BeginnerRobotHaveBall::~BeginnerRobotHaveBall()
+{
 }
 
+rhoban_ssl::annotations::Annotations BeginnerRobotHaveBall::getAnnotations() const
+{
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
+  return annotations;
 }
-}
+
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl
