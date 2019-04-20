@@ -19,37 +19,37 @@
 #include "lob.h"
 #include <math/vector2d.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace medium
 {
-Lob::Lob(Ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixed_consign_follower(ai_data))
+Lob::Lob(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void Lob::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void Lob::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.get_movement().linear_position(ai_data.time);
-  Vector2d robot_ball_vector = ball_position() - robot_position;
-  rhoban_geometry::Point target_position = ball_position();
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  Vector2d robot_ball_vector = ballPosition() - robot_position;
+  rhoban_geometry::Point target_position = ballPosition();
 
-  follower_->set_following_position(target_position, vector2angle(robot_ball_vector));
+  follower_->setFollowingPosition(target_position, vector2angle(robot_ball_vector));
 
-  follower_->avoid_the_ball(false);
+  follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }
 
 Control Lob::control() const
 {
-  const rhoban_geometry::Point& robot_position = linear_position();
+  const rhoban_geometry::Point& robot_position = linearPosition();
 
-  Vector2d robot_ball_vector = robot_position - ball_position();
+  Vector2d robot_ball_vector = robot_position - ballPosition();
   double dist = robot_ball_vector.norm();
   Control ctrl = follower_->control();
 
@@ -68,14 +68,14 @@ Lob::~Lob()
   delete follower_;
 }
 
-RhobanSSLAnnotation::Annotations Lob::get_annotations() const
+rhoban_ssl::annotations::Annotations Lob::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
-  annotations.addAnnotations(follower_->get_annotations());
+  annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
 
 }  // namespace medium
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

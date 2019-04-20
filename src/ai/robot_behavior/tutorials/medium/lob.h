@@ -22,9 +22,9 @@
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 namespace medium
 {
@@ -36,32 +36,32 @@ class Lob : public RobotBehavior
 {
 private:
   /**
-   * @see RhobanSSL::Robot_behavior::ConsignFollower
+   * @see rhoban_ssl::robot_behavior::ConsignFollower
    */
   ConsignFollower* follower_;
   /**
    * Not use in this package but set in a case of copy.
-   * @see RhobanSSLAnnotation::Annotations
+   * @see rhoban_ssl::annotations::Annotations
    */
-  RhobanSSLAnnotation::Annotations annotations_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
   /**
    * @brief Constructor.
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @see Ai::AiData
+   * @see ai::AiData
    */
-  Lob(Ai::AiData& ai_data);
+  Lob(ai::AiData& ai_data);
 
   /**
-   * @brief Go in the position of the ball and create a lob.
+   * @brief Go in the position of the ball and make a lob.
    *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   /**
    * @see Control.
@@ -69,9 +69,9 @@ public:
   virtual Control control() const;
 
   /**
-   * @see RhobanSSLAnnotation::Annotations.
+   * @see  rhoban_ssl::annotations::Annotations.
    */
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
    * @brief Destructor.
@@ -79,5 +79,5 @@ public:
   virtual ~Lob();
 };
 }  // namespace medium
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl
