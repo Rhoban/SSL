@@ -96,14 +96,14 @@ public:
     }
   };
 
-  struct Inverse_of_length
+  struct InverseOfLength
   {
     const Curve2d& _this;
     double u;
     double length;
     Vector2d old;
 
-    Inverse_of_length(const Curve2d& _this) : _this(_this), u(0), length(0), old(_this.curve(0.0))
+    InverseOfLength(const Curve2d& _this) : _this(_this), u(0), length(0), old(_this.curve(0.0))
     {
     }
 
@@ -130,16 +130,16 @@ public:
 
   Vector2d operator()(double u) const;
 
-  double arc_length(double u) const;
-  Length length_iterator() const
+  double arcLength(double u) const;
+  Length lengthIterator() const
   {
     return Length(*this);
   }
 
-  double inverse_of_arc_length(double l) const;
-  Inverse_of_length Inverse_of_length_iterator() const
+  double inverseOfArcLength(double l) const;
+  InverseOfLength InverseOfLengthIterator() const
   {
-    return Inverse_of_length(*this);
+    return InverseOfLength(*this);
   }
 
   double size() const;
@@ -210,23 +210,23 @@ public:
   RenormalizedCurve(const Curve2d& curve, const std::function<double(double t)>& velocity_consign, double step_time,
                     double length_tolerance);
 
-  void set_step_time(double dt);
+  void setStepTime(double dt);
 
-  double max_time() const;
-  Vector2d original_curve(double u) const;
+  double maxTime() const;
+  Vector2d originalCurve(double u) const;
   double time(double length) const;
-  TimeCurve time_iterator() const;
-  double position_consign(double t) const;
+  TimeCurve timeIterator() const;
+  double positionConsign(double t) const;
 
   struct CurveIterator
   {
     const RenormalizedCurve& _this;
-    Inverse_of_length inverse_length_iterator;
+    InverseOfLength inverse_length_iterator;
     PositionConsign position_consign_iterator;
 
     CurveIterator(const RenormalizedCurve& _this)
       : _this(_this)
-      , inverse_length_iterator(_this.Inverse_of_length_iterator())
+      , inverse_length_iterator(_this.InverseOfLengthIterator())
       , position_consign_iterator(PositionConsign(_this))
     {
     }
@@ -235,26 +235,26 @@ public:
     {
       if (_this.time_max <= t)
       {
-        return _this.original_curve(1.0);
+        return _this.originalCurve(1.0);
       }
-      return _this.original_curve(inverse_length_iterator(position_consign_iterator(t)));
+      return _this.originalCurve(inverse_length_iterator(position_consign_iterator(t)));
     }
   };
 
-  CurveIterator curve_iterator() const
+  CurveIterator curveIterator() const
   {
     return CurveIterator(*this);
   }
-  PositionConsign position_consign_iterator() const
+  PositionConsign positionConsignIterator() const
   {
     return PositionConsign(*this);
   }
   Vector2d operator()(double t) const;
 
-  double get_time_max() const
+  double getTimeMax() const
   {
     return time_max;
   };
-  double error_position_consign() const;
-  double get_step_time() const;
+  double errorPositionConsign() const;
+  double getStepTime() const;
 };

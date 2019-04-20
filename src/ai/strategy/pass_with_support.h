@@ -23,7 +23,7 @@
 #include <robot_behavior/striker.h>
 #include "Strategy.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace Strategy
 {
@@ -34,11 +34,11 @@ private:
   std::shared_ptr<Robot_behavior::Striker> striker;
 
 public:
-  PassWithSupport(Ai::AiData& ai_data);
+  PassWithSupport(ai::AiData& ai);
   virtual ~PassWithSupport();
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
   virtual Goalie_need needs_goalie() const;
 
   static const std::string name;
@@ -60,5 +60,5 @@ public:
 };
 
 };  // namespace Strategy
-};  // namespace RhobanSSL
+};  // namespace rhoban_ssl
 #endif

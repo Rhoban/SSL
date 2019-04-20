@@ -78,28 +78,28 @@ int main(int argc, char* argv[])
   cmd.parse(argc, argv);
 
   // Instantiating the commander
-  RhobanSSL::AICommander* commander;
+  rhoban_ssl::AICommander* commander;
   if (simulation.getValue())
   {
-    commander = new RhobanSSL::AICommanderSimulation(yellow.getValue());
+    commander = new rhoban_ssl::AICommanderSimulation(yellow.getValue());
   }
   else
   {
-    commander = new RhobanSSL::AICommanderReal(yellow.getValue());
+    commander = new rhoban_ssl::AICommanderReal(yellow.getValue());
   }
 
-  RhobanSSL::Vision::Part_of_the_field part_of_the_field_used;
+  rhoban_ssl::vision::PartOfTheField part_of_the_field_used;
   if (zone_name.getValue() == "all")
   {
-    part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::ALL_FIELD;
+    part_of_the_field_used = rhoban_ssl::vision::PartOfTheField::ALL_FIELD;
   }
   else if (zone_name.getValue() == "positive")
   {
-    part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::POSIVE_HALF_FIELD;
+    part_of_the_field_used = rhoban_ssl::vision::PartOfTheField::POSIVE_HALF_FIELD;
   }
   else if (zone_name.getValue() == "negative")
   {
-    part_of_the_field_used = RhobanSSL::Vision::Part_of_the_field::NEGATIVE_HALF_FIELD;
+    part_of_the_field_used = rhoban_ssl::vision::PartOfTheField::NEGATIVE_HALF_FIELD;
   }
   else
   {
@@ -118,8 +118,9 @@ int main(int argc, char* argv[])
   }
 
   // Viewer API
-  API api(team_name.getValue(), simulation.getValue(), yellow.getValue() ? RhobanSSL::Ai::Yellow : RhobanSSL::Ai::Blue,
-          commander, config_path.getValue(), part_of_the_field_used, addr.getValue(), theport, theport);
+  API api(team_name.getValue(), simulation.getValue(),
+          yellow.getValue() ? rhoban_ssl::ai::Yellow : rhoban_ssl::ai::Blue, commander, config_path.getValue(),
+          part_of_the_field_used, addr.getValue(), theport, theport);
 
   // Running Qt application
   QApplication a(argc, argv);

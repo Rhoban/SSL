@@ -24,7 +24,7 @@
 TEST(test_robot_behavior, constructors)
 {
   {
-    RhobanSSL::Control p;
+    rhoban_ssl::Control p;
     EXPECT_TRUE(!p.kick);
     EXPECT_TRUE(p.active);
     EXPECT_TRUE(!p.ignore);
@@ -38,7 +38,7 @@ TEST(test_robot_behavior, constructors)
     };
     for (int i = 0; i < 8; i++)
     {
-      RhobanSSL::Control p(cases[i][0], cases[i][1], cases[i][2]);
+      rhoban_ssl::Control p(cases[i][0], cases[i][1], cases[i][2]);
       EXPECT_TRUE(p.kick == cases[i][0]);
       EXPECT_TRUE(p.active == cases[i][1]);
       EXPECT_TRUE(p.ignore == cases[i][2]);
@@ -49,7 +49,7 @@ TEST(test_robot_behavior, constructors)
 TEST(test_robot_behavior, make_desactivated)
 {
   {
-    RhobanSSL::Control c = RhobanSSL::Control::make_desactivated();
+    rhoban_ssl::Control c = rhoban_ssl::Control::make_desactivated();
     EXPECT_TRUE(c.kick == false);
     EXPECT_TRUE(c.active == false);
     EXPECT_TRUE(c.ignore == false);
@@ -59,7 +59,7 @@ TEST(test_robot_behavior, make_desactivated)
 TEST(test_robot_behavior, make_ignored)
 {
   {
-    RhobanSSL::Control c = RhobanSSL::Control::make_ignored();
+    rhoban_ssl::Control c = rhoban_ssl::Control::make_ignored();
     EXPECT_TRUE(c.kick == false);
     EXPECT_TRUE(c.active == false);
     EXPECT_TRUE(c.ignore == true);
@@ -69,7 +69,7 @@ TEST(test_robot_behavior, make_ignored)
 TEST(test_robot_behavior, make_null)
 {
   {
-    RhobanSSL::Control c = RhobanSSL::Control::make_null();
+    rhoban_ssl::Control c = rhoban_ssl::Control::make_null();
     EXPECT_TRUE(c.kick == false);
     EXPECT_TRUE(c.active == true);
     EXPECT_TRUE(c.ignore == false);

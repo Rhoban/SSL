@@ -23,7 +23,7 @@
 #include <iomanip>
 #include <limits>
 
-void Plot::create_plot_script(const std::vector<std::string>& value_names)
+void Plot::createPlotScript(const std::vector<std::string>& value_names)
 {
   std::string file_name = (name + ".plot");
   std::ofstream file(file_name);
@@ -33,7 +33,7 @@ void Plot::create_plot_script(const std::vector<std::string>& value_names)
     return;
   }
   file << "plot";
-  for (int i = 1; i < n; i++)
+  for (int i = 1; i < n_; i++)
   {
     file << " \"" << name + ".log\"";
     file << " u 1:" << i + 1 << " t \"" << value_names[i] << "\"";
@@ -46,66 +46,66 @@ void Plot::create_plot_script(const std::vector<std::string>& value_names)
 void Plot::init(const std::string& name, const std::vector<std::string>& value_names)
 {
   this->name = name;
-  this->value_names = value_names;
-  this->n = value_names.size();
-  for (int i = 0; i < n; i++)
+  value_names_ = value_names;
+  n_ = value_names.size();
+  for (int i = 0; i < n_; i++)
   {
-    current_values[value_names[i]] = 0.0;
-    loged_values[value_names[i]] = false;
+    current_values_[value_names[i]] = 0.0;
+    loged_values_[value_names[i]] = false;
   }
-  Plot::create_plot_script(value_names);
-  log_file.open(name + ".log");
-  if (!log_file.is_open())
+  Plot::createPlotScript(value_names);
+  log_file_.open(name + ".log");
+  if (!log_file_.is_open())
   {
     std::cerr << "ERROR : It is not possible to write in " << name << ".log" << std::endl;
   }
-  log_file << std::setprecision(std::numeric_limits<double>::digits10 + 1);
+  log_file_ << std::setprecision(std::numeric_limits<double>::digits10 + 1);
 }
 
 void Plot::close()
 {
-  if (log_file.is_open())
+  if (log_file_.is_open())
   {
-    log_file.close();
+    log_file_.close();
   }
 }
 
 void Plot::store()
 {
-  if (!log_file.is_open())
+  if (!log_file_.is_open())
     return;
-  if (loged_values[value_names[0]])
+  if (loged_values_[value_names_[0]])
   {
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i < n_; i++)
     {
-      if (!loged_values[value_names[i]])
+      if (!loged_values_[value_names_[i]])
       {
-        std::cerr << "Value missing for " << value_names[i] << " at " << current_values[value_names[0]] << std::endl;
+        std::cerr << "Value missing for " << value_names_[i] << " at " << current_values_[value_names_[0]] << std::endl;
       }
-      log_file << current_values[value_names[i]] << " ";
+      log_file_ << current_values_[value_names_[i]] << " ";
     }
-    log_file << std::endl;
+    log_file_ << std::endl;
   }
-  for (int i = 0; i < n; i++)
+  for (int i = 0; i < n_; i++)
   {
-    current_values[value_names[i]] = 0.0;
-    loged_values[value_names[i]] = false;
+    current_values_[value_names_[i]] = 0.0;
+    loged_values_[value_names_[i]] = false;
   }
 }
 
 void Plot::log(std::function<std::vector<double>()> fct)
 {
-  for (int i = 0; i < n; i++)
+  for (int i = 0; i < n_; i++)
   {
-    current_values[value_names[i]] = fct()[i];
-    loged_values[value_names[i]] = true;
+    current_values_[value_names_[i]] = fct()[i];
+    loged_values_[value_names_[i]] = true;
   }
 }
 
 void Plot::log(const std::string& name_value, double value)
 {
-  current_values.at(name_value) = value;
-  loged_values.at(name_value) = true;
+  current_values_.at(name_value) = value;
+  loged_values_.at(name_value) = true;
 }
 
 Plot::~Plot()

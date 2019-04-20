@@ -22,7 +22,7 @@
 #include <core/print_collection.h>
 #include "print_protobuf_referee.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 const std::string Referee_Id::STATE_INIT = "init";
 const std::string Referee_Id::STATE_HALTED = "halted";
@@ -312,4 +312,4 @@ RefereeClient& Referee::getRefereeClient()
   return referee;
 }
 
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

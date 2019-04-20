@@ -5,7 +5,7 @@
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 Kinematic::Kinematic()
 {
@@ -57,4 +57,4 @@ Point Kinematic::makeWheelVector(double angle)
 
   return vector;
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

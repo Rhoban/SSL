@@ -2,7 +2,7 @@
 
 #include <rhoban_geometry/point.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class Kinematic
 {
@@ -46,4 +46,4 @@ protected:
 
   double computeFor(rhoban_geometry::Point vector, double xSpeed, double ySpeed, double thetaSpeed);
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

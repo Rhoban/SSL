@@ -10,7 +10,7 @@
 #define JS_EVENT_AXIS 0x02   /* joystick moved */
 #define JS_EVENT_INIT 0x80   /* initial state of device */
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class Joystick
 {
@@ -39,4 +39,4 @@ protected:
 
   std::string device;
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

@@ -33,8 +33,8 @@ bool eq(double u, double v, double err)
 double error_renormalisation(double t, const RenormalizedCurve& curve, std::function<double(double)>& error_curve,
                              double dt)
 {
-  return (error_curve(curve.inverse_of_arc_length(curve.position_consign(t))) +
-          error_curve(curve.inverse_of_arc_length(curve.position_consign(t + dt)))) /
+  return (error_curve(curve.inverseOfArcLength(curve.positionConsign(t))) +
+          error_curve(curve.inverseOfArcLength(curve.positionConsign(t + dt)))) /
          dt;
 };
 
@@ -54,53 +54,53 @@ TEST(test_curve, curves)
                             [&](double t) { return time_max / length; }, dt_micro, dt_micro / 100);
     for (double u = 0.0; u <= 1.0; u = u + dt)
     {
-      EXPECT_TRUE(curve.original_curve(u) == Vector2d(2 * u, 0));
+      EXPECT_TRUE(curve.originalCurve(u) == Vector2d(2 * u, 0));
     }
 
     EXPECT_TRUE(eq(length, curve.size(), erreur));
 
     // As velocity is 1, then length is equal to time to walk on the
     // complete curve.
-    EXPECT_TRUE(eq(length, curve.max_time(), erreur));
+    EXPECT_TRUE(eq(length, curve.maxTime(), erreur));
     // On this example the ration between time en distance is 2.
     EXPECT_TRUE(eq(length, curve.time(length - erreur), 2 * erreur));
 
-    RenormalizedCurve::TimeCurve time_it = curve.time_iterator();
+    RenormalizedCurve::TimeCurve time_it = curve.timeIterator();
     for (double d = 0.0; d <= length; d = d + dt)
     {
       EXPECT_TRUE(eq(d, time_it(d), erreur));
     }
 
-    RenormalizedCurve::PositionConsign position_it = curve.position_consign_iterator();
+    RenormalizedCurve::PositionConsign position_it = curve.positionConsignIterator();
     for (double t = 0.0; t < 2 * length; t = t + dt)
     {
       EXPECT_TRUE(eq(t, position_it(t), erreur));
     }
 
-    Curve2d::Length length_it = curve.length_iterator();
+    Curve2d::Length length_it = curve.lengthIterator();
     for (double u = 0.0; u < 1.0; u = u + dt)
     {
       EXPECT_TRUE(eq(length * u, length_it(u), erreur));
     }
 
-    Curve2d::Inverse_of_length inverse_legnth_it = curve.Inverse_of_length_iterator();
+    Curve2d::InverseOfLength inverse_legnth_it = curve.InverseOfLengthIterator();
     for (double l = 0.0; l <= length; l = l + dt)
     {
       EXPECT_TRUE(eq(l / length, inverse_legnth_it(l), erreur));
     }
 
     std::function<double(double)> error_curve = [&](double u) { return 2 * dt_micro; };
-    RenormalizedCurve::CurveIterator curve_t_it = curve.curve_iterator();
-    RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curve_iterator();
-    for (double t = 0.0; t < curve.max_time() - dt; t = t + dt)
+    RenormalizedCurve::CurveIterator curve_t_it = curve.curveIterator();
+    RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curveIterator();
+    for (double t = 0.0; t < curve.maxTime() - dt; t = t + dt)
     {
       EXPECT_TRUE(eq(1.0, (norm_2(curve_t_dt_it(t + dt) - curve_t_it(t))) / dt,
                      error_renormalisation(t, curve, error_curve, dt) + dt_micro / 10.0));
     }
 
-    EXPECT_TRUE(eq(norm_2(curve(curve.max_time() + dt) - curve(curve.max_time())), 0, erreur));
-    EXPECT_TRUE(curve(curve.max_time() + dt) == curve(curve.max_time() + 2 * dt));
-    EXPECT_TRUE(curve(curve.max_time() + 3 * dt) == curve(curve.max_time() + dt));
+    EXPECT_TRUE(eq(norm_2(curve(curve.maxTime() + dt) - curve(curve.maxTime())), 0, erreur));
+    EXPECT_TRUE(curve(curve.maxTime() + dt) == curve(curve.maxTime() + 2 * dt));
+    EXPECT_TRUE(curve(curve.maxTime() + 3 * dt) == curve(curve.maxTime() + dt));
   }
 
   {
@@ -109,7 +109,7 @@ TEST(test_curve, curves)
     // length = sqrt(2) + arcsinh(1) - 0 - 0 = 2.2955871
     double length = std::sqrt(2) + std::asinh(1);
     // length = \int_0^time_max t+0.1
-    // length = [ t^2/2 + 0.1 *t ]_0^time_max
+    // length = [ t^2/2 + 0.1 *t ]_0^time_max
     //
     double time_max = -0.1 + sqrt(.1 * .1 + 2 * length);
     double dt = time_max / 10;
@@ -120,15 +120,15 @@ TEST(test_curve, curves)
     RenormalizedCurve curve([](double u) { return Vector2d(u * u, 2 * u); }, dt_micro, [](double t) { return t + .1; },
                             dt_micro, dt_micro / 100);
     EXPECT_TRUE(eq(length, curve.size(), erreur));
-    EXPECT_TRUE(eq(time_max, curve.get_time_max(), erreur));
+    EXPECT_TRUE(eq(time_max, curve.getTimeMax(), erreur));
     std::function<double(double)> error_curve = [&](double u) {
       return ((std::sqrt(u + du) + std::asinh(u + du) - std::sqrt(u) + std::asinh(u)) -
               (sqrt(std::pow(2 * du + du * du, 2) + std::pow(2 * du, 2))));
       // return 2*du*std::sqrt( std::pow( u+du/2.0, 2 ) + 1 );
     };
-    RenormalizedCurve::CurveIterator curve_t_it = curve.curve_iterator();
-    RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curve_iterator();
-    for (double t = 0.0; t < curve.max_time() - dt; t = t + dt)
+    RenormalizedCurve::CurveIterator curve_t_it = curve.curveIterator();
+    RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curveIterator();
+    for (double t = 0.0; t < curve.maxTime() - dt; t = t + dt)
     {
       /* TODO change du to onther valuer */
       /*
@@ -149,8 +149,8 @@ TEST(test_curve, curves)
                      ));
       // DEBUG("");
     }
-    EXPECT_TRUE(curve(curve.max_time() + dt) == curve(curve.max_time()));
-    EXPECT_TRUE(curve(curve.max_time() + 3 * dt) == curve(curve.max_time()));
+    EXPECT_TRUE(curve(curve.maxTime() + dt) == curve(curve.maxTime()));
+    EXPECT_TRUE(curve(curve.maxTime() + 3 * dt) == curve(curve.maxTime()));
   }
 }
 
@@ -192,7 +192,7 @@ TEST(test_curve, empty_curves)
                             dt_micro / 100);
 
     EXPECT_TRUE(0.0 == curve.size());
-    EXPECT_TRUE(0.0 == curve.max_time());
+    EXPECT_TRUE(0.0 == curve.maxTime());
     EXPECT_TRUE(position == curve(0.0));
     EXPECT_TRUE(position == curve(0.4));
   }
@@ -248,7 +248,7 @@ TEST(test_curve, use_cases)
 
     RenormalizedCurve curve([](double u) { return Vector2d(90.0 * u, 0.0); }, dt_micro, [](double t) { return 10.0; },
                             dt_micro, dt_micro / 100);
-    EXPECT_TRUE(eq(curve.max_time(), 9, 0.01));
+    EXPECT_TRUE(eq(curve.maxTime(), 9, 0.01));
   }
   {
     double dt = 0.01;
@@ -273,9 +273,9 @@ TEST(test_curve, use_cases)
     ContinuousVelocityConsign consign(crv.size(), max_velocity, max_acceleration);
     RenormalizedCurve curve(crv, consign, dt_micro, dt_micro / 100);
 
-    RenormalizedCurve::CurveIterator curve_t_it = curve.curve_iterator();
-    RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curve_iterator();
-    for (double t = 0; t < curve.max_time() - dt; t += dt)
+    RenormalizedCurve::CurveIterator curve_t_it = curve.curveIterator();
+    RenormalizedCurve::CurveIterator curve_t_dt_it = curve.curveIterator();
+    for (double t = 0; t < curve.maxTime() - dt; t += dt)
     {
       Vector2d xt = curve_t_it(t);
       Vector2d xdt = curve_t_dt_it(t + dt);

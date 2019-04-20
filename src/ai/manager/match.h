@@ -17,35 +17,32 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef MANAGER_MATCH_H
-#define MANAGER_MATCH_H
+#pragma once
 
 #include "manager.h"
 #include <referee/game_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 class Match : public Manager
 {
 private:
-  const GameState& game_state;
+  const GameState& game_state_;
 
-  unsigned int last_game_state_changement;
+  unsigned int last_game_state_changement_;
 
-  std::list<std::string> future_strats;
+  std::list<std::string> future_strats_;
 
 public:
-  Match(Ai::AiData& ai_data, const GameState& game_state);
+  Match(ai::AiData& ai_data, const GameState& game_state);
 
   void update(double time);
-  void choose_a_strategy(double time);
+  void chooseAStrategy(double time);
 
   virtual ~Match();
 };
 
-};  // namespace Manager
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace manager
+};  // namespace rhoban_ssl

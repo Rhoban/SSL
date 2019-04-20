@@ -22,29 +22,29 @@
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class TestInfra : public RobotBehavior
 {
 private:
-  Vector2d translation;
-  Vision::Team team;
+  Vector2d translation_;
+  vision::Team team_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  TestInfra(Ai::AiData& ai_data);
+  TestInfra(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~TestInfra();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

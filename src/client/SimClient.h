@@ -6,7 +6,7 @@
 #include "grSim_Commands.pb.h"
 #include "grSim_Replacement.pb.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 /**
  * A client that can communicate with the simulator to send orders or to
@@ -60,4 +60,4 @@ public:
 protected:
   rhoban_utils::UDPBroadcast broadcast;
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

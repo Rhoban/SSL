@@ -112,17 +112,17 @@ TEST(test_machine_state, simple_cases)
 
     msi_string::MachineState machine(data, data);
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
-    machine.add_state(
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
+    machine.addState(
 
         std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
-    machine.add_edge(
+    machine.addEdge(
         std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("initialisation", "start", "middle", out)));
-    machine.add_edge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
+    machine.addEdge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
     EXPECT_TRUE(out.str() == "");
     EXPECT_TRUE(data.str() == "");
@@ -204,15 +204,15 @@ TEST(test_machine_state, with_no_start)
 
     msi_string::MachineState machine(data, data);
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
-    machine.add_edge(
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
+    machine.addEdge(
         std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("initialisation", "start", "middle", out)));
-    machine.add_edge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
+    machine.addEdge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
     EXPECT_TRUE(out.str() == "");
     EXPECT_TRUE(data.str() == "");
@@ -244,15 +244,15 @@ TEST(test_machine_state, state_edge_data)
 
     msi_string::MachineState machine(state_data, edge_data);
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
-    machine.add_edge(
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
+    machine.addEdge(
         std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("initialisation", "start", "middle", out)));
-    machine.add_edge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
+    machine.addEdge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
     EXPECT_TRUE(out.str() == "");
     EXPECT_TRUE(state_data.str() == "");
@@ -305,65 +305,65 @@ TEST(test_machine_state, current_and_initial_states_and_are_active)
 
     msi_string::MachineState machine(data, data);
 
-    EXPECT_TRUE(machine.initial_states().size() == 0);
-    EXPECT_TRUE(machine.current_states().size() == 0);
+    EXPECT_TRUE(machine.initialStates().size() == 0);
+    EXPECT_TRUE(machine.currentStates().size() == 0);
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
-    machine.add_edge(
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
+    machine.addEdge(
         std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("initialisation", "start", "middle", out)));
-    machine.add_edge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
+    machine.addEdge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
 
-    EXPECT_TRUE(machine.initial_states().size() == 0);
-    EXPECT_TRUE(machine.current_states().size() == 0);
-    EXPECT_TRUE(!machine.is_active("start"));
-    EXPECT_TRUE(!machine.is_active("middle"));
-    EXPECT_TRUE(!machine.is_active("end"));
+    EXPECT_TRUE(machine.initialStates().size() == 0);
+    EXPECT_TRUE(machine.currentStates().size() == 0);
+    EXPECT_TRUE(!machine.isActive("start"));
+    EXPECT_TRUE(!machine.isActive("middle"));
+    EXPECT_TRUE(!machine.isActive("end"));
 
-    EXPECT_TRUE(!machine.is_initial("start"));
-    EXPECT_TRUE(!machine.is_initial("middle"));
-    EXPECT_TRUE(!machine.is_initial("end"));
+    EXPECT_TRUE(!machine.isInitial("start"));
+    EXPECT_TRUE(!machine.isInitial("middle"));
+    EXPECT_TRUE(!machine.isInitial("end"));
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states().size() == 0);
-    EXPECT_TRUE(!machine.is_active("start"));
-    EXPECT_TRUE(!machine.is_active("middle"));
-    EXPECT_TRUE(!machine.is_active("end"));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates().size() == 0);
+    EXPECT_TRUE(!machine.isActive("start"));
+    EXPECT_TRUE(!machine.isActive("middle"));
+    EXPECT_TRUE(!machine.isActive("end"));
 
-    EXPECT_TRUE(machine.is_initial("start"));
-    EXPECT_TRUE(!machine.is_initial("middle"));
-    EXPECT_TRUE(!machine.is_initial("end"));
+    EXPECT_TRUE(machine.isInitial("start"));
+    EXPECT_TRUE(!machine.isInitial("middle"));
+    EXPECT_TRUE(!machine.isInitial("end"));
 
     machine.start();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.is_active("start"));
-    EXPECT_TRUE(!machine.is_active("middle"));
-    EXPECT_TRUE(!machine.is_active("end"));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.isActive("start"));
+    EXPECT_TRUE(!machine.isActive("middle"));
+    EXPECT_TRUE(!machine.isActive("end"));
 
     std::set<std::string> states;
     states = machine.run();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "end" }));
-    EXPECT_TRUE(machine.current_states() == states);
-    EXPECT_TRUE(!machine.is_active("start"));
-    EXPECT_TRUE(!machine.is_active("middle"));
-    EXPECT_TRUE(machine.is_active("end"));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "end" }));
+    EXPECT_TRUE(machine.currentStates() == states);
+    EXPECT_TRUE(!machine.isActive("start"));
+    EXPECT_TRUE(!machine.isActive("middle"));
+    EXPECT_TRUE(machine.isActive("end"));
 
     states = machine.run();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "end" }));
-    EXPECT_TRUE(machine.current_states() == states);
-    EXPECT_TRUE(!machine.is_active("start"));
-    EXPECT_TRUE(!machine.is_active("middle"));
-    EXPECT_TRUE(machine.is_active("end"));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "end" }));
+    EXPECT_TRUE(machine.currentStates() == states);
+    EXPECT_TRUE(!machine.isActive("start"));
+    EXPECT_TRUE(!machine.isActive("middle"));
+    EXPECT_TRUE(machine.isActive("end"));
   }
 }
 
@@ -377,34 +377,34 @@ TEST(test_machine_state, complex_cases)
 
     for (int i = 1; i < 10; i++)
     {
-      machine.add_state(std::shared_ptr<msi_int::State>(new TestState<int>(i, out)));
+      machine.addState(std::shared_ptr<msi_int::State>(new TestState<int>(i, out)));
     }
-    EXPECT_TRUE(machine.state_number() == 9);
-    machine.add_edge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(1, 1, 2, out)));
-    machine.add_edge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(2, 1, 3, out, []() { return false; })));
+    EXPECT_TRUE(machine.stateNumber() == 9);
+    machine.addEdge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(1, 1, 2, out)));
+    machine.addEdge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(2, 1, 3, out, []() { return false; })));
     bool button_3__4_7 = true;
-    machine.add_edge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(3, 4, 7, out, [&]() { return button_3__4_7; })));
-    machine.add_edge(
-        std::shared_ptr<msi_int::Edge>(new TestEdge<int>(4, 4, 5, out, [&]() { return machine.is_active(2); })));
-    machine.add_edge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(5, 4, 8, out)));
-    machine.add_edge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(6, 7, 9, out)));
-    machine.add_edge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(7, 5, 6, out)));
+    machine.addEdge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(3, 4, 7, out, [&]() { return button_3__4_7; })));
+    machine.addEdge(
+        std::shared_ptr<msi_int::Edge>(new TestEdge<int>(4, 4, 5, out, [&]() { return machine.isActive(2); })));
+    machine.addEdge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(5, 4, 8, out)));
+    machine.addEdge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(6, 7, 9, out)));
+    machine.addEdge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(7, 5, 6, out)));
 
     bool button_8__9_4 = false;
-    machine.add_edge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(8, 9, 4, out, [&]() { return button_8__9_4; })));
-    EXPECT_TRUE(machine.edge_number() == 8);
+    machine.addEdge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(8, 9, 4, out, [&]() { return button_8__9_4; })));
+    EXPECT_TRUE(machine.edgeNumber() == 8);
 
-    machine.add_init_state({ 1, 4 });
+    machine.addInitState({ 1, 4 });
 
-    EXPECT_TRUE(machine.is_initial(1));
-    EXPECT_TRUE(!machine.is_initial(2));
-    EXPECT_TRUE(!machine.is_initial(3));
-    EXPECT_TRUE(machine.is_initial(4));
-    EXPECT_TRUE(!machine.is_initial(5));
-    EXPECT_TRUE(!machine.is_initial(6));
-    EXPECT_TRUE(!machine.is_initial(7));
-    EXPECT_TRUE(!machine.is_initial(8));
-    EXPECT_TRUE(!machine.is_initial(9));
+    EXPECT_TRUE(machine.isInitial(1));
+    EXPECT_TRUE(!machine.isInitial(2));
+    EXPECT_TRUE(!machine.isInitial(3));
+    EXPECT_TRUE(machine.isInitial(4));
+    EXPECT_TRUE(!machine.isInitial(5));
+    EXPECT_TRUE(!machine.isInitial(6));
+    EXPECT_TRUE(!machine.isInitial(7));
+    EXPECT_TRUE(!machine.isInitial(8));
+    EXPECT_TRUE(!machine.isInitial(9));
 
     machine.start();
 
@@ -491,9 +491,9 @@ TEST(test_machine_state, edge_state_number)
 
     msi_int::MachineState machine(data, data);
 
-    EXPECT_TRUE(machine.state_number() == 0);
-    EXPECT_TRUE(machine.size() == machine.state_number());
-    EXPECT_TRUE(machine.edge_number() == 0);
+    EXPECT_TRUE(machine.stateNumber() == 0);
+    EXPECT_TRUE(machine.size() == machine.stateNumber());
+    EXPECT_TRUE(machine.edgeNumber() == 0);
   }
   {
     std::ostringstream data;
@@ -503,15 +503,15 @@ TEST(test_machine_state, edge_state_number)
 
     for (int i = 0; i < 32; i++)
     {
-      machine.add_state(std::shared_ptr<msi_int::State>(new TestState<int>(i, out)));
+      machine.addState(std::shared_ptr<msi_int::State>(new TestState<int>(i, out)));
     }
-    EXPECT_TRUE(machine.state_number() == 32);
-    EXPECT_TRUE(machine.size() == machine.state_number());
+    EXPECT_TRUE(machine.stateNumber() == 32);
+    EXPECT_TRUE(machine.size() == machine.stateNumber());
     for (int i = 0; i < 12; i++)
     {
-      machine.add_edge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(i, i, i + 1, out)));
+      machine.addEdge(std::shared_ptr<msi_int::Edge>(new TestEdge<int>(i, i, i + 1, out)));
     }
-    EXPECT_TRUE(machine.edge_number() == 12);
+    EXPECT_TRUE(machine.edgeNumber() == 12);
   }
 }
 
@@ -523,17 +523,17 @@ TEST(test_machine_state, stream)
 
     msi_string::MachineState machine(data, data);
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
-    machine.add_state(
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
+    machine.addState(
 
         std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
-    machine.add_edge(
+    machine.addEdge(
         std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("initialisation", "start", "middle", out)));
-    machine.add_edge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
+    machine.addEdge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
     std::ostringstream description;
     description << machine;
@@ -553,17 +553,17 @@ TEST(test_machine_state, to_dot)
 
     msi_string::MachineState machine(data, data);
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
-    machine.add_state(
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
+    machine.addState(
 
         std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
-    machine.add_edge(
+    machine.addEdge(
         std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("initialisation", "start", "middle", out)));
-    machine.add_edge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
+    machine.addEdge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
     machine.start();
 
@@ -602,32 +602,32 @@ TEST(test_machine_state, anonym_state_anonym_edge)
 
     msi_string::MachineState machine(data, data);
 
-    machine.add_state("start");
-    machine.add_state("middle");
-    machine.add_state("end");
+    machine.addState("start");
+    machine.addState("middle");
+    machine.addState("end");
 
-    machine.add_edge("initialisation", "start", "middle");
-    machine.add_edge("next", "middle", "end");
+    machine.addEdge("initialisation", "start", "middle");
+    machine.addEdge("next", "middle", "end");
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>());
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>());
 
     machine.start();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "start" }));
 
     machine.run();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "end" }));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "end" }));
 
     machine.run();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "end" }));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "end" }));
   }
   {
     std::ostringstream data;
@@ -635,42 +635,42 @@ TEST(test_machine_state, anonym_state_anonym_edge)
 
     msi_string::MachineState machine(data, data);
 
-    machine.add_state("start");
-    machine.add_state("middle");
-    machine.add_state("end");
+    machine.addState("start");
+    machine.addState("middle");
+    machine.addState("end");
 
-    machine.add_edge("initialisation", "start", "middle");
+    machine.addEdge("initialisation", "start", "middle");
     bool button_next = false;
-    machine.add_edge("next", "middle", "end",
-                     [&](const msi_string::EdgeData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                       return button_next;
-                     });
+    machine.addEdge("next", "middle", "end",
+                    [&](const msi_string::EdgeData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                      return button_next;
+                    });
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>());
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>());
 
     machine.start();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "start" }));
 
     machine.run();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "middle" }));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "middle" }));
 
     machine.run();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "middle" }));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "middle" }));
 
     button_next = true;
     machine.run();
 
-    EXPECT_TRUE(machine.initial_states() == std::set<std::string>({ "start" }));
-    EXPECT_TRUE(machine.current_states() == std::set<std::string>({ "end" }));
+    EXPECT_TRUE(machine.initialStates() == std::set<std::string>({ "start" }));
+    EXPECT_TRUE(machine.currentStates() == std::set<std::string>({ "end" }));
   }
   {
     std::ostringstream data;
@@ -678,23 +678,23 @@ TEST(test_machine_state, anonym_state_anonym_edge)
 
     msi_string::MachineState machine(data, data);
 
-    machine.add_state("start",
-                      [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                        data << "#sr "
-                             << "START"
-                             << " "
-                                "("
-                             << run_number << ", " << atomic_run_number << "), ";
-                      });
-    machine.add_state("middle",
-                      [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                        data << "#sr "
-                             << "MIDDLE"
-                             << " "
-                                "("
-                             << run_number << ", " << atomic_run_number << "), ";
-                      });
-    machine.add_state("end", [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
+    machine.addState("start",
+                     [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                       data << "#sr "
+                            << "START"
+                            << " "
+                               "("
+                            << run_number << ", " << atomic_run_number << "), ";
+                     });
+    machine.addState("middle",
+                     [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                       data << "#sr "
+                            << "MIDDLE"
+                            << " "
+                               "("
+                            << run_number << ", " << atomic_run_number << "), ";
+                     });
+    machine.addState("end", [&](msi_string::StateData& data, unsigned int run_number, unsigned int atomic_run_number) {
       data << "#sr "
            << "END"
            << " "
@@ -702,7 +702,7 @@ TEST(test_machine_state, anonym_state_anonym_edge)
            << run_number << ", " << atomic_run_number << "), ";
     });
 
-    machine.add_edge(
+    machine.addEdge(
         "initialisation", "start", "middle",
         [&](const msi_string::EdgeData& const_data, unsigned int run_number, unsigned int atomic_run_number) {
           msi_string::EdgeData& data = const_cast<msi_string::EdgeData&>(const_data);
@@ -720,7 +720,7 @@ TEST(test_machine_state, anonym_state_anonym_edge)
                   "("
                << run_number << ", " << atomic_run_number << "), ";
         });
-    machine.add_edge(
+    machine.addEdge(
         "next", "middle", "end",
         [&](const msi_string::EdgeData& const_data, unsigned int run_number, unsigned int atomic_run_number) {
           msi_string::EdgeData& data = const_cast<msi_string::EdgeData&>(const_data);
@@ -739,7 +739,7 @@ TEST(test_machine_state, anonym_state_anonym_edge)
                << run_number << ", " << atomic_run_number << "), ";
         });
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
     machine.start();
 
     clear(out);
@@ -787,8 +787,8 @@ public:
     };
     fct(state_data);
   }
-  virtual void atomic_update(std::ostream& state_data, std::ostream& edge_data, unsigned int run_number,
-                             unsigned int atomic_run_number)
+  virtual void atomicUpdate(std::ostream& state_data, std::ostream& edge_data, unsigned int run_number,
+                            unsigned int atomic_run_number)
   {
     auto fct = [&](std::ostream& o) {
       o << "fau " << name
@@ -811,17 +811,17 @@ TEST(test_machine_state, register_follower)
 
     msi_string::MachineState machine(data, data);
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("start", out)));
 
-    machine.add_state(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
-    machine.add_state(
+    machine.addState(std::shared_ptr<msi_string::State>(new TestState<std::string>("middle", out)));
+    machine.addState(
 
         std::shared_ptr<msi_string::State>(new TestState<std::string>("end", out)));
-    machine.add_edge(
+    machine.addEdge(
         std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("initialisation", "start", "middle", out)));
-    machine.add_edge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
+    machine.addEdge(std::shared_ptr<msi_string::Edge>(new TestEdge<std::string>("next", "middle", "end", out)));
 
-    machine.add_init_state("start");
+    machine.addInitState("start");
 
     Follower f1("f1");
     Follower f2("f2");
@@ -887,24 +887,24 @@ TEST(test_machine_state, rising_edge)
 
     msi_int::MachineState machine(data, data);
 
-    machine.add_state(1);
-    machine.add_state(2);
-    machine.add_state(3);
+    machine.addState(1);
+    machine.addState(2);
+    machine.addState(3);
 
-    machine.add_edge(1, 1, 2);
+    machine.addEdge(1, 1, 2);
 
-    machine.add_edge(2, 2, 3,
-                     msi_int::RisingEdge([&](const std::ostream& data, unsigned int run_number,
-                                             unsigned int atomic_run_number) { return machine.is_active(2); },
-                                         machine));
+    machine.addEdge(2, 2, 3,
+                    msi_int::RisingEdge([&](const std::ostream& data, unsigned int run_number,
+                                            unsigned int atomic_run_number) { return machine.isActive(2); },
+                                        machine));
 
-    machine.add_init_state(1);
+    machine.addInitState(1);
 
     machine.start();
 
     machine.run();
 
-    EXPECT_TRUE(machine.current_states() == std::set<int>({ 3 }));
+    EXPECT_TRUE(machine.currentStates() == std::set<int>({ 3 }));
   }
 }
 

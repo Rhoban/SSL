@@ -17,14 +17,11 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PHYSIC__CONSTANTS__H__
-#define __PHYSIC__CONSTANTS__H__
+#pragma once
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 static constexpr double EPSILON_VELOCITY = 0.00001;
 static constexpr double EPSILON_DISTANCE = 0.00001;
 
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace rhoban_ssl

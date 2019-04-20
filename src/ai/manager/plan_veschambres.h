@@ -21,81 +21,81 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <manager/manager_with_game_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 class PlanVeschambres : public ManagerWithGameState
 {
 private:
-  const GameState& game_state;
+  const GameState& game_state_;
 
   // penalty
-  std::vector<std::list<std::string> > penalty_strats;
+  std::vector<std::list<std::string> > penalty_strats_;
   // goale
-  std::vector<std::list<std::string> > goalie_strats;
+  std::vector<std::list<std::string> > goalie_strats_;
   // offensive
-  std::vector<std::list<std::string> > offensive_strats;
+  std::vector<std::list<std::string> > offensive_strats_;
   // stop
-  std::vector<std::list<std::string> > stop_strats;
+  std::vector<std::list<std::string> > stop_strats_;
   // halt
-  std::vector<std::list<std::string> > halt_strats;
+  std::vector<std::list<std::string> > halt_strats_;
   // defensive
-  std::vector<std::list<std::string> > defensive_strats;
+  std::vector<std::list<std::string> > defensive_strats_;
   // kick
-  std::vector<std::list<std::string> > kick_strats;
+  std::vector<std::list<std::string> > kick_strats_;
   // kick_strats_indirect
-  std::vector<std::list<std::string> > kick_strats_indirect;
+  std::vector<std::list<std::string> > kick_strats_indirect_;
 
-  bool ball_was_in_ally_part = true;
+  bool ball_was_in_ally_part_ = true;
 
-  std::list<std::string> future_strats;
+  std::list<std::string> future_strats_;
 
 public:
-  PlanVeschambres(Ai::AiData& ai_data, const GameState& game_state);
+  PlanVeschambres(ai::AiData& ai_data, const GameState& game_state);
 
   // Begin of a new state
-  virtual void start_stop();
-  virtual void start_running();
-  virtual void start_halt();
+  virtual void startStop();
+  virtual void startRunning();
+  virtual void startHalt();
 
-  virtual void start_direct_kick_ally();
-  virtual void start_direct_kick_opponent();
+  virtual void startDirectKickAlly();
+  virtual void startDirectKickOpponent();
 
-  virtual void start_indirect_kick_ally();
-  virtual void start_indirect_kick_opponent();
+  virtual void startIndirectKickAlly();
+  virtual void startIndirectKickOpponent();
 
-  virtual void start_prepare_kickoff_ally();
-  virtual void start_prepare_kickoff_opponent();
+  virtual void startPrepareKickoffAlly();
+  virtual void startPrepareKickoffOpponent();
 
-  virtual void start_kickoff_ally();
-  virtual void start_kickoff_opponent();
+  virtual void startKickoffAlly();
+  virtual void startKickoffOpponent();
 
-  virtual void start_penalty_ally();
-  virtual void start_penalty_opponent();
+  virtual void startPenaltyAlly();
+  virtual void startPenaltyOpponent();
 
   // During a state
-  virtual void continue_stop();
-  virtual void continue_running();
-  virtual void continue_halt();
+  virtual void continueStop();
+  virtual void continueRunning();
+  virtual void continueHalt();
 
-  virtual void continue_direct_kick_ally();
-  virtual void continue_direct_kick_opponent();
+  virtual void continueDirectKickAlly();
+  virtual void continueDirectKickOpponent();
 
-  virtual void continue_indirect_kick_ally();
-  virtual void continue_indirect_kick_opponent();
+  virtual void continueIndirectKickAlly();
+  virtual void continueIndirectKickOpponent();
 
-  virtual void continue_prepare_kickoff_ally();
-  virtual void continue_prepare_kickoff_opponent();
+  virtual void continuePrepareKickoffAlly();
+  virtual void continuePrepareKickoffOpponent();
 
-  virtual void continue_kickoff_ally();
-  virtual void continue_kickoff_opponent();
+  virtual void continueKickoffAlly();
+  virtual void continueKickoffOpponent();
 
-  virtual void continue_penalty_ally();
-  virtual void continue_penalty_opponent();
+  virtual void continuePenaltyAlly();
+  virtual void continuePenaltyOpponent();
 
   virtual ~PlanVeschambres();
 };
 
-};  // namespace Manager
-};  // namespace RhobanSSL
+};  // namespace manager
+};  // namespace rhoban_ssl

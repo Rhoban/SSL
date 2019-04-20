@@ -7,7 +7,7 @@
 #include <rhoban_utils/timing/time_stamp.h>
 #include "structs.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 class Master
 {
@@ -62,4 +62,4 @@ protected:
   void addPacket(int robot, int instruction, char* packet, size_t len);
   void sendPacket();
 };
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl
