@@ -32,7 +32,7 @@ struct names
   static constexpr const char* MANUAL = "manual";
   // static constexpr const char* match = "match";
   static constexpr const char* PLAN_VESCHAMBRES = "PlanVeschambres";
-  static constexpr const char* TUTORIAL = "Tutorials";
+  static constexpr const char* TUTORIAL = "Tutorial";
 };
 
 class Factory

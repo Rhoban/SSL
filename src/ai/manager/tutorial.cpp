@@ -19,8 +19,10 @@
 
 #include "tutorial.h"
 #include <strategy/from_robot_behavior.h>
+#include <robot_behavior/striker.h>
 
 #include <robot_behavior/tutorials/beginner/see_ball.h>
+#include <strategy/tare_and_synchronize.h>
 
 namespace rhoban_ssl
 {
@@ -37,6 +39,17 @@ Tutorial::Tutorial(ai::AiData& ai_data) : Manager(ai_data)
                                               },
                                               false  // we don't want to define a goal here !
                                               )));
+    registerStrategy("Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                  ai_data,
+                                  [&](double time, double dt) {
+                                    robot_behavior::Striker* striker = new robot_behavior::Striker(ai_data);
+                                    return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
+                                  },
+                                  false  // we don't want to define a goal here !
+                                  )));
+    
+    registerStrategy(strategy::TareAndSynchronize::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
 }
 
 void Tutorial::update(double time)

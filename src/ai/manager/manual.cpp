@@ -33,7 +33,6 @@
 #include <robot_behavior/test_velocity_consign.h>
 #include <robot_behavior/patrol.h>
 #include <robot_behavior/position_follower.h>
-#include <robot_behavior/striker.h>
 #include <robot_behavior/striker_ai.h>
 #include <robot_behavior/predict_futur.h>
 #include <robot_behavior/obstructor.h>
@@ -75,14 +74,6 @@ Manual::Manual(ai::AiData& ai_data)
                                  },
                                  false  // we don't want to define a goal here !
                                  )));
-  registerStrategy("Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                  ai_data,
-                                  [&](double time, double dt) {
-                                    robot_behavior::Striker* striker = new robot_behavior::Striker(ai_data);
-                                    return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
-                                  },
-                                  false  // we don't want to define a goal here !
-                                  )));
   registerStrategy("Example_machine_state", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                 ai_data,
                                                 [&](double time, double dt) {

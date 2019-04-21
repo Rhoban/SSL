@@ -700,13 +700,13 @@ void API::updateAssignments()
     }
   }
 
-  auto manual = ai->getManager();
-  manual->clearStrategyAssignement();
+  auto current_manager = ai->getManager();
+  current_manager->clearStrategyAssignement();
   double t = ai->getCurrentTime();
 
   for (auto& entry : strategies)
   {
-    manual->assignStrategy(entry.first, t, entry.second);
+    current_manager->assignStrategy(entry.first, t, entry.second);
   }
 }
 
@@ -726,8 +726,8 @@ QString API::getStrategies()
 {
   Json::Value json(Json::arrayValue);
 
-  auto manual = ai->getManager();
-  for (auto& strategy : manual->getAvailableStrategies())
+  auto current_manager = ai->getManager();
+  for (auto& strategy : current_manager->getAvailableStrategies())
   {
     json.append(strategy);
   }

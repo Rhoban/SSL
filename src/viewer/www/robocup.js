@@ -1144,6 +1144,7 @@ function Manager(viewer)
                 strategiesOptions += '<option value="'+strategy+'">'+strategy+'</option>';
             }
 
+
             $('#managers').html(options);
             $('.strategies-selector').html(strategiesOptions);
             var self = this;
@@ -1162,12 +1163,15 @@ function Manager(viewer)
 
             $('.control-play').click(function() {
                 api.setManager($('#managers').val());
+                if(self.change_manager) {
+                    self.updateStrategies();
+                    self.change_manager = false;
+                }
                 api.managerPlay();
             });
 
             $('#managers').change(function (){
-                api.setManager($('#managers').val());
-                self.updateStrategies();
+                self.change_manager = true;
             })
             $('.control-stop').click(function() {
                 api.managerStop();
@@ -1176,6 +1180,8 @@ function Manager(viewer)
             });
         }
     };
+
+    this.change_manager = false;
 
     this.updateStrategies = function () {
       // Updating strategies
@@ -1189,17 +1195,7 @@ function Manager(viewer)
 
       $('.strategies-selector').html(strategiesOptions);
 
-      $('.clear-strategy').click(function() {
-          var id = $(this).attr('rel');
-          $('.strategy-'+id).val('');
-          $('apply-'+id).click();
-      });
 
-      $('.apply-strategy').click(function() {
-          var id = $(this).attr('rel');
-          var strategy = $('.strategy-'+id).val();
-          api.applyStrategy(id, strategy);
-      });
     }
 
     this.divider = 10;
