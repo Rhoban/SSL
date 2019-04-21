@@ -36,13 +36,6 @@ void PositionFollowerWithTargetTracking::update(double time, const RhobanSSL::Ai
   // DO NOT REMOVE THAT LINE
   RobotBehavior::update_time_and_position(time, robot, ball);
 
-  //TODO MOVE TO RobotControlWithTargetTrackingAndPositionFollowing
-//  if (!isStatic() && !is_time_init_)
-//  {
-
-//    is_time_init_ = true;
-//  }
-
   RobotControlWithTargetTrackingAndPositionFollowing::update(time,
                                                              robot.get_movement().linear_position(time),
                                                              robot.get_movement().linear_velocity(time),

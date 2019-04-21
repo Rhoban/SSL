@@ -37,9 +37,6 @@ public:
   void update(double time, const RhobanSSL::Ai::Robot& robot, const RhobanSSL::Ai::Ball& ball);
   Control control() const;
   RhobanSSLAnnotation::Annotations get_annotations() const;
-
-private:
-  bool is_time_init_ = false;
 };
 
 };  // namespace robot_behavior

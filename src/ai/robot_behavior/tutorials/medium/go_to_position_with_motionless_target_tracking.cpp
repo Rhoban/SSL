@@ -43,7 +43,7 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const RhobanS
 
   annotations_.clear();
 
-#if 0
+#if 1
   if (!robot_destination_set_)
   {
     ContinuousAngle angle_destination( M_PI_2 );
@@ -57,6 +57,8 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const RhobanS
                         circle_follower_.linearPosition(time)+
                             Vector2d(std::cos(circle_follower_.angularPosition(time).value()), std::sin(circle_follower_.angularPosition(time).value())),
                         "green", false);
+
+  //DEBUG(angular_position() - vector2angle(linear_position()-ball_position()));
 
   circle_follower_.update(time, robot, ball);
 #else
@@ -83,14 +85,14 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const RhobanS
 
 Control GoToPositionWithMotionlessTargetTracking::control() const
 {
-  return follower_.control();
+  return circle_follower_.control();
 }
 
 RhobanSSLAnnotation::Annotations GoToPositionWithMotionlessTargetTracking::get_annotations() const
 {
   RhobanSSLAnnotation::Annotations annotations;
   annotations.addAnnotations( annotations_);
-  annotations.addAnnotations( follower_.get_annotations() );
+  annotations.addAnnotations( circle_follower_.get_annotations() );
   return annotations;
 }
 

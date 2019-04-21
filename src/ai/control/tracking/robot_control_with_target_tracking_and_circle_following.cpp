@@ -19,11 +19,12 @@
 #include "robot_control_with_target_tracking_and_circle_following.h"
 
 #include "debug.h"
+
 /// TODO Replace after test with a value in config file
 /// or
 /// add an equation that take the distance between the robot's position and
 /// the robot's destination and returns the velocity
-#define NORM_OF_THE_VELOCITY 0.05
+#define NORM_OF_THE_VELOCITY 0.1
 
 namespace rhoban_ssl
 {
@@ -43,27 +44,29 @@ void RobotControlWithTargetTrackingAndCircleFollowing::setGoal(
 
 Vector2d RobotControlWithTargetTrackingAndCircleFollowing::linearVelocity(double) const
 {
-//  Vector2d robot_target = linear_position_of_the_target_ - linearPosition(time_);
-//  Vector2d robot_target_orth(robot_target.getY(), -1*robot_target.getX());
+  rhoban_geometry::Point r(current_linear_position_.getX(), current_linear_position_.getY());
+  rhoban_geometry::Point t(linear_position_of_the_target_.getX(), linear_position_of_the_target_.getY());
+  rhoban_geometry::Point t_r = r - t;
 
-//  //TODO change sign according to the distance from targeted angle
-
-//  robot_target_orth/robot_target_orth.norm()*NORM_OF_THE_VELOCITY;
-
-  return {0,0};
+  //TODO change sign to shoortest path
+  return t_r.perpendicular().normalize(NORM_OF_THE_VELOCITY);
 }
 
 Vector2d RobotControlWithTargetTrackingAndCircleFollowing::linearPosition(double time) const
 {
-  //return linear_position_at_start_ + linearVelocity(0) * (time_);
-//  double dx = current_linear_position_.getX() - linear_position_of_the_target_.getX();
-//  double dy = current_linear_position_.getY() - linear_position_of_the_target_.getY();
-//  double radius_of_trajectory =  sqrt(dx * dx + dy * dy);
+  //return current_linear_position_;
+//  //return linear_position_at_start_ + linearVelocity(0) * (time_);
+  rhoban_geometry::Point start_robot(linear_position_at_start_.getX(), linear_position_at_start_.getY());
+  rhoban_geometry::Point r(current_linear_position_.getX(), current_linear_position_.getY());
+  rhoban_geometry::Point t(linear_position_of_the_target_.getX(), linear_position_of_the_target_.getY());
+  double radius_of_trajectory =  r.getDist(t);
 
-//  ContinuousAngle angular_position_in_trajectory = linearVelocity(time_).norm() / radius_of_trajectory;
+  rhoban_geometry::Circle c(t, radius_of_trajectory);
+  ContinuousAngle angular_velocity_in_trajectory = linearVelocity(time_).norm() / radius_of_trajectory;
 
-//  return Vector2d(std::cos(angular_position_in_trajectory.value()), std::sin(angular_position_in_trajectory.value()))  ;
-  return {0,0};
+  rhoban_utils::Angle angular_position_in_trajectory = c.getTheta(start_robot) + angular_velocity_in_trajectory.angle() * time_;
+
+  return c.getPoint(angular_position_in_trajectory.getValue());
 }
 
 }  // namespace tracking

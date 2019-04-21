@@ -85,21 +85,25 @@ Vector2d VelocityControllerWithPid::computeNoLimitedLinearVelocity(const Vector2
   }
 
   Vector2d no_limited_linear_velocity = linearVelocity(time_);
-  //DEBUG("Error L: " << no_limited_linear_velocity );
+  // DEBUG("Error L: " << no_limited_linear_velocity );
 
-#if false
+#if true
   Vector2d error = linearPosition(time_) - robot_position;
 
-//  if( error.getX() <= 0.001 && error.getY() <= 0.001 ) {
-//    linear_velocity_pid_.resetIntegration();
-//    DEBUG("reset PID integration -> CALIBRATE");
-//  } else {
-    linear_velocity_pid_.setPid(1.5,0,0);
+//  if (error.getX() > 0.01 || error.getY() > 0.01)
+//  {
+    linear_velocity_pid_.setPid(1, 0, 0);
     Vector2d correction = linear_velocity_pid_.compute(dt_, error);
-    DEBUG("error " << error);
-    DEBUG("correction " << correction );
+    // DEBUG("error " << error);
+    // DEBUG("correction " << correction );
     no_limited_linear_velocity += correction;
-//  }
+    //
+ // }
+  //  if( error.getX() <= 0.001 && error.getY() <= 0.001 ) {
+  //    linear_velocity_pid_.resetIntegration();
+  //    DEBUG("reset PID integration -> CALIBRATE");
+  //  } else {
+  //}
 
 #endif
   return no_limited_linear_velocity;
@@ -116,12 +120,16 @@ VelocityControllerWithPid::computeNoLimitedAngularVelocity(const ContinuousAngle
 
   ContinuousAngle no_limited_angular_velocity = angularVelocity(time_);
 
-#if false
+#if true
   ContinuousAngle error = angularPosition(time_) - robot_angular_position;
 
- // DEBUG("theta error : " << error.value());
+  if (error.angle().getValue() > 0.01)
+  {
+    // DEBUG("theta error : " << error.value());
 
-  no_limited_angular_velocity += angular_velocity_pid_.compute(dt_, error);
+    angular_velocity_pid_.setPid(2, 0, 0);
+    no_limited_angular_velocity += angular_velocity_pid_.compute(dt_, error);
+  }
 #endif
 
   return no_limited_angular_velocity;

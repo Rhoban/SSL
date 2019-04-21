@@ -16,8 +16,7 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-#ifndef __ROBOT_CONTROL_WITH_TARGET_TRACKING_AND_POSITION_FOLLOWING__H__
-#define __ROBOT_CONTROL_WITH_TARGET_TRACKING_AND_POSITION_FOLLOWING__H__
+#pragma once
 
 #include "robot_control_with_target_tracking.h"
 
@@ -37,7 +36,7 @@ public:
   RobotControlWithTargetTrackingAndPositionFollowing() = default;
 
   virtual void setGoal(const Vector2d& robot_destination, const rhoban_geometry::Point& linear_position_of_the_target,
-               const Vector2d& linear_velocity_of_the_target);
+                       const Vector2d& linear_velocity_of_the_target);
 
   //  void setGoal(const Vector2d& robot_destination, const RhobanSSL::Ai::Object& targeted_object);
 
@@ -59,8 +58,7 @@ public:
 protected:
   Vector2d robot_destination_;
 };
-#endif
 
-}  // Namespace robot_control
-}  // Namespace RhobanSSL
-}
+}  // namespace tracking
+}  // namespace robot_control
+}  // namespace rhoban_ssl

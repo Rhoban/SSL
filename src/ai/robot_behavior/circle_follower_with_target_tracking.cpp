@@ -13,6 +13,10 @@ CircleFollowerWithTargetTracking::CircleFollowerWithTargetTracking(RhobanSSL::Ai
 void CircleFollowerWithTargetTracking::update(double time, const RhobanSSL::Ai::Robot& robot,
                                               const RhobanSSL::Ai::Ball& ball)
 {
+  // At First, we update time and update potition from the abstract class robot_behavior.
+  // DO NOT REMOVE THAT LINE
+  RobotBehavior::update_time_and_position(time, robot, ball);
+
   RobotControlWithTargetTrackingAndCircleFollowing::update(time, robot.get_movement().linear_position(time),
                                                            robot.get_movement().linear_velocity(time),
                                                            robot.get_movement().angular_position(time));
@@ -34,7 +38,6 @@ RhobanSSLAnnotation::Annotations CircleFollowerWithTargetTracking::get_annotatio
                        linear_position() +
                            Vector2d(std::cos(angular_position().value()), std::sin(angular_position().value())),
                        "red", not dashed);
-
   //    annotations.addArrow(
   //        linear_position(), m_positionToFollow, "magenta", dashed
   //    );

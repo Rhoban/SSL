@@ -36,7 +36,8 @@ class RobotControlWithTargetTrackingAndCircleFollowing : public RobotControlWith
 public:
   RobotControlWithTargetTrackingAndCircleFollowing() = default;
 
-  virtual void setGoal(const ContinuousAngle& robot_destination, const rhoban_geometry::Point& linear_position_of_the_target,
+  virtual void setGoal(const ContinuousAngle& robot_destination,
+                       const rhoban_geometry::Point& linear_position_of_the_target,
                        const Vector2d& linear_velocity_of_the_target);
 
   //  void setGoal(const Vector2d& robot_destination, const RhobanSSL::Ai::Object& targeted_object);
