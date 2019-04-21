@@ -24,7 +24,6 @@
 #include <algorithm>
 #include <core/collection.h>
 #include <core/print_collection.h>
-#include <algorithm>
 #include <math/matching.h>
 
 namespace rhoban_ssl

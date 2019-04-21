@@ -79,6 +79,7 @@ set (SOURCES
     manager/manager_with_game_state.cpp
     manager/plan_veschambres.cpp
     # manager/Match.cpp
+    manager/tutorial.cpp
     manager/manual.cpp
     manager/factory.cpp
     strategy/strategy.cpp

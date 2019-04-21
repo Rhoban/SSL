@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 SCHMITZ Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,33 +19,21 @@
 
 #pragma once
 
-#include <ai_data.h>
-#include <referee/game_state.h>
-#include "manager.h"
+#include <manager/manager.h>
 
 namespace rhoban_ssl
 {
 namespace manager
 {
-struct names
-{
-  static constexpr const char* MANUAL = "manual";
-  // static constexpr const char* match = "match";
-  static constexpr const char* PLAN_VESCHAMBRES = "PlanVeschambres";
-  static constexpr const char* TUTORIAL = "Tutorials";
-};
-
-class Factory
+class Tutorial : public Manager
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers_;
-
 public:
-  static const std::list<std::string>& availableManagers();
+  Tutorial(ai::AiData& ai_data);
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name, ai::AiData& ai,
-                                                   GameState& game_state);
+  void update(double time);
+
+  virtual ~Tutorial();
 };
-
-};  // namespace manager
-};  // namespace rhoban_ssl
+}  // namespace manager
+}  // namespace rhoban_ssl

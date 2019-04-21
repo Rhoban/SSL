@@ -22,16 +22,15 @@
 #include "manual.h"
 // #include "Match.h"
 #include "plan_veschambres.h"
+#include "tutorial.h"
 
 namespace rhoban_ssl
 {
 namespace manager
 {
-std::list<std::string> Factory::list_of_avalaible_managers_ = {
-  names::MANUAL,
-  // names::match,
-  names::PLAN_VESCHAMBRES,
-};
+std::list<std::string> Factory::list_of_avalaible_managers_ = { names::MANUAL,
+                                                                // names::match,
+                                                                names::PLAN_VESCHAMBRES, names::TUTORIAL };
 
 const std::list<std::string>& Factory::availableManagers()
 {
@@ -54,6 +53,10 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
     dynamic_cast<Manual&>(*manager).changeTeamAndPointOfView(ai_data.team_color, ai_data.team_color != ai::Team::Yellow
                                                              // false //ai_data.team_color != ai::Team::Yellow
     );
+  }
+  if (manager_name == names::TUTORIAL)
+  {
+    manager = std::shared_ptr<Manager>(new Tutorial(ai_data));
   }
   // if( manager_name == names::match ){
   //     manager = std::shared_ptr<Manager>(

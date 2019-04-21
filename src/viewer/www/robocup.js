@@ -1137,7 +1137,7 @@ function Manager(viewer)
 
             // Updating strategies
             var strategiesAvailable = JSON.parse(api.getStrategies());
-            var strategiesOptions = '<option value="">-</otpion>';
+            var strategiesOptions = '<option value="">-</option>';
 
             for (var n in strategiesAvailable) {
                 var strategy = strategiesAvailable[n];
@@ -1164,6 +1164,11 @@ function Manager(viewer)
                 api.setManager($('#managers').val());
                 api.managerPlay();
             });
+
+            $('#managers').change(function (){
+                api.setManager($('#managers').val());
+                self.updateStrategies();
+            })
             $('.control-stop').click(function() {
                 api.managerStop();
                 $('#managers').val('Manual');
@@ -1171,6 +1176,31 @@ function Manager(viewer)
             });
         }
     };
+
+    this.updateStrategies = function () {
+      // Updating strategies
+      var strategiesAvailable = JSON.parse(api.getStrategies());
+      var strategiesOptions = '<option value="">-</option>';
+
+      for (var n in strategiesAvailable) {
+          var strategy = strategiesAvailable[n];
+          strategiesOptions += '<option value="'+strategy+'">'+strategy+'</option>';
+      }
+
+      $('.strategies-selector').html(strategiesOptions);
+
+      $('.clear-strategy').click(function() {
+          var id = $(this).attr('rel');
+          $('.strategy-'+id).val('');
+          $('apply-'+id).click();
+      });
+
+      $('.apply-strategy').click(function() {
+          var id = $(this).attr('rel');
+          var strategy = $('.strategy-'+id).val();
+          api.applyStrategy(id, strategy);
+      });
+    }
 
     this.divider = 10;
 
