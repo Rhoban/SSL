@@ -194,11 +194,13 @@ int main(int argc, char** argv)
   }
   else
   {
-    AiSt* ai_ = nullptr;
-    ai_ = new AiSt(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, data,
-                   commander, config_path.getValue(), simulation.getValue());
-    ai_->run();
-    delete ai_;
+    /*
+  AiSt* ai_ = nullptr;
+  ai_ = new AiSt(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, data,
+                 commander, config_path.getValue(), simulation.getValue());
+  ai_->run();
+  delete ai_;
+  */
   }
   delete commander;
 
