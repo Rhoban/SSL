@@ -153,6 +153,7 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team t
   ball.setMovement(physic::Factory::ballMovement(*this));
 }
 
+
 bool AiData::robotIsInsideTheField(int robot_id) const
 {
   const rhoban_ssl::Movement& mov = robots.at(vision::Ally).at(robot_id).getMovement();

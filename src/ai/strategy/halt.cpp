@@ -54,7 +54,7 @@ void Halt::stop(double time)
 void Halt::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (have_to_manage_the_goalie())
+  if (haveToManageTheGoalie())
   {
     assign_behavior(getGoalie(),
                     std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));

@@ -37,14 +37,14 @@ public:
   {
     uint8_t robot_id;
     bool enabled;
-    double xSpeed;
-    double ySpeed;
-    double thetaSpeed;
+    double x_speed;
+    double y_speed;
+    double theta_speed;
     int kick;
-    float kickPower;
+    float kick_power;
     bool spin;
     bool charge;
-    bool tareOdom;
+    bool tare_odom;
   };
   AICommander(bool yellow);
 
@@ -53,8 +53,8 @@ public:
   /**
    * Set the speed of the robot robot_id to the given speed
    */
-  void set(uint8_t robot_id, bool enabled, double xSpeed, double ySpeed, double thetaSpeed, int kick = false,
-           float kickPower = 0, bool spin = false, bool charge = false, bool tareOdom = false);
+  void set(uint8_t robot_id, bool enabled, double x_speed, double y_speed, double theta_speed, int kick = false,
+           float kick_power = 0, bool spin = false, bool charge = false, bool tare_odom = false);
 
   /**
    * Stop all the robots
@@ -75,7 +75,7 @@ public:
   /**
    * Moves a robot o a target position
    */
-  virtual void moveRobot(bool yellow, int id, double x, double y, double theta, bool turnon){};
+  virtual void moveRobot(bool yellow, int id, double x, double y, double theta, bool turn_on){};
 
   virtual ~AICommander();
 

@@ -150,7 +150,7 @@ public:
    * the strategie have to manage the
    * goalie.
    */
-  bool have_to_manage_the_goalie() const;
+  bool haveToManageTheGoalie() const;
 };
 
 };  // namespace strategy

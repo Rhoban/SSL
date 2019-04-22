@@ -101,6 +101,7 @@ struct Field : vision::Field
   }
 };
 
+
 class AiData
 {
 public:
