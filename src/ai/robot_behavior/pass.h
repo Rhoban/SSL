@@ -39,7 +39,7 @@ public:
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   // TODO: portée des variables ?
-  void declareRobotToPass(int robot_id, vision::Team team = vision::Team::Ally);
+  void declareRobotToPass(int robot_id, vision::Team team = vision::Ally);
 
   virtual Control control() const;
 

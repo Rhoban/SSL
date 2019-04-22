@@ -36,7 +36,7 @@ class NavigationWithObstacleAvoidance : public ConsignFollower
 {
 private:
   bool ignore_the_ball_;
-  bool ignore_robot_[2 * ai::Constants::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.
+  bool ignore_robot_[2 * ai::Config::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.
   double ball_radius_avoidance_;
   bool ball_is_the_obstacle_;
   PositionFollower position_follower_;

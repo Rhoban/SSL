@@ -59,7 +59,7 @@ public:
 
 protected:
   struct pollfd* sockets_fds_;
-  int nfds_;
+  nfds_t nfds_;
   std::string addr, port;
   bool receivedData;
   volatile bool running;
@@ -75,7 +75,7 @@ protected:
    * Called when a valid packet incomes, can be overloaded in sub classes
    * to trigger events when a packet is received
    */
-  virtual void packetReceived();
+  // virtual void packetReceived();
 };
 
 }  // namespace rhobanssl

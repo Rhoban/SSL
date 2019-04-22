@@ -19,6 +19,7 @@ include_directories(${catkin_INCLUDE_DIRS} .)
 
 set (SOURCES
     data.cpp
+    config.cpp
     game_informations.cpp
     vision/ai_vision_client.cpp
     vision/vision_data.cpp
@@ -147,6 +148,9 @@ target_link_libraries(ssl_ai ${ALL_LIBS})
 
 add_executable(ai main.cpp)
 target_link_libraries(ai ssl_ai ${ALL_LIBS})
+
+add_executable(ai_st main_st.cpp)
+target_link_libraries(ai_st ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

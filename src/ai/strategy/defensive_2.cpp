@@ -81,17 +81,17 @@ void Defensive2::assignBehaviorToRobots(
   // we assign now all the other behavior
   assert(getPlayerIds().size() == 2);
 
-  int id_to_obstruct1 = shirtNumberOfThreatMax(vision::Team::Opponent);
-  int id_to_obstruct2 = shirtNumberOfThreatMax2(vision::Team::Opponent);
+  int id_to_obstruct1 = shirtNumberOfThreatMax(vision::Opponent);
+  int id_to_obstruct2 = shirtNumberOfThreatMax2(vision::Opponent);
   int robotID1 = playerId(0);
   int robotID2 = playerId(1);
 
-  const ai::Robot& robot1 = getRobot(robotID1, vision::Team::Ally);
-  const ai::Robot& robot2 = getRobot(robotID2, vision::Team::Ally);
+  const ai::Robot& robot1 = getRobot(robotID1, vision::Ally);
+  const ai::Robot& robot2 = getRobot(robotID2, vision::Ally);
   const rhoban_geometry::Point& robot_position_1 = robot1.getMovement().linearPosition(time);
   const rhoban_geometry::Point& robot_position_2 = robot2.getMovement().linearPosition(time);
 
-  const ai::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, vision::Team::Opponent);
+  const ai::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, vision::Opponent);
   const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.getMovement().linearPosition(time);
 
   double distance1 = (Vector2d(robot_position_1 - robot_to_obstruct_position1)).norm();
@@ -99,16 +99,16 @@ void Defensive2::assignBehaviorToRobots(
 
   if (distance1 < distance2)
   {
-    obstructeur1_->declareRobotToObstruct(id_to_obstruct1, vision::Team::Opponent);
-    obstructeur2_->declareRobotToObstruct(id_to_obstruct2, vision::Team::Opponent);
+    obstructeur1_->declareRobotToObstruct(id_to_obstruct1, vision::Opponent);
+    obstructeur2_->declareRobotToObstruct(id_to_obstruct2, vision::Opponent);
   }
   else
   {
-    obstructeur1_->declareRobotToObstruct(id_to_obstruct2, vision::Team::Opponent);
-    obstructeur2_->declareRobotToObstruct(id_to_obstruct1, vision::Team::Opponent);
+    obstructeur1_->declareRobotToObstruct(id_to_obstruct2, vision::Opponent);
+    obstructeur2_->declareRobotToObstruct(id_to_obstruct1, vision::Opponent);
   }
 
-  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally);
+  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
 
   if (nearest_ballID == robotID1)
   {

@@ -21,7 +21,7 @@
 
 namespace rhoban_ssl
 {
-Data::Data(ai::Team initial_team_color)
+GlobalData::GlobalData(ai::Team initial_team_color)
 {
   data_from_ai_.team_color = initial_team_color;
 }
@@ -39,11 +39,11 @@ SharedData::FinalControl::FinalControl(const FinalControl& control)
 {
 }
 
-SharedData::SharedData() : final_control_for_robots(ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_TEAM)
 {
 }
 
-Data& Data::operator<<(const vision::VisionData& vision_data)
+GlobalData& GlobalData::operator<<(const vision::VisionData& vision_data)
 {
   mutex_for_vision_data_.lock();
   vision_data_ = vision_data;
@@ -51,7 +51,7 @@ Data& Data::operator<<(const vision::VisionData& vision_data)
   return *this;
 }
 
-Data& Data::operator>>(vision::VisionData& vision_data)
+GlobalData& GlobalData::operator>>(vision::VisionData& vision_data)
 {
   mutex_for_vision_data_.lock();
   vision_data = vision_data_;
@@ -59,7 +59,7 @@ Data& Data::operator>>(vision::VisionData& vision_data)
   return *this;
 }
 
-Data& Data::operator<<(const DataFromAi& data_from_ai)
+GlobalData& GlobalData::operator<<(const DataFromAi& data_from_ai)
 {
   mutex_for_ai_data_.lock();
   data_from_ai_ = data_from_ai;
@@ -67,7 +67,7 @@ Data& Data::operator<<(const DataFromAi& data_from_ai)
   return *this;
 }
 
-Data& Data::operator>>(DataFromAi& data_from_ai)
+GlobalData& GlobalData::operator>>(DataFromAi& data_from_ai)
 {
   mutex_for_ai_data_.lock();
   data_from_ai = data_from_ai_;
@@ -75,7 +75,7 @@ Data& Data::operator>>(DataFromAi& data_from_ai)
   return *this;
 }
 
-Data& Data::operator<<(const SharedData& shared_data)
+GlobalData& GlobalData::operator<<(const SharedData& shared_data)
 {
   mutex_for_shared_data_.lock();
   shared_data_ = shared_data;
@@ -83,7 +83,7 @@ Data& Data::operator<<(const SharedData& shared_data)
   return *this;
 }
 
-Data& Data::operator>>(SharedData& shared_data)
+GlobalData& GlobalData::operator>>(SharedData& shared_data)
 {
   mutex_for_shared_data_.lock();
   shared_data = shared_data_;
@@ -91,7 +91,7 @@ Data& Data::operator>>(SharedData& shared_data)
   return *this;
 }
 
-void Data::editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
+void GlobalData::editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
     std::function<void(vision::VisionData& vision_data)> vision_data_editor)
 {
   mutex_for_vision_data_.lock();
@@ -99,7 +99,7 @@ void Data::editVisionData(  // Use that function if you ha no choice. Prefer << 
   mutex_for_vision_data_.unlock();
 }
 
-void Data::editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
+void GlobalData::editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
     std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor)
 {
   mutex_for_ai_data_.lock();
@@ -107,7 +107,7 @@ void Data::editDataFromAi(  // Use that function if you ha no choice. Prefer << 
   mutex_for_ai_data_.unlock();
 }
 
-void Data::editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
+void GlobalData::editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
     std::function<void(SharedData& shared_data)> shared_data_editor)
 {
   mutex_for_shared_data_.lock();
@@ -115,7 +115,7 @@ void Data::editSharedData(  // Use that function if you ha no choice. Prefer << 
   mutex_for_shared_data_.unlock();
 }
 
-Data& Data::operator<<(const DataForViewer& data_for_viewer)
+GlobalData& GlobalData::operator<<(const DataForViewer& data_for_viewer)
 {
   mutex_for_viewer_data_.lock();
   data_for_viewer_ = data_for_viewer;
@@ -123,7 +123,7 @@ Data& Data::operator<<(const DataForViewer& data_for_viewer)
   return *this;
 }
 
-Data& Data::operator>>(DataForViewer& data_for_viewer)
+GlobalData& GlobalData::operator>>(DataForViewer& data_for_viewer)
 {
   mutex_for_viewer_data_.lock();
   data_for_viewer = data_for_viewer_;
@@ -131,12 +131,125 @@ Data& Data::operator>>(DataForViewer& data_for_viewer)
   return *this;
 }
 
-void Data::editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
+void GlobalData::editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
     std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor)
 {
   mutex_for_viewer_data_.lock();
   data_for_viewer_editor(data_for_viewer_);
   mutex_for_viewer_data_.unlock();
 }
+
+///////////////////////////////////////////////////////////////////////
+
+GlobalDataSingleThread::GlobalDataSingleThread(ai::Team initial_team_color)
+{
+  data_from_ai_.team_color = initial_team_color;
+}
+
+void GlobalDataSingleThread::setTeam(ai::Team team_color)
+{
+  data_from_ai_.team_color = team_color;
+}
+
+GlobalDataSingleThread GlobalDataSingleThread::singleton_(ai::Team::Unknown);
+
+/*
+
+GlobalDataSingleThread& GlobalDataSingleThread::operator<<(const vision::VisionDataSingleThread& vision_data)
+{
+  //  mutex_for_vision_data_.lock();
+  vision_data_ = vision_data;
+  //  mutex_for_vision_data_.unlock();
+  return *this;
+}
+
+GlobalDataSingleThread& GlobalDataSingleThread::operator>>(vision::VisionDataSingleThread& vision_data)
+{
+  //  mutex_for_vision_data_.lock();
+  vision_data = vision_data_;
+  //  mutex_for_vision_data_.unlock();
+  return *this;
+}
+
+GlobalDataSingleThread& GlobalDataSingleThread::operator<<(const DataFromAi& data_from_ai)
+{
+  //  mutex_for_ai_data_.lock();
+  data_from_ai_ = data_from_ai;
+  //  mutex_for_ai_data_.unlock();
+  return *this;
+}
+
+GlobalDataSingleThread& GlobalDataSingleThread::operator>>(DataFromAi& data_from_ai)
+{
+  //  mutex_for_ai_data_.lock();
+  data_from_ai = data_from_ai_;
+  //  mutex_for_ai_data_.unlock();
+  return *this;
+}
+
+GlobalDataSingleThread& GlobalDataSingleThread::operator<<(const SharedData& shared_data)
+{
+  // mutex_for_shared_data_.lock();
+  shared_data_ = shared_data;
+  // mutex_for_shared_data_.unlock();
+  return *this;
+}
+
+GlobalDataSingleThread& GlobalDataSingleThread::operator>>(SharedData& shared_data)
+{
+  // mutex_for_shared_data_.lock();
+  shared_data = shared_data_;
+  // mutex_for_shared_data_.unlock();
+  return *this;
+}
+
+void GlobalDataSingleThread::editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
+    std::function<void(vision::VisionDataSingleThread& vision_data)> vision_data_editor)
+{
+  // mutex_for_vision_data_.lock();
+  vision_data_editor(vision_data_);
+  // mutex_for_vision_data_.unlock();
+}
+
+void GlobalDataSingleThread::editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
+    std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor)
+{
+  // mutex_for_ai_data_.lock();
+  data_from_ai_editor(data_from_ai_);
+  // mutex_for_ai_data_.unlock();
+}
+
+void GlobalDataSingleThread::editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
+    std::function<void(SharedData& shared_data)> shared_data_editor)
+{
+  // mutex_for_shared_data_.lock();
+  shared_data_editor(shared_data_);
+  // mutex_for_shared_data_.unlock();
+}
+
+GlobalDataSingleThread& GlobalDataSingleThread::operator<<(const DataForViewer& data_for_viewer)
+{
+  // mutex_for_viewer_data_.lock();
+  data_for_viewer_ = data_for_viewer;
+  // mutex_for_viewer_data_.unlock();
+  return *this;
+}
+
+GlobalDataSingleThread& GlobalDataSingleThread::operator>>(DataForViewer& data_for_viewer)
+{
+  // mutex_for_viewer_data_.lock();
+  data_for_viewer = data_for_viewer_;
+  // mutex_for_viewer_data_.unlock();
+  return *this;
+}
+
+void GlobalDataSingleThread::editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
+    std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor)
+{
+  // mutex_for_viewer_data_.lock();
+  data_for_viewer_editor(data_for_viewer_);
+  // mutex_for_viewer_data_.unlock();
+}
+*/
 
 }  // namespace rhoban_ssl

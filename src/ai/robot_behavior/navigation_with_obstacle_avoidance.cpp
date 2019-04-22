@@ -30,7 +30,7 @@ NavigationWithObstacleAvoidance::NavigationWithObstacleAvoidance(ai::AiData& ai_
   : ConsignFollower(ai_data)
   , ignore_the_ball_(false)
   , ignore_robot_({ false })
-  , ball_radius_avoidance_(ai_data.constants.robot_radius)
+  , ball_radius_avoidance_(ai::Config::robot_radius)
   , position_follower_(ai_data, time, dt)
   , position_follower_avoidance_(ai_data, time, dt)
   , target_position_(0.0, 0.0)
@@ -58,10 +58,10 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
   closest_robot_ = -1;
   second_closest_robot_ = -1;
   std::list<std::pair<int, double> > collisions_with_ctrl = ai_data_.getCollisions(robot().id(), ctrl.linear_velocity);
-  assert(ai_data_.constants.security_acceleration_ratio > ai_data_.constants.obstacle_avoidance_ratio);
+  assert(ai::Config::security_acceleration_ratio > ai::Config::obstacle_avoidance_ratio);
   double ctrl_velocity_norm = ctrl.linear_velocity.norm();
-  double time_to_stop = ctrl_velocity_norm / (ai_data_.constants.obstacle_avoidance_ratio *
-                                              ai_data_.constants.translation_acceleration_limit);
+  double time_to_stop =
+      ctrl_velocity_norm / (ai::Config::obstacle_avoidance_ratio * ai::Config::translation_acceleration_limit);
 
   for (const std::pair<int, double>& collision : collisions_with_ctrl)
   {
@@ -103,11 +103,11 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
   ball_is_the_obstacle_ = false;
   if (not(ignore_the_ball_))
   {
-    double radius_error = ai_data_.constants.radius_security_for_collision;
+    double radius_error = ai::Config::radius_security_for_collision;
     std::pair<bool, double> collision =
-        collisionTime(ai_data_.constants.robot_radius,
-                      robot().getMovement().linearPosition(robot().getMovement().lastTime()), ctrl.linear_velocity,
-                      ball_radius_avoidance_, ball().getMovement().linearPosition(ball().getMovement().lastTime()),
+        collisionTime(ai::Config::robot_radius, robot().getMovement().linearPosition(robot().getMovement().lastTime()),
+                      ctrl.linear_velocity, ball_radius_avoidance_,
+                      ball().getMovement().linearPosition(ball().getMovement().lastTime()),
                       ball().getMovement().linearVelocity(ball().getMovement().lastTime()), radius_error);
     if (collision.first)
     {
@@ -127,27 +127,25 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
 void NavigationWithObstacleAvoidance::computeTheRadiusOfLimitCycle()
 {
   // Is yet constructed at construction
-  assert(ai_data_.constants.radius_security_for_collision < ai_data_.constants.radius_security_for_avoidance);
+  assert(ai::Config::radius_security_for_collision < ai::Config::radius_security_for_avoidance);
 
 #if 1
   if (ball_is_the_obstacle_)
   {
     assert(not(ignore_the_ball_));  // Normally determine_the_closest_obstacle() set ball_is_the_obstacle to false when
                                     // we ignore the ball
-    radius_of_limit_cycle_ = ai_data_.constants.radius_ball + ai_data_.constants.robot_radius +
-                             ai_data_.constants.radius_security_for_avoidance;
+    radius_of_limit_cycle_ =
+        ai::Config::radius_ball + ai::Config::robot_radius + ai::Config::radius_security_for_avoidance;
   }
   else
   {
-    if (robot().getMovement().linearVelocity(ai_data_.time).norm() <
-        ai_data_.constants.translation_velocity_limit / 4.0)
+    if (robot().getMovement().linearVelocity(ai_data_.time).norm() < ai::Config::translation_velocity_limit / 4.0)
     {
-      radius_of_limit_cycle_ =
-          2 * ai_data_.constants.robot_radius;  // + ai_data.constants.radius_security_for_avoidance;
+      radius_of_limit_cycle_ = 2 * ai::Config::robot_radius;  // + ai_data.constants.radius_security_for_avoidance;
     }
     else
     {
-      radius_of_limit_cycle_ = 2 * ai_data_.constants.robot_radius + ai_data_.constants.radius_security_for_avoidance;
+      radius_of_limit_cycle_ = 2 * ai::Config::robot_radius + ai::Config::radius_security_for_avoidance;
     }
   }
 #endif
@@ -199,7 +197,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   double XX = s.getX() * s.getX();
   double YY = s.getY() * s.getY();
 
-  double avoidance_convergence = ai_data_.constants.coefficient_to_increase_avoidance_convergence;
+  double avoidance_convergence = ai::Config::coefficient_to_increase_avoidance_convergence;
   if (ai_data_.all_robots[closest_robot_].first == ai_data_.all_robots[robot().id()].first)
   {
     // sign_of_avoidance_rotation = 1.0;
@@ -324,14 +322,14 @@ void NavigationWithObstacleAvoidance::avoidTheBall(bool value)
 }
 void NavigationWithObstacleAvoidance::avoidAlly(bool value)
 {
-  for (int i = 0; i < ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
+  for (int i = 0; i < ai::Config::NB_OF_ROBOTS_BY_TEAM; i++)
   {
     ignore_robot_[i] = not(value);
   }
 }
 void NavigationWithObstacleAvoidance::avoidOpponent(bool value)
 {
-  for (int i = ai::Constants::NB_OF_ROBOTS_BY_TEAM; i < 2 * ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
+  for (int i = ai::Config::NB_OF_ROBOTS_BY_TEAM; i < 2 * ai::Config::NB_OF_ROBOTS_BY_TEAM; i++)
   {
     ignore_robot_[i] = not(value);
   }

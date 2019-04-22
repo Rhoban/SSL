@@ -88,10 +88,8 @@ void AttaqueWithSupport::assignBehaviorToRobots(
     int ID1 = playerId(0);
     int ID2 = playerId(1);  // we get the first if in get_player_ids()
 
-    const rhoban_geometry::Point& robot_position_1 =
-        getRobot(ID1, vision::Team::Ally).getMovement().linearPosition(time);
-    const rhoban_geometry::Point& robot_position_2 =
-        getRobot(ID2, vision::Team::Ally).getMovement().linearPosition(time);
+    const rhoban_geometry::Point& robot_position_1 = getRobot(ID1, vision::Ally).getMovement().linearPosition(time);
+    const rhoban_geometry::Point& robot_position_2 = getRobot(ID2, vision::Ally).getMovement().linearPosition(time);
 
     double ball_robot1 = (Vector2d(robot_position_1 - ballPosition())).norm();
     double ball_robot2 = (Vector2d(robot_position_2 - ballPosition())).norm();
@@ -114,15 +112,15 @@ void AttaqueWithSupport::assignBehaviorToRobots(
     if (results_.second > seuil)
     {
       assign_behavior(strikerID, striker_);
-      support_->declare_robot_to_follow_(strikerID, Vector2d(1, 2), vision::Team::Ally);
+      support_->declare_robot_to_follow_(strikerID, Vector2d(1, 2), vision::Ally);
       assign_behavior(supportID, support_);
     }
     else
     {
-      pass_->declareRobotToPass(supportID, vision::Team::Ally);
+      pass_->declareRobotToPass(supportID, vision::Ally);
       assign_behavior(strikerID, pass_);
     }
-    support_->declare_robot_to_follow_(strikerID, Vector2d(1, 2), vision::Team::Ally);
+    support_->declare_robot_to_follow_(strikerID, Vector2d(1, 2), vision::Ally);
     assign_behavior(supportID, support_);
 
     // behaviors_are_assigned = true;

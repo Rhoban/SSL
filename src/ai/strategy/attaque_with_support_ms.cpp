@@ -172,8 +172,8 @@ void AttaqueWithSupportMs::start(double time)
   ID1_ = playerId(0);
   ID2_ = playerId(1);  // we get the first if in get_player_ids()
 
-  robot_1_position_ = getRobot(ID1_, vision::Team::Ally).getMovement().linearPosition(time);
-  robot_2_position_ = getRobot(ID2_, vision::Team::Ally).getMovement().linearPosition(time);
+  robot_1_position_ = getRobot(ID1_, vision::Ally).getMovement().linearPosition(time);
+  robot_2_position_ = getRobot(ID2_, vision::Ally).getMovement().linearPosition(time);
 
   double db1 = (Vector2d(ballPosition() - robot_1_position_)).norm();
   double db2 = (Vector2d(ballPosition() - robot_2_position_)).norm();
@@ -205,8 +205,8 @@ void AttaqueWithSupportMs::assignBehaviorToRobots(
   // we assign now all the other behavior
   assert(getPlayerIds().size() == 2);
 
-  robot_1_position_ = getRobot(ID1_, vision::Team::Ally).getMovement().linearPosition(time);
-  robot_2_position_ = getRobot(ID2_, vision::Team::Ally).getMovement().linearPosition(time);
+  robot_1_position_ = getRobot(ID1_, vision::Ally).getMovement().linearPosition(time);
+  robot_2_position_ = getRobot(ID2_, vision::Ally).getMovement().linearPosition(time);
   fgbm_score_ = findGoalBestMove(ballPosition()).second;
 
   machine_.run();
@@ -226,7 +226,7 @@ void AttaqueWithSupportMs::assignBehaviorToRobots(
   else if (state == state_name::pass_search)
   {
     assign_behavior(ID1_, pass_behavior_);
-    // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
+    // pass_behavior->declare_robot_to_pass( ID2, Vision::Ally );
     pass_behavior_->declarePointToStrike(robot_2_position_);
     assign_behavior(ID2_, search_behavior_);
   }
@@ -234,20 +234,20 @@ void AttaqueWithSupportMs::assignBehaviorToRobots(
   {
     assign_behavior(ID1_, search_behavior_);
     assign_behavior(ID2_, pass_behavior_);
-    // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
+    // pass_behavior->declare_robot_to_pass( ID1, Vision::Ally );
     pass_behavior_->declarePointToStrike(robot_1_position_);
   }
   else if (state == state_name::search_waitpass)
   {
     assign_behavior(ID1_, search_behavior_);
-    // pass_behavior->declare_robot_to_pass( ID2, Vision::Team::Ally );
+    // pass_behavior->declare_robot_to_pass( ID2, Vision::Ally );
     assign_behavior(ID2_, wait_pass_behavior_);
   }
   else if (state == state_name::waitpass_search)
   {
     assign_behavior(ID1_, wait_pass_behavior_);
     assign_behavior(ID2_, search_behavior_);  // pass_behavior );
-    // pass_behavior->declare_robot_to_pass( ID1, Vision::Team::Ally );
+    // pass_behavior->declare_robot_to_pass( ID1, Vision::Ally );
   }
 }
 
@@ -330,14 +330,14 @@ bool AttaqueWithSupportMs::fgbmScoreSupSeuil_2PlusConstante()
 
 bool AttaqueWithSupportMs::isInfra_1On()
 {
-  return infraRed(ID1_, vision::Team::Ally);
+  return infraRed(ID1_, vision::Ally);
   // double db1 = (Vector2d (ball_position() - robot_1_position)).norm();
   // // DEBUG("DB1 " << db1 );
   // return (db1 < get_robot_radius()+0.1);
 }
 bool AttaqueWithSupportMs::isInfra_2On()
 {
-  return infraRed(ID2_, vision::Team::Ally);
+  return infraRed(ID2_, vision::Ally);
   // double db2 = (Vector2d (ball_position() - robot_2_position)).norm();
   // // DEBUG("DB2 " << db2 );
   // return (db2 < get_robot_radius()+0.1);
@@ -345,14 +345,14 @@ bool AttaqueWithSupportMs::isInfra_2On()
 
 bool AttaqueWithSupportMs::isDb1InfSeuilOrTimeInfTempo()
 {
-  // return infra_red( ID1, Vision::Team::Ally);
+  // return infra_red( ID1, Vision::Ally);
   double db1 = (Vector2d(ballPosition() - robot_1_position_)).norm();
   bool t = (time() - begin_time_ > tempo_);
   return ((db1 < getRobotRadius() + 0.7) || t);
 }
 bool AttaqueWithSupportMs::isDb2InfSeuilOrTimeInfTempo()
 {
-  // return infra_red( ID2, Vision::Team::Ally);
+  // return infra_red( ID2, Vision::Ally);
   double db2 = (Vector2d(ballPosition() - robot_2_position_)).norm();
   bool t = (time() - begin_time_ > tempo_);
   return ((db2 < getRobotRadius() + 0.7) || t);

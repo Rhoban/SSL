@@ -74,7 +74,7 @@ void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rho
     return;
   }
 
-  for (size_t i = 0; i < ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
+  for (size_t i = 0; i < ai::Config::NB_OF_ROBOTS_BY_TEAM; i++)
   {
     const ai::Robot& robot = getRobot(i, team);
     if (robot.isPresentInVision())
@@ -100,8 +100,8 @@ std::vector<int> GameInformations::getRobotInLine(const rhoban_geometry::Point p
                                                   double distance) const
 {
   std::vector<int> result;
-  getRobotInLine(p1, p2, vision::Team::Ally, distance, result);
-  getRobotInLine(p1, p2, vision::Team::Opponent, distance, result);
+  getRobotInLine(p1, p2, vision::Ally, distance, result);
+  getRobotInLine(p1, p2, vision::Opponent, distance, result);
   return result;
 }
 
@@ -136,9 +136,8 @@ std::pair<rhoban_geometry::Point, double> GameInformations::findGoalBestMove(con
   for (size_t i = 1; i < nb_analysed_point - 1; i++)
   {
     analysed_point = right_post_position + rhoban_geometry::Point(0, dist_post / nb_analysed_point * i);
-    std::vector<int> robot_in_line =
-        GameInformations::getRobotInLine(point, analysed_point, vision::Team::Opponent, 0.15);
-    std::vector<int> robot_in_line2 = GameInformations::getRobotInLine(point, analysed_point, vision::Team::Ally, 0.15);
+    std::vector<int> robot_in_line = GameInformations::getRobotInLine(point, analysed_point, vision::Opponent, 0.15);
+    std::vector<int> robot_in_line2 = GameInformations::getRobotInLine(point, analysed_point, vision::Ally, 0.15);
     robot_in_line.insert(robot_in_line.end(), robot_in_line2.begin(), robot_in_line2.end());
     if (robot_in_line.empty())
     {
@@ -186,7 +185,7 @@ int GameInformations::getShirtNumberOfClosestRobot(vision::Team team, rhoban_geo
 {
   int id = -1;
   double distance_max = -1;
-  for (int i = 0; i < ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
+  for (int i = 0; i < ai::Config::NB_OF_ROBOTS_BY_TEAM; i++)
   {
     const ai::Robot& robot = getRobot(i, team);
     if (robot.isPresentInVision())
@@ -220,7 +219,7 @@ double GameInformations::getRobotDistanceFromAllyGoalCenter(int robot_number, vi
 std::vector<double> GameInformations::threat(vision::Team team) const
 {
   std::vector<double> v_threat;
-  for (size_t i = 0; i < ai::Constants::NB_OF_ROBOTS_BY_TEAM; i++)
+  for (size_t i = 0; i < ai::Config::NB_OF_ROBOTS_BY_TEAM; i++)
   {
     double threat = getRobotDistanceFromAllyGoalCenter(i, team);
     v_threat.push_back(threat);
@@ -294,12 +293,12 @@ rhoban_geometry::Point GameInformations::centerOpponentField() const
 
 double GameInformations::getRobotRadius() const
 {
-  return ai_data.constants.robot_radius;
+  return ai::Config::robot_radius;
 }
 
 double GameInformations::getBallRadius() const
 {
-  return ai_data.constants.radius_ball;
+  return ai::Config::radius_ball;
 }
 
 std::vector<rhoban_geometry::Point> GameInformations::centerQuarterField() const

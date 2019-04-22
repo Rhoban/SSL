@@ -42,7 +42,7 @@ public:
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  void declare_robot_to_follow_(int robot_id, const Vector2d& translation, vision::Team team = vision::Team::Ally);
+  void declare_robot_to_follow_(int robot_id, const Vector2d& translation, vision::Team team = vision::Ally);
 
   virtual Control control() const;
 

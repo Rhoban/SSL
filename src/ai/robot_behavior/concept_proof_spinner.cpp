@@ -59,7 +59,7 @@ void ConceptProofSpinner::update(double time, const ai::Robot& robot, const ai::
 
   if (not(go_to_home_))
   {
-    target_position = (ballPosition() + direction * ai_data_.constants.robot_radius);
+    target_position = (ballPosition() + direction * ai::Config::robot_radius);
   }
   else
   {

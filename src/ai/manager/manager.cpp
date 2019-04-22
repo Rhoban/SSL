@@ -38,7 +38,7 @@ int Manager::getGoalieOpponentId() const
 
 void Manager::declareGoalieOpponentId(int goalie_opponent_id)
 {
-  if (goalie_opponent_id >= ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  if (goalie_opponent_id >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
     return;
   if (this->goalie_opponent_id_ >= 0)
   {
@@ -52,7 +52,7 @@ void Manager::declareGoalieOpponentId(int goalie_opponent_id)
 }
 void Manager::declareGoalieId(int goalie_id)
 {
-  if (goalie_id >= ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  if (goalie_id >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
     return;
   if (this->goalie_id_ >= 0)
   {
@@ -109,10 +109,10 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
   assert(strategies_.find(strategy_name) != strategies_.end());  // The name of the strategy is not declared. Please
                                                                  // register them with register_strategy() (during the
                                                                  // initialisation of your manager for example).
-  assert(not(assign_goalie) or
-         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(), goalie_id_) ==
-                                robot_ids.end()));  // If you declare that you are assigning a goal, you should not
-                                                    // declar the goal id inside the list of field robots.
+  assert(not(assign_goalie) or (assign_goalie and
+                                std::find(robot_ids.begin(), robot_ids.end(), goalie_id_) ==
+                                    robot_ids.end()));  // If you declare that you are assigning a goal, you should not
+                                                        // declar the goal id inside the list of field robots.
 
   current_strategy_names_.push_front(strategy_name);
   strategy::Strategy& strategy = getStrategy(strategy_name);
@@ -465,9 +465,9 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
   for (unsigned int i = starting_positions_.size(); i < getValidPlayerIds().size(); i++)
   {
     robot_consigns_[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
-        rhoban_geometry::Point(-((5.0 * ai_data_.constants.robot_radius) * (i - starting_positions_.size()) +
-                                 1.5 * ai_data_.constants.robot_radius),
-                               -ai_data_.field.fieldWidth / 2.0 + ai_data_.constants.robot_radius),
+        rhoban_geometry::Point(
+            -((5.0 * ai::Config::robot_radius) * (i - starting_positions_.size()) + 1.5 * ai::Config::robot_radius),
+            -ai_data_.field.fieldWidth / 2.0 + ai::Config::robot_radius),
         ContinuousAngle(0.0));
     robot_affectations_[i] = *it;
     it++;

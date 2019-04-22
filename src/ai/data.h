@@ -21,7 +21,7 @@
 
 #include <vision/vision_data.h>
 #include <mutex>
-#include <ai_data.h>
+//#include <ai_data.h>
 #include <robot_behavior/robot_behavior.h>
 
 namespace rhoban_ssl
@@ -57,7 +57,7 @@ struct SharedData
 /**
  * This class is used to make transfer between different threads.
  */
-class Data
+class GlobalData
 {
 private:  // Do not remove !
   std::mutex mutex_for_vision_data_;
@@ -73,27 +73,67 @@ private:  // Do not remove !
   DataForViewer data_for_viewer_;
 
 public:
-  Data(ai::Team initial_team_color);
+  GlobalData(ai::Team initial_team_color);
 
-  Data& operator<<(const vision::VisionData& vision_data);
-  Data& operator>>(vision::VisionData& vision_data);
+  GlobalData& operator<<(const vision::VisionData& vision_data);
+  GlobalData& operator>>(vision::VisionData& vision_data);
   void editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
       std::function<void(vision::VisionData& vision_data)> vision_data_editor);
 
-  Data& operator<<(const DataFromAi& data_from_ai);
-  Data& operator>>(DataFromAi& data_from_ai);
+  GlobalData& operator<<(const DataFromAi& data_from_ai);
+  GlobalData& operator>>(DataFromAi& data_from_ai);
   void editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
       std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor);
 
-  Data& operator<<(const DataForViewer& data_for_viewer);
-  Data& operator>>(DataForViewer& data_for_viewer);
+  GlobalData& operator<<(const DataForViewer& data_for_viewer);
+  GlobalData& operator>>(DataForViewer& data_for_viewer);
   void editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
       std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor);
 
-  Data& operator<<(const SharedData& shared_data);
-  Data& operator>>(SharedData& shared_data);
+  GlobalData& operator<<(const SharedData& shared_data);
+  GlobalData& operator>>(SharedData& shared_data);
   void editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
       std::function<void(SharedData& shared_data)> shared_data_editor);
+};
+
+/**
+ * This class is used to make transfer store global data accessed from many points.
+ */
+class GlobalDataSingleThread
+{
+public:
+  vision::VisionDataSingleThread vision_data_;
+  DataFromAi data_from_ai_;
+  SharedData shared_data_;
+  DataForViewer data_for_viewer_;
+
+private:
+  GlobalDataSingleThread(ai::Team initial_team_color);
+
+public:
+  static GlobalDataSingleThread singleton_;
+  void setTeam(ai::Team team_color);
+
+  /*  GlobalDataSingleThread& operator<<(const vision::VisionDataSingleThread& vision_data);
+    GlobalDataSingleThread& operator>>(vision::VisionDataSingleThread& vision_data);
+    void editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
+        std::function<void(vision::VisionDataSingleThread& vision_data)> vision_data_editor);
+
+    GlobalDataSingleThread& operator<<(const DataFromAi& data_from_ai);
+    GlobalDataSingleThread& operator>>(DataFromAi& data_from_ai);
+    void editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
+        std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor);
+
+    GlobalDataSingleThread& operator<<(const DataForViewer& data_for_viewer);
+    GlobalDataSingleThread& operator>>(DataForViewer& data_for_viewer);
+    void editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
+        std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor);
+
+    GlobalDataSingleThread& operator<<(const SharedData& shared_data);
+    GlobalDataSingleThread& operator>>(SharedData& shared_data);
+    void editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
+        std::function<void(SharedData& shared_data)> shared_data_editor);
+        */
 };
 
 }  // namespace rhoban_ssl

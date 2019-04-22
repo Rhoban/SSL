@@ -12,7 +12,7 @@ rhoban_ssl::Task::~Task()
 
 rhoban_ssl::ExecutionManager rhoban_ssl::ExecutionManager::execution_manager_singleton_;
 
-rhoban_ssl::ExecutionManager::ExecutionManager()
+rhoban_ssl::ExecutionManager::ExecutionManager() : shutdown_(false)
 {
 }
 
@@ -63,5 +63,13 @@ void rhoban_ssl::ExecutionManager::run(double min_loop_duration)
       // std::cout << d << std::endl;
       std::this_thread::sleep_for(std::chrono::nanoseconds(d));
     }
-  } while (tasks_.size() > 0);
+  } while ((tasks_.size() > 0) && (shutdown_ == false));
+
+  for (auto i = tasks_.begin(); i != tasks_.end(); ++i)
+    delete *i;
+}
+
+void rhoban_ssl::ExecutionManager::shutdown()
+{
+  shutdown_ = true;
 }

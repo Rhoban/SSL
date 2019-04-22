@@ -29,7 +29,7 @@ namespace robot_behavior
 RobotFollower::RobotFollower(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_follow_id_(-1)
-  , team_(vision::Team::Ally)
+  , team_(vision::Ally)
   , follower_(Factory::fixedConsignFollower(ai_data))
 {
 }

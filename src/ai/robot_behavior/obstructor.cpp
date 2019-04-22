@@ -28,7 +28,7 @@ namespace robot_behavior
 Obstructor::Obstructor(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_obstruct_id_(-1)
-  , robot_to_obstruct_team_(vision::Team::Opponent)
+  , robot_to_obstruct_team_(vision::Opponent)
   , follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
@@ -44,7 +44,7 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
   // are all avalaible
 
   // int robot_id = 2;
-  // const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
+  // const Robots_table & robot_table = ai_data.robots.at(Vision::Ally);
   // const ai::Robot & robot = robot_table.at(robot_id);
 
   assert(robot_to_obstruct_id_ != -1);
@@ -84,7 +84,7 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
   }
 
   rhoban_geometry::Point target_position = rhoban_geometry::centerOfConeIncircle(
-      point_to_obstruct_, left_post_position, right_post_position, ai_data_.constants.robot_radius);
+      point_to_obstruct_, left_post_position, right_post_position, ai::Config::robot_radius);
 
   // Vector2d target_position = Vector2d(ball_position()) + ball_goal_vector * (target_radius_from_ball);
 

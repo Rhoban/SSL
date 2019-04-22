@@ -49,7 +49,7 @@ void MurDefKick::update(double time, const ai::Robot& robot, const ai::Ball& bal
   // are all avalaible
 
   // int robot_id = 2;
-  // const Robots_table & robot_table = ai_data.robots.at(Vision::Team::Ally);
+  // const Robots_table & robot_table = ai_data.robots.at(Vision::Ally);
   // const ai::Robot & robot = robot_table.at(robot_id);
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
@@ -76,7 +76,7 @@ void MurDefKick::update(double time, const ai::Robot& robot, const ai::Ball& bal
   double target_rotation = detail::vec2angle(-ball_robot_vector);
   rhoban_geometry::Point target_position;
 
-  double multiple_robot_offset = ai_data_.constants.robot_radius + 0.02;
+  double multiple_robot_offset = ai::Config::robot_radius + 0.02;
 
   if (mur_nb_robot_ == 2)
   {

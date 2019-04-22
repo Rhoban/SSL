@@ -105,7 +105,7 @@ public slots:
 protected:
   std::string teamName;
   rhoban_ssl::AI* ai;
-  rhoban_ssl::Data data;
+  rhoban_ssl::GlobalData data;
   rhoban_ssl::ai::Team team;
   rhoban_ssl::AIVisionClient visionClient;
   rhoban_ssl::AICommander* commander;

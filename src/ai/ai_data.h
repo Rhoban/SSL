@@ -45,12 +45,7 @@ struct RobotPlacement
   RobotPlacement(std::vector<Position> field_robot_position);
 };
 
-typedef enum
-{
-  Yellow,
-  Blue,
-  Unknown
-} Team;
+typedef enum { Yellow, Blue, Unknown } Team;
 
 class Object
 {
@@ -106,57 +101,6 @@ struct Field : vision::Field
   }
 };
 
-struct Constants
-{
-  static constexpr int NB_OF_ROBOTS_BY_TEAM = 16;
-
-  bool is_in_simulation;
-
-  int frame_per_second;
-  double period;
-
-  double robot_radius;
-  double radius_ball;
-  Vector2d waiting_goal_position;
-  int default_goalie_id;
-
-  // PID for translation
-  double p_translation;
-  double i_translation;
-  double d_translation;
-  // PID for orientation
-  double p_orientation;
-  double i_orientation;
-  double d_orientation;
-
-  bool enable_kicking;
-
-  double penalty_rayon;
-  double translation_velocity_limit;
-  double rotation_velocity_limit;
-  double translation_acceleration_limit;
-  double rotation_acceleration_limit;
-
-  double time_limit_between_collision;
-  double security_acceleration_ratio;
-  double obstacle_avoidance_ratio;
-
-  double radius_security_for_collision;
-  double radius_security_for_avoidance;
-
-  double wheel_radius;
-  double wheel_excentricity;
-  double wheel_nb_turns_acceleration_limit;
-
-  double rules_avoidance_distance;
-  double convergence_coefficient;
-  double coefficient_to_increase_avoidance_convergence;
-
-  void load(const std::string& config_path);
-
-  Constants(const std::string& config_path, bool is_in_simulation);
-};
-
 class AiData
 {
 public:
@@ -199,9 +143,10 @@ public:
   void changeFrameForAllObjects(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
   void changeTeamColor(ai::Team team_color);
 
-  Constants constants;
+  // Constants constants;
 
   void update(const vision::VisionData vision_data);
+  // void update(const vision::VisionDataSingleThread vision_data);
 
   // Rturn true is the robot is ready and inside the field
   bool robotIsValid(int robot_id) const;

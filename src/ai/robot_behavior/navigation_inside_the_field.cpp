@@ -35,7 +35,7 @@ namespace robot_behavior
 NavigationInsideTheField::NavigationInsideTheField(ai::AiData& ai_data, double time, double dt)
   : ConsignFollower(ai_data)
   , need_to_avoid_the_ball_(true)
-  , saving_ball_radius_avoidance_(ai_data.constants.robot_radius)
+  , saving_ball_radius_avoidance_(ai::Config::robot_radius)
   , following_position_was_updated_(true)
   , position_follower_(ai_data, time, dt)
   , target_position_(0.0, 0.0)
@@ -66,7 +66,7 @@ void NavigationInsideTheField::update_control(double time, const ai::Robot& robo
   if (ai_data_.force_ball_avoidance)
   {
     this->position_follower_.setRadiusAvoidanceForTheBall(getRobotRadius() + getBallRadius() +
-                                                          ai_data_.constants.rules_avoidance_distance);
+                                                          ai::Config::rules_avoidance_distance);
     this->avoidTheBall(true);
   }
   else

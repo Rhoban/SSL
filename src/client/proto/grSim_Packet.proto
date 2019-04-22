@@ -1,3 +1,6 @@
+syntax = "proto2";
+option cc_enable_arenas = true;
+
 import "grSim_Commands.proto";
 import "grSim_Replacement.proto";
 message grSim_Packet {

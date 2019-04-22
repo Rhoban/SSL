@@ -174,7 +174,7 @@ public:
    * the team of the robot
    * @return a reference on a robot
    */
-  const ai::Robot& getRobot(int robot_number, vision::Team team = vision::Team::Ally) const;
+  const ai::Robot& getRobot(int robot_number, vision::Team team = vision::Ally) const;
   /**
    * @brief returns the robot's radius.
    * @return a radius in meter
@@ -195,7 +195,7 @@ public:
    * @param team the team of the robot (ally or opponent)
    * @return a boolean
    */
-  bool infraRed(int robot_number, vision::Team team = vision::Team::Ally) const;
+  bool infraRed(int robot_number, vision::Team team = vision::Ally) const;
   /**
    * @brief Computes all the robots of a given team at a distance `distance` of the line
    * ( `P1`, `P2` ).
@@ -209,7 +209,7 @@ public:
    * @param p2
    * a point
    * @param team
-   * ( Vision::Team::Opponent or Vision::Team::Ally)
+   * ( Vision::Opponent or Vision::Ally)
    * @param distance (usually the robot radius)
    * @param[out] result
    * a vector of robot's number
@@ -227,13 +227,13 @@ public:
    * @param p2
    * a point
    * @param team
-   * ( Vision::Team::Opponent or Vision::Team::Ally)
+   * ( Vision::Opponent or Vision::Ally)
    * @param distance (usually the robot radius)
    * @return a vector of robot's number
    * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
    */
   std::vector<int> getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                  vision::Team team = vision::Team::Opponent, double distance = 0.4) const;
+                                  vision::Team team = vision::Opponent, double distance = 0.4) const;
   /**
    * @brief same as vector<int> get_robot_in_line() but doesn't
    * consider the robot's team.
@@ -249,7 +249,7 @@ public:
    * @brief returns the robot's number which is closest to the point
    * given in parameter in the team given in parameter.
    * @param team
-   * ( Vision::Team::Opponent or Vision::Team::Ally)
+   * ( Vision::Opponent or Vision::Ally)
    * @return robot's shirt number (-1 if not found)
    * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
    */
@@ -258,7 +258,7 @@ public:
    * @brief returns the robot's shirt number which is closest robot to the ball
    * from the team given in parameter.
    * @param team
-   * ( Vision::Team::Opponent or Vision::Team::Ally)
+   * ( Vision::Opponent or Vision::Ally)
    * @return robot's shirt number(-1 if not found)
    * @see GameInformation::get_robot() to know the difference between robot'id and robot's number).
    */
@@ -291,7 +291,7 @@ public:
    * the team of the robot (opponent by default)
    * @return a distance
    */
-  double getRobotDistanceFromAllyGoalCenter(int robot_number, vision::Team team = vision::Team::Opponent) const;
+  double getRobotDistanceFromAllyGoalCenter(int robot_number, vision::Team team = vision::Opponent) const;
   /**
    * @brief returns the distance between all robots in the team given in parameter and
    * the ally goal center.
@@ -303,7 +303,7 @@ public:
    * [1] = distance of the second robot
    * ...
    */
-  std::vector<double> threat(vision::Team team = vision::Team::Opponent) const;
+  std::vector<double> threat(vision::Team team = vision::Opponent) const;
   /**
    * @brief returns the robot's number of the biggest threat belonging
    * to the team given in parameter.

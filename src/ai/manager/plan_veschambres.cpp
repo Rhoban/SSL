@@ -57,14 +57,14 @@ namespace manager
 PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_state)
   : ManagerWithGameState(ai_data, game_state)
   , game_state_(game_state)
-  , penalty_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , goalie_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , offensive_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , stop_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , halt_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , defensive_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , kick_strats_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-  , kick_strats_indirect_(1 + ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+  , penalty_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , goalie_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , offensive_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , stop_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , halt_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , defensive_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , kick_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , kick_strats_indirect_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
 {
   penalty_strats_[8] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name, PROTECT_BALL };
   penalty_strats_[7] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name, PROTECT_BALL };

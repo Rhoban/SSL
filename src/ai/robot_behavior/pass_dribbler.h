@@ -43,7 +43,7 @@ public:
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   // TODO: portée des variables ?
   void declarePointToPass(rhoban_geometry::Point point);
-  void declareRobotToPass(int robot_id, vision::Team team = vision::Team::Ally);
+  void declareRobotToPass(int robot_id, vision::Team team = vision::Ally);
   void calcKickPower(rhoban_geometry::Point start, rhoban_geometry::Point end);
 
   virtual Control control() const;

@@ -33,10 +33,10 @@ namespace rhoban_ssl
 class AIVisionClient : public VisionClient
 {
 public:
-  AIVisionClient(Data& shared_data_, ai::Team my_team_, bool simulation = false,
+  AIVisionClient(GlobalData& shared_data_, ai::Team my_team_, bool simulation = false,
                  vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
 
-  AIVisionClient(Data& shared_data_, ai::Team my_team_, bool simulation, std::string addr = SSL_VISION_ADDRESS,
+  AIVisionClient(GlobalData& shared_data_, ai::Team my_team_, bool simulation, std::string addr = SSL_VISION_ADDRESS,
                  std::string port = SSL_VISION_PORT, std::string sim_port = SSL_SIMULATION_VISION_PORT,
                  vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
 
@@ -45,7 +45,7 @@ public:
 protected:
   virtual void packetReceived();
 
-  Data& shared_data_;
+  GlobalData& shared_data_;
 
   vision::PartOfTheField part_of_the_field_used_;
 
@@ -73,4 +73,39 @@ private:
                                                           > >& ball_camera_detections_,
                                        vision::PartOfTheField part_of_the_field_used_);
 };
+
+class SslGeometryPacketAnalyzer : public Task
+{
+  bool field_done_;
+  bool camera_done_;
+
+public:
+  SslGeometryPacketAnalyzer();
+  virtual bool runTask() override;
+};
+
+class DetectionPacketAnalyzer : public Task
+{
+public:
+  virtual bool runTask() override;
+};
+
+class UpdateRobotInformation : public Task
+{
+  vision::PartOfTheField part_of_the_field_used_;
+
+public:
+  UpdateRobotInformation(vision::PartOfTheField part_of_the_field_used);
+  virtual bool runTask() override;
+};
+
+class UpdateBallInformation : public Task
+{
+  vision::PartOfTheField part_of_the_field_used_;
+
+public:
+  UpdateBallInformation(vision::PartOfTheField part_of_the_field_used);
+  virtual bool runTask() override;
+};
+
 }  // namespace rhoban_ssl

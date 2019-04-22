@@ -1,3 +1,6 @@
+syntax = "proto2";
+option cc_enable_arenas = true;
+
 message grSim_Robot_Command {
 required uint32 id = 1;
 required float kickspeedx = 2;

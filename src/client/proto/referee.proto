@@ -1,5 +1,6 @@
 syntax = "proto2";
 
+option cc_enable_arenas = true;
 // Each UDP packet contains one of these messages.
 message SSL_Referee {
 	// The UNIX timestamp when the packet was sent, in microseconds.

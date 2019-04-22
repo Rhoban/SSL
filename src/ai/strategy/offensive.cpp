@@ -75,7 +75,7 @@ void Offensive::update(double time)
 void Offensive::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Team::Ally) == playerId(0))
+  if (GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Ally) == playerId(0))
   {
     is_closest_ = true;
   }

@@ -1,4 +1,5 @@
 syntax = "proto2";
+option cc_enable_arenas = true;
 import "messages_robocup_ssl_detection.proto";
 import "messages_robocup_ssl_geometry_legacy.proto";
 

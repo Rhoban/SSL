@@ -57,6 +57,9 @@ target_link_libraries (referee ssl_client)
 add_executable (vision vision.cpp ${SOURCES})
 target_link_libraries (vision ssl_client)
 
+add_executable (vision_st vision_st.cpp ${SOURCES})
+target_link_libraries (vision_st ssl_client)
+
 add_executable (sim sim.cpp ${SOURCES})
 target_link_libraries (sim ssl_client)
 

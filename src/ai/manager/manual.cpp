@@ -105,7 +105,7 @@ Manual::Manual(ai::AiData& ai_data)
                                            [&](double time, double dt) {
                                              robot_behavior::PassiveDefensor* passive_defensor =
                                                  new robot_behavior::PassiveDefensor(ai_data);
-                                             passive_defensor->set_robot_to_obstacle(0, vision::Team::Ally);
+                                             passive_defensor->set_robot_to_obstacle(0, vision::Ally);
                                              passive_defensor->set_barycenter(0.5);
                                              return std::shared_ptr<robot_behavior::RobotBehavior>(passive_defensor);
                                            },
@@ -581,7 +581,7 @@ Manual::Manual(ai::AiData& ai_data)
                                    [&](double time, double dt) {
                                      robot_behavior::Pass* p = new robot_behavior::Pass(ai_data);
                                      // p->declare_point_to_pass(ally_goal_center());
-                                     p->declareRobotToPass(2, vision::Team::Ally);
+                                     p->declareRobotToPass(2, vision::Ally);
                                      return std::shared_ptr<robot_behavior::RobotBehavior>(p);
                                    },
                                    false)));

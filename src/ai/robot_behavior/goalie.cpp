@@ -39,9 +39,8 @@ rhoban_geometry::Point Goalie::calculateGoalPosition(const rhoban_geometry::Poin
 Goalie::Goalie(ai::AiData& ai_data)
   : Goalie::Goalie(ai_data, Vector2d(-ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0),
                    Vector2d(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0),
-                   rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, 0.0) +
-                       ai_data.constants.waiting_goal_position,
-                   ai_data.field.penaltyAreaDepth, ai_data.constants.robot_radius, ai_data.time, ai_data.dt)
+                   rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, 0.0) + ai::Config::waiting_goal_position,
+                   ai_data.field.penaltyAreaDepth, ai::Config::robot_radius, ai_data.time, ai_data.dt)
 {
 }
 
@@ -85,7 +84,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   rhoban_geometry::Point right_post_position =
       rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, -ai_data_.field.goalWidth / 2.0);
 
-  double offset_goal = ai_data_.constants.robot_radius * 1.5;
+  double offset_goal = ai::Config::robot_radius * 1.5;
   double hyst = 0.10;
 
   rhoban_geometry::Point target_position;

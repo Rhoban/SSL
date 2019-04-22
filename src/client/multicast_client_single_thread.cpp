@@ -164,16 +164,16 @@ bool MulticastClientSingleThread::runTask()
   if (running == false)
     return false;
 
-  for (int i = 0; i < nfds_; ++i)
+  for (unsigned int i = 0; i < nfds_; ++i)
     sockets_fds_[i].revents = 0;
 
   poll(sockets_fds_, nfds_, 0);
 
-  for (int i = 0; i < nfds_; ++i)
+  for (unsigned int i = 0; i < nfds_; ++i)
   {
     if (sockets_fds_[i].revents & POLLIN)
     {
-      char buffer[65536];
+      static char buffer[65536];  // can be static as we are in single thread paradigm
       ssize_t len = recv(sockets_fds_[i].fd, buffer, sizeof(buffer), 0);
 
       if (len > 0)
@@ -181,7 +181,7 @@ bool MulticastClientSingleThread::runTask()
         if (process(buffer, len))
         {
           packets++;
-          packetReceived();
+          // packetReceived();
           receivedData = true;
           lastData = TimeStamp::now();
         }
@@ -202,10 +202,10 @@ bool MulticastClientSingleThread::hasData() const
   return false;
 }
 
-void MulticastClientSingleThread::packetReceived()
-{
-  // Default behaviors does nothing
-}
+// void MulticastClientSingleThread::packetReceived()
+//{
+// Default behaviors does nothing
+//}
 
 unsigned int MulticastClientSingleThread::getPackets()
 {

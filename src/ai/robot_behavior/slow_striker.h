@@ -44,7 +44,7 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   void declarePointToStrike(rhoban_geometry::Point point);
-  void declareRobotToPass(int id, vision::Team team = vision::Team::Ally);
+  void declareRobotToPass(int id, vision::Team team = vision::Ally);
   virtual ~SlowStriker();
 };
 

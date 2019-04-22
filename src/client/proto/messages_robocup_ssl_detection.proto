@@ -1,5 +1,7 @@
 syntax = "proto2";
 
+option cc_enable_arenas = true;
+
 message SSL_DetectionBall {
   required float  confidence = 1;
   optional uint32 area       = 2;

@@ -28,7 +28,7 @@ namespace robot_behavior
 SlowStriker::SlowStriker(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
   , robot_to_pass_id_(-1)
-  , robot_to_pass_team_(vision::Team::Ally)
+  , robot_to_pass_team_(vision::Ally)
   , follower_(Factory::fixedConsignFollower(ai_data))
 {
   tempo_ = 0.0;

@@ -41,7 +41,7 @@ public:
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
-  void declareRobotToObstruct(int robot_id, vision::Team team = vision::Team::Opponent);
+  void declareRobotToObstruct(int robot_id, vision::Team team = vision::Opponent);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual ~Obstructor();

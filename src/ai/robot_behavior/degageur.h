@@ -41,7 +41,7 @@ public:
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   void declarePointToPass(rhoban_geometry::Point point);
-  void declareRobotToPass(int robot_id, vision::Team team = vision::Team::Ally);
+  void declareRobotToPass(int robot_id, vision::Team team = vision::Ally);
 
   virtual Control control() const;
 

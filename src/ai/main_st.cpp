@@ -25,7 +25,7 @@
 #include <vision/ai_vision_client.h>
 #include <com/ai_commander_real.h>
 #include <com/ai_commander_simulation.h>
-#include "ai.h"
+#include "ai_st.h"
 #include "data.h"
 #include <core/print_collection.h>
 #include <manager/factory.h>
@@ -36,14 +36,13 @@
 #define CONFIG_PATH "./src/ai/config.json"
 
 using namespace rhoban_ssl;
-AI* ai_ = NULL;
+// AI* ai_ = NULL;
+// static bool running = true;
 
 void stop(int s)
 {
-  if (ai_ != NULL)
-  {
-    ai_->stop();
-  }
+  // running = false;
+  rhoban_ssl::ExecutionManager::getManager().shutdown();
 }
 
 int main(int argc, char** argv)
@@ -130,19 +129,17 @@ int main(int argc, char** argv)
 
   cmd.parse(argc, argv);
 
-  const std::list<std::string>& avalaible_managers = manager::Factory::availableManagers();
-  if (std::find(avalaible_managers.begin(), avalaible_managers.end(), manager_name.getValue()) ==
-      avalaible_managers.end())
+  GlobalDataSingleThread::singleton_.setTeam(yellow.getValue() ? ai::Yellow : ai::Blue);
+
+  std::string theport;
+  if (simulation.getValue())
   {
-    std::cerr << "The manager '" << manager_name.getValue()
-              << "' doesn't exist. Valid manager names are : " << avalaible_managers << "." << std::endl;
-    return 1;
-  };
-
-  DEBUG("The name of the team have been set to : " << team_name.getValue());
-  DEBUG("The manager have been set to : " << manager_name.getValue());
-
-  GlobalData data(yellow.getValue() ? ai::Yellow : ai::Blue);
+    theport = sim_port.getValue();
+  }
+  else
+  {
+    theport = port.getValue();
+  }
 
   vision::PartOfTheField part_of_the_field_used;
   if (zone_name.getValue() == "all")
@@ -163,6 +160,67 @@ int main(int argc, char** argv)
     assert(false);
   }
 
+  ai::Config::load(config_path.getValue());
+
+  if (yellow.getValue())
+    ai::Config::we_are_blue = false;
+
+  ai::Config::is_in_simulation = simulation.getValue();
+
+  rhoban_ssl::ExecutionManager::getManager().addTask(
+      new rhoban_ssl::VisionClientSingleThread(addr.getValue(), theport));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::SslGeometryPacketAnalyzer());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::DetectionPacketAnalyzer());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateRobotInformation(part_of_the_field_used));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ProtoBufReset(10));
+
+  AICommander* commander;
+  if (simulation.getValue())
+  {
+    commander = new AICommanderSimulation(yellow.getValue());
+  }
+  else
+  {
+    // XXX: To test!!
+    commander = new AICommanderReal(yellow.getValue());
+  }
+
+  if (em.getValue())
+  {
+    commander->stopAll();
+    commander->flush();
+  }
+  else
+  {
+    AiSt* ai_ = nullptr;
+    ai_ = new AiSt(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, data,
+                   commander, config_path.getValue(), simulation.getValue());
+    ai_->run();
+    delete ai_;
+  }
+  delete commander;
+
+  rhoban_ssl::ExecutionManager::getManager().run(0.01);
+  ::google::protobuf::ShutdownProtobufLibrary();
+  return 0;
+  /*
+  const std::list<std::string>& avalaible_managers = manager::Factory::availableManagers();
+  if (std::find(avalaible_managers.begin(), avalaible_managers.end(), manager_name.getValue()) ==
+      avalaible_managers.end())
+  {
+    std::cerr << "The manager '" << manager_name.getValue()
+              << "' doesn't exist. Valid manager names are : " << avalaible_managers << "." << std::endl;
+    return 1;
+  };
+
+  DEBUG("The name of the team have been set to : " << team_name.getValue());
+  DEBUG("The manager have been set to : " << manager_name.getValue());
+
+
+
+
   // // Instantiationg the vision
   // AIVisionClient vision(
   //   data,
@@ -170,15 +228,6 @@ int main(int argc, char** argv)
   //   simulation.getValue(), part_of_the_field_used
   //   );
 
-  std::string theport;
-  if (simulation.getValue())
-  {
-    theport = sim_port.getValue();
-  }
-  else
-  {
-    theport = port.getValue();
-  }
 
   // Instantiationg the vision
   AIVisionClient vision(data, yellow.getValue() ? ai::Yellow : ai::Blue, simulation.getValue(), addr.getValue(),
@@ -209,4 +258,5 @@ int main(int argc, char** argv)
     delete ai_;
   }
   delete commander;
+  */
 }

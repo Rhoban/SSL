@@ -39,7 +39,7 @@ private:
 
 public:
   bool is_in_simulation;
-  AI(std::string manager_name, std::string team_name, ai::Team default_team, Data& data, AICommander* commander,
+  AI(std::string manager_name, std::string team_name, ai::Team default_team, GlobalData& data, AICommander* commander,
      const std::string& config_path, bool is_in_simulation);
 
   void run();
@@ -73,7 +73,7 @@ protected:
 
   SharedData shared_data_;
 
-  Data& data_;
+  GlobalData& data_;
   GameState game_state_;
   std::string manager_name_;
   std::shared_ptr<manager::Manager> strategy_manager_;
