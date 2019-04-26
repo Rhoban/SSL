@@ -59,13 +59,7 @@ namespace manager
 {
 Manual::Manual(ai::AiData& ai_data)
   : Manager(ai_data)
-  , team_color_(ai::Team::Unknown)
-  , goal_to_positive_axis_(true)
-  , ally_goalie_id_(0)
-  , opponent_goalie_id_(0)
 {
-  changeTeamAndPointOfView(ai_data.team_color, goal_to_positive_axis_);
-
   registerStrategy("Goalie", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                  ai_data,
                                  [&](double time, double dt) {
@@ -627,23 +621,6 @@ Manual::Manual(ai::AiData& ai_data)
                                                             // strategy_was_assigned = false;
 }
 
-void Manual::assignPointOfViewAndGoalie()
-{
-  // DEBUG(team_color);
-  // DEBUG(ai::Team::Yellow);
-  changeTeamAndPointOfView(team_color_, goal_to_positive_axis_);
-}
-
-void Manual::setTeamColor(ai::Team team_color)
-{
-  this->team_color_ = team_color;
-}
-
-void Manual::defineGoalToPositiveAxis(bool value)
-{
-  this->goal_to_positive_axis_ = value;
-}
-
 void Manual::update(double time)
 {
   // if( not( get_strategy_<Strategy::Tare_and_synchronize>().is_tared_and_synchronized() ) ){
@@ -651,7 +628,6 @@ void Manual::update(double time)
   // }
   // update_strategies(time);
   updateCurrentStrategies(time);
-  assignPointOfViewAndGoalie();
   // if( ! strategy_was_assigned ){
   //    assign_strategy(
   //        "Goalie",

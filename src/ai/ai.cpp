@@ -444,16 +444,9 @@ void AI::run()
 
     game_state_.update(current_time_);
 
-    if (manager_name_ != manager::names::MANUAL)
-    {  // HACK TOT REMOVEE !
-      strategy_manager_->changeTeamAndPointOfView(game_state_.getTeamColor(strategy_manager_->getTeamName()),
+    strategy_manager_->changeTeamAndPointOfView(game_state_.getTeamColor(strategy_manager_->getTeamName()),
                                                   game_state_.blueHaveItsGoalOnPositiveXAxis());
-    }
-    else
-    {
-      dynamic_cast<manager::Manual*>(strategy_manager_.get())
-          ->defineGoalToPositiveAxis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
-    }
+
     strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
 
     strategy_manager_->removeInvalidRobots();

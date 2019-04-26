@@ -27,7 +27,6 @@ namespace manager
 {
 class Tutorial : public Manager
 {
-private:
 public:
   Tutorial(ai::AiData& ai_data);
 
