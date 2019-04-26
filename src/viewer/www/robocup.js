@@ -14,7 +14,7 @@ var field = {
 };
 
 // Blue on positive ?
-var bluePositive = true;
+var bluePositive = false;
 var yellowName = 'yellow';
 var blueName = 'blue';
 
@@ -1136,17 +1136,9 @@ function Manager(viewer)
             $('.robot-strategies').html(html);
 
             // Updating strategies
-            var strategiesAvailable = JSON.parse(api.getStrategies());
-            var strategiesOptions = '<option value="">-</option>';
-
-            for (var n in strategiesAvailable) {
-                var strategy = strategiesAvailable[n];
-                strategiesOptions += '<option value="'+strategy+'">'+strategy+'</option>';
-            }
-
-
+            this.updateStrategies();
             $('#managers').html(options);
-            $('.strategies-selector').html(strategiesOptions);
+            
             var self = this;
 
             $('.clear-strategy').click(function() {
@@ -1163,16 +1155,9 @@ function Manager(viewer)
 
             $('.control-play').click(function() {
                 api.setManager($('#managers').val());
-                if(self.change_manager) {
-                    self.updateStrategies();
-                    self.change_manager = false;
-                }
+                self.updateStrategies();
                 api.managerPlay();
             });
-
-            $('#managers').change(function (){
-                self.change_manager = true;
-            })
             $('.control-stop').click(function() {
                 api.managerStop();
                 $('#managers').val('Manual');
