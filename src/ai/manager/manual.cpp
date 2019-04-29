@@ -50,6 +50,7 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/tutorials/beginner/go_center.h>
 #include <robot_behavior/tutorials/medium/striker.h>
 #include <robot_behavior/tutorials/medium/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
@@ -376,6 +377,15 @@ Manual::Manual(ai::AiData& ai_data)
                                               robot_behavior::beginner::Goalie* goalie =
                                                   new robot_behavior::beginner::Goalie(ai_data);
                                               return std::shared_ptr<robot_behavior::RobotBehavior>(goalie);
+                                            },
+                                            false  // we don't want to define a goal here !
+					    )));
+  registerStrategy("Beginner - GoCenter", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                            ai_data,
+                                            [&](double time, double dt) {
+                                              robot_behavior::beginner::GoCenter* beginner_go_center =
+                                                  new robot_behavior::beginner::GoCenter(ai_data);
+                                              return std::shared_ptr<robot_behavior::RobotBehavior>(beginner_go_center);
                                             },
                                             false  // we don't want to define a goal here !
                                             )));
