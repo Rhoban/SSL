@@ -56,9 +56,6 @@ Control Lob::control() const
   double dist = robot_ball_vector.norm();
   Control ctrl = follower_->control();
 
-  // dist_minimal = robot_radius + radius_ball + safety margin = 0.09 + 0.02 + 0.1 = 0.21
-  double dist_minimal_to_lob_ = 0.21;
-
   if (dist < dist_minimal_to_lob_)
   {
     ctrl.chipKick = true;
