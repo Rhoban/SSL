@@ -31,6 +31,8 @@ namespace beginner
 /**
  * @class AnnotationsBallPosition
  * @brief Tutorial to show how to annotate the position of the ball in the viewer.
+ *
+ * Set an annotations in the ball position.
  */
 class AnnotationsBallPosition : public RobotBehavior
 {
@@ -46,12 +48,12 @@ public:
   AnnotationsBallPosition(ai::AiData& ai_data);
 
   /**
-   * @brief Set an annotations in the ball position.
-   *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
+   *
+   * @see RobotBehavior::update
    */
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
