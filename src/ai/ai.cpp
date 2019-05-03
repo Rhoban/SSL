@@ -290,16 +290,16 @@ void AI::initRobotBehaviors()
   }
 }
 
-AI::AI(std::string manager_name, std::string team_name, ai::Team default_team, GlobalData& data, AICommander* commander,
-       const std::string& config_path, bool is_in_simulation)
+AI::AI(std::string manager_name, std::string team_name, ai::Team default_team,  // GlobalData& data,
+       AICommander* commander, const std::string& config_path, bool is_in_simulation)
   : team_name_(team_name)
   , default_team_(default_team)
-  , is_in_simulation(is_in_simulation)
+  //, is_in_simulation(is_in_simulation)
   , running_(true)
   , ai_data_(config_path, is_in_simulation, default_team)
   , commander_(commander)
   , current_dt_(ai::Config::period)
-  , data_(data)
+  //, data_(data)
   , game_state_(ai_data_)
 {
   initRobotBehaviors();
@@ -363,7 +363,8 @@ void AI::updateRobots()
   auto team = vision::Ally;
   for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
   {
-    SharedData::FinalControl& final_control = shared_data_.final_control_for_robots[robot_id];
+    SharedData::FinalControl& final_control =
+        GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id];
 
     ai::Robot& robot = ai_data_.robots[team][robot_id];
     robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
@@ -384,8 +385,11 @@ void AI::updateRobots()
   }
 }
 
-void AI::run()
+bool AI::runTask()
 {
+  if (running_ == false)
+    return false;
+
   double period = ai::Config::period;
   auto lastTick = rhoban_utils::TimeStamp::now();
 
@@ -393,94 +397,98 @@ void AI::run()
   double warmup_period = 2 * period * rhoban_ssl::vision::history_size;
   double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
 
-  while (running_)
+  auto now = rhoban_utils::TimeStamp::now();
+  double elapsed = diffSec(lastTick, now);
+  double toSleep = period - elapsed;
+  if (toSleep > 0)
   {
-    auto now = rhoban_utils::TimeStamp::now();
-    double elapsed = diffSec(lastTick, now);
-    double toSleep = period - elapsed;
-    if (toSleep > 0)
-    {
-      usleep(round(toSleep * 1000000));
-    }
-    else
-    {
-      DEBUG("LAG");
-    }
-    lastTick = rhoban_utils::TimeStamp::now();
-    current_dt_ = current_time_;
-    current_time_ = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
-    current_dt_ = current_time_ - current_dt_;
+    // DEBUG("NO LAG");
+    usleep(round(toSleep * 1000000));
+  }
+  else
+  {
+    DEBUG("LAG");
+  }
+  lastTick = rhoban_utils::TimeStamp::now();
+  current_dt_ = current_time_;
+  current_time_ = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
+  current_dt_ = current_time_ - current_dt_;
 
-    ai_data_.time = current_time_, ai_data_.dt = current_dt_;
+  ai_data_.time = current_time_, ai_data_.dt = current_dt_;
 
 #ifndef NDEBUG
-    updatePeriodicDebug(current_time_, 10.0);
+  updatePeriodicDebug(current_time_, 10.0);
 #endif
 
-    data_ >> visionData_;
+  // data_ >> visionData_;
 
-    // DEBUG( visionData );
+  // DEBUG( visionData );
 
-    // DEBUG("");
-    visionData_.checkAssert(current_time_);
-    // DEBUG("");
+  // DEBUG("");
+  // visionData_.checkAssert(current_time_);
+  // DEBUG("");
 
-    ai_data_.update(visionData_);
-    if (not(is_in_simulation))
-    {
-      updateElectronicInformations();
-    }
+  ai_data_.update(GlobalDataSingleThread::singleton_.vision_data_);
+  if (not(ai::Config::is_in_simulation))
+  {
+    updateElectronicInformations();
+  }
 // print_electronic_info();
 
 #ifndef NDEBUG
 // check_time_is_coherent();
 #endif
 
-    // We wait some time to update completly ai_data structure.
-    if (warmup_start + warmup_period > current_time_)
-    {
-      continue;
-    }
+  // We wait some time to update completly ai_data structure.
 
-    game_state_.update(current_time_);
+  // DOESNOT WORK WITH ExecutionManager
+  // if (warmup_start + warmup_period > current_time_)
+  //{
+  // return true;
+  //}
 
-    if (manager_name_ != manager::names::MANUAL)
-    {  // HACK TOT REMOVEE !
-      strategy_manager_->changeTeamAndPointOfView(game_state_.getTeamColor(strategy_manager_->getTeamName()),
-                                                  game_state_.blueHaveItsGoalOnPositiveXAxis());
-    }
-    else
-    {
-      dynamic_cast<manager::Manual*>(strategy_manager_.get())
-          ->defineGoalToPositiveAxis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
-    }
-    strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
+  game_state_.update(current_time_);
 
-    strategy_manager_->removeInvalidRobots();
-
-    strategy_manager_->update(current_time_);
-    strategy_manager_->assignBehaviorToRobots(robot_behaviors_, current_time_, current_dt_);
-    shareData();
-    // ai_data.compute_table_of_collision_times();
-    // if( ai_data.table_of_collision_times.size() != 0 ){
-    //   DEBUG( ai_data.table_of_collision_times );
-    //}
-
-    data_ >> shared_data_;
-
-    updateRobots();
-
-    data_ << shared_data_;
-
-    data_.editDataForViewer([this](DataForViewer& data_for_viewer) {
-      data_for_viewer.annotations.clear();
-      this->getAnnotations(data_for_viewer.annotations);
-    });
-
-    // XXX: Flushing takes some time in real mode, and should be done in parallel
-    // along with the computing of the AI
-    commander_->flush();
+  if (manager_name_ != manager::names::MANUAL)
+  {  // HACK TOT REMOVEE !
+    strategy_manager_->changeTeamAndPointOfView(game_state_.getTeamColor(strategy_manager_->getTeamName()),
+                                                game_state_.blueHaveItsGoalOnPositiveXAxis());
   }
+  else
+  {
+    dynamic_cast<manager::Manual*>(strategy_manager_.get())
+        ->defineGoalToPositiveAxis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
+  }
+  strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
+
+  strategy_manager_->removeInvalidRobots();
+
+  strategy_manager_->update(current_time_);
+  strategy_manager_->assignBehaviorToRobots(robot_behaviors_, current_time_, current_dt_);
+  // shareData();
+  // ai_data.compute_table_of_collision_times();
+  // if( ai_data.table_of_collision_times.size() != 0 ){
+  //   DEBUG( ai_data.table_of_collision_times );
+  //}
+
+  // data_ >> shared_data_;
+
+  updateRobots();
+
+  // data_ << shared_data_;
+
+  /*
+    data_.editDataForViewer([this](DataForViewer& data_for_viewer) {
+    data_for_viewer.annotations.clear();
+    this->getAnnotations(data_for_viewer.annotations);
+  });
+  */
+  GlobalDataSingleThread::singleton_.data_for_viewer_.annotations.clear();
+  this->getAnnotations(GlobalDataSingleThread::singleton_.data_for_viewer_.annotations);
+  // XXX: Flushing takes some time in real mode, and should be done in parallel
+  // along with the computing of the AI
+  commander_->flush();
+  return true;
 }
 
 void AI::stop()
@@ -488,12 +496,14 @@ void AI::stop()
   running_ = false;
 }
 
+/*
 void AI::shareData()
 {
   DataFromAi data_from_ai;
   data_from_ai.team_color = ai_data_.team_color;
   data_ << data_from_ai;
 }
+*/
 
 GameState& AI::getGameState()
 {

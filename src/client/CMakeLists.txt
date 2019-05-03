@@ -37,6 +37,7 @@ set (SOURCES
     execution_manager.cpp
     MulticastClient.cpp
     RefereeClient.cpp
+    referee_client_single_thread.cpp
     VisionClient.cpp
     SimClient.cpp
     Kinematic.cpp
@@ -53,6 +54,9 @@ target_include_directories(ssl_client PUBLIC ${CMAKE_SOURCE_DIR})
 
 add_executable (referee referee.cpp ${SOURCES})
 target_link_libraries (referee ssl_client)
+
+add_executable (referee_st referee_st.cpp ${SOURCES})
+target_link_libraries (referee_st ssl_client)
 
 add_executable (vision vision.cpp ${SOURCES})
 target_link_libraries (vision ssl_client)

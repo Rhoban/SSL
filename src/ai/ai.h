@@ -31,18 +31,18 @@
 
 namespace rhoban_ssl
 {
-class AI
+class AI : public Task
 {
 private:
   std::string team_name_;
   ai::Team default_team_;
 
 public:
-  bool is_in_simulation;
-  AI(std::string manager_name, std::string team_name, ai::Team default_team, GlobalData& data, AICommander* commander,
+  // bool is_in_simulation;
+  AI(std::string manager_name, std::string team_name, ai::Team default_team, AICommander* commander,
      const std::string& config_path, bool is_in_simulation);
 
-  void run();
+  bool runTask() override;
   void stop();
 
   std::vector<std::string> getAvailableManagers();
@@ -57,7 +57,7 @@ public:
 protected:
   bool running_;
 
-  vision::VisionData visionData_;
+  // vision::VisionData visionData_;
   ai::AiData ai_data_;
 
   bool enable_kicking_;
@@ -71,9 +71,8 @@ protected:
   double current_time_;
   double current_dt_;
 
-  SharedData shared_data_;
+  // SharedData shared_data_;
 
-  GlobalData& data_;
   GameState game_state_;
   std::string manager_name_;
   std::shared_ptr<manager::Manager> strategy_manager_;
@@ -89,7 +88,7 @@ protected:
   void limitsVelocity(Control& ctrl) const;
   void checkTimeIsCoherent() const;
 
-  void shareData();
+  // void shareData();
   void preventCollision(int robot_id, Control& ctrl);
   rhoban_ssl::annotations::Annotations getRobotBehaviorAnnotations() const;
 

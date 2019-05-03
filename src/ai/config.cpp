@@ -8,6 +8,7 @@ namespace rhoban_ssl
 {
 namespace ai
 {
+bool Config::enable_movement_with_integration = true;
 bool Config::we_are_blue = true;
 bool Config::is_in_simulation = true;
 

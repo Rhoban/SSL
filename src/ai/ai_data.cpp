@@ -89,21 +89,21 @@ bool Object::isPresentInVision() const
   return vision_data.isOk();
 }
 
-void AiData::update(const vision::VisionData vision_data)
+void AiData::update(const vision::VisionDataSingleThread& vision_data)
 {
-  if (vision_data.field.present)
+  if (vision_data.field_.present)
   {
-    static_cast<vision::Field&>(field) = vision_data.field;
+    static_cast<vision::Field&>(field) = vision_data.field_;
   };
 
   for (auto team : { vision::Ally, vision::Opponent })
   {
     for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
     {
-      robots[team][k].setVisionData(vision_data.robots.at(team).at(k));
+      robots[team][k].setVisionData(vision_data.robots_[team][k]);
     }
   }
-  ball.setVisionData(vision_data.ball);
+  ball.setVisionData(vision_data.ball_);
   computeTableOfCollisionTimes();
 }
 
@@ -152,7 +152,6 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team t
   }
   ball.setMovement(physic::Factory::ballMovement(*this));
 }
-
 
 bool AiData::robotIsInsideTheField(int robot_id) const
 {

@@ -33,7 +33,7 @@ Movement* Factory::movement(ai::AiData& ai_data)
 {
   Movement* movement = nullptr;
 
-  if (ai_data.constants.enable_movement_with_integration)
+  if (ai::Config::enable_movement_with_integration)
   {
     movement = new MovementPredictedByIntegration();
   }

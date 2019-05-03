@@ -5,8 +5,12 @@
 #include <thread>
 #include <rhoban_utils/timing/time_stamp.h>
 #include <poll.h>
+#include <sys/socket.h>
 
 #include "execution_manager.h"
+
+#define VLEN 100
+#define BUFSIZE 1024
 
 namespace rhoban_ssl
 {
@@ -16,6 +20,10 @@ namespace rhoban_ssl
  */
 class MulticastClientSingleThread : public virtual rhoban_ssl::Task
 {
+  struct mmsghdr msgs[VLEN];
+  struct iovec iovecs[VLEN];
+  char bufs[VLEN][BUFSIZE];
+
 public:
   struct Interface
   {
@@ -41,7 +49,7 @@ public:
    * @param  len     Number of bytes in the buffer
    * @return         Returns true if the contents is a valid packet
    */
-  virtual bool process(char* buffer, size_t len) = 0;
+  virtual bool process(char* buffer_, size_t len) = 0;
 
   /**
    * Is there valid received packet ?

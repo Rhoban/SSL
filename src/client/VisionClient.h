@@ -39,13 +39,13 @@ public:
   void reset();
 };
 
-class ProtoBufReset : public Task
+class VisionProtoBufReset : public Task
 {
   int counter_;
   int freq_;
 
 public:
-  ProtoBufReset(int freq = 100);
+  VisionProtoBufReset(int freq = 100);
   virtual bool runTask() override;
 };
 
@@ -53,6 +53,6 @@ class VisionClientSingleThread : public MulticastClientSingleThread
 {
 public:
   VisionClientSingleThread(std::string addr, std::string port);
-  virtual bool process(char* buffer, size_t len) override;
+  virtual bool process(char* buffer_, size_t len) override;
 };
 }  // namespace rhoban_ssl

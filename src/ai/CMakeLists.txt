@@ -20,6 +20,7 @@ include_directories(${catkin_INCLUDE_DIRS} .)
 set (SOURCES
     data.cpp
     config.cpp
+    viewer.cpp
     game_informations.cpp
     vision/ai_vision_client.cpp
     vision/vision_data.cpp
@@ -141,7 +142,7 @@ set (SOURCES
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
-set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES})
+set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} zmq)
 
 add_library (ssl_ai ${SOURCES})
 target_link_libraries(ssl_ai ${ALL_LIBS})

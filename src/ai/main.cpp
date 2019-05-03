@@ -203,9 +203,10 @@ int main(int argc, char** argv)
   }
   else
   {
-    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, data,
-                 commander, config_path.getValue(), simulation.getValue());
-    ai_->run();
+    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, commander,
+                 config_path.getValue(), simulation.getValue());
+    while (ai_->runTask())
+      ;
     delete ai_;
   }
   delete commander;

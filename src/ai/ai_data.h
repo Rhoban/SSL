@@ -101,7 +101,6 @@ struct Field : vision::Field
   }
 };
 
-
 class AiData
 {
 public:
@@ -146,7 +145,7 @@ public:
 
   // Constants constants;
 
-  void update(const vision::VisionData vision_data);
+  void update(const vision::VisionDataSingleThread& vision_data);
   // void update(const vision::VisionDataSingleThread vision_data);
 
   // Rturn true is the robot is ready and inside the field

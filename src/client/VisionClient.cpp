@@ -91,7 +91,7 @@ struct BlocksSet
 
 static BlocksSet free_blocks;
 
-void* arena_allocator(size_t s)
+static void* arena_allocator(size_t s)
 {
   if (free_blocks.blocks.size() == 0)
     return new char[PROTOBUF_ALLOC_BLOCK];
@@ -100,7 +100,7 @@ void* arena_allocator(size_t s)
   return p;
 }
 
-void arena_deallocator(void* p, size_t)
+static void arena_deallocator(void* p, size_t)
 {
   if (free_blocks.deleted)
     delete[] static_cast<char*>(p);
@@ -141,11 +141,11 @@ bool VisionClientSingleThread::process(char* buffer, size_t len)
   return false;
 }
 
-ProtoBufReset::ProtoBufReset(int freq) : counter_(0), freq_(freq)
+VisionProtoBufReset::VisionProtoBufReset(int freq) : counter_(0), freq_(freq)
 {
 }
 
-bool ProtoBufReset::runTask()
+bool VisionProtoBufReset::runTask()
 {
   counter_ += 1;
   if (counter_ >= freq_)

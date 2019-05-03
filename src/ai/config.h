@@ -12,6 +12,8 @@ struct Config
   static constexpr unsigned int NB_CAMERAS = 4;
   static constexpr unsigned int MAX_BALLS_DETECTED = 4;
 
+  static bool enable_movement_with_integration;
+
   static bool we_are_blue;
 
   static bool is_in_simulation;

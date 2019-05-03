@@ -74,34 +74,25 @@ GameState::GameState(ai::AiData& ai_data)
   , number_of_blue_goals_(0)
 {
   // STATES
-  machine_state_.addState(state_name::stop,
-                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            // DEBUG(state_name::stop);
-                          });
-  machine_state_.addState(state_name::running,
-                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            // DEBUG(state_name::running);
-                          });
-  machine_state_.addState(state_name::halt,
-                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            // DEBUG(state_name::halt);
-                          });
+  machine_state_.addState(state_name::stop, [this](const GameStateData& data, unsigned int run_number,
+                                                   unsigned int atomic_run_number) { DEBUG(state_name::stop); });
+  machine_state_.addState(state_name::running, [this](const GameStateData& data, unsigned int run_number,
+                                                      unsigned int atomic_run_number) { DEBUG(state_name::running); });
+  machine_state_.addState(state_name::halt, [this](const GameStateData& data, unsigned int run_number,
+                                                   unsigned int atomic_run_number) {  // DEBUG(state_name::halt);
+  });
   machine_state_.addState(state_name::free_kick,
                           [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            // DEBUG(state_name::free_kick);
+                            DEBUG(state_name::free_kick);
                           });
-  machine_state_.addState(state_name::kickoff,
-                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            // DEBUG(state_name::kickoff);
-                          });
+  machine_state_.addState(state_name::kickoff, [this](const GameStateData& data, unsigned int run_number,
+                                                      unsigned int atomic_run_number) { DEBUG(state_name::kickoff); });
   machine_state_.addState(state_name::prepare_kickoff,
                           [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            // DEBUG(state_name::prepare_kickoff);
+                            DEBUG(state_name::prepare_kickoff);
                           });
-  machine_state_.addState(state_name::penalty,
-                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            // DEBUG(state_name::penalty);
-                          });
+  machine_state_.addState(state_name::penalty, [this](const GameStateData& data, unsigned int run_number,
+                                                      unsigned int atomic_run_number) { DEBUG(state_name::penalty); });
   machine_state_.addInitState(state_name::halt);
 
   // EDGES
@@ -226,7 +217,7 @@ GameState::GameState(ai::AiData& ai_data)
                            }
                          }
 
-  );
+                         );
 
   machine_state_.addEdge(edge_name::penalty_to_halt, state_name::penalty, state_name::halt,
                          command_is_<SSL_Referee::HALT>);
@@ -254,7 +245,7 @@ bool GameState::ballIsMoving()
 void GameState::extractData()
 {
   SSL_Referee data = referee_.getData();
-  // DEBUG("SSL REFEREE PROTOBUF : " << data);
+  // DEBUG("SSL REFEREE PROTOBUF : " << data.stage_time_left());
   // Use this function just one time if you want to avoir thread
   // issue.
   if (game_state_data_.last_time < data.packet_timestamp())

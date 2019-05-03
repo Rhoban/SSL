@@ -25,11 +25,12 @@
 #include <vision/ai_vision_client.h>
 #include <com/ai_commander_real.h>
 #include <com/ai_commander_simulation.h>
-#include "ai_st.h"
+#include "ai.h"
 #include "data.h"
 #include <core/print_collection.h>
 #include <manager/factory.h>
 #include "client_config.h"
+#include "viewer.h"
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -173,8 +174,9 @@ int main(int argc, char** argv)
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::DetectionPacketAnalyzer());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateRobotInformation(part_of_the_field_used));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ProtoBufReset(10));
+  // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
 
   AICommander* commander;
   if (simulation.getValue())
@@ -194,17 +196,16 @@ int main(int argc, char** argv)
   }
   else
   {
-    /*
-  AiSt* ai_ = nullptr;
-  ai_ = new AiSt(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, data,
-                 commander, config_path.getValue(), simulation.getValue());
-  ai_->run();
-  delete ai_;
-  */
+    AI* ai_ = nullptr;
+    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, commander,
+                 config_path.getValue(), simulation.getValue());
+    // ai_->run();
+    rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
+    rhoban_ssl::ExecutionManager::getManager().run(0.01);
+    // delete ai_;
   }
   delete commander;
 
-  rhoban_ssl::ExecutionManager::getManager().run(0.01);
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;
   /*
