@@ -31,6 +31,9 @@ namespace beginner
 /**
  * @class AnnotationClosestRobotToTheBall
  * @brief Tutorial to show how to find the closest robot to the ball and draw the response on the viewer.
+ *
+ * Find the closest robot of the ball with the information of the class GameInformations
+ * and compare the distance between the ally closestrobot and the opponent closest robot.
  */
 class AnnotationClosestRobotToTheBall : public RobotBehavior
 {
@@ -49,13 +52,12 @@ public:
   AnnotationClosestRobotToTheBall(ai::AiData& ai_data);
 
   /**
-   * @brief Find the closest robot of the ball with the information of the class GameInformations
-   * and compare the distance between the ally closestrobot and the opponent closest robot.
-   *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
+   *
+   * @see RobotBehavior::update
    */
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 

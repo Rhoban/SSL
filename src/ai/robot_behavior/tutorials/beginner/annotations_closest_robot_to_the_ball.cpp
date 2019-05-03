@@ -31,9 +31,10 @@ AnnotationClosestRobotToTheBall::AnnotationClosestRobotToTheBall(ai::AiData& ai_
 
 void AnnotationClosestRobotToTheBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
+  // Do note remove this line.
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
-  // Find the ally and the opponent closest to the ball
 
+  // Find the ally and the opponent closest to the ball
   int ally_shirt_number = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
   int opponent_shirt_number = getShirtNumberOfClosestRobotToTheBall(vision::Opponent);
 
@@ -49,11 +50,13 @@ void AnnotationClosestRobotToTheBall::update(double time, const ai::Robot& robot
   double dist_ally = vec_ally_to_ball.norm();
   double dist_opponent = vec_opponent_to_ball.norm();
 
+  // Prepare annotations.
   annotations_.clear();
-
   std::string ally_color = "green";
   std::string opponnent_color = "red";
   bool dashed = false;
+
+  // Find position of closest robot for the ally and opponent.
   const rhoban_geometry::Point closest_ally_position = closest_ally.getMovement().linearPosition(ai_data_.time);
   const rhoban_geometry::Point closest_opponent_position = closest_opponent.getMovement().linearPosition(ai_data_.time);
 
