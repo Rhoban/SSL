@@ -31,6 +31,8 @@ namespace medium
 /**
  * @class Lob
  * @brief Tutorial to show how to use the lob.
+ *
+ * Go in the position of the ball and make a lob.
  */
 class Lob : public RobotBehavior
 {
@@ -44,6 +46,16 @@ private:
    * @see rhoban_ssl::annotations::Annotations
    */
   rhoban_ssl::annotations::Annotations annotations_;
+  /**
+   * A safety margin for the minimal distance to activate the kicker for the Lob.
+   * Set at 0.1 here.
+   */
+  double safety_margin_;
+  /**
+   * Minimal distance to activate the kicker for the Lob.
+   * Set at ball_radius + robot_radius + safety_margin_.
+   */
+  double dist_minimal_to_lob_;
 
 public:
   /**
@@ -54,8 +66,6 @@ public:
   Lob(ai::AiData& ai_data);
 
   /**
-   * @brief Go in the position of the ball and make a lob.
-   *
    * We use parameters to update the time and the position before to do anything.
    * @param time : The time.
    * @param robot : The information for the robot selected in the behavior.

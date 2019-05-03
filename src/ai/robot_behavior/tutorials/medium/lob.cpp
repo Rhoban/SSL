@@ -25,7 +25,10 @@ namespace robot_behavior
 {
 namespace medium
 {
-Lob::Lob(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+Lob::Lob(ai::AiData& ai_data)
+  : RobotBehavior(ai_data)
+  , follower_(Factory::fixedConsignFollower(ai_data))
+  , dist_minimal_to_lob_(ai_data.constants.radius_ball + ai_data.constants.robot_radius)
 {
 }
 
@@ -54,9 +57,9 @@ Control Lob::control() const
   Control ctrl = follower_->control();
 
   // dist_minimal = robot_radius + radius_ball + safety margin = 0.09 + 0.02 + 0.1 = 0.21
-  double dist_minimal = 0.21;
+  double dist_minimal_to_lob_ = 0.21;
 
-  if (dist < dist_minimal)
+  if (dist < dist_minimal_to_lob_)
   {
     ctrl.chipKick = true;
   }
