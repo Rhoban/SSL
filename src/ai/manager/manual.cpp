@@ -53,6 +53,7 @@
 #include <robot_behavior/tutorials/medium/striker.h>
 #include <robot_behavior/tutorials/medium/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
+#include <robot_behavior/test/striker_on_order.h>
 
 namespace rhoban_ssl
 {
@@ -135,6 +136,17 @@ Manual::Manual(ai::AiData& ai_data)
                          robot_behavior::Patrol* two_way_trip =
                              robot_behavior::Patrol::twoWayTripOnWidth(ai_data, true);
                          return std::shared_ptr<robot_behavior::RobotBehavior>(two_way_trip);
+                       },
+                       false  // we don't want to define a goal here !
+                       )));
+  registerStrategy("Test - StrikerOnOrder",
+                   std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                       ai_data,
+                       [&](double time, double dt) {
+                         robot_behavior::test::StrikerOnOrder* striker_on_order =
+                             new robot_behavior::test::StrikerOnOrder(ai_data, 1, 1.0,
+                                                                      GameInformations::allyGoalCenter(), true);
+                         return std::shared_ptr<robot_behavior::RobotBehavior>(striker_on_order);
                        },
                        false  // we don't want to define a goal here !
                        )));
