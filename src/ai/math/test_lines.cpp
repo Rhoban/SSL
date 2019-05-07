@@ -3,6 +3,7 @@
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
     Copyright 2018 Muller Xavier (xavier.muller@etu.u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com) (Refacto)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
