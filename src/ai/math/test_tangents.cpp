@@ -111,7 +111,7 @@ TEST(test_tangents, tangent_of_two_circle)
   {
     rhoban_geometry::Circle circle_A(rhoban_geometry::Point(0.0, 0.0), 1.0);
     rhoban_geometry::Circle circle_B(rhoban_geometry::Point(3.0, 0.0), 1.0);
-    std::vector<rhoban_geometry::Segment> tangents = tangent_of_two_circle(circle_A, circle_B);
+    std::vector<rhoban_geometry::Segment> tangents = tangentOfTwoCircle(circle_A, circle_B);
     EXPECT_EQ(tangents[0].A, rhoban_geometry::Point(0.0, 1.0));
     EXPECT_EQ(tangents[0].B, rhoban_geometry::Point(3.0, 1.0));
     EXPECT_EQ(tangents[1].A, rhoban_geometry::Point(0.0, -1.0));
