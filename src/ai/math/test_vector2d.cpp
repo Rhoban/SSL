@@ -27,22 +27,22 @@ TEST(test_vector2d, vectorial_product)
   {
     Vector2d v1(0.0, 0.0);
     Vector2d v2(0.0, 0.0);
-    EXPECT_EQ(vectorial_product(v1, v2), 0.0);
+    EXPECT_EQ(vectorialProduct(v1, v2), 0.0);
   }
   {
     Vector2d v1(1.0, 2.0);
     Vector2d v2(0.0, 0.0);
-    EXPECT_EQ(vectorial_product(v1, v2), 0.0);
+    EXPECT_EQ(vectorialProduct(v1, v2), 0.0);
   }
   {
     Vector2d v1(0.0, 0.0);
     Vector2d v2(3.0, 4.0);
-    EXPECT_EQ(vectorial_product(v1, v2), 0.0);
+    EXPECT_EQ(vectorialProduct(v1, v2), 0.0);
   }
   {
     Vector2d v1(2.0, 3.0);
     Vector2d v2(4.0, 5.0);
-    EXPECT_EQ(vectorial_product(v1, v2), 2.0 * 5.0 - 4.0 * 3.0);
+    EXPECT_EQ(vectorialProduct(v1, v2), 2.0 * 5.0 - 4.0 * 3.0);
   }
 }
 
@@ -51,22 +51,22 @@ TEST(test_vector2d, scalar_product)
   {
     Vector2d v1(0.0, 0.0);
     Vector2d v2(0.0, 0.0);
-    EXPECT_EQ(scalar_product(v1, v2), 0.0);
+    EXPECT_EQ(scalarProduct(v1, v2), 0.0);
   }
   {
     Vector2d v1(1.0, 2.0);
     Vector2d v2(0.0, 0.0);
-    EXPECT_EQ(scalar_product(v1, v2), 0.0);
+    EXPECT_EQ(scalarProduct(v1, v2), 0.0);
   }
   {
     Vector2d v1(0.0, 0.0);
     Vector2d v2(3.0, 4.0);
-    EXPECT_EQ(scalar_product(v1, v2), 0.0);
+    EXPECT_EQ(scalarProduct(v1, v2), 0.0);
   }
   {
     Vector2d v1(2.0, 3.0);
     Vector2d v2(4.0, 5.0);
-    EXPECT_EQ(scalar_product(v1, v2), 2.0 * 4.0 + 3.0 * 5.0);
+    EXPECT_EQ(scalarProduct(v1, v2), 2.0 * 4.0 + 3.0 * 5.0);
   }
 }
 
@@ -116,47 +116,47 @@ TEST(test_vector2d, norm_square)
 {
   {
     Vector2d v(0.0, 0.0);
-    EXPECT_EQ(v.norm_square(), 0.0);
-    EXPECT_EQ(norm_square(v), 0.0);
+    EXPECT_EQ(v.normSquare(), 0.0);
+    EXPECT_EQ(normSquare(v), 0.0);
   }
   {
     Vector2d v(1.0, 0.0);
-    EXPECT_EQ(norm_square(v), 1.0);
+    EXPECT_EQ(normSquare(v), 1.0);
   }
   {
     Vector2d v(0.0, 1.0);
-    EXPECT_EQ(v.norm_square(), 1.0);
-    EXPECT_EQ(norm_square(v), 1.0);
+    EXPECT_EQ(v.normSquare(), 1.0);
+    EXPECT_EQ(normSquare(v), 1.0);
   }
   {
     Vector2d v(3.0, 4.0);
-    EXPECT_EQ(v.norm_square(), 25.0);
-    EXPECT_EQ(norm_square(v), 25.0);
+    EXPECT_EQ(v.normSquare(), 25.0);
+    EXPECT_EQ(normSquare(v), 25.0);
   }
   {
     Vector2d v(4.0, 3.0);
-    EXPECT_EQ(v.norm_square(), 25.0);
-    EXPECT_EQ(norm_square(v), 25.0);
+    EXPECT_EQ(v.normSquare(), 25.0);
+    EXPECT_EQ(normSquare(v), 25.0);
   }
   {
     Vector2d v(0.0, 0.0);
-    EXPECT_TRUE(std::fabs(v.norm_square()) < 0.0001);
-    EXPECT_TRUE(std::fabs(norm_square(v)) < 0.0001);
+    EXPECT_TRUE(std::fabs(v.normSquare()) < 0.0001);
+    EXPECT_TRUE(std::fabs(normSquare(v)) < 0.0001);
   }
   {
     Vector2d v(2.0, 0.0);
-    EXPECT_TRUE(std::fabs(v.norm_square() - 4.0) < 0.0001);
-    EXPECT_TRUE(std::fabs(norm_square(v) - 4.0) < 0.0001);
+    EXPECT_TRUE(std::fabs(v.normSquare() - 4.0) < 0.0001);
+    EXPECT_TRUE(std::fabs(normSquare(v) - 4.0) < 0.0001);
   }
   {
     Vector2d v(0.0, 2.0);
-    EXPECT_TRUE(std::fabs(v.norm_square() - 4.0) < 0.0001);
-    EXPECT_TRUE(std::fabs(norm_square(v) - 4.0) < 0.0001);
+    EXPECT_TRUE(std::fabs(v.normSquare() - 4.0) < 0.0001);
+    EXPECT_TRUE(std::fabs(normSquare(v) - 4.0) < 0.0001);
   }
   {
     Vector2d v(1.0, 1.0);
-    EXPECT_TRUE(std::fabs(v.norm_square() - 2.0) < 0.0001);
-    EXPECT_TRUE(std::fabs(norm_square(v) - 2.0) < 0.0001);
+    EXPECT_TRUE(std::fabs(v.normSquare() - 2.0) < 0.0001);
+    EXPECT_TRUE(std::fabs(normSquare(v) - 2.0) < 0.0001);
   }
 }
 

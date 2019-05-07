@@ -26,7 +26,7 @@
 
 using namespace rhoban_utils;
 
-TEST(test_contitinus_angle, constructors)
+TEST(test_continuous_angle, constructors)
 {
   {
     ContinuousAngle c;
@@ -82,7 +82,7 @@ TEST(test_contitinus_angle, constructors)
   */
 }
 
-TEST(test_cotinus_angle, angle)
+TEST(test_continuous_angle, angle)
 {
   {
     ContinuousAngle c(2 * M_PI);
@@ -98,7 +98,7 @@ TEST(test_cotinus_angle, angle)
   }
 }
 
-TEST(test_cotinus_angle, abs)
+TEST(test_continuous_angle, abs)
 {
   {
     ContinuousAngle c(1.4);
@@ -112,7 +112,7 @@ TEST(test_cotinus_angle, abs)
   }
 }
 
-TEST(test_cotinus_angle, operator_plus)
+TEST(test_continuous_angle, operator_plus)
 {
   {
     ContinuousAngle c(1.4);
@@ -133,7 +133,7 @@ TEST(test_cotinus_angle, operator_plus)
   }
 }
 
-TEST(test_ContinuousAngle, operator_minus)
+TEST(test_continuous_angle, operator_minus)
 {
   {
     ContinuousAngle c(1.4);
@@ -154,7 +154,7 @@ TEST(test_ContinuousAngle, operator_minus)
   }
 }
 
-TEST(test_ContinuousAngle, operator_prod)
+TEST(test_continuous_angle, operator_prod)
 {
   {
     ContinuousAngle c(1.4);
@@ -169,7 +169,7 @@ TEST(test_ContinuousAngle, operator_prod)
   }
 }
 
-TEST(test_ContinuousAngle, operator_div)
+TEST(test_continuous_angle, operator_div)
 {
   {
     ContinuousAngle c(2.8);
@@ -184,7 +184,7 @@ TEST(test_ContinuousAngle, operator_div)
   }
 }
 
-TEST(test_ContinuousAngle, operator_equal)
+TEST(test_continuous_angle, operator_equal)
 {
   {
     ContinuousAngle c(2.8);
@@ -200,7 +200,7 @@ TEST(test_ContinuousAngle, operator_equal)
   }
 }
 
-TEST(test_ContinuousAngle, turn)
+TEST(test_continuous_angle, turn)
 {
   {
     ContinuousAngle c(2.8);
@@ -208,7 +208,7 @@ TEST(test_ContinuousAngle, turn)
   }
 }
 
-TEST(test_ContinuousAngle, nb_turn)
+TEST(test_continuous_angle, nb_turn)
 {
   {
     ContinuousAngle c(2.8);
@@ -230,7 +230,7 @@ TEST(test_ContinuousAngle, nb_turn)
   }
 }
 
-TEST(test_ContinuousAngle, stream)
+TEST(test_continuous_angle, stream)
 {
   {
     ContinuousAngle c(2.8);
@@ -285,7 +285,7 @@ TEST(test_ContinuousAngle, stream)
   }
 }
 
-TEST(test_ContinuousAngle, set_to_nearest)
+TEST(test_continuous_angle, set_to_nearest)
 {
   {
     double amplitude = 4 * 2 * M_PI;
