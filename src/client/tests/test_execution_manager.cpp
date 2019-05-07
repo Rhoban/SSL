@@ -1,3 +1,23 @@
+/*
+    This file is part of SSL.
+
+    Copyright TODO : Julien Allali.
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com) (Refacto)
+
+    SSL is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    SSL is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #include <gtest/gtest.h>
 #include <execution_manager.h>
 #include <chrono>
@@ -33,9 +53,9 @@ TEST(test_execution_manager, add_task)
 
   using std::chrono::high_resolution_clock;
   high_resolution_clock::time_point start = high_resolution_clock::now();
-  rhobanssl::ExecutionManager::getManager().addTask(new SimpleTask(100, simple1));
-  rhobanssl::ExecutionManager::getManager().addTask(new SimpleTask(200, simple2));
-  rhobanssl::ExecutionManager::getManager().run(0.01);
+  rhoban_ssl::ExecutionManager::getManager().addTask(new SimpleTask(100, simple1));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new SimpleTask(200, simple2));
+  rhoban_ssl::ExecutionManager::getManager().run(0.01);
   double loop_duration = std::chrono::duration<double>(high_resolution_clock::now() - start).count();
   EXPECT_TRUE(simple1 == 100);
   EXPECT_TRUE(simple2 == 200);

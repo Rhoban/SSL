@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com) (Refacto)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -24,7 +25,7 @@
 TEST(test_robot_behavior, constructors)
 {
   {
-    rhoban_ssl::Control p;
+    Control p;
     EXPECT_TRUE(!p.kick);
     EXPECT_TRUE(p.active);
     EXPECT_TRUE(!p.ignore);
@@ -38,7 +39,7 @@ TEST(test_robot_behavior, constructors)
     };
     for (int i = 0; i < 8; i++)
     {
-      rhoban_ssl::Control p(cases[i][0], cases[i][1], cases[i][2]);
+      Control p(cases[i][0], cases[i][1], cases[i][2]);
       EXPECT_TRUE(p.kick == cases[i][0]);
       EXPECT_TRUE(p.active == cases[i][1]);
       EXPECT_TRUE(p.ignore == cases[i][2]);
@@ -49,7 +50,7 @@ TEST(test_robot_behavior, constructors)
 TEST(test_robot_behavior, make_desactivated)
 {
   {
-    rhoban_ssl::Control c = rhoban_ssl::Control::make_desactivated();
+    Control c = Control::makeDesactivated();
     EXPECT_TRUE(c.kick == false);
     EXPECT_TRUE(c.active == false);
     EXPECT_TRUE(c.ignore == false);
@@ -59,7 +60,7 @@ TEST(test_robot_behavior, make_desactivated)
 TEST(test_robot_behavior, make_ignored)
 {
   {
-    rhoban_ssl::Control c = rhoban_ssl::Control::make_ignored();
+    Control c = Control::makeIgnored();
     EXPECT_TRUE(c.kick == false);
     EXPECT_TRUE(c.active == false);
     EXPECT_TRUE(c.ignore == true);
@@ -69,7 +70,7 @@ TEST(test_robot_behavior, make_ignored)
 TEST(test_robot_behavior, make_null)
 {
   {
-    rhoban_ssl::Control c = rhoban_ssl::Control::make_null();
+    Control c = Control::makeNull();
     EXPECT_TRUE(c.kick == false);
     EXPECT_TRUE(c.active == true);
     EXPECT_TRUE(c.ignore == false);
