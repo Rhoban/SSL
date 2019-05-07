@@ -31,15 +31,15 @@ TEST(test_lines, distance_from_point_to_line)
     rhoban_geometry::Point point_line_1(0.0, 0.0);
     rhoban_geometry::Point point_line_2(1.0, 0.0);
 
-    double distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    double distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
     EXPECT_TRUE(distance < 0.0000000001);
 
     point = rhoban_geometry::Point(0.0, 1.0);
-    distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
     EXPECT_TRUE(((distance < 1.0000000001) && (distance > 0.9999999999)));
 
     point = rhoban_geometry::Point(-2.0, -2.0);
-    distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
     EXPECT_TRUE(((distance < 2.0000000001) && (distance > 1.9999999999)));
   }
   {
@@ -47,15 +47,15 @@ TEST(test_lines, distance_from_point_to_line)
     rhoban_geometry::Point point_line_1(0.0, 0.0);
     rhoban_geometry::Point point_line_2(0.0, 1.0);
 
-    double distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    double distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
     EXPECT_TRUE(((distance < 0.5000000001) && (distance > 0.4999999999)));
 
     point = rhoban_geometry::Point(0.0, 1.0);
-    distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
     EXPECT_TRUE(distance < 0.0000000001);
 
     point = rhoban_geometry::Point(-2.0, -2.0);
-    distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
     EXPECT_TRUE(((distance < 2.0000000001) && (distance > 1.9999999999)));
   }
   {
@@ -63,17 +63,17 @@ TEST(test_lines, distance_from_point_to_line)
     rhoban_geometry::Point point_line_1(0.0, 0.0);
     rhoban_geometry::Point point_line_2(1.0, 1.0);
 
-    double distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    double distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
 
     EXPECT_TRUE(((distance < 0.7071080001) && (distance > 0.7070999999)));
 
     point = rhoban_geometry::Point(0.0, 1.0);
-    distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
 
     EXPECT_TRUE(((distance < 0.7071080001) && (distance > 0.7070999999)));
 
     point = rhoban_geometry::Point(-2.0, -2.0);
-    distance = distance_from_point_to_line(point, point_line_1, point_line_2);
+    distance = rhoban_geometry::distanceFromPointToLine(point, point_line_1, point_line_2);
     EXPECT_TRUE((distance < 0.0000000001));
   }
 }
