@@ -23,7 +23,7 @@
 #include "tangents.h"
 #include "vector2d.h"
 
-using namespace rhoban_geometry
+using namespace rhoban_geometry;
 
 TEST(test_tangents, center_of_cone_incircle)
 {
