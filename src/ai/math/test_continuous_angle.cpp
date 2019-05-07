@@ -212,21 +212,21 @@ TEST(test_continuous_angle, nb_turn)
 {
   {
     ContinuousAngle c(2.8);
-    EXPECT_TRUE(c.nb_turn() == 0);
+    EXPECT_TRUE(c.nbTurn() == 0);
     c += (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == 1);
+    EXPECT_TRUE(c.nbTurn() == 1);
     c += (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == 2);
+    EXPECT_TRUE(c.nbTurn() == 2);
   }
   {
     ContinuousAngle c(2.8);
-    EXPECT_TRUE(c.nb_turn() == 0);
+    EXPECT_TRUE(c.nbTurn() == 0);
     c -= (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == 0);
+    EXPECT_TRUE(c.nbTurn() == 0);
     c -= (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == -1);
+    EXPECT_TRUE(c.nbTurn() == -1);
     c -= (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == -2);
+    EXPECT_TRUE(c.nbTurn() == -2);
   }
 }
 
@@ -297,7 +297,7 @@ TEST(test_continuous_angle, set_to_nearest)
       d = c;
 
       double angle = std::fmod(c.value() + step, 2 * M_PI);
-      c.set_to_nearest(angle);
+      c.setToNearest(angle);
 
       EXPECT_TRUE(std::fabs(c.value() - d.value()) < 2 * step);
     }
@@ -311,7 +311,7 @@ TEST(test_continuous_angle, set_to_nearest)
     {
       d = c;
       double angle = std::fmod(c.value() - step, 2 * M_PI);
-      c.set_to_nearest(angle);
+      c.setToNearest(angle);
       EXPECT_TRUE(std::fabs(c.value() - d.value()) < 2 * step);
     }
   }
@@ -325,7 +325,7 @@ TEST(test_continuous_angle, set_to_nearest)
       d = c;
 
       Angle angle(rad2deg(c.value() + step));
-      c.set_to_nearest(angle);
+      c.setToNearest(angle);
 
       EXPECT_TRUE(std::fabs(Angle(rad2deg(c.value())).getSignedValue() - angle.getSignedValue()) < 0.000001);
 
@@ -341,7 +341,7 @@ TEST(test_continuous_angle, set_to_nearest)
     {
       d = c;
       Angle angle(rad2deg(c.value() - step));
-      c.set_to_nearest(angle);
+      c.setToNearest(angle);
 
       EXPECT_TRUE(std::fabs(Angle(rad2deg(c.value())).getSignedValue() - angle.getSignedValue()) < 0.000001);
 
