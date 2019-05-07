@@ -166,7 +166,7 @@ if(CATKIN_ENABLE_TESTING)
     physic/test_movement_with_no_prediction.cpp
     physic/test_movement_predicted_by_integration.cpp
     physic/test_collision.cpp
-    math/test_ContinuousAngle.cpp
+    math/test_continuous_angle.cpp
     math/test_tangents.cpp
     math/test_vector2d.cpp
     math/test_matrix2d.cpp

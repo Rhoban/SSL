@@ -19,14 +19,14 @@
 
 #include <gtest/gtest.h>
 
-#include "ContinuousAngle.h"
+#include "continuous_angle.h"
 #include <math.h>
 #include <debug.h>
 #include <sstream>
 
 using namespace rhoban_utils;
 
-TEST(test_ContinuousAngle, constructors)
+TEST(test_contitinus_angle, constructors)
 {
   {
     ContinuousAngle c;
@@ -82,7 +82,7 @@ TEST(test_ContinuousAngle, constructors)
   */
 }
 
-TEST(test_ContinuousAngle, angle)
+TEST(test_cotinus_angle, angle)
 {
   {
     ContinuousAngle c(2 * M_PI);
@@ -98,7 +98,7 @@ TEST(test_ContinuousAngle, angle)
   }
 }
 
-TEST(test_ContinuousAngle, abs)
+TEST(test_cotinus_angle, abs)
 {
   {
     ContinuousAngle c(1.4);
@@ -112,7 +112,7 @@ TEST(test_ContinuousAngle, abs)
   }
 }
 
-TEST(test_ContinuousAngle, operator_plus)
+TEST(test_cotinus_angle, operator_plus)
 {
   {
     ContinuousAngle c(1.4);
