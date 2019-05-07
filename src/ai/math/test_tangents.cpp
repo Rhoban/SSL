@@ -23,6 +23,8 @@
 #include "tangents.h"
 #include "vector2d.h"
 
+using namespace rhoban_geometry
+
 TEST(test_tangents, center_of_cone_incircle)
 {
   {
@@ -31,7 +33,8 @@ TEST(test_tangents, center_of_cone_incircle)
     rhoban_geometry::Point cone_base_B(-2.0, 0.0);
     double circle_radius = 1.0;
     rhoban_geometry::Point circle_center =
-        center_of_cone_incircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
+
+        centerOfConeIncircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
     EXPECT_TRUE(norm(circle_center - rhoban_geometry::Point(-1.0, -1.0)) < 0.001);
   }
   {
@@ -40,7 +43,7 @@ TEST(test_tangents, center_of_cone_incircle)
     rhoban_geometry::Point cone_base_B(0.0, -2.0);
     double circle_radius = 1.0;
     rhoban_geometry::Point circle_center =
-        center_of_cone_incircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
+        centerOfConeIncircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
     EXPECT_TRUE(norm(circle_center - rhoban_geometry::Point(-1.0, -1.0)) < 0.001);
   }
   {
@@ -49,7 +52,7 @@ TEST(test_tangents, center_of_cone_incircle)
     rhoban_geometry::Point cone_base_B(2.0, 1.0);
     double circle_radius = 1.0;
     rhoban_geometry::Point circle_center =
-        center_of_cone_incircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
+        centerOfConeIncircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
     EXPECT_TRUE(norm(circle_center - rhoban_geometry::Point(1.0, 2.0)) < 0.001);
   }
   {
@@ -58,7 +61,7 @@ TEST(test_tangents, center_of_cone_incircle)
     rhoban_geometry::Point cone_base_B(0.0, 3.0);
     double circle_radius = 1.0;
     rhoban_geometry::Point circle_center =
-        center_of_cone_incircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
+        centerOfConeIncircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
     EXPECT_TRUE(norm(circle_center - rhoban_geometry::Point(1.0, 2.0)) < 0.001);
   }
   {
@@ -68,7 +71,7 @@ TEST(test_tangents, center_of_cone_incircle)
     rhoban_geometry::Point cone_base_B(1.0, 0.0);
     double circle_radius = d / 3.0;
     rhoban_geometry::Point circle_center =
-        center_of_cone_incircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
+        centerOfConeIncircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
     EXPECT_TRUE(norm(circle_center - rhoban_geometry::Point(1.0 / 2.0, d / 3.0)) < 0.00001);
   }
   {
@@ -78,7 +81,7 @@ TEST(test_tangents, center_of_cone_incircle)
     rhoban_geometry::Point cone_base_A(1.0, 0.0);
     double circle_radius = d / 3.0;
     rhoban_geometry::Point circle_center =
-        center_of_cone_incircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
+        centerOfConeIncircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
     EXPECT_TRUE(norm(circle_center - rhoban_geometry::Point(1.0 / 2.0, d / 3.0)) < 0.00001);
   }
   {
@@ -88,7 +91,7 @@ TEST(test_tangents, center_of_cone_incircle)
     rhoban_geometry::Point cone_base_B(2 + 1.0, 3 + 0.0);
     double circle_radius = d / 3.0;
     rhoban_geometry::Point circle_center =
-        center_of_cone_incircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
+        centerOfConeIncircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
     EXPECT_TRUE(norm(circle_center - rhoban_geometry::Point(2 + 1.0 / 2.0, 3 + d / 3.0)) < 0.00001);
   }
   {
@@ -98,7 +101,7 @@ TEST(test_tangents, center_of_cone_incircle)
     rhoban_geometry::Point cone_base_A(2 + 1.0, 3 + 0.0);
     double circle_radius = d / 3.0;
     rhoban_geometry::Point circle_center =
-        center_of_cone_incircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
+        centerOfConeIncircle(cone_vertex, cone_base_A, cone_base_B, circle_radius);
     EXPECT_TRUE(norm(circle_center - rhoban_geometry::Point(2 + 1.0 / 2.0, 3 + d / 3.0)) < 0.00001);
   }
 }
