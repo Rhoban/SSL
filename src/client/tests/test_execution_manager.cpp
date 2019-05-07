@@ -33,9 +33,9 @@ TEST(test_execution_manager, add_task)
 
   using std::chrono::high_resolution_clock;
   high_resolution_clock::time_point start = high_resolution_clock::now();
-  rhobanssl::ExecutionManager::getManager().addTask(new SimpleTask(100, simple1));
-  rhobanssl::ExecutionManager::getManager().addTask(new SimpleTask(200, simple2));
-  rhobanssl::ExecutionManager::getManager().run(0.01);
+  rhoban_ssl::ExecutionManager::getManager().addTask(new SimpleTask(100, simple1));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new SimpleTask(200, simple2));
+  rhoban_ssl::ExecutionManager::getManager().run(0.01);
   double loop_duration = std::chrono::duration<double>(high_resolution_clock::now() - start).count();
   EXPECT_TRUE(simple1 == 100);
   EXPECT_TRUE(simple2 == 200);
