@@ -18,6 +18,7 @@
 */
 
 #include "striker_on_order.h"
+#include <cmath>
 
 namespace rhoban_ssl
 {
@@ -50,6 +51,8 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
 
   double target_rotation = robot.getMovement().angularPosition(ai_data_.time).value();
   Vector2d target_ball = ballPosition() - target_;
+  Vector2d ball_target = target_ - ballPosition();
+  Vector2d ball_robot = robot_position - ballPosition();
   double dist_target_ball = target_ball.norm();
 
   if (has_strike_ || dist_target_ball == 0)
@@ -60,7 +63,7 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
     return;
   }
 
-  target_rotation = -vector2angle(target_ball).value();
+  target_rotation = vector2angle(ball_target).value();
   target_ball = target_ball / target_ball.norm();
 
   if (!is_placed_)
@@ -68,8 +71,13 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
     // Placer le robot
     target_position = ballPosition() + target_ball * run_up_;
 
-    // Todo : Make a angle for check if avoid the ball is needed (-90 < x < 90)
-    follower_->avoidTheBall(true);
+    double angle = rhoban_utils::rad2deg(vectors2angle(ball_target, ball_robot).value());
+
+    if(std::abs(angle) < 90.00) {
+        follower_->avoidTheBall(true);
+    } else {
+        follower_->avoidTheBall(false);
+    }
 
     Vector2d robot_target_placed = target_position - robot_position;
     double dist_rb_target_placed = robot_target_placed.norm();
