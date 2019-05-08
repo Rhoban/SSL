@@ -373,6 +373,17 @@ TEST(test_vector2d, perpendicular)
   }
 }
 
+TEST(test_vector2d, vectors2angle)
+{
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(-1.0, 0.0);
+    DEBUG(vectors2angle(v1, v2).value())
+    EXPECT_TRUE(vectors2angle(v1, v2).value() == 3.14159);
+    EXPECT_EQ(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()), 180.00);
+  }
+}
+
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);

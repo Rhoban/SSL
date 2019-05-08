@@ -1,7 +1,11 @@
 /*
     This file is part of SSL.
 
+<<<<<<< Updated upstream
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+=======
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
+>>>>>>> Stashed changes
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -70,6 +74,13 @@ private:
    * @brief Has the robot strike ?
    */
   bool has_strike_;
+<<<<<<< Updated upstream
+=======
+  /**
+   * @brief The minimal distance when the behavior say the robot is placed.
+   */
+  double dist_robot_is_placed_;
+>>>>>>> Stashed changes
 
 public:
   /**
@@ -101,6 +112,13 @@ public:
    */
   virtual ~StrikerOnOrder();
 
+<<<<<<< Updated upstream
+=======
+  /**
+   * @brief Change the allow_to_strike.
+   * @param allow_to_strike The new value.
+   */
+>>>>>>> Stashed changes
   void setAllowToStrike(const bool allow_to_strike);
 };
 }  // namespace test

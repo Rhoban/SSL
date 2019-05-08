@@ -84,6 +84,18 @@ Manual::Manual(ai::AiData& ai_data)
                                   },
                                   false  // we don't want to define a goal here !
                                   )));
+  registerStrategy("Test - Annotations vector",
+                   std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                       ai_data,
+                       [&](double time, double dt) {
+                         robot_behavior::test::AnnotationsAngle* angle = new robot_behavior::test::AnnotationsAngle(
+                             ai_data,
+
+                             GameInformations::allyGoalCenter(), GameInformations::opponentGoalCenter());
+                         return std::shared_ptr<robot_behavior::RobotBehavior>(angle);
+                       },
+                       false  // we don't want to define a goal here !
+                       )));
   registerStrategy("Example_machine_state", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                 ai_data,
                                                 [&](double time, double dt) {
