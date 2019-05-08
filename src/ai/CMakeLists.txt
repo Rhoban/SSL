@@ -142,7 +142,7 @@ set (SOURCES
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
-set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} zmq)
+set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} websockets)
 
 add_library (ssl_ai ${SOURCES})
 target_link_libraries(ssl_ai ${ALL_LIBS})
