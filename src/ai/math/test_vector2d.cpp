@@ -424,7 +424,7 @@ TEST(test_vector2d, vectors2angle)
     {
         Vector2d v1(std::sqrt(3)/2.0, 1.0/2.0);
         Vector2d v2(1.0, 0.0);
-        EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - (30.00) < 0.00001);
+        EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - (-30.00) < 0.00001);
     }
     {
         Vector2d v1(std::sqrt(2)/2.0, std::sqrt(2)/2.0);
