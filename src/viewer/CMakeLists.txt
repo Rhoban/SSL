@@ -21,6 +21,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 find_package(Protobuf REQUIRED)
 
 PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS
+    ../ai/viewer/proto/field_packet.proto
     ../ai/viewer/proto/location_packet.proto
     ../ai/viewer/proto/ai_packet.proto
 )

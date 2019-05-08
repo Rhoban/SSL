@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+message FieldPacket {
+    float fieldLength = 1;
+    float fieldWidth = 2;
+    float goalWidth = 3;
+    float goalDepth = 4;
+    float boundaryWidth = 5;
+    float penaltyAreaDepth = 6;
+    float penaltyAreaWidth = 7;
+}
+

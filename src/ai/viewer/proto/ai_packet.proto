@@ -1,8 +1,11 @@
 syntax = "proto3";
 import "location_packet.proto";
+import "field_packet.proto";
+
 
 message AIPacket {
     oneof wrapperPacket {
-        LocationPacket location_packet =1;
+        LocationPacket location =1;
+        FieldPacket field = 2;
     }
 }
