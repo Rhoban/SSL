@@ -23,10 +23,10 @@ int rhoban_ssl::ViewerCommunication::callback_viewer(struct lws *wsi, enum lws_c
         lws_write(wsi, m_Test, 20, LWS_WRITE_TEXT);
         return 0;
         break;
-    //case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
-      //  std::cout << "we receive client refused";
-        //return 0;
-        //break;
+    case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
+        std::cout << "we receive client refused";
+        return 0;
+        break;
     default:
         return 0;
         break;
