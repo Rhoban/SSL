@@ -19,32 +19,51 @@
 
 #pragma once
 
-#include <list>
+#include <queue>
 #include "ai_packet.pb.h"
+#include <ai_data.h>
 
-
-namespace rhoban_ssl {
-namespace api {
-class Api {
+namespace rhoban_ssl
+{
+namespace viewer
+{
+class Api
+{
 private:
-    /**
-    * @brief Constructor.
-    */
-    Api();
-    /**
-    * @brief The singleton of the class.
-    */
-    static Api api_singleton_;
-    /**
-     * @brief All packet to store and send.
-     */
-    std::list<AiPacket> packet_;
+  /**
+   * @brief Constructor.
+   */
+  Api();
+
+  /**
+   * @brief The singleton of the class.
+   */
+  static Api api_singleton_;
+
+  /**
+   * @brief All packet to store and send.
+   */
+  std::queue<AIPacket> packets_;
 
 public:
-    /**
-    * @brief Get the unique instance of the class.
-    */
-    static Api getApi();
+  /**
+   * @brief Get the unique instance of the class.
+   */
+  static Api getApi();
+
+  /**
+   * @brief Add a packet in the queue.
+   */
+  void addPacket(AIPacket packet);
+
+  /**
+   * @brief Get the queue of packets.
+   * @return The pointer of the queue of packets.
+   */
+  std::queue<AIPacket>* getQueue();
+
+  // Work In Progress.
+  void updateField();
 };
-}
-}
+}  // namespace viewer
+}  // namespace rhoban_ssl

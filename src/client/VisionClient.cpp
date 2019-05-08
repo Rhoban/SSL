@@ -3,6 +3,7 @@
 #include <iostream>
 #include "VisionClient.h"
 #include "client_config.h"
+#include "../ai/debug.h"
 
 using namespace rhoban_utils;
 
@@ -129,7 +130,8 @@ VisionClientSingleThread::VisionClientSingleThread(std::string addr, std::string
 bool VisionClientSingleThread::process(char* buffer, size_t len)
 {
   SSL_WrapperPacket* packet = VisionDataGlobal::singleton_.getNewPacket();
-  if (packet->ParseFromArray(buffer, len))
+
+  if (packet->ParsePartialFromArray(buffer, len))
   {
     VisionDataGlobal::singleton_.last_packets_.push_back(packet);
     return true;

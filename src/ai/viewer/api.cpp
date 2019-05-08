@@ -18,18 +18,37 @@
 */
 
 #include "api.h"
+#include <data.h>
 
-namespace rhoban_ssl {
-namespace api {
+namespace rhoban_ssl
+{
+namespace viewer
+{
+Api Api::api_singleton_;
 
-   Api Api::api_singleton_;
-
-   Api::Api() {}
-
-   Api Api::getApi() {
-       return Api::api_singleton_;
-   }
-
-
+Api::Api()
+{
 }
+
+Api Api::getApi()
+{
+  return Api::api_singleton_;
 }
+
+void Api::addPacket(AIPacket packet)
+{
+  packets_.push(packet);
+}
+std::queue<AIPacket>* Api::getQueue()
+{
+  return &packets_;
+}
+
+void Api::updateField()
+{
+  DEBUG(GlobalDataSingleThread::singleton_.vision_data_.field_);
+  // DEBUG(GlobalDataSingleThread::singleton_.vision_data_.field_.fieldWidth);
+}
+
+}  // namespace viewer
+}  // namespace rhoban_ssl
