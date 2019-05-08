@@ -15,9 +15,18 @@ catkin_package(
 
 find_package(Protobuf REQUIRED)
 
+include_directories(${PROTOBUF_INCLUDE_DIRS})
 include_directories(${catkin_INCLUDE_DIRS} .)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS
+    viewer/proto/location_packet.proto
+    viewer/proto/ai_packet.proto
+)
 
 set (SOURCES
+    ${PROTO_SRCS}
+    ${PROTO_HDRS}
     data.cpp
     config.cpp
     viewer.cpp
@@ -30,6 +39,7 @@ set (SOURCES
     com/ai_commander.cpp
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp
+    viewer/api.cpp
     robot_behavior/factory.cpp
     robot_behavior/example_machine_state.cpp
     robot_behavior/example.cpp

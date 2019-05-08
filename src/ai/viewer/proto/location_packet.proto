@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+message RobotLocation {
+    uint32 robot_id = 1;
+    double x = 2;
+    double y = 3;
+    double dir = 4;
+    bool isAlly = 5;
+}
+
+message BallLocation {
+    double x=1;
+    double y=2;
+}
+
+message LocationPacket {
+    repeated RobotLocation robot = 1;
+    BallLocation ball = 2;
+}
