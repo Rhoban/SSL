@@ -35,10 +35,8 @@ StrikerOnOrder::StrikerOnOrder(ai::AiData& ai_data, const double power_kicker, c
   , allow_to_strike_(allow_to_strike)
   , is_placed_(false)
   , has_strike_(false)
-<<<<<<< Updated upstream
-=======
   , dist_robot_is_placed_(0.005)
->>>>>>> Stashed changes
+
 {
 }
 
@@ -46,46 +44,30 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
 {
   // Do not remove this line.
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
-<<<<<<< Updated upstream
-  rhoban_geometry::Point target_position = robot.getMovement().linearPosition(ai_data_.time);
-=======
 
   rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(ai_data_.time);
   rhoban_geometry::Point target_position = robot_position;
->>>>>>> Stashed changes
+
   double target_rotation = robot.getMovement().angularPosition(ai_data_.time).value();
   Vector2d target_ball = ballPosition() - target_;
   double dist_target_ball = target_ball.norm();
 
-<<<<<<< Updated upstream
-  if (has_strike_ && dist_target_ball == 0)
-  {
-    // Do nothing
-=======
   if (has_strike_ || dist_target_ball == 0)
   {
->>>>>>> Stashed changes
+    // Do nothing
     follower_->setFollowingPosition(target_position, target_rotation);
     follower_->update(time, robot, ball);
     return;
   }
 
-<<<<<<< Updated upstream
   target_rotation = -vector2angle(target_ball).value();
-=======
-  target_rotation = vector2angle(-target_ball).value();
->>>>>>> Stashed changes
   target_ball = target_ball / target_ball.norm();
 
   if (!is_placed_)
   {
     // Placer le robot
     target_position = ballPosition() + target_ball * run_up_;
-<<<<<<< Updated upstream
-=======
 
-    std::cout << rhoban_utils::rad2deg(vectors2angle(robot_position - ballPosition(), target_ - ballPosition()).value())
-              << std::endl;
     // Todo : Make a angle for check if avoid the ball is needed (-90 < x < 90)
     follower_->avoidTheBall(true);
 
@@ -110,11 +92,9 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
   {
     target_position = ballPosition();
     follower_->avoidTheBall(false);
-    if (GameInformations::infraRed(robot.id(), vision::Ally))
-    {
+    if (GameInformations::infraRed(robot.id(), vision::Ally)) {
       has_strike_ = true;
     }
->>>>>>> Stashed changes
   }
 
   follower_->setFollowingPosition(target_position, target_rotation);
@@ -124,9 +104,6 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
 Control StrikerOnOrder::control() const
 {
   Control ctrl = follower_->control();
-<<<<<<< Updated upstream
-  // To implement
-=======
   if (allow_to_strike_ && is_placed_)
   {
     ctrl.charge = true;
@@ -134,7 +111,6 @@ Control StrikerOnOrder::control() const
     ctrl.kickPower = power_kicker_;
   }
 
->>>>>>> Stashed changes
   return ctrl;
 }
 
