@@ -38,7 +38,7 @@ private:
   /**
    * @brief Target point to shoot.
    */
-  const rhoban_geometry::Point target_;
+  std::function<rhoban_geometry::Point (void) > target_;
 
   /**
    * @brief power of the shoot.
@@ -56,6 +56,18 @@ private:
    */
   Vector2d line_imaginary_;
 
+  /**
+   * @brief Represent the robot_striker.
+   */
+  ai::Robot striker_;
+
+  /**
+   * @brief Position of the ball when the game start.
+   */
+  rhoban_geometry::Point position_ball_start_;
+
+    const std::string color_error_;
+    const std::string color_informations_;
 public:
   /**
    * @brief Name of the strategy.
@@ -66,7 +78,7 @@ public:
    * @param Ai data
    * @see ai::AiData
    */
-  Kicker(ai::AiData& ai_data, rhoban_geometry::Point target, double power, double run_up, Vector2d line_imaginary = Vector2d(0.0,0.0));
+  Kicker(ai::AiData& ai_data, std::function<rhoban_geometry::Point (void)> target, double power, double run_up, Vector2d line_imaginary = Vector2d(0.0,0.0));
 
   /**
    * @brief The minimum number of robots needs for the strategy.

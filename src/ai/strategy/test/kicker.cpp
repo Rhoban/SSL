@@ -27,9 +27,11 @@ namespace test
 {
 const std::string Kicker::name = "Test Kicker";
 
-Kicker::Kicker(ai::AiData &ai_data, rhoban_geometry::Point target, double power, double run_up, Vector2d line_imaginary): Strategy(ai_data),
-    target_(target), power_(power), run_up_(run_up), line_imaginary_(line_imaginary)
-{}
+Kicker::Kicker(ai::AiData &ai_data, std::function<rhoban_geometry::Point(void)> target, double power, double run_up, Vector2d line_imaginary): Strategy(ai_data),
+    target_(target), power_(power), run_up_(run_up), line_imaginary_(line_imaginary), color_error_("red"), color_informations_("green")
+{
+
+}
 
 int Kicker::minRobots() const
 {
@@ -59,7 +61,7 @@ void Kicker::stop(double time)
 
 void Kicker::update(double time)
 {
-  // TODO : Create the annotations.
+
 }
 
 void Kicker::assignBehaviorToRobots(
@@ -69,10 +71,12 @@ void Kicker::assignBehaviorToRobots(
   {
     assert(getPlayerIds().size() == 1);
     int id = playerId(0);  // we get the first if in get_player_ids()
+    position_ball_start_ = ballPosition();
+    striker_ = GameInformations::getRobot(id, vision::Ally);
+
     assign_behavior(id,
     std::shared_ptr<robot_behavior::RobotBehavior>
-                    (new robot_behavior::test::StrikerOnOrder(ai_data_,power_,run_up_, target_, true)));
-
+                    (new robot_behavior::test::StrikerOnOrder(ai_data_,power_,run_up_, target_(), true)));
     behaviors_are_assigned_ = true;
   }
 }
@@ -94,7 +98,12 @@ bool Kicker::getStartingPositionForGoalie(rhoban_geometry::Point& linear_positio
 Kicker::~Kicker() {}
 
 rhoban_ssl::annotations::Annotations Kicker::getAnnotations() const {
-    return annotations_;
+    rhoban_ssl::annotations::Annotations annotations;
+
+
+
+    annotations.addArrow(position_ball_start_, target_(), color_informations_, false);
+    return annotations;
 }
 
 }  // namespace test

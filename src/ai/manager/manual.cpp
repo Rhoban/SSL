@@ -644,7 +644,7 @@ Manual::Manual(ai::AiData& ai_data)
                        )));
 
   registerStrategy(strategy::test::Kicker::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::test::Kicker(ai_data, allyGoalCenter(), 1.0, 1.0)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::test::Kicker(ai_data, [&](){ return allyGoalCenter();}, 1.0, 1.0)));
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
   registerStrategy(strategy::TareAndSynchronize::name,
                    std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
