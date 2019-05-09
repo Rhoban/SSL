@@ -46,7 +46,8 @@ SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_
 GlobalData& GlobalData::operator<<(const vision::VisionData& vision_data)
 {
   mutex_for_vision_data_.lock();
-  vision_data_ = vision_data;
+  // vision_data_ = vision_data;
+  assert(false && "should not be called!");
   mutex_for_vision_data_.unlock();
   return *this;
 }
@@ -54,7 +55,8 @@ GlobalData& GlobalData::operator<<(const vision::VisionData& vision_data)
 GlobalData& GlobalData::operator>>(vision::VisionData& vision_data)
 {
   mutex_for_vision_data_.lock();
-  vision_data = vision_data_;
+  // vision_data = vision_data_;
+  assert(false && "should not be called!");
   mutex_for_vision_data_.unlock();
   return *this;
 }

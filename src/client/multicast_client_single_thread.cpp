@@ -190,7 +190,7 @@ bool MulticastClientSingleThread::runTask()
 
       for (int k = 0; k < len; ++k)
       {
-        if (process(bufs[i], msgs[i].msg_len))
+        if (process(bufs[k], msgs[k].msg_len))
         {
           packets++;
           // packetReceived();

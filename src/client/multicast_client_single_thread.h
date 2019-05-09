@@ -9,8 +9,9 @@
 
 #include "execution_manager.h"
 
-#define VLEN 100
-#define BUFSIZE 1024
+/* Warning: don't touch the BUFSIZE: it must be enought to store the biggest protobuf packet*/
+#define VLEN 50
+#define BUFSIZE 4096
 
 namespace rhoban_ssl
 {

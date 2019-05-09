@@ -37,6 +37,8 @@ private:
   std::string team_name_;
   ai::Team default_team_;
 
+  rhoban_utils::TimeStamp lastTick;
+
 public:
   // bool is_in_simulation;
   AI(std::string manager_name, std::string team_name, ai::Team default_team, AICommander* commander,

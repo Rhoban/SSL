@@ -75,9 +75,13 @@ rhoban_ssl::annotations::Annotations Halt::getAnnotations() const
 
   for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
   {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
-    // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-    annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
+    if (getRobot(*it).vision_data.present)
+    {
+      const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
+      // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+      annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "whit"
+                                                                                                                 "e");
+    }
   }
   return annotations;
 }

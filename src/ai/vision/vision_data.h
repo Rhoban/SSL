@@ -60,6 +60,11 @@ struct Object
   bool isOk() const;
   bool isTooOld() const;
 
+  // private:
+  // Object(const Object& o);
+  // void operator=(const Object&);
+
+public:
   Object();
   void checkAssert(double time) const;
   virtual ~Object();

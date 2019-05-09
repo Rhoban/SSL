@@ -182,6 +182,9 @@ VisionDataSingleThread::VisionDataSingleThread()
   {
     last_camera_detection_[i].frame_number_ = 0;
   }
+  for (Team team = 0; team < 2; team++)
+    for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
+      robots_[team][rid].id = rid;
 }
 
 VisionDataSingleThread::~VisionDataSingleThread()

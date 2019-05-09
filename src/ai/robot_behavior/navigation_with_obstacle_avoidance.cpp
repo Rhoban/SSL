@@ -85,7 +85,8 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
   for (unsigned int j = 0; j < ai_data_.all_robots.size(); j++)
   {
     ai::Robot* r = ai_data_.all_robots.at(j).second;
-
+    if (r->vision_data.present == false)
+      continue;
     if (r->id() != robot().id() && r->id() != closest_robot_)
     {
       rhoban_geometry::Point rpos = r->getMovement().linearPosition(r->getMovement().lastTime());

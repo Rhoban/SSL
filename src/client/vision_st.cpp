@@ -1,6 +1,7 @@
 #include <signal.h>
 #include "VisionClient.h"
 #include <iostream>
+#include <google/protobuf/stubs/logging.h>
 
 static volatile bool running = true;
 void stop(int s)
@@ -36,7 +37,6 @@ public:
     for (auto i : to_remove)
     {
       rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.remove(i);
-      delete i;
       // rhoban_ssl::VisionDataGlobal::singleton_.packets_buffer_.push_back(i);
     }
     return running;
@@ -62,7 +62,7 @@ public:
                   << p->detection().camera_id() << std::endl;
       }
       // rhoban_ssl::VisionDataGlobal::singleton_.packets_buffer_.push_back(p);
-      delete p;
+      //     delete p;
     }
     return running;
   }
@@ -75,8 +75,9 @@ int main()
   rhoban_ssl::ExecutionManager::getManager().addTask(
       new rhoban_ssl::VisionClientSingleThread(SSL_VISION_ADDRESS, SSL_SIMULATION_VISION_PORT));
 
-  rhoban_ssl::ExecutionManager::getManager().addTask(new DoubleFrameCleaner());
+  // rhoban_ssl::ExecutionManager::getManager().addTask(new DoubleFrameCleaner());
   rhoban_ssl::ExecutionManager::getManager().addTask(new ProcessSSLPacket());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
   rhoban_ssl::ExecutionManager::getManager().run(0.01);
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

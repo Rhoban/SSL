@@ -123,7 +123,7 @@ public:
 
 private:
   std::list<std::string> determineTheRobotNeedsForTheStrategies(const std::list<std::string>& next_strategies);
-  unsigned int nb_of_extra_robots_non_affected_;
+  // unsigned int nb_of_extra_robots_non_affected_;
   unsigned int minimal_nb_of_robots_to_be_affected_;
   unsigned int nb_of_extra_robots_;
   std::string strategy_with_arbitrary_number_of_robot_;

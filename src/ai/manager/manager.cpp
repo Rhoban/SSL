@@ -541,7 +541,7 @@ void Manager::declareNextStrategies(const std::list<std::string>& next_strategie
   std::list<std::string> next_valid_strategies = determineTheRobotNeedsForTheStrategies(next_strategies);
 
   DEBUG("============== determ. ======");
-  DEBUG("nb_of_extra_robots_non_affected : " << nb_of_extra_robots_non_affected_);
+  // DEBUG("nb_of_extra_robots_non_affected : " << nb_of_extra_robots_non_affected_);
   DEBUG("minimal_nb_of_robots_to_be_affected : " << minimal_nb_of_robots_to_be_affected_);
   DEBUG("nb_of_extra_robots : " << nb_of_extra_robots_);
   DEBUG("strategy_with_arbitrary_number_of_robot : " << strategy_with_arbitrary_number_of_robot_);
