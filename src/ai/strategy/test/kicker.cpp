@@ -27,10 +27,16 @@ namespace test
 {
 const std::string Kicker::name = "Test Kicker";
 
-Kicker::Kicker(ai::AiData &ai_data, std::function<rhoban_geometry::Point(void)> target, double power, double run_up, Vector2d line_imaginary): Strategy(ai_data),
-    target_(target), power_(power), run_up_(run_up), line_imaginary_(line_imaginary), color_error_("red"), color_informations_("green")
+Kicker::Kicker(ai::AiData& ai_data, std::function<rhoban_geometry::Point(void)> target, double power, double run_up,
+               Vector2d line_imaginary)
+  : Strategy(ai_data)
+  , target_(target)
+  , power_(power)
+  , run_up_(run_up)
+  , line_imaginary_(line_imaginary)
+  , color_error_("red")
+  , color_informations_("green")
 {
-
 }
 
 int Kicker::minRobots() const
@@ -61,7 +67,8 @@ void Kicker::stop(double time)
 
 void Kicker::update(double time)
 {
-
+    //bool dashed = false;
+    //annotations_.addCross(ballPosition(), color_informations_, dashed);
 }
 
 void Kicker::assignBehaviorToRobots(
@@ -74,9 +81,8 @@ void Kicker::assignBehaviorToRobots(
     position_ball_start_ = ballPosition();
     striker_ = GameInformations::getRobot(id, vision::Ally);
 
-    assign_behavior(id,
-    std::shared_ptr<robot_behavior::RobotBehavior>
-                    (new robot_behavior::test::StrikerOnOrder(ai_data_,power_,run_up_, target_(), true)));
+    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(
+                            new robot_behavior::test::StrikerOnOrder(ai_data_, power_, run_up_, target_(), true)));
     behaviors_are_assigned_ = true;
   }
 }
@@ -95,15 +101,32 @@ bool Kicker::getStartingPositionForGoalie(rhoban_geometry::Point& linear_positio
   return false;
 }
 
-Kicker::~Kicker() {}
+Kicker::~Kicker()
+{
+}
 
-rhoban_ssl::annotations::Annotations Kicker::getAnnotations() const {
-    rhoban_ssl::annotations::Annotations annotations;
+rhoban_ssl::annotations::Annotations Kicker::getAnnotations() const
+{
+  bool dashed = false;
+  rhoban_ssl::annotations::Annotations annotations;
+  //annotations.addAnnotations(annotations_);
 
+  double short_distance = ballPosition().getDist(position_ball_start_);
+  annotations.addText("Short distance :" + std::to_string(short_distance), 9.0, 6.0, color_error_);
 
+  double final_error = ballPosition().getDist(target_());
+  annotations.addText("Final error distance :" + std::to_string(final_error), 9.0, 5.5, color_error_);
 
-    annotations.addArrow(position_ball_start_, target_(), color_informations_, false);
-    return annotations;
+  if(position_ball_start_.getDist(ballPosition()) > 0.0001) {
+    Vector2d ball_init_to_target = target_() - position_ball_start_;
+    Vector2d ball_init_to_final_position = ballPosition() - position_ball_start_;
+
+    double final_angle = vectors2angle(ball_init_to_target, ball_init_to_final_position).value();
+    annotations.addText("Final angle :" + std::to_string(final_angle), 9.0, 5.0, color_error_);
+  }
+
+  annotations.addArrow(position_ball_start_, target_(), color_informations_, dashed);
+  return annotations;
 }
 
 }  // namespace test

@@ -36,9 +36,10 @@ private:
   bool behaviors_are_assigned_;
 
   /**
-   * @brief Target point to shoot.
+   * @brief Lambda to return the target_ position.
+   * @return target_position Point where to shoot.
    */
-  std::function<rhoban_geometry::Point (void) > target_;
+  std::function<rhoban_geometry::Point(void)> target_;
 
   /**
    * @brief power of the shoot.
@@ -66,8 +67,16 @@ private:
    */
   rhoban_geometry::Point position_ball_start_;
 
-    const std::string color_error_;
-    const std::string color_informations_;
+  /**
+   * @brief Color for error annotations.
+   */
+  const std::string color_error_;
+
+  /**
+   * @brief Color for informations annotations
+   */
+  const std::string color_informations_;
+
 public:
   /**
    * @brief Name of the strategy.
@@ -78,7 +87,8 @@ public:
    * @param Ai data
    * @see ai::AiData
    */
-  Kicker(ai::AiData& ai_data, std::function<rhoban_geometry::Point (void)> target, double power, double run_up, Vector2d line_imaginary = Vector2d(0.0,0.0));
+  Kicker(ai::AiData& ai_data, std::function<rhoban_geometry::Point(void)> target, double power, double run_up,
+         Vector2d line_imaginary = Vector2d(0.0, 0.0));
 
   /**
    * @brief The minimum number of robots needs for the strategy.

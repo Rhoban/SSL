@@ -88,13 +88,12 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
     if (dist_rb_target_placed < 0.005)
     {
       is_placed_ = true;
-      std::cout << robot.id() << std::endl;
     }
   }
 
   Vector2d target_position_ball = ballPosition() - target_position;
   double dist_target_position_ball = target_position_ball.norm();
-  if (dist_target_position_ball > run_up_)
+  if (dist_target_position_ball - run_up_ > 1.0)
   {
     is_placed_ = false;
   }

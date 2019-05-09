@@ -144,10 +144,8 @@ Manual::Manual(ai::AiData& ai_data)
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        ai_data,
                        [&](double time, double dt) {
-
                          robot_behavior::test::StrikerOnOrder* striker_on_order =
-                             new robot_behavior::test::StrikerOnOrder(ai_data, 1, 1.0,
-                                                                      allyGoalCenter(), true);
+                             new robot_behavior::test::StrikerOnOrder(ai_data, 1, 1.0, allyGoalCenter(), true);
                          return std::shared_ptr<robot_behavior::RobotBehavior>(striker_on_order);
                        },
                        false  // we don't want to define a goal here !
@@ -643,8 +641,8 @@ Manual::Manual(ai::AiData& ai_data)
                        false  // we don't want to define a goal here !
                        )));
 
-  registerStrategy(strategy::test::Kicker::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::test::Kicker(ai_data, [&](){ return allyGoalCenter();}, 1.0, 1.0)));
+  registerStrategy(strategy::test::Kicker::name, std::shared_ptr<strategy::Strategy>(new strategy::test::Kicker(
+                                                     ai_data, [&]() { return allyGoalCenter(); }, 1.0, 1.0)));
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
   registerStrategy(strategy::TareAndSynchronize::name,
                    std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
