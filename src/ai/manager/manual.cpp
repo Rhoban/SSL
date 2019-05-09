@@ -50,8 +50,6 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
-#include <robot_behavior/tutorials/medium/striker.h>
-#include <robot_behavior/tutorials/medium/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
 #include <robot_behavior/test/striker_on_order.h>
 #include <strategy/test/kicker.h>
@@ -447,25 +445,6 @@ Manual::Manual(ai::AiData& ai_data)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
-  registerStrategy("Intermediate Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                               ai_data,
-                                               [&](double time, double dt) {
-                                                 robot_behavior::IntermediateStriker* striker =
-                                                     new robot_behavior::IntermediateStriker(ai_data);
-                                                 return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
-                                               },
-                                               false  // we don't want to define a goal here !
-                                               )));
-  registerStrategy("Intermediate Prepare to strike",
-                   std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                       ai_data,
-                       [&](double time, double dt) {
-                         robot_behavior::IntermediatePrepareStrike* prepare_strike =
-                             new robot_behavior::IntermediatePrepareStrike(ai_data);
-                         return std::shared_ptr<robot_behavior::RobotBehavior>(prepare_strike);
-                       },
-                       false  // we don't want to define a goal here !
-                       )));
   registerStrategy("Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                      ai_data,
                                      [&](double time, double dt) {

@@ -67,7 +67,8 @@ void Kicker::stop(double time)
 
 void Kicker::update(double time)
 {
-  // bool dashed = false;
+  robot_error_ = fmin(robot_error_, ballPosition().getDist(target_()));
+  //bool dashed = false;
   // annotations_.addCross(ballPosition(), color_informations_, dashed);
 }
 
@@ -80,6 +81,7 @@ void Kicker::assignBehaviorToRobots(
     int id = playerId(0);  // we get the first if in get_player_ids()
     position_ball_start_ = ballPosition();
     striker_ = GameInformations::getRobot(id, vision::Ally);
+    robot_error_ = ballPosition().getDist(target_());
 
     assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(
                             new robot_behavior::test::StrikerOnOrder(ai_data_, power_, run_up_, target_(), true)));
@@ -117,13 +119,15 @@ rhoban_ssl::annotations::Annotations Kicker::getAnnotations() const
   double final_error = ballPosition().getDist(target_());
   annotations.addText("Final error distance :" + std::to_string(final_error), 6.5, 4.3, color_error_);
 
+  annotations.addText("robot error distance :" + std::to_string(robot_error_), 6.5, 4.1, color_error_);
+
   if (position_ball_start_.getDist(ballPosition()) > 0.0001)
   {
     Vector2d ball_init_to_target = target_() - position_ball_start_;
     Vector2d ball_init_to_final_position = ballPosition() - position_ball_start_;
 
     double final_angle = vectors2angle(ball_init_to_target, ball_init_to_final_position).value();
-    annotations.addText("Final angle :" + std::to_string(final_angle), 6.5, 4.1, color_error_);
+    annotations.addText("Final angle :" + std::to_string(final_angle), 6.5, 3.9, color_error_);
   }
 
   annotations.addArrow(position_ball_start_, target_(), color_informations_, dashed);

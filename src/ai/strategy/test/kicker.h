@@ -77,6 +77,10 @@ private:
    */
   const std::string color_informations_;
 
+  /**
+   * @brief The error_robot.
+   */
+  double robot_error_;
 public:
   /**
    * @brief Name of the strategy.
