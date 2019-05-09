@@ -53,11 +53,12 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
   Vector2d target_ball = ballPosition() - target_;
   Vector2d ball_target = target_ - ballPosition();
   Vector2d ball_robot = robot_position - ballPosition();
+
   double dist_target_ball = target_ball.norm();
 
   if (has_strike_ || dist_target_ball == 0)
   {
-    // Do nothing
+    // Do nothing, the behavior is finished.
     follower_->setFollowingPosition(target_position, target_rotation);
     follower_->update(time, robot, ball);
     return;
@@ -68,24 +69,27 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
 
   if (!is_placed_)
   {
-    // Placer le robot
+    // The robot is not placed yet.
     target_position = ballPosition() + target_ball * run_up_;
 
     double angle = rhoban_utils::rad2deg(vectors2angle(ball_target, ball_robot).value());
 
-    if (std::abs(angle) < 90.00)
+    // Find where is the robot.
+    if (std::fabs(angle) < 90.00)
     {
+      // The robot is "between" the ball and the target point.
       follower_->avoidTheBall(true);
     }
     else
     {
+      // The robot is "behind" the ball and the target point.
       follower_->avoidTheBall(false);
     }
 
     Vector2d robot_target_placed = target_position - robot_position;
     double dist_rb_target_placed = robot_target_placed.norm();
 
-    if (dist_rb_target_placed < 0.005)
+    if (dist_rb_target_placed < dist_robot_is_placed_)
     {
       is_placed_ = true;
     }
@@ -93,6 +97,7 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
 
   Vector2d target_position_ball = ballPosition() - target_position;
   double dist_target_position_ball = target_position_ball.norm();
+
   if (dist_target_position_ball - run_up_ > 1.0)
   {
     is_placed_ = false;
@@ -102,7 +107,10 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
   {
     target_position = ballPosition();
     follower_->avoidTheBall(false);
-    if (GameInformations::infraRed(robot.id(), vision::Ally))
+
+    // Striker has strike ?
+    Vector2d ballVelocity = ball.getMovement().linearVelocity(time);
+    if (GameInformations::infraRed(robot.id(), vision::Ally) || ballVelocity.getX() != 0 || ballVelocity.getY())
     {
       has_strike_ = true;
     }

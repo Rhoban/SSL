@@ -32,6 +32,7 @@ namespace test
  * @brief The StrikerOnOrder class
  *
  * Go at a distance of run_up from the ball and shot when given the order.
+ * When the robot try to place, it avoids the ball if it is not "behind" the ball.
  */
 class StrikerOnOrder : public RobotBehavior
 {

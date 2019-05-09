@@ -67,8 +67,8 @@ void Kicker::stop(double time)
 
 void Kicker::update(double time)
 {
-    //bool dashed = false;
-    //annotations_.addCross(ballPosition(), color_informations_, dashed);
+  // bool dashed = false;
+  // annotations_.addCross(ballPosition(), color_informations_, dashed);
 }
 
 void Kicker::assignBehaviorToRobots(
@@ -109,20 +109,21 @@ rhoban_ssl::annotations::Annotations Kicker::getAnnotations() const
 {
   bool dashed = false;
   rhoban_ssl::annotations::Annotations annotations;
-  //annotations.addAnnotations(annotations_);
+  // annotations.addAnnotations(annotations_);
 
   double short_distance = ballPosition().getDist(position_ball_start_);
-  annotations.addText("Short distance :" + std::to_string(short_distance), 9.0, 6.0, color_error_);
+  annotations.addText("Short distance :" + std::to_string(short_distance), 6.5, 4.5, color_error_);
 
   double final_error = ballPosition().getDist(target_());
-  annotations.addText("Final error distance :" + std::to_string(final_error), 9.0, 5.5, color_error_);
+  annotations.addText("Final error distance :" + std::to_string(final_error), 6.5, 4.3, color_error_);
 
-  if(position_ball_start_.getDist(ballPosition()) > 0.0001) {
+  if (position_ball_start_.getDist(ballPosition()) > 0.0001)
+  {
     Vector2d ball_init_to_target = target_() - position_ball_start_;
     Vector2d ball_init_to_final_position = ballPosition() - position_ball_start_;
 
     double final_angle = vectors2angle(ball_init_to_target, ball_init_to_final_position).value();
-    annotations.addText("Final angle :" + std::to_string(final_angle), 9.0, 5.0, color_error_);
+    annotations.addText("Final angle :" + std::to_string(final_angle), 6.5, 4.1, color_error_);
   }
 
   annotations.addArrow(position_ball_start_, target_(), color_informations_, dashed);
