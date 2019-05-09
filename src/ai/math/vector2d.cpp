@@ -103,7 +103,7 @@ ContinuousAngle vectors2angle(Vector2d v1, Vector2d v2)
   assert(norm_1 != 0.0 && norm_2 != 0.0);
   v1 /= norm_1;
   v2 /= norm_2;
-  double res = std::acos(scalarProduct(v1, v2) / (norm_1 * norm_2));
+  double res = std::acos(scalarProduct(v1, v2));
   if (vectorialProduct(v1, v2) < 0)
     res = -res;
   return ContinuousAngle(res);
