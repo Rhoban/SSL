@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    // REVIEW ES : Même chose que le .cpp file
-    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2019 Keryell-Even Mael (keryelleven.mael@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by

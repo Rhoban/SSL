@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    // REVIEW ES : Change the copyright.
-    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2019 Keryell-Even Mael (keryelleven.mael@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -40,20 +39,13 @@ void GoCenter::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
-  // REVIEW ES : Problème de nom ? (Inversé : robot_center_vector). Regarde la formule d'un vecteur mathématique entre deux points.
-  Vector2d center_robot_vector = centerMark() - robot_position;
-  // REVIEW ES : IF the center_robot_vector.norm() == 0 ? Erreur...
-  // REVIEW ES : You don't need to normalize your vector.
-  center_robot_vector = center_robot_vector / center_robot_vector.norm();
-  
-  // REVIEW ES : target_position ? (A voir, pas obligé).
-  const rhoban_geometry::Point& future_position = centerMark();
-  double target_rotation = detail::vec2angle(center_robot_vector);
-  
+  const rhoban_geometry::Point& target_position = centerMark();
+  double target_rotation = 0.0;
 
-  follower_->setFollowingPosition(future_position, target_rotation);
+  follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
 }
+
 
 Control GoCenter::control() const
 {
@@ -69,8 +61,6 @@ GoCenter::~GoCenter()
 rhoban_ssl::annotations::Annotations GoCenter::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  // REVIEW ES : You don't need this line. Remove it.
-  annotations.addAnnotations(this->annotations_);
   annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
