@@ -74,6 +74,7 @@ private:
    * @brief The minimal distance when the behavior say the robot is placed.
    */
   double dist_robot_is_placed_;
+
 public:
   /**
    * @brief Constructor

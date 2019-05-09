@@ -82,6 +82,7 @@ set (SOURCES
     # manager/Match.cpp
     manager/manual.cpp
     manager/factory.cpp
+    strategy/test/kicker.cpp
     strategy/strategy.cpp
     strategy/halt.cpp
     strategy/mur.cpp

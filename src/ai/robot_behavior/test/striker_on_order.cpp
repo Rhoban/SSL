@@ -73,10 +73,13 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
 
     double angle = rhoban_utils::rad2deg(vectors2angle(ball_target, ball_robot).value());
 
-    if(std::abs(angle) < 90.00) {
-        follower_->avoidTheBall(true);
-    } else {
-        follower_->avoidTheBall(false);
+    if (std::abs(angle) < 90.00)
+    {
+      follower_->avoidTheBall(true);
+    }
+    else
+    {
+      follower_->avoidTheBall(false);
     }
 
     Vector2d robot_target_placed = target_position - robot_position;
@@ -100,7 +103,8 @@ void StrikerOnOrder::update(double time, const ai::Robot& robot, const ai::Ball&
   {
     target_position = ballPosition();
     follower_->avoidTheBall(false);
-    if (GameInformations::infraRed(robot.id(), vision::Ally)) {
+    if (GameInformations::infraRed(robot.id(), vision::Ally))
+    {
       has_strike_ = true;
     }
   }
