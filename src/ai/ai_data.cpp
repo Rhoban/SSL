@@ -100,7 +100,8 @@ void AiData::update(const vision::VisionDataSingleThread& vision_data)
   {
     for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
     {
-      robots[team][k].setVisionData(vision_data.robots_[team][k]);
+      if (vision_data.robots_[team][k].present)
+        robots[team][k].setVisionData(vision_data.robots_[team][k]);
     }
   }
   ball.setVisionData(vision_data.ball_);
@@ -137,6 +138,8 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team t
     for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
     {
       robots[team][k].setMovement(physic::Factory::robotMovement(*this));
+      robots[team][k].vision_data.id = k;
+      assert(robots[team][k].id() == k);
       nb_robots++;
     }
   }
@@ -146,7 +149,7 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team t
   {
     for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
     {
-      all_robots[i] = std::pair<vision::Team, Robot*>(team, &(robots.at(team).at(k)));
+      all_robots[i] = std::pair<vision::Team, Robot*>(team, &(robots[team][k]));
       i++;
     }
   }
@@ -155,13 +158,13 @@ AiData::AiData(const std::string& config_path, bool is_in_simulation, ai::Team t
 
 bool AiData::robotIsInsideTheField(int robot_id) const
 {
-  const rhoban_ssl::Movement& mov = robots.at(vision::Ally).at(robot_id).getMovement();
+  const rhoban_ssl::Movement& mov = robots[vision::Ally][robot_id].getMovement();
   return field.isInside(mov.linearPosition(time));
 }
 
 bool AiData::robotIsValid(int robot_id) const
 {
-  return (robots.at(vision::Ally).at(robot_id).isPresentInVision() and robotIsInsideTheField(robot_id));
+  return (robots[vision::Ally][robot_id].isPresentInVision() and robotIsInsideTheField(robot_id));
 }
 
 const AiData::Collision_times_table& AiData::getTableOfCollisionTimes() const
@@ -184,7 +187,7 @@ void AiData::visitAllPairOfRobots(
 std::list<std::pair<int, double> > AiData::getCollisions(int robot_id, const Vector2d& linear_velocity) const
 {
   std::list<std::pair<int, double> > result;
-  const Robot* robot_1 = &(robots.at(vision::Ally).at(robot_id));
+  const Robot* robot_1 = &(robots[vision::Ally][robot_id]);
 
   if (not(robot_1->isPresentInVision()))
   {
@@ -224,12 +227,16 @@ void AiData::computeTableOfCollisionTimes()
     {
       Robot& robot_1 = *all_robots[i].second;
       Robot& robot_2 = *all_robots[j].second;
-      double radius_error = Config::radius_security_for_collision;
-      std::pair<bool, double> collision = collisionTime(
-          Config::robot_radius, robot_1.getMovement(), Config::robot_radius, robot_2.getMovement(), radius_error, time);
-      if (collision.first)
+      if ((robot_1.vision_data.present) && (robot_2.vision_data.present))
       {
-        table_of_collision_times[std::pair<int, int>(i, j)] = collision.second;
+        double radius_error = Config::radius_security_for_collision;
+        std::pair<bool, double> collision =
+            collisionTime(Config::robot_radius, robot_1.getMovement(), Config::robot_radius, robot_2.getMovement(),
+                          radius_error, time);
+        if (collision.first)
+        {
+          table_of_collision_times[std::pair<int, int>(i, j)] = collision.second;
+        }
       }
     }
   }

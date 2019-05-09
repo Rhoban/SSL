@@ -63,7 +63,7 @@ rhoban_geometry::Point GameInformations::opponentCornerLeft() const
 
 const ai::Robot& GameInformations::getRobot(int robot_number, vision::Team team) const
 {
-  return ai_data.robots.at(team).at(robot_number);
+  return ai_data.robots[team][robot_number];
 }
 
 void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,

@@ -136,6 +136,7 @@ bool VisionClientSingleThread::process(char* buffer, size_t len)
   }
   else
   {
+    fprintf(stderr, "parsing error! %s ", buffer);
     // error in packet so we ignore it, it will be cleaned later by the arena
   }
   return false;

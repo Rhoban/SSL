@@ -66,7 +66,8 @@ void AIVisionClient::setRobotPos(ai::Team team, int id, double x, double y, doub
   mutex.unlock();
 
   shared_data_ << vision_data_;
-  old_vision_data_ = vision_data_;
+  // old_vision_data_ = vision_data_;
+  assert(false && "should not be called!");
 }
 
 void AIVisionClient::packetReceived()
@@ -311,6 +312,7 @@ bool SslGeometryPacketAnalyzer::runTask()
   {
     if ((*i)->has_geometry())
     {
+      DEBUG("geometry packet found");
       // process geometry data and update global
       auto& geometry = (*i)->geometry();
       if ((field_done_ == false) && (geometry.has_field()))
@@ -345,6 +347,7 @@ bool SslGeometryPacketAnalyzer::runTask()
     else
     {
       ++i;
+      // DEBUG("geometry packet not found");
     }
   }
   return true;  // !(field_done_ && camera_done)

@@ -103,6 +103,9 @@ struct Field : vision::Field
 
 class AiData
 {
+  AiData(const AiData&);
+  void operator=(const AiData&);
+
 public:
   double time_shift_with_vision;
   double time;  //(Write for Ai)
@@ -116,9 +119,11 @@ public:
 
   typedef std::map<int, Robot> RobotsTable;
   typedef std::map<vision::Team, RobotsTable> RobotsTableByTeam;
-  RobotsTableByTeam robots;
+  // RobotsTableByTeam robots;
+  Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
 
   std::vector<std::pair<vision::Team, Robot*> > all_robots;
+  // Robot* all_robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
 
   Ball ball;
   Field field;

@@ -60,6 +60,7 @@ void RobotBehavior::setBirthday(double birthday)
 void RobotBehavior::updateTimeAndPosition(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   robot_ptr_ = &robot;
+  assert((robot.id() >= 0) && (robot.id() < ai::Config::NB_OF_ROBOTS_BY_TEAM));
   last_update_ = time;
   robot_linear_position_ = Vector2d(robot.getMovement().linearPosition(time));
   robot_angular_position_ = robot.getMovement().angularPosition(time);

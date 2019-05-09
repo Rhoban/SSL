@@ -84,9 +84,11 @@ void AI::limitsVelocity(Control& ctrl) const
 
 void AI::preventCollision(int robot_id, Control& ctrl)
 {
-  const ai::Robot& robot = ai_data_.robots.at(vision::Ally).at(robot_id);
+  const ai::Robot& robot = ai_data_.robots[vision::Ally][robot_id];
 
   const Vector2d& ctrl_velocity = ctrl.linear_velocity;
+  if (robot.vision_data.present == false)
+    return;
   Vector2d robot_velocity = robot.getMovement().linearVelocity(ai_data_.time);
 
   bool collision_is_detected = false;
@@ -261,6 +263,8 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
          );
     }
 #endif
+  if (ai_data_.robots[vision::Ally][robot_id].vision_data.present == false)
+    return;
 
   preventCollision(robot_id, ctrl);
   ctrl.changeToRelativeControl(ai_data_.robots[vision::Ally][robot_id].getMovement().angularPosition(ai_data_.time),
@@ -306,6 +310,8 @@ AI::AI(std::string manager_name, std::string team_name, ai::Team default_team,  
 
   ai_data_.changeTeamColor(default_team);
   ai_data_.team_name = team_name;
+
+  lastTick = rhoban_utils::TimeStamp::now();
 
   manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL, ai_data_, game_state_);
 
@@ -355,7 +361,7 @@ std::shared_ptr<manager::Manager> AI::getManualManager()
 
 void AI::updateRobots()
 {
-  commander_->setYellow(ai_data_.team_color == ai::Yellow);
+  commander_->setYellow(ai::Config::we_are_blue == false);
 
   double time = this->current_time_;
   ai::Ball& ball = ai_data_.ball;
@@ -367,6 +373,7 @@ void AI::updateRobots()
         GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id];
 
     ai::Robot& robot = ai_data_.robots[team][robot_id];
+    assert(robot.id() == robot_id);
     robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)
@@ -391,11 +398,11 @@ bool AI::runTask()
     return false;
 
   double period = ai::Config::period;
-  auto lastTick = rhoban_utils::TimeStamp::now();
+  // auto lastTick = rhoban_utils::TimeStamp::now();
 
   // TODO ; SEE HOW TO REMOVE THE WARMUP
-  double warmup_period = 2 * period * rhoban_ssl::vision::history_size;
-  double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
+  // double warmup_period = 2 * period * rhoban_ssl::vision::history_size;
+  // double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
 
   auto now = rhoban_utils::TimeStamp::now();
   double elapsed = diffSec(lastTick, now);
@@ -545,7 +552,7 @@ void AI::updateElectronicInformations()
     auto robot = master->robots[id];
     if (robot.isOk())
     {
-      ai_data_.robots.at(vision::Ally).at(id).infra_red = (robot.status.status & STATUS_IR) ? true : false;
+      ai_data_.robots[vision::Ally][id].infra_red = (robot.status.status & STATUS_IR) ? true : false;
     }
   }
 }
@@ -555,7 +562,7 @@ void AI::printElectronicInfo()
   std::cout << "Electronic : " << std::endl;
   for (unsigned int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    std::cout << "robot id : " << id << " IR : " << ai_data_.robots.at(vision::Ally).at(id).infra_red << std::endl;
+    std::cout << "robot id : " << id << " IR : " << ai_data_.robots[vision::Ally][id].infra_red << std::endl;
   }
 }
 
