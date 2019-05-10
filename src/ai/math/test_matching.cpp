@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com) (Refacto)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -25,13 +26,13 @@
 #include <core/collection.h>
 #include <cmath>
 
-using namespace RhobanSSL;
+using namespace rhoban_ssl;
 
 struct Man
 {
   int value;
-  Man(int v) : value(v){};
-  Man() : value(0.0){};
+  Man(int v) : value(v){}
+  Man() : value(0.0){}
 };
 
 std::ostream& operator<<(std::ostream& out, const Man& man)
@@ -43,8 +44,8 @@ std::ostream& operator<<(std::ostream& out, const Man& man)
 struct Woman
 {
   double value;
-  Woman(double v) : value(v){};
-  Woman() : value(0.0){};
+  Woman(double v) : value(v){}
+  Woman() : value(0.0){}
 };
 
 std::ostream& operator<<(std::ostream& out, const Woman& woman)
@@ -68,7 +69,7 @@ TEST(test_matching, gale_shapley_algorithm__empty_cases)
     const std::vector<Woman> woman_set;
 
     matching::Matchings matchings =
-        matching::gale_shapley_algorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
+        matching::galeShapleyAlgorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
 
     EXPECT_EQ(matchings.size(), 0);
   }
@@ -77,7 +78,7 @@ TEST(test_matching, gale_shapley_algorithm__empty_cases)
     const std::vector<Woman> woman_set;
 
     matching::Matchings matchings =
-        matching::gale_shapley_algorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
+        matching::galeShapleyAlgorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
 
     EXPECT_EQ(matchings.size(), 0);
   }
@@ -86,7 +87,7 @@ TEST(test_matching, gale_shapley_algorithm__empty_cases)
     const std::vector<Woman> woman_set = { 4.1, 2.0, 1.0 };
 
     matching::Matchings matchings =
-        matching::gale_shapley_algorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
+        matching::galeShapleyAlgorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
 
     EXPECT_EQ(matchings.size(), 0);
   }
@@ -99,7 +100,7 @@ TEST(test_matching, gale_shapley_algorithm__use_cases_with_struct)
     const std::vector<Woman> woman_set = { 4.1, 2.0, 1.0 };
 
     matching::Matchings matchings =
-        matching::gale_shapley_algorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
+        matching::galeShapleyAlgorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
 
     EXPECT_EQ(matchings.size(), 3);
     EXPECT_EQ((map2set(matchings.man_to_women_matchings)),
@@ -117,7 +118,7 @@ TEST(test_matching, gale_shapley_algorithm__use_cases_with_double)
         [](const double& juge, const double& man) { return std::fabs(juge - man); };
 
     matching::Matchings matchings =
-        matching::gale_shapley_algorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
+        matching::galeShapleyAlgorithm(man_set, woman_set, simple_man_rank, simple_woman_rank);
 
     EXPECT_EQ(matchings.size(), 3);
     EXPECT_EQ((map2set(matchings.man_to_women_matchings)),
@@ -132,7 +133,7 @@ TEST(test_matching, gale_shapley_algorithm__use_cases_with_double)
         [](const double& juge, const double& man) { return std::fabs(juge - man); };
 
     matching::Matchings matchings =
-        matching::gale_shapley_algorithm(man_set, woman_set, simple_man_rank, simple_woman_rank, false, false);
+        matching::galeShapleyAlgorithm(man_set, woman_set, simple_man_rank, simple_woman_rank, false, false);
 
     EXPECT_EQ(matchings.size(), 3);
     EXPECT_EQ((map2set(matchings.man_to_women_matchings)),

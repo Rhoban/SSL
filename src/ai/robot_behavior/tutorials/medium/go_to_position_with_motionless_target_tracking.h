@@ -33,22 +33,22 @@ namespace medium
  * @brief The GoToPositionWithMotionlessTargetTracking class
  * @todo add documentation for this file
  */
-class GoToPositionWithMotionlessTargetTracking : public RhobanSSL::Robot_behavior::RobotBehavior
+class GoToPositionWithMotionlessTargetTracking : public RobotBehavior
 {
 public:
-  GoToPositionWithMotionlessTargetTracking(RhobanSSL::Ai::AiData& ai_data);
+  GoToPositionWithMotionlessTargetTracking(ai::AiData& ai_data);
 
   // RobotBehavior interface
 public:
-  void update(double time, const RhobanSSL::Ai::Robot& robot, const RhobanSSL::Ai::Ball& ball);
+  void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   Control control() const;
-  RhobanSSLAnnotation::Annotations get_annotations() const;
+  annotations::Annotations getAnnotations() const;
 
 private:
   PositionFollowerWithTargetTracking follower_;
   CircleFollowerWithTargetTracking circle_follower_;
   bool robot_destination_set_ = false;
-  RhobanSSLAnnotation::Annotations annotations_;
+  annotations::Annotations annotations_;
 };
 
 }  // namespace medium

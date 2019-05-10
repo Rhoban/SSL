@@ -26,11 +26,11 @@ Logger::Logger() : active(false), plot(new Plot())
 {
 }
 
-void Logger::init_plot(const std::string& name, const std::vector<std::string>& value_names)
+void Logger::initPlot(const std::string& name, const std::vector<std::string>& value_names)
 {
   plot->init(name, value_names);
 }
-void Logger::init_file(const std::string& file_name)
+void Logger::initFile(const std::string& file_name)
 {
   log_file.open(file_name);
   if (!log_file.is_open())
@@ -40,7 +40,7 @@ void Logger::init_file(const std::string& file_name)
   }
 }
 
-void Logger::log_plot(const std::string& name, double value)
+void Logger::logPlot(const std::string& name, double value)
 {
   if (active)
   {
@@ -51,7 +51,7 @@ void Logger::log_plot(const std::string& name, double value)
   }
 }
 
-void Logger::log_plot(std::function<std::vector<double>()> fct)
+void Logger::logPlot(std::function<std::vector<double>()> fct)
 {
   if (active)
   {
@@ -62,7 +62,7 @@ void Logger::log_plot(std::function<std::vector<double>()> fct)
   }
 }
 
-void Logger::store_plot()
+void Logger::storePlot()
 {
   if (plot)
   {
@@ -70,14 +70,14 @@ void Logger::store_plot()
   }
 }
 
-bool Logger::is_active() const
+bool Logger::isActive() const
 {
   return active;
 }
 
 void Logger::log(const std::string& message)
 {
-  if (is_active())
+  if (isActive())
   {
     if (log_file.is_open())
     {
@@ -88,7 +88,7 @@ void Logger::log(const std::string& message)
 
 void Logger::print(const std::string& message) const
 {
-  if (is_active())
+  if (isActive())
   {
     std::cout << message;
   }
@@ -104,7 +104,7 @@ void Logger::desactivate()
   active = false;
 }
 
-Plot* Logger::get_plot()
+Plot* Logger::getPlot()
 {
   return plot;
 }

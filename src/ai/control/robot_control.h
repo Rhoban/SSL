@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_CONTROL__H__
-#define __ROBOT_CONTROL__H__
+#pragma once
 
 #include <debug.h>
 #include <vector>
@@ -68,11 +67,11 @@ public:
   Vector2d translation(double t) const;
   double rotation(double t) const;
 
-  void print_translation_curve(double dt) const;
-  void print_translation_movment(double dt) const;
+  void printTranslationCurve(double dt) const;
+  void printTranslationMovment(double dt) const;
 
-  void print_rotation_curve(double dt) const;
-  void print_rotation_movment(double dt) const;
+  void printRotationCurve(double dt) const;
+  void printRotationMovment(double dt) const;
 };
 
 class RobotControl
@@ -81,32 +80,30 @@ public:
   static constexpr double security_margin = .92;
 
 private:
-  double translation_velocity_limit;
-  ContinuousAngle rotation_velocity_limit;
-  double translation_acceleration_limit;
-  ContinuousAngle rotation_acceleration_limit;
+  double translation_velocity_limit_;
+  ContinuousAngle rotation_velocity_limit_;
+  double translation_acceleration_limit_;
+  ContinuousAngle rotation_acceleration_limit_;
 
 public:
-  Control limited_control(const Vector2d& robot_position, const ContinuousAngle& robot_orientation,
-                          const Vector2d& robot_linear_velocity, const ContinuousAngle& robot_angular_velocity) const;
+  Control limitedControl(const Vector2d& robot_position, const ContinuousAngle& robot_orientation,
+                         const Vector2d& robot_linear_velocity, const ContinuousAngle& robot_angular_velocity) const;
 
   RobotControl();
 
-  void set_limits(double translation_velocity_limit, double rotation_velocity_limit,
-                  double translation_acceleration_limit, double rotation_acceleration_limit);
+  void setLimits(double translation_velocity_limit, double rotation_velocity_limit,
+                 double translation_acceleration_limit, double rotation_acceleration_limit);
 
-  virtual Control no_limited_control() const = 0;
+  virtual Control noLimitedControl() const = 0;
 
   /* TODO : write a documentation to explaint that function */
-  virtual double get_dt() const = 0;
+  virtual double getDt() const = 0;
 };
 
 class RobotControlWithPid : public RobotControl, public PidController
 {
 public:
-  virtual Control no_limited_control() const;
+  virtual Control noLimitedControl() const;
 
-  virtual double get_dt() const;
+  virtual double getDt() const;
 };
-
-#endif

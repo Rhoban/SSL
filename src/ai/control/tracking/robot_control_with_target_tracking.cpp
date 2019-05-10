@@ -44,7 +44,7 @@ ContinuousAngle RobotControlWithTargetTracking::angularVelocity(double time) con
   Vector2d robot_target_relative = /* rotation_matrix * */ robot_target_absolute;
   Vector2d normalized_robot_target_relative = robot_target_relative / robot_target_relative.norm();
 
-  return vectorial_product(normalized_robot_target_relative,
+  return vectorialProduct(normalized_robot_target_relative,
                            (linear_velocity_of_the_target_ - current_linear_velocity_) / robot_target_relative.norm());
 }
 

@@ -20,60 +20,60 @@
 #include "robot_follower.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-RobotFollower::RobotFollower(Ai::AiData& ai_data)
+RobotFollower::RobotFollower(ai::AiData& ai_data)
   : RobotBehavior(ai_data)
-  , robot_to_follow_id(-1)
-  , team(Vision::Team::Ally)
-  , follower(Factory::fixed_consign_follower(ai_data))
+  , robot_to_follow_id_(-1)
+  , team_(vision::Team::Ally)
+  , follower_(Factory::fixedConsignFollower(ai_data))
 {
 }
 
-void RobotFollower::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void RobotFollower::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
 
-  const Ai::Robot& robot_to_follow = get_robot(robot_to_follow_id, robot_to_follow_team);
-  rhoban_geometry::Point position = robot_to_follow.get_movement().linear_position(time);
-  rhoban_geometry::Point target_position = position + translation;
+  const ai::Robot& robot_to_follow = getRobot(robot_to_follow_id_, robot_to_follow_team_);
+  rhoban_geometry::Point position = robot_to_follow.getMovement().linearPosition(time);
+  rhoban_geometry::Point target_position = position + translation_;
 
-  rhoban_geometry::Point robot_position = robot.get_movement().linear_position(time);
-  double target_rotation = detail::vec2angle(ball_position() - robot_position);
+  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
+  double target_rotation = detail::vec2angle(ballPosition() - robot_position);
 
-  follower->avoid_the_ball(true);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(true);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
 Control RobotFollower::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   // ctrl.spin = true; // We active the dribler !
   return ctrl;
 }
 
 RobotFollower::~RobotFollower()
 {
-  delete follower;
+  delete follower_;
 }
 
-void RobotFollower::declare_robot_to_follow(int robot_id, const Vector2d& translation, Vision::Team team)
+void RobotFollower::declare_robot_to_follow_(int robot_id, const Vector2d& translation, vision::Team team)
 {
-  robot_to_follow_id = robot_id;
-  this->translation = translation;
-  robot_to_follow_team = team;
+  robot_to_follow_id_ = robot_id;
+  this->translation_ = translation;
+  robot_to_follow_team_ = team;
 }
 
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

@@ -1,0 +1,15 @@
+digraph whole_archi {               
+	       a [shape=box, color=blue, fontsize=24, label="Motion Capture Server"]
+               b [shape=box , label="RhobanSSL::Vision::AIVisionClient"];
+	       a -> b [label="multicast data(raw char)"];
+               {rank=same; a b}
+	       c [ label="VisionData"];
+	       b -> c [dir=none , style=dotted] ;
+	       
+	       subgraph cluster_vision {
+	       		label="RhobanSSL::Vision::AIVisionClient"
+			x [shape=box , label="RhobanSSL::MulticastClient"];
+			y [shape=box , label="RhobanSSL::VisionClient"];
+	       }
+       }
+

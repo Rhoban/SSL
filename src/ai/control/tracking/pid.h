@@ -19,7 +19,7 @@
 #ifndef PID_H
 #define PID_H
 
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <math/vector2d.h>
 #include <float.h>
 

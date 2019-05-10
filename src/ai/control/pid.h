@@ -17,13 +17,12 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __pid__H__
-#define __pid__H__
+#pragma once
 
 #include "control.h"
 
 #include <debug.h>
-#include <math/ContinuousAngle.h>
+#include <math/continuous_angle.h>
 #include <math/vector2d.h>
 #include <utility>
 
@@ -49,32 +48,31 @@ struct PidController
   double no_limited_angular_control_value;
   Vector2d no_limited_translation_control_value;
 
-  void init_time(double start_time, double dt);
+  void initTime(double start_time, double dt);
 
   void update(double current_time, const Vector2d& robot_position, const ContinuousAngle& robot_orientation);
 
   PidController();
   PidController(double p_t, double i_t, double d_t, double p_o, double i_o, double d_o);
 
-  void set_orientation_pid(double kp, double ki, double kd);
-  void set_translation_pid(double kp, double ki, double kd);
+  void setOrientationPid(double kp, double ki, double kd);
+  void setTranslationPid(double kp, double ki, double kd);
 
-  void set_static(bool value);
-  bool is_static() const;
+  void setStatic(bool value);
+  bool isStatic() const;
 
-  double get_dt() const;
-  double get_time() const;
+  double getDt() const;
+  double getTime() const;
 
-  virtual ContinuousAngle goal_orientation(double t) const = 0;
-  virtual Vector2d goal_position(double t) const = 0;
+  virtual ContinuousAngle goalOrientation(double t) const = 0;
+  virtual Vector2d goalPosition(double t) const = 0;
 
-  void compute_no_limited_translation_control(const Vector2d& robot_position);
-  Vector2d no_limited_translation_control() const;
+  void computeNoLimitedTranslationControl(const Vector2d& robot_position);
+  Vector2d noLimitedTranslationControl() const;
 
-  void compute_no_limited_angular_control(const ContinuousAngle& robot_orientation);
-  double no_limited_angular_control() const;
+  void computeNoLimitedAngularControl(const ContinuousAngle& robot_orientation);
+  double noLimitedAngularControl() const;
 
-  virtual Control no_limited_control() const;
+  virtual Control noLimitedControl() const;
+  virtual ~PidController();
 };
-
-#endif

@@ -17,25 +17,22 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PHYSIC__FACTORY__H__
-#define __PHYSIC__FACTORY__H__
+#pragma once
 
-#include "Movement.h"
-#include <AiData.h>
+#include "movement.h"
+#include <ai_data.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 namespace physic
 {
 class Factory
 {
 public:
-  static Movement* movement(Ai::AiData& ai_data);
-  static Movement* robot_movement(Ai::AiData& ai_data);
-  static Movement* ball_movement(Ai::AiData& ai_data);
+  static Movement* movement(ai::AiData& ai_data);
+  static Movement* robotMovement(ai::AiData& ai_data);
+  static Movement* ballMovement(ai::AiData& ai_data);
 };
 
 };  // namespace physic
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace rhoban_ssl

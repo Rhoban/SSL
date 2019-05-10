@@ -18,72 +18,73 @@
 */
 #include "test_relative_velocity_consign.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-Test_relative_velocity_consign::Test_relative_velocity_consign(RhobanSSL::Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), relative_control(false)
-{
-}
-
-Test_relative_velocity_consign::~Test_relative_velocity_consign()
+TestRelativeVelocityConsign::TestRelativeVelocityConsign(rhoban_ssl::ai::AiData& ai_data)
+  : RobotBehavior(ai_data), relative_control_(false)
 {
 }
 
-void Test_relative_velocity_consign::set_linear_velocity(const Vector2d& linear_velocity)
+TestRelativeVelocityConsign::~TestRelativeVelocityConsign()
 {
-  relative_control.linear_velocity = linear_velocity;
 }
 
-void Test_relative_velocity_consign::set_angular_velocity(const ContinuousAngle& angular_velocity)
+void TestRelativeVelocityConsign::setLinearVelocity(const Vector2d& linear_velocity)
 {
-  relative_control.angular_velocity = angular_velocity;
+  relative_control_.linear_velocity = linear_velocity;
 }
 
-void Test_relative_velocity_consign::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void TestRelativeVelocityConsign::setAngularVelocity(const ContinuousAngle& angular_velocity)
+{
+  relative_control_.angular_velocity = angular_velocity;
+}
+
+void TestRelativeVelocityConsign::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 }
 
-Control Test_relative_velocity_consign::control() const
+Control TestRelativeVelocityConsign::control() const
 {
-  return relative_control;
+  return relative_control_;
 }
 
-RhobanSSLAnnotation::Annotations Test_relative_velocity_consign::get_annotations() const
+rhoban_ssl::annotations::Annotations TestRelativeVelocityConsign::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addArrow(linear_position(), linear_position() + relative_control.linear_velocity, "blue");
+  rhoban_ssl::annotations::Annotations annotations;
+  annotations.addArrow(linearPosition(), linearPosition() + relative_control_.linear_velocity, "blue");
   return annotations;
 }
 
-Test_relative_velocity_consign*
-Test_relative_velocity_consign::get_movement_angular_velocity_only(Ai::AiData& ai_data, double angular_velocity)
+TestRelativeVelocityConsign* TestRelativeVelocityConsign::getMovementAngularVelocityOnly(ai::AiData& ai_data,
+                                                                                         double angular_velocity)
 {
-  Test_relative_velocity_consign* res = new Test_relative_velocity_consign(ai_data);
-  res->set_angular_velocity(angular_velocity);
+  TestRelativeVelocityConsign* res = new TestRelativeVelocityConsign(ai_data);
+  res->setAngularVelocity(angular_velocity);
   return res;
 }
 
-Test_relative_velocity_consign*
-Test_relative_velocity_consign::get_movement_linear_velocity_only(Ai::AiData& ai_data, Vector2d linear_velocity)
+TestRelativeVelocityConsign* TestRelativeVelocityConsign::getMovementLinearVelocityOnly(ai::AiData& ai_data,
+                                                                                        Vector2d linear_velocity)
 {
-  Test_relative_velocity_consign* res = new Test_relative_velocity_consign(ai_data);
-  res->set_linear_velocity(linear_velocity);
+  TestRelativeVelocityConsign* res = new TestRelativeVelocityConsign(ai_data);
+  res->setLinearVelocity(linear_velocity);
   return res;
 }
 
-Test_relative_velocity_consign* Test_relative_velocity_consign::get_movement_angular_and_linear_velocity(
-    Ai::AiData& ai_data, Vector2d linear_velocity, double angular_velocity)
+TestRelativeVelocityConsign* TestRelativeVelocityConsign::getMovementAngularAndLinearVelocity(ai::AiData& ai_data,
+                                                                                              Vector2d linear_velocity,
+                                                                                              double angular_velocity)
 {
-  Test_relative_velocity_consign* res = new Test_relative_velocity_consign(ai_data);
-  res->set_linear_velocity(linear_velocity);
-  res->set_angular_velocity(angular_velocity);
+  TestRelativeVelocityConsign* res = new TestRelativeVelocityConsign(ai_data);
+  res->setLinearVelocity(linear_velocity);
+  res->setAngularVelocity(angular_velocity);
   return res;
 }
 
-};  // namespace Robot_behavior
-};  // Namespace RhobanSSL
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include "Master.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 float Master::Robot::age()
 {
@@ -256,4 +256,4 @@ void Master::execute()
     }
   }
 }
-}  // namespace RhobanSSL
+}  // namespace rhoban_ssl

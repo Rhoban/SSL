@@ -18,47 +18,52 @@
 */
 #include "go_to_position_with_motionless_target_tracking.h"
 
-
-
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
 namespace medium
 {
-
-
-
-GoToPositionWithMotionlessTargetTracking::GoToPositionWithMotionlessTargetTracking(RhobanSSL::Ai::AiData& ai_data)
+GoToPositionWithMotionlessTargetTracking::GoToPositionWithMotionlessTargetTracking(ai::AiData& ai_data)
   : RobotBehavior(ai_data), follower_(ai_data), circle_follower_(ai_data)
 {
 }
 
-void GoToPositionWithMotionlessTargetTracking::update(double time, const RhobanSSL::Ai::Robot& robot,
-                                                      const RhobanSSL::Ai::Ball& ball)
+void GoToPositionWithMotionlessTargetTracking::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   annotations_.clear();
 
 #if 1
   if (!robot_destination_set_)
   {
-    ContinuousAngle angle_destination( M_PI_2 );
+    ContinuousAngle angle_destination(M_PI_2);
 
-    circle_follower_.setGoal(angle_destination, ball_position(), Vector2d(0.0, 0.0));
+    circle_follower_.setGoal(angle_destination, ballPosition(), Vector2d(0.0, 0.0));
     robot_destination_set_ = true;
   }
-  annotations_.addCross(circle_follower_.linearPosition(time), "green");
+  annotations_.addCross(
+      circle_follower_.robot_control::tracking::RobotControlWithTargetTrackingAndCircleFollowing::linearPosition(time),
+      "green");
 
-  annotations_.addArrow(circle_follower_.linearPosition(time),
-                        circle_follower_.linearPosition(time)+
-                            Vector2d(std::cos(circle_follower_.angularPosition(time).value()), std::sin(circle_follower_.angularPosition(time).value())),
-                        "green", false);
+  annotations_.addArrow(
+      circle_follower_.robot_control::tracking::RobotControlWithTargetTrackingAndCircleFollowing::linearPosition(time),
+      circle_follower_.robot_control::tracking::RobotControlWithTargetTrackingAndCircleFollowing::linearPosition(time) +
+          Vector2d(
+              std::cos(
+                  circle_follower_
+                      .robot_control::tracking::RobotControlWithTargetTrackingAndCircleFollowing::angularPosition(time)
+                      .value()),
+              std::sin(
+                  circle_follower_
+                      .robot_control::tracking::RobotControlWithTargetTrackingAndCircleFollowing::angularPosition(time)
+                      .value())),
+      "green", false);
 
-  //DEBUG(angular_position() - vector2angle(linear_position()-ball_position()));
+  // DEBUG(angular_position() - vector2angle(linear_position()-ball_position()));
 
   circle_follower_.update(time, robot, ball);
 #else
@@ -66,18 +71,18 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const RhobanS
   {
     rhoban_geometry::Point robot_destination;
     robot_destination.x = linear_position().x;
-    robot_destination.y = ai_data.field.fieldWidth/2;
+    robot_destination.y = ai_data.field.fieldWidth / 2;
     follower_.setGoal(robot_destination, rhoban_geometry::Point(0, 0), Vector2d(0.0, 0.0));
     robot_destination_set_ = true;
   }
 
-  //DEBUG(follower_.linearPosition(time));
+  // DEBUG(follower_.linearPosition(time));
   annotations_.addCross(follower_.linearPosition(time), "green");
 
   annotations_.addArrow(follower_.linearPosition(time),
-                       follower_.linearPosition(time)+
-                            Vector2d(std::cos(follower_.angularPosition(time).value()), std::sin(follower_.angularPosition(time).value())),
-                       "green", false);
+                        follower_.linearPosition(time) + Vector2d(std::cos(follower_.angularPosition(time).value()),
+                                                                  std::sin(follower_.angularPosition(time).value())),
+                        "green", false);
 
   follower_.update(time, robot, ball);
 #endif
@@ -88,11 +93,11 @@ Control GoToPositionWithMotionlessTargetTracking::control() const
   return circle_follower_.control();
 }
 
-RhobanSSLAnnotation::Annotations GoToPositionWithMotionlessTargetTracking::get_annotations() const
+annotations::Annotations GoToPositionWithMotionlessTargetTracking::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
-  annotations.addAnnotations( annotations_);
-  annotations.addAnnotations( circle_follower_.get_annotations() );
+  annotations::Annotations annotations;
+  annotations.addAnnotations(annotations_);
+  annotations.addAnnotations(circle_follower_.getAnnotations());
   return annotations;
 }
 

@@ -22,7 +22,6 @@
 
 #include <control/tracking/velocity_controller_with_pid.h>
 
-#include <physic/Movement.h>
 #include <physic/movement_with_no_prediction.h>
 #include <rhoban_geometry/point.h>
 

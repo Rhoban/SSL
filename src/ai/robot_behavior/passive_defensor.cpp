@@ -22,62 +22,62 @@
 #include <math/vector2d.h>
 #include <debug.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-Passive_defensor::Passive_defensor(Ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower(Factory::fixed_consign_follower(ai_data)), barycenter(.5)
+PassiveDefensor::PassiveDefensor(ai::AiData& ai_data)
+  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data)), barycenter_(.5)
 {
 }
 
-void Passive_defensor::update(double time, const Ai::Robot& robot, const Ai::Ball& ball)
+void PassiveDefensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
-  const Ai::Robot& ennemy = get_robot(robot_to_obstale_id, robot_to_obstale_team);
-  rhoban_geometry::Point ennemy_position = ennemy.get_movement().linear_position(time);
+  const ai::Robot& ennemy = getRobot(robot_to_obstale_id_, robot_to_obstale_team_1);
+  rhoban_geometry::Point ennemy_position = ennemy.getMovement().linearPosition(time);
 
   rhoban_geometry::Point target_position =
-      vector2point(Vector2d(ball_position()) * barycenter + Vector2d(ennemy_position) * (1.0 - barycenter));
+      vector2point(Vector2d(ballPosition()) * barycenter_ + Vector2d(ennemy_position) * (1.0 - barycenter_));
 
-  ContinuousAngle target_rotation = detail::vec2angle(Vector2d(ball_position() - target_position));
+  ContinuousAngle target_rotation = detail::vec2angle(Vector2d(ballPosition() - target_position));
 
-  follower->avoid_the_ball(false);
-  follower->set_following_position(target_position, target_rotation);
-  follower->update(time, robot, ball);
+  follower_->avoidTheBall(false);
+  follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->update(time, robot, ball);
 }
 
-Control Passive_defensor::control() const
+Control PassiveDefensor::control() const
 {
-  Control ctrl = follower->control();
+  Control ctrl = follower_->control();
   // ctrl.spin = true; // We active the dribler !
   return ctrl;
 }
 
-Passive_defensor::~Passive_defensor()
+PassiveDefensor::~PassiveDefensor()
 {
-  delete follower;
+  delete follower_;
 }
 
-void Passive_defensor::set_robot_to_obstacle(int robot_id, Vision::Team team)
+void PassiveDefensor::set_robot_to_obstacle(int robot_id, vision::Team team)
 {
-  this->robot_to_obstale_id = robot_id;
-  this->robot_to_obstale_team = team;
+  this->robot_to_obstale_id_ = robot_id;
+  this->robot_to_obstale_team_1 = team;
 }
 
-void Passive_defensor::set_barycenter(double barycenter)
+void PassiveDefensor::set_barycenter(double barycenter)
 {
   assert(0 <= barycenter and barycenter <= 1.0);
-  this->barycenter = barycenter;
+  this->barycenter_ = barycenter;
 }
 
-RhobanSSLAnnotation::Annotations Passive_defensor::get_annotations() const
+rhoban_ssl::annotations::Annotations PassiveDefensor::getAnnotations() const
 {
-  return follower->get_annotations();
+  return follower_->getAnnotations();
 }
 
-}  // namespace Robot_behavior
-}  // namespace RhobanSSL
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

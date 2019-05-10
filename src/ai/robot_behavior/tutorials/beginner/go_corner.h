@@ -17,39 +17,74 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGINNER__GO__CORNER__
+#pragma once
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-/** Tutorial class to show how to move a robot in the side corner. */
-class Go_corner : public RobotBehavior
+/**
+ * @class GoCorner
+ * @brief Tutorial to show how to move a robot in the side corner.
+ */
+class GoCorner : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  /**
+   * @see rhoban_ssl::Robot_behavior::ConsignFollower
+   */
+  ConsignFollower* follower_;
+  /**
+   * Not use in this package but set in a case of copy.
+   * @see rhoban_ssl::annotations::Annotations
+   */
+  rhoban_ssl::annotations::Annotations annotations_;
+  /**
+   * @brief The target corner which the robot goes.
+   */
+  const rhoban_geometry::Point target_corner_;
 
 public:
-  Go_corner(Ai::AiData& ai_data);
+  /**
+   * @brief Constructor.
+   * The default value of the target_corner_ is set to left opponent corner.
+   * @param ai_data : The Robot Behavior needs the data of the AI.
+   * @see ai::AiData
+   */
+  GoCorner(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  /**
+   * @brief Set the position of the robot in the target_corner_.
+   *
+   * We use parameters to update the time and the position before to do anything.
+   * @param time : The time.
+   * @param robot : The information for the robot selected in the behavior.
+   * @param ball : The information of the ball.
+   */
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
+  /**
+   * Return the control of the behavior.
+   */
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  /**
+   * @see rhoban_ssl::annotations::Annotations
+   * The class don't draw any annotations.
+   * The follower draw annotation.
+   */
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Go_corner();
+  /**
+   * @brief Destructor.
+   */
+  virtual ~GoCorner();
 };
-
-};  // namespace Beginner
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+}  // namespace beginner
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl

@@ -38,7 +38,7 @@ public:
   virtual void setGoal(const Vector2d& robot_destination, const rhoban_geometry::Point& linear_position_of_the_target,
                        const Vector2d& linear_velocity_of_the_target);
 
-  //  void setGoal(const Vector2d& robot_destination, const RhobanSSL::Ai::Object& targeted_object);
+  //  void setGoal(const Vector2d& robot_destination, const ai::Object& targeted_object);
 
   // VelocityControllerWithPid interface
 public:

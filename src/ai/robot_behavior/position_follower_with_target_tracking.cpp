@@ -22,24 +22,24 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-PositionFollowerWithTargetTracking::PositionFollowerWithTargetTracking(RhobanSSL::Ai::AiData& ai_data)
-  : RhobanSSL::Robot_behavior::RobotBehavior(ai_data)
+PositionFollowerWithTargetTracking::PositionFollowerWithTargetTracking(ai::AiData& ai_data)
+  : RobotBehavior(ai_data)
 {
   initTime(ai_data.time, ai_data.dt);
 }
 
 
-void PositionFollowerWithTargetTracking::update(double time, const RhobanSSL::Ai::Robot& robot,
-                                                const RhobanSSL::Ai::Ball& ball)
+void PositionFollowerWithTargetTracking::update(double time, const ai::Robot& robot,
+                                                const ai::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
-  RobotBehavior::update_time_and_position(time, robot, ball);
+  RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   RobotControlWithTargetTrackingAndPositionFollowing::update(time,
-                                                             robot.get_movement().linear_position(time),
-                                                             robot.get_movement().linear_velocity(time),
-                                                             robot.get_movement().angular_position(time));
+                                                             robot.getMovement().linearPosition(time),
+                                                             robot.getMovement().linearVelocity(time),
+                                                             robot.getMovement().angularPosition(time));
 }
 
 Control PositionFollowerWithTargetTracking::control() const
@@ -47,16 +47,16 @@ Control PositionFollowerWithTargetTracking::control() const
   return getLimitedControl();
 }
 
-RhobanSSLAnnotation::Annotations PositionFollowerWithTargetTracking::get_annotations() const
+annotations::Annotations PositionFollowerWithTargetTracking::getAnnotations() const
 {
-  RhobanSSLAnnotation::Annotations annotations;
+  annotations::Annotations annotations;
   bool dashed = true;
 
-  annotations.addArrow(linear_position(), linear_position_of_the_target_, "red", dashed);
+  annotations.addArrow(RobotBehavior::linearPosition(), linear_position_of_the_target_, "red", dashed);
 
-  annotations.addArrow(linear_position(),
-                       linear_position() +
-                           Vector2d(std::cos(angular_position().value()), std::sin(angular_position().value())),
+  annotations.addArrow(RobotBehavior::linearPosition(),
+                       RobotBehavior::linearPosition() +
+                           Vector2d(std::cos(RobotBehavior::angularPosition().value()), std::sin(RobotBehavior::angularPosition().value())),
                        "red", not dashed);
 
   //    annotations.addArrow(
@@ -64,7 +64,7 @@ RhobanSSLAnnotation::Annotations PositionFollowerWithTargetTracking::get_annotat
   //    );
 
   Control ctrl = control();
-  annotations.addArrow(linear_position(), linear_position() + ctrl.linear_velocity, "orange", not dashed);
+  annotations.addArrow(RobotBehavior::linearPosition(), RobotBehavior::linearPosition() + ctrl.linear_velocity, "orange", not dashed);
   return annotations;
 }
 

@@ -22,12 +22,12 @@
 
 #define CALCULUS_ERROR 0.000
 
-Control::Control(bool is_absolute) : m_is_absolute(is_absolute)
+Control::Control(bool is_absolute) : is_absolute_(is_absolute)
 {
 }
 
 Control::Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool is_absolute)
-  : m_is_absolute(is_absolute), linear_velocity(linear_velocity), angular_velocity(angular_velocity)
+  : is_absolute_(is_absolute), linear_velocity(linear_velocity), angular_velocity(angular_velocity)
 {
 }
 
@@ -35,9 +35,9 @@ Control::Control(bool kick, bool active, bool ignore) : kick(kick), active(activ
 {
 }
 
-void Control::change_to_relative_control(const ContinuousAngle& robot_orientation, double dt)
+void Control::changeToRelativeControl(const ContinuousAngle& robot_orientation, double dt)
 {
-  if (!is_absolute())
+  if (!isAbsolute())
   {
     return;
   }
@@ -65,9 +65,9 @@ void Control::change_to_relative_control(const ContinuousAngle& robot_orientatio
   this->angular_velocity = a_r;
 }
 
-void Control::change_to_absolute_control(const ContinuousAngle& robot_orientation, double dt)
+void Control::changeToAbsoluteControl(const ContinuousAngle& robot_orientation, double dt)
 {
-  if (is_absolute())
+  if (isAbsolute())
   {
     return;
   }
@@ -76,27 +76,27 @@ void Control::change_to_absolute_control(const ContinuousAngle& robot_orientatio
   // TODO
 }
 
-bool Control::is_absolute()
+bool Control::isAbsolute()
 {
-  return m_is_absolute;
+  return is_absolute_;
 }
 
-bool Control::is_relative()
+bool Control::isRelative()
 {
-  return !m_is_absolute;
+  return !is_absolute_;
 }
 
-Control Control::make_null()
+Control Control::makeNull()
 {
   return Control(false, true, false);
 }
 
-Control Control::make_desactivated()
+Control Control::makeDesactivated()
 {
   return Control(false, false, false);
 }
 
-Control Control::make_ignored()
+Control Control::makeIgnored()
 {
   return Control(false, false, true);
 }

@@ -27,16 +27,16 @@ namespace robot_behavior
 {
 class PositionFollowerWithTargetTracking
   : public robot_control::tracking::RobotControlWithTargetTrackingAndPositionFollowing,
-    public RhobanSSL::Robot_behavior::RobotBehavior
+    public rhoban_ssl::robot_behavior::RobotBehavior
 {
 public:
-  PositionFollowerWithTargetTracking(RhobanSSL::Ai::AiData& ai_data);
+  PositionFollowerWithTargetTracking(ai::AiData& ai_data);
 
   // RobotBehavior interface
 public:
-  void update(double time, const RhobanSSL::Ai::Robot& robot, const RhobanSSL::Ai::Ball& ball);
+  void update(double time, const ai::Robot& robot, const ai::Ball& ball);
   Control control() const;
-  RhobanSSLAnnotation::Annotations get_annotations() const;
+  rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace robot_behavior

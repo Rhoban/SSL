@@ -27,16 +27,16 @@ namespace robot_behavior
 {
 class CircleFollowerWithTargetTracking
   : public robot_control::tracking::RobotControlWithTargetTrackingAndCircleFollowing,
-    public RhobanSSL::Robot_behavior::RobotBehavior
+    public RobotBehavior
 {
 public:
-  CircleFollowerWithTargetTracking(RhobanSSL::Ai::AiData& ai_data);
+  CircleFollowerWithTargetTracking(ai::AiData& ai_data);
 
   // RobotBehavior interface
 public:
-  void update(double time, const RhobanSSL::Ai::Robot &robot, const RhobanSSL::Ai::Ball &ball);
+  void update(double time, const ai::Robot &robot, const ai::Ball &ball);
   Control control() const;
-  RhobanSSLAnnotation::Annotations get_annotations() const;
+  annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace robot_behavior

@@ -17,68 +17,62 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__EXAMPLE_MACHINE_STATE__H__
-#define __ROBOT_BEHAVIOR__EXAMPLE_MACHINE_STATE__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 #include <core/machine_state.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
-class Example_machine_state : public RobotBehavior
+class ExampleMachineState : public RobotBehavior
 {
 private:
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  struct state_name
+  struct StateName
   {
     static const constexpr char* wait_pass = "wait_pass";
     static const constexpr char* strike = "strike";
   };
-  struct edge_name
+  struct EdgeName
   {
     static const constexpr char* can_strike = "can_strike";
     static const constexpr char* strike_is_finished = "strike_is_finished";
   };
 
-  bool is_closed_to_the_ball() const;
+  bool isClosedToTheBall() const;
 
-  void print_are_pass()
-  {
-    DEBUG("ARE PASSING");
-  };
-  void print_ball_info()
+  void printArePass();
+  void printBallInfo()
   {
     DEBUG("INFO");
-  };
-  void print_ball_info2()
+  }
+  void printBallInfo2()
   {
     DEBUG("INFO2");
-  };
+  }
 
-  typedef construct_machine_state_infrastructure<std::string, Ai::AiData, Ai::AiData> machine_state_infrastructure;
+  typedef construct_machine_state_infrastructure<std::string, ai::AiData, ai::AiData> MachineStateInfrastructure;
 
 private:
-  machine_state_infrastructure::MachineState machine;
+  MachineStateInfrastructure::MachineState machine;
 
 public:
-  Example_machine_state(Ai::AiData& ai_data);
+  ExampleMachineState(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Example_machine_state();
+  virtual ~ExampleMachineState();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl
