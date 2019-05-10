@@ -183,6 +183,15 @@ void Constants::load(const std::string& config_path)
   robot_radius = robot_conf["robot_radius"].asDouble();
   assert(robot_radius > 0.0);
 
+  max_wheel_speed = robot_conf["max_wheel_speed"].asDouble();
+  assert(max_wheel_speed > 0.0);
+
+  front_wheel_angle = robot_conf["front_wheel_angle"].asDouble();
+  assert(front_wheel_angle > 0.0 && front_wheel_angle < 360);
+
+  rear_wheel_angle = robot_conf["rear_wheel_angle"].asDouble();
+  assert(rear_wheel_angle > 0.0 && rear_wheel_angle < 360);
+
   wheel_radius = robot_conf["wheel_radius"].asDouble();
   assert(wheel_radius > 0.0);
 

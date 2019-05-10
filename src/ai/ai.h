@@ -28,6 +28,7 @@
 #include <core/machine_state.h>
 #include <manager/manager.h>
 #include <annotations/annotations.h>
+#include <control/kinematic.h>
 
 namespace rhoban_ssl
 {
@@ -36,7 +37,7 @@ class AI
 private:
   std::string team_name_;
   ai::Team default_team_;
-
+  control::Kinematic kinematic_;
 public:
   bool is_in_simulation;
   AI(std::string manager_name, std::string team_name, ai::Team default_team, Data& data, AICommander* commander,

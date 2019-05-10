@@ -145,6 +145,10 @@ struct Constants
   double radius_security_for_collision;
   double radius_security_for_avoidance;
 
+  double max_wheel_speed;
+  double front_wheel_angle;
+  double rear_wheel_angle;
+
   double wheel_radius;
   double wheel_excentricity;
   double wheel_nb_turns_acceleration_limit;

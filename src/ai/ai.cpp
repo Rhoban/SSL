@@ -266,6 +266,15 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
   ctrl.changeToRelativeControl(ai_data_.robots[vision::Ally][robot_id].getMovement().angularPosition(ai_data_.time),
                                ai_data_.dt);
   limitsVelocity(ctrl);
+
+  control::Kinematic::WheelsSpeed wheels_speed = kinematic_.compute(ctrl.linear_velocity.getX(), ctrl.linear_velocity.getY(), ctrl.angular_velocity.value());
+  if (wheels_speed.backLeft > ai_data_.constants.max_wheel_speed ||
+      wheels_speed.backRight > ai_data_.constants.max_wheel_speed ||
+      wheels_speed.frontLeft > ai_data_.constants.max_wheel_speed ||
+      wheels_speed.frontRight > ai_data_.constants.max_wheel_speed)
+  {
+    std::cerr << "AI WARNING : one wheel reached his maximum speed ! " << std::endl;
+  }
 }
 
 Control AI::updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball)
@@ -302,6 +311,8 @@ AI::AI(std::string manager_name, std::string team_name, ai::Team default_team, D
   , data_(data)
   , game_state_(ai_data_)
 {
+  kinematic_.load(ai_data_);
+
   initRobotBehaviors();
 
   ai_data_.changeTeamColor(default_team);
