@@ -3,6 +3,8 @@
 #include <execution_manager.h>
 #include <libwebsockets.h>
 #include <iostream>
+#include <vector>
+#include <viewer/api.h>
 
 /**
  * @brief The per_session_data__minimal struct
@@ -60,6 +62,11 @@ private:
    * The struct lws_context represents the server.
    */
   struct lws_context* context_;
+
+  /**
+   * @brief All clients used.
+   */
+  static std::vector<struct lws*> clients_;
 
 public:
   /**

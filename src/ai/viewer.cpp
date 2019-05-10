@@ -1,20 +1,25 @@
 #include "viewer.h"
 #include "debug.h"
 
-int rhoban_ssl::ViewerCommunication::callback_http_dummy(struct lws* wsi, enum lws_callback_reasons reason, void* user,
-                                                         void* in, size_t len)
+namespace rhoban_ssl
+{
+int ViewerCommunication::callback_http_dummy(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in,
+                                             size_t len)
 {
   return 0;
 }
 
-int rhoban_ssl::ViewerCommunication::callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void* user,
-                                                     void* in, size_t len)
+std::vector<struct lws*> ViewerCommunication::clients_;
+
+int ViewerCommunication::callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in,
+                                         size_t len)
 {
   unsigned char m_Test[20] = "Hello World";
   switch (reason)
   {
     case LWS_CALLBACK_ESTABLISHED:
-      std::cout << "we receive a client" << std::endl;
+      DEBUG("Connection - Initialized");
+      ViewerCommunication::clients_.push_back(wsi);
       return 0;
       break;
     case LWS_CALLBACK_RECEIVE:
@@ -28,16 +33,21 @@ int rhoban_ssl::ViewerCommunication::callback_viewer(struct lws* wsi, enum lws_c
       return 0;
       break;
     case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
-      std::cout << "we receive client refused";
+      DEBUG("Error - We receive the client");
       return 0;
       break;
+    case LWS_CALLBACK_CLOSED:
+      DEBUG("Connection closed");
+      ViewerCommunication::clients_.erase(
+          std::remove(ViewerCommunication::clients_.begin(), ViewerCommunication::clients_.end(), wsi),
+          ViewerCommunication::clients_.end());
     default:
       return 0;
       break;
   }
 }
 
-rhoban_ssl::ViewerCommunication::ViewerCommunication()
+ViewerCommunication::ViewerCommunication()
 {
   // Set the protocols
 
@@ -50,16 +60,30 @@ rhoban_ssl::ViewerCommunication::ViewerCommunication()
   struct lws_context_creation_info info;
   memset(&info, 0, sizeof info); /* otherwise uninitialized garbage */
 
-  info.port = 7880;
+  info.port = 7882;
   info.protocols = protocols_;
 
   context_ = lws_create_context(&info);
 }
 
-bool rhoban_ssl::ViewerCommunication::runTask()
+bool ViewerCommunication::runTask()
 {
   try
   {
+    // Here send.
+    // rhoban_ssl::viewer::Api api = rhoban_ssl::viewer::Api::getApi();
+    if (clients_.size() > 0)
+    {
+      unsigned char m_Test[30] = "Hello World of main";
+      // TODO HERE
+      // FOR EACH PACKET, SEND EACH THE USER.
+      // After that supress the packet.
+      for (auto it = clients_.begin(); it != clients_.end(); ++it)
+      {
+        lws_write(*it, m_Test, 30, LWS_WRITE_TEXT);
+        // On accède à l'élément pointé via l'étoile
+      }
+    }
     // Use this to ask to send.
     // lws_callback_on_writable_all_protocol(context_, &protocols[1]);
     lws_service(context_, 10);
@@ -70,7 +94,9 @@ bool rhoban_ssl::ViewerCommunication::runTask()
   return true;
 }
 
-rhoban_ssl::ViewerCommunication::~ViewerCommunication()
+ViewerCommunication::~ViewerCommunication()
 {
   lws_context_destroy(context_);
 }
+
+}  // namespace rhoban_ssl

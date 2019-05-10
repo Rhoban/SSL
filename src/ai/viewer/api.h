@@ -19,15 +19,23 @@
 
 #pragma once
 
+#include <libwebsockets.h>
 #include <queue>
+
 #include "ai_packet.pb.h"
-#include <ai_data.h>
+#include "field_packet.pb.h"
+
+#include <config.h>
+#include <execution_manager.h>
+#include <data.h>
+#include <vision/vision_data.h>
+#include <rhoban_utils/timing/time_stamp.h>
 
 namespace rhoban_ssl
 {
 namespace viewer
 {
-class Api
+class Api : public Task
 {
 private:
   /**
@@ -44,6 +52,11 @@ private:
    * @brief All packet to store and send.
    */
   std::queue<AIPacket> packets_;
+
+  /**
+   * @brief The current time
+   */
+  double time_;
 
 public:
   /**
@@ -62,8 +75,16 @@ public:
    */
   std::queue<AIPacket>* getQueue();
 
-  // Work In Progress.
+  /**
+   * @brief Update the field.
+   */
   void updateField();
+
+  /**
+   * @brief run a task
+   * @see rhoban_ssl::Task
+   */
+  virtual bool runTask(void) override;
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

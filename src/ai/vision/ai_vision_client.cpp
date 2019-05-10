@@ -24,6 +24,7 @@
 #include "factory.h"
 #include <core/print_collection.h>
 #include "print_protobuf.h"
+#include <viewer/api.h>
 
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
@@ -312,7 +313,6 @@ bool SslGeometryPacketAnalyzer::runTask()
   {
     if ((*i)->has_geometry())
     {
-      DEBUG("geometry packet found");
       // process geometry data and update global
       auto& geometry = (*i)->geometry();
       if ((field_done_ == false) && (geometry.has_field()))
@@ -333,6 +333,9 @@ bool SslGeometryPacketAnalyzer::runTask()
             field.penaltyAreaWidth = std::fabs(2 * geometry.field().field_lines(i).p1().y()) / 1000.0;
           }
         }
+
+        rhoban_ssl::viewer::Api::getApi().updateField();
+
         // XXX: Receive other data?
         field_done_ = true;
       }
