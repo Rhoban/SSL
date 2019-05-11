@@ -199,24 +199,15 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
 
 void PlanVeschambres::startStop()
 {
-<<<<<<< HEAD
-  future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(true);
+  assert(ai_data_.force_ball_avoidance);
   future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 
 void PlanVeschambres::startRunning()
 {
-<<<<<<< HEAD
-  if (ball_position().getX() <= 0)
-=======
-  setBallAvoidanceForAllRobots(false);
+  assert(!ai_data_.force_ball_avoidance);
   if (ballPosition().getX() <= 0)
->>>>>>> master
   {
     future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
     ball_was_in_ally_part_ = true;
@@ -230,129 +221,77 @@ void PlanVeschambres::startRunning()
 }
 void PlanVeschambres::startHalt()
 {
-<<<<<<< HEAD
-  future_strats = halt_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(true);
+  assert(ai_data_.force_ball_avoidance);
   future_strats_ = halt_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 
 void PlanVeschambres::startDirectKickAlly()
 {
-<<<<<<< HEAD
-  future_strats = kick_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(false);
+  assert(!ai_data_.force_ball_avoidance);
   future_strats_ = kick_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 void PlanVeschambres::startDirectKickOpponent()
 {
-<<<<<<< HEAD
-  future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(true);
+  assert(ai_data_.force_ball_avoidance);
   future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 
 void PlanVeschambres::startIndirectKickAlly()
 {
-<<<<<<< HEAD
-  future_strats = kick_strats_indirect[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(false);
+  assert(!ai_data_.force_ball_avoidance);
   future_strats_ = kick_strats_indirect_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
+
 void PlanVeschambres::startIndirectKickOpponent()
 {
-<<<<<<< HEAD
-  future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(true);
+  assert(ai_data_.force_ball_avoidance);
   future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 
 void PlanVeschambres::startPrepareKickoffAlly()
 {
-<<<<<<< HEAD
-  future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(true);
+  assert(!ai_data_.force_ball_avoidance);
   future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
+
 void PlanVeschambres::startPrepareKickoffOpponent()
 {
-<<<<<<< HEAD
-  future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(true);
+  assert(ai_data_.force_ball_avoidance);
   future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 
 void PlanVeschambres::startKickoffAlly()
 {
-<<<<<<< HEAD
-  future_strats = offensive_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(false);
+  assert(!ai_data_.force_ball_avoidance);
   future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
+
 void PlanVeschambres::startKickoffOpponent()
 {
-<<<<<<< HEAD
-  future_strats = defensive_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(true);
+  assert(ai_data_.force_ball_avoidance);
   future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 
 void PlanVeschambres::startPenaltyAlly()
 {
-<<<<<<< HEAD
-  future_strats = penalty_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(false);
+  assert(!ai_data_.force_ball_avoidance);
   future_strats_ = penalty_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 void PlanVeschambres::startPenaltyOpponent()
 {
-<<<<<<< HEAD
-  future_strats = stop_strats[Manager::get_valid_player_ids().size() + 1];
-  declare_and_assign_next_strategies(future_strats);
-=======
-  setBallAvoidanceForAllRobots(true);
+  assert(ai_data_.force_ball_avoidance);
   future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
->>>>>>> master
 }
 
 // Continue

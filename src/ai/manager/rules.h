@@ -20,7 +20,6 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-
 #include <manager/manager_with_game_state.h>
 #include <type_traits>
 
@@ -28,122 +27,151 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-template< typename MANAGER,
+template <typename MANAGER,
           typename = typename std::enable_if<std::is_base_of<ManagerWithGameState, MANAGER>::value>::type>
 class Rules : public MANAGER
 {
+public:
+  Rules(ai::AiData& ai_data, const GameState& game_state) : MANAGER(ai_data, game_state)
+  {
+  }
 
-  public:
-      Rules(ai::AiData & ai_data, const GameState & game_state):MANAGER(ai_data, game_state)
-      {
-      }
+  virtual void startStop()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startStop();
+  }
 
-  virtual void start_stop(){
-                MANAGER::set_ball_avoidance_for_all_robots(true);
-                MANAGER::start_stop();
-	}
+  virtual void startRunning()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(false);
+    MANAGER::startRunning();
+  }
+  virtual void startHalt()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startHalt();
+  }
 
-	virtual void start_running(){
-                MANAGER::set_ball_avoidance_for_all_robots(false);
-                MANAGER::start_running();
-	}
-	virtual void start_halt(){
-                MANAGER::set_ball_avoidance_for_all_robots(true);
-                MANAGER::start_halt();
-	}
+  virtual void startDirectKickAlly()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(false);
+    MANAGER::startDirectKickAlly();
+  }
+  virtual void startDirectKickOpponent()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startDirectKickOpponent();
+  }
 
-	virtual void start_direct_kick_ally(){
-                MANAGER::set_ball_avoidance_for_all_robots(false);
-                MANAGER::start_direct_kick_ally();
-	}
-	virtual void start_direct_kick_opponent(){
-                MANAGER::set_ball_avoidance_for_all_robots(true);
-                MANAGER::start_direct_kick_opponent();
-	}
+  virtual void startIndirectKickAlly()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(false);
+    MANAGER::startIndirectKickAlly();
+  }
 
-	virtual void start_indirect_kick_ally(){
-                MANAGER::set_ball_avoidance_for_all_robots(false);
-                MANAGER::start_indirect_kick_ally();
-	}
-	virtual void start_indirect_kick_opponent(){
-                MANAGER::set_ball_avoidance_for_all_robots(true);
-                MANAGER::start_indirect_kick_opponent();
-	}
+  virtual void startIndirectKickOpponent()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startIndirectKickOpponent();
+  }
 
-	virtual void start_prepare_kickoff_ally(){
-                MANAGER::set_ball_avoidance_for_all_robots(true);
-                MANAGER::start_prepare_kickoff_ally();
-	}
-	virtual void start_prepare_kickoff_opponent(){
-                MANAGER::set_ball_avoidance_for_all_robots(true);
-                MANAGER::start_prepare_kickoff_opponent();
-	}
+  virtual void startPrepareKickoffAlly()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(false);
+    MANAGER::startPrepareKickoffAlly();
+  }
 
-	virtual void start_kickoff_ally(){
-                MANAGER::set_ball_avoidance_for_all_robots(false);
-                MANAGER::start_kickoff_ally();
-	}
-	virtual void start_kickoff_opponent(){
-                MANAGER::set_ball_avoidance_for_all_robots(true);
-                MANAGER::start_kickoff_opponent();
-	}
+  virtual void startPrepareKickoffOpponent()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startPrepareKickoffOpponent();
+  }
 
-	virtual void start_penalty_ally(){
-                MANAGER::set_ball_avoidance_for_all_robots(false);
-                MANAGER::start_penalty_ally();
-	}
-	virtual void start_penalty_opponent(){
-                MANAGER::set_ball_avoidance_for_all_robots(true);
-                MANAGER::start_penalty_opponent();
-	}
+  virtual void startKickoffAlly()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(false);
+    MANAGER::startKickoffAlly();
+  }
 
-	//Continue
+  virtual void startKickoffOpponent()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startKickoffOpponent();
+  }
 
-	virtual void continue_stop(){
-	}
+  virtual void startPenaltyAlly()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(false);
+    MANAGER::startPenaltyAlly();
+  }
+  virtual void startPenaltyOpponent()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startPenaltyOpponent();
+  }
 
-	virtual void continue_running(){
-                MANAGER::continue_running();
-	}
-	virtual void continue_halt(){
-                MANAGER::continue_halt();
-	}
+  // Continue
 
-	virtual void continue_direct_kick_ally(){
-                MANAGER::continue_direct_kick_ally();
-	}
-	virtual void continue_direct_kick_opponent(){
-                MANAGER::continue_direct_kick_opponent();
-	}
+  virtual void continueStop()
+  {
+     MANAGER::continueStop();
+  }
 
-	virtual void continue_indirect_kick_ally(){
-                MANAGER::continue_indirect_kick_ally();
-	}
-	virtual void continue_indirect_kick_opponent(){
-                MANAGER::continue_indirect_kick_opponent();
-	}
+  virtual void continueRunning()
+  {
+    MANAGER::continueRunning();
+  }
+  virtual void continueHalt()
+  {
+    MANAGER::continueHalt();
+  }
 
-	virtual void continue_prepare_kickoff_ally(){
-                MANAGER::continue_prepare_kickoff_ally();
-	}
-	virtual void continue_prepare_kickoff_opponent(){
-                MANAGER::continue_prepare_kickoff_opponent();
-	}
+  virtual void continueDirectKickAlly()
+  {
+    MANAGER::continueDirectKickAlly();
+  }
+  virtual void continueDirectKickOpponent()
+  {
+    MANAGER::continueDirectKickOpponent();
+  }
 
-	virtual void continue_kickoff_ally(){
-                MANAGER::continue_kickoff_ally();
-	}
-	virtual void continue_kickoff_opponent(){
-                MANAGER::continue_kickoff_opponent();
-	}
+  virtual void continueIndirectKickAlly()
+  {
+    MANAGER::continueIndirectKickAlly();
+  }
+  virtual void continueIndirectKickOpponent()
+  {
+    MANAGER::continueIndirectKickOpponent();
+  }
 
-	virtual void continue_penalty_ally(){
-                MANAGER::continue_penalty_ally();
-	}
-	virtual void continue_penalty_opponent(){
-                MANAGER::continue_penalty_opponent();
-	}
+  virtual void continuePrepareKickoffAlly()
+  {
+    MANAGER::continuePrepareKickoffAlly();
+  }
+  virtual void continuePrepareKickoffOpponent()
+  {
+    MANAGER::continuePrepareKickoffOpponent();
+  }
+
+  virtual void continueKickoffAlly()
+  {
+    MANAGER::continueKickoffAlly();
+  }
+  virtual void continueKickoffOpponent()
+  {
+    MANAGER::continueKickoffOpponent();
+  }
+
+  virtual void continuePenaltyAlly()
+  {
+    MANAGER::continuePenaltyAlly();
+  }
+  virtual void continuePenaltyOpponent()
+  {
+    MANAGER::continuePenaltyOpponent();
+  }
 };
 
-} // namespace Manager
-} // namespace RhobanSSL
+}  // namespace manager
+}  // namespace rhoban_ssl
