@@ -65,6 +65,9 @@ public:
   static Control makeDesactivated();
   static Control makeIgnored();
   static Control makeNull();
+
+  
+  static float getNeededPower(double distance); //return needed kick power ([0;1]) to throw the ball at a certain distance (m)
 };
 
 std::ostream& operator<<(std::ostream& out, const Control& control);

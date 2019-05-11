@@ -19,6 +19,7 @@
 */
 #include "control.h"
 #include <math/matrix2d.h>
+#include <debug.h>
 
 #define CALCULUS_ERROR 0.000
 
@@ -99,6 +100,11 @@ Control Control::makeDesactivated()
 Control Control::makeIgnored()
 {
   return Control(false, false, true);
+}
+
+float Control::getNeededPower(double distance){
+  DEBUG("lol !!!!!!!!!!!");
+  return 1.0;
 }
 
 std::ostream& operator<<(std::ostream& out, const Control& control)
