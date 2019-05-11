@@ -75,30 +75,29 @@ bool ViewerCommunication::runTask()
 
       unsigned char m_Test[30] = "Hello World of main";
 
-        //rhoban_ssl::viewer::Api::getApi().getQueue();
-/**
-      while(!rhoban_ssl::viewer::Api::getApi().getQueue()->empty()) {
-          DEBUG("test");
+        //DEBUG(!rhoban_ssl::viewer::Api::getApi().getQueue().empty());
+      while(!rhoban_ssl::viewer::Api::getApi().getQueue().empty()) {
+
           if (clients_.size() > 0)
           {
+            AIPacket packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
 
-          AIPacket packet = rhoban_ssl::viewer::Api::getApi().getQueue()->front();
-          //DEBUG(packet);
+            //unsigned char packet_send[packet.ByteSize()];
 
-          unsigned char packet_to_send[LWS_PRE + packet.ByteSize()];
+            //packet.SerializeToArray(packet_send, packet.ByteSize());
 
-          std::memset(&packet_to_send[LWS_PRE], 0, packet.ByteSize());
+            DEBUG("test");
+            for(auto it = clients_.begin(); it!= clients_.end(); ++it) {
+                  // WIP : We receive packet but we need to convert the protocol buffer to unsigned char*;
+                  lws_write(*it, m_Test , 30, LWS_WRITE_TEXT);
+            }
 
-
-          for(auto it = clients_.begin(); it!= clients_.end(); ++it) {
-              lws_write(*it, &packet_to_send[LWS_PRE], packet.ByteSize() , LWS_WRITE_BINARY);
-              DEBUG("write");
-          }
 
           }
           //
+          rhoban_ssl::viewer::Api::getApi().getQueue().pop();
 
-      }*/
+      }
 
     //rhoban_ssl::viewer::Api::getApi().getQueue()->pop();
     // Use this to ask to send.
