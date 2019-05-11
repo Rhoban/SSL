@@ -29,13 +29,13 @@
 #include <execution_manager.h>
 #include <data.h>
 #include <vision/vision_data.h>
-#include <rhoban_utils/timing/time_stamp.h>
+#include <execution_manager.h>
 
 namespace rhoban_ssl
 {
 namespace viewer
 {
-class Api : public Task
+class Api
 {
 private:
   /**
@@ -81,10 +81,9 @@ public:
   void updateField();
 
   /**
-   * @brief run a task
-   * @see rhoban_ssl::Task
+   * @brief Add Location Packet.
    */
-  virtual bool runTask(void) override;
+  virtual void updateLocationPacket(double time);
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl
