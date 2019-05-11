@@ -17,42 +17,39 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MOVEMENT_PREDICTION_BY_INTEGRATION_H__
-#define __MOVEMENT_PREDICTION_BY_INTEGRATION_H__
+#pragma once
 
-#include <physic/Movement.h>
+#include <physic/movement.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-class Movement_predicted_by_integration : public Movement
+class MovementPredictedByIntegration : public Movement
 {
 private:
-  MovementSample samples;
+  MovementSample samples_;
 
   void check();
 
 public:
   virtual Movement* clone() const;
 
-  virtual void set_sample(const MovementSample& samples);
-  virtual const MovementSample& get_sample() const;
+  virtual void setSample(const MovementSample& samples);
+  virtual const MovementSample& getSample() const;
 
-  virtual double last_time() const;
+  virtual double lastTime() const;
 
-  virtual rhoban_geometry::Point linear_position(double time) const;
-  virtual ContinuousAngle angular_position(double time) const;
+  virtual rhoban_geometry::Point linearPosition(double time) const;
+  virtual ContinuousAngle angularPosition(double time) const;
 
-  virtual Vector2d linear_velocity(double time) const;
-  virtual ContinuousAngle angular_velocity(double time) const;
+  virtual Vector2d linearVelocity(double time) const;
+  virtual ContinuousAngle angularVelocity(double time) const;
 
-  virtual Vector2d linear_acceleration(double time) const;
-  virtual ContinuousAngle angular_acceleration(double time) const;
+  virtual Vector2d linearAcceleration(double time) const;
+  virtual ContinuousAngle angularAcceleration(double time) const;
 
   virtual void print(std::ostream& stream) const;
 
-  virtual ~Movement_predicted_by_integration();
+  virtual ~MovementPredictedByIntegration();
 };
 
-}  // namespace RhobanSSL
-
-#endif
+}  // namespace rhoban_ssl

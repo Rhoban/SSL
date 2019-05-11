@@ -15,7 +15,7 @@ void stop(int s)
 int main()
 {
   signal(SIGINT, stop);
-  RhobanSSL::SimClient client;
+  rhoban_ssl::SimClient client;
 
   std::cout << "Putting ball on the middle..." << std::endl;
   client.moveBall(0, 0, 0, 0);

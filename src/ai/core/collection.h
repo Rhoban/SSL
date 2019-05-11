@@ -17,8 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __CORE__COLLECTION__H__
-#define __CORE__COLLECTION__H__
+#pragma once
 
 #include <list>
 #include <vector>
@@ -104,5 +103,3 @@ std::list<DATA_DEST> map2list(const std::vector<DATA_SRC>& source,
   }
   return result;
 }
-
-#endif

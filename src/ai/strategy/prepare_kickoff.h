@@ -17,35 +17,34 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRATEGY__PREPARE_KICKOFF__H__
-#define __STRATEGY__PREPARE_KICKOFF__H__
+#pragma once
 
-#include "Strategy.h"
+#include "strategy.h"
 #include <string>
 #include <robot_behavior/robot_behavior.h>
 #include "placer.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Strategy
+namespace strategy
 {
-class Prepare_kickoff : public Strategy
+class PrepareKickoff : public Strategy
 {
 private:
-  bool is_kicking;
-  bool strategy_is_active;
-  Ai::RobotPlacement attacking_placement;
-  Ai::RobotPlacement defending_placement;
-  Placer placer_when_kicking;
-  Placer placer_when_no_kicking;
+  bool is_kicking_;
+  bool strategy_is_active_;
+  ai::RobotPlacement attacking_placement_;
+  ai::RobotPlacement defending_placement_;
+  Placer placer_when_kicking_;
+  Placer placer_when_no_kicking_;
 
 public:
-  Prepare_kickoff(Ai::AiData& ai_data);
-  virtual ~Prepare_kickoff();
+  PrepareKickoff(ai::AiData& ai_data);
+  virtual ~PrepareKickoff();
 
-  virtual int min_robots() const;
-  virtual int max_robots() const;
-  virtual Goalie_need needs_goalie() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
+  virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
@@ -53,32 +52,29 @@ public:
   virtual void stop(double time);
 
   virtual void update(double time);
-  void update_starting_positions();
+  void updateStartingPositions();
 
-  virtual void assign_behavior_to_robots(
-      std::function<void(int, std::shared_ptr<Robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+  virtual void assignBehaviorToRobots(
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
-  void set_positions(const std::vector<int>& robot_affectations,
-                     const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns,
-                     bool allly_have_the_kickoff);
-  void set_goalie_positions(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position,
-                            bool allly_have_the_kickoff);
+  void setPositions(const std::vector<int>& robot_affectations,
+                    const std::vector<std::pair<rhoban_geometry::Point, ContinuousAngle> >& robot_consigns,
+                    bool allly_have_the_kickoff);
+  void setGoaliePositions(const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position,
+                          bool allly_have_the_kickoff);
 
-  void set_kicking(bool value = true);
+  void setKicking(bool value = true);
 
-  virtual void set_robot_affectation(const std::vector<int>& robot_ids);
+  virtual void setRobotAffectation(const std::vector<int>& robot_ids);
 
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  get_starting_positions(int number_of_avalaible_robots);
-  virtual bool get_starting_position_for_goalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position);
+  getStartingPositions(int number_of_avalaible_robots);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual void set_goalie(int id, bool to_be_managed);
+  virtual void setGoalie(int id, bool to_be_managed);
 };
 
-};  // namespace Strategy
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace strategy
+};  // namespace rhoban_ssl

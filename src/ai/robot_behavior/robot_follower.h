@@ -17,40 +17,37 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__ROBOT_FOLLOWER__H__
-#define __ROBOT_BEHAVIOR__ROBOT_FOLLOWER__H__
+#pragma once
 
 #include "robot_behavior.h"
 #include "factory.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class RobotFollower : public RobotBehavior
 {
 private:
-  int robot_to_follow_id;
-  Vision::Team robot_to_follow_team;
+  int robot_to_follow_id_;
+  vision::Team robot_to_follow_team_;
 
-  Vector2d translation;
-  Vision::Team team;
+  Vector2d translation_;
+  vision::Team team_;
 
-  ConsignFollower* follower;
+  ConsignFollower* follower_;
 
 public:
-  RobotFollower(Ai::AiData& ai_data);
+  RobotFollower(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
-  void declare_robot_to_follow(int robot_id, const Vector2d& translation, Vision::Team team = Vision::Team::Ally);
+  void declare_robot_to_follow_(int robot_id, const Vector2d& translation, vision::Team team = vision::Team::Ally);
 
   virtual Control control() const;
 
   virtual ~RobotFollower();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

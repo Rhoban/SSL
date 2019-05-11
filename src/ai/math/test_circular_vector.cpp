@@ -26,15 +26,15 @@
 TEST(test_circular_vector, Constructors)
 {
   {
-    circular_vector<double> vec(0);
+    CircularVector<double> vec(0);
     EXPECT_TRUE(vec.size() == 0);
   }
   {
-    circular_vector<double> vec;
+    CircularVector<double> vec;
     EXPECT_TRUE(vec.size() == 0);
   }
   {
-    circular_vector<double> vec(3);
+    CircularVector<double> vec(3);
     EXPECT_TRUE(vec.size() == 3);
     for (unsigned int i = 0; i < vec.size(); i++)
     {
@@ -46,7 +46,7 @@ TEST(test_circular_vector, Constructors)
 TEST(test_circular_vector, insert)
 {
   {
-    circular_vector<double> vec(3);
+    CircularVector<double> vec(3);
     vec.insert(3);
     EXPECT_TRUE(vec[0] == 3);
     EXPECT_TRUE(vec[1] == 0);
@@ -72,15 +72,15 @@ TEST(test_circular_vector, insert)
 TEST(test_circular_vector, size)
 {
   {
-    circular_vector<double> vec(42);
+    CircularVector<double> vec(42);
     EXPECT_TRUE(vec.size() == 42);
   }
   {
-    circular_vector<double> vec(0);
+    CircularVector<double> vec(0);
     EXPECT_TRUE(vec.size() == 0);
   }
   {
-    circular_vector<double> vec;
+    CircularVector<double> vec;
     EXPECT_TRUE(vec.size() == 0);
   }
 }
@@ -88,7 +88,7 @@ TEST(test_circular_vector, size)
 TEST(test_circular_vector, resize)
 {
   {
-    circular_vector<double> vec(5);
+    CircularVector<double> vec(5);
 
     vec.insert(1);
     vec.insert(2);
@@ -143,7 +143,7 @@ TEST(test_circular_vector, resize)
 TEST(test_circular_vector, getters)
 {
   {
-    circular_vector<double> vec(4);
+    CircularVector<double> vec(4);
 
     vec.insert(1);
     vec.insert(2);
@@ -170,7 +170,7 @@ TEST(test_circular_vector, getters)
 TEST(test_circular_vector, stream)
 {
   {
-    circular_vector<int> vec(4);
+    CircularVector<int> vec(4);
 
     vec.insert(11);
     vec.insert(12);
@@ -194,14 +194,14 @@ TEST(test_circular_vector, stream)
 TEST(test_circular_vector, copy)
 {
   {
-    circular_vector<int> vec(4);
+    CircularVector<int> vec(4);
 
     vec.insert(1);
     vec.insert(2);
     vec.insert(3);
     vec.insert(4);
 
-    circular_vector<int> vec1(vec);
+    CircularVector<int> vec1(vec);
 
     EXPECT_TRUE(vec1.size() == 4);
     EXPECT_TRUE(vec1[0] == 4);
@@ -210,14 +210,14 @@ TEST(test_circular_vector, copy)
     EXPECT_TRUE(vec1[3] == 1);
   }
   {
-    circular_vector<int> vec(4);
+    CircularVector<int> vec(4);
 
     vec.insert(1);
     vec.insert(2);
     vec.insert(3);
     vec.insert(4);
 
-    circular_vector<int> vec1;
+    CircularVector<int> vec1;
     vec1 = vec;
 
     EXPECT_TRUE(vec1.size() == 4);

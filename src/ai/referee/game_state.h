@@ -17,15 +17,14 @@
   along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __GAMESTATE__H__
-#define __GAMESTATE__H__
+#pragma once
 
 #include <RefereeClient.h>
 #include <core/machine_state.h>
 #include <math/circular_vector.h>
-#include <AiData.h>
+#include <ai_data.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
 struct state_name
 {
@@ -80,7 +79,7 @@ struct GameStateData
 {
   // datas[0] is the most recent
   // datas[1] the older
-  circular_vector<SSL_Referee> datas;
+  CircularVector<SSL_Referee> datas;
 
   double last_time;
   uint32_t last_command_counter;
@@ -90,60 +89,58 @@ struct GameStateData
   const SSL_Referee& current() const;
   const SSL_Referee& old() const;
 
-  bool command_is_new() const;
+  bool commandIsNew() const;
 };
 
 class GameState
 {
 private:
-  Ai::AiData& ai_data;
-  bool blueTeamOnPositiveHalf;
+  ai::AiData& ai_data_;
+  bool blueTeamOnPositiveHalf_;
 
-  RefereeClient referee;
-  GameStateData game_state_data;
-  unsigned int change_stamp;
+  RefereeClient referee_;
+  GameStateData game_state_data_;
+  unsigned int change_stamp_;
 
   typedef std::string ID;
-  typedef construct_machine_state_infrastructure<ID, GameStateData, GameStateData> machine_infrastructure;
+  typedef construct_machine_state_infrastructure<ID, GameStateData, GameStateData> MachineInfrastructure;
 
-  machine_infrastructure::MachineState machine_state;
+  MachineInfrastructure::MachineState machine_state_;
 
-  bool ball_is_moving();
-  void extract_data();
-  void save_last_time_stamps();
+  bool ballIsMoving();
+  void extractData();
+  void saveLastTimeStamps();
 
-  Ai::Team team_having_kickoff;
-  Ai::Team team_having_penalty;
-  Ai::Team team_having_free_kick;
-  free_kick_type_id free_kick_type;
-  int number_of_yellow_goals;
-  int number_of_blue_goals;
+  ai::Team team_having_kickoff_;
+  ai::Team team_having_penalty_;
+  ai::Team team_having_free_kick_;
+  free_kick_type_id free_kick_type_;
+  int number_of_yellow_goals_;
+  int number_of_blue_goals_;
 
 public:
-  GameState(Ai::AiData& ai_data);
+  GameState(ai::AiData& ai_data_);
 
-  unsigned int get_change_stamp() const;
-  const ID& get_state() const;
+  unsigned int getChangeStamp() const;
+  const ID& getState() const;
 
   void update(double time);
 
-  Ai::Team kickoff_team() const;
-  Ai::Team penalty_team() const;
-  Ai::Team free_kick_team() const;
+  ai::Team kickoffTeam() const;
+  ai::Team penaltyTeam() const;
+  ai::Team freeKickTeam() const;
 
-  free_kick_type_id type_of_the_free_kick() const;
+  free_kick_type_id typeOfTheFreeKick() const;
 
-  bool blue_have_it_s_goal_on_positive_x_axis() const;
-  Ai::Team get_team_color(const std::string& team_name) const;
+  bool blueHaveItsGoalOnPositiveXAxis() const;
+  ai::Team getTeamColor(const std::string& team_name) const;
 
-  int yellow_goalie_id() const;
-  int blue_goalie_id() const;
+  int yellowGoalieId() const;
+  int blueGoalieId() const;
 
-  bool state_is_newer(unsigned int last_change_stamp) const;
+  bool stateIsNewer(unsigned int last_change_stamp) const;
 
   RefereeClient& getRefereeClient();
 };
 
-}  // namespace RhobanSSL
-
-#endif
+}  // namespace rhoban_ssl

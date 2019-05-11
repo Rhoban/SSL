@@ -18,36 +18,33 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __MANAGER__FACTORY__H__
-#define __MANAGER__FACTORY__H__
+#pragma once
 
-#include <AiData.h>
+#include <ai_data.h>
 #include <referee/game_state.h>
-#include "Manager.h"
+#include "manager.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
 struct names
 {
-  static constexpr const char* manual = "manual";
-  static constexpr const char* plan_veschambres = "PlanVeschambres";
+  static constexpr const char* MANUAL = "manual";
+  static constexpr const char* PLAN_VESCHAMBRES = "PlanVeschambres";
 };
 
 class Factory
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers;
+  static std::list<std::string> list_of_avalaible_managers_;
 
 public:
-  static const std::list<std::string>& avalaible_managers();
+  static const std::list<std::string>& availableManagers();
 
-  static std::shared_ptr<Manager> construct_manager(const std::string& manager_name, Ai::AiData& ai_data,
-                                                    GameState& game_state);
+  static std::shared_ptr<Manager> constructManager(const std::string& manager_name, ai::AiData& ai,
+                                                   GameState& game_state);
 };
 
-};  // namespace Manager
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace manager
+};  // namespace rhoban_ssl

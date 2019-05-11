@@ -1,14 +1,14 @@
 #pragma once
 
 #include <thread>
-#include <vision/AIVisionClient.h>
-#include <com/AICommander.h>
+#include <vision/ai_vision_client.h>
+#include <com/ai_commander.h>
 #include <joystick/Joystick.h>
 #include <json/json.h>
 #include <string>
 #include <QObject>
-#include <Data.h>
-#include <Ai.h>
+#include <data.h>
+#include <ai.h>
 #include "client_config.h"
 
 class API : public QObject
@@ -16,8 +16,8 @@ class API : public QObject
   Q_OBJECT
 
 public:
-  API(std::string teamName, bool simulation, RhobanSSL::Ai::Team team, RhobanSSL::AICommander* commander,
-      const std::string& config_path, RhobanSSL::Vision::Part_of_the_field part_of_the_field_used,
+  API(std::string teamName, bool simulation, rhoban_ssl::ai::Team team, rhoban_ssl::AICommander* commander,
+      const std::string& config_path, rhoban_ssl::vision::PartOfTheField part_of_the_field_used,
       std::string addr = SSL_VISION_ADDRESS, std::string port = SSL_VISION_PORT,
       std::string sim_port = SSL_SIMULATION_VISION_PORT);
   virtual ~API();
@@ -69,6 +69,9 @@ public slots:
   // Set spin
   void setSpin(int id, bool spin);
 
+  // Tare the Odometry at precise value
+  void tareOdom(int id, bool tare, double xFix = 0.0, double yFix = 0.0, double tFix = 0.0);
+
   // Emergency stop
   void emergencyStop();
 
@@ -101,11 +104,11 @@ public slots:
 
 protected:
   std::string teamName;
-  RhobanSSL::AI* ai;
-  RhobanSSL::Data data;
-  RhobanSSL::Ai::Team team;
-  RhobanSSL::AIVisionClient visionClient;
-  RhobanSSL::AICommander* commander;
+  rhoban_ssl::AI* ai;
+  rhoban_ssl::Data data;
+  rhoban_ssl::ai::Team team;
+  rhoban_ssl::AIVisionClient visionClient;
+  rhoban_ssl::AICommander* commander;
 
   std::map<int, std::string> assignments;
 
@@ -118,7 +121,7 @@ protected:
   std::mutex mutex;
 
   std::thread* joystickThread;
-  RhobanSSL::Joystick* joystick;
+  rhoban_ssl::Joystick* joystick;
   int joystickRobot;
 
   // void comThreadExec();

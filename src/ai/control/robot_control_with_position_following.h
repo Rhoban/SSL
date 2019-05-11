@@ -17,22 +17,19 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_CONTROL_WITH_POSITION_FOLLOWING__H__
-#define __ROBOT_CONTROL_WITH_POSITION_FOLLOWING__H__
+#pragma once
 
 #include "robot_control.h"
 
 class RobotControlWithPositionFollowing : public RobotControlWithPid
 {
 protected:
-  Vector2d position;
-  ContinuousAngle orientation;
+  Vector2d position_;
+  ContinuousAngle orientation_;
 
 public:
-  void set_goal(const Vector2d& position, ContinuousAngle orientation);
+  void setGoal(const Vector2d& position, ContinuousAngle orientation);
 
-  ContinuousAngle goal_orientation(double t) const;
-  Vector2d goal_position(double t) const;
+  ContinuousAngle goalOrientation(double t) const;
+  Vector2d goalPosition(double t) const;
 };
-
-#endif

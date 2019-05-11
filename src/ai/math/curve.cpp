@@ -107,7 +107,7 @@ void Curve2d::init()
 {
   if (curve_length < 0)
   {
-    this->curve_length = length_iterator().next(1.0);
+    this->curve_length = lengthIterator().next(1.0);
   }
 }
 
@@ -139,14 +139,14 @@ double Curve2d::size() const
   return this->curve_length;
 }
 
-double Curve2d::arc_length(double u) const
+double Curve2d::arcLength(double u) const
 {
   return Length(*this)(u);
 }
 
-double Curve2d::inverse_of_arc_length(double l) const
+double Curve2d::inverseOfArcLength(double l) const
 {
-  return Inverse_of_length(*this)(l);
+  return InverseOfLength(*this)(l);
 }
 
 void RenormalizedCurve::init()
@@ -172,44 +172,44 @@ RenormalizedCurve::RenormalizedCurve(const Curve2d& curve, const std::function<d
   init();
 };
 
-double RenormalizedCurve::max_time() const
+double RenormalizedCurve::maxTime() const
 {
   return this->time_max;
 }
 
-Vector2d RenormalizedCurve::original_curve(double u) const
+Vector2d RenormalizedCurve::originalCurve(double u) const
 {
   return curve(u);
 }
 
-void RenormalizedCurve::set_step_time(double dt)
+void RenormalizedCurve::setStepTime(double dt)
 {
   assert(dt > 0.0);
   this->step_time = dt;
   init();
 }
 
-double RenormalizedCurve::get_step_time() const
+double RenormalizedCurve::getStepTime() const
 {
   return this->step_time;
 }
 
-double RenormalizedCurve::position_consign(double t) const
+double RenormalizedCurve::positionConsign(double t) const
 {
   return PositionConsign(*this)(t);
 }
 
-double RenormalizedCurve::error_position_consign() const
+double RenormalizedCurve::errorPositionConsign() const
 {
   double max_velocity = 0;
-  for (double t = 0; t < max_time(); t += this->step_time)
+  for (double t = 0; t < maxTime(); t += this->step_time)
   {
     max_velocity = std::max(max_velocity, velocity_consign(t));
   }
   return this->step_time * max_velocity;
 }
 
-RenormalizedCurve::TimeCurve RenormalizedCurve::time_iterator() const
+RenormalizedCurve::TimeCurve RenormalizedCurve::timeIterator() const
 {
   return TimeCurve(*this);
 }

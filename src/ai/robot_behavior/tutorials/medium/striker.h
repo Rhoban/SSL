@@ -17,37 +17,34 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__INTERMEDIATE__STRIKER__
-#define __ROBOT_BEHAVIOR__TUTORIALS__INTERMEDIATE__STRIKER__
+#pragma once
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 /** Tutorial class to show how to move a robot in the side corner. */
-class Intermediate_striker : public RobotBehavior
+class IntermediateStriker : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point striking_point;
-  ConsignFollower* follower;
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_geometry::Point striking_point_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Intermediate_striker(Ai::AiData& ai_data);
+  IntermediateStriker(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Intermediate_striker();
+  virtual ~IntermediateStriker();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

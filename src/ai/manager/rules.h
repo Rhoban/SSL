@@ -1,7 +1,8 @@
 /*
 This file is part of SSL.
 
-Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+Copyright 2019 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+Copyright 2019 Bezamat Xavier (xavier.muller@etu.u-bordeaux.com)
 
 SSL is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
@@ -17,25 +18,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __RULES__H__
-#define __RULES__H__
+#pragma once
 
 
 #include <manager/manager_with_game_state.h>
 #include <type_traits>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Manager
+namespace manager
 {
-
 template< typename MANAGER,
           typename = typename std::enable_if<std::is_base_of<ManagerWithGameState, MANAGER>::value>::type>
 class Rules : public MANAGER
 {
 
   public:
-      Rules(Ai::AiData & ai_data, const GameState & game_state):MANAGER(ai_data, game_state)
+      Rules(ai::AiData & ai_data, const GameState & game_state):MANAGER(ai_data, game_state)
       {
       }
 
@@ -148,4 +147,3 @@ class Rules : public MANAGER
 
 } // namespace Manager
 } // namespace RhobanSSL
-#endif

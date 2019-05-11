@@ -17,26 +17,23 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__DO_NOTHING__H__
-#define __ROBOT_BEHAVIOR__DO_NOTHING__H__
+#pragma once
 
 #include "robot_behavior.h"
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 class DoNothing : public RobotBehavior
 {
 public:
-  DoNothing(Ai::AiData& ai_data);
+  DoNothing(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

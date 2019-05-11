@@ -17,35 +17,32 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ANNOTATIONS__BALL__POSITION
-#define __ROBOT_BEHAVIOR__TUTORIALS__BEGGINER__ANNOTATIONS__BALL__POSITION
+#pragma once
 
-#include "../../robot_behavior.h"
-#include "../../factory.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
-namespace RhobanSSL
+namespace rhoban_ssl
 {
-namespace Robot_behavior
+namespace robot_behavior
 {
 /** Tutorial class to show how to move a robot in the side corner. */
-class Begginer_annotations_ball_position : public RobotBehavior
+class BeginnerAnnotationsBallPosition : public RobotBehavior
 {
 private:
-  RhobanSSLAnnotation::Annotations annotations;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Begginer_annotations_ball_position(Ai::AiData& ai_data);
+  BeginnerAnnotationsBallPosition(ai::AiData& ai_data);
 
-  virtual void update(double time, const Ai::Robot& robot, const Ai::Ball& ball);
+  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
 
-  virtual RhobanSSLAnnotation::Annotations get_annotations() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Begginer_annotations_ball_position();
+  virtual ~BeginnerAnnotationsBallPosition();
 };
 
-};  // namespace Robot_behavior
-};  // namespace RhobanSSL
-
-#endif
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl
