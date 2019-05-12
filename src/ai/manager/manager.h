@@ -26,7 +26,6 @@
 #include <memory>
 #include <vector>
 #include <ai_data.h>
-#include <strategy/placer.h>
 #include <annotations/annotations.h>
 
 namespace rhoban_ssl
