@@ -72,19 +72,36 @@ bool ViewerCommunication::runTask()
   {
     // Here send.
     // rhoban_ssl::viewer::Api api = rhoban_ssl::viewer::Api::getApi();
-    if (clients_.size() > 0)
-    {
+
       unsigned char m_Test[30] = "Hello World of main";
-      // TODO HERE
-      // FOR EACH PACKET, SEND EACH THE USER.
-      // After that supress the packet.
-      for (auto it = clients_.begin(); it != clients_.end(); ++it)
-      {
-        lws_write(*it, m_Test, 30, LWS_WRITE_TEXT);
-        // On accède à l'élément pointé via l'étoile
+
+        //DEBUG(!rhoban_ssl::viewer::Api::getApi().getQueue().empty());
+      while(!rhoban_ssl::viewer::Api::getApi().getQueue().empty()) {
+
+          if (clients_.size() > 0)
+          {
+            AIPacket packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
+
+            //unsigned char packet_send[packet.ByteSize()];
+
+            //packet.SerializeToArray(packet_send, packet.ByteSize());
+
+            DEBUG("test");
+            for(auto it = clients_.begin(); it!= clients_.end(); ++it) {
+                  // WIP : We receive packet but we need to convert the protocol buffer to unsigned char*;
+                  lws_write(*it, m_Test , 30, LWS_WRITE_TEXT);
+            }
+
+
+          }
+          //
+          rhoban_ssl::viewer::Api::getApi().getQueue().pop();
+
       }
-    }
+
+    //rhoban_ssl::viewer::Api::getApi().getQueue()->pop();
     // Use this to ask to send.
+        //rhoban_ssl::viewer::Api::getApi().getQueue();
     // lws_callback_on_writable_all_protocol(context_, &protocols[1]);
     lws_service(context_, 10);
   }

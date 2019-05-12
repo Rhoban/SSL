@@ -23,19 +23,18 @@
 #include <queue>
 
 #include "ai_packet.pb.h"
-#include "field_packet.pb.h"
 
 #include <config.h>
 #include <execution_manager.h>
 #include <data.h>
 #include <vision/vision_data.h>
-#include <rhoban_utils/timing/time_stamp.h>
+#include <execution_manager.h>
 
 namespace rhoban_ssl
 {
 namespace viewer
 {
-class Api : public Task
+class Api
 {
 private:
   /**
@@ -53,6 +52,7 @@ private:
    */
   std::queue<AIPacket> packets_;
 
+
   /**
    * @brief The current time
    */
@@ -62,8 +62,9 @@ public:
   /**
    * @brief Get the unique instance of the class.
    */
-  static Api getApi();
+  static Api& getApi();
 
+  double t;
   /**
    * @brief Add a packet in the queue.
    */
@@ -73,7 +74,7 @@ public:
    * @brief Get the queue of packets.
    * @return The pointer of the queue of packets.
    */
-  std::queue<AIPacket>* getQueue();
+  std::queue<AIPacket>& getQueue();
 
   /**
    * @brief Update the field.
@@ -81,10 +82,10 @@ public:
   void updateField();
 
   /**
-   * @brief run a task
-   * @see rhoban_ssl::Task
+   * @brief Add Location Packet.
    */
-  virtual bool runTask(void) override;
+  virtual void updateLocationPacket(double time);
+
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

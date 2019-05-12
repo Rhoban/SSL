@@ -25,6 +25,7 @@
 #include <core/print_collection.h>
 #include "print_protobuf.h"
 #include <viewer/api.h>
+#include <iostream>
 
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
@@ -334,7 +335,8 @@ bool SslGeometryPacketAnalyzer::runTask()
           }
         }
 
-        rhoban_ssl::viewer::Api::getApi().updateField();
+
+       rhoban_ssl::viewer::Api::getApi().updateField();
 
         // XXX: Receive other data?
         field_done_ = true;

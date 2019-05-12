@@ -34,6 +34,7 @@
 #include <debug.h>
 #include <com/ai_commander_real.h>
 #include <utility>
+#include <viewer/api.h>
 
 namespace rhoban_ssl
 {
@@ -414,7 +415,7 @@ bool AI::runTask()
   }
   else
   {
-    DEBUG("LAG");
+    //DEBUG("LAG");
   }
   lastTick = rhoban_utils::TimeStamp::now();
   current_dt_ = current_time_;
@@ -492,6 +493,9 @@ bool AI::runTask()
   */
   GlobalDataSingleThread::singleton_.data_for_viewer_.annotations.clear();
   this->getAnnotations(GlobalDataSingleThread::singleton_.data_for_viewer_.annotations);
+
+  rhoban_ssl::viewer::Api::getApi().updateField();
+
   // XXX: Flushing takes some time in real mode, and should be done in parallel
   // along with the computing of the AI
   commander_->flush();
