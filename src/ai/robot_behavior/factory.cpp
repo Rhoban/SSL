@@ -22,7 +22,6 @@
 #include "position_follower.h"
 #include "navigation_with_obstacle_avoidance.h"
 #include "navigation_inside_the_field.h"
-#include "a_star_path.h"
 
 namespace rhoban_ssl
 {

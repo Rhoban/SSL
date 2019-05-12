@@ -31,7 +31,7 @@ set (SOURCES
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp
     robot_behavior/factory.cpp
-    robot_behavior/example.cpp
+    robot_behavior/do_nothing.cpp
     robot_behavior/position_follower.cpp
     robot_behavior/consign_follower.cpp
     robot_behavior/robot_behavior.cpp
@@ -56,9 +56,10 @@ set (SOURCES
     manager/manual.cpp
     manager/factory.cpp
     strategy/strategy.cpp
+    strategy/halt.cpp
+    strategy/placer.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
-    strategy/example.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp

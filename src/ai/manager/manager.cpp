@@ -21,6 +21,7 @@
 
 #include <debug.h>
 #include <strategy/halt.h>
+#include <strategy/placer.h>
 #include <algorithm>
 #include <core/collection.h>
 #include <core/print_collection.h>

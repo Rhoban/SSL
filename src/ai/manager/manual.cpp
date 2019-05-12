@@ -22,7 +22,6 @@
 // The different strategies
 #include <strategy/tare_and_synchronize.h>
 #include <strategy/from_robot_behavior.h>
-#include <robot_behavior/example.h>
 #include <robot_behavior/position_follower.h>
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 #include <robot_behavior/tutorials/beginner/go_corner.h>
@@ -49,14 +48,6 @@ Manual::Manual(ai::AiData& ai_data)
 {
   changeTeamAndPointOfView(ai_data.team_color, goal_to_positive_axis_);
 
-  registerStrategy("Example", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                  ai_data,
-                                  [&](double time, double dt) {
-                                    robot_behavior::Example* example = new robot_behavior::Example(ai_data);
-                                    return std::shared_ptr<robot_behavior::RobotBehavior>(example);
-                                  },
-                                  false  // we don't want to define a goal here !
-                                  )));
   registerStrategy("Beginner go to ball",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        ai_data,

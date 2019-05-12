@@ -20,38 +20,33 @@
 #pragma once
 
 #include "strategy.h"
+#include <string>
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-class Example : public Strategy
+class Halt : public Strategy
 {
-private:
-  bool behaviors_are_assigned_;
-
 public:
-  Example(ai::AiData& ai_data);
-  virtual ~Example();
+  Halt(ai::AiData& ai_data);
 
-  virtual int minRobots() const;
-  virtual int maxRobots() const;
+  int minRobots() const;
+  int maxRobots() const;
   virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
-  virtual void start(double time);
-  virtual void stop(double time);
+  void start(double time);
+  void stop(double time);
 
-  virtual void update(double time);
+  void assignBehaviorToRobots(std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior,
+                              double time, double dt);
+  virtual ~Halt();
 
-  virtual void assignBehaviorToRobots(
-      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
-
-  virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-  getStartingPositions(int number_of_avalaible_robots);
-  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace strategy
 };  // namespace rhoban_ssl
+

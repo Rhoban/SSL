@@ -20,33 +20,21 @@
 #pragma once
 
 #include "robot_behavior.h"
-#include "factory.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class Example : public RobotBehavior
+class DoNothing : public RobotBehavior
 {
-private:
-  ConsignFollower* follower_;
-  rhoban_ssl::annotations::Annotations annotations_;
-
-  double period_;
-  double last_time_;
-  int cpt_;
-
 public:
-  Example(ai::AiData& ai_data);
+  DoNothing(ai::AiData& ai_data);
 
   virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
 
   virtual Control control() const;
-
-  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
-
-  virtual ~Example();
 };
 
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl
+
