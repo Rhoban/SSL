@@ -31,37 +31,12 @@ set (SOURCES
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp
     robot_behavior/factory.cpp
-    robot_behavior/example_machine_state.cpp
     robot_behavior/example.cpp
-    robot_behavior/goalie.cpp
-    robot_behavior/patrol.cpp
-    robot_behavior/pass.cpp
-    robot_behavior/pass_dribbler.cpp
-    robot_behavior/protect_ball.cpp
-    robot_behavior/search_shoot_area.cpp
-    robot_behavior/defensor.cpp
-    robot_behavior/passive_defensor.cpp
-    robot_behavior/mur_defensor.cpp
-    robot_behavior/mur_def_kick.cpp
-    robot_behavior/robot_follower.cpp
-    robot_behavior/concept_proof_spinner.cpp
-    robot_behavior/striker.cpp
-    robot_behavior/striker_ai.cpp
-    robot_behavior/predict_futur.cpp
-    robot_behavior/degageur.cpp
-    robot_behavior/test_kicker.cpp
-    robot_behavior/test_velocity_consign.cpp
     robot_behavior/position_follower.cpp
-    robot_behavior/do_nothing.cpp
-    robot_behavior/a_star_path.cpp
     robot_behavior/consign_follower.cpp
     robot_behavior/robot_behavior.cpp
     robot_behavior/navigation_with_obstacle_avoidance.cpp
     robot_behavior/navigation_inside_the_field.cpp
-    robot_behavior/obstructor.cpp
-    robot_behavior/wait_pass.cpp
-    robot_behavior/slow_striker.cpp
-    robot_behavior/test_infra.cpp
     robot_behavior/tutorials/beginner/goto_ball.cpp
     robot_behavior/tutorials/beginner/goalie.cpp
     robot_behavior/tutorials/beginner/go_corner.cpp
@@ -73,7 +48,6 @@ set (SOURCES
     robot_behavior/tutorials/medium/prepare_strike.cpp
     robot_behavior/tutorials/medium/striker.cpp
     robot_behavior/tutorials/medium/defender.cpp
-    robot_behavior/test_relative_velocity_consign.cpp
     ai.cpp
     ai_data.cpp
     debug.cpp
@@ -84,30 +58,8 @@ set (SOURCES
     manager/manual.cpp
     manager/factory.cpp
     strategy/strategy.cpp
-    strategy/halt.cpp
-    strategy/mur.cpp
-    strategy/striker_with_support.cpp
-    strategy/striker_v2.cpp
-    strategy/base.cpp
-    strategy/base_3_gds.cpp
-    strategy/base_3_gms.cpp
-    strategy/indirect.cpp
-    strategy/indirect_lob.cpp
-    strategy/attaque_with_support.cpp
-    strategy/attaque_with_support_ms.cpp
-    strategy/striker_kick.cpp
-    strategy/defensive.cpp
-    strategy/defensive_2.cpp
-    strategy/union.cpp
-    strategy/offensive.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
-    strategy/placer.cpp
-    strategy/mur_2.cpp
-    strategy/mur_2_passif.cpp
-    strategy/mur_stop.cpp
-    strategy/goalie_strat.cpp
-    strategy/prepare_kickoff.cpp
     strategy/example.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
@@ -175,7 +127,6 @@ if(CATKIN_ENABLE_TESTING)
     math/test_tangents.cpp
     math/test_vector2d.cpp
     math/test_matrix2d.cpp
-    robot_behavior/test_robot_behavior.cpp
   )
 
   foreach(test_source ${TEST_SOURCES})
