@@ -495,7 +495,7 @@ bool AI::runTask()
 
   // TODO : Merge in Task when the refacto is finish.
   rhoban_ssl::viewer::Api::getApi().addEntityPacket(ai_data_);
-  rhoban_ssl::viewer::Api::addListPacket(std::shared_ptr<manager::Manager> strategy_manager_);
+  rhoban_ssl::viewer::Api::getApi().addListPacket(strategy_manager_);
 
   // XXX: Flushing takes some time in real mode, and should be done in parallel
   // along with the computing of the AI
