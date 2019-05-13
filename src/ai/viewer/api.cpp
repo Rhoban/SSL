@@ -84,34 +84,16 @@ void Api::updateField()
 
 void Api::updateLocationPacket(ai::AiData& ai_data)
 {
-  AIPacket packet;
-  int ball = GlobalDataSingleThread::singleton_.vision_data_.ball_.movement[0].linear_position.x;
-  DEBUG(ai_data.ball.getMovement().linearPosition(ai_data.time).getX());
-  // Ball positionvision_data_.ball_.movement[0].linear_position.x
-  // rhoban_geometry::Point ball_position = ball.movement[0].linearPosition;
-  // packet.mutable_location()->mutable_ball()->set_x(ball_position.getX());
-  // packet.mutable_location()->mutable_ball()->set_y(ball_position.getY());
-  // DEBUG(time);
-  // time_ = time;
-  // DEBUG(time_);
-  // DEBUG("------------------------------");
-
-  // DEBUG(ball);
-  /**
-  location_ball.set_x(1);
-  location_ball.set_y(1);
-  location_packet.set_allocated_ball(&location_ball);
-  */
-
-  // Ball Location
-  // location_ball.set_x(1);
-  // location_ball.set_y(1);
-  // location_packet.set_allocated_ball(&location_ball);
+    AIPacket packet;
+    rhoban_geometry::Point ball_position = ai_data.ball.getMovement().linearPosition(ai_data.time);
+    packet.mutable_location()->mutable_ball()->set_x(ball_position.getX());
+    packet.mutable_location()->mutable_ball()->set_y(ball_position.getY());
 
   // Robot Location
   // rhoban_ssl::vision::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] =
   //    GlobalDataSingleThread::singleton_.vision_data_.robots_;
 
+   //ai_data.all_robots;
   /**
   for (int team = 0; team < 2; team++)
   {
@@ -128,8 +110,6 @@ void Api::updateLocationPacket(ai::AiData& ai_data)
     }
   }*/
 
-  // DEBUG(packets_.size());
-  // DEBUG("add Packet");
   addPacket(packet);
   packet.release_location();
   // DEBUG(packets_.size());

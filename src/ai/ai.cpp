@@ -491,11 +491,11 @@ bool AI::runTask()
     this->getAnnotations(data_for_viewer.annotations);
   });
   */
-  // GlobalDataSingleThread::singleton_.data_for_viewer_.annotations.clear();
   this->getAnnotations(GlobalDataSingleThread::singleton_.data_for_viewer_.annotations);
-  // DEBUG(ai_data_.ball.getMovement().linearPosition(ai_data_.time).getX());
+
+  // TODO : Merge in Task.
   rhoban_ssl::viewer::Api::getApi().updateField();
-  // rhoban_ssl::viewer::Api::getApi().updateLocationPacket(ai_data_.time);
+  rhoban_ssl::viewer::Api::getApi().updateLocationPacket(ai_data_);
 
   // XXX: Flushing takes some time in real mode, and should be done in parallel
   // along with the computing of the AI
