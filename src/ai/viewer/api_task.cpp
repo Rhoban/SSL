@@ -32,7 +32,8 @@ bool ApiTask::runTask()
 {
   Api::getApi().addFieldPacket();
   // Prepare to the future version.
-  // Api::getApi().addEntityPacket(ai_data_);
+  // Api::getApi().addEntityPacket();
+  // Api::getApi().
   return 0;
 }
 

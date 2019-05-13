@@ -97,5 +97,18 @@ void Api::addEntityPacket(ai::AiData& ai_data)
   addPacket(packet);
   packet.release_entities();
 }
+
+void Api::addListPacket(std::shared_ptr<manager::Manager> manager) {
+   // WIP : Add in the packet.
+   const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory.availableManagers();
+   // WIP : Add List for strategy.
+   // WIP : Prepare for robot behavior.
+}
+
+void addElectronicsPacket() {
+
+
+}
+
 }  // namespace viewer
 }  // namespace rhoban_ssl

@@ -28,6 +28,8 @@
 #include <execution_manager.h>
 #include <data.h>
 #include <vision/vision_data.h>
+#include <manager/factory.h>
+#include <manager/manager.h>
 
 namespace rhoban_ssl
 {
@@ -81,6 +83,10 @@ public:
    * @brief Add Entity Packet.
    */
   void addEntityPacket(ai::AiData& ai_data);
+
+  void addListPacket(std::shared_ptr<manager::Manager> manager);
+
+  void addElectronicsPacket();
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl
