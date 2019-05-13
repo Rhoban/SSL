@@ -229,7 +229,7 @@ void AI::sendControl(int robot_id, const Control& ctrl)
         commander_->set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(),
                         kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom
 
-                        );
+        );
         // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
       }
       else
@@ -415,7 +415,7 @@ bool AI::runTask()
   }
   else
   {
-    //DEBUG("LAG");
+    // DEBUG("LAG");
   }
   lastTick = rhoban_utils::TimeStamp::now();
   current_dt_ = current_time_;
@@ -441,7 +441,7 @@ bool AI::runTask()
   {
     updateElectronicInformations();
   }
-// print_electronic_info();
+  // print_electronic_info();
 
 #ifndef NDEBUG
 // check_time_is_coherent();
@@ -491,10 +491,11 @@ bool AI::runTask()
     this->getAnnotations(data_for_viewer.annotations);
   });
   */
-  GlobalDataSingleThread::singleton_.data_for_viewer_.annotations.clear();
+  // GlobalDataSingleThread::singleton_.data_for_viewer_.annotations.clear();
   this->getAnnotations(GlobalDataSingleThread::singleton_.data_for_viewer_.annotations);
-
+  // DEBUG(ai_data_.ball.getMovement().linearPosition(ai_data_.time).getX());
   rhoban_ssl::viewer::Api::getApi().updateField();
+  // rhoban_ssl::viewer::Api::getApi().updateLocationPacket(ai_data_.time);
 
   // XXX: Flushing takes some time in real mode, and should be done in parallel
   // along with the computing of the AI

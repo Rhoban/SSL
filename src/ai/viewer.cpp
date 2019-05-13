@@ -73,35 +73,35 @@ bool ViewerCommunication::runTask()
     // Here send.
     // rhoban_ssl::viewer::Api api = rhoban_ssl::viewer::Api::getApi();
 
-      unsigned char m_Test[30] = "Hello World of main";
+    unsigned char m_Test[30] = "Hello World of main";
 
-        //DEBUG(!rhoban_ssl::viewer::Api::getApi().getQueue().empty());
-      while(!rhoban_ssl::viewer::Api::getApi().getQueue().empty()) {
+    m_Test[0] = 30;
 
-          if (clients_.size() > 0)
-          {
-            AIPacket packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
+    // DEBUG(!rhoban_ssl::viewer::Api::getApi().getQueue().empty());
+    while (!rhoban_ssl::viewer::Api::getApi().getQueue().empty())
+    {
+      if (clients_.size() > 0)
+      {
+        AIPacket packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
+        unsigned char packet_send[packet.ByteSize() + LWS_PRE];
 
-            //unsigned char packet_send[packet.ByteSize()];
+        std::string packet_test = packet.SerializeAsString();
 
-            //packet.SerializeToArray(packet_send, packet.ByteSize());
+        std::copy(packet_test.begin(), packet_test.end(), (packet_send + LWS_PRE));
 
-            DEBUG("test");
-            for(auto it = clients_.begin(); it!= clients_.end(); ++it) {
-                  // WIP : We receive packet but we need to convert the protocol buffer to unsigned char*;
-                  lws_write(*it, m_Test , 30, LWS_WRITE_TEXT);
-            }
-
-
-          }
-          //
-          rhoban_ssl::viewer::Api::getApi().getQueue().pop();
-
+        for (auto it = clients_.begin(); it != clients_.end(); ++it)
+        {
+          // WIP : We receive packet but we need to convert the protocol buffer to unsigned char*;
+          lws_write(*it, &packet_send[LWS_PRE], packet.ByteSize(), LWS_WRITE_BINARY);
+        }
       }
 
-    //rhoban_ssl::viewer::Api::getApi().getQueue()->pop();
+      rhoban_ssl::viewer::Api::getApi().getQueue().pop();
+    }
+
+    // rhoban_ssl::viewer::Api::getApi().getQueue()->pop();
     // Use this to ask to send.
-        //rhoban_ssl::viewer::Api::getApi().getQueue();
+    // rhoban_ssl::viewer::Api::getApi().getQueue();
     // lws_callback_on_writable_all_protocol(context_, &protocols[1]);
     lws_service(context_, 10);
   }

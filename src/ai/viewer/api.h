@@ -52,7 +52,6 @@ private:
    */
   std::queue<AIPacket> packets_;
 
-
   /**
    * @brief The current time
    */
@@ -84,8 +83,7 @@ public:
   /**
    * @brief Add Location Packet.
    */
-  virtual void updateLocationPacket(double time);
-
+  virtual void updateLocationPacket(ai::AiData& ai_data);
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

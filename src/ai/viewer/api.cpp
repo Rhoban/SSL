@@ -30,27 +30,25 @@ Api Api::api_singleton_;
 
 Api::Api()
 {
-
-    t=5;
+  t = 5;
 }
 
 Api& Api::getApi()
 {
-  //DEBUG(api_singleton_.packets_.size());
+  // DEBUG(api_singleton_.packets_.size());
   return Api::api_singleton_;
 }
 
 void Api::addPacket(AIPacket packet)
 {
-  //DEBUG("ADD");
-  //DEBUG("2222222222222");
-  //std::cout << &packets_<< std::endl;
+  // DEBUG("ADD");
+  // DEBUG("2222222222222");
+  // std::cout << &packets_<< std::endl;
   packets_.push(packet);
 }
 std::queue<AIPacket>& Api::getQueue()
 {
-
-    return packets_;
+  return packets_;
 }
 
 void Api::updateField()
@@ -78,27 +76,27 @@ void Api::updateField()
   packet.mutable_field()->set_penaltyareadepth(field.penaltyAreaDepth);
   packet.mutable_field()->set_penaltyareawidth(field.penaltyAreaWidth);
 
-
-  //packet.set_allocated_field(&field_packet);
-  //packet.set_allocated_field(&field_packet);
+  // packet.set_allocated_field(&field_packet);
+  // packet.set_allocated_field(&field_packet);
   addPacket(packet);
   packet.release_field();
 }
 
-void Api::updateLocationPacket(double time)
+void Api::updateLocationPacket(ai::AiData& ai_data)
 {
-
   AIPacket packet;
-  LocationPacket location_packet;
-  BallLocation location_ball;
+  int ball = GlobalDataSingleThread::singleton_.vision_data_.ball_.movement[0].linear_position.x;
+  DEBUG(ai_data.ball.getMovement().linearPosition(ai_data.time).getX());
+  // Ball positionvision_data_.ball_.movement[0].linear_position.x
+  // rhoban_geometry::Point ball_position = ball.movement[0].linearPosition;
+  // packet.mutable_location()->mutable_ball()->set_x(ball_position.getX());
+  // packet.mutable_location()->mutable_ball()->set_y(ball_position.getY());
+  // DEBUG(time);
+  // time_ = time;
+  // DEBUG(time_);
+  // DEBUG("------------------------------");
 
-  //DEBUG(time);
-  //time_ = time;
-  //DEBUG(time_);
-  //DEBUG("------------------------------");
-
-  //rhoban_ssl::vision::Ball ball = GlobalDataSingleThread::singleton_.vision_data_.ball_;
-  //DEBUG(ball);
+  // DEBUG(ball);
   /**
   location_ball.set_x(1);
   location_ball.set_y(1);
@@ -106,13 +104,12 @@ void Api::updateLocationPacket(double time)
   */
 
   // Ball Location
-  //location_ball.set_x(1);
-  //location_ball.set_y(1);
-  //location_packet.set_allocated_ball(&location_ball);
-
+  // location_ball.set_x(1);
+  // location_ball.set_y(1);
+  // location_packet.set_allocated_ball(&location_ball);
 
   // Robot Location
-  //rhoban_ssl::vision::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] =
+  // rhoban_ssl::vision::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] =
   //    GlobalDataSingleThread::singleton_.vision_data_.robots_;
 
   /**
@@ -131,10 +128,11 @@ void Api::updateLocationPacket(double time)
     }
   }*/
 
-  //DEBUG(packets_.size());
-  //DEBUG("add Packet");
-  //packets_.push(packet);
-  //DEBUG(packets_.size());
+  // DEBUG(packets_.size());
+  // DEBUG("add Packet");
+  addPacket(packet);
+  packet.release_location();
+  // DEBUG(packets_.size());
 }
 }  // namespace viewer
 }  // namespace rhoban_ssl
