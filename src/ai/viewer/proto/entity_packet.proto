@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-message RobotLocation {
+message Robot {
     uint32 robot_id = 1;
     double x = 2;
     double y = 3;
@@ -9,12 +9,12 @@ message RobotLocation {
     bool isPresent = 6;
 }
 
-message BallLocation {
+message Ball {
     double x=1;
     double y=2;
 }
 
-message LocationPacket {
-    repeated RobotLocation robot = 1;
-    BallLocation ball = 2;
+message EntityPacket {
+    repeated Robot robot = 1;
+    Ball ball = 2;
 }

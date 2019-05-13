@@ -28,7 +28,6 @@
 #include <execution_manager.h>
 #include <data.h>
 #include <vision/vision_data.h>
-#include <execution_manager.h>
 
 namespace rhoban_ssl
 {
