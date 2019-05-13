@@ -19,6 +19,10 @@ include_directories(${catkin_INCLUDE_DIRS} .)
 
 set (SOURCES
     data.cpp
+    data/ball.cpp
+    data/robot.cpp
+    data/field.cpp
+    data/camera_data.cpp
     config.cpp
     viewer.cpp
     game_informations.cpp
