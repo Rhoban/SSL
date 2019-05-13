@@ -73,14 +73,14 @@ public:
   std::queue<AIPacket>& getQueue();
 
   /**
-   * @brief Update the field.
+   * @brief Add Field Packet.
    */
-  void updateField();
+  void addFieldPacket();
 
   /**
-   * @brief Add Location Packet.
+   * @brief Add Entity Packet.
    */
-  virtual void updateLocationPacket(ai::AiData& ai_data);
+  void addEntityPacket(ai::AiData& ai_data);
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

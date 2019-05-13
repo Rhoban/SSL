@@ -494,8 +494,7 @@ bool AI::runTask()
   this->getAnnotations(GlobalDataSingleThread::singleton_.data_for_viewer_.annotations);
 
   // TODO : Merge in Task.
-  rhoban_ssl::viewer::Api::getApi().updateField();
-  rhoban_ssl::viewer::Api::getApi().updateLocationPacket(ai_data_);
+  rhoban_ssl::viewer::Api::getApi().addEntityPacket(ai_data_);
 
   // XXX: Flushing takes some time in real mode, and should be done in parallel
   // along with the computing of the AI

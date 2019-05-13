@@ -30,7 +30,8 @@
 #include <core/print_collection.h>
 #include <manager/factory.h>
 #include "client_config.h"
-#include "viewer.h"
+#include <viewer.h>
+#include <viewer/api_task.h>
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -176,6 +177,7 @@ int main(int argc, char** argv)
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
   // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ApiTask());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
 
   AICommander* commander;

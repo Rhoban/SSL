@@ -47,7 +47,7 @@ std::queue<AIPacket>& Api::getQueue()
   return packets_;
 }
 
-void Api::updateField()
+void Api::addFieldPacket()
 {
   AIPacket packet;
   FieldPacket field_packet;
@@ -66,7 +66,7 @@ void Api::updateField()
   packet.release_field();
 }
 
-void Api::updateLocationPacket(ai::AiData& ai_data)
+void Api::addEntityPacket(ai::AiData& ai_data)
 {
   AIPacket packet;
   rhoban_geometry::Point ball_position = ai_data.ball.getMovement().linearPosition(ai_data.time);
@@ -95,7 +95,7 @@ void Api::updateLocationPacket(ai::AiData& ai_data)
   }
 
   addPacket(packet);
-  // packet.release_location();
+  packet.release_entities();
 }
 }  // namespace viewer
 }  // namespace rhoban_ssl

@@ -41,6 +41,7 @@ set (SOURCES
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp
     viewer/api.cpp
+    viewer/api_task.cpp
     robot_behavior/factory.cpp
     robot_behavior/example_machine_state.cpp
     robot_behavior/example.cpp

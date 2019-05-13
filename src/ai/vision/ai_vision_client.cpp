@@ -335,8 +335,6 @@ bool SslGeometryPacketAnalyzer::runTask()
           }
         }
 
-        rhoban_ssl::viewer::Api::getApi().updateField();
-
         // XXX: Receive other data?
         field_done_ = true;
       }
