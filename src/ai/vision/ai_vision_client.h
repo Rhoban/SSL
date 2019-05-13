@@ -30,50 +30,6 @@
 
 namespace rhoban_ssl
 {
-class AIVisionClient : public VisionClient
-{
-public:
-  AIVisionClient(GlobalData& shared_data_, ai::Team my_team_, bool simulation = false,
-                 vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
-
-  AIVisionClient(GlobalData& shared_data_, ai::Team my_team_, bool simulation, std::string addr = SSL_VISION_ADDRESS,
-                 std::string port = SSL_VISION_PORT, std::string sim_port = SSL_SIMULATION_VISION_PORT,
-                 vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
-
-  void setRobotPos(ai::Team team, int id, double x, double y, double orientation);
-
-protected:
-  virtual void packetReceived();
-
-  GlobalData& shared_data_;
-
-  vision::PartOfTheField part_of_the_field_used_;
-
-  std::map<int, SSL_DetectionFrame> camera_detections_;
-
-  std::map<int,                              // CMAERA ID
-           std::pair<double,                 // camera have found a ball at time?
-                     rhoban_geometry::Point  // detecte ball
-                     > >
-      ball_camera_detections_;
-
-  void updateRobotInformation(const SSL_DetectionFrame& detection, const SSL_DetectionRobot& robot, bool ally,
-                              ai::Team team_color);
-
-private:
-  vision::VisionData old_vision_data_;
-  vision::VisionData vision_data_;
-  ai::Team my_team_;
-  std::map<int, SSL_DetectionFrame> historic_;
-
-  rhoban_geometry::Point averageFilter(const rhoban_geometry::Point& new_ball,
-                                       std::map<int,                              // CMAERA ID
-                                                std::pair<double,                 // camera have found a ball
-                                                          rhoban_geometry::Point  // detecte ball
-                                                          > >& ball_camera_detections_,
-                                       vision::PartOfTheField part_of_the_field_used_);
-};
-
 class SslGeometryPacketAnalyzer : public Task
 {
   bool field_done_;

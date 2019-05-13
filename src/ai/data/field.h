@@ -19,11 +19,10 @@
 
 #pragma once
 
-#include "messages_robocup_ssl_geometry.pb.h"
 #include "rhoban_geometry/point.h"
 #include "rhoban_geometry/circle.h"
 #include "math/box.h"
-#include "vision/vision_data.h"
+#include "config.h"
 
 namespace rhoban_ssl
 {
@@ -31,19 +30,16 @@ namespace data
 {
 class Field
 {
-private:
-  bool present_;
-
 public:
   Field();
 
-  float field_length_;
-  float field_width_;
-  float goal_width_;
-  float goal_depth_;
-  float boundary_width_;
-  float penalty_area_depth_;
-  float penalty_area_width_;
+  double field_length_;
+  double field_width_;
+  double goal_width_;
+  double goal_depth_;
+  double boundary_width_;
+  double penalty_area_depth_;
+  double penalty_area_width_;
 
   rhoban_geometry::Circle cirlcle_center_;
   rhoban_geometry::Point goal_center_[2];
@@ -53,8 +49,6 @@ public:
   Box penalty_areas_[2];
 
 public:
-  void updateFromVision(const SSL_GeometryData& packet);
-
   /**
    * @brief returns the position of the center mark of the field.
    * @return a point
@@ -66,16 +60,14 @@ public:
    * given parameter.
    * @return a box
    */
-  Box getPenaltyArea(vision::Team team) const;
+  Box getPenaltyArea(Team team) const;
 
   /**
    * @brief returns the position of the goal center of the team in the
    * given parameter.
    * @return a point
    */
-  rhoban_geometry::Point goalCenter(vision::Team team) const;
-
-
+  rhoban_geometry::Point goalCenter(Team team) const;
 };
 
 }  // namespace data

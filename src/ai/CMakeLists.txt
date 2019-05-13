@@ -23,6 +23,7 @@ set (SOURCES
     data/robot.cpp
     data/field.cpp
     data/camera_data.cpp
+    data/mobile.cpp
     config.cpp
     viewer.cpp
     game_informations.cpp

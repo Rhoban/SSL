@@ -31,150 +31,7 @@ namespace rhoban_ssl
 {
 namespace vision
 {
-Field::Field()
-  : present(false)
-  , fieldLength(0.0)
-  , fieldWidth(0.0)
-  , goalWidth(0.0)
-  , goalDepth(0.0)
-  , boundaryWidth(0.0)
-  , penaltyAreaDepth(0.0)
-  , penaltyAreaWidth(0.0)
-{
-}
-
-void Object::update(double time, const Point& linear_position)
-{
-  update(time, linear_position, movement[0].angular_position);
-}
-
-void Object::update(double time, const Point& linear_position, const Angle& angular_position)
-{
-  ContinuousAngle angle(movement[0].angular_position);
-  angle.setToNearest(angular_position);
-  update(time, linear_position, angle);
-}
-
-void Object::update(double time, const Point& linear_position, const ContinuousAngle& angular_position)
-{
-  if (time <= movement.time(0))
-  {
-    // TODO
-    // DEBUG("TODO");
-    return;
-  }
-  last_update = rhoban_utils::TimeStamp::now();
-  present = true;
-
-  movement.insert(PositionSample(time, linear_position, angular_position));
-}
-
-double Object::age() const
-{
-  return diffSec(last_update, rhoban_utils::TimeStamp::now());
-}
-
-bool Object::isTooOld() const
-{
-  return not(present) or age() > 4.0;
-}
-
-bool Object::isOk() const
-{
-  return present && age() < 2.0;
-}
-
-Object::Object() : movement(history_size), present(false), id(-1), last_update(rhoban_utils::TimeStamp::now())
-{
-  for (int i = 0; i < history_size; i++)
-  {
-    movement[i].time = -i;
-  }
-}
-
-VisionData::VisionData()
-{
-  field.present = false;
-
-  for (auto team : { Ally, Opponent })
-  {
-    for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
-    {
-      robots[team][k].id = k;
-      if (team == Ally)
-      {
-        robots[team][k].update(1, Point(-1 - k * 0.3, 3.75));
-      }
-      else
-      {
-        robots[team][k].update(1, Point(1 + k * 0.3, 3.75));
-      }
-      robots[team][k].present = false;
-    }
-  }
-}
-
-void Object::checkAssert(double time) const
-{
-  assert(not(present) or (movement.time(0) > movement.time(1) and movement.time(1) > movement.time(2)));
-  //    assert(
-  //        not(present) or ( time > movement.time(0) )
-  //    );
-}
-
-Object::~Object()
-{
-}
-
-void VisionData::checkAssert(double time) const
-{
-  for (auto team : { Ally, Opponent })
-  {
-    for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
-    {
-      robots.at(team).at(k).checkAssert(time);
-    }
-  }
-  ball.checkAssert(time);
-}
-
-std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision)
-{
-  for (auto team : { rhoban_ssl::vision::Ally, rhoban_ssl::vision::Opponent })
-  {
-    out << team << " : " << std::endl;
-    for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
-    {
-      out << "robot " << k << std::endl;
-      out << vision.robots.at(team).at(k);
-    }
-  }
-  out << "ball : " << std::endl;
-  out << vision.ball << std::endl;
-
-  return out;
-}
-
-std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::Object& object)
-{
-  out << " id : " << object.id << std::endl;
-  out << " present : " << object.present << std::endl;
-  out << " age : " << object.age() << std::endl;
-  out << " lastUpdate : " << object.last_update.getTimeMS() / 1000.0 << std::endl;
-  out << " movement : " << object.movement << std::endl;
-  return out;
-}
-
-std::ostream& operator<<(std::ostream& out, const Field& field)
-{
-  out << "field -- len. " << field.fieldLength << " , width " << field.fieldWidth;
-  return out;
-}
-
-VisionDataSingleThread::VisionDataSingleThread(const VisionDataSingleThread&)
-{
-  throw "Vision Data must not be copied!";
-}
+static VisionDataSingleThread singleton_;
 
 VisionDataSingleThread::VisionDataSingleThread()
 {
@@ -225,6 +82,7 @@ RobotDetection::RobotDetection() : camera_(nullptr), confidence_(-1)
 {
 }
 
+/*
 bool VisionDataTerminalPrinter::runTask()
 {
   static int counter = 0;
@@ -296,6 +154,7 @@ bool VisionDataTerminalPrinter::runTask()
   }
   return true;
 }
+*/
 
 CameraDetectionFrame::CameraDetectionFrame() : t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
 {

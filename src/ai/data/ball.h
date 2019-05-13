@@ -19,11 +19,13 @@
 
 #pragma once
 
+#include "mobile.h"
+
 namespace rhoban_ssl
 {
 namespace data
 {
-class Ball
+class Ball : public Mobile
 {
 public:
   Ball();

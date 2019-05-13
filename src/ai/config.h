@@ -4,6 +4,10 @@
 
 namespace rhoban_ssl
 {
+typedef int Team;
+const Team Ally = 0;
+const Team Opponent = 1;
+
 namespace ai
 {
 struct Config
