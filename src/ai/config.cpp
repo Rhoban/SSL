@@ -163,5 +163,5 @@ void Config::load(const std::string& config_path)
 
   enable_kicking = true;
 }
-}
-}
+}  // namespace ai
+}  // namespace rhoban_ssl

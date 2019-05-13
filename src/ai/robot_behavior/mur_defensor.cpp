@@ -109,9 +109,8 @@ void MurDefensor::update(double time, const ai::Robot& robot, const ai::Ball& ba
     {
       if (target_rotation < 0.7071)
       {
-        target_position =
-            ally_goal_point -
-            ball_goal_vector * (distance_defense_line / std::cos(target_rotation) + ai::Config::robot_radius);
+        target_position = ally_goal_point - ball_goal_vector * (distance_defense_line / std::cos(target_rotation) +
+                                                                ai::Config::robot_radius);
         target_position += rhoban_geometry::Point(0, multiple_robot_offset);
       }
       else

@@ -228,4 +228,4 @@ void MulticastClientSingleThread::shutdown()
 {
   running = false;
 }
-}  // namespace rhobanssl
+}  // namespace rhoban_ssl

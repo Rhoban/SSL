@@ -79,8 +79,9 @@ rhoban_ssl::annotations::Annotations Halt::getAnnotations() const
     {
       const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
       // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-      annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "whit"
-                                                                                                                 "e");
+      annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30,
+                          "whit"
+                          "e");
     }
   }
   return annotations;

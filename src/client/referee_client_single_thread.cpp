@@ -106,4 +106,4 @@ bool RefereeProtoBufReset::runTask()
   }
   return true;
 }
-}
+}  // namespace rhoban_ssl

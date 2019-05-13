@@ -60,5 +60,5 @@ struct Config
 
   static void load(const std::string& config_path);
 };
-}
-}
+}  // namespace ai
+}  // namespace rhoban_ssl

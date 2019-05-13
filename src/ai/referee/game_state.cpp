@@ -224,7 +224,7 @@ GameState::GameState(ai::AiData& ai_data)
                            }
                          }
 
-                         );
+  );
 
   machine_state_.addEdge(edge_name::penalty_to_halt, state_name::penalty, state_name::halt,
                          command_is_<SSL_Referee::HALT>);

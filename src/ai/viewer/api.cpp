@@ -84,16 +84,16 @@ void Api::updateField()
 
 void Api::updateLocationPacket(ai::AiData& ai_data)
 {
-    AIPacket packet;
-    rhoban_geometry::Point ball_position = ai_data.ball.getMovement().linearPosition(ai_data.time);
-    packet.mutable_location()->mutable_ball()->set_x(ball_position.getX());
-    packet.mutable_location()->mutable_ball()->set_y(ball_position.getY());
+  AIPacket packet;
+  rhoban_geometry::Point ball_position = ai_data.ball.getMovement().linearPosition(ai_data.time);
+  packet.mutable_location()->mutable_ball()->set_x(ball_position.getX());
+  packet.mutable_location()->mutable_ball()->set_y(ball_position.getY());
 
   // Robot Location
   // rhoban_ssl::vision::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] =
   //    GlobalDataSingleThread::singleton_.vision_data_.robots_;
 
-   //ai_data.all_robots;
+  // ai_data.all_robots;
   /**
   for (int team = 0; team < 2; team++)
   {

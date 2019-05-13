@@ -35,4 +35,4 @@ public:
   RefereeClientSingleThread(std::string addr, std::string port);
   virtual bool process(char* buffer_, size_t len) override;
 };
-}
+}  // namespace rhoban_ssl
