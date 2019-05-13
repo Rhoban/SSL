@@ -30,20 +30,15 @@ Api Api::api_singleton_;
 
 Api::Api()
 {
-  t = 5;
 }
 
 Api& Api::getApi()
 {
-  // DEBUG(api_singleton_.packets_.size());
   return Api::api_singleton_;
 }
 
 void Api::addPacket(AIPacket packet)
 {
-  // DEBUG("ADD");
-  // DEBUG("2222222222222");
-  // std::cout << &packets_<< std::endl;
   packets_.push(packet);
 }
 std::queue<AIPacket>& Api::getQueue()
@@ -58,16 +53,6 @@ void Api::updateField()
   rhoban_ssl::vision::Field field = GlobalDataSingleThread::singleton_.vision_data_.field_;
 
   // Prepare packet
-
-  /*
-  field_packet.set_fieldlength(field.fieldLength);
-  field_packet.set_fieldwidth(field.fieldWidth);
-  field_packet.set_boundarywidth(field.boundaryWidth);
-  field_packet.set_goaldepth(field.goalDepth);
-  field_packet.set_goalwidth(field.goalWidth);
-  field_packet.set_penaltyareadepth(field.penaltyAreaDepth);
-  field_packet.set_penaltyareawidth(field.penaltyAreaWidth);
- */
   packet.mutable_field()->set_fieldlength(field.fieldLength);
   packet.mutable_field()->set_fieldwidth(field.fieldWidth);
   packet.mutable_field()->set_boundarywidth(field.boundaryWidth);
@@ -76,8 +61,6 @@ void Api::updateField()
   packet.mutable_field()->set_penaltyareadepth(field.penaltyAreaDepth);
   packet.mutable_field()->set_penaltyareawidth(field.penaltyAreaWidth);
 
-  // packet.set_allocated_field(&field_packet);
-  // packet.set_allocated_field(&field_packet);
   addPacket(packet);
   packet.release_field();
 }
@@ -90,29 +73,26 @@ void Api::updateLocationPacket(ai::AiData& ai_data)
   packet.mutable_location()->mutable_ball()->set_y(ball_position.getY());
 
   // Robot Location
-  // rhoban_ssl::vision::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] =
-  //    GlobalDataSingleThread::singleton_.vision_data_.robots_;
+   rhoban_ssl::vision::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] = GlobalDataSingleThread::singleton_.vision_data_.robots_;
+   for (int team = 0; team < 2; team++)
+   {
+     for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++) {
+         RobotLocation* location_robot  = packet.mutable_location()->add_robot();
 
-  // ai_data.all_robots;
-  /**
-  for (int team = 0; team < 2; team++)
-  {
-    for (int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
-    {
-      rhoban_ssl::vision::Robot robot = robots[team][id];
-      RobotLocation location_robot = *location_packet.add_robot();
-      location_robot.set_robot_id(robot.id);
-      location_robot.set_x(robot.movement.linearPosition().getX());
-      location_robot.set_y(robot.movement.linearPosition().getY());
-      // 0 -> Ally || 1 -> Opponent
-      location_robot.set_isally(!team);
-      location_robot.set_dir(robot.movement.angularPosition().value());
+         rhoban_geometry::Point robot_position = robots[team][rid].movement.linearPosition();
+         double robot_direction = robots[team][rid].movement.angularPosition().value();
+
+         location_robot->set_x(robot_position.getX());
+         location_robot->set_y(robot_position.getY());
+         location_robot->set_isally(!team);
+         location_robot->set_ispresent(robots[team][rid].isOk());
+         location_robot->set_robot_id(robots[team][rid].id);
+         location_robot->set_dir(robot_direction);
     }
-  }*/
+    }
 
   addPacket(packet);
   packet.release_location();
-  // DEBUG(packets_.size());
 }
 }  // namespace viewer
 }  // namespace rhoban_ssl

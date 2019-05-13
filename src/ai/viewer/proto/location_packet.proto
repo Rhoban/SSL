@@ -6,6 +6,7 @@ message RobotLocation {
     double y = 3;
     double dir = 4;
     bool isAlly = 5;
+    bool isPresent = 6;
 }
 
 message BallLocation {

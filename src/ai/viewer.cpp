@@ -70,14 +70,6 @@ bool ViewerCommunication::runTask()
 {
   try
   {
-    // Here send.
-    // rhoban_ssl::viewer::Api api = rhoban_ssl::viewer::Api::getApi();
-
-    unsigned char m_Test[30] = "Hello World of main";
-
-    m_Test[0] = 30;
-
-    // DEBUG(!rhoban_ssl::viewer::Api::getApi().getQueue().empty());
     while (!rhoban_ssl::viewer::Api::getApi().getQueue().empty())
     {
       if (clients_.size() > 0)
@@ -100,7 +92,6 @@ bool ViewerCommunication::runTask()
   }
   catch (...)
   {
-    // Here
   }
   return true;
 }

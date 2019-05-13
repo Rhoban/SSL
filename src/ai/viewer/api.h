@@ -62,8 +62,6 @@ public:
    * @brief Get the unique instance of the class.
    */
   static Api& getApi();
-
-  double t;
   /**
    * @brief Add a packet in the queue.
    */
