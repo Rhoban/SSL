@@ -31,7 +31,7 @@ namespace rhoban_ssl
 {
 namespace vision
 {
-static VisionDataSingleThread singleton_;
+VisionDataSingleThread VisionDataSingleThread::singleton_;
 
 VisionDataSingleThread::VisionDataSingleThread()
 {
