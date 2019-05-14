@@ -19,9 +19,14 @@
 
 #include "data.h"
 #include <config.h>
+#include <physic/factory.h>
 
 namespace rhoban_ssl
 {
+
+
+GlobalDataSingleThread GlobalDataSingleThread::singleton_;
+
 
 SharedData::FinalControl::FinalControl()
   : hardware_is_responding(false), is_disabled_by_viewer(false), is_manually_controled_by_viewer(false)
@@ -42,18 +47,19 @@ SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_
 
 ///////////////////////////////////////////////////////////////////////
 
-GlobalDataSingleThread::GlobalDataSingleThread()
+GlobalDataSingleThread::GlobalDataSingleThread() :
+  all_robots(ai::Config::NB_OF_ROBOTS_BY_TEAM*2)
 {
-  for (uint team_id = 0; team_id < 2; team_id++)
+  for (int team_id = 0; team_id < 2; team_id++)
   {
-    for (uint robot_id = team_id; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
+    for ( int robot_id = team_id; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
     {
+      robots_[team_id][robot_id].setMovement(physic::Factory::robotMovement());
       all_robots[team_id*ai::Config::NB_OF_ROBOTS_BY_TEAM+robot_id] = std::pair<Team, data::Robot*>(team_id, &(robots_[team_id][robot_id]));
     }
   }
+   ball_.setMovement(physic::Factory::ballMovement());
 }
-
-GlobalDataSingleThread GlobalDataSingleThread::singleton_;
 
 /*
 

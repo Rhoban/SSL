@@ -427,6 +427,7 @@ bool AI::runTask()
   // visionData_.checkAssert(current_time_);
   // DEBUG("");
 
+
   //DESABLED : NEED TO FIX SEGFAULT
   //data::ComputedData::computeTableOfCollisionTimes();
 

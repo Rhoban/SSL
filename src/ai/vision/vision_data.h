@@ -36,9 +36,6 @@ namespace vision
 {
 struct CameraDetectionFrame;
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wno-padded"
-
 struct BallDetection
 {
   float confidence_;  // set to -1 if not valid
@@ -74,8 +71,6 @@ struct RobotDetection
   void operator=(const SSL_DetectionRobot&);
   RobotDetection();
 };
-
-#pragma clang diagnostic pop
 
 struct CameraDetectionFrame
 {
