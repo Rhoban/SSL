@@ -427,7 +427,10 @@ bool AI::runTask()
   // visionData_.checkAssert(current_time_);
   // DEBUG("");
 
-  data::ComputedData::computeTableOfCollisionTimes();
+  //DESABLED : NEED TO FIX SEGFAULT
+  //data::ComputedData::computeTableOfCollisionTimes();
+
+
   // ai_data_.update(GlobalDataSingleThread::singleton_.vision_data_);
 
   if (not(ai::Config::is_in_simulation))
