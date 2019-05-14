@@ -23,4 +23,6 @@ RUN ./workspace install
 
 RUN ./workspace build:debug
 
+EXPOSE 7882
+
 CMD ./bin/ai_st -s -y 
