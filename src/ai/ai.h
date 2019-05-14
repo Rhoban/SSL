@@ -49,8 +49,6 @@ public:
   std::shared_ptr<manager::Manager> getManager() const;
   std::shared_ptr<manager::Manager> getManualManager();
 
-  GameState& getGameState();
-
   double getCurrentTime();
 
 protected:
@@ -66,7 +64,6 @@ protected:
 
   // SharedData shared_data_;
 
-  GameState game_state_;
   std::string manager_name_;
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;

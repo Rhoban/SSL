@@ -82,7 +82,7 @@ RobotDetection::RobotDetection() : camera_(nullptr), confidence_(-1)
 {
 }
 
-/*
+
 bool VisionDataTerminalPrinter::runTask()
 {
   static int counter = 0;
@@ -91,16 +91,13 @@ bool VisionDataTerminalPrinter::runTask()
   printf("%d\n", counter);
   printf("%d\n", VisionDataGlobal::singleton_.last_packets_.size());
   // VisionDataGlobal::singleton_.packets_buffer_.size());
-  auto& field = GlobalDataSingleThread::singleton_.vision_data_.field_;
-  if (field.present)
-  {
-    printf("Field is present : \n");
-    printf("\t %f x %f \n", field.fieldWidth, field.fieldLength);
-  }
+  auto& field = GlobalDataSingleThread::singleton_.field_;
+  printf("Field is present : \n");
+  printf("\t %f x %f \n", field.field_width_, field.field_length_);
 
   for (int camera = 0; camera < ai::Config::NB_CAMERAS; ++camera)
   {
-    auto& cam = GlobalDataSingleThread::singleton_.vision_data_.last_camera_detection_[camera];
+    auto& cam = VisionDataSingleThread::singleton_.last_camera_detection_[camera];
     printf("CAMERA %d (%d): \n", camera, cam.frame_number_);
     printf("\t time: %lf / %lf \n", cam.t_capture_, cam.t_sent_);
     int nballs = 0;
@@ -132,9 +129,9 @@ bool VisionDataTerminalPrinter::runTask()
     printf("\n");
   }
 
-  if (GlobalDataSingleThread::singleton_.vision_data_.ball_.present)
-    printf("BALL is at %f %f\n", GlobalDataSingleThread::singleton_.vision_data_.ball_.movement[0].linear_position.x,
-           GlobalDataSingleThread::singleton_.vision_data_.ball_.movement[0].linear_position.y);
+  if (GlobalDataSingleThread::singleton_.ball_.isActive())
+    printf("BALL is at %f %f\n", GlobalDataSingleThread::singleton_.ball_.movement_sample[0].linear_position.x,
+           GlobalDataSingleThread::singleton_.ball_.movement_sample[0].linear_position.y);
   else
   {
     printf("BALL is not found\n");
@@ -145,16 +142,16 @@ bool VisionDataTerminalPrinter::runTask()
     printf("team %d\n", team);
     for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
     {
-      if (GlobalDataSingleThread::singleton_.vision_data_.robots_[team][robot].present)
+      if (GlobalDataSingleThread::singleton_.robots_[team][robot].isActive())
         printf("\t%d : (%f;%f) ", robot,
-               GlobalDataSingleThread::singleton_.vision_data_.robots_[team][robot].movement[0].linear_position.x,
-               GlobalDataSingleThread::singleton_.vision_data_.robots_[team][robot].movement[0].linear_position.y);
+               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.x,
+               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.y);
     }
     printf("\n");
   }
   return true;
 }
-*/
+
 
 CameraDetectionFrame::CameraDetectionFrame() : t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
 {

@@ -161,10 +161,6 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
   ai::Config::we_are_blue = !yellow.getValue();
-
-  if (yellow.getValue())
-    ai::Config::we_are_blue = false;
-
   ai::Config::is_in_simulation = simulation.getValue();
 
   rhoban_ssl::ExecutionManager::getManager().addTask(
@@ -173,7 +169,7 @@ int main(int argc, char** argv)
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::DetectionPacketAnalyzer());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateRobotInformation(part_of_the_field_used));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
-  // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
 

@@ -54,11 +54,9 @@ GlobalDataSingleThread::GlobalDataSingleThread() :
   {
     for ( int robot_id = team_id; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
     {
-      robots_[team_id][robot_id].setMovement(physic::Factory::robotMovement());
       all_robots[team_id*ai::Config::NB_OF_ROBOTS_BY_TEAM+robot_id] = std::pair<Team, data::Robot*>(team_id, &(robots_[team_id][robot_id]));
     }
   }
-   ball_.setMovement(physic::Factory::ballMovement());
 }
 
 /*

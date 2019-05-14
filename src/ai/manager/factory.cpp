@@ -32,7 +32,7 @@ const std::list<std::string>& Factory::availableManagers()
   return Factory::list_of_avalaible_managers_;
 }
 
-std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_name, GameState& game_state)
+std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_name)
 {
   std::shared_ptr<Manager> manager;
 

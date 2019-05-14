@@ -308,7 +308,7 @@ AI::AI(std::string manager_name, std::string team_name,  // GlobalData& data,
 
   lastTick = rhoban_utils::TimeStamp::now();
 
-  manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL, game_state_);
+  manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
 
   setManager(manager_name);
 }
@@ -337,7 +337,7 @@ void AI::setManager(std::string managerName)
   }
   else
   {
-    strategy_manager_ = manager::Factory::constructManager(managerName, game_state_);
+    strategy_manager_ = manager::Factory::constructManager(managerName);
   }
   manager_name_ = managerName;
   strategy_manager_->declareGoalieId(goalie_id);
@@ -419,15 +419,6 @@ bool AI::runTask()
   updatePeriodicDebug(GlobalDataSingleThread::singleton_.ai_data_.time, 10.0);
 #endif
 
-  // data_ >> visionData_;
-
-  // DEBUG( visionData );
-
-  // DEBUG("");
-  // visionData_.checkAssert(current_time_);
-  // DEBUG("");
-
-
   //DESABLED : NEED TO FIX SEGFAULT
   //data::ComputedData::computeTableOfCollisionTimes();
 
@@ -452,18 +443,17 @@ bool AI::runTask()
   // return true;
   //}
 
-  game_state_.update(GlobalDataSingleThread::singleton_.ai_data_.time);
-
-  if (manager_name_ != manager::names::MANUAL)
-  {  // HACK TOT REMOVEE !
-    strategy_manager_->changeTeamAndPointOfView(game_state_.blueHaveItsGoalOnPositiveXAxis());
-  }
-  else
-  {
-    dynamic_cast<manager::Manual*>(strategy_manager_.get())
-        ->defineGoalToPositiveAxis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
-  }
-  strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
+  //REFACTO CHANGEMENT DE VUE AU NIVEAU DE LA RECEPTION DE LA COM
+//  if (manager_name_ != manager::names::MANUAL)
+//  {  // HACK TOT REMOVEE !
+//    strategy_manager_->changeTeamAndPointOfView(game_state_.blueHaveItsGoalOnPositiveXAxis());
+//  }
+//  else
+//  {
+//    dynamic_cast<manager::Manual*>(strategy_manager_.get())
+//        ->defineGoalToPositiveAxis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
+//  }
+//  strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
 
   strategy_manager_->removeInvalidRobots();
 
@@ -475,13 +465,9 @@ bool AI::runTask()
   //   DEBUG( ai_data.table_of_collision_times );
   //}
 
-  // data_ >> shared_data_;
-
   updateRobots();
 
-  // data_ << shared_data_;
-
-  /*
+  /* REFACTO
     data_.editDataForViewer([this](DataForViewer& data_for_viewer) {
     data_for_viewer.annotations.clear();
     this->getAnnotations(data_for_viewer.annotations);
@@ -510,11 +496,6 @@ void AI::shareData()
   data_ << data_from_ai;
 }
 */
-
-GameState& AI::getGameState()
-{
-  return game_state_;
-}
 
 double AI::getCurrentTime()
 {

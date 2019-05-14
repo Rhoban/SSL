@@ -27,6 +27,7 @@
 #include <iostream>
 #include <list>
 #include "config.h"
+#include <execution_manager.h>
 
 #include <messages_robocup_ssl_wrapper.pb.h>
 
@@ -103,13 +104,11 @@ public:
   ~VisionDataSingleThread();
 };
 
-/*
 class VisionDataTerminalPrinter : public Task
 {
-public:
   virtual bool runTask(void);
 };
-*/
+
 
 }  // namespace vision
 }  // namespace rhoban_ssl

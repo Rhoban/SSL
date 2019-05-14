@@ -39,8 +39,7 @@ private:
 public:
   static const std::list<std::string>& availableManagers();
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name,
-                                                   GameState& game_state);
+  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
 };
 
 };  // namespace manager

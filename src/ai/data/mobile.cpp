@@ -1,5 +1,6 @@
 #include "mobile.h"
 #include <physic/movement_on_new_frame.h>
+#include <physic/factory.h>
 #include <data.h>
 
 namespace rhoban_ssl
@@ -8,6 +9,7 @@ namespace data
 {
 Mobile::~Mobile()
 {
+  delete movement;
 }
 
 using rhoban_geometry::Point;
@@ -33,6 +35,7 @@ void Mobile::update(double time, const Point& linear_position, const ContinuousA
   }
   last_update = rhoban_utils::TimeStamp::now();
   movement_sample.insert(PositionSample(time, linear_position, angular_position));
+  updateVisionData();
 }
 
 double Mobile::age() const
@@ -76,7 +79,10 @@ bool Mobile::isActive() const
   return age() < 2.0;
 }
 
-Mobile::Mobile() : last_update(rhoban_utils::TimeStamp::fromMS(0)), movement_sample(history_size), movement(nullptr)
+Mobile::Mobile()
+  : last_update(rhoban_utils::TimeStamp::fromMS(0))
+  , movement_sample(history_size)
+  , movement(physic::Factory::movement())
 {
   for (int i = 0; i < history_size; i++)
   {
