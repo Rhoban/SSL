@@ -21,7 +21,7 @@
 #pragma once
 
 #include <stdint.h>
-#include <master.h>
+#include <Master.h>
 #include <SimClient.h>
 
 /**

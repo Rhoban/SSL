@@ -20,7 +20,6 @@
 
 #include "ai_commander_simulation.h"
 #include <rhoban_utils/angle.h>
-#include <robot_behavior/robot_behavior.h>
 
 namespace rhoban_ssl
 {

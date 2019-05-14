@@ -86,7 +86,7 @@ Mobile::Mobile() : last_update(rhoban_utils::TimeStamp::fromMS(0)), movement_sam
 
 bool Mobile::isInsideTheField()
 {
-  GlobalDataSingleThread::singleton_.field_.isInside(
+  return GlobalDataSingleThread::singleton_.field_.isInside(
       movement->linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time));
 }
 

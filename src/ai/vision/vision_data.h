@@ -27,7 +27,6 @@
 #include <iostream>
 #include <list>
 #include "config.h"
-#include <execution_manager.h>
 
 #include <messages_robocup_ssl_wrapper.pb.h>
 

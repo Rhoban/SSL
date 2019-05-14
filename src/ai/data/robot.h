@@ -21,7 +21,7 @@
 
 #include "mobile.h"
 
-#include <robot_instructions.h>
+#include <structs.h>
 
 namespace rhoban_ssl
 {
