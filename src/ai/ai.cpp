@@ -33,6 +33,7 @@
 #include <debug.h>
 #include <com/ai_commander_real.h>
 #include <utility>
+#include <data/computed_data.h>
 
 namespace rhoban_ssl
 {
@@ -48,9 +49,10 @@ float sign(float x)
 void AI::checkTimeIsCoherent() const
 {
 #ifndef NDEBUG
-  for (unsigned int i = 0; i < ai_data_.all_robots.size(); i++)
+  for (unsigned int i = 0; i < GlobalDataSingleThread::singleton_.all_robots.size(); i++)
   {
-    assert(ai_data_.all_robots.at(i).second->getMovement().lastTime() - 0.000001 <= ai_data_.time);
+    assert(GlobalDataSingleThread::singleton_.all_robots.at(i).second->getMovement().lastTime() - 0.000001 <=
+           GlobalDataSingleThread::singleton_.ai_data_.time);
   }
 #endif
 }
@@ -83,16 +85,16 @@ void AI::limitsVelocity(Control& ctrl) const
 
 void AI::preventCollision(int robot_id, Control& ctrl)
 {
-  const ai::Robot& robot = ai_data_.robots[vision::Ally][robot_id];
+  const data::Robot& robot = GlobalDataSingleThread::singleton_.robots_[Ally][robot_id];
 
   const Vector2d& ctrl_velocity = ctrl.linear_velocity;
-  if (robot.vision_data.present == false)
+  if (robot.isActive() == false)
     return;
-  Vector2d robot_velocity = robot.getMovement().linearVelocity(ai_data_.time);
+  Vector2d robot_velocity = robot.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time);
 
   bool collision_is_detected = false;
 
-  std::list<std::pair<int, double> > collisions_with_ctrl = ai_data_.getCollisions(robot_id, ctrl_velocity);
+  std::list<std::pair<int, double> > collisions_with_ctrl = data::ComputedData::getCollisions(robot_id, ctrl_velocity);
   for (const std::pair<int, double>& collision : collisions_with_ctrl)
   {
     double time_before_collision = collision.second;
@@ -135,7 +137,8 @@ void AI::preventCollision(int robot_id, Control& ctrl)
     double err = 0.01;
     if (robot_velocity_norm > err)
     {
-      velocity_increase = (1 - ai_data_.dt * ai::Config::translation_acceleration_limit / robot_velocity_norm);
+      velocity_increase = (1 - GlobalDataSingleThread::singleton_.ai_data_.dt *
+                                   ai::Config::translation_acceleration_limit / robot_velocity_norm);
       if (velocity_increase < 0.0)
       {
         velocity_increase = 0.0;
@@ -227,7 +230,7 @@ void AI::sendControl(int robot_id, const Control& ctrl)
         commander_->set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(),
                         kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom
 
-                        );
+        );
         // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
       }
       else
@@ -262,18 +265,20 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
          );
     }
 #endif
-  if (ai_data_.robots[vision::Ally][robot_id].vision_data.present == false)
+  if (GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].isActive() == false)
     return;
 
   preventCollision(robot_id, ctrl);
-  ctrl.changeToRelativeControl(ai_data_.robots[vision::Ally][robot_id].getMovement().angularPosition(ai_data_.time),
-                               ai_data_.dt);
+  ctrl.changeToRelativeControl(GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].getMovement().angularPosition(
+                                   GlobalDataSingleThread::singleton_.ai_data_.time),
+                               GlobalDataSingleThread::singleton_.ai_data_.dt);
   limitsVelocity(ctrl);
 }
 
-Control AI::updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball)
+Control AI::updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, data::Robot& robot,
+                        data::Ball& ball)
 {
-  if (robot.isPresentInVision())
+  if (robot.isActive())
   {
     Control ctrl = robot_behavior.control();
     return ctrl;
@@ -289,30 +294,21 @@ void AI::initRobotBehaviors()
 {
   for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
   {
-    robot_behaviors_[k] = std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_));
+    robot_behaviors_[k] = std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing);
   }
 }
 
-AI::AI(std::string manager_name, std::string team_name, ai::Team default_team,  // GlobalData& data,
-       AICommander* commander, const std::string& config_path, bool is_in_simulation)
-  : team_name_(team_name)
-  , default_team_(default_team)
-  //, is_in_simulation(is_in_simulation)
-  , running_(true)
-  , ai_data_(config_path, is_in_simulation, default_team)
+AI::AI(std::string manager_name, std::string team_name,  // GlobalData& data,
+       AICommander* commander, const std::string& config_path)
+  :  //, is_in_simulation(is_in_simulation)
+  running_(true)
   , commander_(commander)
-  , current_dt_(ai::Config::period)
-  //, data_(data)
-  , game_state_(ai_data_)
 {
   initRobotBehaviors();
 
-  ai_data_.changeTeamColor(default_team);
-  ai_data_.team_name = team_name;
-
   lastTick = rhoban_utils::TimeStamp::now();
 
-  manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL, ai_data_, game_state_);
+  manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL, game_state_);
 
   setManager(manager_name);
 }
@@ -341,7 +337,7 @@ void AI::setManager(std::string managerName)
   }
   else
   {
-    strategy_manager_ = manager::Factory::constructManager(managerName, ai_data_, game_state_);
+    strategy_manager_ = manager::Factory::constructManager(managerName, game_state_);
   }
   manager_name_ = managerName;
   strategy_manager_->declareGoalieId(goalie_id);
@@ -362,17 +358,17 @@ void AI::updateRobots()
 {
   commander_->setYellow(ai::Config::we_are_blue == false);
 
-  double time = this->current_time_;
-  ai::Ball& ball = ai_data_.ball;
+  double time = GlobalDataSingleThread::singleton_.ai_data_.time;
+  data::Ball& ball = GlobalDataSingleThread::singleton_.ball_;
 
-  auto team = vision::Ally;
+  auto team = Ally;
   for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
   {
     SharedData::FinalControl& final_control =
         GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id];
 
-    ai::Robot& robot = ai_data_.robots[team][robot_id];
-    assert(robot.id() == robot_id);
+    data::Robot& robot = GlobalDataSingleThread::singleton_.robots_[team][robot_id];
+    assert(robot.id == robot_id);
     robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)
@@ -381,7 +377,7 @@ void AI::updateRobots()
     }
     else if (!final_control.is_manually_controled_by_viewer)
     {
-      ai::Robot& robot = ai_data_.robots[team][robot_id];
+      data::Robot& robot = GlobalDataSingleThread::singleton_.robots_[team][robot_id];
 
       robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
       final_control.control = updateRobot(robot_behavior, time, robot, ball);
@@ -416,14 +412,11 @@ bool AI::runTask()
     DEBUG("LAG");
   }
   lastTick = rhoban_utils::TimeStamp::now();
-  current_dt_ = current_time_;
-  current_time_ = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
-  current_dt_ = current_time_ - current_dt_;
-
-  ai_data_.time = current_time_, ai_data_.dt = current_dt_;
-
+  GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time;
+  GlobalDataSingleThread::singleton_.ai_data_.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
+  GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time - GlobalDataSingleThread::singleton_.ai_data_.dt;
 #ifndef NDEBUG
-  updatePeriodicDebug(current_time_, 10.0);
+  updatePeriodicDebug(GlobalDataSingleThread::singleton_.ai_data_.time, 10.0);
 #endif
 
   // data_ >> visionData_;
@@ -434,12 +427,14 @@ bool AI::runTask()
   // visionData_.checkAssert(current_time_);
   // DEBUG("");
 
-  ai_data_.update(GlobalDataSingleThread::singleton_.vision_data_);
+  data::ComputedData::computeTableOfCollisionTimes();
+  // ai_data_.update(GlobalDataSingleThread::singleton_.vision_data_);
+
   if (not(ai::Config::is_in_simulation))
   {
     updateElectronicInformations();
   }
-// print_electronic_info();
+  // print_electronic_info();
 
 #ifndef NDEBUG
 // check_time_is_coherent();
@@ -453,12 +448,11 @@ bool AI::runTask()
   // return true;
   //}
 
-  game_state_.update(current_time_);
+  game_state_.update(GlobalDataSingleThread::singleton_.ai_data_.time);
 
   if (manager_name_ != manager::names::MANUAL)
   {  // HACK TOT REMOVEE !
-    strategy_manager_->changeTeamAndPointOfView(game_state_.getTeamColor(strategy_manager_->getTeamName()),
-                                                game_state_.blueHaveItsGoalOnPositiveXAxis());
+    strategy_manager_->changeTeamAndPointOfView(game_state_.blueHaveItsGoalOnPositiveXAxis());
   }
   else
   {
@@ -469,8 +463,8 @@ bool AI::runTask()
 
   strategy_manager_->removeInvalidRobots();
 
-  strategy_manager_->update(current_time_);
-  strategy_manager_->assignBehaviorToRobots(robot_behaviors_, current_time_, current_dt_);
+  strategy_manager_->update(GlobalDataSingleThread::singleton_.ai_data_.time);
+  strategy_manager_->assignBehaviorToRobots(robot_behaviors_, GlobalDataSingleThread::singleton_.ai_data_.time, GlobalDataSingleThread::singleton_.ai_data_.dt);
   // shareData();
   // ai_data.compute_table_of_collision_times();
   // if( ai_data.table_of_collision_times.size() != 0 ){
@@ -489,8 +483,10 @@ bool AI::runTask()
     this->getAnnotations(data_for_viewer.annotations);
   });
   */
-  GlobalDataSingleThread::singleton_.data_for_viewer_.annotations.clear();
-  this->getAnnotations(GlobalDataSingleThread::singleton_.data_for_viewer_.annotations);
+
+  //  GlobalDataSingleThread::singleton_.data_for_viewer_.annotations.clear();
+  //  this->getAnnotations(GlobalDataSingleThread::singleton_.data_for_viewer_.annotations);
+
   // XXX: Flushing takes some time in real mode, and should be done in parallel
   // along with the computing of the AI
   commander_->flush();
@@ -518,7 +514,7 @@ GameState& AI::getGameState()
 
 double AI::getCurrentTime()
 {
-  return ai_data_.time;
+  return GlobalDataSingleThread::singleton_.ai_data_.time;
 }
 
 rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
@@ -534,13 +530,14 @@ rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
 
 void AI::getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const
 {
-  annotations.addAnnotations(getManager()->getAnnotations());
-  annotations.addAnnotations(getRobotBehaviorAnnotations());
+  //  annotations.addAnnotations(getManager()->getAnnotations());
+  //  annotations.addAnnotations(getRobotBehaviorAnnotations());
 
-  std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point& p) {
-    return this->ai_data_.team_point_of_view.fromFrame(p);
-  };
-  annotations.mapPositions(fct);
+  //  std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point&
+  //  p) {
+  //    return this->ai_data_.team_point_of_view.fromFrame(p);
+  //  };
+  //  annotations.mapPositions(fct);
 }
 
 void AI::updateElectronicInformations()
@@ -551,7 +548,7 @@ void AI::updateElectronicInformations()
     auto robot = master->robots[id];
     if (robot.isOk())
     {
-      ai_data_.robots[vision::Ally][id].infra_red = (robot.status.status & STATUS_IR) ? true : false;
+      GlobalDataSingleThread::singleton_.robots_[Ally][id].electronics = robot.status;
     }
   }
 }
@@ -561,7 +558,7 @@ void AI::printElectronicInfo()
   std::cout << "Electronic : " << std::endl;
   for (unsigned int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    std::cout << "robot id : " << id << " IR : " << ai_data_.robots[vision::Ally][id].infra_red << std::endl;
+    std::cout << "robot id : " << id << " IR : " << GlobalDataSingleThread::singleton_.robots_[Ally][id].infraRed() << std::endl;
   }
 }
 

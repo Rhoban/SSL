@@ -21,18 +21,21 @@
 
 #include <vision/vision_data.h>
 #include <mutex>
-#include <robot_behavior/robot_behavior.h>
-
+#include <control/control.h>
 #include "data/robot.h"
-#include "data/field.h"
 #include "data/ball.h"
+#include "data/field.h"
+#include "data/ai_data.h"
 
 namespace rhoban_ssl
 {
+/*
+TODO refacto
 struct DataForViewer
 {
   rhoban_ssl::annotations::Annotations annotations;
 };
+*/
 
 struct SharedData
 {
@@ -61,16 +64,18 @@ public:
   data::Robot robots_[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
   data::Ball ball_;
   data::Field field_;
+  data::AiData ai_data_;
+  std::vector<std::pair<Team, data::Robot*>> all_robots;
 
   SharedData shared_data_;
-  DataForViewer data_for_viewer_;
+// TODO refacto
+//  DataForViewer data_for_viewer_;
 
 private:
-  GlobalDataSingleThread(ai::Team initial_team_color);
+  GlobalDataSingleThread();
 
 public:
   static GlobalDataSingleThread singleton_;
-  void setTeam(ai::Team team_color);
 
   /*  GlobalDataSingleThread& operator<<(const vision::VisionDataSingleThread& vision_data);
     GlobalDataSingleThread& operator>>(vision::VisionDataSingleThread& vision_data);

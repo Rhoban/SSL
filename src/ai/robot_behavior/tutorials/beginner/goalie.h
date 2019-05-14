@@ -54,7 +54,7 @@ public:
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see ai::AiData
    */
-  Goalie(ai::AiData& ai_data);
+  Goalie();
   /**
    * @brief Move the robot 0.5 meters from the goal center.
    * The robot will be align with the ally goal center and the ball position..
@@ -64,7 +64,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   /**
    * @see Control.

@@ -41,7 +41,7 @@ VisionDataSingleThread::VisionDataSingleThread()
   }
   for (Team team = 0; team < 2; team++)
     for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
-      robots_[team][rid].id = rid;
+      GlobalDataSingleThread::singleton_.robots_[team][rid].id = rid;
 }
 
 VisionDataSingleThread::~VisionDataSingleThread()

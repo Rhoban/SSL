@@ -21,7 +21,6 @@
 
 #include "robot_behavior.h"
 #include "position_follower.h"
-#include <ai_data.h>
 #include <math/circular_vector.h>
 
 namespace rhoban_ssl
@@ -75,13 +74,13 @@ private:
   void convertCycleDirectionToLinearAndAngularVelocity();
 
 public:
-  NavigationWithObstacleAvoidance(ai::AiData& ai_data, double time, double dt);
+  NavigationWithObstacleAvoidance(double time, double dt);
 
 protected:
-  void updateControl(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void updateControl(double time, const data::Robot& robot, const data::Ball& ball);
 
 public:
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 

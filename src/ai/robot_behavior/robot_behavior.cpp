@@ -40,8 +40,8 @@ double vec2angle(Vector2d direction)
 
 }  // namespace detail
 
-RobotBehavior::RobotBehavior(ai::AiData& ai_data)
-  : GameInformations(ai_data), robot_ptr_(nullptr), birthday_(-1.0), ai_data_(ai_data){};
+RobotBehavior::RobotBehavior()
+  : GameInformations(), robot_ptr_(nullptr), birthday_(-1.0){};
 
 double RobotBehavior::age() const
 {
@@ -57,10 +57,10 @@ void RobotBehavior::setBirthday(double birthday)
   birthday_ = birthday;
 };
 
-void RobotBehavior::updateTimeAndPosition(double time, const ai::Robot& robot, const ai::Ball& ball)
+void RobotBehavior::updateTimeAndPosition(double time, const data::Robot& robot, const data::Ball& ball)
 {
   robot_ptr_ = &robot;
-  assert((robot.id() >= 0) && (robot.id() < ai::Config::NB_OF_ROBOTS_BY_TEAM));
+  assert((robot.id >= 0) && (robot.id < ai::Config::NB_OF_ROBOTS_BY_TEAM));
   last_update_ = time;
   robot_linear_position_ = Vector2d(robot.getMovement().linearPosition(time));
   robot_angular_position_ = robot.getMovement().angularPosition(time);
@@ -68,7 +68,7 @@ void RobotBehavior::updateTimeAndPosition(double time, const ai::Robot& robot, c
   robot_angular_velocity_ = robot.getMovement().angularVelocity(time);
 };
 
-const ai::Robot& RobotBehavior::robot() const
+const data::Robot& RobotBehavior::robot() const
 {
 #ifndef NDEBUG
   if (not(robot_ptr_))
@@ -83,12 +83,12 @@ const ai::Robot& RobotBehavior::robot() const
 
 rhoban_geometry::Point RobotBehavior::linearPosition() const
 {
-  return robot().getMovement().linearPosition(time());
+  return robot().getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 }
 
 ContinuousAngle RobotBehavior::angularPosition() const
 {
-  return robot().getMovement().angularPosition(time());
+  return robot().getMovement().angularPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 }
 
 bool RobotBehavior::isGoalie() const
@@ -103,7 +103,7 @@ rhoban_ssl::annotations::Annotations RobotBehavior::getAnnotations() const
 
 bool RobotBehavior::infraRed() const
 {
-  return robot().infra_red;
+  return robot().infraRed();
 }
 
 }  // namespace robot_behavior

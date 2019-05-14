@@ -12,6 +12,9 @@ namespace ai
 {
 struct Config
 {
+  //todo move to GlobalData ?
+  static std::string team_name;
+
   static constexpr int NB_OF_ROBOTS_BY_TEAM = 16;
   static constexpr unsigned int NB_CAMERAS = 4;
   static constexpr unsigned int MAX_BALLS_DETECTED = 4;
@@ -26,7 +29,7 @@ struct Config
   static double period;
 
   static double robot_radius;
-  static double radius_ball;
+  static double ball_radius;
   static Vector2d waiting_goal_position;
   static int default_goalie_id;
 

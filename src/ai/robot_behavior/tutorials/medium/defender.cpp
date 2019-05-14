@@ -25,17 +25,17 @@ namespace robot_behavior
 {
 namespace medium
 {
-Defender::Defender(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+Defender::Defender() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void Defender::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void Defender::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 
   Vector2d ball_goal_vector = allyGoalCenter() - ballPosition();
   double target_rotation = 0.0;

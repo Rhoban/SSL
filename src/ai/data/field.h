@@ -49,6 +49,16 @@ public:
   Box penalty_areas_[2];
 
 public:
+
+  /**
+   * @brief isInside returns true if the point given in parameter is in
+   * the area of the field
+   * @param point
+   * @note was in ai_data::Field class
+   * @return a boolean
+   */
+  bool isInside(const rhoban_geometry::Point& point) const;
+
   /**
    * @brief returns the position of the center mark of the field.
    * @return a point
@@ -68,6 +78,12 @@ public:
    * @return a point
    */
   rhoban_geometry::Point goalCenter(Team team) const;
+
+
+  rhoban_geometry::Point getSE() const;
+  rhoban_geometry::Point getNE() const;
+  rhoban_geometry::Point getNW() const;
+  rhoban_geometry::Point getSW() const;
 };
 
 }  // namespace data

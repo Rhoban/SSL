@@ -15,7 +15,7 @@ private:
   unsigned int last_change_stamp_;
 
 public:
-  ManagerWithGameState(ai::AiData& ai_data, const GameState& game_state);
+  ManagerWithGameState(const GameState& game_state);
 
   void update(double time);
   void analyseData(double time);

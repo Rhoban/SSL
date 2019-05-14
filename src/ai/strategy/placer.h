@@ -53,7 +53,7 @@ public:
   void setStartingPositionForGoalie(const rhoban_geometry::Point& linear_position,
                                     const ContinuousAngle& angular_position);
 
-  Placer(ai::AiData& ai_data);
+  Placer();
   bool behavior_has_been_assigned;
   int minRobots() const;
   int maxRobots() const;

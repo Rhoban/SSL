@@ -65,9 +65,8 @@ bool command_is_one_of_4_(const GameStateData& game_state_data, unsigned int run
           (game_state_data.current().command() == E3) or (game_state_data.current().command() == E4));
 }
 
-GameState::GameState(ai::AiData& ai_data)
-  : ai_data_(ai_data)
-  , blueTeamOnPositiveHalf_(false)
+GameState::GameState()
+  : blueTeamOnPositiveHalf_(false)
   , change_stamp_(0)
   , machine_state_(game_state_data_, game_state_data_)
   , number_of_yellow_goals_(0)
@@ -114,11 +113,11 @@ GameState::GameState(ai::AiData& ai_data)
                          [&](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
                            if ((game_state_data_.current().command() == SSL_Referee::PREPARE_KICKOFF_YELLOW))
                            {
-                             team_having_kickoff_ = ai::Yellow;
+                             team_having_kickoff_ = (ai::Config::we_are_blue) ? Opponent : Ally;
                            }
                            else
                            {
-                             team_having_kickoff_ = ai::Blue;
+                             team_having_kickoff_ = (ai::Config::we_are_blue) ? Ally : Opponent;
                            }
                          });
 
@@ -151,11 +150,11 @@ GameState::GameState(ai::AiData& ai_data)
                            if ((game_state_data_.current().command() == SSL_Referee::DIRECT_FREE_YELLOW) or
                                (game_state_data_.current().command() == SSL_Referee::INDIRECT_FREE_YELLOW))
                            {
-                             team_having_free_kick_ = ai::Yellow;
+                             team_having_free_kick_ = (ai::Config::we_are_blue) ? Opponent : Ally;
                            }
                            else
                            {
-                             team_having_free_kick_ = ai::Blue;
+                             team_having_free_kick_ = (ai::Config::we_are_blue) ? Ally : Opponent;
                            }
                            if ((game_state_data_.current().command() == SSL_Referee::DIRECT_FREE_YELLOW) or
                                (game_state_data_.current().command() == SSL_Referee::DIRECT_FREE_BLUE))
@@ -186,11 +185,11 @@ GameState::GameState(ai::AiData& ai_data)
                          [&](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
                            if ((game_state_data_.current().command() == SSL_Referee::PREPARE_PENALTY_YELLOW))
                            {
-                             team_having_penalty_ = ai::Yellow;
+                             team_having_penalty_ = (ai::Config::we_are_blue) ? Opponent : Ally;
                            }
                            else
                            {
-                             team_having_penalty_ = ai::Blue;
+                             team_having_penalty_ = (ai::Config::we_are_blue) ? Ally : Opponent;
                            }
                          });
 
@@ -224,7 +223,7 @@ GameState::GameState(ai::AiData& ai_data)
                            }
                          }
 
-                         );
+  );
 
   machine_state_.addEdge(edge_name::penalty_to_halt, state_name::penalty, state_name::halt,
                          command_is_<SSL_Referee::HALT>);
@@ -240,7 +239,7 @@ GameState::GameState(ai::AiData& ai_data)
 
 bool GameState::ballIsMoving()
 {
-  Vector2d ball_velocity = ai_data_.ball.getMovement().linearVelocity(ai_data_.time);
+  Vector2d ball_velocity = GlobalDataSingleThread::singleton_.ball_.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time);
   double threshold = 0.001;
   if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
   {
@@ -298,17 +297,17 @@ const GameState::ID& GameState::getState() const
   return *(machine_state_.currentStates().begin());
 }
 
-ai::Team GameState::kickoffTeam() const
+Team GameState::kickoffTeam() const
 {
   return team_having_kickoff_;
 }
 
-ai::Team GameState::penaltyTeam() const
+Team GameState::penaltyTeam() const
 {
   return team_having_penalty_;
 }
 
-ai::Team GameState::freeKickTeam() const
+Team GameState::freeKickTeam() const
 {
   return team_having_free_kick_;
 }
@@ -337,19 +336,6 @@ bool GameState::stateIsNewer(unsigned int last_change_stamp) const
 {
   return change_stamp_ > last_change_stamp;
 }
-
-ai::Team GameState::getTeamColor(const std::string& team_name) const
-{
-  if (game_state_data_.current().yellow().name() == team_name)
-  {
-    return ai::Yellow;
-  }
-  if (game_state_data_.current().blue().name() == team_name)
-  {
-    return ai::Blue;
-  }
-  return ai::Unknown;
-};
 
 RefereeClient& GameState::getRefereeClient()
 {

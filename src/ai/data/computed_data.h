@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -16,32 +16,28 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-#pragma once
-
-#include <robot_behavior/robot_behavior.h>
-#include <robot_behavior/factory.h>
+#include <math/vector2d.h>
+#include <list>
 
 namespace rhoban_ssl
 {
-namespace robot_behavior
+namespace data
 {
-class BeginnerRobotHaveBall : public RobotBehavior
-{
-private:
-  rhoban_ssl::annotations::Annotations annotations_;
 
+/**
+ * @brief The ComputedData class
+ *
+ * This class intent to share computed data accross multiple behaviors/strategies and
+ * avoid redundant computation.
+ */
+class ComputedData
+{
 public:
-  BeginnerRobotHaveBall();
+  ComputedData();
 
-  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
-
-  virtual Control control() const;
-
-  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
-
-  virtual ~BeginnerRobotHaveBall();
+  static std::list<std::pair<int, double> > getCollisions(int robot_id, const Vector2d& linear_velocity);
+  static void computeTableOfCollisionTimes();
 };
+}
 
-};  // namespace robot_behavior
-};  // namespace rhoban_ssl
+}  // namespace rhoban_ssl

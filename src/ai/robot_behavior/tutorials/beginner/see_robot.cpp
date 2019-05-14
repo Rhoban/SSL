@@ -26,14 +26,14 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-SeeRobot::SeeRobot(ai::AiData& ai_data, int target_id)
-  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+SeeRobot::SeeRobot(int target_id)
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 
 {
   target_robot_id_ = target_id;
 }
 
-void SeeRobot::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void SeeRobot::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -41,16 +41,16 @@ void SeeRobot::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 
-  ContinuousAngle target_rotation = robot.getMovement().angularPosition(ai_data_.time);
+  ContinuousAngle target_rotation = robot.getMovement().angularPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to look itself will do nothing.
-  if (target_robot_id_ != robot.id())
+  if (target_robot_id_ != robot.id)
   {
     const rhoban_geometry::Point& target_position =
-        getRobot(target_robot_id_).getMovement().linearPosition(ai_data_.time);
+        getRobot(target_robot_id_).getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 
     Vector2d direction = target_position - robot_position;
     target_rotation = vector2angle(direction);

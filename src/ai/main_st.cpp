@@ -130,8 +130,6 @@ int main(int argc, char** argv)
 
   cmd.parse(argc, argv);
 
-  GlobalDataSingleThread::singleton_.setTeam(yellow.getValue() ? ai::Yellow : ai::Blue);
-
   std::string theport;
   if (simulation.getValue())
   {
@@ -162,6 +160,7 @@ int main(int argc, char** argv)
   }
 
   ai::Config::load(config_path.getValue());
+  ai::Config::we_are_blue = !yellow.getValue();
 
   if (yellow.getValue())
     ai::Config::we_are_blue = false;
@@ -197,8 +196,8 @@ int main(int argc, char** argv)
   else
   {
     AI* ai_ = nullptr;
-    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, commander,
-                 config_path.getValue(), simulation.getValue());
+    ai_ = new AI(manager_name.getValue(), team_name.getValue(), commander,
+                 config_path.getValue());
     // ai_->run();
     rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
     rhoban_ssl::ExecutionManager::getManager().run(0.01);

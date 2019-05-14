@@ -25,8 +25,8 @@
 #include <utility>
 #include <math/continuous_angle.h>
 #include <memory>
-#include <ai_data.h>
 #include <annotations/annotations.h>
+
 namespace rhoban_ssl
 {
 namespace strategy
@@ -40,9 +40,6 @@ enum GoalieNeed
 
 class Strategy : public GameInformations
 {
-protected:
-  ai::AiData& ai_data_;
-
 private:
   int goalie_id_;
   bool manage_a_goalie_;
@@ -53,7 +50,7 @@ private:
   void updatePlayerIds();
 
 public:
-  Strategy(ai::AiData& ai_data);
+  Strategy();
 
   virtual void setGoalie(int id, bool to_be_managed);
   void setGoalieOpponent(int id);

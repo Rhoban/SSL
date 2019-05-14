@@ -23,8 +23,8 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Strategy::Strategy(ai::AiData& ai_data)
-  : GameInformations(ai_data), ai_data_(ai_data), goalie_id_(-1), manage_a_goalie_(false), goalie_opponent_id_(-1)
+Strategy::Strategy()
+  : GameInformations(), goalie_id_(-1), manage_a_goalie_(false), goalie_opponent_id_(-1)
 {
 }
 

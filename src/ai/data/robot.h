@@ -21,6 +21,8 @@
 
 #include "mobile.h"
 
+#include <robot_instructions.h>
+
 namespace rhoban_ssl
 {
 namespace data
@@ -29,6 +31,22 @@ class Robot : public Mobile
 {
 public:
   Robot();
+
+  int id;
+  bool is_goalie;
+
+  /**
+   * @brief true if inside field and in vision
+   */
+  bool is_valid;
+
+  struct packet_robot electronics;
+
+  /**
+   * @brief infraRed returns true if the infrared barrier of the robot detects somethings
+   * @return bool : infrared barrier detection
+   */
+  bool infraRed() const;
 };
 
 }  // namespace data

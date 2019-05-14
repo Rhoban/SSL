@@ -25,43 +25,43 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-BeginnerRobotHaveBall::BeginnerRobotHaveBall(ai::AiData& ai_data) : RobotBehavior(ai_data)
+BeginnerRobotHaveBall::BeginnerRobotHaveBall() : RobotBehavior()
 {
 }
 
-void BeginnerRobotHaveBall ::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void BeginnerRobotHaveBall ::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   // Find the ally and the opponent closest to the ball
-  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
-  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Opponent);
+  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Ally);
+  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Opponent);
 
   // Get the robot ally and opponent.
-  ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, vision::Ally);
-  ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, vision::Opponent);
+  data::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Ally);
+  data::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Opponent);
 
   // Find if the robot has the ball.
-  int ally_have_ball = GameInformations::infraRed(nb_ally_closest_to_the_ball, vision::Ally);
-  int opponent_have_ball = GameInformations::infraRed(nb_opponent_closest_to_the_ball, vision::Opponent);
+  int ally_have_ball = GameInformations::infraRed(nb_ally_closest_to_the_ball, Ally);
+  int opponent_have_ball = GameInformations::infraRed(nb_opponent_closest_to_the_ball, Opponent);
 
   annotations_.clear();
 
   // Find the robot that have the ball.
   if (opponent_have_ball)
   {
-    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time), "blue", false);
   }
   else if (ally_have_ball)
   {
-    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time), "blue", false);
   }
   else
   {
     annotations_.addCross(ballPosition(), "red", false);
   }
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 }
 
 Control BeginnerRobotHaveBall::control() const

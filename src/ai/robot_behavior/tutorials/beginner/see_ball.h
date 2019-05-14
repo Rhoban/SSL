@@ -53,7 +53,7 @@ public:
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see Ai::AiData
    */
-  SeeBall(ai::AiData& ai_data);
+  SeeBall();
 
   /**
    * @brief The robot stay in his position and always turns to the ball.
@@ -63,7 +63,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   /**
    * @see Control

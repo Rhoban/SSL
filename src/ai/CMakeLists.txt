@@ -24,6 +24,8 @@ set (SOURCES
     data/field.cpp
     data/camera_data.cpp
     data/mobile.cpp
+    data/ai_data.cpp
+    data/computed_data.cpp
     config.cpp
     viewer.cpp
     game_informations.cpp
@@ -50,11 +52,8 @@ set (SOURCES
     robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
-    robot_behavior/tutorials/medium/prepare_strike.cpp
-    robot_behavior/tutorials/medium/striker.cpp
     robot_behavior/tutorials/medium/defender.cpp
     ai.cpp
-    ai_data.cpp
     debug.cpp
     manager/manager.cpp
     manager/manager_with_game_state.cpp
@@ -102,9 +101,6 @@ set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} zmq)
 
 add_library (ssl_ai ${SOURCES})
 target_link_libraries(ssl_ai ${ALL_LIBS})
-
-add_executable(ai main.cpp)
-target_link_libraries(ai ssl_ai ${ALL_LIBS})
 
 add_executable(ai_st main_st.cpp)
 target_link_libraries(ai_st ssl_ai ${ALL_LIBS})

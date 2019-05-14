@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <ai_data.h>
 #include <referee/game_state.h>
 #include "manager.h"
 
@@ -40,7 +39,7 @@ private:
 public:
   static const std::list<std::string>& availableManagers();
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name, ai::AiData& ai,
+  static std::shared_ptr<Manager> constructManager(const std::string& manager_name,
                                                    GameState& game_state);
 };
 

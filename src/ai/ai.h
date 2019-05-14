@@ -23,7 +23,6 @@
 #include <com/ai_commander.h>
 #include <vision/ai_vision_client.h>
 #include <robot_behavior/robot_behavior.h>
-#include "ai_data.h"
 #include <referee/game_state.h>
 #include <core/machine_state.h>
 #include <manager/manager.h>
@@ -34,15 +33,13 @@ namespace rhoban_ssl
 class AI : public Task
 {
 private:
-  std::string team_name_;
-  ai::Team default_team_;
 
   rhoban_utils::TimeStamp lastTick;
 
 public:
   // bool is_in_simulation;
-  AI(std::string manager_name, std::string team_name, ai::Team default_team, AICommander* commander,
-     const std::string& config_path, bool is_in_simulation);
+  AI(std::string manager_name, std::string team_name, AICommander* commander,
+     const std::string& config_path);
 
   bool runTask() override;
   void stop();
@@ -59,10 +56,6 @@ public:
 protected:
   bool running_;
 
-  // vision::VisionData visionData_;
-  ai::AiData ai_data_;
-
-  bool enable_kicking_;
 
   AICommander* commander_;
 
@@ -70,8 +63,6 @@ protected:
 
   void initRobotBehaviors();
   void updateRobots();
-  double current_time_;
-  double current_dt_;
 
   // SharedData shared_data_;
 
@@ -80,7 +71,7 @@ protected:
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
 
-  Control updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball);
+  Control updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, data::Robot& robot, data::Ball& ball);
   void updateElectronicInformations();
   void printElectronicInfo();
 

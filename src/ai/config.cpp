@@ -8,6 +8,8 @@ namespace rhoban_ssl
 {
 namespace ai
 {
+std::string Config::team_name = "AMC";
+
 bool Config::enable_movement_with_integration = true;
 bool Config::we_are_blue = true;
 bool Config::is_in_simulation = true;
@@ -16,7 +18,7 @@ int Config::frame_per_second = 60;
 double Config::period = 1.0 / 60.0;
 
 double Config::robot_radius = 0.09;
-double Config::radius_ball = 0.021375;
+double Config::ball_radius = 0.021375;
 Vector2d Config::waiting_goal_position;
 int Config::default_goalie_id;
 
@@ -131,8 +133,8 @@ void Config::load(const std::string& config_path)
 
   rules_avoidance_distance = 0.5 * (1.0 + 10.0 / 100.0);
 
-  radius_ball = root["ball"]["radius_ball"].asDouble();
-  assert(radius_ball > 0.0);
+  ball_radius = root["ball"]["radius_ball"].asDouble();
+  assert(ball_radius > 0.0);
 
   auto nav = root["navigation_with_obstacle"];
   security_acceleration_ratio = nav["security_acceleration_ratio"].asDouble();
@@ -163,5 +165,5 @@ void Config::load(const std::string& config_path)
 
   enable_kicking = true;
 }
-}
-}
+}  // namespace ai
+}  // namespace rhoban_ssl

@@ -27,8 +27,8 @@ namespace strategy
 {
 const std::string TareAndSynchronize::name = "tare_and_synchronize";
 
-TareAndSynchronize::TareAndSynchronize(ai::AiData& ai_data)
-  : Strategy(ai_data), halt_behavior_was_assigned_(false), move_behavior_was_assigned_(false), time_is_synchro_(false)
+TareAndSynchronize::TareAndSynchronize()
+  : Strategy(), halt_behavior_was_assigned_(false), move_behavior_was_assigned_(false), time_is_synchro_(false)
 {
 }
 
@@ -77,17 +77,17 @@ double TareAndSynchronize::getTemporalShiftBetweenVision() const
 
 void TareAndSynchronize::setTemporalShiftBetweenVision()
 {
-  ai_data_.time_shift_with_vision = getTemporalShiftBetweenVision();
+  GlobalDataSingleThread::singleton_.ai_data_.time_shift_with_vision = getTemporalShiftBetweenVision();
 }
 
 void TareAndSynchronize::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  const Movement& movement = ai_data_.robots[vision::Ally][robotId(0)].getMovement();
+  const Movement& movement = GlobalDataSingleThread::singleton_.robots_[Ally][robotId(0)].getMovement();
   if (!halt_behavior_was_assigned_)
   {
     assign_behavior(robotId(0),
-                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
+                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
     halt_behavior_was_assigned_ = true;
     return;
   }
@@ -95,7 +95,7 @@ void TareAndSynchronize::assignBehaviorToRobots(
   {
     if (movement.angularVelocity(movement.lastTime()).abs().value() <= 0.05)
     {
-      robot_behavior::PositionFollower* follower = new robot_behavior::PositionFollower(ai_data_, time, dt);
+      robot_behavior::PositionFollower* follower = new robot_behavior::PositionFollower(time, dt);
       follower->setFollowingPosition(movement.linearPosition(movement.lastTime()),
                                      movement.angularPosition(movement.lastTime()) + M_PI / 2.0);
       follower->setTranslationPid(ai::Config::p_translation, ai::Config::i_translation, ai::Config::d_translation);
@@ -116,7 +116,7 @@ void TareAndSynchronize::assignBehaviorToRobots(
       vision_time_command_ = movement.getSample().time();
       ai_time_associated_to_vision_time_command_ = time;
       assign_behavior(robotId(0),
-                      std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
+                      std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
       setTemporalShiftBetweenVision();
       time_is_synchro_ = true;
       return;

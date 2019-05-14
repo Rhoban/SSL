@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -16,32 +16,34 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #pragma once
 
-#include <robot_behavior/robot_behavior.h>
-#include <robot_behavior/factory.h>
+#include <map>
 
 namespace rhoban_ssl
 {
-namespace robot_behavior
+namespace data
 {
-class BeginnerRobotHaveBall : public RobotBehavior
-{
-private:
-  rhoban_ssl::annotations::Annotations annotations_;
 
+class AiData
+{
 public:
-  BeginnerRobotHaveBall();
+  AiData();
 
-  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+  double time_shift_with_vision;
+  double time;
+  double dt;
 
-  virtual Control control() const;
+  // This field is used by rhobot_behavior::Navigation_inside_the_field.
+  bool force_ball_avoidance;
 
-  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
-
-  virtual ~BeginnerRobotHaveBall();
+  /**
+   * @brief Collision_times_table
+   * @note come from ai_data
+   */
+  typedef std::map<std::pair<int, int>, double> Collision_times_table;
+  Collision_times_table table_of_collision_times_;
 };
 
-};  // namespace robot_behavior
-};  // namespace rhoban_ssl
+}  // namespace data
+}  // namespace rhoban_ssl

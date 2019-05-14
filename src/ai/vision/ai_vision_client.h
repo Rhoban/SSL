@@ -23,7 +23,6 @@
 #include <VisionClient.h>
 #include "vision_data.h"
 #include <data.h>
-#include <ai_data.h>
 #include "factory.h"
 #include "client_config.h"
 #include "robot_position_filter.h"
