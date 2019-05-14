@@ -1,11 +1,11 @@
 syntax = "proto3";
 import "entity_packet.proto";
-import "field_packet.proto";
+import "game_packet.proto";
 
 
 message AIPacket {
     oneof wrapperPacket {
         EntityPacket entities =1;
-        FieldPacket field = 2;
+        GamePacket game = 2;
     }
 }

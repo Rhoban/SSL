@@ -18,10 +18,6 @@
 */
 
 #include "api.h"
-#include <rhoban_utils/timing/time_stamp.h>
-#include <iostream>
-#include "field_packet.pb.h"
-#include "entity_packet.pb.h"
 
 namespace rhoban_ssl
 {
@@ -38,7 +34,7 @@ Api& Api::getApi()
   return Api::api_singleton_;
 }
 
-void Api::addPacket(AIPacket packet)
+void Api::addPacket(AIPacket& packet)
 {
   packets_.push(packet);
 }
@@ -47,23 +43,24 @@ std::queue<AIPacket>& Api::getQueue()
   return packets_;
 }
 
-void Api::addFieldPacket()
+void Api::generateGamePacket()
 {
   AIPacket packet;
-  FieldPacket field_packet;
   rhoban_ssl::vision::Field field = GlobalDataSingleThread::singleton_.vision_data_.field_;
 
-  // Prepare packet
-  packet.mutable_field()->set_fieldlength(field.fieldLength);
-  packet.mutable_field()->set_fieldwidth(field.fieldWidth);
-  packet.mutable_field()->set_boundarywidth(field.boundaryWidth);
-  packet.mutable_field()->set_goaldepth(field.goalDepth);
-  packet.mutable_field()->set_goalwidth(field.goalWidth);
-  packet.mutable_field()->set_penaltyareadepth(field.penaltyAreaDepth);
-  packet.mutable_field()->set_penaltyareawidth(field.penaltyAreaWidth);
+  // Prepare Field packet
+  packet.mutable_game()->mutable_field()->set_fieldlength(field.fieldLength);
+  packet.mutable_game()->mutable_field()->set_fieldwidth(field.fieldWidth);
+  packet.mutable_game()->mutable_field()->set_boundarywidth(field.boundaryWidth);
+  packet.mutable_game()->mutable_field()->set_goaldepth(field.goalDepth);
+  packet.mutable_game()->mutable_field()->set_goalwidth(field.goalWidth);
+  packet.mutable_game()->mutable_field()->set_penaltyareadepth(field.penaltyAreaDepth);
+  packet.mutable_game()->mutable_field()->set_penaltyareawidth(field.penaltyAreaWidth);
+
+  // Prepare Informations packet.
+  // packet.mutable_game();
 
   addPacket(packet);
-  packet.release_field();
 }
 
 void Api::addEntityPacket(ai::AiData& ai_data)
@@ -95,7 +92,6 @@ void Api::addEntityPacket(ai::AiData& ai_data)
   }
 
   addPacket(packet);
-  packet.release_entities();
 }
 
 void Api::addListPacket(std::shared_ptr<manager::Manager> manager)

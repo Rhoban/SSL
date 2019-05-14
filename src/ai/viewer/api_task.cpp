@@ -30,7 +30,7 @@ ApiTask::ApiTask() : Task()
 
 bool ApiTask::runTask()
 {
-  Api::getApi().addFieldPacket();
+  Api::getApi().generateGamePacket();
   // Prepare to the future version.
   // Api::getApi().addEntityPacket();
   // Api::getApi().

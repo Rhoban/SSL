@@ -19,11 +19,16 @@
 
 #pragma once
 
-#include <libwebsockets.h>
+// STL
 #include <queue>
+#include <iostream>
 
+// Packet Protobuf.
 #include "ai_packet.pb.h"
+#include "game_packet.pb.h"
+#include "entity_packet.pb.h"
 
+// Internal files
 #include <config.h>
 #include <execution_manager.h>
 #include <data.h>
@@ -35,6 +40,9 @@ namespace rhoban_ssl
 {
 namespace viewer
 {
+/**
+ * @brief The API for the connection with the viewer.
+ */
 class Api
 {
 private:
@@ -66,7 +74,7 @@ public:
   /**
    * @brief Add a packet in the queue.
    */
-  void addPacket(AIPacket packet);
+  void addPacket(AIPacket& packet);
 
   /**
    * @brief Get the queue of packets.
@@ -75,9 +83,9 @@ public:
   std::queue<AIPacket>& getQueue();
 
   /**
-   * @brief Add Field Packet.
+   * @brief Generate Game Packet.
    */
-  void addFieldPacket();
+  void generateGamePacket();
 
   /**
    * @brief Add Entity Packet.

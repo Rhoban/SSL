@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-message FieldPacket {
+message Field {
     float fieldLength = 1;
     float fieldWidth = 2;
     float goalWidth = 3;
@@ -10,3 +10,12 @@ message FieldPacket {
     float penaltyAreaWidth = 7;
 }
 
+message Informations {
+    bool isBlue = 1;
+    bool isSimulation = 2;
+}
+
+message GamePacket {
+    Field field = 1;
+    Informations information = 2;
+}

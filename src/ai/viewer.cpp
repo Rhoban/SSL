@@ -72,9 +72,9 @@ bool ViewerCommunication::runTask()
   {
     while (!rhoban_ssl::viewer::Api::getApi().getQueue().empty())
     {
+      AIPacket packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
       if (clients_.size() > 0)
       {
-        AIPacket packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
         unsigned char packet_send[packet.ByteSize() + LWS_PRE];
 
         packet.SerializeToArray(packet_send + LWS_PRE, packet.ByteSize());
@@ -85,6 +85,7 @@ bool ViewerCommunication::runTask()
         }
       }
 
+      packet.~AIPacket();
       rhoban_ssl::viewer::Api::getApi().getQueue().pop();
     }
 
