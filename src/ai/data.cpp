@@ -47,14 +47,13 @@ SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_
 
 ///////////////////////////////////////////////////////////////////////
 
-GlobalDataSingleThread::GlobalDataSingleThread() :
-  all_robots(ai::Config::NB_OF_ROBOTS_BY_TEAM*2)
+GlobalDataSingleThread::GlobalDataSingleThread()
 {
   for (int team_id = 0; team_id < 2; team_id++)
   {
-    for ( int robot_id = team_id; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
+    for ( int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
     {
-      all_robots[team_id*ai::Config::NB_OF_ROBOTS_BY_TEAM+robot_id] = std::pair<Team, data::Robot*>(team_id, &(robots_[team_id][robot_id]));
+      all_robots.push_back(std::pair<Team, data::Robot*>(team_id, &(robots_[team_id][robot_id])));
     }
   }
 }
