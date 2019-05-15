@@ -26,11 +26,11 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-Goto_ball::Goto_ball(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+Goto_ball::Goto_ball() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void Goto_ball::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void Goto_ball::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE

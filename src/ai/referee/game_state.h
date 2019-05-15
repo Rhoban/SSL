@@ -22,7 +22,7 @@
 #include <RefereeClient.h>
 #include <core/machine_state.h>
 #include <math/circular_vector.h>
-#include <ai_data.h>
+#include <config.h>
 
 namespace rhoban_ssl
 {
@@ -79,23 +79,21 @@ struct GameStateData
 {
   // datas[0] is the most recent
   // datas[1] the older
-  CircularVector<SSL_Referee> datas;
+  CircularVector<Referee> datas;
 
   double last_time;
   uint32_t last_command_counter;
 
   GameStateData();
 
-  const SSL_Referee& current() const;
-  const SSL_Referee& old() const;
+  const Referee& current() const;
+  const Referee& old() const;
 
   bool commandIsNew() const;
 };
 
 class GameState
 {
-private:
-  ai::AiData& ai_data_;
   bool blueTeamOnPositiveHalf_;
 
   RefereeClient referee_;
@@ -111,29 +109,28 @@ private:
   void extractData();
   void saveLastTimeStamps();
 
-  ai::Team team_having_kickoff_;
-  ai::Team team_having_penalty_;
-  ai::Team team_having_free_kick_;
+  Team team_having_kickoff_;
+  Team team_having_penalty_;
+  Team team_having_free_kick_;
   free_kick_type_id free_kick_type_;
   int number_of_yellow_goals_;
   int number_of_blue_goals_;
 
 public:
-  GameState(ai::AiData& ai_data_);
+  GameState();
 
   unsigned int getChangeStamp() const;
   const ID& getState() const;
 
   void update(double time);
 
-  ai::Team kickoffTeam() const;
-  ai::Team penaltyTeam() const;
-  ai::Team freeKickTeam() const;
+  Team kickoffTeam() const;
+  Team penaltyTeam() const;
+  Team freeKickTeam() const;
 
   free_kick_type_id typeOfTheFreeKick() const;
 
   bool blueHaveItsGoalOnPositiveXAxis() const;
-  ai::Team getTeamColor(const std::string& team_name) const;
 
   int yellowGoalieId() const;
   int blueGoalieId() const;

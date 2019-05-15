@@ -4,15 +4,15 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-ManagerWithGameState::ManagerWithGameState(ai::AiData& ai_data, const GameState& game_state)
-  : Manager(ai_data), game_state_(game_state), last_change_stamp_(0)
+ManagerWithGameState::ManagerWithGameState(const GameState& game_state)
+  : Manager(), game_state_(game_state), last_change_stamp_(0)
 {
 }
 
 void ManagerWithGameState::analyseData(double time)
 {
   // We change the point of view of the team
-  changeTeamAndPointOfView(game_state_.getTeamColor(getTeamName()), game_state_.blueHaveItsGoalOnPositiveXAxis());
+  changeTeamAndPointOfView(game_state_.blueHaveItsGoalOnPositiveXAxis());
   changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
 }
 
@@ -40,23 +40,23 @@ void ManagerWithGameState::chooseAStrategy(double time)
     else if (game_state_.getState() == state_name::free_kick)
     {
       free_kick_type_id type_free_kick = game_state_.typeOfTheFreeKick();
-      ai::Team team_free_kick = game_state_.freeKickTeam();
-      if (type_free_kick == DIRECT and team_free_kick == getTeam())
+      Team team_free_kick = game_state_.freeKickTeam();
+      if (type_free_kick == DIRECT and team_free_kick == Ally)
       {
         DEBUG("DIRECT KICK ALLY");
         startDirectKickAlly();
       }
-      else if (type_free_kick == DIRECT and team_free_kick != getTeam())
+      else if (type_free_kick == DIRECT and team_free_kick == Opponent)
       {
         DEBUG("DIRECT KICK OPPONENT");
         startDirectKickOpponent();
       }
-      else if (type_free_kick == INDIRECT and team_free_kick == getTeam())
+      else if (type_free_kick == INDIRECT and team_free_kick == Ally)
       {
         DEBUG("INDIRECT KICK ALLY");
         startIndirectKickAlly();
       }
-      else if (type_free_kick == INDIRECT and team_free_kick != getTeam())
+      else if (type_free_kick == INDIRECT and team_free_kick == Opponent)
       {
         DEBUG("INDIRECT KICK OPPONENT");
         startIndirectKickOpponent();
@@ -64,8 +64,8 @@ void ManagerWithGameState::chooseAStrategy(double time)
     }
     else if (game_state_.getState() == state_name::prepare_kickoff)
     {
-      ai::Team team_prepare_kickoff = game_state_.kickoffTeam();
-      if (team_prepare_kickoff == getTeam())
+      Team team_prepare_kickoff = game_state_.kickoffTeam();
+      if (team_prepare_kickoff == Ally)
       {
         DEBUG("PREPARE KICKOFF ALLY");
         startPrepareKickoffAlly();
@@ -78,8 +78,8 @@ void ManagerWithGameState::chooseAStrategy(double time)
     }
     else if (game_state_.getState() == state_name::kickoff)
     {
-      ai::Team team_kickoff = game_state_.kickoffTeam();
-      if (team_kickoff == getTeam())
+      Team team_kickoff = game_state_.kickoffTeam();
+      if (team_kickoff == Ally)
       {
         DEBUG("KICKOFF ALLY");
         startKickoffAlly();
@@ -92,8 +92,8 @@ void ManagerWithGameState::chooseAStrategy(double time)
     }
     else if (game_state_.getState() == state_name::penalty)
     {
-      ai::Team team_penalty = game_state_.penaltyTeam();
-      if (team_penalty == getTeam())
+      Team team_penalty = game_state_.penaltyTeam();
+      if (team_penalty == Ally)
       {
         DEBUG("PENALTY ALLY");
         startPenaltyAlly();
@@ -125,23 +125,23 @@ void ManagerWithGameState::chooseAStrategy(double time)
     else if (game_state_.getState() == state_name::free_kick)
     {
       free_kick_type_id type_free_kick = game_state_.typeOfTheFreeKick();
-      ai::Team team_free_kick = game_state_.freeKickTeam();
-      if (type_free_kick == DIRECT and team_free_kick == getTeam())
+      Team team_free_kick = game_state_.freeKickTeam();
+      if (type_free_kick == DIRECT and team_free_kick == Ally)
       {
         // DEBUG("DIRECT KICK ALLY continue");
         continueDirectKickAlly();
       }
-      else if (type_free_kick == DIRECT and team_free_kick != getTeam())
+      else if (type_free_kick == DIRECT and team_free_kick == Opponent)
       {
         // DEBUG("DIRECT KICK OPPONENT continue");
         continueDirectKickOpponent();
       }
-      else if (type_free_kick == INDIRECT and team_free_kick == getTeam())
+      else if (type_free_kick == INDIRECT and team_free_kick == Ally)
       {
         // DEBUG("INDIRECT KICK ALLY continue");
         continueIndirectKickAlly();
       }
-      else if (type_free_kick == INDIRECT and team_free_kick != getTeam())
+      else if (type_free_kick == INDIRECT and team_free_kick == Opponent)
       {
         // DEBUG("INDIRECT KICK OPPONENT continue");
         continueIndirectKickOpponent();
@@ -149,8 +149,8 @@ void ManagerWithGameState::chooseAStrategy(double time)
     }
     else if (game_state_.getState() == state_name::prepare_kickoff)
     {
-      ai::Team team_prepare_kickoff = game_state_.kickoffTeam();
-      if (team_prepare_kickoff == getTeam())
+      Team team_prepare_kickoff = game_state_.kickoffTeam();
+      if (team_prepare_kickoff == Ally)
       {
         // DEBUG("PREPARE KICKOFF ALLY continue");
         continuePrepareKickoffAlly();
@@ -163,8 +163,8 @@ void ManagerWithGameState::chooseAStrategy(double time)
     }
     else if (game_state_.getState() == state_name::kickoff)
     {
-      ai::Team team_kickoff = game_state_.kickoffTeam();
-      if (team_kickoff == getTeam())
+      Team team_kickoff = game_state_.kickoffTeam();
+      if (team_kickoff == Ally)
       {
         // DEBUG("KICKOFF ALLY continue");
         continueKickoffAlly();
@@ -177,8 +177,8 @@ void ManagerWithGameState::chooseAStrategy(double time)
     }
     else if (game_state_.getState() == state_name::penalty)
     {
-      ai::Team team_penalty = game_state_.penaltyTeam();
-      if (team_penalty == getTeam())
+      Team team_penalty = game_state_.penaltyTeam();
+      if (team_penalty == Ally)
       {
         // DEBUG("PENALTY ALLY continue");
         continuePenaltyAlly();

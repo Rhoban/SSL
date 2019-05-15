@@ -23,11 +23,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-DoNothing::DoNothing(ai::AiData& ai_data) : RobotBehavior(ai_data)
+DoNothing::DoNothing() : RobotBehavior()
 {
 }
 
-void DoNothing::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void DoNothing::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
 }
 
@@ -38,3 +38,4 @@ Control DoNothing::control() const
 
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
+

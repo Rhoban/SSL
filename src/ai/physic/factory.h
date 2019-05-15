@@ -20,7 +20,6 @@
 #pragma once
 
 #include "movement.h"
-#include <ai_data.h>
 
 namespace rhoban_ssl
 {
@@ -29,9 +28,9 @@ namespace physic
 class Factory
 {
 public:
-  static Movement* movement(ai::AiData& ai_data);
-  static Movement* robotMovement(ai::AiData& ai_data);
-  static Movement* ballMovement(ai::AiData& ai_data);
+  static Movement* movement();
+  static Movement* robotMovement();
+  static Movement* ballMovement();
 };
 
 };  // namespace physic

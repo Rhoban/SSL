@@ -21,7 +21,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <Master.h>
 #include <Kinematic.h>
 #include "ai_commander.h"
 

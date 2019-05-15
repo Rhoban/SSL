@@ -1,7 +1,7 @@
 #pragma once
 
 #include "multicast_client_single_thread.h"
-#include "referee.pb.h"
+#include "ssl_referee.pb.h"
 #include <google/protobuf/arena.h>
 
 namespace rhoban_ssl
@@ -13,9 +13,9 @@ class RefereeMessages
   ~RefereeMessages();
 
 public:
-  SSL_Referee* getNewPacket();
+  Referee* getNewPacket();
   static RefereeMessages singleton_;
-  std::list<SSL_Referee*> last_packets_;
+  std::list<Referee*> last_packets_;
   void reset();
 };
 

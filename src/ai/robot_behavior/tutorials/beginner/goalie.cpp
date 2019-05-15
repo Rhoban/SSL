@@ -26,11 +26,11 @@ namespace robot_behavior
 {
 namespace beginner
 {
-Goalie::Goalie(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+Goalie::Goalie() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void Goalie::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
@@ -38,7 +38,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   // The position of the goalie is at 0.5 meters of the goal center.
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
   rhoban_geometry::Point target_position = robot_position;
   Vector2d goal_ball_vector = ballPosition() - allyGoalCenter();
   double dist_goal_ball_vector = goal_ball_vector.norm();

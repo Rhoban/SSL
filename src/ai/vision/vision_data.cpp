@@ -31,150 +31,7 @@ namespace rhoban_ssl
 {
 namespace vision
 {
-Field::Field()
-  : present(false)
-  , fieldLength(0.0)
-  , fieldWidth(0.0)
-  , goalWidth(0.0)
-  , goalDepth(0.0)
-  , boundaryWidth(0.0)
-  , penaltyAreaDepth(0.0)
-  , penaltyAreaWidth(0.0)
-{
-}
-
-void Object::update(double time, const Point& linear_position)
-{
-  update(time, linear_position, movement[0].angular_position);
-}
-
-void Object::update(double time, const Point& linear_position, const Angle& angular_position)
-{
-  ContinuousAngle angle(movement[0].angular_position);
-  angle.setToNearest(angular_position);
-  update(time, linear_position, angle);
-}
-
-void Object::update(double time, const Point& linear_position, const ContinuousAngle& angular_position)
-{
-  if (time <= movement.time(0))
-  {
-    // TODO
-    // DEBUG("TODO");
-    return;
-  }
-  last_update = rhoban_utils::TimeStamp::now();
-  present = true;
-
-  movement.insert(PositionSample(time, linear_position, angular_position));
-}
-
-double Object::age() const
-{
-  return diffSec(last_update, rhoban_utils::TimeStamp::now());
-}
-
-bool Object::isTooOld() const
-{
-  return not(present) or age() > 4.0;
-}
-
-bool Object::isOk() const
-{
-  return present && age() < 2.0;
-}
-
-Object::Object() : movement(history_size), present(false), id(-1), last_update(rhoban_utils::TimeStamp::now())
-{
-  for (int i = 0; i < history_size; i++)
-  {
-    movement[i].time = -i;
-  }
-}
-
-VisionData::VisionData()
-{
-  field.present = false;
-
-  for (auto team : { Ally, Opponent })
-  {
-    for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
-    {
-      robots[team][k].id = k;
-      if (team == Ally)
-      {
-        robots[team][k].update(1, Point(-1 - k * 0.3, 3.75));
-      }
-      else
-      {
-        robots[team][k].update(1, Point(1 + k * 0.3, 3.75));
-      }
-      robots[team][k].present = false;
-    }
-  }
-}
-
-void Object::checkAssert(double time) const
-{
-  assert(not(present) or (movement.time(0) > movement.time(1) and movement.time(1) > movement.time(2)));
-  //    assert(
-  //        not(present) or ( time > movement.time(0) )
-  //    );
-}
-
-Object::~Object()
-{
-}
-
-void VisionData::checkAssert(double time) const
-{
-  for (auto team : { Ally, Opponent })
-  {
-    for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
-    {
-      robots.at(team).at(k).checkAssert(time);
-    }
-  }
-  ball.checkAssert(time);
-}
-
-std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision)
-{
-  for (auto team : { rhoban_ssl::vision::Ally, rhoban_ssl::vision::Opponent })
-  {
-    out << team << " : " << std::endl;
-    for (int k = 0; k < ai::Config::NB_OF_ROBOTS_BY_TEAM; k++)
-    {
-      out << "robot " << k << std::endl;
-      out << vision.robots.at(team).at(k);
-    }
-  }
-  out << "ball : " << std::endl;
-  out << vision.ball << std::endl;
-
-  return out;
-}
-
-std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::Object& object)
-{
-  out << " id : " << object.id << std::endl;
-  out << " present : " << object.present << std::endl;
-  out << " age : " << object.age() << std::endl;
-  out << " lastUpdate : " << object.last_update.getTimeMS() / 1000.0 << std::endl;
-  out << " movement : " << object.movement << std::endl;
-  return out;
-}
-
-std::ostream& operator<<(std::ostream& out, const Field& field)
-{
-  out << "field -- len. " << field.fieldLength << " , width " << field.fieldWidth;
-  return out;
-}
-
-VisionDataSingleThread::VisionDataSingleThread(const VisionDataSingleThread&)
-{
-  throw "Vision Data must not be copied!";
-}
+VisionDataSingleThread VisionDataSingleThread::singleton_;
 
 VisionDataSingleThread::VisionDataSingleThread()
 {
@@ -184,12 +41,19 @@ VisionDataSingleThread::VisionDataSingleThread()
   }
   for (Team team = 0; team < 2; team++)
     for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
-      robots_[team][rid].id = rid;
+      GlobalDataSingleThread::singleton_.robots_[team][rid].id = rid;
 }
 
 VisionDataSingleThread::~VisionDataSingleThread()
 {
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+BallDetection::BallDetection() : confidence_(-1), camera_(nullptr)
+{
+}
+
 
 void BallDetection::operator=(const SSL_DetectionBall& b)
 {
@@ -202,9 +66,8 @@ void BallDetection::operator=(const SSL_DetectionBall& b)
   area_ = b.area();
 }
 
-BallDetection::BallDetection() : confidence_(-1), camera_(nullptr)
-{
-}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void RobotDetection::operator=(const SSL_DetectionRobot& r)
 {
@@ -225,6 +88,21 @@ RobotDetection::RobotDetection() : camera_(nullptr), confidence_(-1)
 {
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+CameraDetectionFrame::CameraDetectionFrame() : t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
+{
+  for (auto& r : allies_)
+    r.camera_ = this;
+  for (auto& r : opponents_)
+    r.camera_ = this;
+  for (auto& b : balls_)
+    b.camera_ = this;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 bool VisionDataTerminalPrinter::runTask()
 {
   static int counter = 0;
@@ -233,16 +111,13 @@ bool VisionDataTerminalPrinter::runTask()
   printf("%d\n", counter);
   printf("%d\n", VisionDataGlobal::singleton_.last_packets_.size());
   // VisionDataGlobal::singleton_.packets_buffer_.size());
-  auto& field = GlobalDataSingleThread::singleton_.vision_data_.field_;
-  if (field.present)
-  {
-    printf("Field is present : \n");
-    printf("\t %f x %f \n", field.fieldWidth, field.fieldLength);
-  }
+  auto& field = GlobalDataSingleThread::singleton_.field_;
+  printf("Field is present : \n");
+  printf("\t %f x %f \n", field.field_width_, field.field_length_);
 
   for (int camera = 0; camera < ai::Config::NB_CAMERAS; ++camera)
   {
-    auto& cam = GlobalDataSingleThread::singleton_.vision_data_.last_camera_detection_[camera];
+    auto& cam = VisionDataSingleThread::singleton_.last_camera_detection_[camera];
     printf("CAMERA %d (%d): \n", camera, cam.frame_number_);
     printf("\t time: %lf / %lf \n", cam.t_capture_, cam.t_sent_);
     int nballs = 0;
@@ -274,9 +149,9 @@ bool VisionDataTerminalPrinter::runTask()
     printf("\n");
   }
 
-  if (GlobalDataSingleThread::singleton_.vision_data_.ball_.present)
-    printf("BALL is at %f %f\n", GlobalDataSingleThread::singleton_.vision_data_.ball_.movement[0].linear_position.x,
-           GlobalDataSingleThread::singleton_.vision_data_.ball_.movement[0].linear_position.y);
+  if (GlobalDataSingleThread::singleton_.ball_.isActive())
+    printf("BALL is at %f %f\n", GlobalDataSingleThread::singleton_.ball_.movement_sample[0].linear_position.x,
+           GlobalDataSingleThread::singleton_.ball_.movement_sample[0].linear_position.y);
   else
   {
     printf("BALL is not found\n");
@@ -287,24 +162,21 @@ bool VisionDataTerminalPrinter::runTask()
     printf("team %d\n", team);
     for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
     {
-      if (GlobalDataSingleThread::singleton_.vision_data_.robots_[team][robot].present)
+      if (GlobalDataSingleThread::singleton_.robots_[team][robot].isActive())
         printf("\t%d : (%f;%f) ", robot,
-               GlobalDataSingleThread::singleton_.vision_data_.robots_[team][robot].movement[0].linear_position.x,
-               GlobalDataSingleThread::singleton_.vision_data_.robots_[team][robot].movement[0].linear_position.y);
+               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.x,
+               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.y);
     }
     printf("\n");
   }
   return true;
 }
 
-CameraDetectionFrame::CameraDetectionFrame() : t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool ChangeReferencePointOfView::runTask()
 {
-  for (auto& r : allies_)
-    r.camera_ = this;
-  for (auto& r : opponents_)
-    r.camera_ = this;
-  for (auto& b : balls_)
-    b.camera_ = this;
+  return true;
 }
 
 }  // namespace vision

@@ -46,46 +46,48 @@ std::queue<AIPacket>& Api::getQueue()
 void Api::generateGamePacket()
 {
   AIPacket packet;
-  rhoban_ssl::vision::Field field = GlobalDataSingleThread::singleton_.vision_data_.field_;
+  data::Field field = GlobalDataSingleThread::singleton_.field_;
 
   // Prepare Field packet
-  packet.mutable_game()->mutable_field()->set_fieldlength(field.fieldLength);
-  packet.mutable_game()->mutable_field()->set_fieldwidth(field.fieldWidth);
-  packet.mutable_game()->mutable_field()->set_boundarywidth(field.boundaryWidth);
-  packet.mutable_game()->mutable_field()->set_goaldepth(field.goalDepth);
-  packet.mutable_game()->mutable_field()->set_goalwidth(field.goalWidth);
-  packet.mutable_game()->mutable_field()->set_penaltyareadepth(field.penaltyAreaDepth);
-  packet.mutable_game()->mutable_field()->set_penaltyareawidth(field.penaltyAreaWidth);
+  packet.mutable_game()->mutable_field()->set_fieldlength(field.field_length_);
+  packet.mutable_game()->mutable_field()->set_fieldwidth(field.field_width_);
+  packet.mutable_game()->mutable_field()->set_boundarywidth(field.boundary_width_);
+  packet.mutable_game()->mutable_field()->set_goaldepth(field.goal_depth_);
+  packet.mutable_game()->mutable_field()->set_goalwidth(field.goal_width_);
+  packet.mutable_game()->mutable_field()->set_penaltyareadepth(field.penalty_area_depth_);
+  packet.mutable_game()->mutable_field()->set_penaltyareawidth(field.penalty_area_width_);
   // TODO : packet.mutable_game()->mutable_field()->set_radiuscircle();
 
   addPacket(packet);
 }
 
-void Api::generateEntityPacket(ai::AiData& ai_data)
+void Api::generateEntityPacket()
 {
   AIPacket packet;
-  rhoban_geometry::Point ball_position = ai_data.ball.getMovement().linearPosition(ai_data.time);
+  double time = GlobalDataSingleThread::singleton_.ai_data_.time;
+
+  rhoban_geometry::Point ball_position =  GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
   packet.mutable_entities()->mutable_ball()->set_x(ball_position.getX());
   packet.mutable_entities()->mutable_ball()->set_y(ball_position.getY());
 
   // Robot Location
-  rhoban_ssl::vision::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] =
-      GlobalDataSingleThread::singleton_.vision_data_.robots_;
+  data::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] =
+      GlobalDataSingleThread::singleton_.robots_;
   for (int team = 0; team < 2; team++)
   {
     for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
     {
       Robot* robot_packet = packet.mutable_entities()->add_robot();
 
-      rhoban_geometry::Point robot_position = robots[team][rid].movement.linearPosition();
-      double robot_direction = robots[team][rid].movement.angularPosition().value();
+      rhoban_geometry::Point robot_position = robots[team][rid].getMovement().linearPosition(time);
+      double robot_direction = robots[team][rid].getMovement().angularPosition(time).value();
 
       robot_packet->set_x(robot_position.getX());
       robot_packet->set_y(robot_position.getY());
       robot_packet->set_isally(!team);
-      robot_packet->set_ispresent(robots[team][rid].isOk());
+      robot_packet->set_ispresent(robots[team][rid].isActive());
       robot_packet->set_robot_id(robots[team][rid].id);
-      robot_packet->set_dir(robot_direction);
+      //robot_packet->set_dir(robot_direction);
     }
   }
 

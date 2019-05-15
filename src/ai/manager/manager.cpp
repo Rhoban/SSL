@@ -21,6 +21,7 @@
 
 #include <debug.h>
 #include <strategy/halt.h>
+#include <strategy/placer.h>
 #include <algorithm>
 #include <core/collection.h>
 #include <core/print_collection.h>
@@ -42,12 +43,12 @@ void Manager::declareGoalieOpponentId(int goalie_opponent_id)
     return;
   if (this->goalie_opponent_id_ >= 0)
   {
-    ai_data_.robots[vision::Opponent][this->goalie_opponent_id_].is_goalie = false;
+    GlobalDataSingleThread::singleton_.robots_[Opponent][this->goalie_opponent_id_].is_goalie = false;
   }
   this->goalie_opponent_id_ = goalie_opponent_id;
   if (goalie_opponent_id >= 0)
   {
-    ai_data_.robots[vision::Opponent][goalie_opponent_id].is_goalie = true;
+    GlobalDataSingleThread::singleton_.robots_[Opponent][goalie_opponent_id].is_goalie = true;
   }
 }
 void Manager::declareGoalieId(int goalie_id)
@@ -56,12 +57,12 @@ void Manager::declareGoalieId(int goalie_id)
     return;
   if (this->goalie_id_ >= 0)
   {
-    ai_data_.robots[vision::Ally][this->goalie_id_].is_goalie = false;
+    GlobalDataSingleThread::singleton_.robots_[Ally][this->goalie_id_].is_goalie = false;
   }
   this->goalie_id_ = goalie_id;
   if (goalie_id >= 0)
   {
-    ai_data_.robots[vision::Ally][this->goalie_id_].is_goalie = true;
+    GlobalDataSingleThread::singleton_.robots_[Ally][this->goalie_id_].is_goalie = true;
   }
 }
 int Manager::getGoalieId() const
@@ -73,13 +74,9 @@ void Manager::declareTeamIds(const std::vector<int>& team_ids)
   this->team_ids_ = team_ids;
 }
 
-ai::Team Manager::getTeam() const
-{
-  return ai_data_.team_color;
-}
 const std::string& Manager::getTeamName() const
 {
-  return ai_data_.team_name;
+  return ai::Config::team_name;
 }
 
 const std::vector<int>& Manager::getTeamIds() const
@@ -203,50 +200,52 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
 
 void Manager::changeAllyAndOpponentGoalieId(int blue_goalie_id, int yellow_goalie_id)
 {
-  declareGoalieId((getTeam() == ai::Team::Yellow) ? yellow_goalie_id : blue_goalie_id);
-  declareGoalieOpponentId((getTeam() == ai::Team::Yellow) ? blue_goalie_id : yellow_goalie_id);
+  declareGoalieId((ai::Config::we_are_blue) ? blue_goalie_id : yellow_goalie_id);
+  declareGoalieOpponentId((ai::Config::we_are_blue) ? yellow_goalie_id : blue_goalie_id);
 }
 
-void Manager::changeTeamAndPointOfView(ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis)
+void Manager::changeTeamAndPointOfView(bool blue_have_it_s_goal_on_positive_x_axis)
 {
-  if (team != ai::Unknown and getTeam() != team)
-  {
-    assert(team == ai::Blue or team == ai::Yellow);
-    ai_data_.changeTeamColor(team);
-    blue_is_not_set_ = true;
-  }
+  /// TODO refacto
+  ///  if (team != ai::Unknown and getTeam() != team)
+  ///  {
+  ///    assert(team == ai::Blue or team == ai::Yellow);
+  ///    ai_data_.changeTeamColor(team);
+  ///    blue_is_not_set_ = true;
+  ///  }
   // We change the point of view of the team
   if (blue_is_not_set_ or blue_team_on_positive_half_ != blue_have_it_s_goal_on_positive_x_axis)
   {
     blue_is_not_set_ = false;
     blue_team_on_positive_half_ = blue_have_it_s_goal_on_positive_x_axis;
-    if ((getTeam() == ai::Blue and blue_have_it_s_goal_on_positive_x_axis) or
-        (getTeam() == ai::Yellow and !blue_have_it_s_goal_on_positive_x_axis))
+    if ((ai::Config::we_are_blue and blue_have_it_s_goal_on_positive_x_axis) or
+        (!ai::Config::we_are_blue and !blue_have_it_s_goal_on_positive_x_axis))
     {
-      ai_data_.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(-1.0, 0.0), Vector2d(0.0, -1.0));
+      /// TODO refacto
+      /// ai_data_.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(-1.0, 0.0), Vector2d(0.0, -1.0));
     }
     else
     {
-      ai_data_.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(1.0, 0.0), Vector2d(0.0, 1.0));
+      /// TODO refacto
+      /// ai_data_.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(1.0, 0.0), Vector2d(0.0, 1.0));
     }
   }
 }
 
-Manager::Manager(ai::AiData& ai_data)
-  : GameInformations(ai_data), blue_is_not_set_(true), goalie_id_(-1), goalie_opponent_id_(-1), ai_data_(ai_data)
+Manager::Manager() : GameInformations(), blue_is_not_set_(true), goalie_id_(-1), goalie_opponent_id_(-1)
 {
-  registerStrategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
-  registerStrategy(MANAGER__PLACER, std::shared_ptr<strategy::Strategy>(new strategy::Placer(ai_data)));
+  registerStrategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
+  registerStrategy(MANAGER__PLACER, std::shared_ptr<strategy::Strategy>(new strategy::Placer()));
 }
 
-int Manager::time() const
+double Manager::time() const
 {
-  return ai_data_.time;
+  return GlobalDataSingleThread::singleton_.ai_data_.time;
 }
 
 int Manager::dt() const
 {
-  return ai_data_.dt;
+  return GlobalDataSingleThread::singleton_.ai_data_.dt;
 }
 
 void Manager::affectInvalidRobotsToInvalidRobotsStrategy()
@@ -268,23 +267,13 @@ void Manager::detectInvalidRobots()
   // TODO : we need to detect when the list of invalid robot change.
   // When it change, then, we need to reaffect robot ids.
 
-  int nb_valid = 0;
-  int n_robots = team_ids_.size();
-  for (int i = 0; i < n_robots; i++)
-  {
-    if (ai_data_.robotIsValid(team_ids_[i]))
-    {
-      nb_valid++;
-    }
-  }
   valid_team_ids_.clear();
   valid_player_ids_.clear();
-
   invalid_team_ids_.clear();
-  for (int i = 0; i < n_robots; i++)
+
+  for (int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    int id = team_ids_[i];
-    if (ai_data_.robotIsValid(id))
+    if (GlobalDataSingleThread::singleton_.robots_[Ally][id].is_valid)
     {
       valid_team_ids_.push_back(id);
       if (goalie_id_ != id)
@@ -419,7 +408,8 @@ void Manager::aggregateAllStartingPositionOfAllStrategies(const std::list<std::s
     if (!getStrategy(strategy_with_goal_)
              .getStartingPositionForGoalie(this->goalie_linear_position_, this->goalie_angular_position_))
     {
-      this->goalie_linear_position_ = rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, 0.0);
+      this->goalie_linear_position_ =
+          rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, 0.0);
       this->goalie_angular_position_ = ContinuousAngle(0.0);
     }
   }
@@ -467,7 +457,7 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
     robot_consigns_[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
         rhoban_geometry::Point(
             -((5.0 * ai::Config::robot_radius) * (i - starting_positions_.size()) + 1.5 * ai::Config::robot_radius),
-            -ai_data_.field.fieldWidth / 2.0 + ai::Config::robot_radius),
+            -GlobalDataSingleThread::singleton_.field_.field_width_ / 2.0 + ai::Config::robot_radius),
         ContinuousAngle(0.0));
     robot_affectations_[i] = *it;
     it++;
@@ -584,7 +574,7 @@ void Manager::declareAndAssignNextStrategies(const std::list<std::string>& futur
     const std::string& strategy_name = elem.first;
     const std::vector<int>& affectation = elem.second;
     bool have_a_goalie = (getNextStrategyWithGoalie() == strategy_name);
-    assignStrategy(strategy_name, ai_data_.time, affectation, have_a_goalie);
+    assignStrategy(strategy_name, GlobalDataSingleThread::singleton_.ai_data_.time, affectation, have_a_goalie);
   }
 }
 
@@ -602,7 +592,7 @@ rhoban_ssl::annotations::Annotations Manager::getAnnotations() const
 
 void Manager::setBallAvoidanceForAllRobots(bool value = true)
 {
-  ai_data_.force_ball_avoidance = value;
+  GlobalDataSingleThread::singleton_.ai_data_.force_ball_avoidance = value;
 }
 
 };  // namespace manager

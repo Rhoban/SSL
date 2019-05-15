@@ -25,8 +25,6 @@
 #include <map>
 #include <memory>
 #include <vector>
-#include <ai_data.h>
-#include <strategy/placer.h>
 #include <annotations/annotations.h>
 
 namespace rhoban_ssl
@@ -54,19 +52,14 @@ private:
 
   void affectInvalidRobotsToInvalidRobotsStrategy();
   void detectInvalidRobots();
-
-protected:
-  ai::AiData& ai_data_;
-
 public:
-  int time() const;
+  double time() const;
   int dt() const;
 
   std::vector<std::string> getAvailableStrategies();
 
-  Manager(ai::AiData& ai_data);
+  Manager();
 
-  ai::Team getTeam() const;
   const std::string& getTeamName() const;
   void declareGoalieId(int goalie_id);
   void declareGoalieOpponentId(int goalie_opponent_id);
@@ -115,7 +108,7 @@ public:
 
   void changeAllyAndOpponentGoalieId(int blue_goalie_id, int yellow_goalie_id);
 
-  void changeTeamAndPointOfView(ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis);
+  void changeTeamAndPointOfView(bool blue_have_it_s_goal_on_positive_x_axis);
 
   void removeInvalidRobots();
 

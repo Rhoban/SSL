@@ -32,6 +32,8 @@
 #include "client_config.h"
 #include <viewer.h>
 #include <viewer/api_task.h>
+#include "referee_client_single_thread.h"
+#include <referee/referee_packet_analyzer.h>
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -41,7 +43,7 @@ using namespace rhoban_ssl;
 // AI* ai_ = NULL;
 // static bool running = true;
 
-void stop(int s)
+void stop(int)
 {
   // running = false;
   rhoban_ssl::ExecutionManager::getManager().shutdown();
@@ -54,9 +56,11 @@ int main(int argc, char** argv)
   signal(SIGINT, stop);
 
   // Command line parsing
-  TCLAP::CmdLine cmd("Rhoban SSL AI", ' ', "0.0");
+  TCLAP::CmdLine cmd("Rhoban SSL AI", ' ', "0.0", true);
   TCLAP::SwitchArg simulation("s", "simulation", "Simulation mode", cmd, false);
   TCLAP::SwitchArg yellow("y", "yellow", "If set we are yellow otherwise we are blue.", cmd, false);
+  TCLAP::SwitchArg attack_on_left_side("l", "attack_on_right_side",
+                                       "If set we attack on left otherwise we attack on the right.", cmd, false);
 
   TCLAP::ValueArg<std::string> team_name(
       "t",     // short argument name  (with one character)
@@ -131,8 +135,6 @@ int main(int argc, char** argv)
 
   cmd.parse(argc, argv);
 
-  GlobalDataSingleThread::singleton_.setTeam(yellow.getValue() ? ai::Yellow : ai::Blue);
-
   std::string theport;
   if (simulation.getValue())
   {
@@ -163,22 +165,30 @@ int main(int argc, char** argv)
   }
 
   ai::Config::load(config_path.getValue());
-
-  if (yellow.getValue())
-    ai::Config::we_are_blue = false;
-
+  ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
   rhoban_ssl::ExecutionManager::getManager().addTask(
       new rhoban_ssl::VisionClientSingleThread(addr.getValue(), theport));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::SslGeometryPacketAnalyzer());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::DetectionPacketAnalyzer());
+
+  rhoban_ssl::ExecutionManager::getManager().addTask(
+      new rhoban_ssl::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereePacketAnalyzer());
+
+  if (attack_on_left_side.getValue())
+    rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::ChangeReferencePointOfView());
+
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateRobotInformation(part_of_the_field_used));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
-  // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
+  //rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
+
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ApiTask());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
+
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeProtoBufReset(100));
 
   AICommander* commander;
   if (simulation.getValue())
@@ -199,9 +209,9 @@ int main(int argc, char** argv)
   else
   {
     AI* ai_ = nullptr;
-    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, commander,
-                 config_path.getValue(), simulation.getValue());
+    ai_ = new AI(manager_name.getValue(), team_name.getValue(), commander, config_path.getValue());
     // ai_->run();
+    rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::TimeSynchronisation());
     rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
     rhoban_ssl::ExecutionManager::getManager().run(0.01);
     // delete ai_;
@@ -210,58 +220,4 @@ int main(int argc, char** argv)
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;
-  /*
-  const std::list<std::string>& avalaible_managers = manager::Factory::availableManagers();
-  if (std::find(avalaible_managers.begin(), avalaible_managers.end(), manager_name.getValue()) ==
-      avalaible_managers.end())
-  {
-    std::cerr << "The manager '" << manager_name.getValue()
-              << "' doesn't exist. Valid manager names are : " << avalaible_managers << "." << std::endl;
-    return 1;
-  };
-
-  DEBUG("The name of the team have been set to : " << team_name.getValue());
-  DEBUG("The manager have been set to : " << manager_name.getValue());
-
-
-
-
-  // // Instantiationg the vision
-  // AIVisionClient vision(
-  //   data,
-  //   yellow.getValue() ? ai::Yellow : ai::Blue,
-  //   simulation.getValue(), part_of_the_field_used
-  //   );
-
-
-  // Instantiationg the vision
-  AIVisionClient vision(data, yellow.getValue() ? ai::Yellow : ai::Blue, simulation.getValue(), addr.getValue(),
-                        theport, theport, part_of_the_field_used);
-
-  // AI Commander to control the robots
-  AICommander* commander;
-  if (simulation.getValue())
-  {
-    commander = new AICommanderSimulation(yellow.getValue());
-  }
-  else
-  {
-    // XXX: To test!!
-    commander = new AICommanderReal(yellow.getValue());
-  }
-
-  if (em.getValue())
-  {
-    commander->stopAll();
-    commander->flush();
-  }
-  else
-  {
-    ai_ = new AI(manager_name.getValue(), team_name.getValue(), yellow.getValue() ? ai::Yellow : ai::Blue, data,
-                 commander, config_path.getValue(), simulation.getValue());
-    ai_->run();
-    delete ai_;
-  }
-  delete commander;
-  */
 }

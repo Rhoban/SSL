@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <ai_data.h>
 #include <referee/game_state.h>
 #include "manager.h"
 
@@ -30,8 +29,6 @@ namespace manager
 struct names
 {
   static constexpr const char* MANUAL = "manual";
-  // static constexpr const char* match = "match";
-  static constexpr const char* PLAN_VESCHAMBRES = "PlanVeschambres";
 };
 
 class Factory
@@ -42,8 +39,7 @@ private:
 public:
   static const std::list<std::string>& availableManagers();
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name, ai::AiData& ai,
-                                                   GameState& game_state);
+  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
 };
 
 };  // namespace manager

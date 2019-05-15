@@ -90,7 +90,7 @@ public:
   /**
    * @brief Add Entity Packet.
    */
-  void generateEntityPacket(ai::AiData& ai_data);
+  void generateEntityPacket();
 
   void addListPacket(std::shared_ptr<manager::Manager> manager);
 

@@ -21,20 +21,21 @@
 
 #include <vision/vision_data.h>
 #include <mutex>
-//#include <ai_data.h>
-#include <robot_behavior/robot_behavior.h>
+#include <control/control.h>
+#include "data/robot.h"
+#include "data/ball.h"
+#include "data/field.h"
+#include "data/ai_data.h"
 
 namespace rhoban_ssl
 {
-struct DataFromAi
-{
-  ai::Team team_color;
-};
-
+/*
+TODO refacto
 struct DataForViewer
 {
   rhoban_ssl::annotations::Annotations annotations;
 };
+*/
 
 struct SharedData
 {
@@ -55,64 +56,26 @@ struct SharedData
 };
 
 /**
- * This class is used to make transfer between different threads.
- */
-class GlobalData
-{
-private:  // Do not remove !
-  std::mutex mutex_for_vision_data_;
-  vision::VisionData vision_data_;
-
-  std::mutex mutex_for_ai_data_;
-  DataFromAi data_from_ai_;
-
-  std::mutex mutex_for_shared_data_;
-  SharedData shared_data_;
-
-  std::mutex mutex_for_viewer_data_;
-  DataForViewer data_for_viewer_;
-
-public:
-  GlobalData(ai::Team initial_team_color);
-
-  GlobalData& operator<<(const vision::VisionData& vision_data);
-  GlobalData& operator>>(vision::VisionData& vision_data);
-  void editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(vision::VisionData& vision_data)> vision_data_editor);
-
-  GlobalData& operator<<(const DataFromAi& data_from_ai);
-  GlobalData& operator>>(DataFromAi& data_from_ai);
-  void editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor);
-
-  GlobalData& operator<<(const DataForViewer& data_for_viewer);
-  GlobalData& operator>>(DataForViewer& data_for_viewer);
-  void editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor);
-
-  GlobalData& operator<<(const SharedData& shared_data);
-  GlobalData& operator>>(SharedData& shared_data);
-  void editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
-      std::function<void(SharedData& shared_data)> shared_data_editor);
-};
-
-/**
  * This class is used to make transfer store global data accessed from many points.
  */
 class GlobalDataSingleThread
 {
 public:
-  vision::VisionDataSingleThread vision_data_;
-  DataFromAi data_from_ai_;
+  data::Robot robots_[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
+  data::Ball ball_;
+  data::Field field_;
+  data::AiData ai_data_;
+  std::vector<std::pair<Team, data::Robot*>> all_robots;
+
   SharedData shared_data_;
-  DataForViewer data_for_viewer_;
+// TODO refacto
+//  DataForViewer data_for_viewer_;
 
 private:
-  GlobalDataSingleThread(ai::Team initial_team_color);
+  GlobalDataSingleThread();
 
 public:
   static GlobalDataSingleThread singleton_;
-  void setTeam(ai::Team team_color);
 
   /*  GlobalDataSingleThread& operator<<(const vision::VisionDataSingleThread& vision_data);
     GlobalDataSingleThread& operator>>(vision::VisionDataSingleThread& vision_data);

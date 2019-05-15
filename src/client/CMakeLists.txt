@@ -23,13 +23,16 @@ include_directories(${catkin_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS
-    proto/referee.proto
-    proto/messages_robocup_ssl_geometry.proto
-    proto/messages_robocup_ssl_detection.proto
-    proto/messages_robocup_ssl_wrapper.proto
-    proto/grSim_Commands.proto
-    proto/grSim_Replacement.proto
-    proto/grSim_Packet.proto
+    grproto/messages_robocup_ssl_geometry.proto
+    grproto/messages_robocup_ssl_detection.proto
+    grproto/messages_robocup_ssl_wrapper.proto
+    grproto/grSim_Commands.proto
+    grproto/grSim_Replacement.proto
+    grproto/grSim_Packet.proto
+    refproto/ssl_game_controller_common.proto
+    refproto/ssl_game_event_2019.proto
+    refproto/ssl_game_event.proto
+    refproto/ssl_referee.proto
 )
 
 set (SOURCES

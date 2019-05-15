@@ -35,81 +35,6 @@ namespace rhoban_ssl
 {
 namespace vision
 {
-static const int history_size = 10;
-// static const int Robots = 16;
-
-// typedef enum { Ally = 0, Opponent = 1 } Team;
-
-typedef int Team;
-const int Ally = 0;
-const int Opponent = 1;
-
-struct Object
-{
-  MovementSample movement;
-
-  bool present;
-  int id;
-  rhoban_utils::TimeStamp last_update;
-
-  void update(double time, const rhoban_geometry::Point& linear_position, const rhoban_utils::Angle& angular_position);
-  void update(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
-  void update(double time, const rhoban_geometry::Point& linear_position);
-
-  double age() const;
-  bool isOk() const;
-  bool isTooOld() const;
-
-  // private:
-  // Object(const Object& o);
-  // void operator=(const Object&);
-
-public:
-  Object();
-  void checkAssert(double time) const;
-  virtual ~Object();
-};
-
-std::ostream& operator<<(std::ostream& out, const Object& object);
-
-struct Robot : Object
-{
-};
-struct Ball : Object
-{
-};
-
-struct Field
-{
-  bool present;
-  float fieldLength;
-  float fieldWidth;
-  float goalWidth;
-  float goalDepth;
-  float boundaryWidth;
-  float penaltyAreaDepth;
-  float penaltyAreaWidth;
-
-  Field();
-};
-std::ostream& operator<<(std::ostream& out, const Field& field);
-
-class VisionData
-{
-public:
-  VisionData();
-
-  std::map<Team, std::map<int, Robot>> robots;
-  Ball ball;
-  Field field;
-
-  void checkAssert(double time) const;
-
-  friend std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision);
-};
-
-std::ostream& operator<<(std::ostream& out, const VisionData& vision);
-
 struct CameraDetectionFrame;
 
 struct BallDetection
@@ -153,7 +78,7 @@ struct CameraDetectionFrame
   double t_capture_;
   double t_sent_;
   unsigned int frame_number_;
-  unsigned int camera_id_;
+  int camera_id_;
   struct BallDetection balls_[ai::Config::MAX_BALLS_DETECTED];
   struct RobotDetection allies_[ai::Config::NB_OF_ROBOTS_BY_TEAM];
   struct RobotDetection opponents_[ai::Config::NB_OF_ROBOTS_BY_TEAM];
@@ -165,22 +90,31 @@ class VisionDataSingleThread
 private:
   // avoid copy:
   VisionDataSingleThread(const VisionDataSingleThread&);
-  // void operator=(const VisionDataSingleThread&);
+  void operator=(const VisionDataSingleThread&);
+
+  friend class UpdateRobotInformation;
+  friend class DetectionPacketAnalyzer;
+  friend class UpdateBallInformation;
 
 public:
-  Field field_;
+  static VisionDataSingleThread singleton_;
+
   CameraDetectionFrame last_camera_detection_[ai::Config::NB_CAMERAS];
-  Robot robots_[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
-  Ball ball_;
   VisionDataSingleThread();
   ~VisionDataSingleThread();
 };
 
-class VisionDataTerminalPrinter : public Task
+class ChangeReferencePointOfView : public Task
 {
-public:
   virtual bool runTask(void);
 };
+
+
+class VisionDataTerminalPrinter : public Task
+{
+  virtual bool runTask(void);
+};
+
 
 }  // namespace vision
 }  // namespace rhoban_ssl

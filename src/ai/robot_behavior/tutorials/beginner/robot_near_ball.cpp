@@ -25,24 +25,24 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-BeginnerRobotNearBall::BeginnerRobotNearBall(ai::AiData& ai_data) : RobotBehavior(ai_data)
+BeginnerRobotNearBall::BeginnerRobotNearBall() : RobotBehavior()
 {
 }
 
-void BeginnerRobotNearBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void BeginnerRobotNearBall::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Find the ally and the opponent closest to the ball
-  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
-  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(vision::Opponent);
+  int nb_ally_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Ally);
+  int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Opponent);
 
   // Get the robot ally and opponent.
-  ai::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, vision::Ally);
-  ai::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, vision::Opponent);
+  data::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Ally);
+  data::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Opponent);
 
   // Create the vector between the robots and the ball.
-  Vector2d vec_ally_to_ball = ballPosition() - ally_closest.getMovement().linearPosition(ai_data_.time);
-  Vector2d vec_opponent_to_ball = ballPosition() - opponent_closest.getMovement().linearPosition(ai_data_.time);
+  Vector2d vec_ally_to_ball = ballPosition() - ally_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  Vector2d vec_opponent_to_ball = ballPosition() - opponent_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 
   // Find the distance between them and the ball.
   double dist_ally = vec_ally_to_ball.norm();
@@ -53,19 +53,19 @@ void BeginnerRobotNearBall::update(double time, const ai::Robot& robot, const ai
   // Search the nearest robot between the ally and the opponent.
   if (dist_ally > dist_opponent)
   {
-    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time), "blue", false);
   }
   else if (dist_ally < dist_opponent)
   {
-    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time), "blue", false);
   }
   else
   {
-    annotations_.addCross(opponent_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
-    annotations_.addCross(ally_closest.getMovement().linearPosition(ai_data_.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time), "blue", false);
   }
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 }
 
 Control BeginnerRobotNearBall::control() const
