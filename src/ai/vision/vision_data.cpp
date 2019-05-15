@@ -48,6 +48,13 @@ VisionDataSingleThread::~VisionDataSingleThread()
 {
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+BallDetection::BallDetection() : confidence_(-1), camera_(nullptr)
+{
+}
+
+
 void BallDetection::operator=(const SSL_DetectionBall& b)
 {
   confidence_ = b.confidence();
@@ -59,9 +66,8 @@ void BallDetection::operator=(const SSL_DetectionBall& b)
   area_ = b.area();
 }
 
-BallDetection::BallDetection() : confidence_(-1), camera_(nullptr)
-{
-}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 void RobotDetection::operator=(const SSL_DetectionRobot& r)
 {
@@ -81,6 +87,20 @@ void RobotDetection::operator=(const SSL_DetectionRobot& r)
 RobotDetection::RobotDetection() : camera_(nullptr), confidence_(-1)
 {
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+CameraDetectionFrame::CameraDetectionFrame() : t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
+{
+  for (auto& r : allies_)
+    r.camera_ = this;
+  for (auto& r : opponents_)
+    r.camera_ = this;
+  for (auto& b : balls_)
+    b.camera_ = this;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 bool VisionDataTerminalPrinter::runTask()
@@ -152,15 +172,11 @@ bool VisionDataTerminalPrinter::runTask()
   return true;
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
-CameraDetectionFrame::CameraDetectionFrame() : t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
+bool ChangeReferencePointOfView::runTask()
 {
-  for (auto& r : allies_)
-    r.camera_ = this;
-  for (auto& r : opponents_)
-    r.camera_ = this;
-  for (auto& b : balls_)
-    b.camera_ = this;
+  return true;
 }
 
 }  // namespace vision
