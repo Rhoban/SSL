@@ -415,21 +415,30 @@ bool AI::runTask()
   GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time;
   GlobalDataSingleThread::singleton_.ai_data_.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
   GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time - GlobalDataSingleThread::singleton_.ai_data_.dt;
+
+  assert(GlobalDataSingleThread::singleton_.ai_data_.dt > 0);
+  if( GlobalDataSingleThread::singleton_.ai_data_.dt <= 0) {
+    std::cerr << "WARNING INVALID DT !!!!!!!!!!!!!!!!!!!\n";
+    GlobalDataSingleThread::singleton_.ai_data_.dt = 1;
+  }
+
+  assert(GlobalDataSingleThread::singleton_.ai_data_.time <= 0 );
+  if( GlobalDataSingleThread::singleton_.ai_data_.time <= 0 ) {
+    std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
+    GlobalDataSingleThread::singleton_.ai_data_.time = 1;
+  }
+
+
 #ifndef NDEBUG
   updatePeriodicDebug(GlobalDataSingleThread::singleton_.ai_data_.time, 10.0);
 #endif
 
-  //DESABLED : NEED TO FIX SEGFAULT
-  //data::ComputedData::computeTableOfCollisionTimes();
-
-
-  // ai_data_.update(GlobalDataSingleThread::singleton_.vision_data_);
+  data::ComputedData::computeTableOfCollisionTimes();
 
   if (not(ai::Config::is_in_simulation))
   {
     updateElectronicInformations();
   }
-  // print_electronic_info();
 
 #ifndef NDEBUG
 // check_time_is_coherent();
