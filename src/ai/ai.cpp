@@ -306,8 +306,6 @@ AI::AI(std::string manager_name, std::string team_name,  // GlobalData& data,
 {
   initRobotBehaviors();
 
-  lastTick = rhoban_utils::TimeStamp::now();
-
   manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
 
   setManager(manager_name);
@@ -339,7 +337,6 @@ void AI::setManager(std::string managerName)
   {
     strategy_manager_ = manager::Factory::constructManager(managerName);
   }
-  manager_name_ = managerName;
   strategy_manager_->declareGoalieId(goalie_id);
   strategy_manager_->declareTeamIds(robot_ids);
 }
@@ -392,26 +389,12 @@ bool AI::runTask()
   if (running_ == false)
     return false;
 
-  double period = ai::Config::period;
   // auto lastTick = rhoban_utils::TimeStamp::now();
 
   // TODO ; SEE HOW TO REMOVE THE WARMUP
   // double warmup_period = 2 * period * rhoban_ssl::vision::history_size;
   // double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
 
-  auto now = rhoban_utils::TimeStamp::now();
-  double elapsed = diffSec(lastTick, now);
-  double toSleep = period - elapsed;
-  if (toSleep > 0)
-  {
-    // DEBUG("NO LAG");
-    usleep(round(toSleep * 1000000));
-  }
-  else
-  {
-    DEBUG("LAG");
-  }
-  lastTick = rhoban_utils::TimeStamp::now();
   GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time;
   GlobalDataSingleThread::singleton_.ai_data_.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
   GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time - GlobalDataSingleThread::singleton_.ai_data_.dt;
@@ -422,12 +405,22 @@ bool AI::runTask()
     GlobalDataSingleThread::singleton_.ai_data_.dt = 1;
   }
 
-  assert(GlobalDataSingleThread::singleton_.ai_data_.time <= 0 );
+  assert(GlobalDataSingleThread::singleton_.ai_data_.time > 0 );
   if( GlobalDataSingleThread::singleton_.ai_data_.time <= 0 ) {
     std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
     GlobalDataSingleThread::singleton_.ai_data_.time = 1;
   }
 
+  double toSleep = ai::Config::period - GlobalDataSingleThread::singleton_.ai_data_.dt;
+  if (toSleep > 0)
+  {
+    // DEBUG("NO LAG");
+    usleep(round(toSleep * 1000000));
+  }
+  else
+  {
+    DEBUG("LAG");
+  }
 
 #ifndef NDEBUG
   updatePeriodicDebug(GlobalDataSingleThread::singleton_.ai_data_.time, 10.0);
@@ -441,7 +434,7 @@ bool AI::runTask()
   }
 
 #ifndef NDEBUG
-// check_time_is_coherent();
+  checkTimeIsCoherent();
 #endif
 
   // We wait some time to update completly ai_data structure.

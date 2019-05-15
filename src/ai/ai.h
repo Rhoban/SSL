@@ -32,10 +32,6 @@ namespace rhoban_ssl
 {
 class AI : public Task
 {
-private:
-
-  rhoban_utils::TimeStamp lastTick;
-
 public:
   // bool is_in_simulation;
   AI(std::string manager_name, std::string team_name, AICommander* commander,
@@ -51,10 +47,8 @@ public:
 
   double getCurrentTime();
 
-protected:
+private:
   bool running_;
-
-
   AICommander* commander_;
 
   std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
@@ -64,7 +58,6 @@ protected:
 
   // SharedData shared_data_;
 
-  std::string manager_name_;
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
 
