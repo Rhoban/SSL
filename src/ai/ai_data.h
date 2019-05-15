@@ -153,6 +153,8 @@ struct Constants
   double convergence_coefficient;
   double coefficient_to_increase_avoidance_convergence;
 
+  std::vector<std::vector<double>> kick_settings;
+
   void load(const std::string& config_path);
 
   Constants(const std::string& config_path, bool is_in_simulation);

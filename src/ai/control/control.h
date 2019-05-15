@@ -23,6 +23,7 @@
 
 #include <math/continuous_angle.h>
 #include <math/vector2d.h>
+#include <ai_data.h>
 
 class Control
 {
@@ -67,7 +68,7 @@ public:
   static Control makeNull();
 
   
-  static float getNeededPower(double distance); //return needed kick power ([0;1]) to throw the ball at a certain distance (m)
+  static float getNeededPower(double distance, int robot_id, rhoban_ssl::ai::AiData& ai_data); //return needed kick power ([0;1]) to throw the ball at a certain distance (m)
 };
 
 std::ostream& operator<<(std::ostream& out, const Control& control);

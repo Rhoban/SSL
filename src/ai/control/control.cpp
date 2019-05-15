@@ -102,8 +102,13 @@ Control Control::makeIgnored()
   return Control(false, false, true);
 }
 
-float Control::getNeededPower(double distance){
-  DEBUG("lol !!!!!!!!!!!");
+float Control::getNeededPower(double distance, int robot_id, rhoban_ssl::ai::AiData& ai_data)
+{
+
+  for(int i = 0 ; i < ai_data.constants.kick_settings[robot_id].size() ; i++){
+     DEBUG(ai_data.constants.kick_settings[robot_id][i]);
+  }
+  DEBUG("<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>");
   return 1.0;
 }
 
