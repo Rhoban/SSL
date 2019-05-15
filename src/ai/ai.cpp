@@ -411,17 +411,6 @@ bool AI::runTask()
     GlobalDataSingleThread::singleton_.ai_data_.time = 1;
   }
 
-  double toSleep = ai::Config::period - GlobalDataSingleThread::singleton_.ai_data_.dt;
-  if (toSleep > 0)
-  {
-    // DEBUG("NO LAG");
-    usleep(round(toSleep * 1000000));
-  }
-  else
-  {
-    DEBUG("LAG");
-  }
-
 #ifndef NDEBUG
   updatePeriodicDebug(GlobalDataSingleThread::singleton_.ai_data_.time, 10.0);
 #endif
@@ -553,6 +542,23 @@ void AI::printElectronicInfo()
 
 bool TimeSynchronisation::runTask()
 {
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool RegulateAiLoopPeriod::runTask()
+{
+  double toSleep = ai::Config::period - GlobalDataSingleThread::singleton_.ai_data_.dt;
+  if (toSleep > 0)
+  {
+    // DEBUG("NO LAG");
+    usleep(round(toSleep * 1000000));
+  }
+  else
+  {
+    DEBUG("LAG");
+  }
   return true;
 }
 

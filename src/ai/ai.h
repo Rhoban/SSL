@@ -92,4 +92,15 @@ class TimeSynchronisation : public Task {
 public:
   bool runTask();
 };
+
+/**
+ * @brief The TimeSynchronisation class
+ */
+class RegulateAiLoopPeriod : public Task {
+  // Task interface
+public:
+  bool runTask();
+};
+
+
 };  // namespace rhoban_ssl
