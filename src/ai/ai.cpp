@@ -389,11 +389,17 @@ bool AI::runTask()
   if (running_ == false)
     return false;
 
-  // auto lastTick = rhoban_utils::TimeStamp::now();
-
   // TODO ; SEE HOW TO REMOVE THE WARMUP
   // double warmup_period = 2 * period * rhoban_ssl::vision::history_size;
   // double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
+
+  // We wait some time to update completly ai_data structure.
+
+  // DOESNOT WORK WITH ExecutionManager
+  // if (warmup_start + warmup_period > current_time_)
+  //{
+  // return true;
+  //}
 
   GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time;
   GlobalDataSingleThread::singleton_.ai_data_.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
@@ -425,14 +431,6 @@ bool AI::runTask()
 #ifndef NDEBUG
   checkTimeIsCoherent();
 #endif
-
-  // We wait some time to update completly ai_data structure.
-
-  // DOESNOT WORK WITH ExecutionManager
-  // if (warmup_start + warmup_period > current_time_)
-  //{
-  // return true;
-  //}
 
   //REFACTO CHANGEMENT DE VUE AU NIVEAU DE LA RECEPTION DE LA COM
 //  if (manager_name_ != manager::names::MANUAL)

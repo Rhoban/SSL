@@ -75,7 +75,6 @@ private:
   void limitsVelocity(Control& ctrl) const;
   void checkTimeIsCoherent() const;
 
-  // void shareData();
   void preventCollision(int robot_id, Control& ctrl);
   rhoban_ssl::annotations::Annotations getRobotBehaviorAnnotations() const;
 

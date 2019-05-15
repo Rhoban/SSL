@@ -40,7 +40,7 @@ using namespace rhoban_ssl;
 // AI* ai_ = NULL;
 // static bool running = true;
 
-void stop(int s)
+void stop(int)
 {
   // running = false;
   rhoban_ssl::ExecutionManager::getManager().shutdown();
