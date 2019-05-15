@@ -8,6 +8,7 @@ message Field {
     float boundaryWidth = 5;
     float penaltyAreaDepth = 6;
     float penaltyAreaWidth = 7;
+    float radiusCircle = 8;
 }
 
 message Informations {

@@ -56,14 +56,12 @@ void Api::generateGamePacket()
   packet.mutable_game()->mutable_field()->set_goalwidth(field.goalWidth);
   packet.mutable_game()->mutable_field()->set_penaltyareadepth(field.penaltyAreaDepth);
   packet.mutable_game()->mutable_field()->set_penaltyareawidth(field.penaltyAreaWidth);
-
-  // Prepare Informations packet.
-  // packet.mutable_game();
+  // TODO : packet.mutable_game()->mutable_field()->set_radiuscircle();
 
   addPacket(packet);
 }
 
-void Api::addEntityPacket(ai::AiData& ai_data)
+void Api::generateEntityPacket(ai::AiData& ai_data)
 {
   AIPacket packet;
   rhoban_geometry::Point ball_position = ai_data.ball.getMovement().linearPosition(ai_data.time);
@@ -97,7 +95,7 @@ void Api::addEntityPacket(ai::AiData& ai_data)
 void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
 {
   // WIP : Add in the packet.
-  const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
+  // const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
   // WIP : Add List for strategy.
   // WIP : Prepare for robot behavior.
 }

@@ -34,7 +34,7 @@ bool ApiTask::runTask()
   // Prepare to the future version.
   // Api::getApi().addEntityPacket();
   // Api::getApi().
-  return 0;
+  return 1;
 }
 
 ApiTask::~ApiTask()

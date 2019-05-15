@@ -494,7 +494,7 @@ bool AI::runTask()
   this->getAnnotations(GlobalDataSingleThread::singleton_.data_for_viewer_.annotations);
 
   // TODO : Merge in Task when the refacto is finish.
-  rhoban_ssl::viewer::Api::getApi().addEntityPacket(ai_data_);
+  rhoban_ssl::viewer::Api::getApi().generateEntityPacket(ai_data_);
   rhoban_ssl::viewer::Api::getApi().addListPacket(strategy_manager_);
 
   // XXX: Flushing takes some time in real mode, and should be done in parallel
