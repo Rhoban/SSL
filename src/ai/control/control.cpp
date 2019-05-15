@@ -102,14 +102,31 @@ Control Control::makeIgnored()
   return Control(false, false, true);
 }
 
-float Control::getNeededPower(double distance, int robot_id, rhoban_ssl::ai::AiData& ai_data)
+double Control::getNeededPower(double distance, int robot_id, rhoban_ssl::ai::AiData& ai_data)
 {
+  int min = 0;
+  int max = ai_data.constants.kick_settings[robot_id].size() - 1;
+  double m = (min + max) / 2;
 
-  for(int i = 0 ; i < ai_data.constants.kick_settings[robot_id].size() ; i++){
-     DEBUG(ai_data.constants.kick_settings[robot_id][i]);
+  while (min < max)
+  {
+    if (ai_data.constants.kick_settings[robot_id][m] > distance)
+    {
+      max = m - 1;
+    }
+    else if (ai_data.constants.kick_settings[robot_id][m] < distance)
+    {
+      min = m + 1;
+    }
+    else
+    {
+      min = m;
+      max = m;
+    }
+    m = (min + max) / 2;
   }
-  DEBUG("<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>");
-  return 1.0;
+  double step_percent = 1.0 / (ai_data.constants.kick_settings[robot_id].size() - 1);
+  return m * step_percent;
 }
 
 std::ostream& operator<<(std::ostream& out, const Control& control)

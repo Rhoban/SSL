@@ -67,8 +67,9 @@ public:
   static Control makeIgnored();
   static Control makeNull();
 
-  
-  static float getNeededPower(double distance, int robot_id, rhoban_ssl::ai::AiData& ai_data); //return needed kick power ([0;1]) to throw the ball at a certain distance (m)
+  static double getNeededPower(double distance, int robot_id,
+                              rhoban_ssl::ai::AiData& ai_data);  // return needed kick power ([0;1]) to throw the ball
+                                                                 // at a certain distance (m)
 };
 
 std::ostream& operator<<(std::ostream& out, const Control& control);

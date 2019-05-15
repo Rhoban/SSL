@@ -177,7 +177,7 @@ public:
   typedef std::map<vision::Team, RobotsTable> RobotsTableByTeam;
   RobotsTableByTeam robots;
 
-  std::vector<std::pair<vision::Team, Robot*> > all_robots;
+  std::vector<std::pair<vision::Team, Robot*>> all_robots;
 
   Ball ball;
   Field field;
@@ -217,7 +217,7 @@ public:
   const Collision_times_table& getTableOfCollisionTimes() const;
 
   void computeTableOfCollisionTimes();
-  std::list<std::pair<int, double> > getCollisions(int robot_id, const Vector2d& ctrl) const;
+  std::list<std::pair<int, double>> getCollisions(int robot_id, const Vector2d& ctrl) const;
 };
 
 }  // namespace ai
