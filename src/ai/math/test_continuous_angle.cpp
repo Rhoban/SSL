@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com) (Refacto)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,14 +20,14 @@
 
 #include <gtest/gtest.h>
 
-#include "ContinuousAngle.h"
+#include "continuous_angle.h"
 #include <math.h>
 #include <debug.h>
 #include <sstream>
 
 using namespace rhoban_utils;
 
-TEST(test_ContinuousAngle, constructors)
+TEST(test_continuous_angle, constructors)
 {
   {
     ContinuousAngle c;
@@ -82,7 +83,7 @@ TEST(test_ContinuousAngle, constructors)
   */
 }
 
-TEST(test_ContinuousAngle, angle)
+TEST(test_continuous_angle, angle)
 {
   {
     ContinuousAngle c(2 * M_PI);
@@ -98,7 +99,7 @@ TEST(test_ContinuousAngle, angle)
   }
 }
 
-TEST(test_ContinuousAngle, abs)
+TEST(test_continuous_angle, abs)
 {
   {
     ContinuousAngle c(1.4);
@@ -112,7 +113,7 @@ TEST(test_ContinuousAngle, abs)
   }
 }
 
-TEST(test_ContinuousAngle, operator_plus)
+TEST(test_continuous_angle, operator_plus)
 {
   {
     ContinuousAngle c(1.4);
@@ -133,7 +134,7 @@ TEST(test_ContinuousAngle, operator_plus)
   }
 }
 
-TEST(test_ContinuousAngle, operator_minus)
+TEST(test_continuous_angle, operator_minus)
 {
   {
     ContinuousAngle c(1.4);
@@ -154,7 +155,7 @@ TEST(test_ContinuousAngle, operator_minus)
   }
 }
 
-TEST(test_ContinuousAngle, operator_prod)
+TEST(test_continuous_angle, operator_prod)
 {
   {
     ContinuousAngle c(1.4);
@@ -169,7 +170,7 @@ TEST(test_ContinuousAngle, operator_prod)
   }
 }
 
-TEST(test_ContinuousAngle, operator_div)
+TEST(test_continuous_angle, operator_div)
 {
   {
     ContinuousAngle c(2.8);
@@ -184,7 +185,7 @@ TEST(test_ContinuousAngle, operator_div)
   }
 }
 
-TEST(test_ContinuousAngle, operator_equal)
+TEST(test_continuous_angle, operator_equal)
 {
   {
     ContinuousAngle c(2.8);
@@ -200,7 +201,7 @@ TEST(test_ContinuousAngle, operator_equal)
   }
 }
 
-TEST(test_ContinuousAngle, turn)
+TEST(test_continuous_angle, turn)
 {
   {
     ContinuousAngle c(2.8);
@@ -208,29 +209,29 @@ TEST(test_ContinuousAngle, turn)
   }
 }
 
-TEST(test_ContinuousAngle, nb_turn)
+TEST(test_continuous_angle, nb_turn)
 {
   {
     ContinuousAngle c(2.8);
-    EXPECT_TRUE(c.nb_turn() == 0);
+    EXPECT_TRUE(c.nbTurn() == 0);
     c += (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == 1);
+    EXPECT_TRUE(c.nbTurn() == 1);
     c += (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == 2);
+    EXPECT_TRUE(c.nbTurn() == 2);
   }
   {
     ContinuousAngle c(2.8);
-    EXPECT_TRUE(c.nb_turn() == 0);
+    EXPECT_TRUE(c.nbTurn() == 0);
     c -= (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == 0);
+    EXPECT_TRUE(c.nbTurn() == 0);
     c -= (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == -1);
+    EXPECT_TRUE(c.nbTurn() == -1);
     c -= (2 * M_PI);
-    EXPECT_TRUE(c.nb_turn() == -2);
+    EXPECT_TRUE(c.nbTurn() == -2);
   }
 }
 
-TEST(test_ContinuousAngle, stream)
+TEST(test_continuous_angle, stream)
 {
   {
     ContinuousAngle c(2.8);
@@ -285,7 +286,7 @@ TEST(test_ContinuousAngle, stream)
   }
 }
 
-TEST(test_ContinuousAngle, set_to_nearest)
+TEST(test_continuous_angle, set_to_nearest)
 {
   {
     double amplitude = 4 * 2 * M_PI;
@@ -297,7 +298,7 @@ TEST(test_ContinuousAngle, set_to_nearest)
       d = c;
 
       double angle = std::fmod(c.value() + step, 2 * M_PI);
-      c.set_to_nearest(angle);
+      c.setToNearest(angle);
 
       EXPECT_TRUE(std::fabs(c.value() - d.value()) < 2 * step);
     }
@@ -311,7 +312,7 @@ TEST(test_ContinuousAngle, set_to_nearest)
     {
       d = c;
       double angle = std::fmod(c.value() - step, 2 * M_PI);
-      c.set_to_nearest(angle);
+      c.setToNearest(angle);
       EXPECT_TRUE(std::fabs(c.value() - d.value()) < 2 * step);
     }
   }
@@ -325,7 +326,7 @@ TEST(test_ContinuousAngle, set_to_nearest)
       d = c;
 
       Angle angle(rad2deg(c.value() + step));
-      c.set_to_nearest(angle);
+      c.setToNearest(angle);
 
       EXPECT_TRUE(std::fabs(Angle(rad2deg(c.value())).getSignedValue() - angle.getSignedValue()) < 0.000001);
 
@@ -341,7 +342,7 @@ TEST(test_ContinuousAngle, set_to_nearest)
     {
       d = c;
       Angle angle(rad2deg(c.value() - step));
-      c.set_to_nearest(angle);
+      c.setToNearest(angle);
 
       EXPECT_TRUE(std::fabs(Angle(rad2deg(c.value())).getSignedValue() - angle.getSignedValue()) < 0.000001);
 

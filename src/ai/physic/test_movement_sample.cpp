@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com) (Refacto)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,7 +21,7 @@
 #include <gtest/gtest.h>
 
 #include <debug.h>
-#include "MovementSample.h"
+#include "movement_sample.h"
 #include <math.h>
 
 using namespace rhoban_geometry;
@@ -63,23 +64,23 @@ TEST(test_MovementSample, some_use_cases)
     mov.insert(rhoban_ssl::PositionSample(2, Point(8, 16), ContinuousAngle(32)));
     mov.insert(rhoban_ssl::PositionSample(3, Point(27, 54), ContinuousAngle(108)));
 
-    EXPECT_TRUE(mov.linear_position(2) == Point(1, 2));
-    EXPECT_TRUE(mov.linear_position(1) == Point(8, 16));
-    EXPECT_TRUE(mov.linear_position(0) == Point(27, 54));
+    EXPECT_TRUE(mov.linearPosition(2) == Point(1, 2));
+    EXPECT_TRUE(mov.linearPosition(1) == Point(8, 16));
+    EXPECT_TRUE(mov.linearPosition(0) == Point(27, 54));
 
-    EXPECT_TRUE(mov.angular_position(2) == ContinuousAngle(4));
-    EXPECT_TRUE(mov.angular_position(1) == ContinuousAngle(32));
-    EXPECT_TRUE(mov.angular_position(0) == ContinuousAngle(108));
+    EXPECT_TRUE(mov.angularPosition(2) == ContinuousAngle(4));
+    EXPECT_TRUE(mov.angularPosition(1) == ContinuousAngle(32));
+    EXPECT_TRUE(mov.angularPosition(0) == ContinuousAngle(108));
 
-    EXPECT_TRUE(mov.linear_velocity(1) == Point(7, 14));
-    EXPECT_TRUE(mov.linear_velocity(0) == Point(19, 38));
+    EXPECT_TRUE(mov.linearVelocity(1) == Point(7, 14));
+    EXPECT_TRUE(mov.linearVelocity(0) == Point(19, 38));
 
-    EXPECT_TRUE(mov.angular_velocity(1) == ContinuousAngle(28));
-    EXPECT_TRUE(mov.angular_velocity(0) == ContinuousAngle(76));
+    EXPECT_TRUE(mov.angularVelocity(1) == ContinuousAngle(28));
+    EXPECT_TRUE(mov.angularVelocity(0) == ContinuousAngle(76));
 
-    EXPECT_TRUE(mov.linear_acceleration(0) == Vector2d(12, 24));
+    EXPECT_TRUE(mov.linearAcceleration(0) == Vector2d(12, 24));
 
-    EXPECT_TRUE(mov.angular_acceleration(0) == ContinuousAngle(48));
+    EXPECT_TRUE(mov.angularAcceleration(0) == ContinuousAngle(48));
   }
   {
     rhoban_ssl::MovementSample mov(3);
@@ -87,23 +88,23 @@ TEST(test_MovementSample, some_use_cases)
     mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
     mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
-    EXPECT_TRUE(mov.linear_position(2) == Point(1, 2));
-    EXPECT_TRUE(mov.linear_position(1) == Point(8, 16));
-    EXPECT_TRUE(mov.linear_position(0) == Point(27, 54));
+    EXPECT_TRUE(mov.linearPosition(2) == Point(1, 2));
+    EXPECT_TRUE(mov.linearPosition(1) == Point(8, 16));
+    EXPECT_TRUE(mov.linearPosition(0) == Point(27, 54));
 
-    EXPECT_TRUE(mov.angular_position(2) == ContinuousAngle(4));
-    EXPECT_TRUE(mov.angular_position(1) == ContinuousAngle(32));
-    EXPECT_TRUE(mov.angular_position(0) == ContinuousAngle(108));
+    EXPECT_TRUE(mov.angularPosition(2) == ContinuousAngle(4));
+    EXPECT_TRUE(mov.angularPosition(1) == ContinuousAngle(32));
+    EXPECT_TRUE(mov.angularPosition(0) == ContinuousAngle(108));
 
-    EXPECT_TRUE(mov.linear_velocity(1) == Point(7, 14) / 2);
-    EXPECT_TRUE(mov.linear_velocity(0) == Point(19, 38) / 3);
+    EXPECT_TRUE(mov.linearVelocity(1) == Point(7, 14) / 2);
+    EXPECT_TRUE(mov.linearVelocity(0) == Point(19, 38) / 3);
 
-    EXPECT_TRUE(mov.angular_velocity(1) == ContinuousAngle(28) / 2);
-    EXPECT_TRUE(mov.angular_velocity(0) == ContinuousAngle(76) / 3);
+    EXPECT_TRUE(mov.angularVelocity(1) == ContinuousAngle(28) / 2);
+    EXPECT_TRUE(mov.angularVelocity(0) == ContinuousAngle(76) / 3);
 
-    EXPECT_TRUE(norm(mov.linear_acceleration(0) - Vector2d(17, 34) / (2 * 3 * 3)) < 0.0001);
+    EXPECT_TRUE(norm(mov.linearAcceleration(0) - Vector2d(17, 34) / (2 * 3 * 3)) < 0.0001);
 
-    EXPECT_TRUE(std::fabs((mov.angular_acceleration(0) - ContinuousAngle(68) / (2 * 3 * 3)).value()) < 0.0001);
+    EXPECT_TRUE(std::fabs((mov.angularAcceleration(0) - ContinuousAngle(68) / (2 * 3 * 3)).value()) < 0.0001);
   }
   {
     rhoban_ssl::MovementSample mov(4);
@@ -112,29 +113,29 @@ TEST(test_MovementSample, some_use_cases)
     mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
     mov.insert(rhoban_ssl::PositionSample(10, Point(343, 686), ContinuousAngle(1029)));
 
-    EXPECT_TRUE(mov.linear_position(3) == Point(1, 2));
-    EXPECT_TRUE(mov.linear_position(2) == Point(8, 16));
-    EXPECT_TRUE(mov.linear_position(1) == Point(27, 54));
-    EXPECT_TRUE(mov.linear_position(0) == Point(343, 686));
+    EXPECT_TRUE(mov.linearPosition(3) == Point(1, 2));
+    EXPECT_TRUE(mov.linearPosition(2) == Point(8, 16));
+    EXPECT_TRUE(mov.linearPosition(1) == Point(27, 54));
+    EXPECT_TRUE(mov.linearPosition(0) == Point(343, 686));
 
-    EXPECT_TRUE(mov.angular_position(3) == ContinuousAngle(4));
-    EXPECT_TRUE(mov.angular_position(2) == ContinuousAngle(32));
-    EXPECT_TRUE(mov.angular_position(1) == ContinuousAngle(108));
-    EXPECT_TRUE(mov.angular_position(0) == ContinuousAngle(1029));
+    EXPECT_TRUE(mov.angularPosition(3) == ContinuousAngle(4));
+    EXPECT_TRUE(mov.angularPosition(2) == ContinuousAngle(32));
+    EXPECT_TRUE(mov.angularPosition(1) == ContinuousAngle(108));
+    EXPECT_TRUE(mov.angularPosition(0) == ContinuousAngle(1029));
 
-    EXPECT_TRUE(mov.linear_velocity(2) == Point(7, 14) / 2);
-    EXPECT_TRUE(mov.linear_velocity(1) == Point(19, 38) / 3);
-    EXPECT_TRUE(mov.linear_velocity(0) == Point(316, 632) / 4);
+    EXPECT_TRUE(mov.linearVelocity(2) == Point(7, 14) / 2);
+    EXPECT_TRUE(mov.linearVelocity(1) == Point(19, 38) / 3);
+    EXPECT_TRUE(mov.linearVelocity(0) == Point(316, 632) / 4);
 
-    EXPECT_TRUE(mov.angular_velocity(2) == ContinuousAngle(28) / 2);
-    EXPECT_TRUE(mov.angular_velocity(1) == ContinuousAngle(76) / 3);
-    EXPECT_TRUE(mov.angular_velocity(0) == ContinuousAngle(921) / 4);
+    EXPECT_TRUE(mov.angularVelocity(2) == ContinuousAngle(28) / 2);
+    EXPECT_TRUE(mov.angularVelocity(1) == ContinuousAngle(76) / 3);
+    EXPECT_TRUE(mov.angularVelocity(0) == ContinuousAngle(921) / 4);
 
-    EXPECT_TRUE(norm(mov.linear_acceleration(1) - Vector2d(17, 34) / (2 * 3 * 3)) < 0.0001);
-    EXPECT_TRUE(norm(mov.linear_acceleration(0) - Vector2d(872, 1744) / (3 * 4 * 4)) < 0.0001);
+    EXPECT_TRUE(norm(mov.linearAcceleration(1) - Vector2d(17, 34) / (2 * 3 * 3)) < 0.0001);
+    EXPECT_TRUE(norm(mov.linearAcceleration(0) - Vector2d(872, 1744) / (3 * 4 * 4)) < 0.0001);
 
-    EXPECT_TRUE(std::fabs((mov.angular_acceleration(1) - ContinuousAngle(68) / (2 * 3 * 3)).value()) < 0.0001);
-    EXPECT_TRUE(std::fabs((mov.angular_acceleration(0) - ContinuousAngle(2459) / (3 * 4 * 4)).value()) < 0.0001);
+    EXPECT_TRUE(std::fabs((mov.angularAcceleration(1) - ContinuousAngle(68) / (2 * 3 * 3)).value()) < 0.0001);
+    EXPECT_TRUE(std::fabs((mov.angularAcceleration(0) - ContinuousAngle(2459) / (3 * 4 * 4)).value()) < 0.0001);
   }
 }
 
