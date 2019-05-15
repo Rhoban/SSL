@@ -195,6 +195,7 @@ int main(int argc, char** argv)
     ai_ = new AI(manager_name.getValue(), team_name.getValue(), commander,
                  config_path.getValue());
     // ai_->run();
+    rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::TimeSynchronisation());
     rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
     rhoban_ssl::ExecutionManager::getManager().run(0.01);
     // delete ai_;

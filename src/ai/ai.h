@@ -30,6 +30,10 @@
 
 namespace rhoban_ssl
 {
+
+/**
+ * @brief The AI class
+ */
 class AI : public Task
 {
 public:
@@ -77,5 +81,15 @@ private:
 
 public:
   void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
+};
+
+
+/**
+ * @brief The TimeSynchronisation class
+ */
+class TimeSynchronisation : public Task {
+  // Task interface
+public:
+  bool runTask();
 };
 };  // namespace rhoban_ssl

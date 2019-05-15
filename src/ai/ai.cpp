@@ -549,4 +549,11 @@ void AI::printElectronicInfo()
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+bool TimeSynchronisation::runTask()
+{
+  return true;
+}
+
 }  // namespace rhoban_ssl
