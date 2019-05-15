@@ -79,15 +79,15 @@ struct GameStateData
 {
   // datas[0] is the most recent
   // datas[1] the older
-  CircularVector<SSL_Referee> datas;
+  CircularVector<Referee> datas;
 
   double last_time;
   uint32_t last_command_counter;
 
   GameStateData();
 
-  const SSL_Referee& current() const;
-  const SSL_Referee& old() const;
+  const Referee& current() const;
+  const Referee& old() const;
 
   bool commandIsNew() const;
 };

@@ -20,7 +20,6 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 #include "game_state.h"
 #include <debug.h>
 #include <core/print_collection.h>
-#include "print_protobuf_referee.h"
 #include <game_informations.h>
 
 namespace rhoban_ssl
@@ -29,12 +28,12 @@ GameStateData::GameStateData() : datas(2), last_time(0.0), last_command_counter(
 {
 }
 
-const SSL_Referee& GameStateData::current() const
+const Referee& GameStateData::current() const
 {
   return datas[0];
 }
 
-const SSL_Referee& GameStateData::old() const
+const Referee& GameStateData::old() const
 {
   return datas[1];
 }
@@ -44,20 +43,20 @@ bool GameStateData::commandIsNew() const
   return (last_time < current().packet_timestamp()) and (last_command_counter < current().command_counter());
 }
 
-template <SSL_Referee_Command E>
+template <Referee_Command E>
 bool command_is_(const GameStateData& game_state_data, unsigned int run_number, unsigned int atomic_run_number)
 {
   return (game_state_data.commandIsNew()) and (game_state_data.current().command() == E);
 }
 
-template <SSL_Referee_Command E1, SSL_Referee_Command E2>
+template <Referee_Command E1, Referee_Command E2>
 bool command_is_one_of_(const GameStateData& game_state_data, unsigned int run_number, unsigned int atomic_run_number)
 {
   return (game_state_data.commandIsNew()) and
          ((game_state_data.current().command() == E1) or (game_state_data.current().command() == E2));
 }
 
-template <SSL_Referee_Command E1, SSL_Referee_Command E2, SSL_Referee_Command E3, SSL_Referee_Command E4>
+template <Referee_Command E1, Referee_Command E2, Referee_Command E3, Referee_Command E4>
 bool command_is_one_of_4_(const GameStateData& game_state_data, unsigned int run_number, unsigned int atomic_run_number)
 {
   return (game_state_data.commandIsNew()) and
@@ -103,15 +102,15 @@ GameState::GameState()
 
   // EDGES
   machine_state_.addEdge(edge_name::force_start, state_name::stop, state_name::running,
-                         command_is_<SSL_Referee::FORCE_START>);
+                         command_is_<Referee::FORCE_START>);
 
   machine_state_.addEdge(edge_name::running_to_stop, state_name::running, state_name::stop,
-                         command_is_<SSL_Referee::STOP>);
+                         command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::stop_to_prepare_kickoff, state_name::stop, state_name::prepare_kickoff,
-                         command_is_one_of_<SSL_Referee::PREPARE_KICKOFF_BLUE, SSL_Referee::PREPARE_KICKOFF_YELLOW>,
+                         command_is_one_of_<Referee::PREPARE_KICKOFF_BLUE, Referee::PREPARE_KICKOFF_YELLOW>,
                          [&](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                           if ((game_state_data_.current().command() == SSL_Referee::PREPARE_KICKOFF_YELLOW))
+                           if ((game_state_data_.current().command() == Referee::PREPARE_KICKOFF_YELLOW))
                            {
                              team_having_kickoff_ = (ai::Config::we_are_blue) ? Opponent : Ally;
                            }
@@ -122,33 +121,33 @@ GameState::GameState()
                          });
 
   machine_state_.addEdge(edge_name::prepare_kickoff_to_stop, state_name::prepare_kickoff, state_name::stop,
-                         command_is_<SSL_Referee::STOP>);
+                         command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::kickoff_to_stop, state_name::kickoff, state_name::stop,
-                         command_is_<SSL_Referee::STOP>);
+                         command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::start, state_name::prepare_kickoff, state_name::kickoff,
-                         command_is_<SSL_Referee::NORMAL_START>);
+                         command_is_<Referee::NORMAL_START>);
 
   machine_state_.addEdge(edge_name::ball_move_after_kickoff, state_name::kickoff, state_name::running,
                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
                            return (ballIsMoving() &&
-                                   not(command_is_<SSL_Referee::HALT>(data, run_number, atomic_run_number)) &&
-                                   not(command_is_<SSL_Referee::STOP>(data, run_number, atomic_run_number)));
+                                   not(command_is_<Referee::HALT>(data, run_number, atomic_run_number)) &&
+                                   not(command_is_<Referee::STOP>(data, run_number, atomic_run_number)));
                          });
 
   machine_state_.addEdge(edge_name::prepare_kickoff_to_halt, state_name::prepare_kickoff, state_name::halt,
-                         command_is_<SSL_Referee::HALT>);
+                         command_is_<Referee::HALT>);
 
   machine_state_.addEdge(edge_name::kickoff_to_halt, state_name::kickoff, state_name::halt,
-                         command_is_<SSL_Referee::HALT>);
+                         command_is_<Referee::HALT>);
 
   machine_state_.addEdge(edge_name::stop_to_free_kick, state_name::stop, state_name::free_kick,
-                         command_is_one_of_4_<SSL_Referee::DIRECT_FREE_YELLOW, SSL_Referee::DIRECT_FREE_BLUE,
-                                              SSL_Referee::INDIRECT_FREE_YELLOW, SSL_Referee::INDIRECT_FREE_BLUE>,
+                         command_is_one_of_4_<Referee::DIRECT_FREE_YELLOW, Referee::DIRECT_FREE_BLUE,
+                                              Referee::INDIRECT_FREE_YELLOW, Referee::INDIRECT_FREE_BLUE>,
                          [&](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                           if ((game_state_data_.current().command() == SSL_Referee::DIRECT_FREE_YELLOW) or
-                               (game_state_data_.current().command() == SSL_Referee::INDIRECT_FREE_YELLOW))
+                           if ((game_state_data_.current().command() == Referee::DIRECT_FREE_YELLOW) or
+                               (game_state_data_.current().command() == Referee::INDIRECT_FREE_YELLOW))
                            {
                              team_having_free_kick_ = (ai::Config::we_are_blue) ? Opponent : Ally;
                            }
@@ -156,8 +155,8 @@ GameState::GameState()
                            {
                              team_having_free_kick_ = (ai::Config::we_are_blue) ? Ally : Opponent;
                            }
-                           if ((game_state_data_.current().command() == SSL_Referee::DIRECT_FREE_YELLOW) or
-                               (game_state_data_.current().command() == SSL_Referee::DIRECT_FREE_BLUE))
+                           if ((game_state_data_.current().command() == Referee::DIRECT_FREE_YELLOW) or
+                               (game_state_data_.current().command() == Referee::DIRECT_FREE_BLUE))
                            {
                              free_kick_type_ = DIRECT;
                            }
@@ -168,22 +167,22 @@ GameState::GameState()
                          });
 
   machine_state_.addEdge(edge_name::free_kick_to_stop, state_name::free_kick, state_name::stop,
-                         command_is_<SSL_Referee::STOP>);
+                         command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::ball_move_after_free_kick, state_name::free_kick, state_name::running,
                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
                            return (ballIsMoving() &&
-                                   not(command_is_<SSL_Referee::HALT>(data, run_number, atomic_run_number)) &&
-                                   not(command_is_<SSL_Referee::STOP>(data, run_number, atomic_run_number)));
+                                   not(command_is_<Referee::HALT>(data, run_number, atomic_run_number)) &&
+                                   not(command_is_<Referee::STOP>(data, run_number, atomic_run_number)));
                          });
 
   machine_state_.addEdge(edge_name::free_kick_to_halt, state_name::free_kick, state_name::halt,
-                         command_is_<SSL_Referee::HALT>);
+                         command_is_<Referee::HALT>);
 
   machine_state_.addEdge(edge_name::stop_to_penalty, state_name::stop, state_name::penalty,
-                         command_is_one_of_<SSL_Referee::PREPARE_PENALTY_YELLOW, SSL_Referee::PREPARE_PENALTY_BLUE>,
+                         command_is_one_of_<Referee::PREPARE_PENALTY_YELLOW, Referee::PREPARE_PENALTY_BLUE>,
                          [&](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                           if ((game_state_data_.current().command() == SSL_Referee::PREPARE_PENALTY_YELLOW))
+                           if ((game_state_data_.current().command() == Referee::PREPARE_PENALTY_YELLOW))
                            {
                              team_having_penalty_ = (ai::Config::we_are_blue) ? Opponent : Ally;
                            }
@@ -194,26 +193,26 @@ GameState::GameState()
                          });
 
   machine_state_.addEdge(edge_name::penalty_to_stop, state_name::penalty, state_name::stop,
-                         command_is_<SSL_Referee::STOP>);
+                         command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::ball_move_after_penalty, state_name::penalty, state_name::running,
                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
                            return (ballIsMoving() &&
-                                   not(command_is_<SSL_Referee::HALT>(data, run_number, atomic_run_number)) &&
-                                   not(command_is_<SSL_Referee::STOP>(data, run_number, atomic_run_number)));
+                                   not(command_is_<Referee::HALT>(data, run_number, atomic_run_number)) &&
+                                   not(command_is_<Referee::STOP>(data, run_number, atomic_run_number)));
                          });
 
-  machine_state_.addEdge(edge_name::stop_to_halt, state_name::stop, state_name::halt, command_is_<SSL_Referee::HALT>);
+  machine_state_.addEdge(edge_name::stop_to_halt, state_name::stop, state_name::halt, command_is_<Referee::HALT>);
 
-  machine_state_.addEdge(edge_name::halt_to_stop, state_name::halt, state_name::stop, command_is_<SSL_Referee::STOP>);
+  machine_state_.addEdge(edge_name::halt_to_stop, state_name::halt, state_name::stop, command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::running_to_halt, state_name::running, state_name::halt,
-                         command_is_<SSL_Referee::HALT>);
+                         command_is_<Referee::HALT>);
 
   machine_state_.addEdge(edge_name::goal, state_name::stop, state_name::stop,
-                         command_is_one_of_<SSL_Referee::GOAL_YELLOW, SSL_Referee::GOAL_BLUE>,
+                         command_is_one_of_<Referee::GOAL_YELLOW, Referee::GOAL_BLUE>,
                          [&](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                           if ((game_state_data_.current().command() == SSL_Referee::GOAL_YELLOW))
+                           if ((game_state_data_.current().command() == Referee::GOAL_YELLOW))
                            {
                              number_of_yellow_goals_ += 1;
                            }
@@ -226,7 +225,7 @@ GameState::GameState()
   );
 
   machine_state_.addEdge(edge_name::penalty_to_halt, state_name::penalty, state_name::halt,
-                         command_is_<SSL_Referee::HALT>);
+                         command_is_<Referee::HALT>);
 
   machine_state_.executeAtEachEdge([&](std::string edge_id, GameStateData& state_data, GameStateData& edge_data,
                                        unsigned int run_number,
@@ -250,16 +249,16 @@ bool GameState::ballIsMoving()
 
 void GameState::extractData()
 {
-  SSL_Referee data = referee_.getData();
+  Referee data = referee_.getData();
   // DEBUG("SSL REFEREE PROTOBUF : " << data.stage_time_left());
   // Use this function just one time if you want to avoir thread
   // issue.
   if (game_state_data_.last_time < data.packet_timestamp())
   {
     game_state_data_.datas.insert(data);
-    if (data.has_blueteamonpositivehalf())
+    if (data.has_blue_team_on_positive_half())
     {
-      blueTeamOnPositiveHalf_ = data.blueteamonpositivehalf();
+      blueTeamOnPositiveHalf_ = data.has_blue_team_on_positive_half();
     }
   }
 }
@@ -324,12 +323,12 @@ bool GameState::blueHaveItsGoalOnPositiveXAxis() const
 
 int GameState::yellowGoalieId() const
 {
-  return game_state_data_.current().yellow().goalie();
+  return int(game_state_data_.current().yellow().goalkeeper());
 }
 
 int GameState::blueGoalieId() const
 {
-  return game_state_data_.current().blue().goalie();
+  return int(game_state_data_.current().blue().goalkeeper());
 }
 
 bool GameState::stateIsNewer(unsigned int last_change_stamp) const

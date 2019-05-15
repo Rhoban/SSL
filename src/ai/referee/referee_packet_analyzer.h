@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
+    Copyright 2019
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,16 +18,18 @@
 */
 #pragma once
 
-#include "referee.h"
-#include <iostream>
-#include <google/protobuf/stubs/common.h>
-#if GOOGLE_PROTOBUF_MIN_LIBRARY_VERSION >= 3000000
-#include <google/protobuf/util/json_util.h>
-#endif
-// namespace rhoban_ssl {
-// namespace vision {
+#include <execution_manager.h>
 
-std::ostream& operator<<(std::ostream& out, const SSL_Referee& referee);
+namespace rhoban_ssl
+{
+class RefereePacketAnalyzer : public Task
+{
+public:
+  RefereePacketAnalyzer();
 
-//};
-//};
+  // Task interface
+public:
+  bool runTask();
+};
+
+}  // namespace rhoban_ssl

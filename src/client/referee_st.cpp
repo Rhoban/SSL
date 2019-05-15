@@ -29,7 +29,7 @@ public:
        << std::endl;
     if (rhoban_ssl::RefereeMessages::singleton_.last_packets_.size() > 0)
     {
-      SSL_Referee* data = rhoban_ssl::RefereeMessages::singleton_.last_packets_.front();
+      Referee* data = rhoban_ssl::RefereeMessages::singleton_.last_packets_.front();
       ss << "stage: " << data->stage() << std::endl;
       ss << "stage_time_left: " << data->stage_time_left() << std::endl;
       ss << "command: " << data->command() << std::endl;
@@ -37,7 +37,7 @@ public:
       ss << "command_timestamp: " << data->command_timestamp() << std::endl;
       ss << "remaining time: " << data->stage_time_left() << std::endl;
 
-      auto printTeamInfo = [&ss](const SSL_Referee_TeamInfo& teamInfo) {
+      auto printTeamInfo = [&ss](const Referee_TeamInfo& teamInfo) {
         ss << "  name: " << teamInfo.name() << std::endl;
         ss << "  score: " << teamInfo.score() << std::endl;
         ss << "  red_cards: " << teamInfo.red_cards() << std::endl;
@@ -48,7 +48,7 @@ public:
         }
         ss << "  timeouts: " << teamInfo.timeouts() << std::endl;
         ss << "  timeout_time: " << teamInfo.timeout_time() << std::endl;
-        ss << "  goalie: " << teamInfo.goalie() << std::endl;
+        ss << "  goalie: " << teamInfo.goalkeeper() << std::endl;
       };
 
       ss << "yellow infos:" << std::endl;

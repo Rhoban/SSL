@@ -89,7 +89,7 @@ set (SOURCES
     math/lines.cpp
     core/export_to_plot.cpp
     core/logger.cpp
-    referee/print_protobuf_referee.cpp
+    referee/referee_packet_analyzer.cpp
     referee/game_state.cpp
     annotations/annotations.cpp
 )

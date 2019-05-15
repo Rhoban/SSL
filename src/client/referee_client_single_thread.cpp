@@ -1,5 +1,4 @@
 #include "referee_client_single_thread.h"
-#include "referee.pb.h"
 
 namespace rhoban_ssl
 {
@@ -10,9 +9,9 @@ RefereeMessages::~RefereeMessages()
   delete arena_;
 }
 
-SSL_Referee* RefereeMessages::getNewPacket()
+Referee *RefereeMessages::getNewPacket()
 {
-  return google::protobuf::Arena::CreateMessage<SSL_Referee>(arena_);
+  return google::protobuf::Arena::CreateMessage<Referee>(arena_);
 }
 
 void RefereeMessages::reset()
@@ -76,9 +75,9 @@ RefereeClientSingleThread::RefereeClientSingleThread(std::string addr, std::stri
   init();
 }
 
-bool RefereeClientSingleThread::process(char* buffer, size_t len)
+bool RefereeClientSingleThread:: process(char* buffer, size_t len)
 {
-  SSL_Referee* packet = RefereeMessages::singleton_.getNewPacket();
+  Referee* packet = RefereeMessages::singleton_.getNewPacket();
   if (packet->ParseFromArray(buffer, len))
   {
     printf("message %d read: %d\n", len, packet->command_counter());
