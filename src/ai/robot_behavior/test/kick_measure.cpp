@@ -40,6 +40,11 @@ void KickMeasure::update(double time, const ai::Robot& robot, const ai::Ball& ba
   rhoban_geometry::Point follow_position = robot.getMovement().linearPosition(ai_data_.time);
   ContinuousAngle follow_rotation = robot.getMovement().angularPosition(ai_data_.time);
 
+  double distance = follow_position.getDist(ballPosition());
+
+  // Display of distance:
+  annotations_.addText(std::to_string(distance), ballPosition().x - 0.25, ballPosition().y - 0.25, "white");
+
   follower_->setFollowingPosition(follow_position, follow_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
@@ -48,6 +53,9 @@ void KickMeasure::update(double time, const ai::Robot& robot, const ai::Ball& ba
 Control KickMeasure::control() const
 {
   Control ctrl = follower_->control();
+  ctrl.kickPower = kick_power_;
+  ctrl.kick = true;
+  ctrl.charge = true;
   return ctrl;
 }
 
