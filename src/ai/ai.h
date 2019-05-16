@@ -86,15 +86,6 @@ public:
 /**
  * @brief The TimeSynchronisation class
  */
-class TimeSynchronisation : public Task {
-  // Task interface
-public:
-  bool runTask();
-};
-
-/**
- * @brief The TimeSynchronisation class
- */
 class RegulateAiLoopPeriod : public Task {
   // Task interface
 public:

@@ -20,7 +20,7 @@ double Config::period = 1.0 / 60.0;
 double Config::robot_radius = 0.09;
 double Config::ball_radius = 0.021375;
 Vector2d Config::waiting_goal_position;
-int Config::default_goalie_id;
+uint Config::default_goalie_id;
 
 // PID for translation
 double Config::p_translation;
@@ -161,7 +161,7 @@ void Config::load(const std::string& config_path)
                                    root["goalie"]["waiting_goal_position"][1].asDouble());
   penalty_rayon = root["goalie"]["penalty_rayon"].asDouble();  // penalty rayon for the goalie
   assert(penalty_rayon > 0.0);
-  default_goalie_id = root["goalie"]["default_id"].asInt();  // penalty rayon for the goalie
+  default_goalie_id = root["goalie"]["default_id"].asUInt();  // penalty rayon for the goalie
   assert(default_goalie_id >= 0);
   assert(default_goalie_id < Config::NB_OF_ROBOTS_BY_TEAM);
 

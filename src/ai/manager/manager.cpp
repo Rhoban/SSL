@@ -32,43 +32,6 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-int Manager::getGoalieOpponentId() const
-{
-  return goalie_opponent_id_;
-}
-
-void Manager::declareGoalieOpponentId(int goalie_opponent_id)
-{
-  if (goalie_opponent_id >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
-    return;
-  if (this->goalie_opponent_id_ >= 0)
-  {
-    GlobalDataSingleThread::singleton_.robots_[Opponent][this->goalie_opponent_id_].is_goalie = false;
-  }
-  this->goalie_opponent_id_ = goalie_opponent_id;
-  if (goalie_opponent_id >= 0)
-  {
-    GlobalDataSingleThread::singleton_.robots_[Opponent][goalie_opponent_id].is_goalie = true;
-  }
-}
-void Manager::declareGoalieId(int goalie_id)
-{
-  if (goalie_id >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
-    return;
-  if (this->goalie_id_ >= 0)
-  {
-    GlobalDataSingleThread::singleton_.robots_[Ally][this->goalie_id_].is_goalie = false;
-  }
-  this->goalie_id_ = goalie_id;
-  if (goalie_id >= 0)
-  {
-    GlobalDataSingleThread::singleton_.robots_[Ally][this->goalie_id_].is_goalie = true;
-  }
-}
-int Manager::getGoalieId() const
-{
-  return goalie_id_;
-}
 void Manager::declareTeamIds(const std::vector<int>& team_ids)
 {
   this->team_ids_ = team_ids;
@@ -107,7 +70,7 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
                                                                  // register them with register_strategy() (during the
                                                                  // initialisation of your manager for example).
   assert(not(assign_goalie) or
-         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(), goalie_id_) ==
+         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(), GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) ==
                                 robot_ids.end()));  // If you declare that you are assigning a goal, you should not
                                                     // declar the goal id inside the list of field robots.
 
@@ -122,8 +85,8 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
   }
   assert(static_cast<unsigned int>(strategy.minRobots()) <= robot_ids.size());
 
-  strategy.setGoalie(goalie_id_, assign_goalie);
-  strategy.setGoalieOpponent(goalie_opponent_id_);
+  strategy.setGoalie(GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number, assign_goalie);
+  strategy.setGoalieOpponent(GlobalDataSingleThread::singleton_.referee_.teams_info[Opponent].goalkeeper_number);
   strategy.setRobotAffectation(robot_ids);
   strategy.start(time);
 
@@ -183,7 +146,7 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
               break;
             }
           }
-          if (this->getStrategy(name).haveToManageTheGoalie() and getGoalieId() == id)
+          if (this->getStrategy(name).haveToManageTheGoalie() and int(GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) == id)
           {
             id_is_present = true;
           }
@@ -196,12 +159,6 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
         },
         time, dt);
   }
-}
-
-void Manager::changeAllyAndOpponentGoalieId(int blue_goalie_id, int yellow_goalie_id)
-{
-  declareGoalieId((ai::Config::we_are_blue) ? blue_goalie_id : yellow_goalie_id);
-  declareGoalieOpponentId((ai::Config::we_are_blue) ? yellow_goalie_id : blue_goalie_id);
 }
 
 void Manager::changeTeamAndPointOfView(bool blue_have_it_s_goal_on_positive_x_axis)
@@ -232,7 +189,7 @@ void Manager::changeTeamAndPointOfView(bool blue_have_it_s_goal_on_positive_x_ax
   }
 }
 
-Manager::Manager() : GameInformations(), blue_is_not_set_(true), goalie_id_(-1), goalie_opponent_id_(-1)
+Manager::Manager() : GameInformations(), blue_is_not_set_(true)
 {
   registerStrategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
   registerStrategy(MANAGER__PLACER, std::shared_ptr<strategy::Strategy>(new strategy::Placer()));
@@ -276,7 +233,7 @@ void Manager::detectInvalidRobots()
     if (GlobalDataSingleThread::singleton_.robots_[Ally][id].is_valid)
     {
       valid_team_ids_.push_back(id);
-      if (goalie_id_ != id)
+      if (int(GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) != id)
       {
         valid_player_ids_.push_back(id);
       }

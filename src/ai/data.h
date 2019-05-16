@@ -26,6 +26,7 @@
 #include "data/ball.h"
 #include "data/field.h"
 #include "data/ai_data.h"
+#include "data/referee.h"
 
 namespace rhoban_ssl
 {
@@ -62,10 +63,12 @@ class GlobalDataSingleThread
 {
 public:
   data::Robot robots_[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
+  std::vector<std::pair<Team, data::Robot*>> all_robots;
+
   data::Ball ball_;
   data::Field field_;
   data::AiData ai_data_;
-  std::vector<std::pair<Team, data::Robot*>> all_robots;
+  data::Referee referee_;
 
   SharedData shared_data_;
 // TODO refacto
@@ -76,27 +79,22 @@ private:
 
 public:
   static GlobalDataSingleThread singleton_;
+};
 
-  /*  GlobalDataSingleThread& operator<<(const vision::VisionDataSingleThread& vision_data);
-    GlobalDataSingleThread& operator>>(vision::VisionDataSingleThread& vision_data);
-    void editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
-        std::function<void(vision::VisionDataSingleThread& vision_data)> vision_data_editor);
+/**
+ * @brief The RefereeTerminalPrinter class
+ */
+class RefereeTerminalPrinter : public Task
+{
+private:
+  int counter_ = 0;
 
-    GlobalDataSingleThread& operator<<(const DataFromAi& data_from_ai);
-    GlobalDataSingleThread& operator>>(DataFromAi& data_from_ai);
-    void editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
-        std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor);
+public:
+  RefereeTerminalPrinter();
 
-    GlobalDataSingleThread& operator<<(const DataForViewer& data_for_viewer);
-    GlobalDataSingleThread& operator>>(DataForViewer& data_for_viewer);
-    void editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
-        std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor);
-
-    GlobalDataSingleThread& operator<<(const SharedData& shared_data);
-    GlobalDataSingleThread& operator>>(SharedData& shared_data);
-    void editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
-        std::function<void(SharedData& shared_data)> shared_data_editor);
-        */
+  // Task interface
+public:
+  bool runTask();
 };
 
 }  // namespace rhoban_ssl

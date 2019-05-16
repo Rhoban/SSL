@@ -54,7 +54,6 @@ BallDetection::BallDetection() : confidence_(-1), camera_(nullptr)
 {
 }
 
-
 void BallDetection::operator=(const SSL_DetectionBall& b)
 {
   confidence_ = b.confidence();
@@ -65,7 +64,6 @@ void BallDetection::operator=(const SSL_DetectionBall& b)
   pixel_y_ = b.pixel_y();
   area_ = b.area();
 }
-
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -101,7 +99,6 @@ CameraDetectionFrame::CameraDetectionFrame() : t_capture_(-1.0), t_sent_(-1.0), 
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 bool VisionDataTerminalPrinter::runTask()
 {
@@ -176,6 +173,30 @@ bool VisionDataTerminalPrinter::runTask()
 
 bool ChangeReferencePointOfView::runTask()
 {
+  if (GlobalDataSingleThread::singleton_.referee_.blue_team_on_positive_half && !ai::Config::we_are_blue)
+  {
+    for (uint cam_id = 0; cam_id < ai::Config::NB_CAMERAS; cam_id++)
+    {
+
+      for (uint ball_id = 0; ball_id < ai::Config::NB_CAMERAS; ball_id++)
+      {
+        struct BallDetection& ball = VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].balls_[ball_id];
+        ball.x_ *= -1;
+        ball.y_ *= -1;
+      }
+
+      for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
+      {
+        struct RobotDetection& ally_robot = VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].allies_[robot_id];
+        ally_robot.x_ *= -1;
+        ally_robot.y_ *= -1;
+
+        struct RobotDetection& opponent_robot = VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].opponents_[robot_id];
+        opponent_robot.x_ *= -1;
+        opponent_robot.x_ *= -1;
+      }
+    }
+  }
   return true;
 }
 

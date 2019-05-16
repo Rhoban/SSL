@@ -23,10 +23,7 @@
 
 namespace rhoban_ssl
 {
-
-
 GlobalDataSingleThread GlobalDataSingleThread::singleton_;
-
 
 SharedData::FinalControl::FinalControl()
   : hardware_is_responding(false), is_disabled_by_viewer(false), is_manually_controled_by_viewer(false)
@@ -51,110 +48,48 @@ GlobalDataSingleThread::GlobalDataSingleThread()
 {
   for (int team_id = 0; team_id < 2; team_id++)
   {
-    for ( int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
+    for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
     {
       all_robots.push_back(std::pair<Team, data::Robot*>(team_id, &(robots_[team_id][robot_id])));
     }
   }
 }
 
-/*
+///////////////////////////////////////////////////////////////////////////////
 
-GlobalDataSingleThread& GlobalDataSingleThread::operator<<(const vision::VisionDataSingleThread& vision_data)
+RefereeTerminalPrinter::RefereeTerminalPrinter() : counter_(0)
 {
-  //  mutex_for_vision_data_.lock();
-  vision_data_ = vision_data;
-  //  mutex_for_vision_data_.unlock();
-  return *this;
 }
 
-GlobalDataSingleThread& GlobalDataSingleThread::operator>>(vision::VisionDataSingleThread& vision_data)
+bool RefereeTerminalPrinter::runTask()
 {
-  //  mutex_for_vision_data_.lock();
-  vision_data = vision_data_;
-  //  mutex_for_vision_data_.unlock();
-  return *this;
-}
+  counter_ += 1;
+  std::stringstream ss;
 
-GlobalDataSingleThread& GlobalDataSingleThread::operator<<(const DataFromAi& data_from_ai)
-{
-  //  mutex_for_ai_data_.lock();
-  data_from_ai_ = data_from_ai;
-  //  mutex_for_ai_data_.unlock();
-  return *this;
-}
+  // ss << "\033[2J\033[1;1H";  // this clear the terminal
+  ss << "--------------------------------------------------" << std::endl;
+  ss << "Refere infos (" << counter_ << ")" << std::endl;
+  ss << "--------------------------------------------------" << std::endl;
+  ss << "stage: " << GlobalDataSingleThread::singleton_.referee_.getCurrentStageName() << std::endl;
+  ss << "stage_time_left: " << GlobalDataSingleThread::singleton_.referee_.stage_time_left << std::endl;
+  ss << "state: " << GlobalDataSingleThread::singleton_.referee_.getCurrentStateName() << std::endl;
+  ss << "command_timestamp: " << GlobalDataSingleThread::singleton_.referee_.command_timestamp << std::endl;
+  ss << "remaining time: " << GlobalDataSingleThread::singleton_.referee_.stage_time_left << std::endl;
 
-GlobalDataSingleThread& GlobalDataSingleThread::operator>>(DataFromAi& data_from_ai)
-{
-  //  mutex_for_ai_data_.lock();
-  data_from_ai = data_from_ai_;
-  //  mutex_for_ai_data_.unlock();
-  return *this;
+  for (int i = 0; i < 2; ++i)
+  {
+    ss << "----- TEAM : " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].name << " ----- " << std::endl;
+    ss << "score: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].score << std::endl;
+    ss << "red_cards: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].red_cards_count << std::endl;
+    ss << "yellow_cards: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].yellow_cards_count << std::endl;
+    ss << "  timeouts: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].available_timeout_count
+       << std::endl;
+    ss << "  timeout_time: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].available_time_of_timeout_
+       << std::endl;
+    ss << "  goalie: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].goalkeeper_number << std::endl;
+  }
+  std::cout << ss.str();
+  std::cout << std::flush;
+  return true;
 }
-
-GlobalDataSingleThread& GlobalDataSingleThread::operator<<(const SharedData& shared_data)
-{
-  // mutex_for_shared_data_.lock();
-  shared_data_ = shared_data;
-  // mutex_for_shared_data_.unlock();
-  return *this;
-}
-
-GlobalDataSingleThread& GlobalDataSingleThread::operator>>(SharedData& shared_data)
-{
-  // mutex_for_shared_data_.lock();
-  shared_data = shared_data_;
-  // mutex_for_shared_data_.unlock();
-  return *this;
-}
-
-void GlobalDataSingleThread::editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(vision::VisionDataSingleThread& vision_data)> vision_data_editor)
-{
-  // mutex_for_vision_data_.lock();
-  vision_data_editor(vision_data_);
-  // mutex_for_vision_data_.unlock();
-}
-
-void GlobalDataSingleThread::editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor)
-{
-  // mutex_for_ai_data_.lock();
-  data_from_ai_editor(data_from_ai_);
-  // mutex_for_ai_data_.unlock();
-}
-
-void GlobalDataSingleThread::editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(SharedData& shared_data)> shared_data_editor)
-{
-  // mutex_for_shared_data_.lock();
-  shared_data_editor(shared_data_);
-  // mutex_for_shared_data_.unlock();
-}
-
-GlobalDataSingleThread& GlobalDataSingleThread::operator<<(const DataForViewer& data_for_viewer)
-{
-  // mutex_for_viewer_data_.lock();
-  data_for_viewer_ = data_for_viewer;
-  // mutex_for_viewer_data_.unlock();
-  return *this;
-}
-
-GlobalDataSingleThread& GlobalDataSingleThread::operator>>(DataForViewer& data_for_viewer)
-{
-  // mutex_for_viewer_data_.lock();
-  data_for_viewer = data_for_viewer_;
-  // mutex_for_viewer_data_.unlock();
-  return *this;
-}
-
-void GlobalDataSingleThread::editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor)
-{
-  // mutex_for_viewer_data_.lock();
-  data_for_viewer_editor(data_for_viewer_);
-  // mutex_for_viewer_data_.unlock();
-}
-*/
-
 }  // namespace rhoban_ssl

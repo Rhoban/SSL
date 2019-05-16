@@ -96,7 +96,6 @@ class GameState
 {
   bool blueTeamOnPositiveHalf_;
 
-  RefereeClient referee_;
   GameStateData game_state_data_;
   unsigned int change_stamp_;
 
@@ -106,7 +105,7 @@ class GameState
   MachineInfrastructure::MachineState machine_state_;
 
   bool ballIsMoving();
-  void extractData();
+  void extractData(const Referee& new_data);
   void saveLastTimeStamps();
 
   Team team_having_kickoff_;
@@ -122,7 +121,7 @@ public:
   unsigned int getChangeStamp() const;
   const ID& getState() const;
 
-  void update(double time);
+  void update(const Referee &new_referee);
 
   Team kickoffTeam() const;
   Team penaltyTeam() const;
@@ -136,8 +135,6 @@ public:
   int blueGoalieId() const;
 
   bool stateIsNewer(unsigned int last_change_stamp) const;
-
-  RefereeClient& getRefereeClient();
 };
 
 }  // namespace rhoban_ssl
