@@ -53,6 +53,7 @@
 #include <robot_behavior/tutorials/medium/striker.h>
 #include <robot_behavior/tutorials/medium/prepare_strike.h>
 #include <robot_behavior/test_relative_velocity_consign.h>
+#include <robot_behavior/test/kick_measure.h>
 
 namespace rhoban_ssl
 {
@@ -417,6 +418,15 @@ Manual::Manual(ai::AiData& ai_data)
                                                  },
                                                  false  // we don't want to define a goal here !
                                                  )));
+  registerStrategy("Test - KickMeasure", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                             ai_data,
+                                             [&](double time, double dt) {
+                                               robot_behavior::test::KickMeasure* kick_m =
+                                                   new robot_behavior::test::KickMeasure(ai_data, 1.0);
+                                               return std::shared_ptr<robot_behavior::RobotBehavior>(kick_m);
+                                             },
+                                             false  // we don't want to define a goal here !
+                                             )));
   registerStrategy("Beginner - Robot near ball", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                      ai_data,
                                                      [&](double time, double dt) {
