@@ -80,7 +80,7 @@ bool Mobile::isActive() const
 }
 
 Mobile::Mobile()
-  : last_update(rhoban_utils::TimeStamp::fromMS(0))
+  : last_update(rhoban_utils::TimeStamp::min())
   , movement_sample(history_size)
   , movement(physic::Factory::movement())
 {
@@ -88,6 +88,7 @@ Mobile::Mobile()
   {
     movement_sample[i].time = -i;
   }
+  updateVisionData();
 }
 
 bool Mobile::isInsideTheField()
