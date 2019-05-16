@@ -84,7 +84,7 @@ void Config::load(const std::string& config_path)
   wheel_excentricity = robot_conf["wheel_excentricity"].asDouble();
   assert(wheel_excentricity > 0.0);
 
-  enable_movement_with_integration = root["movement_prediction"]["enable_movement_with_integration"].asBool();
+  enable_movement_with_integration = root["movement_prediction"]["enable_integration"].asBool();
 
   if (is_in_simulation)
   {
