@@ -173,27 +173,29 @@ bool VisionDataTerminalPrinter::runTask()
 
 bool ChangeReferencePointOfView::runTask()
 {
-  if (GlobalDataSingleThread::singleton_.referee_.blue_team_on_positive_half && !ai::Config::we_are_blue)
+  if ((ai::Config::we_are_blue && GlobalDataSingleThread::singleton_.referee_.blue_team_on_positive_half) ||
+      (!ai::Config::we_are_blue && !GlobalDataSingleThread::singleton_.referee_.blue_team_on_positive_half))
   {
     for (uint cam_id = 0; cam_id < ai::Config::NB_CAMERAS; cam_id++)
     {
-
       for (uint ball_id = 0; ball_id < ai::Config::NB_CAMERAS; ball_id++)
       {
         struct BallDetection& ball = VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].balls_[ball_id];
-        ball.x_ *= -1;
-        ball.y_ *= -1;
+        ball.x_ *= -1.f;
+        ball.y_ *= -1.f;
       }
 
       for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
       {
-        struct RobotDetection& ally_robot = VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].allies_[robot_id];
-        ally_robot.x_ *= -1;
-        ally_robot.y_ *= -1;
+        struct RobotDetection& ally_robot =
+            VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].allies_[robot_id];
+        ally_robot.x_ *= -1.f;
+        ally_robot.y_ *= -1.f;
 
-        struct RobotDetection& opponent_robot = VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].opponents_[robot_id];
-        opponent_robot.x_ *= -1;
-        opponent_robot.x_ *= -1;
+        struct RobotDetection& opponent_robot =
+            VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].opponents_[robot_id];
+        opponent_robot.x_ *= -1.f;
+        opponent_robot.y_ *= -1.f;
       }
     }
   }
