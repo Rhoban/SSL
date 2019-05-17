@@ -71,23 +71,23 @@ void Api::generateEntityPacket()
   packet.mutable_entities()->mutable_ball()->set_y(ball_position.getY());
 
   // Robot Location
-  data::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM] =
-      GlobalDataSingleThread::singleton_.robots_;
+
   for (int team = 0; team < 2; team++)
   {
     for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
     {
       Robot* robot_packet = packet.mutable_entities()->add_robot();
 
-      rhoban_geometry::Point robot_position = robots[team][rid].getMovement().linearPosition(time);
-      double robot_direction = robots[team][rid].getMovement().angularPosition(time).value();
+      const data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team][rid];
+      const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
+      double robot_direction = current_robot.getMovement().angularPosition(time).value();
 
       robot_packet->set_x(robot_position.getX());
       robot_packet->set_y(robot_position.getY());
       robot_packet->set_isally(!team);
-      robot_packet->set_ispresent(robots[team][rid].isActive());
-      robot_packet->set_robot_id(robots[team][rid].id);
-      //robot_packet->set_dir(robot_direction);
+      robot_packet->set_ispresent(current_robot.isActive());
+      robot_packet->set_robot_id(current_robot.id);
+      robot_packet->set_dir(robot_direction);
     }
   }
 
