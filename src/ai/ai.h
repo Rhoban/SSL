@@ -30,7 +30,6 @@
 
 namespace rhoban_ssl
 {
-
 /**
  * @brief The AI class
  */
@@ -38,8 +37,7 @@ class AI : public Task
 {
 public:
   // bool is_in_simulation;
-  AI(std::string manager_name, std::string team_name, AICommander* commander,
-     const std::string& config_path);
+  AI(std::string manager_name, AICommander* commander);
 
   bool runTask() override;
   void stop();
@@ -54,43 +52,41 @@ public:
 private:
   bool running_;
   AICommander* commander_;
-
-  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
-
-  void initRobotBehaviors();
-  void updateRobots();
-
-  // SharedData shared_data_;
-
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
+  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
 
-  Control updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, data::Robot& robot, data::Ball& ball);
-  void updateElectronicInformations();
-  void printElectronicInfo();
+  Control getRobotControl(robot_behavior::RobotBehavior& robot_behavior, data::Robot& robot);
 
-  void sendControl(int robot_id, const Control& control);
+  void initRobotBehaviors();
+
+  void updateRobots();
   void prepareToSendControl(int robot_id, Control& control);
 
   void limitsVelocity(Control& ctrl) const;
-  void checkTimeIsCoherent() const;
-
   void preventCollision(int robot_id, Control& ctrl);
+
   rhoban_ssl::annotations::Annotations getRobotBehaviorAnnotations() const;
 
 public:
   void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
 };
 
-
 /**
  * @brief The TimeSynchronisation class
  */
-class RegulateAiLoopPeriod : public Task {
+class RegulateAiLoopPeriod : public Task
+{
   // Task interface
 public:
   bool runTask();
 };
 
+class TimeUpdater : public Task
+{
+  // Task interface
+public:
+  bool runTask();
+};
 
 };  // namespace rhoban_ssl

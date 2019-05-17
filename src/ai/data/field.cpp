@@ -33,26 +33,25 @@ Box Field::getPenaltyArea(Team team) const
 
 rhoban_geometry::Point Field::goalCenter(Team team) const
 {
-   return goal_center_[team];
+  return goal_center_[team];
 }
 
 rhoban_geometry::Point Field::getSW() const
 {
-  return rhoban_geometry::Point(-field_length_  / 2.0, -field_width_/ 2.0);
+  return rhoban_geometry::Point(-field_length_ / 2.0, -field_width_ / 2.0);
 }
 rhoban_geometry::Point Field::getNW() const
 {
-  return rhoban_geometry::Point(field_length_  / 2.0, -field_width_/ 2.0);
+  return rhoban_geometry::Point(field_length_ / 2.0, -field_width_ / 2.0);
 }
 rhoban_geometry::Point Field::getNE() const
 {
-  return rhoban_geometry::Point(field_length_  / 2.0, field_width_/ 2.0);
+  return rhoban_geometry::Point(field_length_ / 2.0, field_width_ / 2.0);
 }
 rhoban_geometry::Point Field::getSE() const
 {
-  return rhoban_geometry::Point(-field_length_  / 2.0, field_width_/ 2.0);
+  return rhoban_geometry::Point(-field_length_ / 2.0, field_width_ / 2.0);
 }
-
 
 }  // namespace data
 }  // namespace rhoban_ssl

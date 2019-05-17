@@ -31,8 +31,12 @@ using namespace rhoban_ssl;
 struct Man
 {
   int value;
-  Man(int v) : value(v){}
-  Man() : value(0.0){}
+  Man(int v) : value(v)
+  {
+  }
+  Man() : value(0.0)
+  {
+  }
 };
 
 std::ostream& operator<<(std::ostream& out, const Man& man)
@@ -44,8 +48,12 @@ std::ostream& operator<<(std::ostream& out, const Man& man)
 struct Woman
 {
   double value;
-  Woman(double v) : value(v){}
-  Woman() : value(0.0){}
+  Woman(double v) : value(v)
+  {
+  }
+  Woman() : value(0.0)
+  {
+  }
 };
 
 std::ostream& operator<<(std::ostream& out, const Woman& woman)

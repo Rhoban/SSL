@@ -49,7 +49,6 @@ public:
   Box penalty_areas_[2];
 
 public:
-
   /**
    * @brief isInside returns true if the point given in parameter is in
    * the area of the field
@@ -78,7 +77,6 @@ public:
    * @return a point
    */
   rhoban_geometry::Point goalCenter(Team team) const;
-
 
   rhoban_geometry::Point getSE() const;
   rhoban_geometry::Point getNE() const;

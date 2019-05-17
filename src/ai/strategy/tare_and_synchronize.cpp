@@ -86,8 +86,7 @@ void TareAndSynchronize::assignBehaviorToRobots(
   const Movement& movement = GlobalDataSingleThread::singleton_.robots_[Ally][robotId(0)].getMovement();
   if (!halt_behavior_was_assigned_)
   {
-    assign_behavior(robotId(0),
-                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
+    assign_behavior(robotId(0), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
     halt_behavior_was_assigned_ = true;
     return;
   }
@@ -115,8 +114,7 @@ void TareAndSynchronize::assignBehaviorToRobots(
     {
       vision_time_command_ = movement.getSample().time();
       ai_time_associated_to_vision_time_command_ = time;
-      assign_behavior(robotId(0),
-                      std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
+      assign_behavior(robotId(0), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
       setTemporalShiftBetweenVision();
       time_is_synchro_ = true;
       return;

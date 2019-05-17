@@ -70,7 +70,8 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
                                                                  // register them with register_strategy() (during the
                                                                  // initialisation of your manager for example).
   assert(not(assign_goalie) or
-         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(), GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) ==
+         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(),
+                                      GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) ==
                                 robot_ids.end()));  // If you declare that you are assigning a goal, you should not
                                                     // declar the goal id inside the list of field robots.
 
@@ -146,7 +147,8 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
               break;
             }
           }
-          if (this->getStrategy(name).haveToManageTheGoalie() and int(GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) == id)
+          if (this->getStrategy(name).haveToManageTheGoalie() and
+              int(GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) == id)
           {
             id_is_present = true;
           }

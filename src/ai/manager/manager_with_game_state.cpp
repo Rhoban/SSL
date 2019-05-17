@@ -4,14 +4,12 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-ManagerWithGameState::ManagerWithGameState()
-  : Manager(), last_change_stamp_(0)
+ManagerWithGameState::ManagerWithGameState() : Manager(), last_change_stamp_(0)
 {
 }
 
 void ManagerWithGameState::analyseData(double time)
 {
-
 }
 
 void ManagerWithGameState::chooseAStrategy(double time)

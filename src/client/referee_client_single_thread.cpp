@@ -9,7 +9,7 @@ RefereeMessages::~RefereeMessages()
   delete arena_;
 }
 
-Referee *RefereeMessages::getNewPacket()
+Referee* RefereeMessages::getNewPacket()
 {
   return google::protobuf::Arena::CreateMessage<Referee>(arena_);
 }
@@ -75,7 +75,7 @@ RefereeClientSingleThread::RefereeClientSingleThread(std::string addr, std::stri
   init();
 }
 
-bool RefereeClientSingleThread:: process(char* buffer, size_t len)
+bool RefereeClientSingleThread::process(char* buffer, size_t len)
 {
   Referee* packet = RefereeMessages::singleton_.getNewPacket();
   if (packet->ParseFromArray(buffer, len))

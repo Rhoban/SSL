@@ -29,7 +29,6 @@ namespace data
 class Referee
 {
 public:
-
   /**
    * @brief Old machine state
    * Need to be update but works.
@@ -96,7 +95,6 @@ public:
    * @see ssl_referee.proto
    */
   Referee_Command current_command;
-
 
   /**
    * @brief The next_state correspond to command that will be issued

@@ -41,7 +41,8 @@ Movement* Factory::movement()
   {
     movement = new MovementWithNoPrediction();
   }
-  return new MovementWithTemporalShift(movement, [&]() { return GlobalDataSingleThread::singleton_.ai_data_.time_shift_with_vision; });
+  return new MovementWithTemporalShift(
+      movement, [&]() { return GlobalDataSingleThread::singleton_.ai_data_.time_shift_with_vision; });
 }
 
 Movement* Factory::robotMovement()

@@ -42,7 +42,7 @@ int main()
         }
         ss << "  timeouts: " << teamInfo.timeouts() << std::endl;
         ss << "  timeout_time: " << teamInfo.timeout_time() << std::endl;
-        //ss << "  goalie: " << teamInfo.goalie() << std::endl;
+        // ss << "  goalie: " << teamInfo.goalie() << std::endl;
       };
 
       ss << "yellow infos:" << std::endl;

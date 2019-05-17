@@ -38,4 +38,3 @@ Control DoNothing::control() const
 
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
-

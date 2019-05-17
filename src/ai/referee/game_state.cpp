@@ -104,8 +104,7 @@ GameState::GameState()
   machine_state_.addEdge(edge_name::force_start, state_name::stop, state_name::running,
                          command_is_<Referee::FORCE_START>);
 
-  machine_state_.addEdge(edge_name::running_to_stop, state_name::running, state_name::stop,
-                         command_is_<Referee::STOP>);
+  machine_state_.addEdge(edge_name::running_to_stop, state_name::running, state_name::stop, command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::stop_to_prepare_kickoff, state_name::stop, state_name::prepare_kickoff,
                          command_is_one_of_<Referee::PREPARE_KICKOFF_BLUE, Referee::PREPARE_KICKOFF_YELLOW>,
@@ -123,8 +122,7 @@ GameState::GameState()
   machine_state_.addEdge(edge_name::prepare_kickoff_to_stop, state_name::prepare_kickoff, state_name::stop,
                          command_is_<Referee::STOP>);
 
-  machine_state_.addEdge(edge_name::kickoff_to_stop, state_name::kickoff, state_name::stop,
-                         command_is_<Referee::STOP>);
+  machine_state_.addEdge(edge_name::kickoff_to_stop, state_name::kickoff, state_name::stop, command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::start, state_name::prepare_kickoff, state_name::kickoff,
                          command_is_<Referee::NORMAL_START>);
@@ -139,8 +137,7 @@ GameState::GameState()
   machine_state_.addEdge(edge_name::prepare_kickoff_to_halt, state_name::prepare_kickoff, state_name::halt,
                          command_is_<Referee::HALT>);
 
-  machine_state_.addEdge(edge_name::kickoff_to_halt, state_name::kickoff, state_name::halt,
-                         command_is_<Referee::HALT>);
+  machine_state_.addEdge(edge_name::kickoff_to_halt, state_name::kickoff, state_name::halt, command_is_<Referee::HALT>);
 
   machine_state_.addEdge(edge_name::stop_to_free_kick, state_name::stop, state_name::free_kick,
                          command_is_one_of_4_<Referee::DIRECT_FREE_YELLOW, Referee::DIRECT_FREE_BLUE,
@@ -192,8 +189,7 @@ GameState::GameState()
                            }
                          });
 
-  machine_state_.addEdge(edge_name::penalty_to_stop, state_name::penalty, state_name::stop,
-                         command_is_<Referee::STOP>);
+  machine_state_.addEdge(edge_name::penalty_to_stop, state_name::penalty, state_name::stop, command_is_<Referee::STOP>);
 
   machine_state_.addEdge(edge_name::ball_move_after_penalty, state_name::penalty, state_name::running,
                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
@@ -206,8 +202,7 @@ GameState::GameState()
 
   machine_state_.addEdge(edge_name::halt_to_stop, state_name::halt, state_name::stop, command_is_<Referee::STOP>);
 
-  machine_state_.addEdge(edge_name::running_to_halt, state_name::running, state_name::halt,
-                         command_is_<Referee::HALT>);
+  machine_state_.addEdge(edge_name::running_to_halt, state_name::running, state_name::halt, command_is_<Referee::HALT>);
 
   machine_state_.addEdge(edge_name::goal, state_name::stop, state_name::stop,
                          command_is_one_of_<Referee::GOAL_YELLOW, Referee::GOAL_BLUE>,
@@ -224,8 +219,7 @@ GameState::GameState()
 
   );
 
-  machine_state_.addEdge(edge_name::penalty_to_halt, state_name::penalty, state_name::halt,
-                         command_is_<Referee::HALT>);
+  machine_state_.addEdge(edge_name::penalty_to_halt, state_name::penalty, state_name::halt, command_is_<Referee::HALT>);
 
   machine_state_.executeAtEachEdge([&](std::string edge_id, GameStateData& state_data, GameStateData& edge_data,
                                        unsigned int run_number,
@@ -238,7 +232,8 @@ GameState::GameState()
 
 bool GameState::ballIsMoving()
 {
-  Vector2d ball_velocity = GlobalDataSingleThread::singleton_.ball_.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time);
+  Vector2d ball_velocity = GlobalDataSingleThread::singleton_.ball_.getMovement().linearVelocity(
+      GlobalDataSingleThread::singleton_.ai_data_.time);
   double threshold = 0.001;
   if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
   {
@@ -249,7 +244,6 @@ bool GameState::ballIsMoving()
 
 void GameState::extractData(const Referee& new_data)
 {
-
   // DEBUG("SSL REFEREE PROTOBUF : " << data.stage_time_left());
   // Use this function just one time if you want to avoir thread
   // issue.

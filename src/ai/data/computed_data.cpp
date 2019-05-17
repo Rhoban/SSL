@@ -19,16 +19,16 @@
 #include "computed_data.h"
 #include <config.h>
 #include "physic/collision.h"
-#include "data.h"
+
 namespace rhoban_ssl
 {
 namespace data
 {
-ComputedData::ComputedData()
+CollisionComputing::CollisionComputing()
 {
 }
 
-std::list<std::pair<int, double> > ComputedData::getCollisions(int robot_id, const Vector2d& linear_velocity)
+std::list<std::pair<int, double> > CollisionComputing::getCollisions(int robot_id, const Vector2d& linear_velocity)
 {
   std::list<std::pair<int, double> > result;
   const Robot* robot_1 = &(GlobalDataSingleThread::singleton_.robots_[Ally][robot_id]);
@@ -61,7 +61,7 @@ std::list<std::pair<int, double> > ComputedData::getCollisions(int robot_id, con
   return result;
 }
 
-void ComputedData::computeTableOfCollisionTimes()
+void CollisionComputing::computeTableOfCollisionTimes()
 {
   GlobalDataSingleThread::singleton_.ai_data_.table_of_collision_times_.clear();
   for (unsigned int i = 0; i < GlobalDataSingleThread::singleton_.all_robots.size(); i++)
@@ -78,11 +78,18 @@ void ComputedData::computeTableOfCollisionTimes()
                           radius_error, GlobalDataSingleThread::singleton_.ai_data_.time);
         if (collision.first)
         {
-          GlobalDataSingleThread::singleton_.ai_data_.table_of_collision_times_[std::pair<int, int>(i, j)] = collision.second;
+          GlobalDataSingleThread::singleton_.ai_data_.table_of_collision_times_[std::pair<int, int>(i, j)] =
+              collision.second;
         }
       }
     }
   }
+}
+
+bool CollisionComputing::runTask()
+{
+  computeTableOfCollisionTimes();
+  return true;
 }
 
 }  // namespace data

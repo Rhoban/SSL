@@ -87,13 +87,18 @@ void NavigationInsideTheField::update_control(double time, const data::Robot& ro
     //     field_NE()
     // );
     // Trying agressive margins
-    Box cropped_field(GlobalDataSingleThread::singleton_.field_.getSW() - Vector2d(marge, marge), GlobalDataSingleThread::singleton_.field_.getNE() + Vector2d(marge, marge));
+    Box cropped_field(GlobalDataSingleThread::singleton_.field_.getSW() - Vector2d(marge, marge),
+                      GlobalDataSingleThread::singleton_.field_.getNE() + Vector2d(marge, marge));
     float radius_margin_factor = 2.0;
-    Box opponent_penalty = GlobalDataSingleThread::singleton_.field_.getPenaltyArea(Opponent).increase(ai::Config::robot_radius);
-    Box ally_penalty = GlobalDataSingleThread::singleton_.field_.getPenaltyArea(Ally).increase(ai::Config::robot_radius);
+    Box opponent_penalty =
+        GlobalDataSingleThread::singleton_.field_.getPenaltyArea(Opponent).increase(ai::Config::robot_radius);
+    Box ally_penalty =
+        GlobalDataSingleThread::singleton_.field_.getPenaltyArea(Ally).increase(ai::Config::robot_radius);
 
-    Box opponent_penalty_large = GlobalDataSingleThread::singleton_.field_.getPenaltyArea(Opponent).increase(ai::Config::ball_radius * radius_margin_factor);
-    Box ally_penalty_large = GlobalDataSingleThread::singleton_.field_.getPenaltyArea(Ally).increase(ai::Config::ball_radius * radius_margin_factor);
+    Box opponent_penalty_large = GlobalDataSingleThread::singleton_.field_.getPenaltyArea(Opponent).increase(
+        ai::Config::ball_radius * radius_margin_factor);
+    Box ally_penalty_large = GlobalDataSingleThread::singleton_.field_.getPenaltyArea(Ally).increase(
+        ai::Config::ball_radius * radius_margin_factor);
 
     rhoban_geometry::Point robot_position = linearPosition();
     double error = ai::Config::ball_radius * radius_margin_factor;
@@ -127,7 +132,8 @@ void NavigationInsideTheField::update_control(double time, const data::Robot& ro
                                                       deviation_position_);
         if (not(cropped_field.is_inside(deviation_position_)))
         {
-          deviation_position_ = deviation_position_ + Vector2d(GlobalDataSingleThread::singleton_.field_.penalty_area_depth_ + error, 0.0);
+          deviation_position_ = deviation_position_ +
+                                Vector2d(GlobalDataSingleThread::singleton_.field_.penalty_area_depth_ + error, 0.0);
         }
       }
       else if (opponent_penalty.is_inside(deviation_position_))
@@ -136,7 +142,8 @@ void NavigationInsideTheField::update_control(double time, const data::Robot& ro
                                                           deviation_position_);
         if (not(cropped_field.is_inside(deviation_position_)))
         {
-          deviation_position_ = deviation_position_ - Vector2d(GlobalDataSingleThread::singleton_.field_.penalty_area_depth_ + error, 0.0);
+          deviation_position_ = deviation_position_ -
+                                Vector2d(GlobalDataSingleThread::singleton_.field_.penalty_area_depth_ + error, 0.0);
         }
       }
     }

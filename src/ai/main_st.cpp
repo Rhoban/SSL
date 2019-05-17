@@ -30,10 +30,11 @@
 #include <core/print_collection.h>
 #include <manager/factory.h>
 #include "client_config.h"
-#include <viewer.h>
-#include <viewer/api_task.h>
+#include "viewer.h"
 #include "referee_client_single_thread.h"
 #include <referee/referee_packet_analyzer.h>
+#include <data/computed_data.h>
+#include <control/control.h>
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -133,6 +134,15 @@ int main(int argc, char** argv)
 
   cmd.parse(argc, argv);
 
+  AICommander* commander;
+  if (em.getValue())
+  {
+    commander = new AICommanderReal();
+    commander->stopAll();
+    commander->flush();
+    return 0;
+  }
+
   std::string theport;
   if (simulation.getValue())
   {
@@ -170,48 +180,42 @@ int main(int argc, char** argv)
       new rhoban_ssl::VisionClientSingleThread(addr.getValue(), theport));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::SslGeometryPacketAnalyzer());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::DetectionPacketAnalyzer());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::ChangeReferencePointOfView());
   rhoban_ssl::ExecutionManager::getManager().addTask(
       new rhoban_ssl::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::referee::RefereePacketAnalyzer());
-  //rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeTerminalPrinter());
+  // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeTerminalPrinter());
 
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::ChangeReferencePointOfView());
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateRobotInformation(part_of_the_field_used));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
-  //rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
 
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ApiTask());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeProtoBufReset(100));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeProtoBufReset(10));
 
-  AICommander* commander;
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
+
   if (simulation.getValue())
   {
-    commander = new AICommanderSimulation(yellow.getValue());
+    commander = new AICommanderSimulation();
   }
   else
   {
-    // XXX: To test!!
-    commander = new AICommanderReal(yellow.getValue());
+    AICommanderReal* commander_r = new AICommanderReal();
+    rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
+    commander = commander_r;
   }
 
-  if (em.getValue())
-  {
-    commander->stopAll();
-    commander->flush();
-  }
-  else
-  {
-    AI* ai_ = nullptr;
-    ai_ = new AI(manager_name.getValue(), team_name.getValue(), commander, config_path.getValue());
-    // ai_->run();
-    rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
-    rhoban_ssl::ExecutionManager::getManager().run(0.01);
-    // delete ai_;
-  }
+  AI* ai_ = nullptr;
+  ai_ = new AI(manager_name.getValue(), commander);
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::data::CollisionComputing());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::TimeUpdater());
+  rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ControlSender(commander));
+  rhoban_ssl::ExecutionManager::getManager().run(0.01);
+
   delete commander;
 
   ::google::protobuf::ShutdownProtobufLibrary();

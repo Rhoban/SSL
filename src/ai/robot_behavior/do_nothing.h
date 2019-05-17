@@ -37,4 +37,3 @@ public:
 
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl
-

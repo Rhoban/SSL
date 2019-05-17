@@ -23,8 +23,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-PositionFollower::PositionFollower(double time, double dt)
-  : ConsignFollower(), position_(0.0, 0.0), angle_(0.0)
+PositionFollower::PositionFollower(double time, double dt) : ConsignFollower(), position_(0.0, 0.0), angle_(0.0)
 {
   robot_control_.initTime(time, dt);
 }

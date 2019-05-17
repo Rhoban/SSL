@@ -40,6 +40,7 @@ public:
    */
   bool is_valid;
 
+  //todo default state
   struct packet_robot electronics;
 
   /**

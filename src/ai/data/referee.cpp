@@ -23,7 +23,7 @@ Referee::TeamInfo::TeamInfo()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Referee::Referee() : state_changed(true), packet_timestamp(0)
+Referee::Referee() : state_changed(true), blue_team_on_positive_half(false), packet_timestamp(0)
 {
 }
 

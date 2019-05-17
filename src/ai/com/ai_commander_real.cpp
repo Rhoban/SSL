@@ -19,10 +19,11 @@
 */
 
 #include "ai_commander_real.h"
+#include "data.h"
 
 namespace rhoban_ssl
 {
-AICommanderReal::AICommanderReal(bool yellow) : AICommander(yellow), kicking_(false), master_("/dev/ttyACM0", 1000000)
+AICommanderReal::AICommanderReal() : AICommander(), kicking_(false), master_("/dev/ttyACM0", 1000000)
 // master("/dev/ttyACM1", 1000000)
 {
 }
@@ -100,6 +101,27 @@ Master* AICommanderReal::getMaster()
 
 AICommanderReal::~AICommanderReal()
 {
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+UpdateElectronicInformations::UpdateElectronicInformations(AICommanderReal* commander) : commander_(commander)
+{
+
+}
+
+bool UpdateElectronicInformations::runTask()
+{
+  rhoban_ssl::Master* master = commander_->getMaster();
+  for (unsigned int id = 0; id < MAX_ROBOTS; id++)
+  {
+    auto robot = master->robots[id];
+    if (robot.isOk())
+    {
+      GlobalDataSingleThread::singleton_.robots_[Ally][id].electronics = robot.status;
+    }
+  }
+  return true;
 }
 
 }  // namespace rhoban_ssl

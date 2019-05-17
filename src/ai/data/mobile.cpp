@@ -80,9 +80,7 @@ bool Mobile::isActive() const
 }
 
 Mobile::Mobile()
-  : last_update(rhoban_utils::TimeStamp::min())
-  , movement_sample(history_size)
-  , movement(physic::Factory::movement())
+  : last_update(rhoban_utils::TimeStamp::now()), movement_sample(history_size), movement(physic::Factory::movement())
 {
   for (int i = 0; i < history_size; i++)
   {
