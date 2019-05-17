@@ -247,18 +247,18 @@ bool GameState::ballIsMoving()
   return false;
 }
 
-void GameState::extractData()
+void GameState::extractData(const Referee& new_data)
 {
-  Referee data = referee_.getData();
+
   // DEBUG("SSL REFEREE PROTOBUF : " << data.stage_time_left());
   // Use this function just one time if you want to avoir thread
   // issue.
-  if (game_state_data_.last_time < data.packet_timestamp())
+  if (game_state_data_.last_time < new_data.packet_timestamp())
   {
-    game_state_data_.datas.insert(data);
-    if (data.has_blue_team_on_positive_half())
+    game_state_data_.datas.insert(new_data);
+    if (new_data.has_blue_team_on_positive_half())
     {
-      blueTeamOnPositiveHalf_ = data.has_blue_team_on_positive_half();
+      blueTeamOnPositiveHalf_ = new_data.has_blue_team_on_positive_half();
     }
   }
 }
@@ -278,9 +278,9 @@ void GameState::saveLastTimeStamps()
   }
 }
 
-void GameState::update(double time)
+void GameState::update(const Referee& new_referee)
 {
-  extractData();
+  extractData(new_referee);
   machine_state_.run();
   assert(machine_state_.currentStates().size() == 1);
   saveLastTimeStamps();
@@ -334,11 +334,6 @@ int GameState::blueGoalieId() const
 bool GameState::stateIsNewer(unsigned int last_change_stamp) const
 {
   return change_stamp_ > last_change_stamp;
-}
-
-RefereeClient& GameState::getRefereeClient()
-{
-  return referee_;
 }
 
 }  // namespace rhoban_ssl

@@ -80,7 +80,6 @@ bool RefereeClientSingleThread:: process(char* buffer, size_t len)
   Referee* packet = RefereeMessages::singleton_.getNewPacket();
   if (packet->ParseFromArray(buffer, len))
   {
-    printf("message %d read: %d\n", len, packet->command_counter());
     RefereeMessages::singleton_.last_packets_.push_back(packet);
     return true;
   }

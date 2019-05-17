@@ -19,8 +19,12 @@
 #pragma once
 
 #include <execution_manager.h>
+#include "data/referee.h"
+#include <config.h>
 
 namespace rhoban_ssl
+{
+namespace referee
 {
 class RefereePacketAnalyzer : public Task
 {
@@ -30,6 +34,10 @@ public:
   // Task interface
 public:
   bool runTask();
+
+private:
+  void updateTeamInfo(rhoban_ssl::Team team, const ::Referee_TeamInfo& new_infos);
 };
 
+}  // namespace referee
 }  // namespace rhoban_ssl

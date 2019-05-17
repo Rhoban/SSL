@@ -31,7 +31,7 @@ struct Config
   static double robot_radius;
   static double ball_radius;
   static Vector2d waiting_goal_position;
-  static int default_goalie_id;
+  static uint default_goalie_id;
 
   // PID for translation
   static double p_translation;

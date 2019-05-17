@@ -326,8 +326,6 @@ void AI::setManager(std::string managerName)
     i++;
   }
 
-  int goalie_id = ai::Config::default_goalie_id;
-
   std::cout << "Setting the manager to: " << managerName << std::endl;
   if (managerName == manager::names::MANUAL)
   {
@@ -337,7 +335,9 @@ void AI::setManager(std::string managerName)
   {
     strategy_manager_ = manager::Factory::constructManager(managerName);
   }
-  strategy_manager_->declareGoalieId(goalie_id);
+
+  GlobalDataSingleThread::singleton_.robots_[Ally][ai::Config::default_goalie_id].is_goalie = true;
+
   strategy_manager_->declareTeamIds(robot_ids);
 }
 
@@ -534,13 +534,6 @@ void AI::printElectronicInfo()
   {
     std::cout << "robot id : " << id << " IR : " << GlobalDataSingleThread::singleton_.robots_[Ally][id].infraRed() << std::endl;
   }
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool TimeSynchronisation::runTask()
-{
-  return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

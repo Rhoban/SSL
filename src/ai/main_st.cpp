@@ -59,8 +59,6 @@ int main(int argc, char** argv)
   TCLAP::CmdLine cmd("Rhoban SSL AI", ' ', "0.0", true);
   TCLAP::SwitchArg simulation("s", "simulation", "Simulation mode", cmd, false);
   TCLAP::SwitchArg yellow("y", "yellow", "If set we are yellow otherwise we are blue.", cmd, false);
-  TCLAP::SwitchArg attack_on_left_side("l", "attack_on_right_side",
-                                       "If set we attack on left otherwise we attack on the right.", cmd, false);
 
   TCLAP::ValueArg<std::string> team_name(
       "t",     // short argument name  (with one character)
@@ -172,13 +170,12 @@ int main(int argc, char** argv)
       new rhoban_ssl::VisionClientSingleThread(addr.getValue(), theport));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::SslGeometryPacketAnalyzer());
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::DetectionPacketAnalyzer());
-
   rhoban_ssl::ExecutionManager::getManager().addTask(
       new rhoban_ssl::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereePacketAnalyzer());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::referee::RefereePacketAnalyzer());
+  //rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeTerminalPrinter());
 
-  if (attack_on_left_side.getValue())
-    rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::ChangeReferencePointOfView());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::ChangeReferencePointOfView());
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateRobotInformation(part_of_the_field_used));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
@@ -211,7 +208,6 @@ int main(int argc, char** argv)
     AI* ai_ = nullptr;
     ai_ = new AI(manager_name.getValue(), team_name.getValue(), commander, config_path.getValue());
     // ai_->run();
-    rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::TimeSynchronisation());
     rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
     rhoban_ssl::ExecutionManager::getManager().run(0.01);
     // delete ai_;

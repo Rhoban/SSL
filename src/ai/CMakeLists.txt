@@ -34,6 +34,7 @@ set (SOURCES
     data/field.cpp
     data/camera_data.cpp
     data/mobile.cpp
+    data/referee.cpp
     data/ai_data.cpp
     data/computed_data.cpp
     config.cpp

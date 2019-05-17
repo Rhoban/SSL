@@ -41,7 +41,7 @@ enum GoalieNeed
 class Strategy : public GameInformations
 {
 private:
-  int goalie_id_;
+  uint goalie_id_;
   bool manage_a_goalie_;
 
   int goalie_opponent_id_;
@@ -52,11 +52,11 @@ private:
 public:
   Strategy();
 
-  virtual void setGoalie(int id, bool to_be_managed);
-  void setGoalieOpponent(int id);
+  virtual void setGoalie(uint id, bool to_be_managed);
+  void setGoalieOpponent(uint id);
 
   // Get the goalie id. If id<0 then no goalie is declared
-  int getGoalie() const;
+  uint getGoalie() const;
   // Get the opponent goalie id. If id<0 then no opponent goalie is declared
   int getGoalieOpponent() const;
 
