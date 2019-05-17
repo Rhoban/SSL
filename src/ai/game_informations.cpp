@@ -53,12 +53,14 @@ rhoban_geometry::Point GameInformations::centerMark() const
 
 rhoban_geometry::Point GameInformations::opponentCornerRight() const
 {
-  return rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, -GlobalDataSingleThread::singleton_.field_.field_width_/ 2.0);
+  return rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+                                -GlobalDataSingleThread::singleton_.field_.field_width_ / 2.0);
 }
 
 rhoban_geometry::Point GameInformations::opponentCornerLeft() const
 {
-  return rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, GlobalDataSingleThread::singleton_.field_.field_width_/ 2.0);
+  return rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+                                GlobalDataSingleThread::singleton_.field_.field_width_ / 2.0);
 }
 
 const data::Robot& GameInformations::getRobot(int robot_number, Team team) const
@@ -66,8 +68,8 @@ const data::Robot& GameInformations::getRobot(int robot_number, Team team) const
   return GlobalDataSingleThread::singleton_.robots_[team][robot_number];
 }
 
-void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2,
-                                      Team team, double distance, std::vector<int>& result) const
+void GameInformations::getRobotInLine(const rhoban_geometry::Point p1, const rhoban_geometry::Point p2, Team team,
+                                      double distance, std::vector<int>& result) const
 {
   if (normSquare(p1 - p2) == 0)
   {
@@ -120,9 +122,11 @@ std::pair<rhoban_geometry::Point, double> GameInformations::findGoalBestMove(con
 
   rhoban_geometry::Point return_point;
   const rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, GlobalDataSingleThread::singleton_.field_.goal_width_/ 2.0);
+      rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+                             GlobalDataSingleThread::singleton_.field_.goal_width_ / 2.0);
   const rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, -GlobalDataSingleThread::singleton_.field_.goal_width_ / 2.0);
+      rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+                             -GlobalDataSingleThread::singleton_.field_.goal_width_ / 2.0);
   const Vector2d left_right_post_vector = right_post_position - left_post_position;
   const double dist_post = left_right_post_vector.norm();
   const int nb_analysed_point = 16;
@@ -211,7 +215,8 @@ double GameInformations::getRobotDistanceFromAllyGoalCenter(int robot_number, Te
     const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time());
     Vector2d goal_center_robot = robot_position - allyGoalCenter();
     distance = goal_center_robot.norm();
-    distance = (GlobalDataSingleThread::singleton_.field_.field_length_ - distance) / GlobalDataSingleThread::singleton_.field_.field_length_;
+    distance = (GlobalDataSingleThread::singleton_.field_.field_length_ - distance) /
+               GlobalDataSingleThread::singleton_.field_.field_length_;
   }
   return distance;
 }
@@ -304,10 +309,14 @@ double GameInformations::getBallRadius() const
 std::vector<rhoban_geometry::Point> GameInformations::centerQuarterField() const
 {
   return std::vector<rhoban_geometry::Point>({
-      rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_  / 4.0, GlobalDataSingleThread::singleton_.field_.field_width_/ 4.0),
-      rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_  / 4.0, -GlobalDataSingleThread::singleton_.field_.field_width_/ 4.0),
-      rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_  / 4.0, -GlobalDataSingleThread::singleton_.field_.field_width_/ 4.0),
-      rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_  / 4.0, GlobalDataSingleThread::singleton_.field_.field_width_/ 4.0),
+      rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 4.0,
+                             GlobalDataSingleThread::singleton_.field_.field_width_ / 4.0),
+      rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 4.0,
+                             -GlobalDataSingleThread::singleton_.field_.field_width_ / 4.0),
+      rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 4.0,
+                             -GlobalDataSingleThread::singleton_.field_.field_width_ / 4.0),
+      rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 4.0,
+                             GlobalDataSingleThread::singleton_.field_.field_width_ / 4.0),
   });
 }
 
@@ -318,24 +327,28 @@ double GameInformations::fieldWidth() const
 
 double GameInformations::fieldHeight() const
 {
-  return GlobalDataSingleThread::singleton_.field_.field_length_ ;
+  return GlobalDataSingleThread::singleton_.field_.field_length_;
 }
 
 rhoban_geometry::Point GameInformations::fieldSW() const
 {
-  return rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_  / 2.0, -GlobalDataSingleThread::singleton_.field_.field_width_/ 2.0);
+  return rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+                                -GlobalDataSingleThread::singleton_.field_.field_width_ / 2.0);
 }
 rhoban_geometry::Point GameInformations::fieldNW() const
 {
-  return rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_  / 2.0, -GlobalDataSingleThread::singleton_.field_.field_width_/ 2.0);
+  return rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+                                -GlobalDataSingleThread::singleton_.field_.field_width_ / 2.0);
 }
 rhoban_geometry::Point GameInformations::fieldNE() const
 {
-  return rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_  / 2.0, GlobalDataSingleThread::singleton_.field_.field_width_/ 2.0);
+  return rhoban_geometry::Point(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+                                GlobalDataSingleThread::singleton_.field_.field_width_ / 2.0);
 }
 rhoban_geometry::Point GameInformations::fieldSE() const
 {
-  return rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_  / 2.0, GlobalDataSingleThread::singleton_.field_.field_width_/ 2.0);
+  return rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+                                GlobalDataSingleThread::singleton_.field_.field_width_ / 2.0);
 }
 
 Box GameInformations::field() const
@@ -345,16 +358,20 @@ Box GameInformations::field() const
 
 Box GameInformations::allyPenaltyArea() const
 {
-  return Box(
-      { -GlobalDataSingleThread::singleton_.field_.field_length_  / 2.0, -GlobalDataSingleThread::singleton_.field_.penalty_area_width_/ 2.0 },
-      { -(GlobalDataSingleThread::singleton_.field_.field_length_  / 2.0 - GlobalDataSingleThread::singleton_.field_.penalty_area_depth_), GlobalDataSingleThread::singleton_.field_.penalty_area_width_/ 2.0 });
+  return Box({ -GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+               -GlobalDataSingleThread::singleton_.field_.penalty_area_width_ / 2.0 },
+             { -(GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0 -
+                 GlobalDataSingleThread::singleton_.field_.penalty_area_depth_),
+               GlobalDataSingleThread::singleton_.field_.penalty_area_width_ / 2.0 });
 }
 
 Box GameInformations::opponentPenaltyArea() const
 {
-  return Box(
-      { (GlobalDataSingleThread::singleton_.field_.field_length_  / 2.0 - GlobalDataSingleThread::singleton_.field_.penalty_area_depth_), -GlobalDataSingleThread::singleton_.field_.penalty_area_width_ / 2.0 },
-      { GlobalDataSingleThread::singleton_.field_.field_length_  / 2.0, GlobalDataSingleThread::singleton_.field_.penalty_area_width_/ 2.0 });
+  return Box({ (GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0 -
+                GlobalDataSingleThread::singleton_.field_.penalty_area_depth_),
+               -GlobalDataSingleThread::singleton_.field_.penalty_area_width_ / 2.0 },
+             { GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0,
+               GlobalDataSingleThread::singleton_.field_.penalty_area_width_ / 2.0 });
 }
 
 double GameInformations::penaltyAreaWidth() const

@@ -22,7 +22,8 @@ class RobotPositionFilter
 public:
   static std::pair<rhoban_geometry::Point, ContinuousAngle>
   averageFilter(int robot_id, const SSL_DetectionRobot& robot_frame, bool ally,
-                const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined, vision::PartOfTheField part_of_the_field_used);
+                const std::map<int, SSL_DetectionFrame>& camera_detections, bool& orientation_is_defined,
+                vision::PartOfTheField part_of_the_field_used);
 
   static std::pair<rhoban_geometry::Point, ContinuousAngle>
   exponentialDegressionFilter(int robot_id, const SSL_DetectionRobot& robot_frame, bool ally,

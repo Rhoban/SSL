@@ -58,7 +58,8 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
   min_time_collision_ = -1;
   closest_robot_ = -1;
   second_closest_robot_ = -1;
-  std::list<std::pair<int, double> > collisions_with_ctrl = data::ComputedData::getCollisions(robot().id, ctrl.linear_velocity);
+  std::list<std::pair<int, double> > collisions_with_ctrl =
+      data::ComputedData::getCollisions(robot().id, ctrl.linear_velocity);
   assert(ai::Config::security_acceleration_ratio > ai::Config::obstacle_avoidance_ratio);
   double ctrl_velocity_norm = ctrl.linear_velocity.norm();
   double time_to_stop =
@@ -88,7 +89,7 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
     data::Robot* r = GlobalDataSingleThread::singleton_.all_robots.at(j).second;
     if (r->isActive() == false)
       continue;
-    if (r->id != robot().id && r->id!= closest_robot_)
+    if (r->id != robot().id && r->id != closest_robot_)
     {
       rhoban_geometry::Point rpos = r->getMovement().linearPosition(r->getMovement().lastTime());
       Vector2d v = (rpos - robot().getMovement().linearPosition(robot().getMovement().lastTime()));
@@ -141,7 +142,8 @@ void NavigationWithObstacleAvoidance::computeTheRadiusOfLimitCycle()
   }
   else
   {
-    if (robot().getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).norm() < ai::Config::translation_velocity_limit / 4.0)
+    if (robot().getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).norm() <
+        ai::Config::translation_velocity_limit / 4.0)
     {
       radius_of_limit_cycle_ = 2 * ai::Config::robot_radius;  // + ai_data.constants.radius_security_for_avoidance;
     }
@@ -200,7 +202,8 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   double YY = s.getY() * s.getY();
 
   double avoidance_convergence = ai::Config::coefficient_to_increase_avoidance_convergence;
-  if (GlobalDataSingleThread::singleton_.all_robots[closest_robot_].first == GlobalDataSingleThread::singleton_.all_robots[robot().id].first)
+  if (GlobalDataSingleThread::singleton_.all_robots[closest_robot_].first ==
+      GlobalDataSingleThread::singleton_.all_robots[robot().id].first)
   {
     // sign_of_avoidance_rotation = 1.0;
     avoidance_convergence = (XX + YY) * (XX + YY);
@@ -360,11 +363,14 @@ rhoban_ssl::annotations::Annotations NavigationWithObstacleAvoidance::getAnnotat
                          linearPosition() + limit_cycle_direction_ * (limit_cycle_direction_.norm()) * 10, "red");
     if (closest_robot_ == -1)
     {
-      annotations.addCircle(ball().getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time), radius_of_limit_cycle_);
+      annotations.addCircle(ball().getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time),
+                            radius_of_limit_cycle_);
     }
     else
     {
-      annotations.addCircle(GlobalDataSingleThread::singleton_.all_robots.at(closest_robot_).second->getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time),
+      annotations.addCircle(GlobalDataSingleThread::singleton_.all_robots.at(closest_robot_)
+                                .second->getMovement()
+                                .linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time),
                             radius_of_limit_cycle_);
     }
     annotations.addAnnotations(position_follower_avoidance_.getAnnotations());

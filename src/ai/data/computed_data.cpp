@@ -78,7 +78,8 @@ void ComputedData::computeTableOfCollisionTimes()
                           radius_error, GlobalDataSingleThread::singleton_.ai_data_.time);
         if (collision.first)
         {
-          GlobalDataSingleThread::singleton_.ai_data_.table_of_collision_times_[std::pair<int, int>(i, j)] = collision.second;
+          GlobalDataSingleThread::singleton_.ai_data_.table_of_collision_times_[std::pair<int, int>(i, j)] =
+              collision.second;
         }
       }
     }

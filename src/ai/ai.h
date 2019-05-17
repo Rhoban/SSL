@@ -30,7 +30,6 @@
 
 namespace rhoban_ssl
 {
-
 /**
  * @brief The AI class
  */
@@ -38,8 +37,7 @@ class AI : public Task
 {
 public:
   // bool is_in_simulation;
-  AI(std::string manager_name, std::string team_name, AICommander* commander,
-     const std::string& config_path);
+  AI(std::string manager_name, std::string team_name, AICommander* commander, const std::string& config_path);
 
   bool runTask() override;
   void stop();
@@ -82,15 +80,14 @@ public:
   void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
 };
 
-
 /**
  * @brief The TimeSynchronisation class
  */
-class RegulateAiLoopPeriod : public Task {
+class RegulateAiLoopPeriod : public Task
+{
   // Task interface
 public:
   bool runTask();
 };
-
 
 };  // namespace rhoban_ssl

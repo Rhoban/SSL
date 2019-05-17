@@ -51,6 +51,7 @@ private:
 
   void affectInvalidRobotsToInvalidRobotsStrategy();
   void detectInvalidRobots();
+
 public:
   double time() const;
   int dt() const;

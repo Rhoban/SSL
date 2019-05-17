@@ -184,13 +184,16 @@ bool UpdateRobotInformation::runTask()
     for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
     {
       bool present = false;
-      for (uint i = 0; i < ai::Config::NB_CAMERAS; ++i) {
-        if( detections[team][robot][i] != nullptr) {
+      for (uint i = 0; i < ai::Config::NB_CAMERAS; ++i)
+      {
+        if (detections[team][robot][i] != nullptr)
+        {
           present = true;
           break;
         }
       }
-      if( present ) {
+      if (present)
+      {
         vision::TimedPosition position = vision::Factory::filter(detections[team][robot]);
         if (position.time_ > 0)
         {
@@ -200,7 +203,9 @@ bool UpdateRobotInformation::runTask()
           else
             GlobalDataSingleThread::singleton_.robots_[team][robot].update(position.time_, position.position_.linear);
         }
-      } else {
+      }
+      else
+      {
         // robot is not present in vision
       }
     }

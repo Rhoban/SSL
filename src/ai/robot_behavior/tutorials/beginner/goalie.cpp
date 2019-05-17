@@ -38,7 +38,8 @@ void Goalie::update(double time, const data::Robot& robot, const data::Ball& bal
   // The position of the goalie is at 0.5 meters of the goal center.
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  const rhoban_geometry::Point& robot_position =
+      robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
   rhoban_geometry::Point target_position = robot_position;
   Vector2d goal_ball_vector = ballPosition() - allyGoalCenter();
   double dist_goal_ball_vector = goal_ball_vector.norm();

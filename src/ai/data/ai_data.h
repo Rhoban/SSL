@@ -24,7 +24,6 @@ namespace rhoban_ssl
 {
 namespace data
 {
-
 class AiData
 {
 public:

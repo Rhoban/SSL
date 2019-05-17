@@ -16,4 +16,4 @@ public:
   ViewerCommunication();
   bool runTask() override;
 };
-}
+}  // namespace rhoban_ssl

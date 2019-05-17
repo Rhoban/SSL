@@ -56,8 +56,7 @@ void Halt::assignBehaviorToRobots(
 {
   if (haveToManageTheGoalie())
   {
-    assign_behavior(getGoalie(),
-                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
+    assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
   }
   for (int id : getPlayerIds())
   {
@@ -84,4 +83,3 @@ rhoban_ssl::annotations::Annotations Halt::getAnnotations() const
 
 }  // namespace strategy
 }  // namespace rhoban_ssl
-

@@ -40,8 +40,7 @@ double vec2angle(Vector2d direction)
 
 }  // namespace detail
 
-RobotBehavior::RobotBehavior()
-  : GameInformations(), robot_ptr_(nullptr), birthday_(-1.0){};
+RobotBehavior::RobotBehavior() : GameInformations(), robot_ptr_(nullptr), birthday_(-1.0){};
 
 double RobotBehavior::age() const
 {

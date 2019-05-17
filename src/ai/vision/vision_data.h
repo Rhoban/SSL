@@ -109,12 +109,10 @@ class ChangeReferencePointOfView : public Task
   virtual bool runTask(void);
 };
 
-
 class VisionDataTerminalPrinter : public Task
 {
   virtual bool runTask(void);
 };
-
 
 }  // namespace vision
 }  // namespace rhoban_ssl

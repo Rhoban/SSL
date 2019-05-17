@@ -23,7 +23,6 @@ namespace rhoban_ssl
 {
 namespace data
 {
-
 /**
  * @brief The ComputedData class
  *
@@ -38,6 +37,6 @@ public:
   static std::list<std::pair<int, double> > getCollisions(int robot_id, const Vector2d& linear_velocity);
   static void computeTableOfCollisionTimes();
 };
-}
+}  // namespace data
 
 }  // namespace rhoban_ssl

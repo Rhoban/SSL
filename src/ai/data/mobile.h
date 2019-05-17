@@ -4,13 +4,12 @@
 #include "physic/movement.h"
 #include <rhoban_utils/timing/time_stamp.h>
 
-namespace rhoban_ssl {
-
-namespace data {
-
-//!TODO: remove hisotry_size ...
+namespace rhoban_ssl
+{
+namespace data
+{
+//! TODO: remove hisotry_size ...
 static const int history_size = 10;
-
 
 class Mobile
 {
@@ -60,7 +59,7 @@ public:
 
   void setMovement(Movement* movement);
 
-  const Movement & getMovement() const;
+  const Movement& getMovement() const;
   /**
    * @brief setVisionData
    * @todo avoid useless copy of movement_sample
@@ -78,6 +77,6 @@ public:
   Mobile();
   virtual ~Mobile();
 };
-}
+}  // namespace data
 
-}
+}  // namespace rhoban_ssl

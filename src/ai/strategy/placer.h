@@ -80,4 +80,3 @@ public:
 
 };  // namespace strategy
 };  // namespace rhoban_ssl
-

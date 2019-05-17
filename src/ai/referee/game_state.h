@@ -121,7 +121,7 @@ public:
   unsigned int getChangeStamp() const;
   const ID& getState() const;
 
-  void update(const Referee &new_referee);
+  void update(const Referee& new_referee);
 
   Team kickoffTeam() const;
   Team penaltyTeam() const;

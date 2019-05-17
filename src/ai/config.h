@@ -12,7 +12,7 @@ namespace ai
 {
 struct Config
 {
-  //todo move to GlobalData ?
+  // todo move to GlobalData ?
   static std::string team_name;
 
   static constexpr int NB_OF_ROBOTS_BY_TEAM = 16;
@@ -67,5 +67,5 @@ struct Config
 
   static void load(const std::string& config_path);
 };
-}
-}
+}  // namespace ai
+}  // namespace rhoban_ssl

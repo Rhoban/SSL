@@ -71,8 +71,8 @@ public:
   data::Referee referee_;
 
   SharedData shared_data_;
-// TODO refacto
-//  DataForViewer data_for_viewer_;
+  // TODO refacto
+  //  DataForViewer data_for_viewer_;
 
 private:
   GlobalDataSingleThread();

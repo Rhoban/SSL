@@ -172,7 +172,7 @@ int main(int argc, char** argv)
   rhoban_ssl::ExecutionManager::getManager().addTask(
       new rhoban_ssl::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::referee::RefereePacketAnalyzer());
-  //rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeTerminalPrinter());
+  // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeTerminalPrinter());
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::ChangeReferencePointOfView());
 
@@ -181,9 +181,9 @@ int main(int argc, char** argv)
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeProtoBufReset(100));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeProtoBufReset(10));
 
-  //rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
+  // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
 
   AICommander* commander;
   if (simulation.getValue())

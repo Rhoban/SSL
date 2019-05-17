@@ -389,30 +389,21 @@ bool AI::runTask()
   if (running_ == false)
     return false;
 
-  // TODO ; SEE HOW TO REMOVE THE WARMUP
-  // double warmup_period = 2 * period * rhoban_ssl::vision::history_size;
-  // double warmup_start = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
-
-  // We wait some time to update completly ai_data structure.
-
-  // DOESNOT WORK WITH ExecutionManager
-  // if (warmup_start + warmup_period > current_time_)
-  //{
-  // return true;
-  //}
-
   GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time;
   GlobalDataSingleThread::singleton_.ai_data_.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
-  GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time - GlobalDataSingleThread::singleton_.ai_data_.dt;
+  GlobalDataSingleThread::singleton_.ai_data_.dt =
+      GlobalDataSingleThread::singleton_.ai_data_.time - GlobalDataSingleThread::singleton_.ai_data_.dt;
 
   assert(GlobalDataSingleThread::singleton_.ai_data_.dt > 0);
-  if( GlobalDataSingleThread::singleton_.ai_data_.dt <= 0) {
+  if (GlobalDataSingleThread::singleton_.ai_data_.dt <= 0)
+  {
     std::cerr << "WARNING INVALID DT !!!!!!!!!!!!!!!!!!!\n";
     GlobalDataSingleThread::singleton_.ai_data_.dt = 1;
   }
 
-  assert(GlobalDataSingleThread::singleton_.ai_data_.time > 0 );
-  if( GlobalDataSingleThread::singleton_.ai_data_.time <= 0 ) {
+  assert(GlobalDataSingleThread::singleton_.ai_data_.time > 0);
+  if (GlobalDataSingleThread::singleton_.ai_data_.time <= 0)
+  {
     std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
     GlobalDataSingleThread::singleton_.ai_data_.time = 1;
   }
@@ -432,22 +423,23 @@ bool AI::runTask()
   checkTimeIsCoherent();
 #endif
 
-  //REFACTO CHANGEMENT DE VUE AU NIVEAU DE LA RECEPTION DE LA COM
-//  if (manager_name_ != manager::names::MANUAL)
-//  {  // HACK TOT REMOVEE !
-//    strategy_manager_->changeTeamAndPointOfView(game_state_.blueHaveItsGoalOnPositiveXAxis());
-//  }
-//  else
-//  {
-//    dynamic_cast<manager::Manual*>(strategy_manager_.get())
-//        ->defineGoalToPositiveAxis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
-//  }
-//  strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
+  // REFACTO CHANGEMENT DE VUE AU NIVEAU DE LA RECEPTION DE LA COM
+  //  if (manager_name_ != manager::names::MANUAL)
+  //  {  // HACK TOT REMOVEE !
+  //    strategy_manager_->changeTeamAndPointOfView(game_state_.blueHaveItsGoalOnPositiveXAxis());
+  //  }
+  //  else
+  //  {
+  //    dynamic_cast<manager::Manual*>(strategy_manager_.get())
+  //        ->defineGoalToPositiveAxis(not(game_state_.blueHaveItsGoalOnPositiveXAxis()));
+  //  }
+  //  strategy_manager_->changeAllyAndOpponentGoalieId(game_state_.blueGoalieId(), game_state_.yellowGoalieId());
 
   strategy_manager_->removeInvalidRobots();
 
   strategy_manager_->update(GlobalDataSingleThread::singleton_.ai_data_.time);
-  strategy_manager_->assignBehaviorToRobots(robot_behaviors_, GlobalDataSingleThread::singleton_.ai_data_.time, GlobalDataSingleThread::singleton_.ai_data_.dt);
+  strategy_manager_->assignBehaviorToRobots(robot_behaviors_, GlobalDataSingleThread::singleton_.ai_data_.time,
+                                            GlobalDataSingleThread::singleton_.ai_data_.dt);
   // shareData();
   // ai_data.compute_table_of_collision_times();
   // if( ai_data.table_of_collision_times.size() != 0 ){
@@ -532,7 +524,8 @@ void AI::printElectronicInfo()
   std::cout << "Electronic : " << std::endl;
   for (unsigned int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    std::cout << "robot id : " << id << " IR : " << GlobalDataSingleThread::singleton_.robots_[Ally][id].infraRed() << std::endl;
+    std::cout << "robot id : " << id << " IR : " << GlobalDataSingleThread::singleton_.robots_[Ally][id].infraRed()
+              << std::endl;
   }
 }
 

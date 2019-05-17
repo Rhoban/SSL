@@ -26,8 +26,7 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-SeeRobot::SeeRobot(int target_id)
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+SeeRobot::SeeRobot(int target_id) : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 
 {
   target_robot_id_ = target_id;
@@ -41,9 +40,11 @@ void SeeRobot::update(double time, const data::Robot& robot, const data::Ball& b
 
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  const rhoban_geometry::Point& robot_position =
+      robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 
-  ContinuousAngle target_rotation = robot.getMovement().angularPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  ContinuousAngle target_rotation =
+      robot.getMovement().angularPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to look itself will do nothing.

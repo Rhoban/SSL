@@ -6,8 +6,8 @@
 #include <algorithm>
 #include <iostream>
 
-namespace rhoban_ssl {
-
+namespace rhoban_ssl
+{
 ExecutionManager ExecutionManager::execution_manager_singleton_;
 
 ExecutionManager::ExecutionManager() : shutdown_(false)
@@ -74,7 +74,6 @@ void ExecutionManager::shutdown()
 
 Task::~Task()
 {
-
 }
 
-}
+}  // namespace rhoban_ssl

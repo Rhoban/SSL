@@ -39,4 +39,4 @@ public:
   void run(double min_loop_duration);
   void shutdown();
 };
-}  // namespace rhobanssl
+}  // namespace rhoban_ssl
