@@ -23,7 +23,7 @@
 
 namespace rhoban_ssl
 {
-AICommanderReal::AICommanderReal(bool yellow) : AICommander(yellow), kicking_(false), master_("/dev/ttyACM0", 1000000)
+AICommanderReal::AICommanderReal() : AICommander(), kicking_(false), master_("/dev/ttyACM0", 1000000)
 // master("/dev/ttyACM1", 1000000)
 {
 }

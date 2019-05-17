@@ -23,16 +23,8 @@
 
 namespace rhoban_ssl
 {
-AICommander::AICommander(bool yellow) : yellow_(yellow)
+AICommander::AICommander()
 {
-}
-
-void AICommander::setYellow(bool value)
-{
-  if (this->yellow_ != value)
-  {
-    this->yellow_ = value;
-  }
 }
 
 AICommander::~AICommander()

@@ -23,6 +23,8 @@
 
 #include <math/continuous_angle.h>
 #include <math/vector2d.h>
+#include <execution_manager.h>
+#include <com/ai_commander.h>
 
 class Control
 {
@@ -68,3 +70,18 @@ public:
 };
 
 std::ostream& operator<<(std::ostream& out, const Control& control);
+
+namespace rhoban_ssl
+{
+class ControlSender : public Task
+{
+private:
+  AICommander* commander_;
+public:
+  ControlSender(AICommander* commander);
+  // Task interface
+public:
+  bool runTask();
+};
+
+}  // namespace rhoban_ssl

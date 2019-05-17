@@ -20,17 +20,18 @@
 
 #include "ai_commander_simulation.h"
 #include <rhoban_utils/angle.h>
+#include <config.h>
 
 namespace rhoban_ssl
 {
-AICommanderSimulation::AICommanderSimulation(bool yellow) : AICommander(yellow), client_()
+AICommanderSimulation::AICommanderSimulation() : AICommander(), client_()
 {
 }
 
 void AICommanderSimulation::flush()
 {
   grSim_Packet packet;
-  packet.mutable_commands()->set_isteamyellow(yellow_);
+  packet.mutable_commands()->set_isteamyellow(!ai::Config::we_are_blue);
   packet.mutable_commands()->set_timestamp(0.0);
 
   for (auto& command : commands_)
