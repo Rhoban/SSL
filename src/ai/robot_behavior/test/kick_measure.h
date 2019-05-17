@@ -26,7 +26,8 @@ namespace test
 {
 /**
  * @class KickMeasure
- * @brief Tutorial to show how follow a other robot.
+ * @brief Behavior to just kick with a specified power, need to put the ball at the middle of the kicker before apply
+ * the behavior.
  */
 class KickMeasure : public RobotBehavior
 {
@@ -49,7 +50,7 @@ public:
    * @brief Constructor.
    * The default value of power is set to 1.0
    * @param ai_data : The Robot Behavior needs the data of the AI.
-   * @param target_id : power of the kick, betwen 0 and 1
+   * @param kick_power : power of the kick, betwen 0 and 1
    * @see ai::AiData
    */
   KickMeasure(ai::AiData& ai_data, double kick_power = 1.0);
