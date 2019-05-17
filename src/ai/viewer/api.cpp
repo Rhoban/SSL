@@ -48,7 +48,7 @@ void Api::generateGamePacket()
   AIPacket packet;
   data::Field field = GlobalDataSingleThread::singleton_.field_;
 
-  // Prepare Field packet
+  // Field packet
   packet.mutable_game()->mutable_field()->set_fieldlength(field.field_length_);
   packet.mutable_game()->mutable_field()->set_fieldwidth(field.field_width_);
   packet.mutable_game()->mutable_field()->set_boundarywidth(field.boundary_width_);
@@ -56,7 +56,11 @@ void Api::generateGamePacket()
   packet.mutable_game()->mutable_field()->set_goalwidth(field.goal_width_);
   packet.mutable_game()->mutable_field()->set_penaltyareadepth(field.penalty_area_depth_);
   packet.mutable_game()->mutable_field()->set_penaltyareawidth(field.penalty_area_width_);
-  // TODO : packet.mutable_game()->mutable_field()->set_radiuscircle();
+  packet.mutable_game()->mutable_field()->set_radiuscircle(field.cirlcle_center_.getRadius());
+
+  // Information packet
+  packet.mutable_game()->mutable_information()->set_isblue(ai::Config.we_are_blue);
+  packet.mutable_game()->mutable_information()->set_issimulation(ai::Config.is_in_simulation);
 
   addPacket(packet);
 }
@@ -66,7 +70,7 @@ void Api::generateEntityPacket()
   AIPacket packet;
   double time = GlobalDataSingleThread::singleton_.ai_data_.time;
 
-  rhoban_geometry::Point ball_position =  GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
+  rhoban_geometry::Point ball_position = GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
   packet.mutable_entities()->mutable_ball()->set_x(ball_position.getX());
   packet.mutable_entities()->mutable_ball()->set_y(ball_position.getY());
 

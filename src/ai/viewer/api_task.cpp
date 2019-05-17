@@ -31,8 +31,8 @@ ApiTask::ApiTask() : Task()
 bool ApiTask::runTask()
 {
   Api::getApi().generateGamePacket();
-  // Prepare to the future version.
   Api::getApi().generateEntityPacket();
+
   // Api::getApi().
   return 1;
 }
