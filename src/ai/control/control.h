@@ -77,6 +77,7 @@ class ControlSender : public Task
 {
 private:
   AICommander* commander_;
+
 public:
   ControlSender(AICommander* commander);
   // Task interface

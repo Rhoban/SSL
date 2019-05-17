@@ -107,7 +107,6 @@ AICommanderReal::~AICommanderReal()
 
 UpdateElectronicInformations::UpdateElectronicInformations(AICommanderReal* commander) : commander_(commander)
 {
-
 }
 
 bool UpdateElectronicInformations::runTask()

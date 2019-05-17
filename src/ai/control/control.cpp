@@ -121,11 +121,12 @@ ControlSender::ControlSender(rhoban_ssl::AICommander* commander) : commander_(co
 
 bool rhoban_ssl::ControlSender::runTask()
 {
-  for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot_id) {
+  for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot_id)
+  {
     Control& ctrl = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id].control;
     if (robot_id >= 8)
     {                      // HACK - becaus hardware doesn't support more than 8 robots
-      continue;              // HACK
+      continue;            // HACK
     }                      // HACK
     assert(robot_id < 8);  // HACK !
     if (!ctrl.ignore)
@@ -150,13 +151,13 @@ bool rhoban_ssl::ControlSender::runTask()
           commander_->set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(),
                           kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom
 
-                          );
+          );
           // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
         }
         else
         {
-          commander_->set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1], ctrl.angular_velocity.value(),
-                          kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom);
+          commander_->set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1],
+                          ctrl.angular_velocity.value(), kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom);
         }
       }
     }
