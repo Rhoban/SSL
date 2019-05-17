@@ -41,6 +41,7 @@
 #include <robot_behavior/pass_dribbler.h>
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/pass.h>
+#include <robot_behavior/kick_to_xy.h>
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 #include <robot_behavior/tutorials/beginner/go_corner.h>
 #include <robot_behavior/tutorials/beginner/goalie.h>
@@ -459,6 +460,14 @@ Manual::Manual(ai::AiData& ai_data)
                                      [&](double time, double dt) {
                                        robot_behavior::Obstructor* obstructor = new robot_behavior::Obstructor(ai_data);
                                        return std::shared_ptr<robot_behavior::RobotBehavior>(obstructor);
+                                     },
+                                     false  // we don't want to define a goal here !
+                                     )));
+  registerStrategy("Kick to a point", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                     ai_data,
+                                     [&](double time, double dt) {
+                                       robot_behavior::KickToXY* kick = new robot_behavior::KickToXY(ai_data);
+                                       return std::shared_ptr<robot_behavior::RobotBehavior>(kick);
                                      },
                                      false  // we don't want to define a goal here !
                                      )));

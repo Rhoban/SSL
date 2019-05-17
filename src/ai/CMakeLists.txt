@@ -72,6 +72,7 @@ set (SOURCES
     robot_behavior/tutorials/medium/striker.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/test_relative_velocity_consign.cpp
+    robot_behavior/kick_to_xy.cpp
     ai.cpp
     ai_data.cpp
     debug.cpp
