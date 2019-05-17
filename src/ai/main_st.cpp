@@ -33,6 +33,7 @@
 #include "viewer.h"
 #include "referee_client_single_thread.h"
 #include <referee/referee_packet_analyzer.h>
+#include <data/computed_data.h>
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -132,6 +133,15 @@ int main(int argc, char** argv)
 
   cmd.parse(argc, argv);
 
+  AICommander* commander;
+  if (em.getValue())
+  {
+    commander = new AICommanderReal(yellow.getValue());
+    commander->stopAll();
+    commander->flush();
+    return 0;
+  }
+
   std::string theport;
   if (simulation.getValue())
   {
@@ -178,6 +188,7 @@ int main(int argc, char** argv)
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateRobotInformation(part_of_the_field_used));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
+
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
@@ -185,31 +196,24 @@ int main(int argc, char** argv)
 
   // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
 
-  AICommander* commander;
   if (simulation.getValue())
   {
     commander = new AICommanderSimulation(yellow.getValue());
   }
   else
   {
-    // XXX: To test!!
-    commander = new AICommanderReal(yellow.getValue());
+    AICommanderReal* commander_r = new AICommanderReal(yellow.getValue());
+    rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
+    commander = commander_r;
   }
 
-  if (em.getValue())
-  {
-    commander->stopAll();
-    commander->flush();
-  }
-  else
-  {
-    AI* ai_ = nullptr;
-    ai_ = new AI(manager_name.getValue(), team_name.getValue(), commander, config_path.getValue());
-    // ai_->run();
-    rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
-    rhoban_ssl::ExecutionManager::getManager().run(0.01);
-    // delete ai_;
-  }
+  AI* ai_ = nullptr;
+  ai_ = new AI(manager_name.getValue(), team_name.getValue(), commander, config_path.getValue());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::data::CollisionComputing());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::TimeUpdater());
+  rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
+  rhoban_ssl::ExecutionManager::getManager().run(0.01);
+
   delete commander;
 
   ::google::protobuf::ShutdownProtobufLibrary();

@@ -46,17 +46,6 @@ float sign(float x)
   return -1.0;
 }
 
-void AI::checkTimeIsCoherent() const
-{
-#ifndef NDEBUG
-  for (unsigned int i = 0; i < GlobalDataSingleThread::singleton_.all_robots.size(); i++)
-  {
-    assert(GlobalDataSingleThread::singleton_.all_robots.at(i).second->getMovement().lastTime() - 0.000001 <=
-           GlobalDataSingleThread::singleton_.ai_data_.time);
-  }
-#endif
-}
-
 void AI::limitsVelocity(Control& ctrl) const
 {
 #if 1
@@ -94,7 +83,8 @@ void AI::preventCollision(int robot_id, Control& ctrl)
 
   bool collision_is_detected = false;
 
-  std::list<std::pair<int, double> > collisions_with_ctrl = data::ComputedData::getCollisions(robot_id, ctrl_velocity);
+  std::list<std::pair<int, double> > collisions_with_ctrl =
+      data::CollisionComputing::getCollisions(robot_id, ctrl_velocity);
   for (const std::pair<int, double>& collision : collisions_with_ctrl)
   {
     double time_before_collision = collision.second;
@@ -389,40 +379,6 @@ bool AI::runTask()
   if (running_ == false)
     return false;
 
-  GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time;
-  GlobalDataSingleThread::singleton_.ai_data_.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
-  GlobalDataSingleThread::singleton_.ai_data_.dt =
-      GlobalDataSingleThread::singleton_.ai_data_.time - GlobalDataSingleThread::singleton_.ai_data_.dt;
-
-  assert(GlobalDataSingleThread::singleton_.ai_data_.dt > 0);
-  if (GlobalDataSingleThread::singleton_.ai_data_.dt <= 0)
-  {
-    std::cerr << "WARNING INVALID DT !!!!!!!!!!!!!!!!!!!\n";
-    GlobalDataSingleThread::singleton_.ai_data_.dt = 1;
-  }
-
-  assert(GlobalDataSingleThread::singleton_.ai_data_.time > 0);
-  if (GlobalDataSingleThread::singleton_.ai_data_.time <= 0)
-  {
-    std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
-    GlobalDataSingleThread::singleton_.ai_data_.time = 1;
-  }
-
-#ifndef NDEBUG
-  updatePeriodicDebug(GlobalDataSingleThread::singleton_.ai_data_.time, 10.0);
-#endif
-
-  data::ComputedData::computeTableOfCollisionTimes();
-
-  if (not(ai::Config::is_in_simulation))
-  {
-    updateElectronicInformations();
-  }
-
-#ifndef NDEBUG
-  checkTimeIsCoherent();
-#endif
-
   // REFACTO CHANGEMENT DE VUE AU NIVEAU DE LA RECEPTION DE LA COM
   //  if (manager_name_ != manager::names::MANUAL)
   //  {  // HACK TOT REMOVEE !
@@ -506,29 +462,6 @@ void AI::getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const
   //  annotations.mapPositions(fct);
 }
 
-void AI::updateElectronicInformations()
-{
-  rhoban_ssl::Master* master = dynamic_cast<rhoban_ssl::AICommanderReal*>(commander_)->getMaster();
-  for (unsigned int id = 0; id < MAX_ROBOTS; id++)
-  {
-    auto robot = master->robots[id];
-    if (robot.isOk())
-    {
-      GlobalDataSingleThread::singleton_.robots_[Ally][id].electronics = robot.status;
-    }
-  }
-}
-
-void AI::printElectronicInfo()
-{
-  std::cout << "Electronic : " << std::endl;
-  for (unsigned int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
-  {
-    std::cout << "robot id : " << id << " IR : " << GlobalDataSingleThread::singleton_.robots_[Ally][id].infraRed()
-              << std::endl;
-  }
-}
-
 ///////////////////////////////////////////////////////////////////////////////
 
 bool RegulateAiLoopPeriod::runTask()
@@ -543,6 +476,36 @@ bool RegulateAiLoopPeriod::runTask()
   {
     DEBUG("LAG");
   }
+  return true;
+}
+
+bool TimeUpdater::runTask()
+{
+  GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time;
+  GlobalDataSingleThread::singleton_.ai_data_.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
+  GlobalDataSingleThread::singleton_.ai_data_.dt =
+      GlobalDataSingleThread::singleton_.ai_data_.time - GlobalDataSingleThread::singleton_.ai_data_.dt;
+
+  assert(GlobalDataSingleThread::singleton_.ai_data_.dt > 0);
+  if (GlobalDataSingleThread::singleton_.ai_data_.dt <= 0)
+  {
+    std::cerr << "WARNING INVALID DT !!!!!!!!!!!!!!!!!!!\n";
+    GlobalDataSingleThread::singleton_.ai_data_.dt = 1;
+  }
+
+  assert(GlobalDataSingleThread::singleton_.ai_data_.time > 0);
+  if (GlobalDataSingleThread::singleton_.ai_data_.time <= 0)
+  {
+    std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
+    GlobalDataSingleThread::singleton_.ai_data_.time = 1;
+  }
+#ifndef NDEBUG
+  for (unsigned int i = 0; i < GlobalDataSingleThread::singleton_.all_robots.size(); i++)
+  {
+    assert(GlobalDataSingleThread::singleton_.all_robots.at(i).second->getMovement().lastTime() - 0.000001 <=
+           GlobalDataSingleThread::singleton_.ai_data_.time);
+  }
+#endif
   return true;
 }
 

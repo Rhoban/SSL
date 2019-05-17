@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <Master.h>
 #include <SimClient.h>
+#include <execution_manager.h>
 
 /**
  * Generic interface for commanding robots, whatever it is in simulator or

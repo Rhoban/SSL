@@ -18,6 +18,7 @@
 */
 #include <math/vector2d.h>
 #include <list>
+#include "data.h"
 
 namespace rhoban_ssl
 {
@@ -29,13 +30,19 @@ namespace data
  * This class intent to share computed data accross multiple behaviors/strategies and
  * avoid redundant computation.
  */
-class ComputedData
+class CollisionComputing : public Task
 {
 public:
-  ComputedData();
+  CollisionComputing();
 
   static std::list<std::pair<int, double> > getCollisions(int robot_id, const Vector2d& linear_velocity);
-  static void computeTableOfCollisionTimes();
+
+  // Task interface
+public:
+  bool runTask();
+
+private:
+  void computeTableOfCollisionTimes();
 };
 }  // namespace data
 

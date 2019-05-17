@@ -64,14 +64,11 @@ private:
   std::shared_ptr<manager::Manager> manual_manager_;
 
   Control updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, data::Robot& robot, data::Ball& ball);
-  void updateElectronicInformations();
-  void printElectronicInfo();
 
   void sendControl(int robot_id, const Control& control);
   void prepareToSendControl(int robot_id, Control& control);
 
   void limitsVelocity(Control& ctrl) const;
-  void checkTimeIsCoherent() const;
 
   void preventCollision(int robot_id, Control& ctrl);
   rhoban_ssl::annotations::Annotations getRobotBehaviorAnnotations() const;
@@ -84,6 +81,13 @@ public:
  * @brief The TimeSynchronisation class
  */
 class RegulateAiLoopPeriod : public Task
+{
+  // Task interface
+public:
+  bool runTask();
+};
+
+class TimeUpdater : public Task
 {
   // Task interface
 public:

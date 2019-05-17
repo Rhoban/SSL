@@ -59,7 +59,7 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
   closest_robot_ = -1;
   second_closest_robot_ = -1;
   std::list<std::pair<int, double> > collisions_with_ctrl =
-      data::ComputedData::getCollisions(robot().id, ctrl.linear_velocity);
+      data::CollisionComputing::getCollisions(robot().id, ctrl.linear_velocity);
   assert(ai::Config::security_acceleration_ratio > ai::Config::obstacle_avoidance_ratio);
   double ctrl_velocity_norm = ctrl.linear_velocity.norm();
   double time_to_stop =

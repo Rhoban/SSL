@@ -43,4 +43,17 @@ protected:
   Master master_;
   Kinematic kinematic_;
 };
+
+class UpdateElectronicInformations : public Task
+{
+private:
+  AICommanderReal* commander_;
+
+public:
+  UpdateElectronicInformations(AICommanderReal* commander);
+
+  // Task interface
+public:
+  bool runTask();
+};
 }  // namespace rhoban_ssl
