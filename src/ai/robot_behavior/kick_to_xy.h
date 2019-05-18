@@ -45,6 +45,11 @@ private:
    * @brief Kick power, can change depending the distance with the target.
    */
   double kick_power_ = 1.0;
+  /**
+   * @brief Constant, radius of the zone arount the target point, the robot stop kicking the ball when the ball it's
+   * inside this zone (m)
+   */
+  double ZONE_RADIUS = 0.5;
 
 public:
   /**

@@ -35,34 +35,41 @@ void KickToXY::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  ContinuousAngle robot_rotation = robot.getMovement().angularPosition(ai_data_.time);
 
   Vector2d ball_target_vector = target_point_ - ballPosition();
   double ball_target_distance = ball_target_vector.norm();
-  Vector2d ball_robot_vector = robot_position - ballPosition();
-  ball_target_vector = normalized(ball_target_vector);
-  ball_robot_vector = normalized(ball_robot_vector);
 
-  double target_radius_from_ball;
-  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_target_vector);
-
-  if (scalar_ball_robot < 0)  // if the robot is behind the ball
+  Vector2d ball_velocity = ball.getMovement().linearVelocity(time);
+  if (ball_target_distance > ZONE_RADIUS && ball_velocity.getX() < 0.1 && ball_velocity.getY() < 0.1)  // if ball not
+                                                                                                       // yet arrived in
+                                                                                                       // the zone
   {
-    follower_->avoidTheBall(true);
-    target_radius_from_ball = 1.5;
-  }
-  else  // if the robot need to backward to go behind the ball
-  {
-    follower_->avoidTheBall(false);
-    target_radius_from_ball = 1 / (2 * (scalar_ball_robot - 1.2)) + 2;
-  }
-  rhoban_geometry::Point follow_position = ballPosition() - ball_target_vector * target_radius_from_ball;
-  double follow_rotation = detail::vec2angle(ball_target_vector);
+    Vector2d ball_robot_vector = robot_position - ballPosition();
+    ball_target_vector = normalized(ball_target_vector);
+    ball_robot_vector = normalized(ball_robot_vector);
 
-  //set kick power:
+    double target_radius_from_ball;
+    double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_target_vector);
+
+    if (scalar_ball_robot < 0)  // if the robot is behind the ball
+    {
+      follower_->avoidTheBall(true);
+      target_radius_from_ball = 1.5;
+    }
+    else  // if the robot need to backward to go behind the ball
+    {
+      follower_->avoidTheBall(false);
+      target_radius_from_ball = 1 / (2 * (scalar_ball_robot - 1.2)) + 2;
+    }
+    robot_position = ballPosition() - ball_target_vector * target_radius_from_ball;
+    robot_rotation = detail::vec2angle(ball_target_vector);
+  }
+  // set kick power:
   kick_power_ = Control::getNeededPower(ball_target_distance, robot.id(), ai_data_);
 
-  follower_->setFollowingPosition(follow_position, follow_rotation);
+  follower_->setFollowingPosition(robot_position, robot_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }
