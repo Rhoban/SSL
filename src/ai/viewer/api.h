@@ -89,8 +89,6 @@ public:
   void generateEntityPacket();
 
   void addListPacket(std::shared_ptr<manager::Manager> manager);
-
-  void addElectronicsPacket();
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

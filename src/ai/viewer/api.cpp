@@ -85,11 +85,11 @@ void Api::generateEntityPacket()
       const double robot_direction = current_robot.getMovement().angularPosition(time).value();
 
       // @Todo Choose the ally Team.
-      std::string team_side = team == 0 ? "Ally" : "Opponent";
+      std::string team_side = team == 0 ? "ally" : "opponent";
 
       packet[team_side][rid]["x"] = robot_position.getX();
       packet[team_side][rid]["y"] = robot_position.getY();
-      packet[team_side][rid]["direction"] = robot_direction;
+      packet[team_side][rid]["orientation"] = robot_direction;
       packet[team_side][rid]["is_present"] = current_robot.isActive();
       packet[team_side][rid]["id"] = current_robot.id;
       if (!ai::Config::is_in_simulation)
@@ -110,10 +110,6 @@ void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
   // const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
   // WIP : Add List for strategy.
   // WIP : Prepare for robot behavior.
-}
-
-void addElectronicsPacket()
-{
 }
 
 }  // namespace viewer

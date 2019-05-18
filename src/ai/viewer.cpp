@@ -57,7 +57,7 @@ ViewerCommunication::ViewerCommunication()
 
   protocols_[0] = { "http", rhoban_ssl::ViewerCommunication::callback_http_dummy, 0, 0 };
   protocols_[1] = {
-    "viewer_protocol", rhoban_ssl::ViewerCommunication::callback_viewer, sizeof(per_session_data_minimal), 1024, 0, NULL
+    "viewer_protocol", rhoban_ssl::ViewerCommunication::callback_viewer, sizeof(per_session_data_minimal), 3000, 0, NULL
   };
   protocols_[2] = { NULL, NULL, 0, 0 };
 
@@ -79,14 +79,15 @@ bool ViewerCommunication::runTask()
       Json::Value packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
       if (clients_.size() > 0)
       {
-        // @TODO : Improve this by don't copy the string.
         Json::FastWriter writer = Json::FastWriter();
         std::string str_json = writer.write(packet);
         unsigned char packet_send[str_json.size() + LWS_PRE];
         std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
         for (auto it = clients_.begin(); it != clients_.end(); ++it)
         {
+          DEBUG(str_json.size());
           lws_write(*it, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
+          DEBUG(str_json.size());
         }
       }
 
