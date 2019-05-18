@@ -30,10 +30,7 @@ ApiTask::ApiTask() : Task()
 
 bool ApiTask::runTask()
 {
-  Api::getApi().generateGamePacket();
-  // Api::getApi().generateEntityPacket();
-
-  // Api::getApi().
+  Api::getApi().generateEntityPacket();
   return 1;
 }
 

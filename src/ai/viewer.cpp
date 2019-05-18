@@ -19,7 +19,11 @@ int ViewerCommunication::callback_viewer(struct lws* wsi, enum lws_callback_reas
   {
     case LWS_CALLBACK_ESTABLISHED:
       DEBUG("Connection - Initialized");
+
       ViewerCommunication::clients_.push_back(wsi);
+      // Generate Game Packet with the first connection.
+      rhoban_ssl::viewer::Api::getApi().generateGamePacket();
+
       return 0;
       break;
     case LWS_CALLBACK_RECEIVE:
@@ -75,6 +79,7 @@ bool ViewerCommunication::runTask()
       Json::Value packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
       if (clients_.size() > 0)
       {
+        // @TODO : Improve this by don't copy the string.
         Json::FastWriter writer = Json::FastWriter();
         std::string str_json = writer.write(packet);
         unsigned char packet_send[str_json.size() + LWS_PRE];
@@ -85,7 +90,6 @@ bool ViewerCommunication::runTask()
         }
       }
 
-      // packet.~Value();
       rhoban_ssl::viewer::Api::getApi().getQueue().pop();
     }
 

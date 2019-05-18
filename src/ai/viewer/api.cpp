@@ -50,15 +50,11 @@ void Api::generateGamePacket()
 
   packet["field"]["field_width"] = field.field_width_;
   packet["field"]["field_length"] = field.field_length_;
-
   packet["field"]["boundary_width"] = field.boundary_width_;
-
   packet["field"]["goal_width"] = field.goal_width_;
   packet["field"]["goal_depth"] = field.goal_depth_;
-
   packet["field"]["penalty_area_width"] = field.penalty_area_width_;
   packet["field"]["penalty_area_depth"] = field.penalty_area_depth_;
-
   packet["field"]["circle"]["radius"] = field.cirlcle_center_.getRadius();
   packet["field"]["circle"]["x"] = field.cirlcle_center_.getCenter().getX();
   packet["field"]["circle"]["y"] = field.cirlcle_center_.getCenter().getY();
@@ -71,35 +67,41 @@ void Api::generateGamePacket()
 
 void Api::generateEntityPacket()
 {
-  AIPacket packet;
+  Json::Value packet;
   double time = GlobalDataSingleThread::singleton_.ai_data_.time;
 
   rhoban_geometry::Point ball_position = GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
-  packet.mutable_entities()->mutable_ball()->set_x(ball_position.getX());
-  packet.mutable_entities()->mutable_ball()->set_y(ball_position.getY());
+  packet["ball"]["x"] = ball_position.getX();
+  packet["ball"]["y"] = ball_position.getY();
 
-  // Robot Location
+  // Robot
 
   for (int team = 0; team < 2; team++)
   {
     for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
     {
-      Robot* robot_packet = packet.mutable_entities()->add_robot();
-
       const data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team][rid];
       const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
-      double robot_direction = current_robot.getMovement().angularPosition(time).value();
+      const double robot_direction = current_robot.getMovement().angularPosition(time).value();
 
-      robot_packet->set_x(robot_position.getX());
-      robot_packet->set_y(robot_position.getY());
-      robot_packet->set_isally(!team);
-      robot_packet->set_ispresent(current_robot.isActive());
-      robot_packet->set_robot_id(current_robot.id);
-      robot_packet->set_dir(robot_direction);
+      // @Todo Choose the ally Team.
+      std::string team_side = team == 0 ? "Ally" : "Opponent";
+
+      packet[team_side][rid]["x"] = robot_position.getX();
+      packet[team_side][rid]["y"] = robot_position.getY();
+      packet[team_side][rid]["direction"] = robot_direction;
+      packet[team_side][rid]["is_present"] = current_robot.isActive();
+      packet[team_side][rid]["id"] = current_robot.id;
+      if (!ai::Config::is_in_simulation)
+      {
+        // Activate electronics.
+        packet[team_side][rid]["electronics"]["voltage"] = current_robot.electronics.voltage;
+        packet[team_side][rid]["electronics"]["cap_volt"] = current_robot.electronics.cap_volt;
+      }
     }
   }
 
-  // addPacket(packet);
+  addPacket(packet);
 }
 
 void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
