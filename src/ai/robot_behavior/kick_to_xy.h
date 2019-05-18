@@ -41,6 +41,10 @@ private:
    * @brief Target point
    */
   rhoban_geometry::Point target_point_;
+  /**
+   * @brief Kick power, can change depending the distance with the target.
+   */
+  double kick_power_ = 1.0;
 
 public:
   /**
