@@ -35,7 +35,7 @@ void KickToXY::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   annotations_.clear();
 
-  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
 
   Vector2d ball_target_vector = target_point_ - ballPosition();
   Vector2d ball_robot_vector = robot_position - ballPosition();
@@ -43,9 +43,9 @@ void KickToXY::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   ball_robot_vector = normalized(ball_robot_vector);
 
   double target_radius_from_ball;
-  double scalar_ball_robot = scalarProduct(ball_robot_vector, ball_target_vector);
+  double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_target_vector);
 
-  if (scalar_ball_robot >= 0)  // if the robot is behind the ball
+  if (scalar_ball_robot < 0)  // if the robot is behind the ball
   {
     follower_->avoidTheBall(true);
     target_radius_from_ball = 1.5;
