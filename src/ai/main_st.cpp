@@ -35,6 +35,7 @@
 #include <referee/referee_packet_analyzer.h>
 #include <data/computed_data.h>
 #include <control/control.h>
+#include <viewer/api_task.h>
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -193,6 +194,8 @@ int main(int argc, char** argv)
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeProtoBufReset(10));
+
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ApiTask());
 
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
 

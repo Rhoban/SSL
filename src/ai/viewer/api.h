@@ -27,6 +27,7 @@
 #include "ai_packet.pb.h"
 #include "game_packet.pb.h"
 #include "entity_packet.pb.h"
+#include <json/json.h>
 
 // Internal files
 #include <config.h>
@@ -59,12 +60,7 @@ private:
   /**
    * @brief All packet to store and send.
    */
-  std::queue<AIPacket> packets_;
-
-  /**
-   * @brief The current time
-   */
-  double time_;
+  std::queue<Json::Value> packets_;
 
 public:
   /**
@@ -74,13 +70,13 @@ public:
   /**
    * @brief Add a packet in the queue.
    */
-  void addPacket(AIPacket& packet);
+  void addPacket(Json::Value& packet);
 
   /**
    * @brief Get the queue of packets.
    * @return The pointer of the queue of packets.
    */
-  std::queue<AIPacket>& getQueue();
+  std::queue<Json::Value>& getQueue();
 
   /**
    * @brief Generate Game Packet.

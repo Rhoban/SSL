@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <viewer/api.h>
+#include <json/json.h>
 
 /**
  * @brief The per_session_data__minimal struct

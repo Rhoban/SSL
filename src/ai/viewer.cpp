@@ -72,20 +72,20 @@ bool ViewerCommunication::runTask()
   {
     while (!rhoban_ssl::viewer::Api::getApi().getQueue().empty())
     {
-      AIPacket packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
+      Json::Value packet = rhoban_ssl::viewer::Api::getApi().getQueue().front();
       if (clients_.size() > 0)
       {
-        unsigned char packet_send[packet.ByteSize() + LWS_PRE];
-
-        packet.SerializeToArray(packet_send + LWS_PRE, packet.ByteSize());
-
+        Json::FastWriter writer = Json::FastWriter();
+        std::string str_json = writer.write(packet);
+        unsigned char packet_send[str_json.size() + LWS_PRE];
+        std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
         for (auto it = clients_.begin(); it != clients_.end(); ++it)
         {
-          lws_write(*it, &packet_send[LWS_PRE], packet.ByteSize(), LWS_WRITE_BINARY);
+          lws_write(*it, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
         }
       }
 
-      packet.~AIPacket();
+      // packet.~Value();
       rhoban_ssl::viewer::Api::getApi().getQueue().pop();
     }
 

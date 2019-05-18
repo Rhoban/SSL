@@ -34,33 +34,37 @@ Api& Api::getApi()
   return Api::api_singleton_;
 }
 
-void Api::addPacket(AIPacket& packet)
+void Api::addPacket(Json::Value& packet)
 {
   packets_.push(packet);
 }
-std::queue<AIPacket>& Api::getQueue()
+std::queue<Json::Value>& Api::getQueue()
 {
   return packets_;
 }
 
 void Api::generateGamePacket()
 {
-  AIPacket packet;
+  Json::Value packet;
   data::Field field = GlobalDataSingleThread::singleton_.field_;
 
-  // Field packet
-  packet.mutable_game()->mutable_field()->set_fieldlength(field.field_length_);
-  packet.mutable_game()->mutable_field()->set_fieldwidth(field.field_width_);
-  packet.mutable_game()->mutable_field()->set_boundarywidth(field.boundary_width_);
-  packet.mutable_game()->mutable_field()->set_goaldepth(field.goal_depth_);
-  packet.mutable_game()->mutable_field()->set_goalwidth(field.goal_width_);
-  packet.mutable_game()->mutable_field()->set_penaltyareadepth(field.penalty_area_depth_);
-  packet.mutable_game()->mutable_field()->set_penaltyareawidth(field.penalty_area_width_);
-  packet.mutable_game()->mutable_field()->set_radiuscircle(field.cirlcle_center_.getRadius());
+  packet["field"]["field_width"] = field.field_width_;
+  packet["field"]["field_length"] = field.field_length_;
 
-  // Information packet
-  packet.mutable_game()->mutable_information()->set_isblue(ai::Config.we_are_blue);
-  packet.mutable_game()->mutable_information()->set_issimulation(ai::Config.is_in_simulation);
+  packet["field"]["boundary_width"] = field.boundary_width_;
+
+  packet["field"]["goal_width"] = field.goal_width_;
+  packet["field"]["goal_depth"] = field.goal_depth_;
+
+  packet["field"]["penalty_area_width"] = field.penalty_area_width_;
+  packet["field"]["penalty_area_depth"] = field.penalty_area_depth_;
+
+  packet["field"]["circle"]["radius"] = field.cirlcle_center_.getRadius();
+  packet["field"]["circle"]["x"] = field.cirlcle_center_.getCenter().getX();
+  packet["field"]["circle"]["y"] = field.cirlcle_center_.getCenter().getY();
+  packet["field"]["simulation"] = ai::Config::is_in_simulation;
+
+  // packet.mutable_game()->mutable_information()->set_isblue(ai::Config::we_are_blue);
 
   addPacket(packet);
 }
@@ -95,7 +99,7 @@ void Api::generateEntityPacket()
     }
   }
 
-  addPacket(packet);
+  // addPacket(packet);
 }
 
 void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
