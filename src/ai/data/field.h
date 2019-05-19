@@ -41,7 +41,7 @@ public:
   double penalty_area_depth_;
   double penalty_area_width_;
 
-  rhoban_geometry::Circle cirlcle_center_;
+  rhoban_geometry::Circle circle_center_;
   rhoban_geometry::Point goal_center_[2];
   rhoban_geometry::Point corners_[4];
   rhoban_geometry::Point quarter_center_[4];

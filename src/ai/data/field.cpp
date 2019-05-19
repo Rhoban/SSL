@@ -23,7 +23,7 @@ bool Field::isInside(const rhoban_geometry::Point& point) const
 
 rhoban_geometry::Point Field::centerMark() const
 {
-  return cirlcle_center_.getCenter();
+  return circle_center_.getCenter();
 }
 
 Box Field::getPenaltyArea(Team team) const

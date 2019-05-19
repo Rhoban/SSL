@@ -55,9 +55,9 @@ void Api::generateGamePacket()
   packet["field"]["goal_depth"] = field.goal_depth_;
   packet["field"]["penalty_area_width"] = field.penalty_area_width_;
   packet["field"]["penalty_area_depth"] = field.penalty_area_depth_;
-  packet["field"]["circle"]["radius"] = field.cirlcle_center_.getRadius();
-  packet["field"]["circle"]["x"] = field.cirlcle_center_.getCenter().getX();
-  packet["field"]["circle"]["y"] = field.cirlcle_center_.getCenter().getY();
+  packet["field"]["circle"]["radius"] = field.circle_center_.getRadius();
+  packet["field"]["circle"]["x"] = field.circle_center_.getCenter().getX();
+  packet["field"]["circle"]["y"] = field.circle_center_.getCenter().getY();
   packet["field"]["simulation"] = ai::Config::is_in_simulation;
 
   // packet.mutable_game()->mutable_information()->set_isblue(ai::Config::we_are_blue);
