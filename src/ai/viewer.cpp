@@ -85,7 +85,6 @@ bool ViewerCommunication::runTask()
         std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
         for (auto it = clients_.begin(); it != clients_.end(); ++it)
         {
-          DEBUG(str_json.size());
           lws_write(*it, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
           DEBUG(str_json.size());
         }
