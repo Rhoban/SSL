@@ -18,18 +18,38 @@
 */
 
 #include <execution_manager.h>
+#include <data.h>
 
 namespace rhoban_ssl
 {
 namespace viewer
 {
+/**
+ * @brief API Task to add packet in the queue for the viewer.
+ */
 class ApiTask : public Task
 {
+private:
+  /**
+   * @brief The time when the last packet has put in the API queue.
+   */
+  double time_last_send_;
+
 public:
+  /**
+   * @brief Constructor.
+   */
   ApiTask();
 
+  /**
+   * @brief Run Task and add packet every 150 ms.
+   * @return continue Boolean to indicate if the task continue in the next loop of the AI.
+   */
   bool runTask() override;
 
+  /**
+   * @brief Destructor.
+   */
   ~ApiTask();
 };
 }  // namespace viewer
