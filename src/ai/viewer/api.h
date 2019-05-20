@@ -61,7 +61,7 @@ private:
   /**
    * @brief All packet to store and send.
    */
-  std::queue<Json::Value> packets_;
+  std::queue<Json::Value> ai_packets_;
 
   /**
    * @brief All packet receive by the viewer.
@@ -76,7 +76,7 @@ public:
   /**
    * @brief Add a packet in the queue.
    */
-  void addPacket(Json::Value& packet);
+  void addAIPacket(Json::Value& packet);
 
   /**
    * @brief Add a packet send by the viewer in the queue.

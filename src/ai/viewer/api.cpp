@@ -35,9 +35,9 @@ Api& Api::getApi()
   return Api::api_singleton_;
 }
 
-void Api::addPacket(Json::Value& packet)
+void Api::addAIPacket(Json::Value& packet)
 {
-  packets_.push(packet);
+  ai_packets_.push(packet);
 }
 
 void Api::addViewerPacket(char* viewer_packet)
@@ -50,7 +50,7 @@ void Api::addViewerPacket(char* viewer_packet)
 
 std::queue<Json::Value>& Api::getQueue()
 {
-  return packets_;
+  return ai_packets_;
 }
 
 void Api::generateGamePacket()
@@ -72,7 +72,7 @@ void Api::generateGamePacket()
   packet["informations"]["simulation"] = ai::Config::is_in_simulation;
   packet["informatons"]["color_ally"] = ai::Config::we_are_blue;
 
-  addPacket(packet);
+  addAIPacket(packet);
 }
 
 void Api::generateEntityPacket()
@@ -116,7 +116,7 @@ void Api::generateEntityPacket()
     }
   }
 
-  addPacket(packet);
+  addAIPacket(packet);
 }
 
 void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
