@@ -80,10 +80,9 @@ void Api::generateEntityPacket()
   Json::Value packet;
   double time = GlobalDataSingleThread::singleton_.ai_data_.time;
 
-
-
   // Ball packet
-  const rhoban_geometry::Point& ball_position = GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
+  const rhoban_geometry::Point& ball_position =
+      GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
   packet["ball"]["x"] = ball_position.getX();
   packet["ball"]["y"] = ball_position.getY();
 

@@ -43,7 +43,7 @@ bool AI::runTask()
     return false;
 
   strategy_manager_->removeInvalidRobots();
-  strategy_manager_->update(GlobalDataSingleThread::singleton_.ai_data_.time);
+  strategy_manager_->update();
   strategy_manager_->assignBehaviorToRobots(robot_behaviors_, GlobalDataSingleThread::singleton_.ai_data_.time,
                                             GlobalDataSingleThread::singleton_.ai_data_.dt);
   updateRobots();

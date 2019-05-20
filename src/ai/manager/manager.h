@@ -92,10 +92,10 @@ public:
                       bool assign_goalie = false);
   void declareAndAssignNextStrategies(const std::list<std::string>& future_strats);
 
-  virtual void update(double time) = 0;
+  virtual void update() = 0;
 
   virtual void updateStrategies(double time);
-  virtual void updateCurrentStrategies(double time);
+  virtual void updateCurrentStrategies();
 
   virtual void assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior>>& robot_behaviors,
                                       double time, double dt);
@@ -179,7 +179,11 @@ public:
   //      return annotations;
   //  }
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+
+  virtual Json::Value getProperties();
+
+  virtual void setProperties(Json::Value);
 };
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+}  // namespace manager
+}  // namespace rhoban_ssl

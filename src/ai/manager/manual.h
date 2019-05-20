@@ -19,15 +19,35 @@
 
 #include <manager/manager.h>
 
-namespace rhoban_ssl {
+namespace rhoban_ssl
+{
 namespace manager
 {
-class Manual {
+class Manual : Manager
+{
 private:
-
 public:
-    Manual();
-    ~Manual();
+  /**
+   * @brief Constructor.
+   */
+  Manual();
+  /**
+   * @brief Update the manager after each loop.
+   */
+  void update();
+  /**
+   * @brief Get all properties of the manager shown in the viewer.
+   */
+  virtual Json::Value getProperties();
+  /**
+   * @brief Set the properties send by the viewer.
+   */
+  virtual void setProperties(Json::Value);
+
+  /**
+   * @brief Destructor
+   */
+  ~Manual();
 };
-}
-}
+}  // namespace manager
+}  // namespace rhoban_ssl

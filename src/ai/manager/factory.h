@@ -42,5 +42,5 @@ public:
   static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
 };
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+}  // namespace manager
+}  // namespace rhoban_ssl

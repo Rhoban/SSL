@@ -17,19 +17,34 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <manager/manual.h>;
+#include <manager/manual.h>
 
-namespace rhoban_ssl {
+namespace rhoban_ssl
+{
 namespace manager
 {
-Manual::Manual() {
-
+Manual::Manual() : Manager()
+{
 }
 
-
-
-Manual::~Manual() {
-
+void Manual::update()
+{
+  updateCurrentStrategies();
 }
+
+Json::Value Manual::getProperties()
+{
+  // @TODO Begin Work.
+
+  return Json::Value();
 }
+
+void Manual::setProperties(Json::Value)
+{
 }
+
+Manual::~Manual()
+{
+}
+}  // namespace manager
+}  // namespace rhoban_ssl
