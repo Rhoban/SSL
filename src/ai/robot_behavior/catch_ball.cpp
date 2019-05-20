@@ -60,10 +60,10 @@ void CatchBall::update(double time, const ai::Robot& robot, const ai::Ball& ball
       follower_->avoidTheBall(false);
     }
 
-  // else
-  //   {
-  //     follower_->avoidTheBall(true);      
-  //   }
+  else
+    {
+      follower_->avoidTheBall(true);      
+    }
    
   if ((GameInformations::infraRed(robot.id(), vision::Ally) || robot_ball.norm() <= (radii_sum + 0.01)))
     {
