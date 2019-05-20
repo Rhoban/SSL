@@ -1,9 +1,11 @@
 syntax = "proto2";
 
+option cc_enable_arenas = true;
+
 import "ssl_game_event.proto";
 import "ssl_game_event_2019.proto";
 
-option cc_enable_arenas = true;
+
 // Each UDP packet contains one of these messages.
 message Referee {
     // The UNIX timestamp when the packet was sent, in microseconds.

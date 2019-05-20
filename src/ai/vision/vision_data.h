@@ -75,6 +75,13 @@ struct RobotDetection
 
 struct CameraDetectionFrame
 {
+  /**
+   * @brief inverted is custom field
+   *
+   * It is true if we already invert detections.
+   */
+  bool inverted;
+
   double t_capture_;
   double t_sent_;
   unsigned int frame_number_;

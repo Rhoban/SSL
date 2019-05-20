@@ -98,6 +98,7 @@ bool DetectionPacketAnalyzer::runTask()
       //
       if (frame.frame_number() > current.frame_number_)
       {
+        current.inverted = false;
         current.frame_number_ = frame.frame_number();
         current.t_sent_ = frame.t_sent();
         current.t_capture_ = frame.t_capture();

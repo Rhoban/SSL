@@ -80,8 +80,10 @@ void Api::generateEntityPacket()
   Json::Value packet;
   double time = GlobalDataSingleThread::singleton_.ai_data_.time;
 
+
+
   // Ball packet
-  rhoban_geometry::Point ball_position = GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
+  const rhoban_geometry::Point& ball_position = GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
   packet["ball"]["x"] = ball_position.getX();
   packet["ball"]["y"] = ball_position.getY();
 
@@ -99,11 +101,10 @@ void Api::generateEntityPacket()
     {
       const data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team][rid];
       const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
-      const double robot_direction = current_robot.getMovement().angularPosition(time).value();
 
       packet[team_side][rid]["x"] = robot_position.getX();
       packet[team_side][rid]["y"] = robot_position.getY();
-      packet[team_side][rid]["orientation"] = robot_direction;
+      packet[team_side][rid]["orientation"] = current_robot.getMovement().angularPosition(time).value();
       packet[team_side][rid]["is_present"] = current_robot.isActive();
       packet[team_side][rid]["id"] = current_robot.id;
 
