@@ -42,9 +42,9 @@ void KickToXY::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   double ball_target_distance = ball_target_vector.norm();
 
   Vector2d ball_velocity = ball.getMovement().linearVelocity(time);
-  if (ball_target_distance > ZONE_RADIUS && ball_velocity.getX() < 0.1 && ball_velocity.getY() < 0.1)  // if ball not
-                                                                                                       // yet arrived in
-                                                                                                       // the zone
+  if (ball_target_distance > ZONE_RADIUS && ball_velocity.getX() < 0.15 && ball_velocity.getY() < 0.15)  // if ball not
+                                                                                                         // yet arrived
+                                                                                                         // in the zone
   {
     Vector2d ball_robot_vector = robot_position - ballPosition();
     ball_target_vector = normalized(ball_target_vector);

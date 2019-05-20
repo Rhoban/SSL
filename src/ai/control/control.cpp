@@ -106,27 +106,31 @@ double Control::getNeededPower(double distance, int robot_id, rhoban_ssl::ai::Ai
 {
   int min = 0;
   int max = ai_data.constants.kick_settings[robot_id].size() - 1;
-  double m = (min + max) / 2;
-
-  while (min < max)
+  while (max - min > 1)
   {
+    double m = (min + max) / 2;
     if (ai_data.constants.kick_settings[robot_id][m] > distance)
     {
-      max = m - 1;
+      max = m;
     }
     else if (ai_data.constants.kick_settings[robot_id][m] < distance)
     {
-      min = m + 1;
-    }
-    else
-    {
       min = m;
-      max = m;
     }
-    m = (min + max) / 2;
   }
   double step_percent = 1.0 / (ai_data.constants.kick_settings[robot_id].size() - 1);
-  return m * step_percent;
+  double d1 = ai_data.constants.kick_settings[robot_id][min];
+  double d2 = ai_data.constants.kick_settings[robot_id][max];
+  double result;  // linear smoothing
+  if (min != max)
+  {
+    result = (min + ((distance - d1) / (d2 - d1))) * step_percent;
+  }
+  else
+  {
+    result = min * step_percent;
+  }
+  return result;
 }
 
 std::ostream& operator<<(std::ostream& out, const Control& control)
