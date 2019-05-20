@@ -18,6 +18,7 @@
 */
 
 #include "api.h"
+#include <debug.h>
 
 namespace rhoban_ssl
 {
@@ -38,6 +39,15 @@ void Api::addPacket(Json::Value& packet)
 {
   packets_.push(packet);
 }
+
+void Api::addViewerPacket(char* viewer_packet)
+{
+  Json::Value root;
+  Json::Reader reader;
+  assert(reader.parse(viewer_packet, root));
+  viewer_packets_.push(root);
+}
+
 std::queue<Json::Value>& Api::getQueue()
 {
   return packets_;
@@ -58,9 +68,9 @@ void Api::generateGamePacket()
   packet["field"]["circle"]["radius"] = field.circle_center_.getRadius();
   packet["field"]["circle"]["x"] = field.circle_center_.getCenter().getX();
   packet["field"]["circle"]["y"] = field.circle_center_.getCenter().getY();
-  packet["field"]["simulation"] = ai::Config::is_in_simulation;
 
-  // packet.mutable_game()->mutable_information()->set_isblue(ai::Config::we_are_blue);
+  packet["informations"]["simulation"] = ai::Config::is_in_simulation;
+  packet["informatons"]["color_ally"] = ai::Config::we_are_blue;
 
   addPacket(packet);
 }
@@ -70,27 +80,34 @@ void Api::generateEntityPacket()
   Json::Value packet;
   double time = GlobalDataSingleThread::singleton_.ai_data_.time;
 
+
+
+  // Ball packet
   const rhoban_geometry::Point& ball_position = GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
   packet["ball"]["x"] = ball_position.getX();
   packet["ball"]["y"] = ball_position.getY();
 
-  // Robot
+  // Robot packet
+  // #dbdd56 : Yellow color && #2393c6 : Blue color
+  std::string color_ally = ai::Config::we_are_blue ? "#2393c6" : "#dbdd56";
+  std::string color_opponent = ai::Config::we_are_blue ? "#dbdd56" : "#2393c6";
 
   for (int team = 0; team < 2; team++)
   {
+    std::string team_side = team == 0 ? "ally" : "opponent";
+    std::string team_color = team == 0 ? color_ally : color_opponent;
+
     for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
     {
       const data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team][rid];
       const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
-
-      // @Todo Choose the ally Team.
-      std::string team_side = team == 0 ? "ally" : "opponent";
 
       packet[team_side][rid]["x"] = robot_position.getX();
       packet[team_side][rid]["y"] = robot_position.getY();
       packet[team_side][rid]["orientation"] = current_robot.getMovement().angularPosition(time).value();
       packet[team_side][rid]["is_present"] = current_robot.isActive();
       packet[team_side][rid]["id"] = current_robot.id;
+
       if (!ai::Config::is_in_simulation)
       {
         // Activate electronics.
@@ -109,6 +126,28 @@ void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
   // const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
   // WIP : Add List for strategy.
   // WIP : Prepare for robot behavior.
+}
+
+void Api::readViewerPacket()
+{
+  while (!viewer_packets_.empty())
+  {
+    Json::Value viewer_packet = viewer_packets_.front();
+    if (viewer_packet["action"] != "")
+    {
+      if (viewer_packet["action"] == "emergency")
+      {
+        AICommander* commander = GlobalDataSingleThread::singleton_.ai_data_.commander_;
+        commander->stopAll();
+        commander->flush();
+      }
+      else
+      {
+        DEBUG("Aucune action trouvé");
+      }
+    }
+    viewer_packets_.pop();
+  }
 }
 
 }  // namespace viewer

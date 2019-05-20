@@ -26,11 +26,17 @@ namespace viewer
 {
 ApiTask::ApiTask() : Task()
 {
+  time_last_send_ = GlobalDataSingleThread::singleton_.ai_data_.time;
 }
 
 bool ApiTask::runTask()
 {
-  Api::getApi().generateEntityPacket();
+  Api::getApi().readViewerPacket();
+  if (GlobalDataSingleThread::singleton_.ai_data_.time - time_last_send_ > 0.150)
+  {
+    Api::getApi().generateEntityPacket();
+    time_last_send_ = GlobalDataSingleThread::singleton_.ai_data_.time;
+  }
   return 1;
 }
 

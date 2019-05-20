@@ -36,6 +36,7 @@
 #include <vision/vision_data.h>
 #include <manager/factory.h>
 #include <manager/manager.h>
+#include <com/ai_commander.h>
 
 namespace rhoban_ssl
 {
@@ -62,6 +63,11 @@ private:
    */
   std::queue<Json::Value> packets_;
 
+  /**
+   * @brief All packet receive by the viewer.
+   */
+  std::queue<Json::Value> viewer_packets_;
+
 public:
   /**
    * @brief Get the unique instance of the class.
@@ -71,6 +77,12 @@ public:
    * @brief Add a packet in the queue.
    */
   void addPacket(Json::Value& packet);
+
+  /**
+   * @brief Add a packet send by the viewer in the queue.
+   * @param packet_receive Packet of the viewer.
+   */
+  void addViewerPacket(char* viewer_packet);
 
   /**
    * @brief Get the queue of packets.
@@ -89,6 +101,8 @@ public:
   void generateEntityPacket();
 
   void addListPacket(std::shared_ptr<manager::Manager> manager);
+
+  void readViewerPacket();
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

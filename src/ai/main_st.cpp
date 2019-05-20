@@ -177,6 +177,8 @@ int main(int argc, char** argv)
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
+  GlobalDataSingleThread::singleton_.ai_data_.commander_ = commander;
+
   rhoban_ssl::ExecutionManager::getManager().addTask(
       new rhoban_ssl::VisionClientSingleThread(addr.getValue(), theport));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::SslGeometryPacketAnalyzer());
