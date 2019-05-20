@@ -88,7 +88,8 @@ RobotDetection::RobotDetection() : camera_(nullptr), confidence_(-1)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-CameraDetectionFrame::CameraDetectionFrame() : t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
+CameraDetectionFrame::CameraDetectionFrame()
+  : inverted(false), t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
 {
   for (auto& r : allies_)
     r.camera_ = this;
@@ -160,9 +161,10 @@ bool VisionDataTerminalPrinter::runTask()
     for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
     {
       if (GlobalDataSingleThread::singleton_.robots_[team][robot].isActive())
-        printf("\t%d : (%f;%f) ", robot,
+        printf("\t%d : (%f;%f;%f) ", robot,
                GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.x,
-               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.y);
+               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.y,
+               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].angular_position.value());
     }
     printf("\n");
   }
@@ -178,24 +180,39 @@ bool ChangeReferencePointOfView::runTask()
   {
     for (uint cam_id = 0; cam_id < ai::Config::NB_CAMERAS; cam_id++)
     {
-      for (uint ball_id = 0; ball_id < ai::Config::NB_CAMERAS; ball_id++)
+      if (!VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].inverted)
       {
-        struct BallDetection& ball = VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].balls_[ball_id];
-        ball.x_ *= -1.f;
-        ball.y_ *= -1.f;
-      }
+        for (uint ball_id = 0; ball_id < ai::Config::MAX_BALLS_DETECTED; ball_id++)
+        {
+          struct BallDetection& ball =
+              VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].balls_[ball_id];
+          ball.x_ *= -1.f;
+          ball.y_ *= -1.f;
+        }
 
-      for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
-      {
-        struct RobotDetection& ally_robot =
-            VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].allies_[robot_id];
-        ally_robot.x_ *= -1.f;
-        ally_robot.y_ *= -1.f;
+        for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
+        {
+          struct RobotDetection& ally_robot =
+              VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].allies_[robot_id];
+          ally_robot.x_ *= -1.f;
+          ally_robot.y_ *= -1.f;
 
-        struct RobotDetection& opponent_robot =
-            VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].opponents_[robot_id];
-        opponent_robot.x_ *= -1.f;
-        opponent_robot.y_ *= -1.f;
+          if (ally_robot.has_orientation_)
+          {
+            ally_robot.orientation_ = fmodf32(ally_robot.orientation_ + M_PIf32, M_PIf32 * 2.0f);
+          }
+
+          struct RobotDetection& opponent_robot =
+              VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].opponents_[robot_id];
+          opponent_robot.x_ *= -1.f;
+          opponent_robot.y_ *= -1.f;
+
+          if (opponent_robot.has_orientation_)
+          {
+            opponent_robot.orientation_ = fmodf32(opponent_robot.orientation_ + M_PIf32, M_PIf32 * 2.0f);
+          }
+        }
+        VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].inverted = true;
       }
     }
   }

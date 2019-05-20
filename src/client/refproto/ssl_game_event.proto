@@ -1,5 +1,7 @@
 syntax = "proto2";
 
+option cc_enable_arenas = true;
+
 // a game event that caused a referee command
 message Game_Event {
 
