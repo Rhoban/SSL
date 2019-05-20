@@ -19,6 +19,7 @@
 #pragma once
 
 #include <map>
+#include <com/ai_commander.h>
 
 namespace rhoban_ssl
 {
@@ -32,6 +33,7 @@ public:
   double time_shift_with_vision;
   double time;
   double dt;
+  AICommander* commander_;
 
   // This field is used by rhobot_behavior::Navigation_inside_the_field.
   bool force_ball_avoidance;

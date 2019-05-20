@@ -31,6 +31,7 @@ ApiTask::ApiTask() : Task()
 
 bool ApiTask::runTask()
 {
+  Api::getApi().readViewerPacket();
   if (GlobalDataSingleThread::singleton_.ai_data_.time - time_last_send_ > 0.150)
   {
     Api::getApi().generateEntityPacket();

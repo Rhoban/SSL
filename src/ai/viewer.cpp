@@ -19,17 +19,14 @@ int ViewerCommunication::callback_viewer(struct lws* wsi, enum lws_callback_reas
   {
     case LWS_CALLBACK_ESTABLISHED:
       DEBUG("Connection - Initialized");
-
       ViewerCommunication::clients_.push_back(wsi);
       // Generate Game Packet with the first connection.
       rhoban_ssl::viewer::Api::getApi().generateGamePacket();
-
       return 0;
       break;
     case LWS_CALLBACK_RECEIVE:
-      std::cout << "we receive something" << std::endl;
-      std::cout << len << std::endl;
-      std::cout << (char*)in << std::endl;
+      DEBUG("test");
+      viewer::Api::getApi().addViewerPacket((char*)in);
       return 0;
       break;
     case LWS_CALLBACK_SERVER_WRITEABLE:
@@ -86,7 +83,6 @@ bool ViewerCommunication::runTask()
         for (auto it = clients_.begin(); it != clients_.end(); ++it)
         {
           lws_write(*it, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
-          DEBUG(str_json.size());
         }
       }
 

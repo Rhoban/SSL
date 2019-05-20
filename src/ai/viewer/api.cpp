@@ -18,6 +18,7 @@
 */
 
 #include "api.h"
+#include <debug.h>
 
 namespace rhoban_ssl
 {
@@ -38,6 +39,15 @@ void Api::addPacket(Json::Value& packet)
 {
   packets_.push(packet);
 }
+
+void Api::addViewerPacket(char* viewer_packet)
+{
+  Json::Value root;
+  Json::Reader reader;
+  assert(reader.parse(viewer_packet, root));
+  viewer_packets_.push(root);
+}
+
 std::queue<Json::Value>& Api::getQueue()
 {
   return packets_;
@@ -115,6 +125,28 @@ void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
   // const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
   // WIP : Add List for strategy.
   // WIP : Prepare for robot behavior.
+}
+
+void Api::readViewerPacket()
+{
+  while (!viewer_packets_.empty())
+  {
+    Json::Value viewer_packet = viewer_packets_.front();
+    if (viewer_packet["action"] != "")
+    {
+      if (viewer_packet["action"] == "emergency")
+      {
+        AICommander* commander = GlobalDataSingleThread::singleton_.ai_data_.commander_;
+        commander->stopAll();
+        commander->flush();
+      }
+      else
+      {
+        DEBUG("Aucune action trouvé");
+      }
+    }
+    viewer_packets_.pop();
+  }
 }
 
 }  // namespace viewer
