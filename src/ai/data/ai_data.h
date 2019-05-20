@@ -20,6 +20,7 @@
 
 #include <map>
 #include <com/ai_commander.h>
+#include <manager/manager.h>
 
 namespace rhoban_ssl
 {
@@ -34,6 +35,7 @@ public:
   double time;
   double dt;
   AICommander* commander_;
+  std::shared_ptr<manager::Manager> manager_;
 
   // This field is used by rhobot_behavior::Navigation_inside_the_field.
   bool force_ball_avoidance;

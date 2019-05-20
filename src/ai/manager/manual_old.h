@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,17 +17,32 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 #include <manager/manager.h>
 
-namespace rhoban_ssl {
+namespace rhoban_ssl
+{
 namespace manager
 {
-class Manual {
+class Manual_old : public Manager
+{
 private:
+  bool strategy_was_assigned_;
+  bool goal_to_positive_axis_;
+  int ally_goalie_id_;
+  int opponent_goalie_id_;
+
+  void assignPointOfViewAndGoalie();
 
 public:
-    Manual();
-    ~Manual();
+  Manual_old();
+  void defineGoalToPositiveAxis(bool value = true);
+
+  void update(double time);
+
+  virtual ~Manual_old();
 };
-}
-}
+
+};  // namespace manager
+};  // namespace rhoban_ssl
