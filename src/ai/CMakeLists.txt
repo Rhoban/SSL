@@ -68,10 +68,10 @@ set (SOURCES
     robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
-    robot_behavior/tutorials/medium/prepare_strike.cpp
-    robot_behavior/tutorials/medium/striker.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/test_relative_velocity_consign.cpp
+    robot_behavior/test/striker_on_order.cpp
+    robot_behavior/catch_ball.cpp
     ai.cpp
     ai_data.cpp
     debug.cpp
@@ -81,6 +81,7 @@ set (SOURCES
     # manager/Match.cpp
     manager/manual.cpp
     manager/factory.cpp
+    strategy/test/kicker.cpp
     strategy/strategy.cpp
     strategy/halt.cpp
     strategy/mur.cpp
