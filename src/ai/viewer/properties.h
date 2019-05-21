@@ -17,40 +17,27 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <manager/manual.h>
+#pragma once
+#include <json/json.h>
 
-namespace rhoban_ssl
-{
-namespace manager
-{
-Manual::Manual() : Manager()
-{
+namespace rhoban_ssl {
+namespace viewer {
+
+
+class PropertiesFactory{
+private:
+    Json::Value json;
+public:
+    PropertiesFactory();
+
+    void addStringSetter(std::string name, std::string default_value);
+
+    void clear();
+
+    Json::Value& getJson();
+
+
+    ~PropertiesFactory();
+};
 }
-
-void Manual::update()
-{
-  updateCurrentStrategies();
 }
-
-Json::Value Manual::getProperties()
-{
-  Json::Value properties;
-  properties_factory.addStringSetter("name_test", "");
-
-  properties = properties_factory.getJson();
-
-  properties_factory.clear();
-  return properties;
-}
-
-void Manual::setProperties(Json::Value json)
-{
-    DEBUG(json);
-}
-
-Manual::~Manual()
-{
-   properties_factory.~PropertiesFactory();
-}
-}  // namespace manager
-}  // namespace rhoban_ssl

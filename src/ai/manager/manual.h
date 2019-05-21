@@ -17,15 +17,19 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#pragma once
+
 #include <manager/manager.h>
+#include <viewer/properties.h>
 
 namespace rhoban_ssl
 {
 namespace manager
 {
-class Manual : Manager
+class Manual : public Manager
 {
 private:
+    viewer::PropertiesFactory properties_factory;
 public:
   /**
    * @brief Constructor.

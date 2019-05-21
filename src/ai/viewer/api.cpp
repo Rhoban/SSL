@@ -53,7 +53,7 @@ std::queue<Json::Value>& Api::getQueue()
   return ai_packets_;
 }
 
-void Api::generateGamePacket()
+void Api::generateFirstConnectionPacket()
 {
   Json::Value packet;
   data::Field field = GlobalDataSingleThread::singleton_.field_;
@@ -75,7 +75,7 @@ void Api::generateGamePacket()
   addAIPacket(packet);
 }
 
-void Api::generateEntityPacket()
+void Api::generateMobilePacket()
 {
   Json::Value packet;
   double time = GlobalDataSingleThread::singleton_.ai_data_.time;
@@ -119,12 +119,37 @@ void Api::generateEntityPacket()
   addAIPacket(packet);
 }
 
-void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
+void Api::generateManagerPacket()
 {
-  // WIP : Add in the packet.
-  // const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
-  // WIP : Add List for strategy.
-  // WIP : Prepare for robot behavior.
+  const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
+
+  Json::Value list_manager;
+  Json::Value tmp_manager;
+  int i = 0;
+  for(std::string manager_name : list_of_avaible_manager) {
+      i++;
+      tmp_manager["id"] = i;
+      tmp_manager["name"] = manager_name;
+      list_manager.append(tmp_manager);
+  }
+  Json::Value message_packet;
+
+  message_packet["manager"]["list_manager"] = list_manager;
+
+  message_packet["manager"]["current_manager_name"] = GlobalDataSingleThread::singleton_.ai_data_.current_manager_name_;
+
+  message_packet["manager"]["properties"] = GlobalDataSingleThread::singleton_.ai_data_.current_manager_->getProperties();
+
+  DEBUG(message_packet);
+  addAIPacket(message_packet);
+}
+
+void Api::generatePropertiesPacket() {
+    // TODO : It is need ?
+    Json::Value message_packet;
+    message_packet["manager"]["properties"] = GlobalDataSingleThread::singleton_.ai_data_.current_manager_->getProperties();
+
+    addAIPacket(message_packet);
 }
 
 void Api::readViewerPacket()

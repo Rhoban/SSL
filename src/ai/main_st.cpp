@@ -177,8 +177,6 @@ int main(int argc, char** argv)
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
-  GlobalDataSingleThread::singleton_.ai_data_.commander_ = commander;
-
   rhoban_ssl::ExecutionManager::getManager().addTask(
       new rhoban_ssl::VisionClientSingleThread(addr.getValue(), theport));
   rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::SslGeometryPacketAnalyzer());
@@ -210,6 +208,8 @@ int main(int argc, char** argv)
     rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
     commander = commander_r;
   }
+
+  GlobalDataSingleThread::singleton_.ai_data_.commander_ = commander;
 
   AI* ai_ = nullptr;
   ai_ = new AI(manager_name.getValue(), commander);

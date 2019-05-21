@@ -91,16 +91,24 @@ public:
   std::queue<Json::Value>& getQueue();
 
   /**
-   * @brief Generate Game Packet.
+   * @brief Generate this packet for each user connect.
    */
-  void generateGamePacket();
+  void generateFirstConnectionPacket();
 
   /**
-   * @brief Add Entity Packet.
+   * @brief Generate Mobile Packet (Robot + Ball).
    */
-  void generateEntityPacket();
+  void generateMobilePacket();
 
-  void addListPacket(std::shared_ptr<manager::Manager> manager);
+  /**
+   * @brief Generate packet with the creation of the Manager.
+   */
+  void generateManagerPacket();
+
+  /**
+   * @brief Generate properties packet.
+   */
+  void generatePropertiesPacket();
 
   void readViewerPacket();
 };

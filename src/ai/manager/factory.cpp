@@ -19,8 +19,6 @@
 
 #include "factory.h"
 
-#include "manual.h"
-
 namespace rhoban_ssl
 {
 namespace manager

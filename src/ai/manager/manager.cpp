@@ -53,6 +53,8 @@ void Manager::registerStrategy(const std::string& strategy_name, std::shared_ptr
   strategies_[strategy_name] = strategy;
 }
 
+
+
 void Manager::clearStrategyAssignement()
 {
   for (const std::string& name : current_strategy_names_)

@@ -21,6 +21,7 @@
 
 #include <referee/game_state.h>
 #include "manager.h"
+#include "manual.h"
 
 namespace rhoban_ssl
 {
@@ -28,7 +29,7 @@ namespace manager
 {
 struct names
 {
-  static constexpr const char* MANUAL = "manual";
+  static constexpr const char* MANUAL = "Manual";
 };
 
 class Factory

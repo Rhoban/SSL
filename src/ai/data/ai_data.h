@@ -20,10 +20,17 @@
 
 #include <map>
 #include <com/ai_commander.h>
-#include <manager/manager.h>
+
 
 namespace rhoban_ssl
 {
+
+// @Todo : Refacto this to supress the circular dependency create by Game Informations.h
+namespace manager {
+class Manager;
+}
+
+
 namespace data
 {
 class AiData
@@ -35,7 +42,8 @@ public:
   double time;
   double dt;
   AICommander* commander_;
-  std::shared_ptr<manager::Manager> manager_;
+  std::shared_ptr<manager::Manager> current_manager_;
+  std::string current_manager_name_;
 
   // This field is used by rhobot_behavior::Navigation_inside_the_field.
   bool force_ball_avoidance;

@@ -271,7 +271,8 @@ void AI::setManager(std::string managerName)
   }
 
   GlobalDataSingleThread::singleton_.robots_[Ally][ai::Config::default_goalie_id].is_goalie = true;
-  GlobalDataSingleThread::singleton_.ai_data_.manager_ = strategy_manager_;
+  GlobalDataSingleThread::singleton_.ai_data_.current_manager_ = strategy_manager_;
+  GlobalDataSingleThread::singleton_.ai_data_.current_manager_name_ = managerName;
 
   strategy_manager_->declareTeamIds(robot_ids);
 }

@@ -19,15 +19,8 @@ include_directories(${PROTOBUF_INCLUDE_DIRS} .)
 include_directories(${catkin_INCLUDE_DIRS} .)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
-PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS
-    viewer/proto/game_packet.proto
-    viewer/proto/entity_packet.proto
-    viewer/proto/ai_packet.proto
-)
 
 set (SOURCES
-    ${PROTO_SRCS}
-    ${PROTO_HDRS}
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -50,6 +43,7 @@ set (SOURCES
     com/ai_commander_real.cpp
     viewer/api.cpp
     viewer/api_task.cpp
+    viewer/properties.cpp
     robot_behavior/factory.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/position_follower.cpp
