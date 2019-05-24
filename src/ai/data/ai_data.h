@@ -21,15 +21,13 @@
 #include <map>
 #include <com/ai_commander.h>
 
-
 namespace rhoban_ssl
 {
-
 // @Todo : Refacto this to supress the circular dependency create by Game Informations.h
-namespace manager {
+namespace manager
+{
 class Manager;
 }
-
 
 namespace data
 {

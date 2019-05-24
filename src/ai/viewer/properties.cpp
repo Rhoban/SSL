@@ -19,36 +19,38 @@
 
 #include "properties.h"
 
-namespace rhoban_ssl {
-namespace viewer {
-
-PropertiesFactory::PropertiesFactory() {
-
+namespace rhoban_ssl
+{
+namespace viewer
+{
+PropertiesFactory::PropertiesFactory()
+{
 }
 
-void PropertiesFactory::addStringSetter(std::string name, std::string default_value) {
-    Json::Value property;
+void PropertiesFactory::addStringSetter(std::string name, std::string default_value)
+{
+  Json::Value property;
 
-    property["type"] = "Input";
-    property["name"] = name;
-    property["value"] = default_value;
+  property["type"] = "Input";
+  property["name"] = name;
+  property["value"] = default_value;
 
-
-    json.append(property);
+  json.append(property);
 }
 
-void PropertiesFactory::clear() {
-    json.clear();
+void PropertiesFactory::clear()
+{
+  json.clear();
 }
 
-Json::Value& PropertiesFactory::getJson() {
-    return json;
+Json::Value& PropertiesFactory::getJson()
+{
+  return json;
 }
 
-PropertiesFactory::~PropertiesFactory() {
-
+PropertiesFactory::~PropertiesFactory()
+{
 }
 
-
-}
-}
+}  // namespace viewer
+}  // namespace rhoban_ssl

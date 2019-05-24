@@ -20,24 +20,25 @@
 #pragma once
 #include <json/json.h>
 
-namespace rhoban_ssl {
-namespace viewer {
-
-
-class PropertiesFactory{
+namespace rhoban_ssl
+{
+namespace viewer
+{
+class PropertiesFactory
+{
 private:
-    Json::Value json;
+  Json::Value json;
+
 public:
-    PropertiesFactory();
+  PropertiesFactory();
 
-    void addStringSetter(std::string name, std::string default_value);
+  void addStringSetter(std::string name, std::string default_value);
 
-    void clear();
+  void clear();
 
-    Json::Value& getJson();
+  Json::Value& getJson();
 
-
-    ~PropertiesFactory();
+  ~PropertiesFactory();
 };
-}
-}
+}  // namespace viewer
+}  // namespace rhoban_ssl

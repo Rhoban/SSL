@@ -45,12 +45,11 @@ Json::Value Manual::getProperties()
 
 void Manual::setProperties(Json::Value json)
 {
-    DEBUG(json);
+  DEBUG(json);
 }
 
 Manual::~Manual()
 {
-   properties_factory.~PropertiesFactory();
 }
 }  // namespace manager
 }  // namespace rhoban_ssl

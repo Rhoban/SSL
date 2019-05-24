@@ -29,7 +29,8 @@ namespace manager
 class Manual : public Manager
 {
 private:
-    viewer::PropertiesFactory properties_factory;
+  viewer::PropertiesFactory properties_factory;
+
 public:
   /**
    * @brief Constructor.

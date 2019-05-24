@@ -126,11 +126,12 @@ void Api::generateManagerPacket()
   Json::Value list_manager;
   Json::Value tmp_manager;
   int i = 0;
-  for(std::string manager_name : list_of_avaible_manager) {
-      i++;
-      tmp_manager["id"] = i;
-      tmp_manager["name"] = manager_name;
-      list_manager.append(tmp_manager);
+  for (std::string manager_name : list_of_avaible_manager)
+  {
+    i++;
+    tmp_manager["id"] = i;
+    tmp_manager["name"] = manager_name;
+    list_manager.append(tmp_manager);
   }
   Json::Value message_packet;
 
@@ -138,18 +139,20 @@ void Api::generateManagerPacket()
 
   message_packet["manager"]["current_manager_name"] = GlobalDataSingleThread::singleton_.ai_data_.current_manager_name_;
 
-  message_packet["manager"]["properties"] = GlobalDataSingleThread::singleton_.ai_data_.current_manager_->getProperties();
+  message_packet["manager"]["properties"] =
+      GlobalDataSingleThread::singleton_.ai_data_.current_manager_->getProperties();
 
-  DEBUG(message_packet);
   addAIPacket(message_packet);
 }
 
-void Api::generatePropertiesPacket() {
-    // TODO : It is need ?
-    Json::Value message_packet;
-    message_packet["manager"]["properties"] = GlobalDataSingleThread::singleton_.ai_data_.current_manager_->getProperties();
+void Api::generatePropertiesPacket()
+{
+  // TODO : It is need ?
+  Json::Value message_packet;
+  message_packet["manager"]["properties"] =
+      GlobalDataSingleThread::singleton_.ai_data_.current_manager_->getProperties();
 
-    addAIPacket(message_packet);
+  addAIPacket(message_packet);
 }
 
 void Api::readViewerPacket()
