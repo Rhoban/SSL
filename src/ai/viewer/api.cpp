@@ -212,5 +212,16 @@ void Api::manualChipKick(int robot_id, double kick_power)
   }
 }
 
+void Api::manualCharge(int robot_id)
+{
+  Control& control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id].control;
+  if (!control.ignore)
+  {
+    control.kick = false;
+    control.chipKick = true;
+    control.kickPower = kick_power;
+  }
+}
+
 }  // namespace viewer
 }  // namespace rhoban_ssl

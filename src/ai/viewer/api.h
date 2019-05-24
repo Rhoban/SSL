@@ -116,6 +116,8 @@ public:
 
   void manualChipKick(int robot_id, double kick_power);
 
+  void manualCharge(int robot_id);
+
   /**
    * @brief Control the robot with the Manual controller.
    */
