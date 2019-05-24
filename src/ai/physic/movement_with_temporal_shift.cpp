@@ -22,7 +22,9 @@
 
 namespace rhoban_ssl
 {
-
+MovementWithTemporalShift::MovementWithTemporalShift(Movement* movement) : movement_(movement)
+{
+}
 
 Movement* MovementWithTemporalShift::clone() const
 {

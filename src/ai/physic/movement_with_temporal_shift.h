@@ -51,7 +51,6 @@ public:
   virtual ContinuousAngle angularAcceleration(double time) const;
 
   virtual void print(std::ostream& stream) const;
-
 };
 
 }  // namespace rhoban_ssl
