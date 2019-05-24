@@ -26,6 +26,7 @@
 #include "factory.h"
 #include "client_config.h"
 #include "robot_position_filter.h"
+#include "time_synchroniser.h"
 
 namespace rhoban_ssl
 {
@@ -43,6 +44,9 @@ class DetectionPacketAnalyzer : public Task
 {
 public:
   virtual bool runTask() override;
+
+private:
+  TimeSynchroniser time_synchroniser_;
 };
 
 class UpdateRobotInformation : public Task

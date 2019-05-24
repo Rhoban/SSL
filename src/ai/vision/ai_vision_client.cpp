@@ -127,9 +127,11 @@ bool DetectionPacketAnalyzer::runTask()
             current.allies_[i] = frame.robots_yellow(i);
         }
       }
+      time_synchroniser_.update(current);
       i = rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.erase(i);
     }
   }
+  time_synchroniser_.syncTimeShift(&GlobalDataSingleThread::singleton_.ai_data_.time_shift_with_vision);
   return true;
 }
 

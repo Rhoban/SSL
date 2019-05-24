@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -18,45 +18,36 @@
 */
 #pragma once
 
-#include <map>
-#include <com/ai_commander.h>
+#include <math/circular_vector.h>
+#include "vision_data.h"
 
 namespace rhoban_ssl
 {
-namespace data
-{
-class AiData
+/**
+ * @brief The TimeSynchroniser class computes the time shift with the vision.
+ *
+ * This class must to be use during the analyse of DetectionPackets in vision.
+ */
+class TimeSynchroniser
 {
 public:
-  AiData();
+  TimeSynchroniser();
 
-  /**
-   * @brief time shift with vision in seconds
-   */
-  double time_shift_with_vision;
+  void update(const vision::CameraDetectionFrame& detection_frame);
 
-  /**
-   * @brief time in seconds
-   */
-  double time;
+  void syncTimeShift(double* time_shift_with_vision);
 
-  /**
-   * @brief dt with last loop in seconds
-   */
-  double dt;
+private:
+  // todo add to config
+  const uint BUFFER_SIZE = 30;
 
-  AICommander* commander_;
+  CircularVector<double> diff_buffer_;
+  CircularVector<double> shift_buffer_;
 
-  // This field is used by rhobot_behavior::Navigation_inside_the_field.
-  bool force_ball_avoidance;
+  double computed_time_shift;
 
-  /**
-   * @brief Collision_times_table
-   * @note come from ai_data
-   */
-  typedef std::map<std::pair<int, int>, double> Collision_times_table;
-  Collision_times_table table_of_collision_times_;
+private:
+  double average(const CircularVector<double>& buffer);
 };
 
-}  // namespace data
 }  // namespace rhoban_ssl
