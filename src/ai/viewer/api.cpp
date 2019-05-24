@@ -168,12 +168,47 @@ void Api::readViewerPacket()
         commander->stopAll();
         commander->flush();
       }
+      else if (viewer_packet["action"] == "control_manual")
+      {
+      }
       else
       {
         DEBUG("Aucune action trouvé");
       }
     }
     viewer_packets_.pop();
+  }
+}
+
+void Api::manualControl(int robot_id, double x_speed, double y_speed, double theta_speed)
+{
+  Control& control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id].control;
+  if (!control.ignore)
+  {
+    control.linear_velocity = Vector2d(x_speed, y_speed);
+    control.angular_velocity = ContinuousAngle(theta_speed);
+  }
+}
+
+void Api::manualKick(int robot_id, double kick_power)
+{
+  Control& control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id].control;
+  if (!control.ignore)
+  {
+    control.kick = true;
+    control.chipKick = false;
+    control.kickPower = kick_power;
+  }
+}
+
+void Api::manualChipKick(int robot_id, double kick_power)
+{
+  Control& control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id].control;
+  if (!control.ignore)
+  {
+    control.kick = false;
+    control.chipKick = true;
+    control.kickPower = kick_power;
   }
 }
 

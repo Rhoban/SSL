@@ -111,6 +111,15 @@ public:
   void generatePropertiesPacket();
 
   void readViewerPacket();
+
+  void manualKick(int robot_id, double kick_power);
+
+  void manualChipKick(int robot_id, double kick_power);
+
+  /**
+   * @brief Control the robot with the Manual controller.
+   */
+  void manualControl(int robot_id, double xSpeed, double ySpeed, double thetaSpeed);
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl
