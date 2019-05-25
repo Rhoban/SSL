@@ -13,6 +13,8 @@ catkin_package(
     CATKIN_DEPENDS ssl_client rhoban_geometry tclap jsoncpp
 )
 
+find_package(Protobuf REQUIRED)
+
 include_directories(${PROTOBUF_INCLUDE_DIRS} .)
 include_directories(${catkin_INCLUDE_DIRS} .)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
