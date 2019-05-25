@@ -4,13 +4,13 @@ set (CMAKE_CXX_STANDARD 11)
 set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ")
 
 find_package(catkin REQUIRED COMPONENTS
-  ssl_client tclap rhoban_geometry rhoban_graphs jsoncpp
+  ssl_client tclap rhoban_geometry jsoncpp
 )
 
 catkin_package(
     INCLUDE_DIRS .
     LIBRARIES ssl_ai
-    CATKIN_DEPENDS ssl_client rhoban_geometry rhoban_graphs tclap jsoncpp
+    CATKIN_DEPENDS ssl_client rhoban_geometry tclap jsoncpp
 )
 
 find_package(Protobuf REQUIRED)
