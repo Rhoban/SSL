@@ -57,12 +57,6 @@ public:
   std::queue<Json::Value> received_packets;
 
   /**
-   * @brief Add a packet that will be send to viewer clients
-   * in the queue.
-   */
-  void addPacket(const Json::Value& packet);
-
-  /**
    * @brief Parse and add store a packet send by the viewer.
    * @param packet_received in char*.
    */

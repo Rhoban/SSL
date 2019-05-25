@@ -17,11 +17,6 @@ ViewerDataGlobal& ViewerDataGlobal::get()
   return ViewerDataGlobal::instance_;
 }
 
-void ViewerDataGlobal::addPacket(const Json::Value& packet)
-{
-  packets_to_send.push(packet);
-}
-
 void ViewerDataGlobal::parseAndStorePacketFromClient(char* packet_received)
 {
   Json::Value root;
