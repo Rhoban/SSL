@@ -35,80 +35,80 @@ namespace rhoban_ssl
  */
 class AI : public Task
 {
-private:
-  /**
-   * @brief The Api struct define the ai api
-   *
-   * This is a temporary class, it will refactor after the competition.
-   */
-  struct Api
-  {
-  public:
-    Api();
-
-    AI* ai = nullptr;
-    /**
-     * @brief getAvailableManagers returns the name of all manager available.
-     * @return a vector of string that contains all name.
-     */
-    std::vector<std::string> getAvailableManagers();
-
-    /**
-     * @brief setManager changes the current manager that correspond with the
-     * name given in parameter.
-     * If the name of the manager doesn't exist this method does nothing.
-     * @param the name of a manager
-     */
-    void setManager(std::string manager_name);
-
-    /**
-     * @brief getCurrentManager returns the manager that currently running in the AI.
-     * @return a Manager
-     * @see rhoban_ssl::manager::Manager
-     */
-    std::shared_ptr<manager::Manager> getCurrentManager() const;
-
-    /**
-     * @brief getManualManager returns a manual manager.
-     *
-     * The manual manager exist in order to change manually the robotbehavior assignement.
-     * @return a Manual Manager
-     * @see rhoban_ssl::manager::Manual
-     */
-    std::shared_ptr<manager::Manager> getManualManager();
-
-    /**
-     * @brief An emergency call stop all robots connected with the ai.
-     *
-     * It's change the control for each robot to manual.
-     * Moreover all manual control are ignore and desactivate.
-     *
-     * After control desactivations in the ai, the commander sends a stop
-     * command to all robots.
-     */
-    void emergency();
-
-    /**
-     * @brief getAnnotations
-     * @param annotations
-     */
-    void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
-
-    std::string getRobotBeheviorOf(uint robot_number);
-  };
-
 public:
-  friend class Api;
-
   // bool is_in_simulation;
   AI(std::string manager_name, AICommander* commander);
 
   bool runTask() override;
-  void stop();
 
+  // api
+public:
+  /**
+   * @brief stop the ia execution
+   */
+  void stop();
+  /**
+   * @brief getAvailableManagers returns the name of all manager available.
+   * @return a vector of string that contains all name.
+   */
+  std::vector<std::string> getAvailableManagers();
+
+  /**
+   * @brief setManager changes the current manager that correspond with the
+   * name given in parameter.
+   * If the name of the manager doesn't exist this method does nothing.
+   * @param the name of a manager
+   */
   void setManager(std::string manager_name);
 
-  static Api api;
+  /**
+   * @brief getCurrentManager returns the manager that currently running in the AI.
+   * @return a Manager
+   * @see rhoban_ssl::manager::Manager
+   */
+  std::shared_ptr<manager::Manager> getCurrentManager() const;
+
+  /**
+   * @brief getManualManager returns a manual manager.
+   *
+   * The manual manager exist in order to change manually the robotbehavior assignement.
+   * @return a Manual Manager
+   * @see rhoban_ssl::manager::Manual
+   */
+  std::shared_ptr<manager::Manager> getManualManager();
+
+  /**
+   * @brief An emergency call stop all robots connected with the ai.
+   *
+   * It's change the control for each robot to manual.
+   * Moreover all manual control are ignore and desactivate.
+   *
+   * After control desactivations in the ai, the commander sends a stop
+   * command to all robots.
+   */
+  void emergency();
+
+  /**
+   * @brief getAnnotations
+   * @param annotations
+   */
+  void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
+
+  /**
+   * @brief Returns the name of the robotbehavior assigned to the robot with the number
+   * given in parameter.
+   * @param robot_number
+   * @return the name of a robotbehavior.
+   */
+  std::string getRobotBeheviorOf(uint robot_number);
+
+  /**
+   * @brief Returns the strategy that chooses the robotBehavior of the robot with
+   * the number given in parameter.
+   * @param robot_number
+   * @return the name of a robotbehavior.
+   */
+  std::string getStrategyOf(uint robot_number);
 
 private:
   bool running_;
@@ -117,7 +117,7 @@ private:
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
 
-  static std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
+  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
 
   Control getRobotControl(robot_behavior::RobotBehavior& robot_behavior, data::Robot& robot);
 

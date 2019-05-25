@@ -37,9 +37,6 @@
 
 namespace rhoban_ssl
 {
-AI::Api AI::api;
-std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > AI::robot_behaviors_;
-
 AI::AI(std::string manager_name, AICommander* commander) : running_(true), commander_(commander)
 {
   initRobotBehaviors();
@@ -47,7 +44,6 @@ AI::AI(std::string manager_name, AICommander* commander) : running_(true), comma
   manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
 
   setManager(manager_name);
-  api.ai = this;
 }
 
 bool AI::runTask()
@@ -368,33 +364,22 @@ bool TimeUpdater::runTask()
   return true;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
-AI::Api::Api()
-{
-}
-
-std::vector<std::string> AI::Api::getAvailableManagers()
+std::vector<std::string> AI::getAvailableManagers()
 {
   list2vector(manager::Factory::availableManagers());
 }
 
-void AI::Api::setManager(std::string manager_name)
+std::shared_ptr<manager::Manager> AI::getCurrentManager() const
 {
-  ai->setManager(manager_name);
+  return strategy_manager_;
 }
 
-std::shared_ptr<manager::Manager> AI::Api::getCurrentManager() const
+std::shared_ptr<manager::Manager> AI::getManualManager()
 {
-  return ai->strategy_manager_;
+  return manual_manager_;
 }
 
-std::shared_ptr<manager::Manager> AI::Api::getManualManager()
-{
-  return ai->manual_manager_;
-}
-
-void AI::Api::emergency()
+void AI::emergency()
 {
   for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
@@ -404,11 +389,11 @@ void AI::Api::emergency()
     final_control.control.active = false;
   }
 
-  ai->commander_->stopAll();
-  ai->commander_->flush();
+  commander_->stopAll();
+  commander_->flush();
 }
 
-void AI::Api::getAnnotations(annotations::Annotations& annotations) const
+void AI::getAnnotations(annotations::Annotations& annotations) const
 {
   //  annotations.addAnnotations(getManager()->getAnnotations());
   //  annotations.addAnnotations(getRobotBehaviorAnnotations());
@@ -420,9 +405,13 @@ void AI::Api::getAnnotations(annotations::Annotations& annotations) const
   //  annotations.mapPositions(fct);
 }
 
-std::string AI::Api::getRobotBeheviorOf(uint robot_number)
+std::string AI::getRobotBeheviorOf(uint robot_number)
 {
   return robot_behaviors_[robot_number].get()->name;
+}
+
+std::string AI::getStrategyOf(uint robot_number)
+{
 }
 
 }  // namespace rhoban_ssl
