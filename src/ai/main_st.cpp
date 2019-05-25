@@ -30,7 +30,7 @@
 #include <core/print_collection.h>
 #include <manager/factory.h>
 #include "client_config.h"
-#include "viewer/viewer_client.h"
+#include "viewer_client.h"
 #include "referee_client_single_thread.h"
 #include <referee/referee_packet_analyzer.h>
 #include <data/computed_data.h>
