@@ -81,20 +81,4 @@ public:
   static GlobalDataSingleThread singleton_;
 };
 
-/**
- * @brief The RefereeTerminalPrinter class
- */
-class RefereeTerminalPrinter : public Task
-{
-private:
-  int counter_ = 0;
-
-public:
-  RefereeTerminalPrinter();
-
-  // Task interface
-public:
-  bool runTask();
-};
-
 }  // namespace rhoban_ssl

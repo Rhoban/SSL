@@ -1,13 +1,13 @@
-#include <chrono>
-
-#include <iostream>
 #include "VisionClient.h"
+
+#include <chrono>
+#include <iostream>
 #include "client_config.h"
 #include "../ai/debug.h"
 
-using namespace rhoban_utils;
-
 namespace rhoban_ssl
+{
+namespace vision
 {
 VisionClient::VisionClient(bool simulation, std::string addr, std::string port, std::string sim_port)
   : MulticastClient(addr, port)
@@ -51,7 +51,6 @@ bool VisionClient::process(char* buffer, size_t len)
   return false;
 }
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 VisionDataGlobal VisionDataGlobal::singleton_;
@@ -158,5 +157,5 @@ bool VisionProtoBufReset::runTask()
   }
   return true;
 }
-
+}  // namespace vision
 }  // namespace rhoban_ssl

@@ -11,6 +11,8 @@
 
 namespace rhoban_ssl
 {
+namespace vision
+{
 class VisionClient : public MulticastClient
 {
 public:
@@ -55,4 +57,5 @@ public:
   VisionClientSingleThread(std::string addr, std::string port);
   virtual bool process(char* buffer_, size_t len) override;
 };
+}  // namespace vision
 }  // namespace rhoban_ssl

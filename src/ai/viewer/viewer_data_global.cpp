@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,30 +17,36 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
-
-#include <manager/manager.h>
+#include "viewer_data_global.h"
+#include <debug.h>
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace viewer
 {
-class Manual : public Manager
+ViewerDataGlobal ViewerDataGlobal::instance_;
+
+ViewerDataGlobal::ViewerDataGlobal()
 {
-private:
-  bool strategy_was_assigned_;
-  bool goal_to_positive_axis_;
-  int ally_goalie_id_;
-  int opponent_goalie_id_;
+}
 
-public:
-  Manual();
-  void defineGoalToPositiveAxis(bool value = true);
+ViewerDataGlobal& ViewerDataGlobal::get()
+{
+  return ViewerDataGlobal::instance_;
+}
 
-  void update(double time);
+void ViewerDataGlobal::addPacket(const Json::Value& packet)
+{
+  packets_to_send.push(packet);
+}
 
-  virtual ~Manual();
-};
+void ViewerDataGlobal::parseAndStorePacketFromClient(char* packet_received)
+{
+  Json::Value root;
+  Json::Reader reader;
+  assert(reader.parse(packet_received, root));
+  received_packets.push(root);
+}
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+}  // namespace viewer
+}  // namespace rhoban_ssl

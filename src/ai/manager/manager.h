@@ -100,10 +100,6 @@ public:
   virtual void assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior>>& robot_behaviors,
                                       double time, double dt);
 
-  void changeAllyAndOpponentGoalieId();
-
-  void changeTeamAndPointOfView(bool blue_have_it_s_goal_on_positive_x_axis);
-
   void removeInvalidRobots();
 
   virtual ~Manager();

@@ -31,6 +31,8 @@ using namespace rhoban_utils;
 
 namespace rhoban_ssl
 {
+namespace vision
+{
 SslGeometryPacketAnalyzer::SslGeometryPacketAnalyzer() : field_done_(false), camera_done_(false)
 {
   // setup field and camera to default values
@@ -39,8 +41,8 @@ SslGeometryPacketAnalyzer::SslGeometryPacketAnalyzer() : field_done_(false), cam
 
 bool SslGeometryPacketAnalyzer::runTask()
 {
-  for (auto i = rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.begin();
-       i != rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.end();)
+  for (auto i = vision::VisionDataGlobal::singleton_.last_packets_.begin();
+       i != vision::VisionDataGlobal::singleton_.last_packets_.end();)
   {
     if ((*i)->has_geometry())
     {
@@ -75,7 +77,7 @@ bool SslGeometryPacketAnalyzer::runTask()
         camera_done_ = true;
       }
       // remove packet as we treated it
-      i = rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.erase(i);
+      i = vision::VisionDataGlobal::singleton_.last_packets_.erase(i);
     }
     else
     {
@@ -87,8 +89,8 @@ bool SslGeometryPacketAnalyzer::runTask()
 
 bool DetectionPacketAnalyzer::runTask()
 {
-  for (auto i = rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.begin();
-       i != rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.end();)
+  for (auto i = vision::VisionDataGlobal::singleton_.last_packets_.begin();
+       i != vision::VisionDataGlobal::singleton_.last_packets_.end();)
   {
     if ((*i)->has_detection())
     {
@@ -128,7 +130,7 @@ bool DetectionPacketAnalyzer::runTask()
         }
       }
       time_synchroniser_.update(current);
-      i = rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.erase(i);
+      i = vision::VisionDataGlobal::singleton_.last_packets_.erase(i);
     }
   }
   time_synchroniser_.syncTimeShift(&GlobalDataSingleThread::singleton_.ai_data_.time_shift_with_vision);
@@ -244,5 +246,5 @@ bool UpdateBallInformation::runTask()
   }
   return true;
 }
-
+}  // namespace vision
 }  // namespace rhoban_ssl

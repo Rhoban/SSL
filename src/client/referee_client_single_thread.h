@@ -6,6 +6,8 @@
 
 namespace rhoban_ssl
 {
+namespace referee
+{
 class RefereeMessages
 {
   google::protobuf::Arena* arena_;
@@ -35,4 +37,5 @@ public:
   RefereeClientSingleThread(std::string addr, std::string port);
   virtual bool process(char* buffer_, size_t len) override;
 };
+}  // namespace referee
 }  // namespace rhoban_ssl

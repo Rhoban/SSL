@@ -2,6 +2,8 @@
 
 namespace rhoban_ssl
 {
+namespace referee
+{
 RefereeMessages RefereeMessages::singleton_;
 
 RefereeMessages::~RefereeMessages()
@@ -104,4 +106,6 @@ bool RefereeProtoBufReset::runTask()
   }
   return true;
 }
+
+}  // namespace referee
 }  // namespace rhoban_ssl

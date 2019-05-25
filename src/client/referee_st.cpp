@@ -25,11 +25,11 @@ public:
 
     // ss << "\033[2J\033[1;1H";  // this clear the terminal
     ss << counter_ << std::endl;
-    ss << "Refere infos (" << rhoban_ssl::RefereeMessages::singleton_.last_packets_.size() << " pending message)"
-       << std::endl;
-    if (rhoban_ssl::RefereeMessages::singleton_.last_packets_.size() > 0)
+    ss << "Refere infos (" << rhoban_ssl::referee::RefereeMessages::singleton_.last_packets_.size()
+       << " pending message)" << std::endl;
+    if (rhoban_ssl::referee::RefereeMessages::singleton_.last_packets_.size() > 0)
     {
-      Referee* data = rhoban_ssl::RefereeMessages::singleton_.last_packets_.front();
+      Referee* data = rhoban_ssl::referee::RefereeMessages::singleton_.last_packets_.front();
       ss << "stage: " << data->stage() << std::endl;
       ss << "stage_time_left: " << data->stage_time_left() << std::endl;
       ss << "command: " << data->command() << std::endl;
@@ -63,8 +63,9 @@ public:
     {
       ss << "*no data*" << std::endl;
     }
-    rhoban_ssl::RefereeMessages::singleton_.last_packets_.clear();
-    ss << "last packets size is :" << rhoban_ssl::RefereeMessages::singleton_.last_packets_.size() << std::endl;
+    rhoban_ssl::referee::RefereeMessages::singleton_.last_packets_.clear();
+    ss << "last packets size is :" << rhoban_ssl::referee::RefereeMessages::singleton_.last_packets_.size()
+       << std::endl;
     std::cout << ss.str();
     std::cout << std::flush;
     return true;
@@ -75,8 +76,8 @@ int main()
 {
   signal(SIGINT, stop);
   rhoban_ssl::ExecutionManager::getManager().addTask(
-      new rhoban_ssl::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
+      new rhoban_ssl::referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
   rhoban_ssl::ExecutionManager::getManager().addTask(new RefereeTerminalPrinter());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeProtoBufReset(100));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::referee::RefereeProtoBufReset(100));
   rhoban_ssl::ExecutionManager::getManager().run(0.1);
 }

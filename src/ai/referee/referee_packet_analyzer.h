@@ -39,5 +39,21 @@ private:
   void updateTeamInfo(rhoban_ssl::Team team, const ::Referee_TeamInfo& new_infos);
 };
 
+/**
+ * @brief The RefereeTerminalPrinter class
+ */
+class RefereeTerminalPrinter : public Task
+{
+private:
+  int counter_ = 0;
+
+public:
+  RefereeTerminalPrinter();
+
+  // Task interface
+public:
+  bool runTask();
+};
+
 }  // namespace referee
 }  // namespace rhoban_ssl

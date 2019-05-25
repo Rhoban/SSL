@@ -30,6 +30,8 @@
 
 namespace rhoban_ssl
 {
+namespace vision
+{
 class SslGeometryPacketAnalyzer : public Task
 {
   bool field_done_;
@@ -66,5 +68,5 @@ public:
   UpdateBallInformation(vision::PartOfTheField part_of_the_field_used);
   virtual bool runTask() override;
 };
-
+}  // namespace vision
 }  // namespace rhoban_ssl

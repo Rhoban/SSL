@@ -45,8 +45,6 @@ public:
    */
   double dt;
 
-  AICommander* commander_;
-
   // This field is used by rhobot_behavior::Navigation_inside_the_field.
   bool force_ball_avoidance;
 

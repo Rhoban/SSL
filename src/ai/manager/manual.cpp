@@ -113,13 +113,6 @@ Manual::Manual() : Manager(), goal_to_positive_axis_(true), ally_goalie_id_(0), 
                    std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize()));
 }
 
-void Manual::assignPointOfViewAndGoalie()
-{
-  // DEBUG(team_color);
-  // DEBUG(ai::Team::Yellow);
-  changeTeamAndPointOfView(goal_to_positive_axis_);
-}
-
 void Manual::defineGoalToPositiveAxis(bool value)
 {
   this->goal_to_positive_axis_ = value;
@@ -132,7 +125,6 @@ void Manual::update(double time)
   // }
   // update_strategies(time);
   updateCurrentStrategies(time);
-  assignPointOfViewAndGoalie();
   // if( ! strategy_was_assigned ){
   //    assign_strategy(
   //        "Goalie",

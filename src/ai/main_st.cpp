@@ -30,24 +30,21 @@
 #include <core/print_collection.h>
 #include <manager/factory.h>
 #include "client_config.h"
-#include "viewer.h"
+#include "viewer/viewer_client.h"
 #include "referee_client_single_thread.h"
 #include <referee/referee_packet_analyzer.h>
 #include <data/computed_data.h>
 #include <control/control.h>
-#include <viewer/api_task.h>
+#include <viewer/viewer_communication.h>
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 
 using namespace rhoban_ssl;
-// AI* ai_ = NULL;
-// static bool running = true;
 
 void stop(int)
 {
-  // running = false;
   rhoban_ssl::ExecutionManager::getManager().shutdown();
 }
 
@@ -177,28 +174,21 @@ int main(int argc, char** argv)
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
-  GlobalDataSingleThread::singleton_.ai_data_.commander_ = commander;
+  // vision
+  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
+  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
+  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
+  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
+  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
+  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used));
+  ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
+  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10));
 
-  rhoban_ssl::ExecutionManager::getManager().addTask(
-      new rhoban_ssl::VisionClientSingleThread(addr.getValue(), theport));
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::SslGeometryPacketAnalyzer());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::DetectionPacketAnalyzer());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::ChangeReferencePointOfView());
-  rhoban_ssl::ExecutionManager::getManager().addTask(
-      new rhoban_ssl::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::referee::RefereePacketAnalyzer());
-  // rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeTerminalPrinter());
-
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateRobotInformation(part_of_the_field_used));
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateBallInformation(part_of_the_field_used));
-
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionDataTerminalPrinter());
-
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::RefereeProtoBufReset(10));
-
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ApiTask());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ViewerCommunication());
+  // refereee
+  ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
+  ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
+  ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
+  ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
 
   if (simulation.getValue())
   {
@@ -207,20 +197,25 @@ int main(int argc, char** argv)
   else
   {
     AICommanderReal* commander_r = new AICommanderReal();
-    rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
+    ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
     commander = commander_r;
   }
 
+  // ai
   AI* ai_ = nullptr;
   ai_ = new AI(manager_name.getValue(), commander);
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::data::CollisionComputing());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::TimeUpdater());
-  rhoban_ssl::ExecutionManager::getManager().addTask(ai_);
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::ControlSender(commander));
-  rhoban_ssl::ExecutionManager::getManager().run(0.01);
+  ExecutionManager::getManager().addTask(new data::CollisionComputing());
+  ExecutionManager::getManager().addTask(new TimeUpdater());
+  ExecutionManager::getManager().addTask(ai_);
+  ExecutionManager::getManager().addTask(new ControlSender(commander));
+
+  // viewer
+  ExecutionManager::getManager().addTask(new viewer::ViewerClient());
+  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
+
+  ExecutionManager::getManager().run(0.01);
 
   delete commander;
-
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;
 }

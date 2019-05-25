@@ -12,29 +12,29 @@ RefereePacketAnalyzer::RefereePacketAnalyzer()
 
 bool RefereePacketAnalyzer::runTask()
 {
-  if (rhoban_ssl::RefereeMessages::singleton_.last_packets_.size() > 0)
+  if (/*referee::*/ RefereeMessages::singleton_.last_packets_.size() > 0)
   {
-    ::Referee* data = rhoban_ssl::RefereeMessages::singleton_.last_packets_.front();
-    rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.game_state.update(*data);
+    ::Referee* data = /*referee::*/ RefereeMessages::singleton_.last_packets_.front();
+    GlobalDataSingleThread::singleton_.referee_.game_state.update(*data);
 
-    if (data->packet_timestamp() > rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.packet_timestamp)
+    if (data->packet_timestamp() > GlobalDataSingleThread::singleton_.referee_.packet_timestamp)
     {
       // update game state
-      rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.packet_timestamp = data->packet_timestamp();
+      GlobalDataSingleThread::singleton_.referee_.packet_timestamp = data->packet_timestamp();
 
-      rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.state_changed =
-          (data->stage() != rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.current_stage);
+      GlobalDataSingleThread::singleton_.referee_.state_changed =
+          (data->stage() != GlobalDataSingleThread::singleton_.referee_.current_stage);
 
-      rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.current_stage = data->stage();
-      rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.stage_time_left = data->stage_time_left();
-      rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.command_timestamp = data->command_timestamp();
-      rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.current_command = data->command();
+      GlobalDataSingleThread::singleton_.referee_.current_stage = data->stage();
+      GlobalDataSingleThread::singleton_.referee_.stage_time_left = data->stage_time_left();
+      GlobalDataSingleThread::singleton_.referee_.command_timestamp = data->command_timestamp();
+      GlobalDataSingleThread::singleton_.referee_.current_command = data->command();
 
       if (data->has_next_command())
-        rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.next_command = data->next_command();
+        GlobalDataSingleThread::singleton_.referee_.next_command = data->next_command();
 
       // Update teams infos
-      if (rhoban_ssl::ai::Config::we_are_blue)
+      if (ai::Config::we_are_blue)
       {
         updateTeamInfo(Ally, data->blue());
         updateTeamInfo(Opponent, data->yellow());
@@ -48,8 +48,7 @@ bool RefereePacketAnalyzer::runTask()
       // Update side information
       if (data->has_blue_team_on_positive_half())
       {
-        rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.blue_team_on_positive_half =
-            data->blue_team_on_positive_half();
+        GlobalDataSingleThread::singleton_.referee_.blue_team_on_positive_half = data->blue_team_on_positive_half();
       }
     }
   }
@@ -58,8 +57,7 @@ bool RefereePacketAnalyzer::runTask()
 
 void RefereePacketAnalyzer::updateTeamInfo(Team team, const Referee_TeamInfo& new_infos)
 {
-  data::Referee::TeamInfo& team_infos_to_update =
-      rhoban_ssl::GlobalDataSingleThread::singleton_.referee_.teams_info[team];
+  data::Referee::TeamInfo& team_infos_to_update = GlobalDataSingleThread::singleton_.referee_.teams_info[team];
 
   team_infos_to_update.name = new_infos.name();
   team_infos_to_update.score = new_infos.score();
@@ -101,6 +99,44 @@ void RefereePacketAnalyzer::updateTeamInfo(Team team, const Referee_TeamInfo& ne
 
   if (new_infos.has_max_allowed_bots())
     team_infos_to_update.max_allowed_bots = int(new_infos.max_allowed_bots());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+RefereeTerminalPrinter::RefereeTerminalPrinter() : counter_(0)
+{
+}
+
+bool RefereeTerminalPrinter::runTask()
+{
+  counter_ += 1;
+  std::stringstream ss;
+
+  // ss << "\033[2J\033[1;1H";  // this clear the terminal
+  ss << "--------------------------------------------------" << std::endl;
+  ss << "Refere infos (" << counter_ << ")" << std::endl;
+  ss << "--------------------------------------------------" << std::endl;
+  ss << "stage: " << GlobalDataSingleThread::singleton_.referee_.getCurrentStageName() << std::endl;
+  ss << "stage_time_left: " << GlobalDataSingleThread::singleton_.referee_.stage_time_left << std::endl;
+  ss << "state: " << GlobalDataSingleThread::singleton_.referee_.getCurrentStateName() << std::endl;
+  ss << "command_timestamp: " << GlobalDataSingleThread::singleton_.referee_.command_timestamp << std::endl;
+  ss << "remaining time: " << GlobalDataSingleThread::singleton_.referee_.stage_time_left << std::endl;
+
+  for (int i = 0; i < 2; ++i)
+  {
+    ss << "----- TEAM : " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].name << " ----- " << std::endl;
+    ss << "score: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].score << std::endl;
+    ss << "red_cards: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].red_cards_count << std::endl;
+    ss << "yellow_cards: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].yellow_cards_count << std::endl;
+    ss << "  timeouts: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].available_timeout_count
+       << std::endl;
+    ss << "  timeout_time: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].available_time_of_timeout_
+       << std::endl;
+    ss << "  goalie: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].goalkeeper_number << std::endl;
+  }
+  std::cout << ss.str();
+  std::cout << std::flush;
+  return true;
 }
 
 }  // namespace referee

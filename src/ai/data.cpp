@@ -54,42 +54,4 @@ GlobalDataSingleThread::GlobalDataSingleThread()
     }
   }
 }
-
-///////////////////////////////////////////////////////////////////////////////
-
-RefereeTerminalPrinter::RefereeTerminalPrinter() : counter_(0)
-{
-}
-
-bool RefereeTerminalPrinter::runTask()
-{
-  counter_ += 1;
-  std::stringstream ss;
-
-  // ss << "\033[2J\033[1;1H";  // this clear the terminal
-  ss << "--------------------------------------------------" << std::endl;
-  ss << "Refere infos (" << counter_ << ")" << std::endl;
-  ss << "--------------------------------------------------" << std::endl;
-  ss << "stage: " << GlobalDataSingleThread::singleton_.referee_.getCurrentStageName() << std::endl;
-  ss << "stage_time_left: " << GlobalDataSingleThread::singleton_.referee_.stage_time_left << std::endl;
-  ss << "state: " << GlobalDataSingleThread::singleton_.referee_.getCurrentStateName() << std::endl;
-  ss << "command_timestamp: " << GlobalDataSingleThread::singleton_.referee_.command_timestamp << std::endl;
-  ss << "remaining time: " << GlobalDataSingleThread::singleton_.referee_.stage_time_left << std::endl;
-
-  for (int i = 0; i < 2; ++i)
-  {
-    ss << "----- TEAM : " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].name << " ----- " << std::endl;
-    ss << "score: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].score << std::endl;
-    ss << "red_cards: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].red_cards_count << std::endl;
-    ss << "yellow_cards: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].yellow_cards_count << std::endl;
-    ss << "  timeouts: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].available_timeout_count
-       << std::endl;
-    ss << "  timeout_time: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].available_time_of_timeout_
-       << std::endl;
-    ss << "  goalie: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].goalkeeper_number << std::endl;
-  }
-  std::cout << ss.str();
-  std::cout << std::flush;
-  return true;
-}
 }  // namespace rhoban_ssl

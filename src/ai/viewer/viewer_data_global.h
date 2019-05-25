@@ -43,66 +43,49 @@ namespace rhoban_ssl
 namespace viewer
 {
 /**
- * @brief The API for the connection with the viewer.
+ * @brief The ViewerDataGlobal class contains all the data exchanged between the monitor and the ia
+ * in the form of json packets.
  */
-class Api
+class ViewerDataGlobal
 {
 private:
   /**
    * @brief Constructor.
    */
-  Api();
+  ViewerDataGlobal();
 
   /**
    * @brief The singleton of the class.
    */
-  static Api api_singleton_;
-
-  /**
-   * @brief All packet to store and send.
-   */
-  std::queue<Json::Value> packets_;
-
-  /**
-   * @brief All packet receive by the viewer.
-   */
-  std::queue<Json::Value> viewer_packets_;
+  static ViewerDataGlobal instance_;
 
 public:
   /**
    * @brief Get the unique instance of the class.
    */
-  static Api& getApi();
-  /**
-   * @brief Add a packet in the queue.
-   */
-  void addPacket(Json::Value& packet);
+  static ViewerDataGlobal& get();
 
   /**
-   * @brief Add a packet send by the viewer in the queue.
-   * @param packet_receive Packet of the viewer.
+   * @brief Store all packets that will be send to clients.
    */
-  void addViewerPacket(char* viewer_packet);
+  std::queue<Json::Value> packets_to_send;
 
   /**
-   * @brief Get the queue of packets.
-   * @return The pointer of the queue of packets.
+   * @brief All packet received from the viewer.
    */
-  std::queue<Json::Value>& getQueue();
+  std::queue<Json::Value> received_packets;
 
   /**
-   * @brief Generate Game Packet.
+   * @brief Add a packet that will be send to viewer clients
+   * in the queue.
    */
-  void generateGamePacket();
+  void addPacket(const Json::Value& packet);
 
   /**
-   * @brief Add Entity Packet.
+   * @brief Parse and add store a packet send by the viewer.
+   * @param packet_received in char*.
    */
-  void generateEntityPacket();
-
-  void addListPacket(std::shared_ptr<manager::Manager> manager);
-
-  void readViewerPacket();
+  void parseAndStorePacketFromClient(char* packet_received);
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

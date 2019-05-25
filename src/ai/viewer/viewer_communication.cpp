@@ -1,59 +1,60 @@
-/*
-    This file is part of SSL.
-
-    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
-
-    SSL is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    SSL is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public License
-    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#include "api.h"
-#include <debug.h>
+#include "viewer_communication.h"
+#include "viewer/viewer_data_global.h"
 
 namespace rhoban_ssl
 {
 namespace viewer
 {
-Api Api::api_singleton_;
-
-Api::Api()
+ViewerCommunication::ViewerCommunication(AI* ai)
+  : ai_(ai), last_sending_time_(rhoban_utils::TimeStamp::now().getTimeMS())
 {
 }
 
-Api& Api::getApi()
+bool ViewerCommunication::runTask()
 {
-  return Api::api_singleton_;
+  processIncomingPackets();
+
+  if (GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_ > SENDING_DELAY)
+  {
+    sendStatusPackets();
+    last_sending_time_ = GlobalDataSingleThread::singleton_.ai_data_.time;
+  }
+
+  return true;
 }
 
-void Api::addPacket(Json::Value& packet)
+void ViewerCommunication::processIncomingPackets()
 {
-  packets_.push(packet);
+  while (!viewer::ViewerDataGlobal::get().received_packets.empty())
+  {
+    Json::Value viewer_packet = viewer::ViewerDataGlobal::get().received_packets.front();
+    if (viewer_packet["action"] != "")
+    {
+      if (viewer_packet["action"] == "emergency")
+      {
+        ai_->api.emergency();
+      }
+      else
+      {
+        DEBUG("Aucune action trouvé");
+      }
+    }
+    viewer::ViewerDataGlobal::get().received_packets.pop();
+  }
 }
 
-void Api::addViewerPacket(char* viewer_packet)
+void ViewerCommunication::sendStatusPackets()
 {
-  Json::Value root;
-  Json::Reader reader;
-  assert(reader.parse(viewer_packet, root));
-  viewer_packets_.push(root);
+  // GlobalData status
+  viewer::ViewerDataGlobal::get().addPacket(fieldStatus());
+  viewer::ViewerDataGlobal::get().addPacket(mobilesStatus());
+
+  // Information of the ai
+  viewer::ViewerDataGlobal::get().addPacket(availableManager());
+  viewer::ViewerDataGlobal::get().addPacket(availableRobotBehavior());
 }
 
-std::queue<Json::Value>& Api::getQueue()
-{
-  return packets_;
-}
-
-void Api::generateGamePacket()
+Json::Value ViewerCommunication::fieldStatus()
 {
   Json::Value packet;
   data::Field field = GlobalDataSingleThread::singleton_.field_;
@@ -72,10 +73,10 @@ void Api::generateGamePacket()
   packet["informations"]["simulation"] = ai::Config::is_in_simulation;
   packet["informatons"]["color_ally"] = ai::Config::we_are_blue;
 
-  addPacket(packet);
+  return packet;
 }
 
-void Api::generateEntityPacket()
+Json::Value ViewerCommunication::mobilesStatus()
 {
   Json::Value packet;
   double time = GlobalDataSingleThread::singleton_.ai_data_.time;
@@ -115,38 +116,15 @@ void Api::generateEntityPacket()
       }
     }
   }
-
-  addPacket(packet);
+  return packet;
 }
 
-void Api::addListPacket(std::shared_ptr<manager::Manager> manager)
+Json::Value ViewerCommunication::availableManager()
 {
-  // WIP : Add in the packet.
-  // const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
-  // WIP : Add List for strategy.
-  // WIP : Prepare for robot behavior.
 }
 
-void Api::readViewerPacket()
+Json::Value ViewerCommunication::availableRobotBehavior()
 {
-  while (!viewer_packets_.empty())
-  {
-    Json::Value viewer_packet = viewer_packets_.front();
-    if (viewer_packet["action"] != "")
-    {
-      if (viewer_packet["action"] == "emergency")
-      {
-        AICommander* commander = GlobalDataSingleThread::singleton_.ai_data_.commander_;
-        commander->stopAll();
-        commander->flush();
-      }
-      else
-      {
-        DEBUG("Aucune action trouvé");
-      }
-    }
-    viewer_packets_.pop();
-  }
 }
 
 }  // namespace viewer

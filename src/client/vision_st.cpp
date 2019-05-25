@@ -23,7 +23,7 @@ public:
   virtual bool runTask() override
   {
     std::list<SSL_WrapperPacket*> to_remove;
-    for (auto i : rhoban_ssl::VisionDataGlobal::singleton_.last_packets_)
+    for (auto i : rhoban_ssl::vision::VisionDataGlobal::singleton_.last_packets_)
       if (i->has_detection())
       {
         if (current_frame[i->detection().camera_id()] == i->detection().frame_number())
@@ -31,12 +31,12 @@ public:
         if (current_frame[i->detection().camera_id()] < i->detection().frame_number())
           current_frame[i->detection().camera_id()] = i->detection().frame_number();
       }
-    for (auto i : rhoban_ssl::VisionDataGlobal::singleton_.last_packets_)
+    for (auto i : rhoban_ssl::vision::VisionDataGlobal::singleton_.last_packets_)
       if ((current_frame[i->detection().camera_id()] > i->detection().frame_number()))
         to_remove.push_back(i);
     for (auto i : to_remove)
     {
-      rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.remove(i);
+      rhoban_ssl::vision::VisionDataGlobal::singleton_.last_packets_.remove(i);
       // rhoban_ssl::VisionDataGlobal::singleton_.packets_buffer_.push_back(i);
     }
     return running;
@@ -48,10 +48,10 @@ class ProcessSSLPacket : public rhoban_ssl::Task
 public:
   virtual bool runTask() override
   {
-    while (rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.empty() == false)
+    while (rhoban_ssl::vision::VisionDataGlobal::singleton_.last_packets_.empty() == false)
     {
-      SSL_WrapperPacket* p = rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.front();
-      rhoban_ssl::VisionDataGlobal::singleton_.last_packets_.pop_front();
+      SSL_WrapperPacket* p = rhoban_ssl::vision::VisionDataGlobal::singleton_.last_packets_.front();
+      rhoban_ssl::vision::VisionDataGlobal::singleton_.last_packets_.pop_front();
       if (p->has_geometry())
       {
         std::cout << "receive a geometry packet" << std::endl;
@@ -73,11 +73,11 @@ int main()
   signal(SIGINT, stop);
 
   rhoban_ssl::ExecutionManager::getManager().addTask(
-      new rhoban_ssl::VisionClientSingleThread(SSL_VISION_ADDRESS, SSL_SIMULATION_VISION_PORT));
+      new rhoban_ssl::vision::VisionClientSingleThread(SSL_VISION_ADDRESS, SSL_SIMULATION_VISION_PORT));
 
   // rhoban_ssl::ExecutionManager::getManager().addTask(new DoubleFrameCleaner());
   rhoban_ssl::ExecutionManager::getManager().addTask(new ProcessSSLPacket());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::VisionProtoBufReset(10));
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::vision::VisionProtoBufReset(10));
   rhoban_ssl::ExecutionManager::getManager().run(0.01);
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

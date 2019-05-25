@@ -38,7 +38,6 @@ set (SOURCES
     data/ai_data.cpp
     data/computed_data.cpp
     config.cpp
-    viewer.cpp
     game_informations.cpp
     vision/ai_vision_client.cpp
     vision/vision_data.cpp
@@ -49,8 +48,10 @@ set (SOURCES
     com/ai_commander.cpp
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp
-    viewer/api.cpp
+    viewer/viewer_client.cpp
+    viewer/viewer_data_global.cpp
     viewer/api_task.cpp
+    viewer/viewer_communication.cpp
     robot_behavior/factory.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/position_follower.cpp

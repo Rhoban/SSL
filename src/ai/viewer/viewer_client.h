@@ -4,7 +4,7 @@
 #include <libwebsockets.h>
 #include <iostream>
 #include <vector>
-#include <viewer/api.h>
+#include <viewer/viewer_data_global.h>
 #include <json/json.h>
 
 /**
@@ -21,10 +21,12 @@ struct per_session_data_minimal
 
 namespace rhoban_ssl
 {
+namespace viewer
+{
 /**
  * @brief The class to communicate with the viewer.
  */
-class ViewerCommunication : public Task
+class ViewerClient : public Task
 {
 private:
   /** The callback for the viewer handler.
@@ -37,7 +39,7 @@ private:
    * @param len Length set for some callback reasons
    * @return is_success Boolean to see if the callback has success.
    */
-  static int callback_http_dummy(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len);
+  static int callback_http_dummy(struct lws* wsi, enum lws_callback_reasons, void*, void*, size_t);
 
   /** A dummy callback because the libwebsocket doesn't start if the http is not handled.
    *
@@ -75,7 +77,7 @@ public:
    *
    * Create context, protocols and websocket.
    */
-  ViewerCommunication();
+  ViewerClient();
   /**
    * @brief runTask
    *
@@ -89,6 +91,7 @@ public:
    *
    * Destroy the context.
    */
-  ~ViewerCommunication();
+  ~ViewerClient() override;
 };
+}  // namespace viewer
 }  // namespace rhoban_ssl

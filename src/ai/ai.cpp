@@ -37,6 +37,18 @@
 
 namespace rhoban_ssl
 {
+AI::Api AI::api;
+
+AI::AI(std::string manager_name, AICommander* commander) : running_(true), commander_(commander)
+{
+  initRobotBehaviors();
+
+  manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
+
+  setManager(manager_name);
+  api.ai = this;
+}
+
 bool AI::runTask()
 {
   if (running_ == false)
@@ -236,20 +248,6 @@ void AI::initRobotBehaviors()
   }
 }
 
-AI::AI(std::string manager_name, AICommander* commander) : running_(true), commander_(commander)
-{
-  initRobotBehaviors();
-
-  manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
-
-  setManager(manager_name);
-}
-
-std::vector<std::string> AI::getAvailableManagers()
-{
-  return list2vector(manager::Factory::availableManagers());
-}
-
 void AI::setManager(std::string managerName)
 {
   std::vector<int> robot_ids(robot_behaviors_.size());
@@ -273,16 +271,6 @@ void AI::setManager(std::string managerName)
   GlobalDataSingleThread::singleton_.robots_[Ally][ai::Config::default_goalie_id].is_goalie = true;
 
   strategy_manager_->declareTeamIds(robot_ids);
-}
-
-std::shared_ptr<manager::Manager> AI::getManager() const
-{
-  return strategy_manager_;
-}
-
-std::shared_ptr<manager::Manager> AI::getManualManager()
-{
-  return manual_manager_;
 }
 
 void AI::updateRobots()
@@ -328,18 +316,6 @@ rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
     annotations.addAnnotations(robot_behavior.getAnnotations());
   }
   return annotations;
-}
-
-void AI::getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const
-{
-  //  annotations.addAnnotations(getManager()->getAnnotations());
-  //  annotations.addAnnotations(getRobotBehaviorAnnotations());
-
-  //  std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point&
-  //  p) {
-  //    return this->ai_data_.team_point_of_view.fromFrame(p);
-  //  };
-  //  annotations.mapPositions(fct);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -389,6 +365,58 @@ bool TimeUpdater::runTask()
   }
 #endif
   return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+AI::Api::Api()
+{
+}
+
+std::vector<std::string> AI::Api::getAvailableManagers()
+{
+  list2vector(manager::Factory::availableManagers());
+}
+
+void AI::Api::setManager(std::string manager_name)
+{
+  ai->setManager(manager_name);
+}
+
+std::shared_ptr<manager::Manager> AI::Api::getCurrentManager() const
+{
+  return ai->strategy_manager_;
+}
+
+std::shared_ptr<manager::Manager> AI::Api::getManualManager()
+{
+  return ai->manual_manager_;
+}
+
+void AI::Api::emergency()
+{
+  for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+  {
+    auto& final_control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id];
+    final_control.is_manually_controled_by_viewer = true;
+    final_control.control.ignore = true;
+    final_control.control.active = false;
+  }
+
+  ai->commander_->stopAll();
+  ai->commander_->flush();
+}
+
+void AI::Api::getAnnotations(annotations::Annotations& annotations) const
+{
+  //  annotations.addAnnotations(getManager()->getAnnotations());
+  //  annotations.addAnnotations(getRobotBehaviorAnnotations());
+
+  //  std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point&
+  //  p) {
+  //    return this->ai_data_.team_point_of_view.fromFrame(p);
+  //  };
+  //  annotations.mapPositions(fct);
 }
 
 }  // namespace rhoban_ssl

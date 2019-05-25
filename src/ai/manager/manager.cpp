@@ -163,34 +163,6 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
   }
 }
 
-void Manager::changeTeamAndPointOfView(bool blue_have_it_s_goal_on_positive_x_axis)
-{
-  /// TODO refacto
-  ///  if (team != ai::Unknown and getTeam() != team)
-  ///  {
-  ///    assert(team == ai::Blue or team == ai::Yellow);
-  ///    ai_data_.changeTeamColor(team);
-  ///    blue_is_not_set_ = true;
-  ///  }
-  // We change the point of view of the team
-  if (blue_is_not_set_ or blue_team_on_positive_half_ != blue_have_it_s_goal_on_positive_x_axis)
-  {
-    blue_is_not_set_ = false;
-    blue_team_on_positive_half_ = blue_have_it_s_goal_on_positive_x_axis;
-    if ((ai::Config::we_are_blue and blue_have_it_s_goal_on_positive_x_axis) or
-        (!ai::Config::we_are_blue and !blue_have_it_s_goal_on_positive_x_axis))
-    {
-      /// TODO refacto
-      /// ai_data_.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(-1.0, 0.0), Vector2d(0.0, -1.0));
-    }
-    else
-    {
-      /// TODO refacto
-      /// ai_data_.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(1.0, 0.0), Vector2d(0.0, 1.0));
-    }
-  }
-}
-
 Manager::Manager() : GameInformations(), blue_is_not_set_(true)
 {
   registerStrategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
