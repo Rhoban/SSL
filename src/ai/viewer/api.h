@@ -24,9 +24,9 @@
 #include <iostream>
 
 // Packet Protobuf.
-#include "ai_packet.pb.h"
-#include "game_packet.pb.h"
-#include "entity_packet.pb.h"
+// #include "ai_packet.pb.h"
+// #include "game_packet.pb.h"
+// #include "entity_packet.pb.h"
 #include <json/json.h>
 
 // Internal files
