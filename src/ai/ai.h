@@ -93,6 +93,8 @@ private:
      * @param annotations
      */
     void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
+
+    std::string getRobotBeheviorOf(uint robot_number);
   };
 
 public:
@@ -114,7 +116,8 @@ private:
   AICommander* commander_;
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
-  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
+
+  static std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
 
   Control getRobotControl(robot_behavior::RobotBehavior& robot_behavior, data::Robot& robot);
 

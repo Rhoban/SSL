@@ -62,8 +62,6 @@ private:
 
   Json::Value gameInformations();
   Json::Value mobilesStatus();
-  Json::Value availableManager();
-  Json::Value availableRobotBehavior();
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

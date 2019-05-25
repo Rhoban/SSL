@@ -38,6 +38,7 @@
 namespace rhoban_ssl
 {
 AI::Api AI::api;
+std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > AI::robot_behaviors_;
 
 AI::AI(std::string manager_name, AICommander* commander) : running_(true), commander_(commander)
 {
@@ -417,6 +418,11 @@ void AI::Api::getAnnotations(annotations::Annotations& annotations) const
   //    return this->ai_data_.team_point_of_view.fromFrame(p);
   //  };
   //  annotations.mapPositions(fct);
+}
+
+std::string AI::Api::getRobotBeheviorOf(uint robot_number)
+{
+  return robot_behaviors_[robot_number].get()->name;
 }
 
 }  // namespace rhoban_ssl

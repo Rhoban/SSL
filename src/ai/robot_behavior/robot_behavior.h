@@ -37,7 +37,6 @@ protected:
   const data::Robot* robot_ptr_;
   double birthday_;
   double last_update_;
-  std::string name_;
 
   Vector2d robot_linear_position_;
   ContinuousAngle robot_angular_position_;
@@ -47,6 +46,7 @@ protected:
 public:
   RobotBehavior();
 
+  std::string name;
   double age() const;
   bool isBorn() const;
   void setBirthday(double birthday);

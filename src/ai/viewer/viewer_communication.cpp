@@ -70,8 +70,8 @@ void ViewerCommunication::sendStatusPackets()
   // viewer::ViewerDataGlobal::get().addPacket(mobilesStatus());
 
   // Information of the ai
-  viewer::ViewerDataGlobal::get().addPacket(availableManager());
-  viewer::ViewerDataGlobal::get().addPacket(availableRobotBehavior());
+  //  viewer::ViewerDataGlobal::get().addPacket(availableManager());
+  //  viewer::ViewerDataGlobal::get().addPacket(availableRobotBehavior());
 }
 
 Json::Value ViewerCommunication::fieldPacket()
@@ -193,15 +193,14 @@ Json::Value ViewerCommunication::teamsPacket()
       if (!ai::Config::is_in_simulation)
       {
         // Activate electronics.
-        packet[team][rid]["electronics"]["alive"] = (current_robot.electronics.status & STATUS_OK) ? true : false;
+        packet[team][rid]["electronics"]["alive"] = current_robot.robotOk();
         packet[team][rid]["electronics"]["voltage"] = current_robot.electronics.voltage;
         packet[team][rid]["electronics"]["cap_volt"] = current_robot.electronics.cap_volt;
         packet[team][rid]["electronics"]["ir_trigered"] = current_robot.infraRed();
         packet[team][rid]["electronics"]["odometry"]["x"] = current_robot.electronics.xpos;
         packet[team][rid]["electronics"]["odometry"]["y"] = current_robot.electronics.ypos;
         packet[team][rid]["electronics"]["odometry"]["orientation"] = current_robot.electronics.ang;
-        packet[team][rid]["electronics"]["errors"]["driver"] =
-            (current_robot.electronics.status & STATUS_DRIVER_ERR) ? true : false;
+        packet[team][rid]["electronics"]["errors"]["driver"] = current_robot.driverError();
       }
     }
   }

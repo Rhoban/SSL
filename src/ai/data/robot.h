@@ -36,7 +36,7 @@ public:
   bool is_goalie;
 
   /**
-   * @brief true if inside field and in vision
+   * @brief is_valid to remove
    */
   bool is_valid;
 
@@ -48,6 +48,19 @@ public:
    * @return bool : infrared barrier detection
    */
   bool infraRed() const;
+
+  /**
+   * @brief electronics informations, returns true if an error with drivers is detected
+   * on the robot.
+   * @return bool : Error with drivers
+   */
+  bool driverError() const;
+
+  /**
+   * @brief returns true if the robot is alive and ok
+   * @return bool : robot is alive and ok
+   */
+  bool robotOk() const;
 };
 
 }  // namespace data
