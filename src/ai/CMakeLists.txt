@@ -48,7 +48,6 @@ set (SOURCES
     com/ai_commander.cpp
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp
-    viewer/viewer_client.cpp
     viewer/viewer_data_global.cpp
     viewer/api_task.cpp
     viewer/viewer_communication.cpp

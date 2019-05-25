@@ -12,7 +12,9 @@
 
     <build_depend>rhoban_geometry</build_depend> <!-- rhoban/geometry -->
     <build_depend>serial</build_depend> <!-- rhobandeps/serial -->
+    <build_depend>jsoncpp</build_depend> <!-- rhobandeps/jsoncpp -->
 
     <run_depend>rhoban_geometry</run_depend>
     <run_depend>serial</run_depend>
+    <run_depend>jsoncpp</run_depend>
 </package>

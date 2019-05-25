@@ -4,12 +4,13 @@ project(ssl_client)
 find_package(catkin REQUIRED COMPONENTS
   rhoban_geometry
   serial
+  jsoncpp
   )
 
 catkin_package(
     INCLUDE_DIRS . ${CMAKE_CURRENT_BINARY_DIR}
     LIBRARIES ssl_client
-    CATKIN_DEPENDS rhoban_geometry serial
+    CATKIN_DEPENDS rhoban_geometry serial jsoncpp
 )
 
 # This is not really clean but will produce the binaries in the workspace
@@ -42,6 +43,7 @@ set (SOURCES
     RefereeClient.cpp
     referee_client_single_thread.cpp
     VisionClient.cpp
+    viewer_client.cpp
     SimClient.cpp
     Kinematic.cpp
     Master.cpp
@@ -51,9 +53,8 @@ set (SOURCES
 )
 
 add_library(ssl_client ${SOURCES})
-target_link_libraries (ssl_client ${PROTOBUF_LIBRARIES} ${catkin_LIBRARIES})
+target_link_libraries (ssl_client ${PROTOBUF_LIBRARIES} ${catkin_LIBRARIES} websockets)
 target_include_directories(ssl_client PUBLIC ${CMAKE_SOURCE_DIR})
-
 
 add_executable (referee referee.cpp ${SOURCES})
 target_link_libraries (referee ssl_client)
@@ -75,6 +76,9 @@ target_link_libraries (kinematic ssl_client)
 
 add_executable (master master.cpp ${SOURCES})
 target_link_libraries (master ssl_client)
+
+add_executable (viewer_st viewer_st.cpp ${SOURCES})
+target_link_libraries (viewer_st ssl_client)
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

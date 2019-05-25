@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "viewer_communication.h"
-#include "viewer/viewer_data_global.h"
+#include <viewer_client.h>
 
 namespace rhoban_ssl
 {

@@ -1,10 +1,37 @@
 #include "viewer_client.h"
-#include "debug.h"
+#include <assert.h>
+#include <algorithm>
 
 namespace rhoban_ssl
 {
 namespace viewer
 {
+ViewerDataGlobal ViewerDataGlobal::instance_;
+
+ViewerDataGlobal::ViewerDataGlobal()
+{
+}
+
+ViewerDataGlobal& ViewerDataGlobal::get()
+{
+  return ViewerDataGlobal::instance_;
+}
+
+void ViewerDataGlobal::addPacket(const Json::Value& packet)
+{
+  packets_to_send.push(packet);
+}
+
+void ViewerDataGlobal::parseAndStorePacketFromClient(char* packet_received)
+{
+  Json::Value root;
+  Json::Reader reader;
+  assert(reader.parse(packet_received, root));
+  received_packets.push(root);
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 int ViewerClient::callback_http_dummy(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in,
                                       size_t len)
 {
@@ -15,35 +42,25 @@ std::vector<struct lws*> ViewerClient::clients_;
 
 int ViewerClient::callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len)
 {
-  unsigned char m_Test[20] = "Hello World";
   switch (reason)
   {
     case LWS_CALLBACK_ESTABLISHED:
-      DEBUG("Connection - Initialized");
       ViewerClient::clients_.push_back(wsi);
       // TODO : the viewer send a request to have informations at initialisation.
       return 0;
-      break;
     case LWS_CALLBACK_RECEIVE:
-      DEBUG("test");
       viewer::ViewerDataGlobal::get().parseAndStorePacketFromClient((char*)in);
       return 0;
-      break;
     case LWS_CALLBACK_SERVER_WRITEABLE:
-      lws_write(wsi, m_Test, 20, LWS_WRITE_TEXT);
       return 0;
-      break;
     case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
-      DEBUG("Error - We receive the client");
       return 0;
-      break;
     case LWS_CALLBACK_CLOSED:
-      DEBUG("Connection closed");
       ViewerClient::clients_.erase(std::remove(ViewerClient::clients_.begin(), ViewerClient::clients_.end(), wsi),
                                    ViewerClient::clients_.end());
+      return 0;
     default:
       return 0;
-      break;
   }
 }
 
