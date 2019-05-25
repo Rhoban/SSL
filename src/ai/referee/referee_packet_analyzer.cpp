@@ -70,8 +70,8 @@ void RefereePacketAnalyzer::updateTeamInfo(Team team, const Referee_TeamInfo& ne
     team_infos_to_update.yellow_card_times.push_back(yellow_card_time);
   }
 
-  team_infos_to_update.available_timeout_count = new_infos.timeouts();
-  team_infos_to_update.available_time_of_timeout_ = new_infos.timeout_time();
+  team_infos_to_update.timeout_remaining_count = new_infos.timeouts();
+  team_infos_to_update.timeout_remaining_time = new_infos.timeout_time();
 
   if (new_infos.goalkeeper() != team_infos_to_update.goalkeeper_number)
   {
@@ -128,9 +128,9 @@ bool RefereeTerminalPrinter::runTask()
     ss << "score: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].score << std::endl;
     ss << "red_cards: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].red_cards_count << std::endl;
     ss << "yellow_cards: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].yellow_cards_count << std::endl;
-    ss << "  timeouts: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].available_timeout_count
+    ss << "  timeouts: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].timeout_remaining_count
        << std::endl;
-    ss << "  timeout_time: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].available_time_of_timeout_
+    ss << "  timeout_time: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].timeout_remaining_time
        << std::endl;
     ss << "  goalie: " << GlobalDataSingleThread::singleton_.referee_.teams_info[i].goalkeeper_number << std::endl;
   }

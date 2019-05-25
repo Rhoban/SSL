@@ -175,8 +175,7 @@ bool VisionDataTerminalPrinter::runTask()
 
 bool ChangeReferencePointOfView::runTask()
 {
-  if ((ai::Config::we_are_blue && GlobalDataSingleThread::singleton_.referee_.blue_team_on_positive_half) ||
-      (!ai::Config::we_are_blue && !GlobalDataSingleThread::singleton_.referee_.blue_team_on_positive_half))
+  if (GlobalDataSingleThread::singleton_.referee_.allyOnPositiveHalf())
   {
     for (uint cam_id = 0; cam_id < ai::Config::NB_CAMERAS; cam_id++)
     {

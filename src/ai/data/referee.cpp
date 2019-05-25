@@ -7,8 +7,8 @@ namespace data
 Referee::TeamInfo::TeamInfo()
   : name("")
   , score(0)
-  , available_timeout_count(0)
-  , available_time_of_timeout_(0)
+  , timeout_remaining_count(0)
+  , timeout_remaining_time(0)
   , goalkeeper_number(0)
   , red_cards_count(0)
   , yellow_cards_count(0)
@@ -40,6 +40,12 @@ std::string Referee::getCurrentStateName()
 std::string Referee::getNextStateName()
 {
   return ::Referee::Command_Name(next_command);
+}
+
+bool Referee::allyOnPositiveHalf() const
+{
+  return (ai::Config::we_are_blue && blue_team_on_positive_half) ||
+         (!ai::Config::we_are_blue && !blue_team_on_positive_half);
 }
 
 }  // namespace data

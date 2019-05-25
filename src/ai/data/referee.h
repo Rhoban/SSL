@@ -44,8 +44,8 @@ public:
   {
     std::string name;
     uint score;
-    uint available_timeout_count;
-    uint available_time_of_timeout_;
+    uint timeout_remaining_count;
+    uint timeout_remaining_time;
     uint goalkeeper_number;
     uint red_cards_count;
     uint yellow_cards_count;
@@ -136,6 +136,8 @@ public:
   std::string getCurrentStageName();
   std::string getCurrentStateName();
   std::string getNextStateName();
+
+  bool allyOnPositiveHalf() const;
 };
 
 }  // namespace data
