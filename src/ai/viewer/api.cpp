@@ -217,9 +217,19 @@ void Api::manualCharge(int robot_id)
   Control& control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id].control;
   if (!control.ignore)
   {
-    control.kick = false;
-    control.chipKick = true;
-    control.kickPower = kick_power;
+    control.charge = true;
+  }
+}
+
+void tareOdom(int robot_id, bool tare, double xPosFix, double yPosFix, double thetaFix)
+{
+  Control& control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id].control;
+
+  if (!control.ignore)
+  {
+    control.tareOdom = tare;
+    control.fix_translation = Vector2d(xPosFix, yPosFix);
+    control.fix_rotation = thetaFix;
   }
 }
 

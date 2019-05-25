@@ -122,6 +122,8 @@ public:
    * @brief Control the robot with the Manual controller.
    */
   void manualControl(int robot_id, double xSpeed, double ySpeed, double thetaSpeed);
+
+  void tareOdom(int robot_id, bool tare, double xPosFix, double yPosFix, double thetaFix);
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl
