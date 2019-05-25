@@ -103,12 +103,7 @@ public:
   /**
    * @brief Generate packet with the creation of the Manager.
    */
-  void generateManagerPacket();
-
-  /**
-   * @brief Generate properties packet.
-   */
-  void generatePropertiesPacket();
+  void generateManagerPacket(bool json_has_changed);
 
   void readViewerPacket();
 

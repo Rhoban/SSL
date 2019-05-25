@@ -21,7 +21,8 @@ int ViewerCommunication::callback_viewer(struct lws* wsi, enum lws_callback_reas
       DEBUG("Connection - Initialized");
       ViewerCommunication::clients_.push_back(wsi);
       // Generate Game Packet with the first connection.
-      rhoban_ssl::viewer::Api::getApi().generateFirstConnectionPacket();
+      viewer::Api::getApi().generateFirstConnectionPacket();
+      viewer::Api::getApi().generateManagerPacket(false);  // Create the manager packet and the JSON has not changed.
       return 0;
       break;
     case LWS_CALLBACK_RECEIVE:

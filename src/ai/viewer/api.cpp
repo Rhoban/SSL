@@ -119,7 +119,7 @@ void Api::generateMobilePacket()
   addAIPacket(packet);
 }
 
-void Api::generateManagerPacket()
+void Api::generateManagerPacket(bool json_has_changed)
 {
   const std::list<std::string>& list_of_avaible_manager = rhoban_ssl::manager::Factory::availableManagers();
 
@@ -135,20 +135,11 @@ void Api::generateManagerPacket()
   }
   Json::Value message_packet;
 
+  message_packet["manager"]["json_has_changed"] = json_has_changed;
   message_packet["manager"]["list_manager"] = list_manager;
 
   message_packet["manager"]["current_manager_name"] = GlobalDataSingleThread::singleton_.ai_data_.current_manager_name_;
 
-  message_packet["manager"]["properties"] =
-      GlobalDataSingleThread::singleton_.ai_data_.current_manager_->getProperties();
-
-  addAIPacket(message_packet);
-}
-
-void Api::generatePropertiesPacket()
-{
-  // TODO : It is need ?
-  Json::Value message_packet;
   message_packet["manager"]["properties"] =
       GlobalDataSingleThread::singleton_.ai_data_.current_manager_->getProperties();
 
@@ -168,8 +159,9 @@ void Api::readViewerPacket()
         commander->stopAll();
         commander->flush();
       }
-      else if (viewer_packet["action"] == "control_manual")
+      else if (viewer_packet["action"] == "manager_json")
       {
+        DEBUG(viewer_packet["json"]);
       }
       else
       {

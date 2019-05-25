@@ -19,6 +19,7 @@
 
 #pragma once
 #include <json/json.h>
+#include <list>
 
 namespace rhoban_ssl
 {
@@ -32,7 +33,21 @@ private:
 public:
   PropertiesFactory();
 
-  void addStringSetter(std::string name, std::string default_value);
+  void addSetValue(std::string name, std::string default_value);
+
+  void addSetValue(std::string name, int default_value);
+
+  void addSetValue(std::string name, double default_value);
+
+  void addRangeValue(std::string name, int min, int max, int step, int default_value);
+
+  void addRangeValue(std::string name, double min, double max, double step, double default_value);
+
+  // void addList(std::string name, std::list<std::string> string_list);
+
+  // void addList(std::string name, std::list<int> string_list);
+
+  // void addList(std::string name, std::list<double> string_list);
 
   void clear();
 

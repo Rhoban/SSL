@@ -27,12 +27,72 @@ PropertiesFactory::PropertiesFactory()
 {
 }
 
-void PropertiesFactory::addStringSetter(std::string name, std::string default_value)
+void PropertiesFactory::addSetValue(std::string name, std::string default_value)
 {
   Json::Value property;
 
   property["type"] = "Input";
+  property["type_value"] = "String";
+
   property["name"] = name;
+  property["value"] = default_value;
+
+  json.append(property);
+}
+
+void PropertiesFactory::addSetValue(std::string name, int default_value)
+{
+  Json::Value property;
+
+  property["type"] = "Input";
+  property["type_value"] = "Integer";
+
+  property["name"] = name;
+  property["value"] = default_value;
+
+  json.append(property);
+}
+
+void PropertiesFactory::addSetValue(std::string name, double default_value)
+{
+  Json::Value property;
+
+  property["type"] = "Input";
+  property["type_value"] = "Double";
+
+  property["name"] = name;
+  property["value"] = default_value;
+
+  json.append(property);
+}
+
+void PropertiesFactory::addRangeValue(std::string name, int min, int max, int step, int default_value)
+{
+  Json::Value property;
+
+  property["type"] = "Range";
+  property["type_value"] = "Integer";
+
+  property["name"] = name;
+  property["min"] = min;
+  property["max"] = max;
+  property["step"] = step;
+  property["value"] = default_value;
+
+  json.append(property);
+}
+
+void PropertiesFactory::addRangeValue(std::string name, double min, double max, double step, double default_value)
+{
+  Json::Value property;
+
+  property["type"] = "Range";
+  property["type_value"] = "Double";
+
+  property["name"] = name;
+  property["min"] = min;
+  property["max"] = max;
+  property["step"] = step;
   property["value"] = default_value;
 
   json.append(property);

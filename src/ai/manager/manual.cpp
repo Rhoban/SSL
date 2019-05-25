@@ -35,7 +35,7 @@ void Manual::update()
 Json::Value Manual::getProperties()
 {
   Json::Value properties;
-  properties_factory.addStringSetter("name_test", "");
+  properties_factory.addSetValue("name_test", "");
 
   properties = properties_factory.getJson();
 
