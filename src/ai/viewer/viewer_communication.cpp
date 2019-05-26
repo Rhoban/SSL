@@ -18,6 +18,8 @@
 */
 #include "viewer_communication.h"
 #include <viewer_client.h>
+#include <manager/factory.h>
+#include <core/collection.h>
 
 namespace rhoban_ssl
 {
@@ -236,10 +238,10 @@ Json::Value ViewerCommunication::aiPacket()
 {
   Json::Value packet;
 
-  const std::vector<std::string>& available_managers = ai_->getAvailableManagers();
-  for (uint i = 0; i < ai_->getAvailableManagers().size(); ++i)
+  const std::vector<std::string>& available_managers = list2vector(manager::Factory::availableManagers());
+  for (uint i = 0; i < available_managers.size(); i++)
   {
-    packet["ai"]["managers"]["availables"][i] = available_managers.at(i);
+    packet["ai"]["managers"]["availables"][i]["name"] = available_managers.at(i);
   }
   // todo
   // packet["ai"]["managers"]["current"]["name"] = ai_->getCurrentManager().get()
