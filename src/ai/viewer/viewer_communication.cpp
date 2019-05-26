@@ -50,9 +50,10 @@ void ViewerCommunication::processIncomingPackets()
     Json::Value viewer_packet = viewer::ViewerDataGlobal::get().received_packets.front();
     if (viewer_packet["informations"] != "")
     {
-      if (viewer_packet["informations"]["emergency"] == "emergency")
+      if (viewer_packet["informations"]["emergency"] != "")
       {
-        ai_->emergency();
+        if (viewer_packet["informations"]["emergency"].asBool())
+          ai_->emergency();
       }
       else if (viewer_packet["informations"]["set_packets_per_second"] != "")
       {
@@ -73,6 +74,49 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (viewer_packet["bots"] != "")
     {
+      if (viewer_packet["bots"]["control_bot"] != "")
+      {
+        uint robot_number = viewer_packet["bots"]["control_bot"]["number"].asUInt();
+
+        Control& manual_ctrl =
+            GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number].control;
+
+        GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number]
+            .is_manually_controled_by_viewer = true;
+
+        manual_ctrl.linear_velocity[0] = viewer_packet["bots"]["control_bot"]["speed"]["x"].asDouble();
+        manual_ctrl.linear_velocity[1] = viewer_packet["bots"]["control_bot"]["speed"]["y"].asDouble();
+        manual_ctrl.angular_velocity = viewer_packet["bots"]["control_bot"]["speed"]["theta"].asDouble();
+
+        manual_ctrl.kick = viewer_packet["bots"]["control_bot"]["kicker"]["kick"].asBool();
+        manual_ctrl.chip_kick = viewer_packet["bots"]["control_bot"]["kicker"]["chip_kick"].asBool();
+        manual_ctrl.kick_power = viewer_packet["bots"]["control_bot"]["kicker"]["power"].asFloat();
+        manual_ctrl.charge = viewer_packet["bots"]["control_bot"]["charge"].asBool();
+
+        manual_ctrl.tare_odom = viewer_packet["bots"]["control_bot"]["tare_odometry"].asBool();
+      }
+
+      if (viewer_packet["bots"]["set_strategy"] != "")
+      {
+        uint robot_number = viewer_packet["bots"]["control_bot"]["number"].asUInt();
+
+        Control& manual_ctrl =
+            GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number].control;
+
+        GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number]
+            .is_manually_controled_by_viewer = true;
+
+        manual_ctrl.linear_velocity[0] = viewer_packet["bots"]["control_bot"]["speed"]["x"].asDouble();
+        manual_ctrl.linear_velocity[1] = viewer_packet["bots"]["control_bot"]["speed"]["y"].asDouble();
+        manual_ctrl.angular_velocity = viewer_packet["bots"]["control_bot"]["speed"]["theta"].asDouble();
+
+        manual_ctrl.kick = viewer_packet["bots"]["control_bot"]["kicker"]["kick"].asBool();
+        manual_ctrl.chip_kick = viewer_packet["bots"]["control_bot"]["kicker"]["chip_kick"].asBool();
+        manual_ctrl.kick_power = viewer_packet["bots"]["control_bot"]["kicker"]["power"].asFloat();
+        manual_ctrl.charge = viewer_packet["bots"]["control_bot"]["charge"].asBool();
+
+        manual_ctrl.tare_odom = viewer_packet["bots"]["control_bot"]["tare_odometry"].asBool();
+      }
     }
     else if (viewer_packet["ball"] != "")
     {
@@ -82,8 +126,8 @@ void ViewerCommunication::processIncomingPackets()
       DEBUG("Invalid viewer packet");
       assert(false);
     }
+    viewer::ViewerDataGlobal::get().received_packets.pop();
   }
-  viewer::ViewerDataGlobal::get().received_packets.pop();
 }
 
 void ViewerCommunication::sendViewerPackets()

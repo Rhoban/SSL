@@ -106,7 +106,7 @@ std::ostream& operator<<(std::ostream& out, const Control& control)
 {
   out << "{ctrl : "
       << "[lin vel. : " << control.linear_velocity << ", ang vel. : " << control.angular_velocity << "]"
-      << ", kick : " << control.kick << ", chip kick : " << control.chipKick << ", kickPower : " << control.kickPower
+      << ", kick : " << control.kick << ", chip kick : " << control.chip_kick << ", kickPower : " << control.kick_power
       << ", spin : " << control.spin << ", charge : " << control.charge << ", acitve : " << control.active
       << ", ignore : " << control.ignore << "}";
 
@@ -143,13 +143,13 @@ bool rhoban_ssl::ControlSender::runTask()
         int kick = 0;
         if (ctrl.kick)
           kick = 1;
-        else if (ctrl.chipKick)
+        else if (ctrl.chip_kick)
           kick = 2;
 
-        if (ctrl.tareOdom)
+        if (ctrl.tare_odom)
         {
           commander_->set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(),
-                          kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom
+                          kick, ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
           );
           // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
@@ -157,7 +157,7 @@ bool rhoban_ssl::ControlSender::runTask()
         else
         {
           commander_->set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1],
-                          ctrl.angular_velocity.value(), kick, ctrl.kickPower, ctrl.spin, ctrl.charge, ctrl.tareOdom);
+                          ctrl.angular_velocity.value(), kick, ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom);
         }
       }
     }

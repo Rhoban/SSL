@@ -42,17 +42,17 @@ public:
 
   bool charge = false;
   bool kick = false;
-  bool chipKick = false;
-  float kickPower = 1.0;
+  bool chip_kick = false;
+  float kick_power = 1.0;
   bool spin = false;
 
   bool active = true;
   bool ignore = false;
-  bool tareOdom = false;  // Reset references for Odometry robot
+  bool tare_odom = false;  // Reset references for Odometry robot
 
-  Control(bool isAbsolute = true);
+  Control(bool is_absolute = true);
 
-  Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool isAbsolute = true);
+  Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool is_absolute = true);
 
   Control(bool kick, bool active, bool ignore);
 
