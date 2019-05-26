@@ -51,11 +51,19 @@ bool AI::runTask()
   if (running_ == false)
     return false;
 
-  strategy_manager_->removeInvalidRobots();
-  strategy_manager_->update();
-  strategy_manager_->assignBehaviorToRobots(robot_behaviors_, GlobalDataSingleThread::singleton_.ai_data_.time,
-                                            GlobalDataSingleThread::singleton_.ai_data_.dt);
-  updateRobots();
+  if (scanning_)
+  {
+    scan();
+  }
+  else
+  {
+    strategy_manager_->removeInvalidRobots();
+    strategy_manager_->update();
+    strategy_manager_->assignBehaviorToRobots(robot_behaviors_, GlobalDataSingleThread::singleton_.ai_data_.time,
+                                              GlobalDataSingleThread::singleton_.ai_data_.dt);
+    updateRobots();
+  }
+
   return true;
 }
 
@@ -414,6 +422,75 @@ std::string AI::getStrategyOf(uint robot_number)
   //  for(auto& strat_name : strategy_manager_.get()->getCurrentStrategyNames()){
   //    for
   //  }
+}
+
+void AI::enableRobot(uint id, bool enabled)
+{
+  if (id < ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  {
+    Control& ctrl = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control;
+    ctrl.ignore = !enabled;
+
+    if (ctrl.ignore)
+    {
+      ctrl.charge = false;
+      ctrl.spin = false;
+    }
+  }
+}
+
+void AI::scan()
+{
+  if (!scanning_)
+  {
+    save_control_before_scan_ = GlobalDataSingleThread::singleton_.shared_data_;
+    for (int n = 0; n < 3; n++)
+    {
+      for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+      {
+        if (GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id]
+                .is_manually_controled_by_viewer)
+        {
+          GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control.active = false;
+          GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control.ignore = false;
+        }
+      }
+    }
+    scanning_ = true;
+    scan_starting_time_ = GlobalDataSingleThread::singleton_.ai_data_.time;
+  }
+  else
+  {
+    double scan_waiting_time_ = GlobalDataSingleThread::singleton_.ai_data_.time - scan_starting_time_;
+    if (scan_waiting_time_ > SCAN_WAITING_DELAY)
+    {
+      for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+      {
+        Control& control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control;
+        if (ai::Config::is_in_simulation)
+        {
+          if (id <= 7)
+          {
+            control.ignore = false;
+          }
+        }
+        else
+        {
+          control.ignore = !GlobalDataSingleThread::singleton_.robots_[id]->isOk();
+
+          if (id == 3)
+          {
+            std::cout << "Age: " << GlobalDataSingleThread::singleton_.robots_[id]->age() << std::endl;
+          }
+          if (GlobalDataSingleThread::singleton_.robots_[id]->isOk())
+          {
+            std::cout << "Robot #" << id << " is enabled!" << std::endl;
+          }
+        }
+      }
+      scanning_ = false;
+    }
+  }
 }
 
 }  // namespace rhoban_ssl

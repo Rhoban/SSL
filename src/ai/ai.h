@@ -47,6 +47,19 @@ public:
    * @brief stop the ia execution
    */
   void stop();
+
+  /**
+   * @brief Call this methods turn the ai into scan mode.
+   *
+   * The scan mode scan all robots and ignore them if there there are not alive.
+   *
+   * After the ai does nothing and wait for the robots to answer during a given time.
+   * @see ai::Config::SCAN_WAITING_DELAY
+   *
+   * Finally we update the status of the robots according to their aswer.
+   */
+  void scan();
+
   /**
    * @brief getAvailableManagers returns the name of all manager available.
    * @return a vector of string that contains all name.
@@ -109,6 +122,20 @@ public:
    * @return the name of a robotbehavior.
    */
   std::string getStrategyOf(uint robot_number);
+
+  /**
+   * @brief enableRobot
+   * @param id
+   * @param enabled
+   */
+  void enableRobot(uint id, bool enabled);
+
+private:
+  // move to config
+  const double SCAN_WAITING_DELAY = 0.030;
+  bool scanning_;
+  double scan_starting_time_;
+  SharedData save_control_before_scan_;
 
 private:
   bool running_;

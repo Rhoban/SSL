@@ -18,7 +18,7 @@ bool Robot::driverError() const
   return (electronics.status & STATUS_DRIVER_ERR) ? true : false;
 }
 
-bool Robot::robotOk() const
+bool Robot::isOk() const
 {
   return (electronics.status & STATUS_OK) ? true : false;
 }

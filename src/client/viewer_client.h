@@ -57,6 +57,11 @@ public:
   std::queue<Json::Value> received_packets;
 
   /**
+   * @brief client_connected
+   */
+  bool client_connected = false;
+
+  /**
    * @brief Parse and add store a packet send by the viewer.
    * @param packet_received in char*.
    */

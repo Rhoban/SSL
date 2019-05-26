@@ -32,14 +32,16 @@ ViewerCommunication::ViewerCommunication(AI* ai)
 
 bool ViewerCommunication::runTask()
 {
-  // processIncomingPackets();
-
-  if (GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_ > SENDING_DELAY)
+  if (ViewerDataGlobal::get().client_connected)
   {
-    sendViewerPackets();
-    last_sending_time_ = GlobalDataSingleThread::singleton_.ai_data_.time;
-  }
+    processIncomingPackets();
 
+    if (GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_ > SENDING_DELAY)
+    {
+      sendViewerPackets();
+      last_sending_time_ = GlobalDataSingleThread::singleton_.ai_data_.time;
+    }
+  }
   return true;
 }
 
@@ -48,78 +50,62 @@ void ViewerCommunication::processIncomingPackets()
   while (!viewer::ViewerDataGlobal::get().received_packets.empty())
   {
     Json::Value viewer_packet = viewer::ViewerDataGlobal::get().received_packets.front();
-    if (viewer_packet["informations"] != "")
+
+    if (!viewer_packet["emergency"].isNull())
     {
-      if (viewer_packet["informations"]["emergency"] != "")
-      {
-        if (viewer_packet["informations"]["emergency"].asBool())
-          ai_->emergency();
-      }
-      else if (viewer_packet["informations"]["set_packets_per_second"] != "")
-      {
-        // todo
-      }
+      ai_->emergency();
     }
-    else if (viewer_packet["managers"] != "")
+    else if (!viewer_packet["set_packets_per_second"].isNull())
     {
-      if (viewer_packet["managers"]["set_manager"] != "")
-      {
-        ai_->setManager(viewer_packet["managers"]["set_manager"].asString());
-      }
-
-      if (viewer_packet["managers"]["start_manager"] != "")
-      {
-        ai_->setManager(viewer_packet["managers"]["set_manager"].asString());
-      }
+      // todo
     }
-    else if (viewer_packet["bots"] != "")
+    else if (!viewer_packet["set_manager"].isNull())
     {
-      if (viewer_packet["bots"]["control_bot"] != "")
-      {
-        uint robot_number = viewer_packet["bots"]["control_bot"]["number"].asUInt();
-
-        Control& manual_ctrl =
-            GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number].control;
-
-        GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number]
-            .is_manually_controled_by_viewer = true;
-
-        manual_ctrl.linear_velocity[0] = viewer_packet["bots"]["control_bot"]["speed"]["x"].asDouble();
-        manual_ctrl.linear_velocity[1] = viewer_packet["bots"]["control_bot"]["speed"]["y"].asDouble();
-        manual_ctrl.angular_velocity = viewer_packet["bots"]["control_bot"]["speed"]["theta"].asDouble();
-
-        manual_ctrl.kick = viewer_packet["bots"]["control_bot"]["kicker"]["kick"].asBool();
-        manual_ctrl.chip_kick = viewer_packet["bots"]["control_bot"]["kicker"]["chip_kick"].asBool();
-        manual_ctrl.kick_power = viewer_packet["bots"]["control_bot"]["kicker"]["power"].asFloat();
-        manual_ctrl.charge = viewer_packet["bots"]["control_bot"]["charge"].asBool();
-
-        manual_ctrl.tare_odom = viewer_packet["bots"]["control_bot"]["tare_odometry"].asBool();
-      }
-
-      if (viewer_packet["bots"]["set_strategy"] != "")
-      {
-        uint robot_number = viewer_packet["bots"]["control_bot"]["number"].asUInt();
-
-        Control& manual_ctrl =
-            GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number].control;
-
-        GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number]
-            .is_manually_controled_by_viewer = true;
-
-        manual_ctrl.linear_velocity[0] = viewer_packet["bots"]["control_bot"]["speed"]["x"].asDouble();
-        manual_ctrl.linear_velocity[1] = viewer_packet["bots"]["control_bot"]["speed"]["y"].asDouble();
-        manual_ctrl.angular_velocity = viewer_packet["bots"]["control_bot"]["speed"]["theta"].asDouble();
-
-        manual_ctrl.kick = viewer_packet["bots"]["control_bot"]["kicker"]["kick"].asBool();
-        manual_ctrl.chip_kick = viewer_packet["bots"]["control_bot"]["kicker"]["chip_kick"].asBool();
-        manual_ctrl.kick_power = viewer_packet["bots"]["control_bot"]["kicker"]["power"].asFloat();
-        manual_ctrl.charge = viewer_packet["bots"]["control_bot"]["charge"].asBool();
-
-        manual_ctrl.tare_odom = viewer_packet["bots"]["control_bot"]["tare_odometry"].asBool();
-      }
+      ai_->setManager(viewer_packet["managers"]["set_manager"].asString());
     }
-    else if (viewer_packet["ball"] != "")
+    else if (!viewer_packet["start_manager"].isNull())
     {
+      // todo
+    }
+    else if (!viewer_packet["stop_manager"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["place_bot"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["halt_bot"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["enable_bot"].isNull())
+    {
+      ai_->enableRobot(viewer_packet["enable_bot"]["number"].asUInt(), true);
+    }
+    else if (!viewer_packet["desable_bot"].isNull())
+    {
+      ai_->enableRobot(viewer_packet["desable_bot"]["number"].asUInt(), false);
+    }
+    else if (!viewer_packet["control_bot"].isNull())
+    {
+      processBotsControlBot(viewer_packet["control_bot"]);
+    }
+    else if (!viewer_packet["set_strategy"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["give_bot_to_manager"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["place_ball"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["scan"].isNull())
+    {
+      ai_->scan();
     }
     else
     {
@@ -135,13 +121,10 @@ void ViewerCommunication::sendViewerPackets()
   // GlobalData status
   viewer::ViewerDataGlobal::get().packets_to_send.push(fieldPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(ballPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
-  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
-
-  // TODO debug viewer client -> if we send teams packets before
-  // all next packets are ignore
 }
 
 Json::Value ViewerCommunication::fieldPacket()
@@ -260,7 +243,7 @@ Json::Value ViewerCommunication::teamsPacket()
         if (!ai::Config::is_in_simulation)
         {
           // Activate electronics.
-          packet["teams"][team]["bots"][rid]["electronics"]["alive"] = current_robot.robotOk();
+          packet["teams"][team]["bots"][rid]["electronics"]["alive"] = current_robot.isOk();
           packet["teams"][team]["bots"][rid]["electronics"]["voltage"] = current_robot.electronics.voltage;
           packet["teams"][team]["bots"][rid]["electronics"]["cap_volt"] = current_robot.electronics.cap_volt;
           packet["teams"][team]["bots"][rid]["electronics"]["ir_trigered"] = current_robot.infraRed();
@@ -330,6 +313,32 @@ Json::Value ViewerCommunication::aiPacket()
     packet["ai"]["strategies"][i]["bots_required"] = ai_->getManualManager().get()->getStrategy(strat_name).minRobots();
   }
   return packet;
+}
+
+void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
+{
+  uint robot_number = packet["number"].asUInt();
+
+  Control& manual_ctrl = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number].control;
+
+  if (!manual_ctrl.ignore)
+  {
+    GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number]
+        .is_manually_controled_by_viewer = true;
+
+    manual_ctrl.linear_velocity[0] = packet["speed"]["x"].asDouble();
+    manual_ctrl.linear_velocity[1] = packet["speed"]["y"].asDouble();
+    manual_ctrl.angular_velocity = packet["speed"]["theta"].asDouble();
+
+    manual_ctrl.kick = packet["kicker"]["kick"].asBool();
+    manual_ctrl.chip_kick = packet["kicker"]["chip_kick"].asBool();
+    manual_ctrl.kick_power = packet["kicker"]["power"].asFloat();
+    manual_ctrl.charge = packet["charge"].asBool();
+
+    manual_ctrl.spin = packet["spin"].asBool();
+
+    manual_ctrl.tare_odom = packet["tare_odometry"].asBool();
+  }
 }
 
 }  // namespace viewer

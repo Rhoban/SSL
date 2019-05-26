@@ -60,7 +60,7 @@ public:
    * @brief returns true if the robot is alive and ok
    * @return bool : robot is alive and ok
    */
-  bool robotOk() const;
+  bool isOk() const;
 };
 
 }  // namespace data

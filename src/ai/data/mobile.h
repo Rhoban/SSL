@@ -17,11 +17,6 @@ class Mobile
    * \brief last_update corresponds to last call to an update method... not related to game timing information.
    */
   rhoban_utils::TimeStamp last_update;
-  /*!
-   * \brief age return the time elapsed since last call to an update method
-   * \return a duration in seconds
-   */
-  double age() const;
 
 public:
   MovementSample movement_sample;
@@ -30,6 +25,12 @@ public:
   void update(double time, const rhoban_geometry::Point& linear_position, const rhoban_utils::Angle& angular_position);
   void update(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
   void update(double time, const rhoban_geometry::Point& linear_position);
+
+  /*!
+   * \brief age return the time elapsed since last call to an update method
+   * \return a duration in seconds
+   */
+  double age() const;
 
   /**
    * @brief isOk returns true if the mobile is active

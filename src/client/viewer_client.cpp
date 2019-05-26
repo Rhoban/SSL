@@ -8,7 +8,7 @@ namespace viewer
 {
 ViewerDataGlobal ViewerDataGlobal::instance_;
 
-ViewerDataGlobal::ViewerDataGlobal()
+ViewerDataGlobal::ViewerDataGlobal() : client_connected(false)
 {
 }
 
@@ -41,7 +41,6 @@ int ViewerClient::callback_viewer(struct lws* wsi, enum lws_callback_reasons rea
   {
     case LWS_CALLBACK_ESTABLISHED:
       ViewerClient::clients_.push_back(wsi);
-      // TODO : the viewer send a request to have informations at initialisation.
       return 0;
     case LWS_CALLBACK_RECEIVE:
       viewer::ViewerDataGlobal::get().parseAndStorePacketFromClient((char*)in);
@@ -100,10 +99,15 @@ bool ViewerClient::runTask()
 {
   if (clients_.size() > 0)
   {
+    viewer::ViewerDataGlobal::get().client_connected = true;
     for (uint i = 0; i < rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.size(); ++i)
     {
       lws_callback_on_writable(clients_.at(0));
     }
+  }
+  else
+  {
+    viewer::ViewerDataGlobal::get().client_connected = false;
   }
 
   lws_service(context_, 0);

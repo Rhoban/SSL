@@ -63,6 +63,9 @@ private:
   Json::Value refereePacket();
   Json::Value informationsPacket();
   Json::Value aiPacket();
+
+  // move to AI
+  void processBotsControlBot(const Json::Value& packet);
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl
