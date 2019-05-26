@@ -66,7 +66,7 @@ void ViewerCommunication::sendStatusPackets()
   // GlobalData status
   viewer::ViewerDataGlobal::get().packets_to_send.push(fieldPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(ballPacket());
-  // viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
   // viewer::ViewerDataGlobal::get().addPacket(mobilesStatus());
 
   // Information of the ai
@@ -114,82 +114,121 @@ Json::Value ViewerCommunication::ballPacket()
 
 Json::Value ViewerCommunication::teamsPacket()
 {
+  //  Json::Value packet;
+  //  double time = GlobalDataSingleThread::singleton_.ai_data_.time;
+
+  //  // Ball packet
+  //  const rhoban_geometry::Point& ball_position =
+  //      GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(time);
+  //  packet["ball"]["x"] = ball_position.getX();
+  //  packet["ball"]["y"] = ball_position.getY();
+
+  //  // Robot packet
+  //  // #dbdd56 : Yellow color && #2393c6 : Blue color
+  //  std::string color_ally = ai::Config::we_are_blue ? "#2393c6" : "#dbdd56";
+  //  std::string color_opponent = ai::Config::we_are_blue ? "#dbdd56" : "#2393c6";
+
+  //  for (int team = 0; team < 2; team++)
+  //  {
+  //    std::string team_side = team == 0 ? "ally" : "opponent";
+  //    std::string team_color = team == 0 ? color_ally : color_opponent;
+
+  //    for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
+  //    {
+  //      const data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team][rid];
+  //      const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
+
+  //      packet[team_side][rid]["x"] = robot_position.getX();
+  //      packet[team_side][rid]["y"] = robot_position.getY();
+  //      packet[team_side][rid]["orientation"] = current_robot.getMovement().angularPosition(time).value();
+  //      packet[team_side][rid]["is_present"] = current_robot.isActive();
+  //      packet[team_side][rid]["id"] = current_robot.id;
+
+  //      if (!ai::Config::is_in_simulation)
+  //      {
+  //        // Activate electronics.
+  //        packet[team_side][rid]["electronics"]["voltage"] = current_robot.electronics.voltage;
+  //        packet[team_side][rid]["electronics"]["cap_volt"] = current_robot.electronics.cap_volt;
+  //      }
+  //    }
+  //  }
+
   Json::Value packet;
+  double time = GlobalDataSingleThread::singleton_.ai_data_.time;
 
-  const data::Referee& referee = GlobalDataSingleThread::singleton_.referee_;
-  const std::string blue_color = "#2393c6";
-  const std::string yellow_color = "#dbdd56";
+  //  const data::Referee& referee = GlobalDataSingleThread::singleton_.referee_;
+  //  const std::string blue_color = "#2393c6";
+  //  const std::string yellow_color = "#dbdd56";
 
-  for (uint team_id = 0; team_id < 2; ++team_id)
+  for (uint team_id = 0; team_id < 2; team_id++)
   {
     bool ally_info = (team_id == Ally);
     std::string team = ally_info ? "allies" : "opponents";
 
-    // referee informations
-    if (ally_info)
-    {
-      packet[team]["positive_axis"] = referee.allyOnPositiveHalf();
-    }
-    else
-    {
-      packet[team]["positive_axis"] = !referee.allyOnPositiveHalf();
-    }
+    //    // referee informations
+    //    if (ally_info)
+    //    {
+    //      packet[team]["positive_axis"] = referee.allyOnPositiveHalf();
+    //    }
+    //    else
+    //    {
+    //      packet[team]["positive_axis"] = !referee.allyOnPositiveHalf();
+    //    }
 
-    packet[team]["name"] = referee.teams_info[team_id].name;
-    packet[team]["score"] = referee.teams_info[team_id].score;
-    packet[team]["timeout"]["remaincount"] = referee.teams_info[team_id].timeout_remaining_count;
-    packet[team]["timeout"]["remaining_time"] = referee.teams_info[team_id].timeout_remaining_time;
-    packet[team]["goalkeeper_number"] = referee.teams_info[team_id].goalkeeper_number;
+    //    packet[team]["name"] = referee.teams_info[team_id].name;
+    //    packet[team]["score"] = referee.teams_info[team_id].score;
+    //    packet[team]["timeout"]["remaincount"] = referee.teams_info[team_id].timeout_remaining_count;
+    //    packet[team]["timeout"]["remaining_time"] = referee.teams_info[team_id].timeout_remaining_time;
+    //    packet[team]["goalkeeper_number"] = referee.teams_info[team_id].goalkeeper_number;
 
-    packet[team]["cards"]["yellow"] = referee.teams_info[team_id].yellow_cards_count;
-    for (uint i = 0; i < referee.teams_info[team_id].yellow_card_times.size(); ++i)
-    {
-      packet[team]["cards"]["yellow"]["time"][i] = referee.teams_info[team_id].yellow_card_times.at(i);
-    }
-    packet[team]["cards"]["red"] = referee.teams_info[team_id].red_cards_count;
-    packet[team]["fouls"] = referee.teams_info[team_id].foul_counter;
-    packet[team]["max_allowed_bots"] = referee.teams_info[team_id].max_allowed_bots;
+    //    packet[team]["cards"]["yellow"] = referee.teams_info[team_id].yellow_cards_count;
+    //    for (uint i = 0; i < referee.teams_info[team_id].yellow_card_times.size(); ++i)
+    //    {
+    //      packet[team]["cards"]["yellow"]["time"][i] = referee.teams_info[team_id].yellow_card_times.at(i);
+    //    }
+    //    packet[team]["cards"]["red"] = referee.teams_info[team_id].red_cards_count;
+    //    packet[team]["fouls"] = referee.teams_info[team_id].foul_counter;
+    //    packet[team]["max_allowed_bots"] = referee.teams_info[team_id].max_allowed_bots;
 
-    // robots informations
+    //    // robots informations
     for (uint rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
     {
-      data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team_id][rid];
-      const rhoban_geometry::Point& robot_position =
-          current_robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+      const data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team_id][rid];
+      const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
 
       packet[team][rid]["number"] = current_robot.id;
-      packet[team][rid]["time"] = current_robot.getMovement().lastTime();
       packet[team][rid]["position"]["x"] = robot_position.getX();
       packet[team][rid]["position"]["y"] = robot_position.getY();
       packet[team][rid]["position"]["orientation"] =
           current_robot.getMovement().angularPosition(GlobalDataSingleThread::singleton_.ai_data_.time).value();
+      //      packet[team][rid]["time"] = current_robot.getMovement().lastTime();
 
-      packet[team][rid]["velocity"]["x"] =
-          current_robot.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).getX();
-      packet[team][rid]["velocity"]["y"] =
-          current_robot.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).getY();
-      packet[team][rid]["velocity"]["theta"] =
-          current_robot.getMovement().angularVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).value();
+      //      packet[team][rid]["velocity"]["x"] =
+      //          current_robot.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).getX();
+      //      packet[team][rid]["velocity"]["y"] =
+      //          current_robot.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).getY();
+      //      packet[team][rid]["velocity"]["theta"] =
+      //          current_robot.getMovement().angularVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).value();
 
-      packet[team][rid]["last_control"]["time"] = 0;
-      packet[team][rid]["last_control"]["velocity"]["x"] = 0;
-      packet[team][rid]["last_control"]["velocity"]["y"] = 0;
-      packet[team][rid]["last_control"]["velocity"]["theta"] = 0;
+      //      packet[team][rid]["last_control"]["time"] = 0;
+      //      packet[team][rid]["last_control"]["velocity"]["x"] = 0;
+      //      packet[team][rid]["last_control"]["velocity"]["y"] = 0;
+      //      packet[team][rid]["last_control"]["velocity"]["theta"] = 0;
 
-      packet[team][rid]["radius"] = ai::Config::robot_radius;
+      //      packet[team][rid]["radius"] = ai::Config::robot_radius;
 
-      if (ally_info)
-      {
-        packet[team][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
-      }
-      else
-      {
-        packet[team][rid]["color"] = (!ai::Config::we_are_blue) ? blue_color : yellow_color;
-      }
-      packet[team][rid]["is_present"] = current_robot.isActive();
+      //      if (ally_info)
+      //      {
+      //        packet[team][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
+      //      }
+      //      else
+      //      {
+      //        packet[team][rid]["color"] = (!ai::Config::we_are_blue) ? blue_color : yellow_color;
+      //      }
+      //      packet[team][rid]["is_present"] = current_robot.isActive();
 
-      packet[team][rid]["behavior"] = ai_->getRobotBehaviorOf(rid);
-      // packet[team][rid]["strategy"] = current_robot.isActive();
+      //      packet[team][rid]["behavior"] = ai_->getRobotBehaviorOf(rid);
+      //      // packet[team][rid]["strategy"] = current_robot.isActive();
 
       if (!ai::Config::is_in_simulation)
       {
