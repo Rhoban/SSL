@@ -48,19 +48,42 @@ void ViewerCommunication::processIncomingPackets()
   while (!viewer::ViewerDataGlobal::get().received_packets.empty())
   {
     Json::Value viewer_packet = viewer::ViewerDataGlobal::get().received_packets.front();
-    if (viewer_packet["action"] != "")
+    if (viewer_packet["informations"] != "")
     {
-      if (viewer_packet["action"] == "emergency")
+      if (viewer_packet["informations"]["emergency"] == "emergency")
       {
         ai_->emergency();
       }
-      else
+      else if (viewer_packet["informations"]["set_packets_per_second"] != "")
       {
-        DEBUG("Aucune action trouvé");
+        // todo
       }
     }
-    viewer::ViewerDataGlobal::get().received_packets.pop();
+    else if (viewer_packet["managers"] != "")
+    {
+      if (viewer_packet["managers"]["set_manager"] != "")
+      {
+        ai_->setManager(viewer_packet["managers"]["set_manager"].asString());
+      }
+
+      if (viewer_packet["managers"]["start_manager"] != "")
+      {
+        ai_->setManager(viewer_packet["managers"]["set_manager"].asString());
+      }
+    }
+    else if (viewer_packet["bots"] != "")
+    {
+    }
+    else if (viewer_packet["ball"] != "")
+    {
+    }
+    else
+    {
+      DEBUG("Invalid viewer packet");
+      assert(false);
+    }
   }
+  viewer::ViewerDataGlobal::get().received_packets.pop();
 }
 
 void ViewerCommunication::sendViewerPackets()
@@ -68,9 +91,9 @@ void ViewerCommunication::sendViewerPackets()
   // GlobalData status
   viewer::ViewerDataGlobal::get().packets_to_send.push(fieldPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(ballPacket());
-  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
-  viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
-  viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
+  //  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
+  //  viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
+  //  viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
 }
 
