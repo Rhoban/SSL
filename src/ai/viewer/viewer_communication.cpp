@@ -91,10 +91,13 @@ void ViewerCommunication::sendViewerPackets()
   // GlobalData status
   viewer::ViewerDataGlobal::get().packets_to_send.push(fieldPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(ballPacket());
-  //  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
-  //  viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
-  //  viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
+
+  // TODO debug viewer client -> if we send teams packets before
+  // all next packets are ignore
+  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
 }
 
 Json::Value ViewerCommunication::fieldPacket()
