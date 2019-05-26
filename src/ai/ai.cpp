@@ -404,13 +404,16 @@ void AI::getAnnotations(annotations::Annotations& annotations) const
   //  annotations.mapPositions(fct);
 }
 
-std::string AI::getRobotBeheviorOf(uint robot_number)
+std::string AI::getRobotBehaviorOf(uint robot_number)
 {
   return robot_behaviors_[robot_number].get()->name;
 }
 
 std::string AI::getStrategyOf(uint robot_number)
 {
+  //  for(auto& strat_name : strategy_manager_.get()->getCurrentStrategyNames()){
+  //    for
+  //  }
 }
 
 }  // namespace rhoban_ssl

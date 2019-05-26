@@ -108,6 +108,8 @@ Json::Value ViewerCommunication::ballPacket()
   packet["ball"]["velocity"]["y"] = ball_velocity.getY();
 
   packet["ball"]["radius"] = ai::Config::ball_radius;
+
+  return packet;
 }
 
 Json::Value ViewerCommunication::teamsPacket()
@@ -149,15 +151,14 @@ Json::Value ViewerCommunication::teamsPacket()
     packet[team]["max_allowed_bots"] = referee.teams_info[team_id].max_allowed_bots;
 
     // robots informations
-    for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
+    for (uint rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
     {
-      const data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team_id][rid];
+      data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team_id][rid];
       const rhoban_geometry::Point& robot_position =
           current_robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
 
       packet[team][rid]["number"] = current_robot.id;
       packet[team][rid]["time"] = current_robot.getMovement().lastTime();
-
       packet[team][rid]["position"]["x"] = robot_position.getX();
       packet[team][rid]["position"]["y"] = robot_position.getY();
       packet[team][rid]["position"]["orientation"] =
@@ -187,8 +188,8 @@ Json::Value ViewerCommunication::teamsPacket()
       }
       packet[team][rid]["is_present"] = current_robot.isActive();
 
-      packet[team][rid]["behavior"] = ai_->getRobotBeheviorOf(rid);
-      packet[team][rid]["strategy"] = current_robot.isActive();
+      packet[team][rid]["behavior"] = ai_->getRobotBehaviorOf(rid);
+      // packet[team][rid]["strategy"] = current_robot.isActive();
 
       if (!ai::Config::is_in_simulation)
       {
@@ -204,6 +205,7 @@ Json::Value ViewerCommunication::teamsPacket()
       }
     }
   }
+  return packet;
 }  // namespace viewer
 
 Json::Value ViewerCommunication::gameInformations()

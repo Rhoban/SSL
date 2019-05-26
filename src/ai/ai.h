@@ -100,7 +100,7 @@ public:
    * @param robot_number
    * @return the name of a robotbehavior.
    */
-  std::string getRobotBeheviorOf(uint robot_number);
+  std::string getRobotBehaviorOf(uint robot_number);
 
   /**
    * @brief Returns the strategy that chooses the robotBehavior of the robot with
