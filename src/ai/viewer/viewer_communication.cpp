@@ -67,11 +67,9 @@ void ViewerCommunication::sendViewerPackets()
   viewer::ViewerDataGlobal::get().packets_to_send.push(fieldPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(ballPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
-  // viewer::ViewerDataGlobal::get().addPacket(mobilesStatus());
-
-  // Information of the ai
-  //  viewer::ViewerDataGlobal::get().addPacket(availableManager());
-  //  viewer::ViewerDataGlobal::get().addPacket(availableRobotBehavior());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
 }
 
 Json::Value ViewerCommunication::fieldPacket()
