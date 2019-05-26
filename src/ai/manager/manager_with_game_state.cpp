@@ -4,7 +4,7 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-ManagerWithGameState::ManagerWithGameState() : Manager(), last_change_stamp_(0)
+ManagerWithGameState::ManagerWithGameState(std::string name) : Manager(name), last_change_stamp_(0)
 {
 }
 

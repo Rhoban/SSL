@@ -244,14 +244,21 @@ Json::Value ViewerCommunication::aiPacket()
     packet["ai"]["managers"]["availables"][i]["name"] = available_managers.at(i);
   }
   // todo
-  // packet["ai"]["managers"]["current"]["name"] = ai_->getCurrentManager().get()
+  packet["ai"]["managers"]["current"]["name"] = ai_->getCurrentManager().get()->name();
 
-  // for ...
-  // packet["ai"]["managers"]["current"]["strategies_used"][i]["name"] =
+  for (uint i = 0; i < ai_->getCurrentManager().get()->getAvailableStrategies().size(); ++i)
+  {
+    packet["ai"]["managers"]["current"]["strategies_used"][i]["name"] =
+        ai_->getCurrentManager().get()->getAvailableStrategies().at(i);
+  }
 
-  // for ... manual
-  // packet["ai"]["strategies"][id]["name"]
-  // packet["ai"]["strategies"][id]["bots_required"]
+  // we send all strategies in manual manager
+  for (uint i = 0; i < ai_->getManualManager().get()->getAvailableStrategies().size(); ++i)
+  {
+    std::string strat_name = ai_->getManualManager().get()->getAvailableStrategies().at(i);
+    packet["ai"]["strategies"][i]["name"] = strat_name;
+    packet["ai"]["strategies"][i]["bots_required"] = ai_->getManualManager().get()->getStrategy(strat_name).minRobots();
+  }
   return packet;
 }
 

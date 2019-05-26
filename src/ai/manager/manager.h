@@ -31,13 +31,15 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-class Manager : public GameInformations
+class Manager
 {
 public:
   static constexpr const char* MANAGER__REMOVE_ROBOTS = "manager__remove_robots";
   static constexpr const char* MANAGER__PLACER = "manager__placer";
 
 private:
+  std::string manager_name_;
+
   bool blue_is_not_set_;
   bool blue_team_on_positive_half_;
 
@@ -53,12 +55,25 @@ private:
   void detectInvalidRobots();
 
 public:
-  double time() const;
-  int dt() const;
+  Manager(std::string name);
 
+  /**
+   * @brief returns the name of the manager
+   *
+   * The name of all manager are define in the factory and set
+   * at the construction.
+   * @return a string
+   */
+  std::string name();
+
+  /**
+   * @brief getAvailableStrategies
+   * @return all name of available strategies in a vector
+   */
   std::vector<std::string> getAvailableStrategies();
 
-  Manager();
+  double time() const;
+  int dt() const;
 
   const std::string& getTeamName() const;
   void declareTeamIds(const std::vector<int>& team_ids);

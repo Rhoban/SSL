@@ -39,7 +39,7 @@ public:
   /**
    * @brief Constructor.
    */
-  Manual();
+  Manual(std::string name);
   /**
    * @brief Update the manager after each loop.
    */

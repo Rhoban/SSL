@@ -41,7 +41,7 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
 
   if (manager_name == names::MANUAL)
   {
-    manager = std::shared_ptr<Manager>(new Manual());
+    manager = std::shared_ptr<Manager>(new Manual(manager_name));
     /// Refacto  changeTeamAndPointOfView
     ///    dynamic_cast<Manual&>(*manager).changeTeamAndPointOfView(ai_data.team_color, ai_data.team_color !=
     ///    ai::Team::Yellow

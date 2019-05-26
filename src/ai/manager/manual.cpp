@@ -23,7 +23,7 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-Manual::Manual() : Manager()
+Manual::Manual(std::string name) : Manager(name)
 {
 }
 

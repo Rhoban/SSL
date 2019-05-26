@@ -165,10 +165,15 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
   }
 }
 
-Manager::Manager() : GameInformations(), blue_is_not_set_(true)
+Manager::Manager(std::string name) : manager_name_(name), blue_is_not_set_(true)
 {
   registerStrategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
   registerStrategy(MANAGER__PLACER, std::shared_ptr<strategy::Strategy>(new strategy::Placer()));
+}
+
+std::string Manager::name()
+{
+  return manager_name_;
 }
 
 double Manager::time() const
@@ -359,12 +364,16 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
 
   std::function<double(const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos)>
       robot_ranking = [this](const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos) {
-        return Vector2d(pos.first - this->getRobot(robot_id).getMovement().linearPosition(time())).normSquare();
+        return Vector2d(pos.first -
+                        GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].getMovement().linearPosition(time()))
+            .normSquare();
       };
 
   std::function<double(const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id)>
       distance_ranking = [this](const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id) {
-        return Vector2d(pos.first - this->getRobot(robot_id).getMovement().linearPosition(time())).normSquare();
+        return Vector2d(pos.first -
+                        GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].getMovement().linearPosition(time()))
+            .normSquare();
       };
 
   matching::Matchings matchings = matching::galeShapleyAlgorithm(getValidPlayerIds(), choising_positions, robot_ranking,

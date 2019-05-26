@@ -12,7 +12,7 @@ class ManagerWithGameState : public Manager
   unsigned int last_change_stamp_;
 
 public:
-  ManagerWithGameState();
+  ManagerWithGameState(std::string name);
 
   void update(double time);
   void analyseData(double time);
