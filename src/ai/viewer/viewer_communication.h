@@ -43,7 +43,7 @@ private:
    * @brief SENDING_DELAY
    * @todo MOVE to config or modify to be a request from the viewer
    */
-  const double SENDING_DELAY = 0.150;
+  const double SENDING_DELAY = 0.032;
 
 public:
   ViewerCommunication(AI* ai);
@@ -54,14 +54,14 @@ public:
 
 private:
   void processIncomingPackets();
-  void sendStatusPackets();
+  void sendViewerPackets();
 
   Json::Value fieldPacket();
   Json::Value ballPacket();
   Json::Value teamsPacket();
-
-  Json::Value gameInformations();
-  Json::Value mobilesStatus();
+  Json::Value refereePacket();
+  Json::Value informationsPacket();
+  Json::Value aiPacket();
 };
 }  // namespace viewer
 }  // namespace rhoban_ssl

@@ -34,7 +34,7 @@ bool ViewerCommunication::runTask()
 
   if (GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_ > SENDING_DELAY)
   {
-    sendStatusPackets();
+    sendViewerPackets();
     last_sending_time_ = GlobalDataSingleThread::singleton_.ai_data_.time;
   }
 
@@ -61,7 +61,7 @@ void ViewerCommunication::processIncomingPackets()
   }
 }
 
-void ViewerCommunication::sendStatusPackets()
+void ViewerCommunication::sendViewerPackets()
 {
   // GlobalData status
   viewer::ViewerDataGlobal::get().packets_to_send.push(fieldPacket());
@@ -117,8 +117,9 @@ Json::Value ViewerCommunication::teamsPacket()
   Json::Value packet;
   double time = GlobalDataSingleThread::singleton_.ai_data_.time;
   const data::Referee& referee = GlobalDataSingleThread::singleton_.referee_;
-  std::string blue_color = "#2393c6";
-  std::string yellow_color = "#dbdd56";
+
+  const std::string blue_color = "#2393c6";
+  const std::string yellow_color = "#dbdd56";
 
   for (uint team_id = 0; team_id < 2; team_id++)
   {
@@ -177,19 +178,11 @@ Json::Value ViewerCommunication::teamsPacket()
       packet["teams"][team]["bots"][rid]["last_control"]["velocity"]["theta"] = 0;
 
       packet["teams"][team]["bots"][rid]["radius"] = ai::Config::robot_radius;
-
-      if (ally_info)
-      {
-        packet["teams"][team]["bots"][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
-      }
-      else
-      {
-        packet["teams"][team]["bots"][rid]["color"] = (!ai::Config::we_are_blue) ? blue_color : yellow_color;
-      }
       packet["teams"][team]["bots"][rid]["is_present"] = current_robot.isActive();
 
       if (ally_info)
       {
+        packet["teams"][team]["bots"][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
         packet["teams"][team]["bots"][rid]["behavior"] = ai_->getRobotBehaviorOf(rid);
         // todo
         packet["teams"][team]["bots"][rid]["strategy"] = "do_nothing";
@@ -207,20 +200,58 @@ Json::Value ViewerCommunication::teamsPacket()
           packet["teams"][team]["bots"][rid]["electronics"]["errors"]["driver"] = current_robot.driverError();
         }
       }
+      else
+      {
+        packet["teams"][team]["bots"][rid]["color"] = (!ai::Config::we_are_blue) ? blue_color : yellow_color;
+      }
     }
   }
   return packet;
-}  // namespace viewer
+}
 
-Json::Value ViewerCommunication::gameInformations()
+Json::Value ViewerCommunication::refereePacket()
 {
   Json::Value packet;
 
-  // std::string team_color = team == 0 ? color_ally : color_opponent;
+  packet["referee"]["stage"]["value"] = GlobalDataSingleThread::singleton_.referee_.getCurrentStageName();
+  packet["referee"]["stage"]["remaining_time"] = GlobalDataSingleThread::singleton_.referee_.stage_time_left;
+  packet["referee"]["state"] = GlobalDataSingleThread::singleton_.referee_.getCurrentStateName();
+
+  return packet;
+}
+
+Json::Value ViewerCommunication::informationsPacket()
+{
+  Json::Value packet;
 
   packet["informations"]["simulation"] = ai::Config::is_in_simulation;
-  packet["informatons"]["color_ally"] = ai::Config::we_are_blue;
+  packet["informations"]["packets_per_second"] =
+      1. / GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_;
 
+  // todo
+  // packet["informatons"]["ping"] = ai::Config::we_are_blue;
+
+  return packet;
+}
+
+Json::Value ViewerCommunication::aiPacket()
+{
+  Json::Value packet;
+
+  const std::vector<std::string>& available_managers = ai_->getAvailableManagers();
+  for (uint i = 0; i < ai_->getAvailableManagers().size(); ++i)
+  {
+    packet["ai"]["managers"]["availables"][i] = available_managers.at(i);
+  }
+  // todo
+  // packet["ai"]["managers"]["current"]["name"] = ai_->getCurrentManager().get()
+
+  // for ...
+  // packet["ai"]["managers"]["current"]["strategies_used"][i]["name"] =
+
+  // for ... manual
+  // packet["ai"]["strategies"][id]["name"]
+  // packet["ai"]["strategies"][id]["bots_required"]
   return packet;
 }
 
