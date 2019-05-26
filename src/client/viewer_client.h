@@ -65,6 +65,8 @@ public:
 
 /**
  * @brief The class to communicate with the viewer.
+ *
+ * Currently only one viewer client is supporte.
  */
 class ViewerClient : public Task
 {

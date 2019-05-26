@@ -94,10 +94,10 @@ void ViewerCommunication::sendViewerPackets()
   viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
 
   // TODO debug viewer client -> if we send teams packets before
   // all next packets are ignore
-  viewer::ViewerDataGlobal::get().packets_to_send.push(teamsPacket());
 }
 
 Json::Value ViewerCommunication::fieldPacket()

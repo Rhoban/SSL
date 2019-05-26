@@ -47,26 +47,21 @@ int ViewerClient::callback_viewer(struct lws* wsi, enum lws_callback_reasons rea
       viewer::ViewerDataGlobal::get().parseAndStorePacketFromClient((char*)in);
       return 0;
     case LWS_CALLBACK_SERVER_WRITEABLE:
-      while (!rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.empty())
+      assert(!rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.empty());
       {
         Json::Value packet = rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.front();
-        if (clients_.size() > 0)
+        Json::FastWriter writer = Json::FastWriter();
+        std::string str_json = writer.write(packet);
+        unsigned char packet_send[str_json.size() + LWS_PRE];
+        std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
+
+        if (lws_send_pipe_choked(wsi) == 0)
         {
-          Json::FastWriter writer = Json::FastWriter();
-          std::string str_json = writer.write(packet);
-          unsigned char packet_send[str_json.size() + LWS_PRE];
-          std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
-          for (auto wsi = clients_.begin(); wsi != clients_.end(); ++wsi)
-          {
-            if (lws_send_pipe_choked(*wsi) == 0)
-            {
-              lws_write(*wsi, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
-            }
-          }
+          lws_write(wsi, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
+          rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.pop();
         }
-        rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.pop();
+        return 0;
       }
-      return 0;
     case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
       return 0;
     case LWS_CALLBACK_CLOSED:
@@ -76,7 +71,7 @@ int ViewerClient::callback_viewer(struct lws* wsi, enum lws_callback_reasons rea
     default:
       return 0;
   }
-}
+}  // namespace viewer
 
 ViewerClient::ViewerClient()
 {
@@ -86,7 +81,7 @@ ViewerClient::ViewerClient()
   protocols_[1] = { "viewer_protocol",
                     rhoban_ssl::viewer::ViewerClient::callback_viewer,
                     sizeof(per_session_data_minimal),
-                    3000,
+                    6000,
                     0,
                     NULL };
   protocols_[2] = { NULL, NULL, 0, 0 };
@@ -103,9 +98,12 @@ ViewerClient::ViewerClient()
 
 bool ViewerClient::runTask()
 {
-  for (auto wsi = clients_.begin(); wsi != clients_.end(); ++wsi)
+  if (clients_.size() > 0)
   {
-    lws_callback_on_writable(*wsi);
+    for (uint i = 0; i < rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.size(); ++i)
+    {
+      lws_callback_on_writable(clients_.at(0));
+    }
   }
 
   lws_service(context_, 0);
