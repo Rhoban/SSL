@@ -23,7 +23,12 @@ Referee::TeamInfo::TeamInfo()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Referee::Referee() : state_changed(true), blue_team_on_positive_half(false), packet_timestamp(0)
+Referee::Referee()
+  : current_stage(Referee_Stage_NORMAL_FIRST_HALF_PRE)
+  , current_command(Referee_Command::Referee_Command_HALT)
+  , state_changed(true)
+  , blue_team_on_positive_half(false)
+  , packet_timestamp(0)
 {
 }
 

@@ -71,9 +71,9 @@ bool SslGeometryPacketAnalyzer::runTask()
         {
           if (geometry.field().field_arcs(i).name() == "CenterCircle")
           {
-            field.circle_center_ = rhoban_geometry::Circle(geometry.field().field_arcs(i).center().x(),
-                                                           geometry.field().field_arcs(i).center().y(),
-                                                           geometry.field().field_arcs(i).radius());
+            field.circle_center_ = rhoban_geometry::Circle(double(geometry.field().field_arcs(i).center().x()) / 1000.0,
+                                                           double(geometry.field().field_arcs(i).center().y()) / 1000.0,
+                                                           double(geometry.field().field_arcs(i).radius()) / 1000.0);
           }
         }
         //! TODO: Update ALL information in field (corner...)

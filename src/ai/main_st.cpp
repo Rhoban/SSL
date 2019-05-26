@@ -181,13 +181,13 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
   ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
   ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used));
-  ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
+  // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
   ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10));
 
   // refereee
   ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
   ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
-  ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
+  // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
   ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
 
   if (simulation.getValue())

@@ -47,6 +47,25 @@ int ViewerClient::callback_viewer(struct lws* wsi, enum lws_callback_reasons rea
       viewer::ViewerDataGlobal::get().parseAndStorePacketFromClient((char*)in);
       return 0;
     case LWS_CALLBACK_SERVER_WRITEABLE:
+      while (!rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.empty())
+      {
+        Json::Value packet = rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.front();
+        if (clients_.size() > 0)
+        {
+          Json::FastWriter writer = Json::FastWriter();
+          std::string str_json = writer.write(packet);
+          unsigned char packet_send[str_json.size() + LWS_PRE];
+          std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
+          for (auto wsi = clients_.begin(); wsi != clients_.end(); ++wsi)
+          {
+            if (lws_send_pipe_choked(*wsi) == 0)
+            {
+              lws_write(*wsi, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
+            }
+          }
+        }
+        rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.pop();
+      }
       return 0;
     case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
       return 0;
@@ -84,31 +103,12 @@ ViewerClient::ViewerClient()
 
 bool ViewerClient::runTask()
 {
-  try
+  for (auto wsi = clients_.begin(); wsi != clients_.end(); ++wsi)
   {
-    while (!rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.empty())
-    {
-      Json::Value packet = rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.front();
-      if (clients_.size() > 0)
-      {
-        Json::FastWriter writer = Json::FastWriter();
-        std::string str_json = writer.write(packet);
-        unsigned char packet_send[str_json.size() + LWS_PRE];
-        std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
-        for (auto it = clients_.begin(); it != clients_.end(); ++it)
-        {
-          lws_write(*it, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
-        }
-      }
-
-      rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.pop();
-    }
-
-    lws_service(context_, 10);
+    lws_callback_on_writable(*wsi);
   }
-  catch (...)
-  {
-  }
+
+  lws_service(context_, 0);
   return true;
 }
 

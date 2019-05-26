@@ -185,7 +185,7 @@ Json::Value ViewerCommunication::teamsPacket()
         packet["teams"][team]["bots"][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
         packet["teams"][team]["bots"][rid]["behavior"] = ai_->getRobotBehaviorOf(rid);
         // todo
-        packet["teams"][team]["bots"][rid]["strategy"] = "do_nothing";
+        // packet["teams"][team]["bots"][rid]["strategy"] = "do_nothing";
 
         if (!ai::Config::is_in_simulation)
         {

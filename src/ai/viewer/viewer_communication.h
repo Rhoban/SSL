@@ -44,7 +44,7 @@ private:
    * @todo MOVE to config or modify to be a request from the viewer
    * @bug if the delay is too fast the viewer_client crash
    */
-  const double SENDING_DELAY = 0.150;
+  const double SENDING_DELAY = 0.032;
 
 public:
   ViewerCommunication(AI* ai);
