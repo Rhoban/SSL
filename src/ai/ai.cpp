@@ -270,11 +270,36 @@ void AI::setManager(std::string managerName)
   }
   else
   {
+    // remove all the robots accessible by the manual manager
+    manual_manager_->declareTeamIds({});
     strategy_manager_ = manager::Factory::constructManager(managerName);
   }
 
   GlobalDataSingleThread::singleton_.robots_[Ally][ai::Config::default_goalie_id].is_goalie = true;
   strategy_manager_->declareTeamIds(robot_ids);
+}
+
+void AI::startManager()
+{
+  for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+  {
+    auto& final_control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id];
+    final_control.is_manually_controled_by_viewer = false;
+  }
+}
+
+void AI::pauseManager()
+{
+  for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+  {
+    auto& final_control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id];
+    final_control.is_manually_controled_by_viewer = true;
+  }
+}
+
+void AI::stopManager()
+{
+  strategy_manager_->clearStrategyAssignement();
 }
 
 void AI::updateRobots()
@@ -422,6 +447,23 @@ std::string AI::getStrategyOf(uint robot_number)
   //  for(auto& strat_name : strategy_manager_.get()->getCurrentStrategyNames()){
   //    for
   //  }
+}
+
+void AI::setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::string strat_name)
+{
+  // remove the bot from the team of the current manager
+  strategy_manager_.get()->removeIdsInTeam(robot_numbers);
+
+  // add the bot in the team of the manual manager
+  manual_manager_.get()->addIdsInTeam(robot_numbers);
+
+  // apply the strategy
+  manual_manager_.get()->assignStrategy(strat_name, GlobalDataSingleThread::singleton_.ai_data_.time, robot_numbers);
+
+  for (int i = 0; i < robot_numbers.size(); ++i)
+  {
+    GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[i].is_manually_controled_by_viewer = false;
+  }
 }
 
 void AI::enableRobot(uint id, bool enabled)

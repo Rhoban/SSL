@@ -26,8 +26,10 @@ namespace rhoban_ssl
 GlobalDataSingleThread GlobalDataSingleThread::singleton_;
 
 SharedData::FinalControl::FinalControl()
-  : hardware_is_responding(false), is_disabled_by_viewer(false), is_manually_controled_by_viewer(false)
+  : hardware_is_responding(false), is_disabled_by_viewer(false), is_manually_controled_by_viewer(true)
 {
+  control.active = false;
+  control.ignore = true;
 }
 
 SharedData::FinalControl::FinalControl(const FinalControl& control)

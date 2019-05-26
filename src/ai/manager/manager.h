@@ -43,7 +43,9 @@ private:
   bool blue_is_not_set_;
   bool blue_team_on_positive_half_;
 
+  // TODO change vector int to a std::unordered_set of int for team_ids_
   std::vector<int> team_ids_;
+
   std::vector<int> valid_team_ids_;
   std::vector<int> valid_player_ids_;
   std::vector<int> invalid_team_ids_;
@@ -72,12 +74,30 @@ public:
    */
   std::vector<std::string> getAvailableStrategies();
 
+  /**
+   * @brief declareTeamIds sets the robots in the team of
+   * the manager.
+   *
+   * A robot in the team can be assigned to a strategy.
+   * @param team_ids
+   */
+  void declareTeamIds(const std::vector<int>& team_ids);
+
+  /**
+   * @brief removeIdsInTeam
+   */
+  void removeIdsInTeam(const std::vector<int>& robot_numbers_to_remove);
+
+  /**
+   * @brief addIdsInTeam
+   */
+  void addIdsInTeam(const std::vector<int>& robot_numbers_to_add);
+
   double time() const;
   int dt() const;
 
-  const std::string& getTeamName() const;
-  void declareTeamIds(const std::vector<int>& team_ids);
   const std::string& getNextStrategyWithGoalie() const;
+
   const std::vector<int>& getTeamIds() const;
   const std::vector<int>& getValidTeamIds() const;
   const std::vector<int>& getValidPlayerIds() const;

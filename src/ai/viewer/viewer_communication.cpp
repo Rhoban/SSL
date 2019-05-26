@@ -65,11 +65,11 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["start_manager"].isNull())
     {
-      // todo
+      ai_->startManager();
     }
     else if (!viewer_packet["stop_manager"].isNull())
     {
-      // todo
+      ai_->stopManager();
     }
     else if (!viewer_packet["place_bot"].isNull())
     {
@@ -83,7 +83,7 @@ void ViewerCommunication::processIncomingPackets()
     {
       ai_->enableRobot(viewer_packet["enable_bot"]["number"].asUInt(), true);
     }
-    else if (!viewer_packet["desable_bot"].isNull())
+    else if (!viewer_packet["disable_bot"].isNull())
     {
       ai_->enableRobot(viewer_packet["desable_bot"]["number"].asUInt(), false);
     }
@@ -93,7 +93,12 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["set_strategy"].isNull())
     {
-      // todo
+      std::vector<int> robot_numbers;
+      for (uint i = 0; i < viewer_packet["set_strategy"]["bots"].size(); ++i)
+      {
+        robot_numbers.push_back(viewer_packet["set_strategy"]["bots"][i].asInt());
+      }
+      ai_->setStrategyManuallyOf(robot_numbers, viewer_packet["set_strategy"]["name"].asString());
     }
     else if (!viewer_packet["give_bot_to_manager"].isNull())
     {
