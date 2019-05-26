@@ -14,7 +14,7 @@
     GNU Lesser General Public License for more details.
 
     You should have received a copy of the GNU Lesser General Public License
-    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+    along with SSL.  If not, see <http://www.gnu.org/licenses/.
 */
 
 #include "manager.h"
@@ -118,15 +118,17 @@ void Manager::updateStrategies(double time)
 {
   for (std::pair<std::string, std::shared_ptr<strategy::Strategy> > elem : strategies_)
   {
+    // REFACTO : TODO Remove the time passed.
     elem.second->update(time);
   }
 }
 
-void Manager::updateCurrentStrategies(double time)
+void Manager::updateCurrentStrategies()
 {
   for (const std::string& name : current_strategy_names_)
   {
-    getStrategy(name).update(time);
+    //@TODO : Remove the time passed.
+    getStrategy(name).update(GlobalDataSingleThread::singleton_.ai_data_.time);
   }
 }
 
@@ -526,5 +528,15 @@ void Manager::setBallAvoidanceForAllRobots(bool value = true)
   GlobalDataSingleThread::singleton_.ai_data_.force_ball_avoidance = value;
 }
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+Json::Value Manager::getProperties()
+{
+  // @ TODO : Create a default behavior
+  return Json::Value();
+}
+
+void Manager::setProperties(Json::Value)
+{
+}
+
+}  // namespace manager
+}  // namespace rhoban_ssl

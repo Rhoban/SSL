@@ -19,8 +19,6 @@
 
 #include "factory.h"
 
-#include "manual.h"
-
 namespace rhoban_ssl
 {
 namespace manager
@@ -53,5 +51,5 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
   return manager;
 }
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+}  // namespace manager
+}  // namespace rhoban_ssl

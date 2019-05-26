@@ -19,29 +19,30 @@
 
 #pragma once
 
-#include <referee/game_state.h>
-#include "manager.h"
-#include "manual.h"
+#include <manager/manager.h>
 
 namespace rhoban_ssl
 {
 namespace manager
 {
-struct names
-{
-  static constexpr const char* MANUAL = "Manual";
-};
-
-class Factory
+class Manual_old : public Manager
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers_;
+  bool strategy_was_assigned_;
+  bool goal_to_positive_axis_;
+  int ally_goalie_id_;
+  int opponent_goalie_id_;
+
+  void assignPointOfViewAndGoalie();
 
 public:
-  static const std::list<std::string>& availableManagers();
+  Manual_old();
+  void defineGoalToPositiveAxis(bool value = true);
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
+  void update(double time);
+
+  virtual ~Manual_old();
 };
 
-}  // namespace manager
-}  // namespace rhoban_ssl
+};  // namespace manager
+};  // namespace rhoban_ssl

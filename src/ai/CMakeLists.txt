@@ -20,8 +20,6 @@ include_directories(${catkin_INCLUDE_DIRS} .)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set (SOURCES
-    ${PROTO_SRCS}
-    ${PROTO_HDRS}
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -43,6 +41,7 @@ set (SOURCES
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp
     viewer/viewer_communication.cpp
+    viewer/properties.cpp
     robot_behavior/factory.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/position_follower.cpp

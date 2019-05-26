@@ -192,7 +192,7 @@ void ManagerWithGameState::chooseAStrategy(double time)
 void ManagerWithGameState::update(double time)
 {
   // update_strategies(time);
-  updateCurrentStrategies(time);
+  updateCurrentStrategies();
   analyseData(time);
   chooseAStrategy(time);
 }

@@ -23,6 +23,12 @@
 
 namespace rhoban_ssl
 {
+// @Todo : Refacto this to supress the circular dependency create by Game Informations.h
+namespace manager
+{
+class Manager;
+}
+
 namespace data
 {
 class AiData

@@ -18,45 +18,42 @@
 */
 
 #pragma once
-
-#include <manager/manager.h>
-#include <viewer/properties.h>
+#include <json/json.h>
+#include <list>
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace viewer
 {
-class Manual : public Manager
+class PropertiesFactory
 {
 private:
-  bool strategy_was_assigned_;
-  bool goal_to_positive_axis_;
-  int ally_goalie_id_;
-  int opponent_goalie_id_;
-  viewer::PropertiesFactory properties_factory;
+  Json::Value json;
 
 public:
-  /**
-   * @brief Constructor.
-   */
-  Manual();
-  /**
-   * @brief Update the manager after each loop.
-   */
-  void update();
-  /**
-   * @brief Get all properties of the manager shown in the viewer.
-   */
-  virtual Json::Value getProperties();
-  /**
-   * @brief Set the properties send by the viewer.
-   */
-  virtual void setProperties(Json::Value);
+  PropertiesFactory();
 
-  /**
-   * @brief Destructor
-   */
-  ~Manual();
+  void addSetValue(std::string name, std::string default_value);
+
+  void addSetValue(std::string name, int default_value);
+
+  void addSetValue(std::string name, double default_value);
+
+  void addRangeValue(std::string name, int min, int max, int step, int default_value);
+
+  void addRangeValue(std::string name, double min, double max, double step, double default_value);
+
+  // void addList(std::string name, std::list<std::string> string_list);
+
+  // void addList(std::string name, std::list<int> string_list);
+
+  // void addList(std::string name, std::list<double> string_list);
+
+  void clear();
+
+  Json::Value& getJson();
+
+  ~PropertiesFactory();
 };
-}  // namespace manager
+}  // namespace viewer
 }  // namespace rhoban_ssl
