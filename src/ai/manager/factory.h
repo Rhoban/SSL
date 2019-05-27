@@ -30,7 +30,6 @@ namespace manager
 struct names
 {
   static constexpr const char* MANUAL = "manual";
-  //static constexpr const char* match = "match";
   static constexpr const char* PLAN_VESCHAMBRES = "Plan_Veschambres";
 };
 
