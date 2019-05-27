@@ -12,10 +12,24 @@ class ManagerWithGameState : public Manager
   unsigned int last_change_stamp_;
 
 public:
+  /**
+   * @brief Constructor
+   * @param name of the manager
+   */
   ManagerWithGameState(std::string name);
 
+  /**
+   * @brief update() strategies of the manager
+   * @param time : the time
+   */
   void update(double time);
+
   void analyseData(double time);
+
+  /**
+   * @brief send the code execution in the good function in Strategy, depending the game state.
+   * @param time : the time
+   */
   void chooseAStrategy(double time);
 
   // Begin of a new state
