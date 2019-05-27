@@ -62,6 +62,8 @@ set (SOURCES
     debug.cpp
     manager/manager.cpp
     manager/manager_with_game_state.cpp
+    manager/plan_veschambres.cpp
+    # manager/Match.cpp
     manager/manual.cpp
     manager/factory.cpp
     strategy/strategy.cpp
