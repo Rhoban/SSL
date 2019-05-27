@@ -4,9 +4,9 @@
 #include <libwebsockets.h>
 #include <iostream>
 #include <json/json.h>
-#include <queue>
 #include <vector>
-
+#include <thread_queue.h>
+#include <atomic>
 /**
  * @brief The per_session_data__minimal struct
  *
@@ -49,17 +49,17 @@ public:
   /**
    * @brief Store all packets that will be send to clients.
    */
-  std::queue<Json::Value> packets_to_send;
+  ThreadQueue<Json::Value> packets_to_send;
 
   /**
    * @brief All packet received from the viewer.
    */
-  std::queue<Json::Value> received_packets;
+  ThreadQueue<Json::Value> received_packets;
 
   /**
    * @brief client_connected
    */
-  bool client_connected = false;
+  std::atomic<bool> client_connected;
 
   /**
    * @brief Parse and add store a packet send by the viewer.
@@ -69,76 +69,121 @@ public:
 };
 
 /**
- * @brief The class to communicate with the viewer.
+ * @brief The ViewerServerLauncher task permit to launch and close the thread of
+ * the viewer websocket server.
  *
- * Currently only one viewer client is supporte.
+ * A thread is launch when the task in created and when the execution manager removes it
+ * the thread is automatically close.
+ *
  */
-class ViewerClient : public Task
+class ViewerServerLauncher : public Task
 {
 private:
-  /** The callback for the viewer handler.
+  /**
+   * @brief The class is use to communicate with the viewer.
    *
-   * @brief callback_viewer
-   * @param wsi Opaque websocket instance pointer
-   * @param reason The reason for the call
-   * @param user Pointer to per-session user data allocated by library
-   * @param in Pointer used for some callback reasons
-   * @param len Length set for some callback reasons
-   * @return is_success Boolean to see if the callback has success.
+   * Currently only one client is supported.
+   * Plus, due to the use of libwebsockets all the communication process
+   * must be handle in a single thread.
+   * To ensure that the ViewerServerLauncher is the only class that contains and can
+   * instanciate this class.
    */
-  static int callback_http_dummy(struct lws* wsi, enum lws_callback_reasons, void*, void*, size_t);
+  class ViewerServer
+  {
+  public:
+    /**
+     * @brief The protocols structure.
+     *
+     * Use for register all protocols.
+     * The tab is set to three because we have only three protocols registred.
+     */
+    static struct lws_protocols protocols_[3];
 
-  /** A dummy callback because the libwebsocket doesn't start if the http is not handled.
-   *
-   * @brief callback_viewer
-   * @param wsi Opaque websocket instance pointer
-   * @param reason The reason for the call
-   * @param user Pointer to per-session user data allocated by library
-   * @param in Pointer used for some callback reasons
-   * @param len Length set for some callback reasons
-   * @return 0 Boolean to say the callback has success.
-   */
-  static int callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len);
+    /**
+     * @brief The context structure
+     * The struct lws_context represents the server.
+     */
+    static struct lws_context* context_;
+
+    /**
+     * @brief Constructor.
+     *
+     * Create context, protocols and websocket.
+     */
+    ViewerServer();
+
+    /**
+     * @brief Destructor
+     *
+     * Destroy the context.
+     */
+    ~ViewerServer();
+
+    /**
+     * @brief run
+     */
+    static void run();
+
+    /**
+     * @brief running_
+     */
+    static std::atomic<bool> running_;
+
+    /**
+     * @brief All clients used.
+     */
+    static std::vector<struct lws*> clients_;
+
+    /**
+     * @brief A dummy callback because the libwebsocket doesn't start if the http is not handled.
+     * @param wsi Opaque websocket instance pointer
+     * @param reason The reason for the call
+     * @param user Pointer to per-session user data allocated by library
+     * @param in Pointer used for some callback reasons
+     * @param len Length set for some callback reasons
+     * @return is_success Boolean to see if the callback has success.
+     */
+    static int callback_http_dummy(struct lws* wsi, enum lws_callback_reasons, void*, void*, size_t);
+
+    /**
+     *
+     * @brief The callback for the viewer handler.
+     * @param wsi Opaque websocket instance pointer
+     * @param reason The reason for the call
+     * @param user Pointer to per-session user data allocated by library
+     * @param in Pointer used for some callback reasons
+     * @param len Length set for some callback reasons
+     * @return 0 Boolean to say the callback has success.
+     */
+    static int callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len);
+  };
+
+private:
+  ViewerServer viewer_client_;
+  std::thread* thread_;
 
   /**
-   * @brief The protocols structure.
-   *
-   * Use for register all protocols.
-   * The tab is set to three because we have only three protocols registred.
+   * @brief This member is used to assure that this task is add only once in the execution manager.
    */
-  struct lws_protocols protocols_[3];
-  /**
-   * @brief The context structure
-   * The struct lws_context represents the server.
-   */
-  struct lws_context* context_;
-
-  /**
-   * @brief All clients used.
-   */
-  static std::vector<struct lws*> clients_;
+  static uint instance_counter_;
 
 public:
-  /**
-   * @brief Constructor.
-   *
-   * Create context, protocols and websocket.
-   */
-  ViewerClient();
+  ViewerServerLauncher();
+  ~ViewerServerLauncher();
+
+  // Task interface
+public:
   /**
    * @brief runTask
    *
-   * Use here to launch the callback function if there is a upcoming connection.
+   * Use to launch the thread of the viewer client.
+   * Also, the task is alive if the thread running.
+   * When the task is destroy, it's stop the thread of the viewer client.
    *
-   * @return success Boolean to see if the function has success.
+   * @return boolean to activate/desactivate the task
    */
-  bool runTask() override;
-  /**
-   * @brief Destructor
-   *
-   * Destroy the context.
-   */
-  ~ViewerClient() override;
+  bool runTask();
 };
+
 }  // namespace viewer
 }  // namespace rhoban_ssl

@@ -27,58 +27,17 @@ void ViewerDataGlobal::parseAndStorePacketFromClient(char* packet_received)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-int ViewerClient::callback_http_dummy(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in,
-                                      size_t len)
-{
-  return 0;
-}
+lws_protocols ViewerServerLauncher::ViewerServer::protocols_[3];
+std::vector<struct lws*> ViewerServerLauncher::ViewerServer::clients_;
+std::atomic<bool> ViewerServerLauncher::ViewerServer::running_(false);
+struct lws_context* ViewerServerLauncher::ViewerServer::context_;
 
-std::vector<struct lws*> ViewerClient::clients_;
-
-int ViewerClient::callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len)
-{
-  switch (reason)
-  {
-    case LWS_CALLBACK_ESTABLISHED:
-      ViewerClient::clients_.push_back(wsi);
-      return 0;
-    case LWS_CALLBACK_RECEIVE:
-      viewer::ViewerDataGlobal::get().parseAndStorePacketFromClient((char*)in);
-      return 0;
-    case LWS_CALLBACK_SERVER_WRITEABLE:
-      assert(!rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.empty());
-      {
-        Json::Value packet = rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.front();
-        Json::FastWriter writer = Json::FastWriter();
-        std::string str_json = writer.write(packet);
-        unsigned char packet_send[str_json.size() + LWS_PRE];
-        std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
-
-        if (lws_send_pipe_choked(wsi) == 0)
-        {
-          lws_write(wsi, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
-          rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.pop();
-        }
-        return 0;
-      }
-    case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
-      return 0;
-    case LWS_CALLBACK_CLOSED:
-      ViewerClient::clients_.erase(std::remove(ViewerClient::clients_.begin(), ViewerClient::clients_.end(), wsi),
-                                   ViewerClient::clients_.end());
-      return 0;
-    default:
-      return 0;
-  }
-}  // namespace viewer
-
-ViewerClient::ViewerClient()
+ViewerServerLauncher::ViewerServer::ViewerServer()
 {
   // Set the protocols
-
-  protocols_[0] = { "http", rhoban_ssl::viewer::ViewerClient::callback_http_dummy, 0, 0 };
+  protocols_[0] = { "http", rhoban_ssl::viewer::ViewerServerLauncher::ViewerServer::callback_http_dummy, 0, 0 };
   protocols_[1] = { "viewer_protocol",
-                    rhoban_ssl::viewer::ViewerClient::callback_viewer,
+                    rhoban_ssl::viewer::ViewerServerLauncher::ViewerServer::callback_viewer,
                     sizeof(per_session_data_minimal),
                     6000,
                     0,
@@ -95,28 +54,98 @@ ViewerClient::ViewerClient()
   context_ = lws_create_context(&info);
 }
 
-bool ViewerClient::runTask()
+ViewerServerLauncher::ViewerServer::~ViewerServer()
 {
-  if (clients_.size() > 0)
+  lws_context_destroy(context_);
+}
+
+void ViewerServerLauncher::ViewerServer::run()
+{
+  while (running_)
   {
-    viewer::ViewerDataGlobal::get().client_connected = true;
-    for (uint i = 0; i < rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.size(); ++i)
+    if (clients_.size() > 0)
     {
+      viewer::ViewerDataGlobal::get().client_connected = true;
       lws_callback_on_writable(clients_.at(0));
     }
+    else
+    {
+      viewer::ViewerDataGlobal::get().client_connected = false;
+    }
+    lws_service(context_, 10);
   }
-  else
-  {
-    viewer::ViewerDataGlobal::get().client_connected = false;
-  }
+  std::cout << "ViewerServer close" << std::endl;
+}
 
-  lws_service(context_, 0);
+int ViewerServerLauncher::ViewerServer::callback_http_dummy(struct lws* wsi, enum lws_callback_reasons reason,
+                                                            void* user, void* in, size_t len)
+{
+  return 0;
+}
+
+int ViewerServerLauncher::ViewerServer::callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void* user,
+                                                        void* in, size_t len)
+{
+  switch (reason)
+  {
+    case LWS_CALLBACK_ESTABLISHED:
+      ViewerServer::clients_.push_back(wsi);
+      return 0;
+    case LWS_CALLBACK_RECEIVE:
+      viewer::ViewerDataGlobal::get().parseAndStorePacketFromClient((char*)in);
+      return 0;
+    case LWS_CALLBACK_SERVER_WRITEABLE:
+    {
+      Json::Value packet = rhoban_ssl::viewer::ViewerDataGlobal::get().packets_to_send.pop();
+      Json::FastWriter writer = Json::FastWriter();
+      std::string str_json = writer.write(packet);
+      unsigned char packet_send[str_json.size() + LWS_PRE];
+      std::copy(str_json.begin(), str_json.end(), packet_send + LWS_PRE);
+
+      if (lws_send_pipe_choked(wsi) == 0)
+      {
+        lws_write(wsi, &packet_send[LWS_PRE], str_json.size(), LWS_WRITE_TEXT);
+      }
+    }
+    break;
+    case LWS_CALLBACK_CLIENT_CONNECTION_ERROR:
+      break;
+    case LWS_CALLBACK_CLOSED:
+      ViewerServer::clients_.erase(std::remove(ViewerServer::clients_.begin(), ViewerServer::clients_.end(), wsi),
+                                   ViewerServer::clients_.end());
+      break;
+    default:
+      break;
+  }
+  return 0;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+uint ViewerServerLauncher::instance_counter_ = 0;
+ViewerServerLauncher::ViewerServerLauncher()
+{
+  instance_counter_++;
+
+  // prevent an invalid second instanciation of the task.
+  assert(instance_counter_ < 2);
+}
+
+bool ViewerServerLauncher::runTask()
+{
+  if (!viewer_client_.running_)
+  {
+    viewer_client_.running_ = true;
+    thread_ = new std::thread(&ViewerServerLauncher::ViewerServer::run);
+  }
   return true;
 }
 
-ViewerClient::~ViewerClient()
+ViewerServerLauncher::~ViewerServerLauncher()
 {
-  lws_context_destroy(context_);
+  std::cout << "coiucou" << std::endl;
+  viewer_client_.running_ = false;
+  delete thread_;
 }
 
 }  // namespace viewer
