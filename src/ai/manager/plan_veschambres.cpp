@@ -66,6 +66,8 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   , kick_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , kick_strats_indirect_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
 {
+  // strategies arrays begin at 1(case 0 unused)to directly acces the good strategy by giving number of disponible
+  // robots
   penalty_strats_[8] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name, PROTECT_BALL };
   penalty_strats_[7] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name, PROTECT_BALL };
   penalty_strats_[6] = { strategy::GoalieStrat::name, strategy::Mur_2::name, strategy::Defensive2::name, PROTECT_BALL };
@@ -209,6 +211,7 @@ void PlanVeschambres::startRunning()
   setBallAvoidanceForAllRobots(false);
   if (ballPosition().getX() <= 0)
   {
+    //+ 1 because the method getValidPlayerIds() doesn't count goalie.
     future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
     ball_was_in_ally_part_ = true;
   }
