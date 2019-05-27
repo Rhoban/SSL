@@ -38,8 +38,18 @@ private:
   static std::list<std::string> list_of_avalaible_managers_;
 
 public:
+  /**
+   * @brief get list of usable managers.
+   * @return list of strings, the names of managers
+   */
   static const std::list<std::string>& availableManagers();
 
+  /**
+   * @brief create a new manager by create a new instance of the manager class corresponding to the name of the manager.
+   *
+   * @param manager_name : the name of the new manager
+   * @return the shared pointer of the new manager
+   */
   static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
 };
 
