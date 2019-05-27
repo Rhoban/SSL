@@ -92,6 +92,7 @@ int ViewerServerLauncher::ViewerServer::callback_viewer(struct lws* wsi, enum lw
       ViewerServer::clients_.push_back(wsi);
       return 0;
     case LWS_CALLBACK_RECEIVE:
+      std::cout << (char*)in << std::endl;
       viewer::ViewerDataGlobal::get().parseAndStorePacketFromClient((char*)in);
       return 0;
     case LWS_CALLBACK_SERVER_WRITEABLE:

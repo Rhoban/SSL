@@ -47,78 +47,79 @@ bool ViewerCommunication::runTask()
 
 void ViewerCommunication::processIncomingPackets()
 {
-  //  while (!viewer::ViewerDataGlobal::get().received_packets.empty())
-  //  {
-  //    Json::Value viewer_packet = viewer::ViewerDataGlobal::get().received_packets.front();
+  std::queue<Json::Value> incoming_packets = viewer::ViewerDataGlobal::get().received_packets.getAndclear();
+  while (!incoming_packets.empty())
+  {
+    Json::Value viewer_packet = incoming_packets.front();
 
-  //    if (!viewer_packet["emergency"].isNull())
-  //    {
-  //      ai_->emergency();
-  //    }
-  //    else if (!viewer_packet["set_packets_per_second"].isNull())
-  //    {
-  //      // todo
-  //    }
-  //    else if (!viewer_packet["set_manager"].isNull())
-  //    {
-  //      ai_->setManager(viewer_packet["managers"]["set_manager"].asString());
-  //    }
-  //    else if (!viewer_packet["start_manager"].isNull())
-  //    {
-  //      ai_->startManager();
-  //    }
-  //    else if (!viewer_packet["stop_manager"].isNull())
-  //    {
-  //      ai_->stopManager();
-  //    }
-  //    else if (!viewer_packet["place_bot"].isNull())
-  //    {
-  //      // todo
-  //    }
-  //    else if (!viewer_packet["halt_bot"].isNull())
-  //    {
-  //      // todo
-  //    }
-  //    else if (!viewer_packet["enable_bot"].isNull())
-  //    {
-  //      ai_->enableRobot(viewer_packet["enable_bot"]["number"].asUInt(), true);
-  //    }
-  //    else if (!viewer_packet["disable_bot"].isNull())
-  //    {
-  //      ai_->enableRobot(viewer_packet["desable_bot"]["number"].asUInt(), false);
-  //    }
-  //    else if (!viewer_packet["control_bot"].isNull())
-  //    {
-  //      processBotsControlBot(viewer_packet["control_bot"]);
-  //    }
-  //    else if (!viewer_packet["set_strategy"].isNull())
-  //    {
-  //      std::vector<int> robot_numbers;
-  //      for (uint i = 0; i < viewer_packet["set_strategy"]["bots"].size(); ++i)
-  //      {
-  //        robot_numbers.push_back(viewer_packet["set_strategy"]["bots"][i].asInt());
-  //      }
-  //      ai_->setStrategyManuallyOf(robot_numbers, viewer_packet["set_strategy"]["name"].asString());
-  //    }
-  //    else if (!viewer_packet["give_bot_to_manager"].isNull())
-  //    {
-  //      // todo
-  //    }
-  //    else if (!viewer_packet["place_ball"].isNull())
-  //    {
-  //      // todo
-  //    }
-  //    else if (!viewer_packet["scan"].isNull())
-  //    {
-  //      ai_->scan();
-  //    }
-  //    else
-  //    {
-  //      DEBUG("Invalid viewer packet");
-  //      assert(false);
-  //    }
-  //    viewer::ViewerDataGlobal::get().received_packets.pop();
-  //}
+    if (!viewer_packet["emergency"].isNull())
+    {
+      ai_->emergency();
+    }
+    else if (!viewer_packet["set_packets_per_second"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["set_manager"].isNull())
+    {
+      ai_->setManager(viewer_packet["set_manager"].asString());
+    }
+    else if (!viewer_packet["start_manager"].isNull())
+    {
+      ai_->startManager();
+    }
+    else if (!viewer_packet["stop_manager"].isNull())
+    {
+      ai_->stopManager();
+    }
+    else if (!viewer_packet["place_bot"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["halt_bot"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["enable_bot"].isNull())
+    {
+      ai_->enableRobot(viewer_packet["enable_bot"]["number"].asUInt(), true);
+    }
+    else if (!viewer_packet["disable_bot"].isNull())
+    {
+      ai_->enableRobot(viewer_packet["desable_bot"]["number"].asUInt(), false);
+    }
+    else if (!viewer_packet["control_bot"].isNull())
+    {
+      processBotsControlBot(viewer_packet["control_bot"]);
+    }
+    else if (!viewer_packet["set_strategy"].isNull())
+    {
+      std::vector<int> robot_numbers;
+      for (uint i = 0; i < viewer_packet["set_strategy"]["bots"].size(); ++i)
+      {
+        robot_numbers.push_back(viewer_packet["set_strategy"]["bots"][i].asInt());
+      }
+      ai_->setStrategyManuallyOf(robot_numbers, viewer_packet["set_strategy"]["name"].asString());
+    }
+    else if (!viewer_packet["give_bot_to_manager"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["place_ball"].isNull())
+    {
+      // todo
+    }
+    else if (!viewer_packet["scan"].isNull())
+    {
+      ai_->scan();
+    }
+    else
+    {
+      DEBUG("Invalid viewer packet");
+      assert(false);
+    }
+    incoming_packets.pop();
+  }
 }
 
 void ViewerCommunication::sendViewerPackets()
@@ -149,7 +150,6 @@ Json::Value ViewerCommunication::fieldPacket()
   packet["field"]["circle"]["radius"] = field.circle_center_.getRadius();
 
   return packet;
-
 }
 
 Json::Value ViewerCommunication::ballPacket()

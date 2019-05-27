@@ -14,7 +14,6 @@ template <typename T>
 class ThreadQueue
 {
 public:
-
   T pop()
   {
     std::unique_lock<std::mutex> mlock(mutex_);
@@ -38,6 +37,19 @@ public:
     queue_.pop();
   }
 
+  std::queue<T> getAndclear()
+  {
+    std::unique_lock<std::mutex> mlock(mutex_);
+    std::queue<T> queue;
+    while (!queue_.empty())
+    {
+      queue.push(queue_.front());
+      queue_.pop();
+    }
+    mlock.unlock();
+    return queue;
+  }
+
   void push(const T& item)
   {
     std::unique_lock<std::mutex> mlock(mutex_);
@@ -45,9 +57,9 @@ public:
     mlock.unlock();
     cond_.notify_one();
   }
-  ThreadQueue()=default;
-  ThreadQueue(const ThreadQueue&) = delete;            // disable copying
-  ThreadQueue& operator=(const ThreadQueue&) = delete; // disable assignment
+  ThreadQueue() = default;
+  ThreadQueue(const ThreadQueue&) = delete;             // disable copying
+  ThreadQueue& operator=(const ThreadQueue&) = delete;  // disable assignment
 
 private:
   std::queue<T> queue_;
