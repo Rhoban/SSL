@@ -20,7 +20,6 @@
 #include "factory.h"
 
 #include "manual.h"
-// #include "Match.h"
 #include "plan_veschambres.h"
 
 namespace rhoban_ssl
@@ -29,7 +28,6 @@ namespace manager
 {
 std::list<std::string> Factory::list_of_avalaible_managers_ = {
   names::MANUAL,
-  // names::match,
   names::PLAN_VESCHAMBRES,
 };
 
