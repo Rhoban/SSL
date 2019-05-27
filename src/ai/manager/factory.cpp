@@ -50,17 +50,7 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
   if (manager_name == names::MANUAL)
   {
     manager = std::shared_ptr<Manager>(new Manual(manager_name));
-    /// Refacto  changeTeamAndPointOfView
-    ///    dynamic_cast<Manual&>(*manager).changeTeamAndPointOfView(ai_data.team_color, ai_data.team_color !=
-    ///    ai::Team::Yellow
-    // false //ai_data.team_color != ai::Team::Yellow
-    ///    );
   }
-  // if( manager_name == names::match ){
-  //     manager = std::shared_ptr<Manager>(
-  //         new Match(ai_data, game_state)
-  //     );
-  // }
   if (manager_name == names::PLAN_VESCHAMBRES)
   {
     manager = std::shared_ptr<Manager>(new PlanVeschambres(ai_data, game_state));
