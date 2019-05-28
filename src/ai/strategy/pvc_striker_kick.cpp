@@ -17,21 +17,21 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mur_2_passif.h"
+#include "pvc_striker_kick.h"
 
-#include <robot_behavior/goalie.h>
-#include <robot_behavior/striker.h>
+#include <robot_behavior/slow_striker.h>
 #include <robot_behavior/mur_defensor.h>
+#include <robot_behavior/degageur.h>
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-Mur_2_passif::Mur_2_passif(ai::AiData& ai_data) : Strategy(ai_data)
+StrikerKick::StrikerKick(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-Mur_2_passif::~Mur_2_passif()
+StrikerKick::~StrikerKick()
 {
 }
 
@@ -39,70 +39,53 @@ Mur_2_passif::~Mur_2_passif()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2_passif::minRobots() const
+int StrikerKick::minRobots() const
 {
-  return 2;
+  return 1;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2_passif::maxRobots() const
+int StrikerKick::maxRobots() const
 {
-  return 2;
+  return 1;
 }
 
-GoalieNeed Mur_2_passif::needsGoalie() const
+GoalieNeed StrikerKick::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-const std::string Mur_2_passif::name = "Mur_2_passif";
+const std::string StrikerKick::name = "slow striker";
 
-void Mur_2_passif::start(double time)
+void StrikerKick::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
+
+  slow_striker_ = std::shared_ptr<robot_behavior::SlowStriker>(new robot_behavior::SlowStriker(ai_data_));
 }
-void Mur_2_passif::stop(double time)
+void StrikerKick::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Mur_2_passif::update(double time)
+void StrikerKick::update(double time)
 {
-  int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Ally);
-  is_closest_0_ = false;
-  is_closest_1_ = false;
-
-  if (nearest_ally_robot_from_ball == playerId(0))
-  {
-    is_closest_0_ = true;
-  }
-  else
-  {
-    if (nearest_ally_robot_from_ball == playerId(1))
-    {
-      is_closest_1_ = true;
-    }
-  }
+  std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
+  slow_striker_->declarePointToStrike(results.first);
 }
 
-void Mur_2_passif::assignBehaviorToRobots(
+void StrikerKick::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefensor(ai_data_, 1));
-  static_cast<robot_behavior::MurDefensor*>(mur1.get())->declareMurRobotId(0, 2);
-
-  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefensor(ai_data_, 1));
-
   if (not(behaviors_are_assigned_))
   {
-    assert(getPlayerIds().size() == 2);
+    assert(getPlayerIds().size() == 1);
 
-    assign_behavior(playerId(0), mur1);
-    assign_behavior(playerId(1), mur2);
+    assign_behavior(playerId(0), slow_striker_);
 
     behaviors_are_assigned_ = true;
   }
@@ -115,12 +98,12 @@ void Mur_2_passif::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Mur_2_passif::getStartingPositions(int number_of_avalaible_robots)
+StrikerKick::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ballPosition(), 0.0) };
 }
 
 //
@@ -128,15 +111,15 @@ Mur_2_passif::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Mur_2_passif::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                                ContinuousAngle& angular_position)
+bool StrikerKick::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
+                                               ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Mur_2_passif::getAnnotations() const
+rhoban_ssl::annotations::Annotations StrikerKick::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 

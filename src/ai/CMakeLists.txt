@@ -69,6 +69,19 @@ set (SOURCES
     strategy/halt.cpp
     strategy/placer.cpp
     strategy/from_robot_behavior.cpp
+    strategy/pvc_prepare_kickoff.cpp
+    strategy/pvc_offensive.cpp
+    strategy/pvc_defensive.cpp
+    strategy/pvc_defensive_2.cpp
+    strategy/pvc_mur_stop.cpp
+    strategy/pvc_mur.cpp
+    strategy/pvc_mur_2.cpp
+    strategy/pvc_mur_2_passif.cpp
+    strategy/pvc_attaque_with_support_ms.cpp
+    strategy/pvc_striker_with_support.cpp
+    strategy/pvc_striker_v2.cpp
+    strategy/pvc_striker_kick.cpp
+    strategy/pvc_goalie_strat.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp

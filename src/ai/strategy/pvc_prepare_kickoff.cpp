@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "prepare_kickoff.h"
+#include "pvc_prepare_kickoff.h"
 #include <robot_behavior/do_nothing.h>
 #include <robot_behavior/factory.h>
 #include <robot_behavior/consign_follower.h>

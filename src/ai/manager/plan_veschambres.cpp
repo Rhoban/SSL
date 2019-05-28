@@ -20,32 +20,29 @@
 #include "plan_veschambres.h"
 
 // The different strategies
-#include <strategy/halt.h>
-#include <strategy/tare_and_synchronize.h>
-#include <strategy/placer.h>
-#include <strategy/prepare_kickoff.h>
 #include <strategy/from_robot_behavior.h>
+#include <strategy/halt.h>
 
-#include <strategy/offensive.h>
-#include <strategy/defensive.h>
-#include <strategy/defensive_2.h>
-#include <strategy/mur_stop.h>
-#include <strategy/mur.h>
-#include <strategy/mur_2.h>
-#include <strategy/mur_2_passif.h>
-#include <strategy/attaque_with_support.h>
-#include <strategy/attaque_with_support_ms.h>
-#include <strategy/striker_with_support.h>
-#include <strategy/striker_v2.h>
-#include <strategy/striker_kick.h>
+//PVC strategies:
+#include <strategy/pvc_prepare_kickoff.h>
+#include <strategy/pvc_offensive.h>
+#include <strategy/pvc_defensive.h>
+#include <strategy/pvc_defensive_2.h>
+#include <strategy/pvc_mur_stop.h>
+#include <strategy/pvc_mur.h>
+#include <strategy/pvc_mur_2.h>
+#include <strategy/pvc_mur_2_passif.h>
+#include <strategy/pvc_attaque_with_support_ms.h>
+#include <strategy/pvc_striker_with_support.h>
+#include <strategy/pvc_striker_v2.h>
+#include <strategy/pvc_striker_kick.h>
+#include <strategy/pvc_goalie_strat.h>
 
-#include <strategy/goalie_strat.h>
-
+//TODO
+//PVC behaviors:
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/protect_ball.h>
 
-#include <core/collection.h>
-#include <core/print_collection.h>
 
 #define GOALIE "goalie"
 #define PROTECT_BALL "protect_ball"
@@ -149,19 +146,17 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   stop_strats_[2] = { strategy::GoalieStrat::name, strategy::Mur::name };
   stop_strats_[1] = { strategy::GoalieStrat::name };
 
-  halt_strats_[8] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
-  halt_strats_[7] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
-  halt_strats_[6] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
-  halt_strats_[5] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
-  halt_strats_[4] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
-  halt_strats_[3] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
-  halt_strats_[2] = { strategy::TareAndSynchronize::name, strategy::Halt::name };
-  halt_strats_[1] = { strategy::TareAndSynchronize::name };
+  halt_strats_[8] = { strategy::Halt::name };
+  halt_strats_[7] = { strategy::Halt::name };
+  halt_strats_[6] = { strategy::Halt::name };
+  halt_strats_[5] = { strategy::Halt::name };
+  halt_strats_[4] = { strategy::Halt::name };
+  halt_strats_[3] = { strategy::Halt::name };
+  halt_strats_[2] = { strategy::Halt::name };
+  halt_strats_[1] = {};
 
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
   registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2(ai_data)));
-  registerStrategy(strategy::TareAndSynchronize::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::TareAndSynchronize(ai_data)));
   registerStrategy(strategy::PrepareKickoff::name,
                    std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff(ai_data)));
   registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(

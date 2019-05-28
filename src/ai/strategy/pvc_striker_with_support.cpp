@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,22 +17,21 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "mur_2.h"
+#include "pvc_striker_with_support.h"
 
 #include <robot_behavior/goalie.h>
 #include <robot_behavior/striker.h>
-#include <robot_behavior/mur_defensor.h>
-#include <robot_behavior/degageur.h>
+#include <robot_behavior/robot_follower.h>
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-Mur_2::Mur_2(ai::AiData& ai_data) : Strategy(ai_data)
+StrikerWithSupport::StrikerWithSupport(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-Mur_2::~Mur_2()
+StrikerWithSupport::~StrikerWithSupport()
 {
 }
 
@@ -40,95 +39,67 @@ Mur_2::~Mur_2()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2::minRobots() const
+int StrikerWithSupport::minRobots() const
 {
-  return 2;
+  return 3;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Mur_2::maxRobots() const
+int StrikerWithSupport::maxRobots() const
 {
-  return 2;
+  return 3;
 }
 
-GoalieNeed Mur_2::needsGoalie() const
+GoalieNeed StrikerWithSupport::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-const std::string Mur_2::name = "mur_2";
+const std::string StrikerWithSupport::name = "striker_with_support";
 
-void Mur_2::start(double time)
+void StrikerWithSupport::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
+
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
 }
-void Mur_2::stop(double time)
+void StrikerWithSupport::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Mur_2::update(double time)
+void StrikerWithSupport::update(double time)
 {
-  int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Ally);
-  is_closest_0_ = false;
-  is_closest_1_ = false;
+  // std::pair<rhoban_geometry::Point, double> results = GameInformations::find_goal_best_move( ball_position() );
+  // rhoban_geometry::Point goal_point = results.first;
 
-  if (nearest_ally_robot_from_ball == playerId(0))
-  {
-    is_closest_0_ = true;
-  }
-  else
-  {
-    if (nearest_ally_robot_from_ball == playerId(1))
-    {
-      is_closest_1_ = true;
-    }
-  }
+  // static_cast<Robot_behavior::Striker*>( striker.get() )->declare_point_to_strik( goal_point );
 }
 
-void Mur_2::assignBehaviorToRobots(
+void StrikerWithSupport::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefensor(ai_data_, 1));
-  static_cast<robot_behavior::MurDefensor*>(mur1.get())->declareMurRobotId(0, 2);
-
-  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefensor(ai_data_, 1));
-  static_cast<robot_behavior::MurDefensor*>(mur2.get())->declareMurRobotId(1, 2);
-  std::shared_ptr<robot_behavior::RobotBehavior> deg1(new robot_behavior::Degageur(ai_data_));
-
   if (not(behaviors_are_assigned_))
   {
-    assert(getPlayerIds().size() == 2);
+    // we assign now all the other behavior
+    assert(getPlayerIds().size() == 3);
 
-    assign_behavior(playerId(0), mur1);
-    assign_behavior(playerId(1), mur2);
+    assign_behavior(playerId(0), striker_);
+    int supportLeft = playerId(1);  // we get the first if in get_player_ids()
+    std::shared_ptr<robot_behavior::RobotFollower> support_behaviorL(new robot_behavior::RobotFollower(ai_data_));
+    support_behaviorL->declare_robot_to_follow_(playerId(0), Vector2d(1, 0.5), vision::Ally);
+    assign_behavior(supportLeft, support_behaviorL);
+
+    int supportRight = playerId(2);  // we get the first if in get_player_ids()
+    std::shared_ptr<robot_behavior::RobotFollower> support_behaviorR(new robot_behavior::RobotFollower(ai_data_));
+    support_behaviorR->declare_robot_to_follow_(playerId(0), Vector2d(1, -0.5), vision::Ally);
+    assign_behavior(supportRight, support_behaviorR);
 
     behaviors_are_assigned_ = true;
-  }
-  else
-  {
-    if (is_closest_0_)
-    {
-      assign_behavior(playerId(0), deg1);
-      assign_behavior(playerId(1), mur2);
-    }
-    else
-    {
-      if (is_closest_1_)
-      {
-        assign_behavior(playerId(0), mur1);
-        assign_behavior(playerId(1), deg1);
-      }
-      else
-      {
-        assign_behavior(playerId(0), mur1);
-        assign_behavior(playerId(1), mur2);
-      }
-    }
   }
 }
 
@@ -139,12 +110,17 @@ void Mur_2::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Mur_2::getStartingPositions(int number_of_avalaible_robots)
+StrikerWithSupport::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
+  return {
+    // std::pair<rhoban_geometry::Point,ContinuousAngle>(
+    //     ai_data.relative2absolute(-1.0/3.0, 0.0),
+    //     0.0
+    // )
+  };
 }
 
 //
@@ -152,14 +128,15 @@ Mur_2::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Mur_2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool StrikerWithSupport::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
+                                                      ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Mur_2::getAnnotations() const
+rhoban_ssl::annotations::Annotations StrikerWithSupport::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 

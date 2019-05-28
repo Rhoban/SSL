@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,17 +17,22 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "offensive.h"
+#include "pvc_mur_stop.h"
+
+#include <robot_behavior/goalie.h>
+#include <robot_behavior/striker.h>
+#include <robot_behavior/mur_def_kick.h>
+#include <robot_behavior/degageur.h>
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-Offensive::Offensive(ai::AiData& ai_data) : Strategy(ai_data), is_closest_(false)
+MurStop::MurStop(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-Offensive::~Offensive()
+MurStop::~MurStop()
 {
 }
 
@@ -35,61 +40,58 @@ Offensive::~Offensive()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Offensive::minRobots() const
+int MurStop::minRobots() const
 {
-  return 1;
+  return 2;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Offensive::maxRobots() const
+int MurStop::maxRobots() const
 {
-  return 1;
+  return 2;
 }
 
-GoalieNeed Offensive::needsGoalie() const
+GoalieNeed MurStop::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-const std::string Offensive::name = "offensive";
+const std::string MurStop::name = "mur_stop";
 
-void Offensive::start(double time)
+void MurStop::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  search_ = std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea(ai_data_));
-  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
   behaviors_are_assigned_ = false;
 }
-void Offensive::stop(double time)
+void MurStop::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Offensive::update(double time)
+void MurStop::update(double time)
 {
 }
 
-void Offensive::assignBehaviorToRobots(
+void MurStop::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Ally) == playerId(0))
+  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefKick(ai_data_, 1));
+  static_cast<robot_behavior::MurDefKick*>(mur1.get())->declareMurRobotId(0, 2);
+
+  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefKick(ai_data_, 1));
+  static_cast<robot_behavior::MurDefKick*>(mur2.get())->declareMurRobotId(1, 2);
+
+  if (not(behaviors_are_assigned_))
   {
-    is_closest_ = true;
-  }
-  else
-  {
-    is_closest_ = false;
-  }
-  if (is_closest_ == true)
-  {
-    assign_behavior(playerId(0), striker_);
-  }
-  else
-  {
-    assign_behavior(playerId(0), search_);
+    assert(getPlayerIds().size() == 2);
+
+    assign_behavior(playerId(0), mur1);
+    assign_behavior(playerId(1), mur2);
+
+    behaviors_are_assigned_ = true;
   }
 }
 
@@ -100,12 +102,12 @@ void Offensive::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Offensive::getStartingPositions(int number_of_avalaible_robots)
+MurStop::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ai_data_.relative2absolute(-1.0 / 3.0, 0.0), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ballPosition(), 0.0) };
 }
 
 //
@@ -113,14 +115,14 @@ Offensive::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Offensive::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool MurStop::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Offensive::getAnnotations() const
+rhoban_ssl::annotations::Annotations MurStop::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 

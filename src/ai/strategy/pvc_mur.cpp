@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,18 +17,19 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "goalie_strat.h"
+#include "pvc_mur.h"
+
+#include <robot_behavior/mur_defensor.h>
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-GoalieStrat::GoalieStrat(ai::AiData& ai_data)
-  : Strategy(ai_data), degageur_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
+Mur::Mur(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-GoalieStrat::~GoalieStrat()
+Mur::~Mur()
 {
 }
 
@@ -36,59 +37,60 @@ GoalieStrat::~GoalieStrat()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int GoalieStrat::minRobots() const
+int Mur::minRobots() const
 {
-  return 0;
+  return 1;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int GoalieStrat::maxRobots() const
+int Mur::maxRobots() const
 {
-  return 0;
+  return 1;
 }
 
-GoalieNeed GoalieStrat::needsGoalie() const
+GoalieNeed Mur::needsGoalie() const
 {
-  return GoalieNeed::YES;
+  return GoalieNeed::NO;
 }
 
-const std::string GoalieStrat::name = "goalie_strat";
+const std::string Mur::name = "mur";
 
-void GoalieStrat::start(double time)
+void Mur::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  goalie_ = std::shared_ptr<robot_behavior::Goalie>(new robot_behavior::Goalie(ai_data_));
   behaviors_are_assigned_ = false;
 }
-void GoalieStrat::stop(double time)
+void Mur::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void GoalieStrat::update(double time)
+void Mur::update(double time)
 {
+  // const std::vector<int> & players = get_player_ids();
+  // int nb_robots = players.size();
+  // for( int robot_id : players){
+  //	const ai::Robot & robot = get_robot( robot_id );
+  //}
 }
 
-void GoalieStrat::assignBehaviorToRobots(
+void Mur::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  // we assign now all the other behavior
-
-  int goalieID = getGoalie();  // we get the first if in get_player_ids()
-
-  if (allyPenaltyArea().is_inside(ballPosition()))
+  if (not(behaviors_are_assigned_))
   {
-    assign_behavior(goalieID, degageur_);
-  }
-  else
-  {
-    assign_behavior(goalieID, goalie_);
-  }
+    // We first assign the behhavior of the goalie.
 
-  behaviors_are_assigned_ = true;
+    // we assign now all the other behavior
+    assert(getPlayerIds().size() == 1);
+    int id = playerId(0);  // we get the first if in get_player_ids()
+    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::MurDefensor(ai_data_)));
+
+    behaviors_are_assigned_ = true;
+  }
 }
 
 // We declare here the starting positions that are used to :
@@ -97,8 +99,7 @@ void GoalieStrat::assignBehaviorToRobots(
 //     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
-std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-GoalieStrat::getStartingPositions(int number_of_avalaible_robots)
+std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> > Mur::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
@@ -111,15 +112,14 @@ GoalieStrat::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool GoalieStrat::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                               ContinuousAngle& angular_position)
+bool Mur::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations GoalieStrat::getAnnotations() const
+rhoban_ssl::annotations::Annotations Mur::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 

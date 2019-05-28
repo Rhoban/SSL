@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,20 +17,21 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "defensive.h"
+#include "pvc_striker_v2.h"
+
+#include <robot_behavior/striker.h>
+#include <robot_behavior/mur_defensor.h>
+#include <robot_behavior/degageur.h>
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-Defensive::Defensive(ai::AiData& ai_data)
-  : Strategy(ai_data)
-  , degageur_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
-  , obstructeur_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
+StrikerV2::StrikerV2(ai::AiData& ai_data) : Strategy(ai_data)
 {
 }
 
-Defensive::~Defensive()
+StrikerV2::~StrikerV2()
 {
 }
 
@@ -38,7 +39,7 @@ Defensive::~Defensive()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Defensive::minRobots() const
+int StrikerV2::minRobots() const
 {
   return 1;
 }
@@ -47,53 +48,47 @@ int Defensive::minRobots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Defensive::maxRobots() const
+int StrikerV2::maxRobots() const
 {
   return 1;
 }
 
-GoalieNeed Defensive::needsGoalie() const
+GoalieNeed StrikerV2::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-const std::string Defensive::name = "defensive";
+const std::string StrikerV2::name = "striker_v2";
 
-void Defensive::start(double time)
+void StrikerV2::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
+
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
 }
-void Defensive::stop(double time)
+void StrikerV2::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Defensive::update(double time)
+void StrikerV2::update(double time)
 {
+  std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
+  striker_->declarePointToStrike(results.first);
 }
 
-void Defensive::assignBehaviorToRobots(
+void StrikerV2::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  // we assign now all the other behavior
-  assert(getPlayerIds().size() == 1);
-  int robotID = playerId(0);  // we get the first if in get_player_ids()
-
-  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
-
-  int id_to_obstruct = shirtNumberOfThreatMax(vision::Opponent);
-  obstructeur_->declareRobotToObstruct(id_to_obstruct, vision::Opponent);
-  if (nearest_ballID == robotID)
+  if (not(behaviors_are_assigned_))
   {
-    assign_behavior(robotID, degageur_);
-  }
-  else
-  {
-    assign_behavior(robotID, obstructeur_);
-  }
+    assert(getPlayerIds().size() == 1);
 
-  behaviors_are_assigned_ = true;
+    assign_behavior(playerId(0), striker_);
+
+    behaviors_are_assigned_ = true;
+  }
 }
 
 // We declare here the starting positions that are used to :
@@ -103,7 +98,7 @@ void Defensive::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Defensive::getStartingPositions(int number_of_avalaible_robots)
+StrikerV2::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
@@ -116,14 +111,14 @@ Defensive::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Defensive::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool StrikerV2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = allyGoalCenter();
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Defensive::getAnnotations() const
+rhoban_ssl::annotations::Annotations StrikerV2::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
