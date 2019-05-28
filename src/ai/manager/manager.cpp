@@ -47,6 +47,10 @@ void Manager::removeIdsInTeam(const std::vector<int>& robot_numbers_to_remove)
       {
         it = team_ids_.erase(it);
       }
+      else
+      {
+        ++it;
+      }
     }
   }
 }
