@@ -68,7 +68,6 @@ set (SOURCES
     strategy/strategy.cpp
     strategy/halt.cpp
     strategy/placer.cpp
-    strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
