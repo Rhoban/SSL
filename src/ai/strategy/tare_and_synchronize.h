@@ -26,6 +26,9 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
+/**
+ * @brief Special Strategy used to synnchronise data with time and coordinate system.
+ */
 class TareAndSynchronize : public Strategy
 {
 private:
@@ -44,14 +47,36 @@ public:
 
   TareAndSynchronize();
 
+  /**
+   * @brief number of robots needed
+   * @return 1
+   */
   int minRobots() const;
+  /**
+   * @brief number of robots needed
+   * @return 1
+   */
   int maxRobots() const;
+  /**
+   * @brief this strategy doesn't need goalie
+   * @return GoalieNeed::NO
+   */
   virtual GoalieNeed needsGoalie() const;
 
+  /**
+   * @brief Check if synchronization is finished
+   * @return time_is_synchro_ value
+   */
   bool isTaredAndSynchronized() const;
 
+  /**
+   * @brief string name of the behavior : "tare_and_synchronize".
+   */
   static const std::string name;
 
+  /**
+   * @brief Call this function to say that you begin synchronization 
+   */
   void start(double time);
   void stop(double time);
   void update(double time);
