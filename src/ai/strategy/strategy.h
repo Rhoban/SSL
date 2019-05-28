@@ -52,16 +52,30 @@ private:
 public:
   Strategy();
 
+  /**
+   * @brief set two varaibles
+   * @param id :  to set goalie_id_
+   * @param to_be_managed : to set manage_a_goalie_
+   */
   virtual void setGoalie(uint id, bool to_be_managed);
+
+  /**
+   * @brief set goalie_opponent_id_
+   * @param id
+   */
   void setGoalieOpponent(uint id);
 
-  // Get the goalie id. If id<0 then no goalie is declared
+  /**
+   * @brief Get the goalie id. If id<0 then no goalie is declared
+   */
   uint getGoalie() const;
-  // Get the opponent goalie id. If id<0 then no opponent goalie is declared
+  /**
+   * @brief Get the opponent goalie id. If id<0 then no opponent goalie is declared
+   */
   int getGoalieOpponent() const;
 
   /*
-   * This function is called by the manager to affect robot to the stratgey.
+   * @brief This function is called by the manager to affect robot to the stratgey.
    * Here only robot for field player are affected.
    * The robot id for the goal can only be obtained from the function get_goalie().
    *
@@ -69,9 +83,14 @@ public:
    * If you overload this function do not forgive to call this base function.
    * The implementation of set_robot_affectation, is important to calculate
    * get_player_ids().
+   *
+   * @param robot_ids :  vector of integers
    */
   virtual void setRobotAffectation(const std::vector<int>& robot_ids);
 
+  /**
+   * @brief get player_ids_.
+   */
   const std::vector<int>& getPlayerIds() const;
 
   int robotId(int id) const;
@@ -85,36 +104,44 @@ public:
   virtual void resume(double time){};
 
   /*
-   * Return a list of position where it is recommended to place a
+   * @brief Return a list of position where it is recommended to place a
    * robot before starting the strategy.
    * the size of the list should be smaller than the parameter
    * number_of_avalaible_robots.
+   * @param number_of_avalaible_robots
+   * @return list
    */
   virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
   getStartingPositions(int number_of_avalaible_robots) const;
   /*
-   * Set the position where it is recommended to place a goalie
+   * @brief Set the position where it is recommended to place a goalie
    * before starting the strategy.
    * If this function return false, then no position is given for a goale.
    * If the strategy have no goalie, this function have to return false.
+   * @param linear_position
+   * @param angular_position
+   * @return bool
    */
   virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                             ContinuousAngle& angular_position) const;
 
   /*
-   * This function give the minimal numer of non goalie robot
+   * @brief This function give the minimal numer of non goalie robot
    * that the strategy commands.
+   * @return an integer
    */
   virtual int minRobots() const = 0;
   /*
-   * This function give the maximal numer of non goalie robot
+   * @brief This function give the maximal numer of non goalie robot
    * that strategy commands.
    * if it is set to -1, then the strategy can command any number of robot.
+   * @return an integer
    */
   virtual int maxRobots() const = 0;
 
   /*
-   * Say if the strategy need a goalie.
+   * @brief Say if the strategy need a goalie.
+   * @return enum value
    */
   virtual GoalieNeed needsGoalie() const = 0;
 
@@ -122,28 +149,31 @@ public:
   assignBehaviorToRobots(std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior,
                          double time, double dt) = 0;
 
-  //
-  // This function is used to draw annotations in the viewer.
-  // You can use it to print what you want.
-  //
-  // For example :
-  //
-  //
-  //  RhobanSSLAnnotation::Annotations get_annotations() const{
-  //      RhobanSSLAnnotation::Annotations annotations;
-  //      static double d = 0;
-  //      d += 0.01;
-  //
-  //      annotations.addCircle(3, 3, 1, "cyan");
-  //      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
-  //      return annotations;
-  //  }
+  /**
+  * @brief This function is used to draw annotations in the viewer.
+  * You can use it to print what you want.
+  *
+  * For example :
+  *
+  *
+  *  RhobanSSLAnnotation::Annotations get_annotations() const{
+  *      RhobanSSLAnnotation::Annotations annotations;
+  *      static double d = 0;
+  *      d += 0.01;
+  *
+  *      annotations.addCircle(3, 3, 1, "cyan");
+  *      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+  *      return annotations;
+  *  }
+  * @return Annotations
+  * @see rhoban_ssl::annotations::Annotations
+  */
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Strategy();
 
   /*
-   * This function return true when the
+   * @brief This function return true when the
    * the strategie have to manage the
    * goalie.
    */
