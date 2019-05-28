@@ -27,6 +27,9 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
+/**
+ * @brief Useful class to quickly convert a behavior to a strategy with a single robot.
+ */
 class FromRobotBehavior : public Strategy
 {
 private:
