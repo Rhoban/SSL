@@ -25,6 +25,9 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
+/**
+ *@brief This behavior do... nothing ! It is used by the Strategy halt to do nothing.
+ */
 class DoNothing : public RobotBehavior
 {
 public:

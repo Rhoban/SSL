@@ -29,6 +29,7 @@ DoNothing::DoNothing() : RobotBehavior()
 
 void DoNothing::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
+  //“I love to talk about nothing. It's the only thing I know anything about.” Oscar Wilde
 }
 
 Control DoNothing::control() const

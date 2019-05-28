@@ -26,6 +26,9 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
+/**
+ * @brief Strategy used to stop all robots by setting the behabior "DoNothing" to all of them.
+ */
 class Halt : public Strategy
 {
 public:
