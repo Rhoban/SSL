@@ -25,6 +25,9 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
+/**
+ * @brief Factory patern to make a follower for a behavior.
+ */
 class Factory
 {
 public:

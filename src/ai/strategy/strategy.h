@@ -37,7 +37,9 @@ enum GoalieNeed
   IF_POSSIBLE,
   NO
 };
-
+/**
+ *@brief In our IA model, Managers control Strategies wich control basic Behaviors.
+ */
 class Strategy : public GameInformations
 {
 private:
@@ -150,24 +152,24 @@ public:
                          double time, double dt) = 0;
 
   /**
-  * @brief This function is used to draw annotations in the viewer.
-  * You can use it to print what you want.
-  *
-  * For example :
-  *
-  *
-  *  RhobanSSLAnnotation::Annotations get_annotations() const{
-  *      RhobanSSLAnnotation::Annotations annotations;
-  *      static double d = 0;
-  *      d += 0.01;
-  *
-  *      annotations.addCircle(3, 3, 1, "cyan");
-  *      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
-  *      return annotations;
-  *  }
-  * @return Annotations
-  * @see rhoban_ssl::annotations::Annotations
-  */
+   * @brief This function is used to draw annotations in the viewer.
+   * You can use it to print what you want.
+   *
+   * For example :
+   *
+   *
+   *  RhobanSSLAnnotation::Annotations get_annotations() const{
+   *      RhobanSSLAnnotation::Annotations annotations;
+   *      static double d = 0;
+   *      d += 0.01;
+   *
+   *      annotations.addCircle(3, 3, 1, "cyan");
+   *      annotations.addArrow(0, 0, cos(d), sin(d)*2, "magenta", true);
+   *      return annotations;
+   *  }
+   * @return Annotations
+   * @see rhoban_ssl::annotations::Annotations
+   */
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   virtual ~Strategy();

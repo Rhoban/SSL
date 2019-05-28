@@ -31,6 +31,9 @@ namespace rhoban_ssl
 {
 namespace manager
 {
+/**
+ *@brief In our IA model, Managers control Strategies wich control basic Behaviors.
+ */
 class Manager
 {
 public:
