@@ -19,9 +19,9 @@
 
 #include "pvc_striker_v2.h"
 
-#include <robot_behavior/striker.h>
-#include <robot_behavior/mur_defensor.h>
-#include <robot_behavior/degageur.h>
+//#include <robot_behavior/striker.h>
+//#include <robot_behavior/mur_defensor.h>
+//#include <robot_behavior/degageur.h>
 
 namespace rhoban_ssl
 {

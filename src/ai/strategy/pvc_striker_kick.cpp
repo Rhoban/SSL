@@ -19,9 +19,9 @@
 
 #include "pvc_striker_kick.h"
 
-#include <robot_behavior/slow_striker.h>
-#include <robot_behavior/mur_defensor.h>
-#include <robot_behavior/degageur.h>
+//#include <robot_behavior/slow_striker.h>
+//#include <robot_behavior/mur_defensor.h>
+//#include <robot_behavior/degageur.h>
 
 namespace rhoban_ssl
 {
@@ -97,7 +97,7 @@ void StrikerKick::assignBehaviorToRobots(
 //     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
-std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >#include <robot_behavior/slow_striker.h>
 StrikerKick::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);

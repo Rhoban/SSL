@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "striker_ai.h"
+#include "pvc_striker_ai.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 

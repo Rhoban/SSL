@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "slow_striker.h"
+#include "pvc_slow_striker.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 

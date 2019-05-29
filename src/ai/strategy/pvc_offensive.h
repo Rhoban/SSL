@@ -21,8 +21,8 @@
 
 #include "strategy.h"
 
-#include <robot_behavior/striker.h>
-#include <robot_behavior/search_shoot_area.h>
+#include <robot_behavior/pvc_striker.h>
+#include <robot_behavior/pvc_search_shoot_area.h>
 
 namespace rhoban_ssl
 {

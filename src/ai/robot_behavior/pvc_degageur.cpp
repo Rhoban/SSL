@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "degageur.h"
+#include "pvc_degageur.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 #include <debug.h>

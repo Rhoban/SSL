@@ -21,13 +21,13 @@ along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "strategy.h"
 // #include <robot_behavior/robot_follower.h>
-#include <robot_behavior/striker.h>
-#include <robot_behavior/striker_ai.h>
-#include <robot_behavior/search_shoot_area.h>
-#include <robot_behavior/pass.h>
-#include <robot_behavior/pass_dribbler.h>
-#include <robot_behavior/wait_pass.h>
-#include <robot_behavior/slow_striker.h>
+#include <robot_behavior/pvc_striker.h>
+#include <robot_behavior/pvc_striker_ai.h>
+#include <robot_behavior/pvc_search_shoot_area.h>
+//#include <robot_behavior/pass.h>
+//#include <robot_behavior/pass_dribbler.h>
+#include <robot_behavior/pvc_wait_pass.h>
+//#include <robot_behavior/slow_striker.h>
 #include <core/machine_state.h>
 
 namespace rhoban_ssl

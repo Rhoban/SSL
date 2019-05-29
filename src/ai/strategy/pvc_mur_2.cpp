@@ -19,10 +19,10 @@
 
 #include "pvc_mur_2.h"
 
-#include <robot_behavior/goalie.h>
-#include <robot_behavior/striker.h>
-#include <robot_behavior/mur_defensor.h>
-#include <robot_behavior/degageur.h>
+//#include <robot_behavior/goalie.h>
+//#include <robot_behavior/striker.h>
+#include <robot_behavior/pvc_mur_defensor.h>
+#include <robot_behavior/pvc_degageur.h>
 
 namespace rhoban_ssl
 {

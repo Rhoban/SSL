@@ -19,9 +19,9 @@
 
 #include "pvc_mur_2_passif.h"
 
-#include <robot_behavior/goalie.h>
-#include <robot_behavior/striker.h>
-#include <robot_behavior/mur_defensor.h>
+//#include <robot_behavior/goalie.h>
+//#include <robot_behavior/striker.h>
+#include <robot_behavior/pvc_mur_defensor.h>
 
 namespace rhoban_ssl
 {

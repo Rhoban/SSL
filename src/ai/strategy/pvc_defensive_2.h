@@ -20,8 +20,8 @@
 #pragma once
 
 #include "strategy.h"
-#include <robot_behavior/degageur.h>
-#include <robot_behavior/obstructor.h>
+#include <robot_behavior/pvc_degageur.h>
+#include <robot_behavior/pvc_obstructor.h>
 
 namespace rhoban_ssl
 {

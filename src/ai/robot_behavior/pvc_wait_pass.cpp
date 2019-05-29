@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "wait_pass.h"
+#include "pvc_wait_pass.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 #include <math/continuous_angle.h>

@@ -19,9 +19,9 @@
 
 #include "pvc_striker_with_support.h"
 
-#include <robot_behavior/goalie.h>
-#include <robot_behavior/striker.h>
-#include <robot_behavior/robot_follower.h>
+//#include <robot_behavior/goalie.h>
+//#include <robot_behavior/striker.h>
+#include <robot_behavior/pvc_robot_follower.h>
 
 namespace rhoban_ssl
 {

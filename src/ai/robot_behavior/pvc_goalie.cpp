@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "goalie.h"
+#include "pvc_goalie.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 #include <math/intersection.h>

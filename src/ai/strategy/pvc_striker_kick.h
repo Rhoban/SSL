@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <robot_behavior/slow_striker.h>
+#include <robot_behavior/pvc_slow_striker.h>
 #include "strategy.h"
 
 namespace rhoban_ssl

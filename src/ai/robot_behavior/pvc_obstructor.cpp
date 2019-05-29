@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "obstructor.h"
+#include "pvc_obstructor.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 

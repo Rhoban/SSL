@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "robot_follower.h"
+#include "pvc_robot_follower.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 #include <math/continuous_angle.h>

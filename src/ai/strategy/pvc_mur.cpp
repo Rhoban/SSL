@@ -19,7 +19,7 @@
 
 #include "pvc_mur.h"
 
-#include <robot_behavior/mur_defensor.h>
+#include <robot_behavior/pvc_mur_defensor.h>
 
 namespace rhoban_ssl
 {
