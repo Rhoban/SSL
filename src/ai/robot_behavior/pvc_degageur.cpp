@@ -26,17 +26,17 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Degageur::Degageur(ai::AiData& ai_data)
-  : RobotBehavior(ai_data)
+Degageur::Degageur()
+  : RobotBehavior()
   , point_to_pass_(66, 66)
   , robot_to_pass_id_(-1)
-  , robot_to_pass_team_(vision::Ally)
+  , robot_to_pass_team_(Ally)
   , needKick_(false)
-  , follower_(Factory::fixedConsignFollower(ai_data))
+  , follower_(Factory::fixedConsignFollower())
 {
 }
 
-void Degageur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void Degageur::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -51,12 +51,12 @@ void Degageur::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   //    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
   // default will be the closest ally robot from the opponent goal center
-  robot_to_pass_id_ = GameInformations::getShirtNumberOfClosestRobot(vision::Ally, opponentGoalCenter());
+  robot_to_pass_id_ = GameInformations::getShirtNumberOfClosestRobot(Ally, opponentGoalCenter());
   //    }
 
   if (robot_to_pass_id_ != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
+    const data::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
     point_to_pass_ = robot_to_pass.getMovement().linearPosition(time);
   }
 
@@ -121,16 +121,16 @@ Control Degageur::control() const
 {
   Control ctrl = follower_->control();
   ctrl.charge = true;
-  ctrl.kickPower = 1.0;
+  ctrl.kick_power = 1.0;
 
   if (needKick_)
   {
-    ctrl.chipKick = false;
+    ctrl.chip_kick = false;
     ctrl.kick = true;
   }
   else
   {
-    ctrl.chipKick = true;
+    ctrl.chip_kick = true;
     ctrl.kick = false;
   }
   return ctrl;
@@ -141,7 +141,7 @@ void Degageur::declarePointToPass(rhoban_geometry::Point point)
   point_to_pass_ = point;
 }
 
-void Degageur::declareRobotToPass(int robot_id, vision::Team team)
+void Degageur::declareRobotToPass(int robot_id, Team team)
 {
   robot_to_pass_id_ = robot_id;
   robot_to_pass_team_ = team;

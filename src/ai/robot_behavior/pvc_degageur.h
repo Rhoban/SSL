@@ -31,17 +31,17 @@ class Degageur : public RobotBehavior
 private:
   rhoban_geometry::Point point_to_pass_;
   int robot_to_pass_id_;
-  vision::Team robot_to_pass_team_;
+  Team robot_to_pass_team_;
   bool needKick_;
 
   ConsignFollower* follower_;
 
 public:
-  Degageur(ai::AiData& ai_data);
+  Degageur();
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
   void declarePointToPass(rhoban_geometry::Point point);
-  void declareRobotToPass(int robot_id, vision::Team team = vision::Ally);
+  void declareRobotToPass(int robot_id, Team team = Ally);
 
   virtual Control control() const;
 
