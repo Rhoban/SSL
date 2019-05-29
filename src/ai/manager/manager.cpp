@@ -37,9 +37,33 @@ void Manager::declareTeamIds(const std::vector<int>& team_ids)
   this->team_ids_ = team_ids;
 }
 
-const std::string& Manager::getTeamName() const
+void Manager::removeIdsInTeam(const std::vector<int>& robot_numbers_to_remove)
 {
-  return ai::Config::team_name;
+  for (int robot_number : robot_numbers_to_remove)
+  {
+    for (auto it = team_ids_.begin(); it != team_ids_.end();)
+    {
+      if (*it == robot_number)
+      {
+        it = team_ids_.erase(it);
+      }
+      else
+      {
+        ++it;
+      }
+    }
+  }
+}
+
+void Manager::addIdsInTeam(const std::vector<int>& robot_numbers_to_add)
+{
+  for (int robot_number : robot_numbers_to_add)
+  {
+    if (std::find(team_ids_.begin(), team_ids_.end(), robot_number) == team_ids_.end())
+    {
+      team_ids_.push_back(robot_number);
+    }
+  }
 }
 
 const std::vector<int>& Manager::getTeamIds() const

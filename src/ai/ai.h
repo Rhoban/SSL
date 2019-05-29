@@ -75,6 +75,24 @@ public:
   void setManager(std::string manager_name);
 
   /**
+   * @brief startManager
+   */
+  void startManager();
+
+  /**
+   * @brief pauseManager
+   */
+  void pauseManager();
+
+  /**
+   * @brief stopManager stops the current manager.
+   *
+   * Its clear all robotbehavior assignements and replace them with the Halt
+   * behavior.
+   */
+  void stopManager();
+
+  /**
    * @brief getCurrentManager returns the manager that currently running in the AI.
    * @return a Manager
    * @see rhoban_ssl::manager::Manager
@@ -124,6 +142,18 @@ public:
   std::string getStrategyOf(uint robot_number);
 
   /**
+   * @brief setStrategyof
+   * @param robot_number
+   */
+  void setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::string strat_name);
+
+  /**
+   * @brief haltRobot
+   * @param robot_number
+   */
+  void haltRobot(uint robot_number);
+
+  /**
    * @brief enableRobot
    * @param id
    * @param enabled
@@ -133,7 +163,7 @@ public:
 private:
   // move to config
   const double SCAN_WAITING_DELAY = 0.030;
-  bool scanning_;
+  bool scanning_ = false;
   double scan_starting_time_;
   SharedData save_control_before_scan_;
 

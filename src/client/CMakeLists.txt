@@ -43,7 +43,7 @@ set (SOURCES
     RefereeClient.cpp
     referee_client_single_thread.cpp
     VisionClient.cpp
-    viewer_client.cpp
+    viewer_server.cpp
     SimClient.cpp
     Kinematic.cpp
     Master.cpp
@@ -77,8 +77,8 @@ target_link_libraries (kinematic ssl_client)
 add_executable (master master.cpp ${SOURCES})
 target_link_libraries (master ssl_client)
 
-add_executable (viewer_st viewer_st.cpp ${SOURCES})
-target_link_libraries (viewer_st ssl_client)
+add_executable (viewer_threaded viewer_threaded.cpp ${SOURCES})
+target_link_libraries (viewer_threaded ssl_client)
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

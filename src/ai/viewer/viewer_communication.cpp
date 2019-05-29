@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "viewer_communication.h"
-#include <viewer_client.h>
+#include <viewer_server.h>
 #include <manager/factory.h>
 #include <core/collection.h>
 
@@ -47,9 +47,10 @@ bool ViewerCommunication::runTask()
 
 void ViewerCommunication::processIncomingPackets()
 {
-  while (!viewer::ViewerDataGlobal::get().received_packets.empty())
+  std::queue<Json::Value> incoming_packets = viewer::ViewerDataGlobal::get().received_packets.getAndclear();
+  while (!incoming_packets.empty())
   {
-    Json::Value viewer_packet = viewer::ViewerDataGlobal::get().received_packets.front();
+    Json::Value viewer_packet = incoming_packets.front();
 
     if (!viewer_packet["emergency"].isNull())
     {
@@ -61,15 +62,15 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["set_manager"].isNull())
     {
-      ai_->setManager(viewer_packet["managers"]["set_manager"].asString());
+      ai_->setManager(viewer_packet["set_manager"].asString());
     }
     else if (!viewer_packet["start_manager"].isNull())
     {
-      // todo
+      ai_->startManager();
     }
     else if (!viewer_packet["stop_manager"].isNull())
     {
-      // todo
+      ai_->stopManager();
     }
     else if (!viewer_packet["place_bot"].isNull())
     {
@@ -83,7 +84,7 @@ void ViewerCommunication::processIncomingPackets()
     {
       ai_->enableRobot(viewer_packet["enable_bot"]["number"].asUInt(), true);
     }
-    else if (!viewer_packet["desable_bot"].isNull())
+    else if (!viewer_packet["disable_bot"].isNull())
     {
       ai_->enableRobot(viewer_packet["desable_bot"]["number"].asUInt(), false);
     }
@@ -93,7 +94,12 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["set_strategy"].isNull())
     {
-      // todo
+      std::vector<int> robot_numbers;
+      for (uint i = 0; i < viewer_packet["set_strategy"]["bots"].size(); ++i)
+      {
+        robot_numbers.push_back(viewer_packet["set_strategy"]["bots"][i].asInt());
+      }
+      ai_->setStrategyManuallyOf(robot_numbers, viewer_packet["set_strategy"]["name"].asString());
     }
     else if (!viewer_packet["give_bot_to_manager"].isNull())
     {
@@ -112,7 +118,7 @@ void ViewerCommunication::processIncomingPackets()
       DEBUG("Invalid viewer packet");
       assert(false);
     }
-    viewer::ViewerDataGlobal::get().received_packets.pop();
+    incoming_packets.pop();
   }
 }
 
