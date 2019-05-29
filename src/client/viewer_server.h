@@ -69,33 +69,38 @@ public:
 };
 
 /**
- * @brief The class is use to communicate with the viewer.
+ * @brief The task is use to lauch the server to communicate with the viewers.
+ *
+ * Permits to launch and close the thread of the viewer websocket server.
+ *
+ * A thread is launch when the task in created and when the execution manager removes it
+ * the thread is automatically close.
  *
  * Currently only one client is supported.
+ *
  * Plus, due to the use of libwebsockets all the communication process
  * must be handle in a single thread.
- * To ensure that the ViewerServerLauncher is the only class that contains and can
- * instanciate this class.
+ * To ensure that the ViewerServer task can's be instanciate more than once.
  */
 class ViewerServer : public Task
 {
 private:
-  std::thread* thread_;
+  // pthread_t thread;
 
-  /**
-   * @brief run
-   */
-  void run();
-
+  std::thread* thread;
   /**
    * @brief running_
    */
   static volatile bool running_;
 
-  static void* prun(void* server);
-  pthread_t thread;
+  static void run();
 
   bool thread_launched_;
+
+  /**
+   * @brief This member is used to assure that this task is add only once in the execution manager.
+   */
+  static uint instance_counter_;
 
 public:
   /**
@@ -134,7 +139,7 @@ public:
    * @param len Length set for some callback reasons
    * @return is_success Boolean to see if the callback has success.
    */
-  static int callback_http_dummy(struct lws* wsi, enum lws_callback_reasons, void*, void*, size_t);
+  static int callback_http_dummy(struct lws*, enum lws_callback_reasons, void*, void*, size_t);
 
   /**
    *
@@ -146,52 +151,26 @@ public:
    * @param len Length set for some callback reasons
    * @return 0 Boolean to say the callback has success.
    */
-  static int callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len);
-
-  // Task interface
-public:
-  bool runTask();
-};
-
-/**
- * @brief The ViewerServerLauncher task permit to launch and close the thread of
- * the viewer websocket server.
- *
- * A thread is launch when the task in created and when the execution manager removes it
- * the thread is automatically close.
- *
- */
-class ViewerServerLauncher
-{
-private:
-private:
-  std::thread* thread_;
-
-  pthread_t thread;
-  sigset_t set;
-  bool thread_launched_;
-  /**
-   * @brief This member is used to assure that this task is add only once in the execution manager.
-   */
-  static uint instance_counter_;
-
-public:
-  ViewerServerLauncher();
-  ~ViewerServerLauncher();
+  static int callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void*, void* in, size_t);
 
   // Task interface
 public:
   /**
    * @brief runTask
    *
-   * Use to launch the thread of the viewer client.
+   * Use to launch the thread of the server that handle de communication with the viewers.
    * Also, the task is alive if the thread running.
-   * When the task is destroy, it's stop the thread of the viewer client.
+   * When the task is destroy, it stops the thread and destroys the websocket context.
    *
    * @return boolean to activate/desactivate the task
    */
   bool runTask();
 };
+
+/**
+ * @brief The ViewerServerLauncher task
+ *
+ */
 
 }  // namespace viewer
 }  // namespace rhoban_ssl

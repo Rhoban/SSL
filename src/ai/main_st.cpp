@@ -46,7 +46,6 @@ using namespace rhoban_ssl;
 void stop(int)
 {
   rhoban_ssl::ExecutionManager::getManager().shutdown();
-  std::cout << "OUINI" << std::endl;
 }
 
 int main(int argc, char** argv)
