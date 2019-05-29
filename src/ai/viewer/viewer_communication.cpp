@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 #include "viewer_communication.h"
-#include <viewer_client.h>
+#include <viewer_server.h>
 #include <manager/factory.h>
 #include <core/collection.h>
 

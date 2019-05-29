@@ -63,8 +63,11 @@ void ExecutionManager::run(double min_loop_duration)
     }
   } while ((tasks_.size() > 0) && (shutdown_ == false));
 
+  std::cout << "DESTROY" << std::endl;
   for (auto i = tasks_.begin(); i != tasks_.end(); ++i)
     delete *i;
+
+  std::cout << "END" << std::endl;
 }
 
 void ExecutionManager::shutdown()

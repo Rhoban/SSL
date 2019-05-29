@@ -33,14 +33,14 @@ Movement* Factory::movement()
 {
   Movement* movement = nullptr;
 
-  if (ai::Config::enable_movement_with_integration)
-  {
-    movement = new MovementPredictedByIntegration();
-  }
-  else
-  {
-    movement = new MovementWithNoPrediction();
-  }
+  //  if (ai::Config::enable_movement_with_integration)
+  //  {
+  //    movement = new MovementPredictedByIntegration();
+  //  }
+  //  else
+  //  {
+  //  }
+  movement = new MovementWithNoPrediction();
   return new MovementWithTemporalShift(movement);
 }
 

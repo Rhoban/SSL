@@ -43,7 +43,7 @@ set (SOURCES
     RefereeClient.cpp
     referee_client_single_thread.cpp
     VisionClient.cpp
-    viewer_client.cpp
+    viewer_server.cpp
     SimClient.cpp
     Kinematic.cpp
     Master.cpp

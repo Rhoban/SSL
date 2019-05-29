@@ -30,7 +30,7 @@
 #include <core/print_collection.h>
 #include <manager/factory.h>
 #include "client_config.h"
-#include "viewer_client.h"
+#include "viewer_server.h"
 #include "referee_client_single_thread.h"
 #include <referee/referee_packet_analyzer.h>
 #include <data/computed_data.h>
@@ -46,6 +46,7 @@ using namespace rhoban_ssl;
 void stop(int)
 {
   rhoban_ssl::ExecutionManager::getManager().shutdown();
+  std::cout << "OUINI" << std::endl;
 }
 
 int main(int argc, char** argv)
@@ -210,7 +211,7 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new ControlSender(commander));
 
   // viewer
-  ExecutionManager::getManager().addTask(new viewer::ViewerServerLauncher());
+  ExecutionManager::getManager().addTask(new viewer::ViewerServer());
   ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
 
   ExecutionManager::getManager().run(0.01);

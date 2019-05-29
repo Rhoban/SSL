@@ -14,6 +14,12 @@ template <typename T>
 class ThreadQueue
 {
 public:
+  bool empty()
+  {
+    std::unique_lock<std::mutex> mlock(mutex_);
+    return queue_.empty();
+  }
+
   T pop()
   {
     std::unique_lock<std::mutex> mlock(mutex_);

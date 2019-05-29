@@ -1,4 +1,4 @@
-#include "viewer_client.h"
+#include "viewer_server.h"
 #include <google/protobuf/stubs/logging.h>
 
 static volatile bool running = true;
@@ -23,7 +23,7 @@ struct Field
   double circle_radius = 0.3;
 };
 
-class sendFieldPacket : public rhoban_ssl::Task
+class SendFieldPacket : public rhoban_ssl::Task
 {
 public:
   virtual bool runTask() override
@@ -54,8 +54,8 @@ int main()
 {
   signal(SIGINT, stop);
 
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ViewerServerLauncher());
-  rhoban_ssl::ExecutionManager::getManager().addTask(new sendFieldPacket());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ViewerServer());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new SendFieldPacket());
   rhoban_ssl::ExecutionManager::getManager().run(0.5);
   return 0;
 }
