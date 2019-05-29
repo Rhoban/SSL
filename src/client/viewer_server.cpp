@@ -27,11 +27,10 @@ void ViewerDataGlobal::parseAndStorePacketFromClient(char* packet_received)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-lws_protocols ViewerServer::protocols_[3];
+std::atomic<bool> ViewerServer::running_(true);
 std::vector<struct lws*> ViewerServer::clients_;
-
-volatile bool ViewerServer::running_(true);
 struct lws_context* ViewerServer::context_;
+lws_protocols ViewerServer::protocols_[3];
 
 uint ViewerServer::instance_counter_ = 0;
 
@@ -87,26 +86,19 @@ ViewerServer::ViewerServer() : thread_launched_(false)
 
 ViewerServer::~ViewerServer()
 {
-  rhoban_ssl::viewer::ViewerServer::stop();
-  lws_cancel_service(context_);
-  // pthread_join(thread, nullptr);
+  viewer::ViewerServer::running_ = false;
+  lws_cancel_service(viewer::ViewerServer::context_);
+  // lws_cancel_service(context_);
   thread->join();
   delete thread;
   lws_context_destroy(context_);
-}
-
-void ViewerServer::stop()
-{
-  viewer::ViewerServer::running_ = false;
-  lws_cancel_service(viewer::ViewerServer::context_);
 }
 
 bool ViewerServer::runTask()
 {
   if (!thread_launched_)
   {
-    thread = new std::thread(&ViewerServer::run);
-    // pthread_create(&thread, nullptr, &ViewerServer::prun, nullptr);
+    thread = new std::thread([this]() { this->run(); });
     thread_launched_ = true;
   }
   return true;

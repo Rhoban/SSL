@@ -85,38 +85,27 @@ public:
 class ViewerServer : public Task
 {
 private:
-  // pthread_t thread;
+  bool thread_launched_;
 
   std::thread* thread;
+
+  /**
+   * @brief thread loop
+   *
+   * This loop manage the websocket.
+   */
+  void run();
+
   /**
    * @brief running_
    */
-  static volatile bool running_;
-
-  static void run();
-
-  bool thread_launched_;
+  static std::atomic<bool> running_;
 
   /**
    * @brief This member is used to assure that this task is add only once in the execution manager.
    */
   static uint instance_counter_;
 
-public:
-  /**
-   * @brief The context structure
-   * The struct lws_context represents the server.
-   */
-  static struct lws_context* context_;
-  /**
-   * @brief Constructor.
-   *
-   * Create context, protocols and websocket.
-   */
-  ViewerServer();
-  ~ViewerServer();
-
-  static void stop();
   /**
    * @brief The protocols structure.
    *
@@ -124,6 +113,40 @@ public:
    * The tab is set to three because we have only three protocols registred.
    */
   static struct lws_protocols protocols_[3];
+
+  /**
+   * @brief The context structure
+   * The struct lws_context represents the server.
+   */
+  static struct lws_context* context_;
+
+  // Task interface
+public:
+  /**
+   * @brief runTask
+   *
+   * Use to launch the thread of the server that handle de communication with the viewers.
+   * Also, the task is alive if the thread running.
+   * When the task is destroy, it stops the thread and destroys the websocket context.
+   *
+   * @return boolean to activate/desactivate the task
+   */
+  bool runTask();
+
+public:
+  /**
+   * @brief Constructor.
+   *
+   * Create and init context, protocols and websocket.
+   */
+  ViewerServer();
+
+  /**
+   * @brief ~ViewerServer
+   *
+   * Destroys context and joins thread.
+   */
+  ~ViewerServer();
 
   /**
    * @brief All clients used.
@@ -152,25 +175,7 @@ public:
    * @return 0 Boolean to say the callback has success.
    */
   static int callback_viewer(struct lws* wsi, enum lws_callback_reasons reason, void*, void* in, size_t);
-
-  // Task interface
-public:
-  /**
-   * @brief runTask
-   *
-   * Use to launch the thread of the server that handle de communication with the viewers.
-   * Also, the task is alive if the thread running.
-   * When the task is destroy, it stops the thread and destroys the websocket context.
-   *
-   * @return boolean to activate/desactivate the task
-   */
-  bool runTask();
 };
-
-/**
- * @brief The ViewerServerLauncher task
- *
- */
 
 }  // namespace viewer
 }  // namespace rhoban_ssl
