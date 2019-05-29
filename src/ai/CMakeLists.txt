@@ -58,41 +58,41 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
-    robot_behavior/pvc_striker_ai.cpp
-    robot_behavior/pvc_search_shoot_area.cpp
-    robot_behavior/pvc_striker.cpp
-    robot_behavior/pvc_wait_pass.cpp
-    robot_behavior/pvc_degageur.cpp
-    robot_behavior/pvc_obstructor.cpp
-    robot_behavior/pvc_goalie.cpp
-    robot_behavior/pvc_mur_defensor.cpp
-    robot_behavior/pvc_mur_def_kick.cpp
-    robot_behavior/pvc_slow_striker.cpp
-    robot_behavior/pvc_robot_follower.cpp
+    #robot_behavior/pvc_striker_ai.cpp
+    #robot_behavior/pvc_search_shoot_area.cpp
+    #robot_behavior/pvc_striker.cpp
+    #robot_behavior/pvc_wait_pass.cpp
+    #robot_behavior/pvc_degageur.cpp
+    #robot_behavior/pvc_obstructor.cpp
+    #robot_behavior/pvc_goalie.cpp
+    #robot_behavior/pvc_mur_defensor.cpp
+    #robot_behavior/pvc_mur_def_kick.cpp
+    #robot_behavior/pvc_slow_striker.cpp
+    #robot_behavior/pvc_robot_follower.cpp
     ai.cpp
     debug.cpp
     manager/manager.cpp
     manager/manager_with_game_state.cpp
-    manager/plan_veschambres.cpp
+    #manager/plan_veschambres.cpp
     manager/manual.cpp
     manager/factory.cpp
     strategy/strategy.cpp
     strategy/halt.cpp
     strategy/placer.cpp
     strategy/from_robot_behavior.cpp
-    strategy/pvc_prepare_kickoff.cpp
-    strategy/pvc_offensive.cpp
-    strategy/pvc_defensive.cpp
-    strategy/pvc_defensive_2.cpp
-    strategy/pvc_mur_stop.cpp
-    strategy/pvc_mur.cpp
-    strategy/pvc_mur_2.cpp
-    strategy/pvc_mur_2_passif.cpp
-    strategy/pvc_attaque_with_support_ms.cpp
-    strategy/pvc_striker_with_support.cpp
-    strategy/pvc_striker_v2.cpp
-    strategy/pvc_striker_kick.cpp
-    strategy/pvc_goalie_strat.cpp
+    #strategy/pvc_prepare_kickoff.cpp
+    #strategy/pvc_offensive.cpp
+    #strategy/pvc_defensive.cpp
+    #strategy/pvc_defensive_2.cpp
+    #strategy/pvc_mur_stop.cpp
+    #strategy/pvc_mur.cpp
+    #strategy/pvc_mur_2.cpp
+    #strategy/pvc_mur_2_passif.cpp
+    #strategy/pvc_attaque_with_support_ms.cpp
+    #strategy/pvc_striker_with_support.cpp
+    #strategy/pvc_striker_v2.cpp
+    #strategy/pvc_striker_kick.cpp
+    #strategy/pvc_goalie_strat.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
