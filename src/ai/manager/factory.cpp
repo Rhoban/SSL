@@ -54,8 +54,9 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
   {
     manager = std::shared_ptr<Manager>(new PlanVeschambres(ai_data, game_state));
   }
-  return manager;
+  
   */
+  return manager;
 }
 
 }  // namespace manager

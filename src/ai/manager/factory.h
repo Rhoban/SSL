@@ -21,7 +21,6 @@
 
 #include <referee/game_state.h>
 #include "manager.h"
-#include "manual.h"
 
 namespace rhoban_ssl
 {
