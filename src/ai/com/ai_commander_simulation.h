@@ -35,7 +35,7 @@ public:
 
   virtual void moveBall(double x, double y, double vx = 0, double vy = 0);
 
-  virtual void moveRobot(bool yellow_, int id, double x, double y, double theta, bool turnon);
+  virtual void moveRobot(bool ally, int id, double x, double y, double theta, bool turnon);
 
   virtual ~AICommanderSimulation();
 

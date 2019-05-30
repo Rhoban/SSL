@@ -158,7 +158,11 @@ public:
    * @param id
    * @param enabled
    */
-  void enableRobot(uint id, bool enabled);
+  void enableRobot(uint number, bool enabled);
+
+  void moveRobot(bool ally, uint number, double x, double y, double theta);
+
+  void moveBall(double x, double y, double v_x, double v_y);
 
 private:
   // move to config

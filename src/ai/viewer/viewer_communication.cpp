@@ -36,7 +36,7 @@ bool ViewerCommunication::runTask()
   {
     processIncomingPackets();
 
-    if (GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_ > SENDING_DELAY)
+    if (GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_ > sending_delay)
     {
       sendViewerPackets();
       last_sending_time_ = GlobalDataSingleThread::singleton_.ai_data_.time;
@@ -58,7 +58,9 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["set_packets_per_second"].isNull())
     {
-      // todo
+      double new_delay = viewer_packet["set_packets_per_second"].asInt();
+      if (new_delay > 0)
+        sending_delay = 1 / new_delay;
     }
     else if (!viewer_packet["set_manager"].isNull())
     {
@@ -72,21 +74,17 @@ void ViewerCommunication::processIncomingPackets()
     {
       ai_->stopManager();
     }
-    else if (!viewer_packet["place_bot"].isNull())
-    {
-      // todo
-    }
     else if (!viewer_packet["halt_bot"].isNull())
     {
-      // todo
+      ai_->haltRobot(viewer_packet["halt_bot"].asUInt());
     }
     else if (!viewer_packet["enable_bot"].isNull())
     {
-      ai_->enableRobot(viewer_packet["enable_bot"]["number"].asUInt(), true);
+      ai_->enableRobot(viewer_packet["enable_bot"].asUInt(), true);
     }
     else if (!viewer_packet["disable_bot"].isNull())
     {
-      ai_->enableRobot(viewer_packet["desable_bot"]["number"].asUInt(), false);
+      ai_->enableRobot(viewer_packet["disable_bot"].asUInt(), false);
     }
     else if (!viewer_packet["control_bot"].isNull())
     {
@@ -103,11 +101,21 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["give_bot_to_manager"].isNull())
     {
-      // todo
+      ai_->getCurrentManager().get()->addIdsInTeam({ viewer_packet["give_bot_to_manager"].asInt() });
+    }
+    else if (!viewer_packet["place_bot"].isNull())
+    {
+      bool ally = viewer_packet["place_bot"]["ally"].asBool();
+      ai_->moveRobot(ally, viewer_packet["place_bot"]["number"].asUInt(),
+                     viewer_packet["place_bot"]["position"]["x"].asDouble(),
+                     viewer_packet["place_bot"]["position"]["y"].asDouble(),
+                     viewer_packet["place_bot"]["position"]["orientation"].asDouble());
     }
     else if (!viewer_packet["place_ball"].isNull())
     {
-      // todo
+      // TODO ADD SPEED
+      ai_->moveBall(viewer_packet["place_ball"]["position"]["x"].asDouble(),
+                    viewer_packet["place_ball"]["position"]["y"].asDouble(), 0.0, 0.0);
     }
     else if (!viewer_packet["scan"].isNull())
     {
@@ -230,7 +238,7 @@ Json::Value ViewerCommunication::teamsPacket()
       packet["teams"][team]["bots"][rid]["velocity"]["theta"] =
           current_robot.getMovement().angularVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).value();
 
-      // todo
+      // TO REMOVE
       packet["teams"][team]["bots"][rid]["last_control"]["time"] = 0;
       packet["teams"][team]["bots"][rid]["last_control"]["velocity"]["x"] = 0;
       packet["teams"][team]["bots"][rid]["last_control"]["velocity"]["y"] = 0;
@@ -243,8 +251,7 @@ Json::Value ViewerCommunication::teamsPacket()
       {
         packet["teams"][team]["bots"][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
         packet["teams"][team]["bots"][rid]["behavior"] = ai_->getRobotBehaviorOf(rid);
-        // todo
-        // packet["teams"][team]["bots"][rid]["strategy"] = "do_nothing";
+        packet["teams"][team]["bots"][rid]["strategy"] = ai_->getStrategyOf(rid);
 
         if (!ai::Config::is_in_simulation)
         {

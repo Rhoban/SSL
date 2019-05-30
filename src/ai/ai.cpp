@@ -34,6 +34,7 @@
 #include <com/ai_commander_real.h>
 #include <utility>
 #include <data/computed_data.h>
+#include <strategy/placer.h>
 
 namespace rhoban_ssl
 {
@@ -113,7 +114,7 @@ void AI::preventCollision(int robot_id, Control& ctrl)
 
   bool collision_is_detected = false;
 
-  std::list<std::pair<int, double> > collisions_with_ctrl =
+  std::list<std::pair<int, double>> collisions_with_ctrl =
       data::CollisionComputing::getCollisions(robot_id, ctrl_velocity);
   for (const std::pair<int, double>& collision : collisions_with_ctrl)
   {
@@ -264,6 +265,7 @@ void AI::setManager(std::string managerName)
   }
 
   std::cout << "Setting the manager to: " << managerName << std::endl;
+  std::cout << "with : " << i << " robots" << std::endl;
   if (managerName == manager::names::MANUAL)
   {
     strategy_manager_ = manual_manager_;
@@ -299,6 +301,7 @@ void AI::pauseManager()
 
 void AI::stopManager()
 {
+  setManager(manager::names::MANUAL);
   strategy_manager_->clearStrategyAssignement();
 }
 
@@ -439,14 +442,23 @@ void AI::getAnnotations(annotations::Annotations& annotations) const
 
 std::string AI::getRobotBehaviorOf(uint robot_number)
 {
-  return robot_behaviors_[robot_number].get()->name;
+  return robot_behaviors_[int(robot_number)].get()->name;
 }
 
 std::string AI::getStrategyOf(uint robot_number)
 {
-  //  for(auto& strat_name : strategy_manager_.get()->getCurrentStrategyNames()){
-  //    for
+  //  for (auto& strat_name : strategy_manager_.get()->getCurrentStrategyNames())
+  //  {
+  //    for (auto& robot_affected : strategy_manager_.get()->getRobotAffectations(strat_name))
+  //    {
+  //      if (int(robot_number) == robot_affected)
+  //      {
+  //        return strat_name;
+  //      }
+  //    }
   //  }
+  //  return "Stratégie non affectée";
+  return "Work in progress";
 }
 
 void AI::setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::string strat_name)
@@ -460,25 +472,56 @@ void AI::setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::strin
   // apply the strategy
   manual_manager_.get()->assignStrategy(strat_name, GlobalDataSingleThread::singleton_.ai_data_.time, robot_numbers);
 
-  for (int i = 0; i < robot_numbers.size(); ++i)
+  for (uint i = 0; i < robot_numbers.size(); ++i)
   {
     GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[i].is_manually_controled_by_viewer = false;
   }
 }
 
-void AI::enableRobot(uint id, bool enabled)
+void AI::haltRobot(uint robot_number)
 {
-  if (id < ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  setStrategyManuallyOf({ int(robot_number) }, manager::Manager::MANAGER__REMOVE_ROBOTS);
+}
+
+void AI::enableRobot(uint number, bool enabled)
+{
+  if (number < ai::Config::NB_OF_ROBOTS_BY_TEAM)
   {
-    Control& ctrl = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control;
+    Control& ctrl = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[number].control;
     ctrl.ignore = !enabled;
 
     if (ctrl.ignore)
     {
       ctrl.charge = false;
       ctrl.spin = false;
+      ctrl.linear_velocity = { 0, 0 };
+      ctrl.angular_velocity = 0;
     }
   }
+}
+
+void AI::moveRobot(bool ally, uint number, double x, double y, double theta)
+{
+  if (!ally)
+  {
+    commander_->moveRobot(ally, int(number), x, y, theta, true);
+  }
+  else
+  {
+    std::pair<rhoban_geometry::Point, ContinuousAngle> target_pos{ rhoban_geometry::Point(x, y),
+                                                                   ContinuousAngle(theta) };
+    getCurrentManager()
+        .get()
+        ->getStrategy<strategy::Placer>(manager::Manager::MANAGER__PLACER)
+        .setPositions({ int(number) }, { target_pos });
+
+    setStrategyManuallyOf({ int(number) }, manager::Manager::MANAGER__PLACER);
+  }
+}
+
+void AI::moveBall(double x, double y, double v_x, double v_y)
+{
+  commander_->moveBall(x, y, v_x, v_y);
 }
 
 void AI::scan()
