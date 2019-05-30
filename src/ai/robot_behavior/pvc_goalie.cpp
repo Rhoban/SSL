@@ -36,18 +36,19 @@ rhoban_geometry::Point Goalie::calculateGoalPosition(const rhoban_geometry::Poin
   return defender_position;
 }
 
-Goalie::Goalie(ai::AiData& ai_data)
-  : Goalie::Goalie(ai_data, Vector2d(-ai_data.field.fieldLength / 2.0, ai_data.field.goalWidth / 2.0),
-                   Vector2d(-ai_data.field.fieldLength / 2.0, -ai_data.field.goalWidth / 2.0),
-                   rhoban_geometry::Point(-ai_data.field.fieldLength / 2.0, 0.0) + ai::Config::waiting_goal_position,
-                   ai_data.field.penaltyAreaDepth, ai::Config::robot_radius, ai_data.time, ai_data.dt)
+Goalie::Goalie()
+  : Goalie::Goalie(Vector2d(-field_.field_length_ / 2.0, field_.goal_width_ / 2.0),
+                   Vector2d(-field_.field_length_ / 2.0, -field_.goal_width_ / 2.0),
+                   rhoban_geometry::Point(-field_.field_length_ / 2.0, 0.0) + ai::Config::waiting_goal_position,
+                   field_.penalty_area_depth_, ai::Config::robot_radius,
+                   GlobalDataSingleThread::singleton_.ai_data_.time, GlobalDataSingleThread::singleton_.ai_data_.dt)
 {
 }
 
-Goalie::Goalie(ai::AiData& ai_data, const Vector2d& left_post_position, const Vector2d& right_post_position,
+Goalie::Goalie(const Vector2d& left_post_position, const Vector2d& right_post_position,
                const rhoban_geometry::Point& waiting_goal_position, double penalty_rayon, double goalie_radius,
                double time, double dt)
-  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
   this->left_post_position_ = left_post_position;
   this->right_post_position_ = right_post_position;
@@ -61,7 +62,7 @@ Goalie::Goalie(ai::AiData& ai_data, const Vector2d& left_post_position, const Ve
   foll->setOrientationPid(1.0, 0, 0);
 }
 
-void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void Goalie::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -74,15 +75,15 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   annotations_.clear();
 
   future_ball_positions.clear();
-  int nb_points = 10;
+  // int nb_points = 10;
   // for (int i=0; i < nb_points; i++) {
   //     future_ball_positions.push_back( ball.get_movement().linear_position( time + i * 0.2 ) );
   // }
 
   rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, ai_data_.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-field_.field_length_ / 2.0, field_.goal_width_ / 2.0);
   rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, -ai_data_.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-field_.field_length_ / 2.0, -field_.goal_width_ / 2.0);
 
   double offset_goal = ai::Config::robot_radius * 1.5;
   double hyst = 0.10;
@@ -181,7 +182,7 @@ void Goalie::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 Control Goalie::control() const
 {
   Control ctrl = follower_->control();
-  ctrl.chipKick = true;
+  ctrl.chip_kick = true;
   return follower_->control();
 }
 

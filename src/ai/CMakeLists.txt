@@ -64,7 +64,7 @@ set (SOURCES
     #robot_behavior/pvc_wait_pass.cpp
     robot_behavior/pvc_degageur.cpp
     #robot_behavior/pvc_obstructor.cpp
-    #robot_behavior/pvc_goalie.cpp
+    robot_behavior/pvc_goalie.cpp
     #robot_behavior/pvc_mur_defensor.cpp
     #robot_behavior/pvc_mur_def_kick.cpp
     #robot_behavior/pvc_slow_striker.cpp

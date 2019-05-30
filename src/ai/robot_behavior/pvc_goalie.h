@@ -44,18 +44,20 @@ private:
   double penalty_rayon_;
   int defensive_approach_;
 
+  data::Field& field_ = GlobalDataSingleThread::singleton_.field_;
+
   static rhoban_geometry::Point calculateGoalPosition(const rhoban_geometry::Point& ballPosition,
                                                       const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
                                                       double goalie_radius_);
 
 public:
-  Goalie(ai::AiData& ai_data);
+  Goalie();
 
-  Goalie(ai::AiData& ai_data, const Vector2d& left_post_position, const Vector2d& right_post_position,
+  Goalie(const Vector2d& left_post_position, const Vector2d& right_post_position,
          const rhoban_geometry::Point& waiting_goal_position, double penalty_rayon, double goalie_radius, double time,
          double dt);
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   std::vector<rhoban_geometry::Point> future_ball_positions;
 
