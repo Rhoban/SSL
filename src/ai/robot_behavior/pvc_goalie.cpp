@@ -183,7 +183,7 @@ Control Goalie::control() const
 {
   Control ctrl = follower_->control();
   ctrl.chip_kick = true;
-  return follower_->control();
+  return ctrl;
 }
 
 Goalie::~Goalie()
