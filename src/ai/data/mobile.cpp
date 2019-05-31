@@ -79,14 +79,21 @@ bool Mobile::isActive() const
   return age() < 2.0;
 }
 
-Mobile::Mobile()
-  : last_update(rhoban_utils::TimeStamp::now()), movement_sample(history_size), movement(physic::Factory::movement())
+Mobile::Mobile() : last_update(rhoban_utils::TimeStamp::now()), movement_sample(history_size), movement(nullptr)
 {
-  for (int i = 0; i < history_size; i++)
+}
+
+void Mobile::initMovement()
+{
+  if (movement == nullptr)
   {
-    movement_sample[i].time = -i;
+    movement = physic::Factory::movement();
+    for (int i = 0; i < history_size; i++)
+    {
+      movement_sample[i].time = -i;
+    }
+    updateVisionData();
   }
-  updateVisionData();
 }
 
 bool Mobile::isInsideTheField()

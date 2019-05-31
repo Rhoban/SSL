@@ -41,6 +41,11 @@ namespace rhoban_ssl
 AI::AI(std::string manager_name, AICommander* commander) : running_(true), commander_(commander)
 {
   initRobotBehaviors();
+  for (auto& mobile : GlobalDataSingleThread::singleton_.all_robots)
+  {
+    mobile.second->initMovement();
+  }
+  GlobalDataSingleThread::singleton_.ball_.initMovement();
 
   manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
 

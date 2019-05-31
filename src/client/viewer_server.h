@@ -112,7 +112,7 @@ private:
    * Use for register all protocols.
    * The tab is set to three because we have only three protocols registred.
    */
-  static struct lws_protocols protocols_[3];
+  static struct lws_protocols protocols_[2];
 
   /**
    * @brief The context structure
