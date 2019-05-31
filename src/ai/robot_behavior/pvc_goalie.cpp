@@ -37,10 +37,10 @@ rhoban_geometry::Point Goalie::calculateGoalPosition(const rhoban_geometry::Poin
 }
 
 Goalie::Goalie()
-  : Goalie::Goalie(Vector2d(-field_.field_length_ / 2.0, field_.goal_width_ / 2.0),
-                   Vector2d(-field_.field_length_ / 2.0, -field_.goal_width_ / 2.0),
-                   rhoban_geometry::Point(-field_.field_length_ / 2.0, 0.0) + ai::Config::waiting_goal_position,
-                   field_.penalty_area_depth_, ai::Config::robot_radius,
+  : Goalie::Goalie(Vector2d(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, GlobalDataSingleThread::singleton_.field_.goal_width_ / 2.0),
+                   Vector2d(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, -GlobalDataSingleThread::singleton_.field_.goal_width_ / 2.0),
+                   rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, 0.0) + ai::Config::waiting_goal_position,
+                   GlobalDataSingleThread::singleton_.field_.penalty_area_depth_, ai::Config::robot_radius,
                    GlobalDataSingleThread::singleton_.ai_data_.time, GlobalDataSingleThread::singleton_.ai_data_.dt)
 {
 }
@@ -81,9 +81,9 @@ void Goalie::update(double time, const data::Robot& robot, const data::Ball& bal
   // }
 
   rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(-field_.field_length_ / 2.0, field_.goal_width_ / 2.0);
+      rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, GlobalDataSingleThread::singleton_.field_.goal_width_ / 2.0);
   rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(-field_.field_length_ / 2.0, -field_.goal_width_ / 2.0);
+      rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, -GlobalDataSingleThread::singleton_.field_.goal_width_ / 2.0);
 
   double offset_goal = ai::Config::robot_radius * 1.5;
   double hyst = 0.10;

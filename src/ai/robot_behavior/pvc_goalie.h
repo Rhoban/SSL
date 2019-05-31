@@ -44,7 +44,6 @@ private:
   double penalty_rayon_;
   int defensive_approach_;
 
-  data::Field& field_ = GlobalDataSingleThread::singleton_.field_;
 
   static rhoban_geometry::Point calculateGoalPosition(const rhoban_geometry::Point& ballPosition,
                                                       const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
