@@ -23,8 +23,7 @@
 
 namespace rhoban_ssl
 {
-AICommanderReal::AICommanderReal() : AICommander(), kicking_(false), master_("/dev/ttyACM0", 1000000)
-// master("/dev/ttyACM1", 1000000)
+AICommanderReal::AICommanderReal() : AICommander(), kicking_(false), master_(nullptr)
 {
 }
 
@@ -87,20 +86,32 @@ void AICommanderReal::flush()
     packet.y_speed = command.y_speed * 1000;
     packet.t_speed = command.theta_speed * 1000;
 
-    master_.addRobotPacket(command.robot_id, packet);
+    master_->addRobotPacket(command.robot_id, packet);
   }
 
-  master_.send();
+  master_->send();
   commands_.clear();
 }
 
 Master* AICommanderReal::getMaster()
 {
-  return &master_;
+  return master_;
 }
 
 AICommanderReal::~AICommanderReal()
 {
+  master_->stop();
+  delete master_;
+}
+
+bool AICommanderReal::runTask()
+{
+  if (master_ == nullptr)
+  {
+    master_ = new Master("/dev/ttyACM0", 1000000);
+    // master("/dev/ttyACM1", 1000000)
+  }
+  return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
