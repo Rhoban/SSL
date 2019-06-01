@@ -71,27 +71,7 @@ public:
    * @return a box
    */
   Box opponentPenaltyArea() const;
-  /**
-   * @brief returns the position of the ally goal center.
-   * @return a point
-   */
-  rhoban_geometry::Point allyGoalCenter() const;
-  /**
-   * @brief returns the position of the opponent goal center.
-   * @return a point
-   */
-  rhoban_geometry::Point opponentGoalCenter() const;
 
-  /**
-   * @brief returns the position of the opponant right corner.
-   * @return a point
-   */
-  rhoban_geometry::Point opponentCornerRight() const;
-  /**
-   * @brief returns the position of the opponant left corner.
-   * @return a point
-   */
-  rhoban_geometry::Point opponentCornerLeft() const;
   /**
    * @brief returns an array which contains the center position
    * of the four field's quarter.

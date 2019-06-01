@@ -84,9 +84,9 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
 
   // second closest robot
   double mdist = 9999;
-  for (unsigned int j = 0; j < GlobalDataSingleThread::singleton_.all_robots.size(); j++)
+  for (unsigned int j = 0; j < Data::get()->all_robots.size(); j++)
   {
-    data::Robot* r = GlobalDataSingleThread::singleton_.all_robots.at(j).second;
+    data::Robot* r = Data::get()->all_robots.at(j).second;
     if (r->isActive() == false)
       continue;
     if (r->id != robot().id && r->id != closest_robot_)
@@ -142,7 +142,7 @@ void NavigationWithObstacleAvoidance::computeTheRadiusOfLimitCycle()
   }
   else
   {
-    if (robot().getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).norm() <
+    if (robot().getMovement().linearVelocity(Data::get()->ai_data.time).norm() <
         ai::Config::translation_velocity_limit / 4.0)
     {
       radius_of_limit_cycle_ = 2 * ai::Config::robot_radius;  // + ai_data.constants.radius_security_for_avoidance;
@@ -185,7 +185,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   /////////////////////////////////////////////////////////////////
   sign_of_avoidance_rotation_ = 1.0;  // TODO
 
-  data::Robot& obstacle = *(GlobalDataSingleThread::singleton_.all_robots[closest_robot_].second);
+  data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
   Vector2d obstacle_to_goal = vector2point(target_position_) - obstacle_linear_position;
   Vector2d current_to_goal = vector2point(target_position_) - linearPosition();
   double angle = vector2angle(current_to_goal).value() - vector2angle(obstacle_to_goal).value();
@@ -202,8 +202,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   double YY = s.getY() * s.getY();
 
   double avoidance_convergence = ai::Config::coefficient_to_increase_avoidance_convergence;
-  if (GlobalDataSingleThread::singleton_.all_robots[closest_robot_].first ==
-      GlobalDataSingleThread::singleton_.all_robots[robot().id].first)
+  if (Data::get()->all_robots[closest_robot_].first == Data::get()->all_robots[robot().id].first)
   {
     // sign_of_avoidance_rotation = 1.0;
     avoidance_convergence = (XX + YY) * (XX + YY);
@@ -239,7 +238,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForRobot()
   /////////////////////////////////////////////////////////////////
   // We change the frame from absolute to frame relative to obstacle
   /////////////////////////////////////////////////////////////////
-  data::Robot& obstacle = *(GlobalDataSingleThread::singleton_.all_robots[closest_robot_].second);
+  data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
   rhoban_geometry::Point obstacle_linear_position = obstacle.getMovement().linearPosition(time());
   Vector2d obstacle_linear_velocity = obstacle.getMovement().linearVelocity(time());
 
@@ -363,15 +362,13 @@ rhoban_ssl::annotations::Annotations NavigationWithObstacleAvoidance::getAnnotat
                          linearPosition() + limit_cycle_direction_ * (limit_cycle_direction_.norm()) * 10, "red");
     if (closest_robot_ == -1)
     {
-      annotations.addCircle(ball().getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time),
-                            radius_of_limit_cycle_);
+      annotations.addCircle(ball().getMovement().linearPosition(Data::get()->ai_data.time), radius_of_limit_cycle_);
     }
     else
     {
-      annotations.addCircle(GlobalDataSingleThread::singleton_.all_robots.at(closest_robot_)
-                                .second->getMovement()
-                                .linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time),
-                            radius_of_limit_cycle_);
+      annotations.addCircle(
+          Data::get()->all_robots.at(closest_robot_).second->getMovement().linearPosition(Data::get()->ai_data.time),
+          radius_of_limit_cycle_);
     }
     annotations.addAnnotations(position_follower_avoidance_.getAnnotations());
   }

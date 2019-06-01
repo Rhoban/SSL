@@ -98,8 +98,7 @@ void Mobile::initMovement()
 
 bool Mobile::isInsideTheField()
 {
-  return GlobalDataSingleThread::singleton_.field_.isInside(
-      movement->linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time));
+  return Data::get()->field.isInside(movement->linearPosition(Data::get()->ai_data.time));
 }
 
 }  // namespace data

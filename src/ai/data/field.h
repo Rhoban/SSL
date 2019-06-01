@@ -30,6 +30,9 @@ namespace data
 {
 class Field
 {
+private:
+  rhoban_geometry::Point corners_[4];
+
 public:
   Field();
 
@@ -43,12 +46,18 @@ public:
 
   rhoban_geometry::Circle circle_center_;
   rhoban_geometry::Point goal_center_[2];
-  rhoban_geometry::Point corners_[4];
-  rhoban_geometry::Point quarter_center_[4];
-
+  rhoban_geometry::Point quarter_centers_[4];
+  rhoban_geometry::Point center_half_field[2];
   Box penalty_areas_[2];
 
+  using cardinal_position = uint;
+  static constexpr cardinal_position SW = 0;
+  static constexpr cardinal_position NW = 1;
+  static constexpr cardinal_position NE = 2;
+  static constexpr cardinal_position SE = 3;
+
 public:
+  void updateAdditionnalInformations();
   /**
    * @brief isInside returns true if the point given in parameter is in
    * the area of the field
@@ -82,6 +91,39 @@ public:
   rhoban_geometry::Point getNE() const;
   rhoban_geometry::Point getNW() const;
   rhoban_geometry::Point getSW() const;
+
+  /**
+   * @brief returns the position of the opponant left corner.
+   * @return a point
+   */
+  rhoban_geometry::Point opponentCornerLeft() const;
+
+  /**
+   * @brief returns the position of the opponant right corner.
+   * @return a point
+   */
+  rhoban_geometry::Point opponentCornerRight() const;
+
+  /**
+   * @brief returns a point that correspond to the center position
+   * of the field's quarter for a given caridinal position.
+   * @return a point
+   */
+  rhoban_geometry::Point getQuarterCenter(const cardinal_position& cardinal_position);
+
+  /**
+   * @brief returns an array which contains the center position
+   * of the four field's quarter.
+   * @return a pointer of an array with four elements
+   */
+  rhoban_geometry::Point* getQuarterCenters();
+
+  /**
+   * @brief getCenterHalfField TODO
+   * @param team
+   * @return a point of the field
+   */
+  rhoban_geometry::Point getCenterHalfField(Team team);
 };
 
 }  // namespace data

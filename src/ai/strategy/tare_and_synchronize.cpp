@@ -77,13 +77,13 @@ double TareAndSynchronize::getTemporalShiftBetweenVision() const
 
 void TareAndSynchronize::setTemporalShiftBetweenVision()
 {
-  GlobalDataSingleThread::singleton_.ai_data_.time_shift_with_vision = getTemporalShiftBetweenVision();
+  Data::get()->ai_data.time_shift_with_vision = getTemporalShiftBetweenVision();
 }
 
 void TareAndSynchronize::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  const Movement& movement = GlobalDataSingleThread::singleton_.robots_[Ally][robotId(0)].getMovement();
+  const Movement& movement = Data::get()->robots[Ally][robotId(0)].getMovement();
   if (!halt_behavior_was_assigned_)
   {
     assign_behavior(robotId(0), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));

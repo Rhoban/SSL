@@ -108,8 +108,7 @@ std::pair<rhoban_geometry::Point, ContinuousAngle> RobotPositionFilter::exponent
     const SSL_DetectionFrame& detection = elem.second;
 
     const google::protobuf::RepeatedPtrField<SSL_DetectionRobot>* robots;
-    const MovementSample& old_robot_movement =
-        GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].movement_sample;
+    const MovementSample& old_robot_movement = Data::get()->robots[Ally][robot_id].movement_sample;
     if (ai::Config::we_are_blue)
     {
       robots = &detection.robots_blue();

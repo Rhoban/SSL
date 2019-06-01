@@ -50,7 +50,8 @@ bool SslGeometryPacketAnalyzer::runTask()
       auto& geometry = (*i)->geometry();
       if ((field_done_ == false) && (geometry.has_field()))
       {
-        data::Field& field = GlobalDataSingleThread::singleton_.field_;
+        data::Field& field = Data::get()->field;
+
         field.field_length_ = geometry.field().field_length() / 1000.0;
         field.field_width_ = geometry.field().field_width() / 1000.0;
         field.goal_width_ = geometry.field().goal_width() / 1000.0;
@@ -76,9 +77,11 @@ bool SslGeometryPacketAnalyzer::runTask()
                                                            double(geometry.field().field_arcs(i).radius()) / 1000.0);
           }
         }
-        //! TODO: Update ALL information in field (corner...)
+        field.updateAdditionnalInformations();
 
+        field.getQuarterCenter(0);
         // XXX: Receive other data?
+
         field_done_ = true;
       }
       if ((camera_done_ == false) && (geometry.calib_size() > 0))
@@ -142,7 +145,7 @@ bool DetectionPacketAnalyzer::runTask()
       i = vision::VisionDataGlobal::singleton_.last_packets_.erase(i);
     }
   }
-  time_synchroniser_.syncTimeShift(&GlobalDataSingleThread::singleton_.ai_data_.time_shift_with_vision);
+  time_synchroniser_.syncTimeShift(&Data::get()->ai_data.time_shift_with_vision);
   return true;
 }
 
@@ -211,10 +214,10 @@ bool UpdateRobotInformation::runTask()
         if (position.time_ > 0)
         {
           if (position.orientation_is_defined_)
-            GlobalDataSingleThread::singleton_.robots_[team][robot].update(position.time_, position.position_.linear,
-                                                                           position.position_.angular);
+            Data::get()->robots[team][robot].update(position.time_, position.position_.linear,
+                                                    position.position_.angular);
           else
-            GlobalDataSingleThread::singleton_.robots_[team][robot].update(position.time_, position.position_.linear);
+            Data::get()->robots[team][robot].update(position.time_, position.position_.linear);
         }
       }
       else
@@ -251,7 +254,7 @@ bool UpdateBallInformation::runTask()
   if (nballs > 0)
   {
     pos = pos / (double)nballs;
-    GlobalDataSingleThread::singleton_.ball_.update((tmin + tmax) / 2.0, pos);
+    Data::get()->ball.update((tmin + tmax) / 2.0, pos);
   }
   return true;
 }

@@ -128,7 +128,7 @@ bool UpdateElectronicInformations::runTask()
     auto robot = master->robots[id];
     if (robot.isOk())
     {
-      GlobalDataSingleThread::singleton_.robots_[Ally][id].electronics = robot.status;
+      Data::get()->robots[Ally][id].electronics = robot.status;
     }
   }
   return true;

@@ -123,7 +123,7 @@ bool rhoban_ssl::ControlSender::runTask()
 {
   for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot_id)
   {
-    Control& ctrl = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id].control;
+    Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_id].control;
     if (robot_id >= 8)
     {                      // HACK - becaus hardware doesn't support more than 8 robots
       continue;            // HACK

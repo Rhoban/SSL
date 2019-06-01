@@ -35,10 +35,9 @@ void Defender::update(double time, const data::Robot& robot, const data::Ball& b
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position =
-      robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
 
-  Vector2d ball_goal_vector = allyGoalCenter() - ballPosition();
+  Vector2d ball_goal_vector = Data::get()->field.goalCenter(Ally) - ballPosition();
   double target_rotation = 0.0;
 
   rhoban_geometry::Point target_position = robot_position;

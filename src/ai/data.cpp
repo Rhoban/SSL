@@ -23,8 +23,6 @@
 
 namespace rhoban_ssl
 {
-GlobalDataSingleThread GlobalDataSingleThread::singleton_;
-
 SharedData::FinalControl::FinalControl()
   : hardware_is_responding(false), is_disabled_by_viewer(false), is_manually_controled_by_viewer(true)
 {
@@ -46,14 +44,21 @@ SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_
 
 ///////////////////////////////////////////////////////////////////////
 
-GlobalDataSingleThread::GlobalDataSingleThread()
+Data Data::singleton_;
+
+Data::Data()
 {
   for (int team_id = 0; team_id < 2; team_id++)
   {
     for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
     {
-      all_robots.push_back(std::pair<Team, data::Robot*>(team_id, &(robots_[team_id][robot_id])));
+      all_robots.push_back(std::pair<Team, data::Robot*>(team_id, &(robots[team_id][robot_id])));
     }
   }
+}
+
+Data* Data::get()
+{
+  return &singleton_;
 }
 }  // namespace rhoban_ssl
