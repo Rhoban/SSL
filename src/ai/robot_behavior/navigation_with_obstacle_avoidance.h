@@ -21,7 +21,6 @@
 
 #include "robot_behavior.h"
 #include "position_follower.h"
-#include <ai_data.h>
 #include <math/circular_vector.h>
 
 namespace rhoban_ssl
@@ -36,7 +35,7 @@ class NavigationWithObstacleAvoidance : public ConsignFollower
 {
 private:
   bool ignore_the_ball_;
-  bool ignore_robot_[2 * ai::Constants::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.
+  bool ignore_robot_[2 * ai::Config::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.
   double ball_radius_avoidance_;
   bool ball_is_the_obstacle_;
   PositionFollower position_follower_;
@@ -75,13 +74,13 @@ private:
   void convertCycleDirectionToLinearAndAngularVelocity();
 
 public:
-  NavigationWithObstacleAvoidance(ai::AiData& ai_data, double time, double dt);
+  NavigationWithObstacleAvoidance(double time, double dt);
 
 protected:
-  void updateControl(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void updateControl(double time, const data::Robot& robot, const data::Ball& ball);
 
 public:
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 

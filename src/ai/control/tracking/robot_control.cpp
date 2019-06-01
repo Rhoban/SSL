@@ -28,15 +28,14 @@ namespace tracking
 void RobotControl::update(double current_time, const Vector2d& robot_linear_position,
                           const Vector2d& robot_linear_velocity, const ContinuousAngle& robot_angular_position)
 {
-  if ( !init && current_linear_position_ != robot_linear_position) {
+  if (!init && current_linear_position_ != robot_linear_position)
+  {
     linear_position_at_start_ = robot_linear_position;
     angular_position_at_start_ = robot_angular_position;
 
-    const double DELAY_ROBOT_AI = 0.16;
-    initTime(current_time+DELAY_ROBOT_AI, dt_);
+    const double DELAY_ROBOT_AI = 0.01;
+    initTime(current_time + DELAY_ROBOT_AI, dt_);
     init = true;
-  }
-  if ( !init ) {
   }
 
   double dt = (current_time - start_time_) - time_;
@@ -46,13 +45,13 @@ void RobotControl::update(double current_time, const Vector2d& robot_linear_posi
     time_ = (current_time - start_time_);
   }
 
-  //DEBUG(time_);
+  // DEBUG(time_);
 
   current_angular_position_ = robot_angular_position;
   current_linear_velocity_ = robot_linear_velocity;
   current_linear_position_ = robot_linear_position;
 
-  //DEBUG("reel " << current_linear_velocity_.norm());
+  // DEBUG("reel " << current_linear_velocity_.norm());
 
   computeLimitedControl();
 }

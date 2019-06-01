@@ -30,11 +30,11 @@ class CircleFollowerWithTargetTracking
     public RobotBehavior
 {
 public:
-  CircleFollowerWithTargetTracking(ai::AiData& ai_data);
+  CircleFollowerWithTargetTracking();
 
   // RobotBehavior interface
 public:
-  void update(double time, const ai::Robot &robot, const ai::Ball &ball);
+  void update(double time, const data::Robot& robot, const data::Ball& ball);
   Control control() const;
   annotations::Annotations getAnnotations() const;
 };

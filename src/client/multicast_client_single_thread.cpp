@@ -141,6 +141,15 @@ void MulticastClientSingleThread::init()
     std::cerr << "no interface to listen on (MulticastClientSingleThread)" << std::endl;
     _exit(1);
   }
+
+  memset(msgs, 0, sizeof(msgs));
+  for (int j = 0; j < VLEN; j++)
+  {
+    iovecs[j].iov_base = bufs[j];
+    iovecs[j].iov_len = BUFSIZE;
+    msgs[j].msg_hdr.msg_iov = &iovecs[j];
+    msgs[j].msg_hdr.msg_iovlen = 1;
+  }
 }
 
 MulticastClientSingleThread::~MulticastClientSingleThread()
@@ -156,6 +165,8 @@ for (auto thread : threads)
 }
 */
 }
+#define VLEN 20
+#define BUFSIZE 100
 
 bool MulticastClientSingleThread::runTask()
 {
@@ -164,24 +175,25 @@ bool MulticastClientSingleThread::runTask()
   if (running == false)
     return false;
 
-  for (int i = 0; i < nfds_; ++i)
+  for (unsigned int i = 0; i < nfds_; ++i)
     sockets_fds_[i].revents = 0;
 
   poll(sockets_fds_, nfds_, 0);
 
-  for (int i = 0; i < nfds_; ++i)
+  for (unsigned int i = 0; i < nfds_; ++i)
   {
     if (sockets_fds_[i].revents & POLLIN)
-    {
-      char buffer[65536];
-      ssize_t len = recv(sockets_fds_[i].fd, buffer, sizeof(buffer), 0);
+    {  // can be static as we are in single thread paradigm
+       // ssize_t len = recv(sockets_fds_[i].fd, buffer_, sizeof(buffer_), 0);
 
-      if (len > 0)
+      int len = recvmmsg(sockets_fds_[i].fd, msgs, VLEN, 0, nullptr);
+
+      for (int k = 0; k < len; ++k)
       {
-        if (process(buffer, len))
+        if (process(bufs[k], msgs[k].msg_len))
         {
           packets++;
-          packetReceived();
+          // packetReceived();
           receivedData = true;
           lastData = TimeStamp::now();
         }
@@ -202,10 +214,10 @@ bool MulticastClientSingleThread::hasData() const
   return false;
 }
 
-void MulticastClientSingleThread::packetReceived()
-{
-  // Default behaviors does nothing
-}
+// void MulticastClientSingleThread::packetReceived()
+//{
+// Default behaviors does nothing
+//}
 
 unsigned int MulticastClientSingleThread::getPackets()
 {
@@ -216,4 +228,4 @@ void MulticastClientSingleThread::shutdown()
 {
   running = false;
 }
-}  // namespace rhobanssl
+}  // namespace rhoban_ssl

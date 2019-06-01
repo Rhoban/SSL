@@ -24,12 +24,12 @@ namespace robot_behavior
 {
 namespace medium
 {
-GoToPositionWithMotionlessTargetTracking::GoToPositionWithMotionlessTargetTracking(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower_(ai_data), circle_follower_(ai_data)
+GoToPositionWithMotionlessTargetTracking::GoToPositionWithMotionlessTargetTracking()
+  : RobotBehavior(), follower_(), circle_follower_()
 {
 }
 
-void GoToPositionWithMotionlessTargetTracking::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void GoToPositionWithMotionlessTargetTracking::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE

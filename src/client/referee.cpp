@@ -31,7 +31,7 @@ int main()
       ss << "command_timestamp: " << data.command_timestamp() << std::endl;
       ss << "remaining time: " << data.stage_time_left() << std::endl;
 
-      auto printTeamInfo = [&ss](SSL_Referee_TeamInfo teamInfo) {
+      auto printTeamInfo = [&ss](Referee_TeamInfo teamInfo) {
         ss << "  name: " << teamInfo.name() << std::endl;
         ss << "  score: " << teamInfo.score() << std::endl;
         ss << "  red_cards: " << teamInfo.red_cards() << std::endl;
@@ -42,7 +42,7 @@ int main()
         }
         ss << "  timeouts: " << teamInfo.timeouts() << std::endl;
         ss << "  timeout_time: " << teamInfo.timeout_time() << std::endl;
-        ss << "  goalie: " << teamInfo.goalie() << std::endl;
+        // ss << "  goalie: " << teamInfo.goalie() << std::endl;
       };
 
       ss << "yellow infos:" << std::endl;

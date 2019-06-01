@@ -30,15 +30,14 @@ class PositionFollowerWithTargetTracking
     public rhoban_ssl::robot_behavior::RobotBehavior
 {
 public:
-  PositionFollowerWithTargetTracking(ai::AiData& ai_data);
+  PositionFollowerWithTargetTracking();
 
   // RobotBehavior interface
 public:
-  void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void update(double time, const data::Robot& robot, const data::Ball& ball);
   Control control() const;
   rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
 
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl
-

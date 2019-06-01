@@ -23,78 +23,193 @@
 #include <com/ai_commander.h>
 #include <vision/ai_vision_client.h>
 #include <robot_behavior/robot_behavior.h>
-#include "ai_data.h"
 #include <referee/game_state.h>
 #include <core/machine_state.h>
 #include <manager/manager.h>
 #include <annotations/annotations.h>
-#include <control/kinematic.h>
 
 namespace rhoban_ssl
 {
-class AI
+/**
+ * @brief The AI class
+ */
+class AI : public Task
 {
-private:
-  std::string team_name_;
-  ai::Team default_team_;
-  control::Kinematic kinematic_;
 public:
-  bool is_in_simulation;
-  AI(std::string manager_name, std::string team_name, ai::Team default_team, Data& data, AICommander* commander,
-     const std::string& config_path, bool is_in_simulation);
+  // bool is_in_simulation;
+  AI(std::string manager_name, AICommander* commander);
 
-  void run();
+  bool runTask() override;
+
+  // api
+public:
+  /**
+   * @brief stop the ia execution
+   */
   void stop();
 
+  /**
+   * @brief Call this methods turn the ai into scan mode.
+   *
+   * The scan mode scan all robots and ignore them if there there are not alive.
+   *
+   * After the ai does nothing and wait for the robots to answer during a given time.
+   * @see ai::Config::SCAN_WAITING_DELAY
+   *
+   * Finally we update the status of the robots according to their aswer.
+   */
+  void scan();
+
+  /**
+   * @brief getAvailableManagers returns the name of all manager available.
+   * @return a vector of string that contains all name.
+   */
   std::vector<std::string> getAvailableManagers();
-  void setManager(std::string manager);
-  std::shared_ptr<manager::Manager> getManager() const;
+
+  /**
+   * @brief setManager changes the current manager that correspond with the
+   * name given in parameter.
+   * If the name of the manager doesn't exist this method does nothing.
+   * @param the name of a manager
+   */
+  void setManager(std::string manager_name);
+
+  /**
+   * @brief startManager
+   */
+  void startManager();
+
+  /**
+   * @brief pauseManager
+   */
+  void pauseManager();
+
+  /**
+   * @brief stopManager stops the current manager.
+   *
+   * Its clear all robotbehavior assignements and replace them with the Halt
+   * behavior.
+   */
+  void stopManager();
+
+  /**
+   * @brief getCurrentManager returns the manager that currently running in the AI.
+   * @return a Manager
+   * @see rhoban_ssl::manager::Manager
+   */
+  std::shared_ptr<manager::Manager> getCurrentManager() const;
+
+  /**
+   * @brief getManualManager returns a manual manager.
+   *
+   * The manual manager exist in order to change manually the robotbehavior assignement.
+   * @return a Manual Manager
+   * @see rhoban_ssl::manager::Manual
+   */
   std::shared_ptr<manager::Manager> getManualManager();
 
-  GameState& getGameState();
+  /**
+   * @brief An emergency call stop all robots connected with the ai.
+   *
+   * It's change the control for each robot to manual.
+   * Moreover all manual control are ignore and desactivate.
+   *
+   * After control desactivations in the ai, the commander sends a stop
+   * command to all robots.
+   */
+  void emergency();
 
-  double getCurrentTime();
+  /**
+   * @brief getAnnotations
+   * @param annotations
+   */
+  void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
 
-protected:
+  /**
+   * @brief Returns the name of the robotbehavior assigned to the robot with the number
+   * given in parameter.
+   * @param robot_number
+   * @return the name of a robotbehavior.
+   */
+  std::string getRobotBehaviorOf(uint robot_number);
+
+  /**
+   * @brief Returns the strategy that chooses the robotBehavior of the robot with
+   * the number given in parameter.
+   * @param robot_number
+   * @return the name of a robotbehavior.
+   */
+  std::string getStrategyOf(uint robot_number);
+
+  /**
+   * @brief setStrategyof
+   * @param robot_number
+   */
+  void setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::string strat_name);
+
+  /**
+   * @brief haltRobot
+   * @param robot_number
+   */
+  void haltRobot(uint robot_number);
+
+  /**
+   * @brief enableRobot
+   * @param id
+   * @param enabled
+   */
+  void enableRobot(uint number, bool enabled);
+
+  void moveRobot(bool ally, uint number, double x, double y, double theta);
+
+  void moveBall(double x, double y, double v_x, double v_y);
+
+private:
+  // move to config
+  const double SCAN_WAITING_DELAY = 0.030;
+  bool scanning_ = false;
+  double scan_starting_time_;
+  SharedData save_control_before_scan_;
+
+private:
   bool running_;
 
-  vision::VisionData visionData_;
-  ai::AiData ai_data_;
-
-  bool enable_kicking_;
-
   AICommander* commander_;
-
-  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
-
-  void initRobotBehaviors();
-  void updateRobots();
-  double current_time_;
-  double current_dt_;
-
-  SharedData shared_data_;
-
-  Data& data_;
-  GameState game_state_;
-  std::string manager_name_;
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
 
-  Control updateRobot(robot_behavior::RobotBehavior& robot_behavior, double time, ai::Robot& robot, ai::Ball& ball);
-  void updateElectronicInformations();
-  void printElectronicInfo();
+  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
 
-  void sendControl(int robot_id, const Control& control);
+  Control getRobotControl(robot_behavior::RobotBehavior& robot_behavior, data::Robot& robot);
+
+  void initRobotBehaviors();
+
+  void updateRobots();
   void prepareToSendControl(int robot_id, Control& control);
 
   void limitsVelocity(Control& ctrl) const;
-  void checkTimeIsCoherent() const;
-
-  void shareData();
   void preventCollision(int robot_id, Control& ctrl);
+
   rhoban_ssl::annotations::Annotations getRobotBehaviorAnnotations() const;
 
 public:
-  void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
 };
+
+/**
+ * @brief The RegulateAiLoopPeriod class
+ */
+class RegulateAiLoopPeriod : public Task
+{
+  // Task interface
+public:
+  bool runTask();
+};
+
+class TimeUpdater : public Task
+{
+  // Task interface
+public:
+  bool runTask();
+};
+
 };  // namespace rhoban_ssl

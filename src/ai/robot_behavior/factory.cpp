@@ -22,32 +22,29 @@
 #include "position_follower.h"
 #include "navigation_with_obstacle_avoidance.h"
 #include "navigation_inside_the_field.h"
-#include "a_star_path.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-ConsignFollower* Factory::fixedConsignFollower(ai::AiData& ai_data, const rhoban_geometry::Point& position,
-                                               const ContinuousAngle& angle, bool ignore_the_ball)
+ConsignFollower* Factory::fixedConsignFollower(const rhoban_geometry::Point& position, const ContinuousAngle& angle,
+                                               bool ignore_the_ball)
 {
-  return Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocation(ai_data, position, angle, ignore_the_ball);
+  return Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocation(position, angle, ignore_the_ball);
 }
 
 ConsignFollower* Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocation(
-    ai::AiData& ai_data, const rhoban_geometry::Point& position, const ContinuousAngle& angle, bool ignore_the_ball)
+    const rhoban_geometry::Point& position, const ContinuousAngle& angle, bool ignore_the_ball)
 {
   // A_star_path* follower = new A_star_path(ai_data, ai_data.time, ai_data.dt);
-  NavigationInsideTheField* follower = new NavigationInsideTheField(ai_data, ai_data.time, ai_data.dt);
+  NavigationInsideTheField* follower = new NavigationInsideTheField(Data::get()->ai_data.time, Data::get()->ai_data.dt);
   // Navigation_with_obstacle_avoidance* follower = new Navigation_with_obstacle_avoidance(ai_data, ai_data.time,
   // ai_data.dt);
   // PositionFollower* follower = new PositionFollower(ai_data, ai_data.time, ai_data.dt);
-  follower->setTranslationPid(ai_data.constants.p_translation, ai_data.constants.i_translation,
-                              ai_data.constants.d_translation);
-  follower->setOrientationPid(ai_data.constants.p_orientation, ai_data.constants.i_orientation,
-                              ai_data.constants.d_orientation);
-  follower->setLimits(ai_data.constants.translation_velocity_limit, ai_data.constants.rotation_velocity_limit,
-                      ai_data.constants.translation_acceleration_limit, ai_data.constants.rotation_acceleration_limit);
+  follower->setTranslationPid(ai::Config::p_translation, ai::Config::i_translation, ai::Config::d_translation);
+  follower->setOrientationPid(ai::Config::p_orientation, ai::Config::i_orientation, ai::Config::d_orientation);
+  follower->setLimits(ai::Config::translation_velocity_limit, ai::Config::rotation_velocity_limit,
+                      ai::Config::translation_acceleration_limit, ai::Config::rotation_acceleration_limit);
   follower->setFollowingPosition(position, angle);
   follower->avoidTheBall(not(ignore_the_ball));
   return follower;

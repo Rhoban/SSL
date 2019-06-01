@@ -19,8 +19,6 @@
 
 #pragma once
 
-#include <ai_data.h>
-#include "robot_behavior.h"
 #include "consign_follower.h"
 
 namespace rhoban_ssl
@@ -30,12 +28,13 @@ namespace robot_behavior
 class Factory
 {
 public:
-  static ConsignFollower*
-  fixedConsignFollower(ai::AiData& ai, const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0, 0.0),
-                       const ContinuousAngle& angle = ContinuousAngle(0.0), bool ignore_the_ball = false);
+  static ConsignFollower* fixedConsignFollower(const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0,
+                                                                                                               0.0),
+                                               const ContinuousAngle& angle = ContinuousAngle(0.0),
+                                               bool ignore_the_ball = false);
 
   static ConsignFollower* fixedConsignFollowerWithoutRepsectingAuthorizedLocation(
-      ai::AiData& ai, const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0, 0.0),
+      const rhoban_geometry::Point& position = rhoban_geometry::Point(0.0, 0.0),
       const ContinuousAngle& angle = ContinuousAngle(0.0), bool ignore_the_ball = false);
 };
 

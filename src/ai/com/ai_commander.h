@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <Master.h>
 #include <SimClient.h>
+#include <execution_manager.h>
 
 /**
  * Generic interface for commanding robots, whatever it is in simulator or
@@ -46,9 +47,7 @@ public:
     bool charge;
     bool tare_odom;
   };
-  AICommander(bool yellow);
-
-  void setYellow(bool value);
+  AICommander();
 
   /**
    * Set the speed of the robot robot_id to the given speed
@@ -75,13 +74,13 @@ public:
   /**
    * Moves a robot o a target position
    */
-  virtual void moveRobot(bool yellow, int id, double x, double y, double theta, bool turn_on){};
+  virtual void moveRobot(bool ally, int id, double x, double y, double theta, bool turn_on)
+  {
+  }
 
   virtual ~AICommander();
 
 protected:
   std::vector<struct Command> commands_;
-
-  bool yellow_;
 };
 }  // namespace rhoban_ssl

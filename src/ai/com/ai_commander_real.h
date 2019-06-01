@@ -21,16 +21,15 @@
 #pragma once
 
 #include <stdint.h>
-#include <Master.h>
 #include <Kinematic.h>
 #include "ai_commander.h"
 
 namespace rhoban_ssl
 {
-class AICommanderReal : public AICommander
+class AICommanderReal : public AICommander, public Task
 {
 public:
-  AICommanderReal(bool yellow);
+  AICommanderReal();
 
   virtual void flush();
   virtual void kick();
@@ -41,7 +40,28 @@ public:
 
 protected:
   bool kicking_;
-  Master master_;
+  Master* master_;
   Kinematic kinematic_;
+
+  // Task interface
+public:
+  /**
+   * @brief this task launchs and stop the thread of the commander
+   * @return true while the thread running
+   */
+  bool runTask();
+};
+
+class UpdateElectronicInformations : public Task
+{
+private:
+  AICommanderReal* commander_;
+
+public:
+  UpdateElectronicInformations(AICommanderReal* commander);
+
+  // Task interface
+public:
+  bool runTask();
 };
 }  // namespace rhoban_ssl
