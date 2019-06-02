@@ -90,15 +90,15 @@ Vector2d VelocityControllerWithPid::computeNoLimitedLinearVelocity(const Vector2
 #if true
   Vector2d error = linearPosition(time_) - robot_position;
 
-//  if (error.getX() > 0.01 || error.getY() > 0.01)
-//  {
-    linear_velocity_pid_.setPid(1, 0, 0);
-    Vector2d correction = linear_velocity_pid_.compute(dt_, error);
-    // DEBUG("error " << error);
-    // DEBUG("correction " << correction );
-    no_limited_linear_velocity += correction;
-    //
- // }
+  //  if (error.getX() > 0.01 || error.getY() > 0.01)
+  //  {
+  linear_velocity_pid_.setPid(1, 0, 0);
+  Vector2d correction = linear_velocity_pid_.compute(dt_, error);
+  // DEBUG("error " << error);
+  // DEBUG("correction " << correction );
+  no_limited_linear_velocity += correction;
+  //
+  // }
   //  if( error.getX() <= 0.001 && error.getY() <= 0.001 ) {
   //    linear_velocity_pid_.resetIntegration();
   //    DEBUG("reset PID integration -> CALIBRATE");

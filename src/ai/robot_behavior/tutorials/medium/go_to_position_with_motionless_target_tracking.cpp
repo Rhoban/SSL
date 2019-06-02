@@ -45,6 +45,7 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const data::R
     circle_follower_.setGoal(angle_destination, ballPosition(), Vector2d(0.0, 0.0));
     robot_destination_set_ = true;
   }
+  circle_follower_.update(time, robot, ball);
   annotations_.addCross(
       circle_follower_.robot_control::tracking::RobotControlWithTargetTrackingAndCircleFollowing::linearPosition(time),
       "green");
@@ -65,7 +66,6 @@ void GoToPositionWithMotionlessTargetTracking::update(double time, const data::R
 
   // DEBUG(angular_position() - vector2angle(linear_position()-ball_position()));
 
-  circle_follower_.update(time, robot, ball);
 #else
   if (!robot_destination_set_)
   {
