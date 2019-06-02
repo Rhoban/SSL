@@ -58,6 +58,9 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
+    robot_behavior/xavier/approach.cpp
+    robot_behavior/xavier/offensive_placement.cpp
+    robot_behavior/xavier/shoot.cpp
     ai.cpp
     debug.cpp
     manager/manager.cpp
@@ -69,6 +72,7 @@ set (SOURCES
     strategy/placer.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
+    strategy/xavier/pass_shoot.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
