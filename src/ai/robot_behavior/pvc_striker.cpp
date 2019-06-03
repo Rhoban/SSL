@@ -25,15 +25,15 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Striker::Striker(ai::AiData& ai_data)
-  : RobotBehavior(ai_data)
+Striker::Striker()
+  : RobotBehavior()
   , use_custom_vector_(false)
-  , striking_point_(opponentGoalCenter())
-  , follower_(Factory::fixedConsignFollower(ai_data))
+  , striking_point_(Data::get()->field.goalCenter(Opponent))
+  , follower_(Factory::fixedConsignFollower())
 {
 }
 
-void Striker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void Striker::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -43,7 +43,7 @@ void Striker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
 
   // rhoban_geometry::Point opponent_goal_point = opponent_goal_center();
   // rhoban_geometry::Point left_post_position = rhoban_geometry::Point( ai_data.field.fieldLength / 2.0,

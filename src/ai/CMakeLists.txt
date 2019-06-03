@@ -60,7 +60,7 @@ set (SOURCES
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/pvc_striker_ai.cpp
     robot_behavior/pvc_search_shoot_area.cpp
-    #robot_behavior/pvc_striker.cpp
+    robot_behavior/pvc_striker.cpp
     #robot_behavior/pvc_wait_pass.cpp
     robot_behavior/pvc_degageur.cpp
     robot_behavior/pvc_obstructor.cpp
