@@ -34,9 +34,9 @@ private:
   ConsignFollower* follower_;
 
 public:
-  MurDefensor(ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
+  MurDefensor(bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
   void declareMurRobotId(int id, int mur_nb_robots);
 
   virtual Control control() const;

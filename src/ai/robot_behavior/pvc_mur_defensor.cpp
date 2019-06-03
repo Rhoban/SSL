@@ -25,20 +25,20 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-MurDefensor::MurDefensor(ai::AiData& ai_data, bool fixed_consign_follower_without_repsecting_authorized_location_bool)
-  : RobotBehavior(ai_data), mur_robot_id_(0), mur_nb_robot_(1)
+MurDefensor::MurDefensor(bool fixed_consign_follower_without_repsecting_authorized_location_bool)
+  : RobotBehavior(), mur_robot_id_(0), mur_nb_robot_(1)
 {
   if (fixed_consign_follower_without_repsecting_authorized_location_bool == 0)
   {
-    follower_ = Factory::fixedConsignFollower(ai_data);
+    follower_ = Factory::fixedConsignFollower();
   }
   else
   {
-    follower_ = Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocation(ai_data);
+    follower_ = Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocation();
   }
 }
 
-void MurDefensor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void MurDefensor::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -52,9 +52,9 @@ void MurDefensor::update(double time, const ai::Robot& robot, const ai::Ball& ba
   // const Robots_table & robot_table = ai_data.robots.at(Vision::Ally);
   // const ai::Robot & robot = robot_table.at(robot_id);
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
 
-  rhoban_geometry::Point ally_goal_point = allyGoalCenter();
+  rhoban_geometry::Point ally_goal_point = Data::get()->field.goalCenter(Ally);
 
   Vector2d ball_goal_vector = ally_goal_point - ballPosition();
   Vector2d ball_robot_vector = robot_position - ballPosition();
@@ -109,9 +109,8 @@ void MurDefensor::update(double time, const ai::Robot& robot, const ai::Ball& ba
     {
       if (target_rotation < 0.7071)
       {
-        target_position =
-            ally_goal_point -
-            ball_goal_vector * (distance_defense_line / std::cos(target_rotation) + ai::Config::robot_radius);
+        target_position = ally_goal_point - ball_goal_vector * (distance_defense_line / std::cos(target_rotation) +
+                                                                ai::Config::robot_radius);
         target_position += rhoban_geometry::Point(0, multiple_robot_offset);
       }
       else

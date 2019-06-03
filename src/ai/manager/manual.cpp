@@ -32,6 +32,7 @@
 #include <robot_behavior/pvc_degageur.h>
 #include <robot_behavior/pvc_goalie.h>
 #include <robot_behavior/pvc_mur_def_kick.h>
+#include <robot_behavior/pvc_mur_defensor.h>
 
 namespace rhoban_ssl
 {
@@ -122,12 +123,19 @@ Manual::Manual(std::string name) : Manager(name)
                                        false  // decoration
                                        )));
   registerStrategy("PVC - Mur Def Kick", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                         [&](double time, double dt) {
-                                           robot_behavior::MurDefKick* mur = new robot_behavior::MurDefKick();
-                                           return std::shared_ptr<robot_behavior::RobotBehavior>(mur);
-                                         },
-                                         false  // we don't want to define a goal here !
-                                         )));
+                                             [&](double time, double dt) {
+                                               robot_behavior::MurDefKick* mur = new robot_behavior::MurDefKick();
+                                               return std::shared_ptr<robot_behavior::RobotBehavior>(mur);
+                                             },
+                                             false  // we don't want to define a goal here !
+                                             )));
+  registerStrategy("PVC - Mur Defensor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                             [&](double time, double dt) {
+                                               robot_behavior::MurDefensor* mur = new robot_behavior::MurDefensor();
+                                               return std::shared_ptr<robot_behavior::RobotBehavior>(mur);
+                                             },
+                                             false  // we don't want to define a goal here !
+                                             )));
 }
 
 void Manual::update()
