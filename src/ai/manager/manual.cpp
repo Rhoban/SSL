@@ -35,6 +35,7 @@
 #include <robot_behavior/pvc_mur_defensor.h>
 #include <robot_behavior/pvc_obstructor.h>
 #include <robot_behavior/pvc_robot_follower.h>
+#include <robot_behavior/pvc_search_shoot_area.h>
 
 namespace rhoban_ssl
 {
@@ -155,6 +156,14 @@ Manual::Manual(std::string name) : Manager(name)
                                                },
                                                false  // we don't want to define a goal here !
                                                )));
+  registerStrategy("PVC - Search Shoot Area", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                  [&](double time, double dt) {
+                                                    robot_behavior::SearchShootArea* searcher =
+                                                        new robot_behavior::SearchShootArea();
+                                                    return std::shared_ptr<robot_behavior::RobotBehavior>(searcher);
+                                                  },
+                                                  false  // we don't want to define a goal here !
+                                                  )));
 }
 
 void Manual::update()

@@ -27,19 +27,19 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-SearchShootArea::SearchShootArea(ai::AiData& ai_data)
-  : RobotBehavior(ai_data)
+SearchShootArea::SearchShootArea()
+  : RobotBehavior()
   , obstructed_view_(-1)
   , period_(3)
   , last_time_changement_(0)
-  , follower_(Factory::fixedConsignFollower(ai_data))
+  , follower_(Factory::fixedConsignFollower())
   , well_positioned(false)
 {
-  p1_ = Vector2d(opponentGoalCenter()) + rhoban_geometry::Point(-1, 2);
+  p1_ = Vector2d(Data::get()->field.goalCenter(Opponent)) + rhoban_geometry::Point(-1, 2);
   p2_ = Vector2d(centerMark()) + rhoban_geometry::Point(1, -2);
 }
 
-void SearchShootArea::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void SearchShootArea::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
