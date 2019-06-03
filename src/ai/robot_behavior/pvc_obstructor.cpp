@@ -25,15 +25,15 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Obstructor::Obstructor(ai::AiData& ai_data)
-  : RobotBehavior(ai_data)
-  , robot_to_obstruct_id_(-1)
-  , robot_to_obstruct_team_(vision::Opponent)
-  , follower_(Factory::fixedConsignFollower(ai_data))
+Obstructor::Obstructor()
+  : RobotBehavior()
+  , robot_to_obstruct_id_(2)  // oponent id
+  , robot_to_obstruct_team_(Opponent)
+  , follower_(Factory::fixedConsignFollower())
 {
 }
 
-void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void Obstructor::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -48,15 +48,15 @@ void Obstructor::update(double time, const ai::Robot& robot, const ai::Ball& bal
   // const ai::Robot & robot = robot_table.at(robot_id);
 
   assert(robot_to_obstruct_id_ != -1);
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
 
-  rhoban_geometry::Point ally_goal_point = allyGoalCenter();
+  rhoban_geometry::Point ally_goal_point = Data::get()->field.goalCenter(Ally);
   rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, ai_data_.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0);
   rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, -ai_data_.field.goalWidth / 2.0);
+      rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, -Data::get()->field.goal_width_ / 2.0);
 
-  const ai::Robot& robot_to_obstruct = getRobot(robot_to_obstruct_id_, robot_to_obstruct_team_);
+  const data::Robot& robot_to_obstruct = getRobot(robot_to_obstruct_id_, robot_to_obstruct_team_);
   point_to_obstruct_ = robot_to_obstruct.getMovement().linearPosition(time);
 
   Vector2d point_to_obstruct_goal_vector = ally_goal_point - point_to_obstruct_;
@@ -111,7 +111,7 @@ Control Obstructor::control() const
   return ctrl;
 }
 
-void Obstructor::declareRobotToObstruct(int robot_id, vision::Team team)
+void Obstructor::declareRobotToObstruct(int robot_id, Team team)
 {
   robot_to_obstruct_id_ = robot_id;
   robot_to_obstruct_team_ = team;

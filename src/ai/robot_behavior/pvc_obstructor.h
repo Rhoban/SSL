@@ -31,17 +31,17 @@ class Obstructor : public RobotBehavior
 private:
   rhoban_geometry::Point point_to_obstruct_;
   int robot_to_obstruct_id_;
-  vision::Team robot_to_obstruct_team_;
+  Team robot_to_obstruct_team_;
 
   ConsignFollower* follower_;
 
 public:
-  Obstructor(ai::AiData& ai_data);
+  Obstructor();
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
-  void declareRobotToObstruct(int robot_id, vision::Team team = vision::Opponent);
+  void declareRobotToObstruct(int robot_id, Team team = Opponent);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
   virtual ~Obstructor();
