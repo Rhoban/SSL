@@ -26,12 +26,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-WaitPass::WaitPass(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), distance_ball_(12), follower_(Factory::fixedConsignFollower(ai_data))
+WaitPass::WaitPass() : RobotBehavior(), distance_ball_(12), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void WaitPass::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void WaitPass::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE

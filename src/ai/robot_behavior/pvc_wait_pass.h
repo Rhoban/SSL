@@ -30,16 +30,16 @@ class WaitPass : public RobotBehavior
 {
 private:
   Vector2d translation_;
-  vision::Team team_;
+  Team team_;
   double distance_ball_;
 
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  WaitPass(ai::AiData& ai_data);
+  WaitPass();
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 

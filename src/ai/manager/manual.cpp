@@ -39,6 +39,7 @@
 #include <robot_behavior/pvc_slow_striker.h>
 #include <robot_behavior/pvc_striker_ai.h>
 #include <robot_behavior/pvc_striker.h>
+#include <robot_behavior/pvc_wait_pass.h>
 
 namespace rhoban_ssl
 {
@@ -190,6 +191,13 @@ Manual::Manual(std::string name) : Manager(name)
                                         },
                                         false  // we don't want to define a goal here !
                                         )));
+  registerStrategy("PVC - Wait pass", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                          [&](double time, double dt) {
+                                            robot_behavior::WaitPass* wait = new robot_behavior::WaitPass();
+                                            return std::shared_ptr<robot_behavior::RobotBehavior>(wait);
+                                          },
+                                          false  // we don't want to define a goal here !
+                                          )));
 }
 
 void Manual::update()
