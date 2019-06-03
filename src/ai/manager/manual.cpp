@@ -31,6 +31,7 @@
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/pvc_degageur.h>
 #include <robot_behavior/pvc_goalie.h>
+#include <robot_behavior/pvc_mur_def_kick.h>
 
 namespace rhoban_ssl
 {
@@ -114,11 +115,18 @@ Manual::Manual(std::string name) : Manager(name)
                                          false  // we don't want to define a goal here !
                                          )));
   registerStrategy("PVC - Goalie", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                       [&](double time, double dt) {
+                                         robot_behavior::Goalie* goal = new robot_behavior::Goalie();
+                                         return std::shared_ptr<robot_behavior::RobotBehavior>(goal);
+                                       },
+                                       false  // decoration
+                                       )));
+  registerStrategy("PVC - Mur Def Kick", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                          [&](double time, double dt) {
-                                           robot_behavior::Goalie* goal = new robot_behavior::Goalie();
-                                           return std::shared_ptr<robot_behavior::RobotBehavior>(goal);
+                                           robot_behavior::MurDefKick* mur = new robot_behavior::MurDefKick();
+                                           return std::shared_ptr<robot_behavior::RobotBehavior>(mur);
                                          },
-                                         false  //decoration
+                                         false  // we don't want to define a goal here !
                                          )));
 }
 
