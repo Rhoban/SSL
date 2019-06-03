@@ -51,7 +51,7 @@ void Degageur::update(double time, const data::Robot& robot, const data::Ball& b
 
   //    if ((point_to_pass == rhoban_geometry::Point(66,66)) && (robot_to_pass_id == -1)) {
   // default will be the closest ally robot from the opponent goal center
-  robot_to_pass_id_ = GameInformations::getShirtNumberOfClosestRobot(Ally, opponentGoalCenter());
+  robot_to_pass_id_ = GameInformations::getShirtNumberOfClosestRobot(Ally, Data::get()->field.goalCenter(Opponent));
   //    }
 
   if (robot_to_pass_id_ != -1)
@@ -62,7 +62,7 @@ void Degageur::update(double time, const data::Robot& robot, const data::Ball& b
 
   std::vector<int> robot_in_line = GameInformations::getRobotInLine(robot_position, point_to_pass_);
 
-  if (robot_position.getX() > (opponentGoalCenter().getX() - 4))
+  if (robot_position.getX() > (Data::get()->field.goalCenter(Opponent).getX() - 4))
   {
     needKick_ = true;
   }
