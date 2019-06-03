@@ -37,6 +37,7 @@
 #include <robot_behavior/pvc_robot_follower.h>
 #include <robot_behavior/pvc_search_shoot_area.h>
 #include <robot_behavior/pvc_slow_striker.h>
+#include <robot_behavior/pvc_striker_ai.h>
 
 namespace rhoban_ssl
 {
@@ -174,6 +175,13 @@ Manual::Manual(std::string name) : Manager(name)
                                              },
                                              false  // we don't want to define a goal here !
                                              )));
+  registerStrategy("PVC - Striker AI", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                           [&](double time, double dt) {
+                                             robot_behavior::StrikerAi* striker = new robot_behavior::StrikerAi();
+                                             return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
+                                           },
+                                           false  // we don't want to define a goal here !
+                                           )));
 }
 
 void Manual::update()
