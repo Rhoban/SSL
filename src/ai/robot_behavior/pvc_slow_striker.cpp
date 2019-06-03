@@ -25,16 +25,13 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-SlowStriker::SlowStriker(ai::AiData& ai_data)
-  : RobotBehavior(ai_data)
-  , robot_to_pass_id_(-1)
-  , robot_to_pass_team_(vision::Ally)
-  , follower_(Factory::fixedConsignFollower(ai_data))
+SlowStriker::SlowStriker()
+  : RobotBehavior(), robot_to_pass_id_(-1), robot_to_pass_team_(Ally), follower_(Factory::fixedConsignFollower())
 {
   tempo_ = 0.0;
 }
 
-void SlowStriker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void SlowStriker::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -44,11 +41,11 @@ void SlowStriker::update(double time, const ai::Robot& robot, const ai::Ball& ba
   //  this->robot_angular_position
   // are all avalaible
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
 
   if (robot_to_pass_id_ != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    const ai::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
+    const data::Robot& robot_to_pass = getRobot(robot_to_pass_id_, robot_to_pass_team_);
     striking_point_ = robot_to_pass.getMovement().linearPosition(time);
   }
 
@@ -116,11 +113,11 @@ Control SlowStriker::control() const
   Control ctrl = follower_->control();
   if (robot_to_pass_id_ != -1)
   {  // if point_to_pass wasn't declare and robot_to_pass_id was.
-    ctrl.kickPower = 0.5;
+    ctrl.kick_power = 0.5;
   }
   else
   {
-    ctrl.kickPower = 1;
+    ctrl.kick_power = 1;
   }
   ctrl.charge = true;
   ctrl.kick = true;
@@ -132,7 +129,7 @@ void SlowStriker::declarePointToStrike(rhoban_geometry::Point point)
   striking_point_ = point;
 }
 
-void SlowStriker::declareRobotToPass(int robot_id, vision::Team team)
+void SlowStriker::declareRobotToPass(int robot_id, Team team)
 {
   robot_to_pass_id_ = robot_id;
   robot_to_pass_team_ = team;
