@@ -27,7 +27,7 @@ namespace robot_behavior
 {
 Obstructor::Obstructor()
   : RobotBehavior()
-  , robot_to_obstruct_id_(2)  // oponent id
+  , robot_to_obstruct_id_(-1)
   , robot_to_obstruct_team_(Opponent)
   , follower_(Factory::fixedConsignFollower())
 {

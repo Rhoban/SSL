@@ -26,15 +26,12 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-RobotFollower::RobotFollower(ai::AiData& ai_data)
-  : RobotBehavior(ai_data)
-  , robot_to_follow_id_(-1)
-  , team_(vision::Ally)
-  , follower_(Factory::fixedConsignFollower(ai_data))
+RobotFollower::RobotFollower()
+  : RobotBehavior(), robot_to_follow_id_(-1), team_(Ally), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void RobotFollower::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void RobotFollower::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -44,7 +41,7 @@ void RobotFollower::update(double time, const ai::Robot& robot, const ai::Ball& 
   //  this->robot_angular_position
   // are all avalaible
 
-  const ai::Robot& robot_to_follow = getRobot(robot_to_follow_id_, robot_to_follow_team_);
+  const data::Robot& robot_to_follow = getRobot(robot_to_follow_id_, robot_to_follow_team_);
   rhoban_geometry::Point position = robot_to_follow.getMovement().linearPosition(time);
   rhoban_geometry::Point target_position = position + translation_;
 
@@ -68,7 +65,7 @@ RobotFollower::~RobotFollower()
   delete follower_;
 }
 
-void RobotFollower::declare_robot_to_follow_(int robot_id, const Vector2d& translation, vision::Team team)
+void RobotFollower::declareRobotToFollow(int robot_id, const Vector2d& translation, Team team)
 {
   robot_to_follow_id_ = robot_id;
   this->translation_ = translation;

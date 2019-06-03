@@ -34,6 +34,7 @@
 #include <robot_behavior/pvc_mur_def_kick.h>
 #include <robot_behavior/pvc_mur_defensor.h>
 #include <robot_behavior/pvc_obstructor.h>
+#include <robot_behavior/pvc_robot_follower.h>
 
 namespace rhoban_ssl
 {
@@ -140,10 +141,20 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("PVC - Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                            [&](double time, double dt) {
                                              robot_behavior::Obstructor* obs = new robot_behavior::Obstructor();
+                                             obs->declareRobotToObstruct(2, Opponent);
                                              return std::shared_ptr<robot_behavior::RobotBehavior>(obs);
                                            },
                                            false  // we don't want to define a goal here !
                                            )));
+  registerStrategy("PVC - Robot Follower", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                               [&](double time, double dt) {
+                                                 robot_behavior::RobotFollower* follower =
+                                                     new robot_behavior::RobotFollower();
+                                                 follower->declareRobotToFollow(0, Vector2d(1, 0.5), Ally);
+                                                 return std::shared_ptr<robot_behavior::RobotBehavior>(follower);
+                                               },
+                                               false  // we don't want to define a goal here !
+                                               )));
 }
 
 void Manual::update()

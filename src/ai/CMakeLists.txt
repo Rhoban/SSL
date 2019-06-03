@@ -68,7 +68,7 @@ set (SOURCES
     robot_behavior/pvc_mur_defensor.cpp
     robot_behavior/pvc_mur_def_kick.cpp
     #robot_behavior/pvc_slow_striker.cpp
-    #robot_behavior/pvc_robot_follower.cpp
+    robot_behavior/pvc_robot_follower.cpp
     ai.cpp
     debug.cpp
     manager/manager.cpp
