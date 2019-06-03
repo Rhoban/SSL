@@ -74,7 +74,9 @@ public:
   /**
    * Moves a robot o a target position
    */
-  virtual void moveRobot(bool yellow, int id, double x, double y, double theta, bool turn_on){};
+  virtual void moveRobot(bool ally, int id, double x, double y, double theta, bool turn_on)
+  {
+  }
 
   virtual ~AICommander();
 

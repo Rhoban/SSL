@@ -30,7 +30,7 @@ void ViewerDataGlobal::parseAndStorePacketFromClient(char* packet_received)
 std::atomic<bool> ViewerServer::running_(true);
 std::vector<struct lws*> ViewerServer::clients_;
 struct lws_context* ViewerServer::context_;
-lws_protocols ViewerServer::protocols_[3];
+lws_protocols ViewerServer::protocols_[2];
 
 uint ViewerServer::instance_counter_ = 0;
 
@@ -64,14 +64,13 @@ ViewerServer::ViewerServer() : thread_launched_(false)
   assert(instance_counter_ < 2);
 
   // Set the protocols
-  protocols_[0] = { "http", rhoban_ssl::viewer::ViewerServer::callback_http_dummy, 0, 0, 0, nullptr };
-  protocols_[1] = { "viewer_protocol",
+  protocols_[0] = { "viewer_protocol",
                     rhoban_ssl::viewer::ViewerServer::callback_viewer,
                     sizeof(per_session_data_minimal),
                     6000,
                     0,
                     nullptr };
-  protocols_[2] = { nullptr, nullptr, 0, 0, 0, nullptr };
+  protocols_[1] = { nullptr, nullptr, 0, 0, 0, nullptr };
 
   struct lws_context_creation_info info;
   memset(&info, 0, sizeof info); /* otherwise uninitialized garbage */
@@ -89,7 +88,6 @@ ViewerServer::~ViewerServer()
 {
   viewer::ViewerServer::running_ = false;
   lws_cancel_service(viewer::ViewerServer::context_);
-  // lws_cancel_service(context_);
   thread->join();
   delete thread;
   lws_context_destroy(context_);

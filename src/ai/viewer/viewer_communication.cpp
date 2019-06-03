@@ -36,10 +36,10 @@ bool ViewerCommunication::runTask()
   {
     processIncomingPackets();
 
-    if (GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_ > SENDING_DELAY)
+    if (Data::get()->ai_data.time - last_sending_time_ > sending_delay)
     {
       sendViewerPackets();
-      last_sending_time_ = GlobalDataSingleThread::singleton_.ai_data_.time;
+      last_sending_time_ = Data::get()->ai_data.time;
     }
   }
   return true;
@@ -58,7 +58,9 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["set_packets_per_second"].isNull())
     {
-      // todo
+      double new_delay = viewer_packet["set_packets_per_second"].asInt();
+      if (new_delay > 0)
+        sending_delay = 1 / new_delay;
     }
     else if (!viewer_packet["set_manager"].isNull())
     {
@@ -72,21 +74,17 @@ void ViewerCommunication::processIncomingPackets()
     {
       ai_->stopManager();
     }
-    else if (!viewer_packet["place_bot"].isNull())
-    {
-      // todo
-    }
     else if (!viewer_packet["halt_bot"].isNull())
     {
-      // todo
+      ai_->haltRobot(viewer_packet["halt_bot"].asUInt());
     }
     else if (!viewer_packet["enable_bot"].isNull())
     {
-      ai_->enableRobot(viewer_packet["enable_bot"]["number"].asUInt(), true);
+      ai_->enableRobot(viewer_packet["enable_bot"].asUInt(), true);
     }
     else if (!viewer_packet["disable_bot"].isNull())
     {
-      ai_->enableRobot(viewer_packet["desable_bot"]["number"].asUInt(), false);
+      ai_->enableRobot(viewer_packet["disable_bot"].asUInt(), false);
     }
     else if (!viewer_packet["control_bot"].isNull())
     {
@@ -103,11 +101,21 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["give_bot_to_manager"].isNull())
     {
-      // todo
+      ai_->getCurrentManager().get()->addIdsInTeam({ viewer_packet["give_bot_to_manager"].asInt() });
+    }
+    else if (!viewer_packet["place_bot"].isNull())
+    {
+      bool ally = viewer_packet["place_bot"]["ally"].asBool();
+      ai_->moveRobot(ally, viewer_packet["place_bot"]["number"].asUInt(),
+                     viewer_packet["place_bot"]["position"]["x"].asDouble(),
+                     viewer_packet["place_bot"]["position"]["y"].asDouble(),
+                     viewer_packet["place_bot"]["position"]["orientation"].asDouble());
     }
     else if (!viewer_packet["place_ball"].isNull())
     {
-      // todo
+      // TODO ADD SPEED
+      ai_->moveBall(viewer_packet["place_ball"]["position"]["x"].asDouble(),
+                    viewer_packet["place_ball"]["position"]["y"].asDouble(), 0.0, 0.0);
     }
     else if (!viewer_packet["scan"].isNull())
     {
@@ -136,7 +144,7 @@ void ViewerCommunication::sendViewerPackets()
 Json::Value ViewerCommunication::fieldPacket()
 {
   Json::Value packet;
-  const data::Field& field = GlobalDataSingleThread::singleton_.field_;
+  const data::Field& field = Data::get()->field;
 
   packet["field"]["length"] = field.field_length_;
   packet["field"]["width"] = field.field_width_;
@@ -156,13 +164,12 @@ Json::Value ViewerCommunication::ballPacket()
 {
   Json::Value packet;
 
-  const rhoban_geometry::Point& ball_position = GlobalDataSingleThread::singleton_.ball_.getMovement().linearPosition(
-      GlobalDataSingleThread::singleton_.ai_data_.time);
+  const rhoban_geometry::Point& ball_position =
+      Data::get()->ball.getMovement().linearPosition(Data::get()->ai_data.time);
   packet["ball"]["position"]["x"] = ball_position.getX();
   packet["ball"]["position"]["y"] = ball_position.getY();
 
-  const Vector2d& ball_velocity = GlobalDataSingleThread::singleton_.ball_.getMovement().linearVelocity(
-      GlobalDataSingleThread::singleton_.ai_data_.time);
+  const Vector2d& ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->ai_data.time);
   packet["ball"]["velocity"]["x"] = ball_velocity.getX();
   packet["ball"]["velocity"]["y"] = ball_velocity.getY();
 
@@ -174,8 +181,8 @@ Json::Value ViewerCommunication::ballPacket()
 Json::Value ViewerCommunication::teamsPacket()
 {
   Json::Value packet;
-  double time = GlobalDataSingleThread::singleton_.ai_data_.time;
-  const data::Referee& referee = GlobalDataSingleThread::singleton_.referee_;
+  double time = Data::get()->ai_data.time;
+  const data::Referee& referee = Data::get()->referee;
 
   const std::string blue_color = "#2393c6";
   const std::string yellow_color = "#dbdd56";
@@ -192,7 +199,7 @@ Json::Value ViewerCommunication::teamsPacket()
     }
     else
     {
-      packet["teams"][team]["positive_axis"] = !GlobalDataSingleThread::singleton_.referee_.allyOnPositiveHalf();
+      packet["teams"][team]["positive_axis"] = !Data::get()->referee.allyOnPositiveHalf();
     }
     packet["teams"][team]["name"] = referee.teams_info[team_id].name;
     packet["teams"][team]["score"] = referee.teams_info[team_id].score;
@@ -212,7 +219,7 @@ Json::Value ViewerCommunication::teamsPacket()
     // robots informations
     for (uint rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
     {
-      const data::Robot& current_robot = GlobalDataSingleThread::singleton_.robots_[team_id][rid];
+      const data::Robot& current_robot = Data::get()->robots[team_id][rid];
       const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
 
       packet["teams"][team]["bots"][rid]["number"] = current_robot.id;
@@ -221,16 +228,16 @@ Json::Value ViewerCommunication::teamsPacket()
       packet["teams"][team]["bots"][rid]["position"]["x"] = robot_position.getX();
       packet["teams"][team]["bots"][rid]["position"]["y"] = robot_position.getY();
       packet["teams"][team]["bots"][rid]["position"]["orientation"] =
-          current_robot.getMovement().angularPosition(GlobalDataSingleThread::singleton_.ai_data_.time).value();
+          current_robot.getMovement().angularPosition(Data::get()->ai_data.time).value();
 
       packet["teams"][team]["bots"][rid]["velocity"]["x"] =
-          current_robot.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).getX();
+          current_robot.getMovement().linearVelocity(Data::get()->ai_data.time).getX();
       packet["teams"][team]["bots"][rid]["velocity"]["y"] =
-          current_robot.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).getY();
+          current_robot.getMovement().linearVelocity(Data::get()->ai_data.time).getY();
       packet["teams"][team]["bots"][rid]["velocity"]["theta"] =
-          current_robot.getMovement().angularVelocity(GlobalDataSingleThread::singleton_.ai_data_.time).value();
+          current_robot.getMovement().angularVelocity(Data::get()->ai_data.time).value();
 
-      // todo
+      // TO REMOVE
       packet["teams"][team]["bots"][rid]["last_control"]["time"] = 0;
       packet["teams"][team]["bots"][rid]["last_control"]["velocity"]["x"] = 0;
       packet["teams"][team]["bots"][rid]["last_control"]["velocity"]["y"] = 0;
@@ -243,8 +250,7 @@ Json::Value ViewerCommunication::teamsPacket()
       {
         packet["teams"][team]["bots"][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
         packet["teams"][team]["bots"][rid]["behavior"] = ai_->getRobotBehaviorOf(rid);
-        // todo
-        // packet["teams"][team]["bots"][rid]["strategy"] = "do_nothing";
+        packet["teams"][team]["bots"][rid]["strategy"] = ai_->getStrategyOf(rid);
 
         if (!ai::Config::is_in_simulation)
         {
@@ -272,9 +278,9 @@ Json::Value ViewerCommunication::refereePacket()
 {
   Json::Value packet;
 
-  packet["referee"]["stage"]["value"] = GlobalDataSingleThread::singleton_.referee_.getCurrentStageName();
-  packet["referee"]["stage"]["remaining_time"] = GlobalDataSingleThread::singleton_.referee_.stage_time_left;
-  packet["referee"]["state"] = GlobalDataSingleThread::singleton_.referee_.getCurrentStateName();
+  packet["referee"]["stage"]["value"] = Data::get()->referee.getCurrentStageName();
+  packet["referee"]["stage"]["remaining_time"] = Data::get()->referee.stage_time_left;
+  packet["referee"]["state"] = Data::get()->referee.getCurrentStateName();
 
   return packet;
 }
@@ -284,8 +290,7 @@ Json::Value ViewerCommunication::informationsPacket()
   Json::Value packet;
 
   packet["informations"]["simulation"] = ai::Config::is_in_simulation;
-  packet["informations"]["packets_per_second"] =
-      1. / GlobalDataSingleThread::singleton_.ai_data_.time - last_sending_time_;
+  packet["informations"]["packets_per_second"] = 1. / Data::get()->ai_data.time - last_sending_time_;
 
   // todo
   // packet["informatons"]["ping"] = ai::Config::we_are_blue;
@@ -325,12 +330,11 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
 {
   uint robot_number = packet["number"].asUInt();
 
-  Control& manual_ctrl = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number].control;
+  Control& manual_ctrl = Data::get()->shared_data.final_control_for_robots[robot_number].control;
 
   if (!manual_ctrl.ignore)
   {
-    GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_number]
-        .is_manually_controled_by_viewer = true;
+    Data::get()->shared_data.final_control_for_robots[robot_number].is_manually_controled_by_viewer = true;
 
     manual_ctrl.linear_velocity[0] = packet["speed"]["x"].asDouble();
     manual_ctrl.linear_velocity[1] = packet["speed"]["y"].asDouble();

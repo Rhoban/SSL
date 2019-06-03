@@ -34,12 +34,18 @@
 #include <com/ai_commander_real.h>
 #include <utility>
 #include <data/computed_data.h>
+#include <strategy/placer.h>
 
 namespace rhoban_ssl
 {
 AI::AI(std::string manager_name, AICommander* commander) : running_(true), commander_(commander)
 {
   initRobotBehaviors();
+  for (auto& mobile : Data::get()->all_robots)
+  {
+    mobile.second->initMovement();
+  }
+  Data::get()->ball.initMovement();
 
   manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
 
@@ -59,8 +65,7 @@ bool AI::runTask()
   {
     strategy_manager_->removeInvalidRobots();
     strategy_manager_->update();
-    strategy_manager_->assignBehaviorToRobots(robot_behaviors_, GlobalDataSingleThread::singleton_.ai_data_.time,
-                                              GlobalDataSingleThread::singleton_.ai_data_.dt);
+    strategy_manager_->assignBehaviorToRobots(robot_behaviors_, Data::get()->ai_data.time, Data::get()->ai_data.dt);
     updateRobots();
   }
 
@@ -104,16 +109,16 @@ void AI::limitsVelocity(Control& ctrl) const
 
 void AI::preventCollision(int robot_id, Control& ctrl)
 {
-  const data::Robot& robot = GlobalDataSingleThread::singleton_.robots_[Ally][robot_id];
+  const data::Robot& robot = Data::get()->robots[Ally][robot_id];
 
   const Vector2d& ctrl_velocity = ctrl.linear_velocity;
   if (robot.isActive() == false)
     return;
-  Vector2d robot_velocity = robot.getMovement().linearVelocity(GlobalDataSingleThread::singleton_.ai_data_.time);
+  Vector2d robot_velocity = robot.getMovement().linearVelocity(Data::get()->ai_data.time);
 
   bool collision_is_detected = false;
 
-  std::list<std::pair<int, double> > collisions_with_ctrl =
+  std::list<std::pair<int, double>> collisions_with_ctrl =
       data::CollisionComputing::getCollisions(robot_id, ctrl_velocity);
   for (const std::pair<int, double>& collision : collisions_with_ctrl)
   {
@@ -157,8 +162,8 @@ void AI::preventCollision(int robot_id, Control& ctrl)
     double err = 0.01;
     if (robot_velocity_norm > err)
     {
-      velocity_increase = (1 - GlobalDataSingleThread::singleton_.ai_data_.dt *
-                                   ai::Config::translation_acceleration_limit / robot_velocity_norm);
+      velocity_increase =
+          (1 - Data::get()->ai_data.dt * ai::Config::translation_acceleration_limit / robot_velocity_norm);
       if (velocity_increase < 0.0)
       {
         velocity_increase = 0.0;
@@ -221,13 +226,13 @@ void AI::preventCollision(int robot_id, Control& ctrl)
 
 void AI::prepareToSendControl(int robot_id, Control& ctrl)
 {
-  if (GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].isActive() == false)
+  if (Data::get()->robots[Ally][robot_id].isActive() == false)
     return;
 
   preventCollision(robot_id, ctrl);
-  ctrl.changeToRelativeControl(GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].getMovement().angularPosition(
-                                   GlobalDataSingleThread::singleton_.ai_data_.time),
-                               GlobalDataSingleThread::singleton_.ai_data_.dt);
+  ctrl.changeToRelativeControl(
+      Data::get()->robots[Ally][robot_id].getMovement().angularPosition(Data::get()->ai_data.time),
+      Data::get()->ai_data.dt);
   limitsVelocity(ctrl);
 }
 
@@ -264,6 +269,7 @@ void AI::setManager(std::string managerName)
   }
 
   std::cout << "Setting the manager to: " << managerName << std::endl;
+  std::cout << "with : " << i << " robots" << std::endl;
   if (managerName == manager::names::MANUAL)
   {
     strategy_manager_ = manual_manager_;
@@ -275,7 +281,7 @@ void AI::setManager(std::string managerName)
     strategy_manager_ = manager::Factory::constructManager(managerName);
   }
 
-  GlobalDataSingleThread::singleton_.robots_[Ally][ai::Config::default_goalie_id].is_goalie = true;
+  Data::get()->robots[Ally][ai::Config::default_goalie_id].is_goalie = true;
   strategy_manager_->declareTeamIds(robot_ids);
 }
 
@@ -283,7 +289,7 @@ void AI::startManager()
 {
   for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    auto& final_control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id];
+    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
     final_control.is_manually_controled_by_viewer = false;
   }
 }
@@ -292,27 +298,27 @@ void AI::pauseManager()
 {
   for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    auto& final_control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id];
+    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
     final_control.is_manually_controled_by_viewer = true;
   }
 }
 
 void AI::stopManager()
 {
+  setManager(manager::names::MANUAL);
   strategy_manager_->clearStrategyAssignement();
 }
 
 void AI::updateRobots()
 {
-  double time = GlobalDataSingleThread::singleton_.ai_data_.time;
-  data::Ball& ball = GlobalDataSingleThread::singleton_.ball_;
+  double time = Data::get()->ai_data.time;
+  data::Ball& ball = Data::get()->ball;
 
   for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
   {
-    SharedData::FinalControl& final_control =
-        GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[robot_id];
+    SharedData::FinalControl& final_control = Data::get()->shared_data.final_control_for_robots[robot_id];
 
-    data::Robot& robot = GlobalDataSingleThread::singleton_.robots_[Ally][robot_id];
+    data::Robot& robot = Data::get()->robots[Ally][robot_id];
     assert(robot.id == robot_id);
     robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     robot_behavior.update(time, robot, ball);
@@ -322,7 +328,7 @@ void AI::updateRobots()
     }
     else if (!final_control.is_manually_controled_by_viewer)
     {
-      data::Robot& robot = GlobalDataSingleThread::singleton_.robots_[Ally][robot_id];
+      data::Robot& robot = Data::get()->robots[Ally][robot_id];
 
       robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
       final_control.control = getRobotControl(robot_behavior, robot);
@@ -351,7 +357,7 @@ rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
 
 bool RegulateAiLoopPeriod::runTask()
 {
-  double toSleep = ai::Config::period - GlobalDataSingleThread::singleton_.ai_data_.dt;
+  double toSleep = ai::Config::period - Data::get()->ai_data.dt;
   if (toSleep > 0)
   {
     // DEBUG("NO LAG");
@@ -368,29 +374,27 @@ bool RegulateAiLoopPeriod::runTask()
 
 bool TimeUpdater::runTask()
 {
-  GlobalDataSingleThread::singleton_.ai_data_.dt = GlobalDataSingleThread::singleton_.ai_data_.time;
-  GlobalDataSingleThread::singleton_.ai_data_.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
-  GlobalDataSingleThread::singleton_.ai_data_.dt =
-      GlobalDataSingleThread::singleton_.ai_data_.time - GlobalDataSingleThread::singleton_.ai_data_.dt;
+  Data::get()->ai_data.dt = Data::get()->ai_data.time;
+  Data::get()->ai_data.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
+  Data::get()->ai_data.dt = Data::get()->ai_data.time - Data::get()->ai_data.dt;
 
-  assert(GlobalDataSingleThread::singleton_.ai_data_.dt > 0);
-  if (GlobalDataSingleThread::singleton_.ai_data_.dt <= 0)
+  assert(Data::get()->ai_data.dt > 0);
+  if (Data::get()->ai_data.dt <= 0)
   {
     std::cerr << "WARNING INVALID DT !!!!!!!!!!!!!!!!!!!\n";
-    GlobalDataSingleThread::singleton_.ai_data_.dt = 1;
+    Data::get()->ai_data.dt = 1;
   }
 
-  assert(GlobalDataSingleThread::singleton_.ai_data_.time > 0);
-  if (GlobalDataSingleThread::singleton_.ai_data_.time <= 0)
+  assert(Data::get()->ai_data.time > 0);
+  if (Data::get()->ai_data.time <= 0)
   {
     std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
-    GlobalDataSingleThread::singleton_.ai_data_.time = 1;
+    Data::get()->ai_data.time = 1;
   }
 #ifndef NDEBUG
-  for (unsigned int i = 0; i < GlobalDataSingleThread::singleton_.all_robots.size(); i++)
+  for (unsigned int i = 0; i < Data::get()->all_robots.size(); i++)
   {
-    assert(GlobalDataSingleThread::singleton_.all_robots.at(i).second->getMovement().lastTime() - 0.000001 <=
-           GlobalDataSingleThread::singleton_.ai_data_.time);
+    assert(Data::get()->all_robots.at(i).second->getMovement().lastTime() - 0.000001 <= Data::get()->ai_data.time);
   }
 #endif
   return true;
@@ -415,7 +419,7 @@ void AI::emergency()
 {
   for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    auto& final_control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id];
+    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
     final_control.is_manually_controled_by_viewer = true;
     final_control.control.ignore = true;
     final_control.control.active = false;
@@ -439,14 +443,23 @@ void AI::getAnnotations(annotations::Annotations& annotations) const
 
 std::string AI::getRobotBehaviorOf(uint robot_number)
 {
-  return robot_behaviors_[robot_number].get()->name;
+  return robot_behaviors_[int(robot_number)].get()->name;
 }
 
 std::string AI::getStrategyOf(uint robot_number)
 {
-  //  for(auto& strat_name : strategy_manager_.get()->getCurrentStrategyNames()){
-  //    for
+  //  for (auto& strat_name : strategy_manager_.get()->getCurrentStrategyNames())
+  //  {
+  //    for (auto& robot_affected : strategy_manager_.get()->getRobotAffectations(strat_name))
+  //    {
+  //      if (int(robot_number) == robot_affected)
+  //      {
+  //        return strat_name;
+  //      }
+  //    }
   //  }
+  //  return "Stratégie non affectée";
+  return "Work in progress";
 }
 
 void AI::setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::string strat_name)
@@ -458,57 +471,87 @@ void AI::setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::strin
   manual_manager_.get()->addIdsInTeam(robot_numbers);
 
   // apply the strategy
-  manual_manager_.get()->assignStrategy(strat_name, GlobalDataSingleThread::singleton_.ai_data_.time, robot_numbers);
+  manual_manager_.get()->assignStrategy(strat_name, Data::get()->ai_data.time, robot_numbers);
 
-  for (int i = 0; i < robot_numbers.size(); ++i)
+  for (uint i = 0; i < robot_numbers.size(); ++i)
   {
-    GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[i].is_manually_controled_by_viewer = false;
+    Data::get()->shared_data.final_control_for_robots[i].is_manually_controled_by_viewer = false;
   }
 }
 
-void AI::enableRobot(uint id, bool enabled)
+void AI::haltRobot(uint robot_number)
 {
-  if (id < ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  setStrategyManuallyOf({ int(robot_number) }, manager::Manager::MANAGER__REMOVE_ROBOTS);
+}
+
+void AI::enableRobot(uint number, bool enabled)
+{
+  if (number < ai::Config::NB_OF_ROBOTS_BY_TEAM)
   {
-    Control& ctrl = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control;
+    Control& ctrl = Data::get()->shared_data.final_control_for_robots[number].control;
     ctrl.ignore = !enabled;
 
     if (ctrl.ignore)
     {
       ctrl.charge = false;
       ctrl.spin = false;
+      ctrl.linear_velocity = { 0, 0 };
+      ctrl.angular_velocity = 0;
     }
   }
+}
+
+void AI::moveRobot(bool ally, uint number, double x, double y, double theta)
+{
+  if (!ally)
+  {
+    commander_->moveRobot(ally, int(number), x, y, theta, true);
+  }
+  else
+  {
+    std::pair<rhoban_geometry::Point, ContinuousAngle> target_pos{ rhoban_geometry::Point(x, y),
+                                                                   ContinuousAngle(theta) };
+    getCurrentManager()
+        .get()
+        ->getStrategy<strategy::Placer>(manager::Manager::MANAGER__PLACER)
+        .setPositions({ int(number) }, { target_pos });
+
+    setStrategyManuallyOf({ int(number) }, manager::Manager::MANAGER__PLACER);
+  }
+}
+
+void AI::moveBall(double x, double y, double v_x, double v_y)
+{
+  commander_->moveBall(x, y, v_x, v_y);
 }
 
 void AI::scan()
 {
   if (!scanning_)
   {
-    save_control_before_scan_ = GlobalDataSingleThread::singleton_.shared_data_;
+    save_control_before_scan_ = Data::get()->shared_data;
     for (int n = 0; n < 3; n++)
     {
       for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
       {
-        if (GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id]
-                .is_manually_controled_by_viewer)
+        if (Data::get()->shared_data.final_control_for_robots[id].is_manually_controled_by_viewer)
         {
-          GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control.active = false;
-          GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control.ignore = false;
+          Data::get()->shared_data.final_control_for_robots[id].control.active = false;
+          Data::get()->shared_data.final_control_for_robots[id].control.ignore = false;
         }
       }
     }
     scanning_ = true;
-    scan_starting_time_ = GlobalDataSingleThread::singleton_.ai_data_.time;
+    scan_starting_time_ = Data::get()->ai_data.time;
   }
   else
   {
-    double scan_waiting_time_ = GlobalDataSingleThread::singleton_.ai_data_.time - scan_starting_time_;
+    double scan_waiting_time_ = Data::get()->ai_data.time - scan_starting_time_;
     if (scan_waiting_time_ > SCAN_WAITING_DELAY)
     {
       for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
       {
-        Control& control = GlobalDataSingleThread::singleton_.shared_data_.final_control_for_robots[id].control;
+        Control& control = Data::get()->shared_data.final_control_for_robots[id].control;
         if (ai::Config::is_in_simulation)
         {
           if (id <= 7)
@@ -518,13 +561,13 @@ void AI::scan()
         }
         else
         {
-          control.ignore = !GlobalDataSingleThread::singleton_.robots_[id]->isOk();
+          control.ignore = !Data::get()->robots[id]->isOk();
 
           if (id == 3)
           {
-            std::cout << "Age: " << GlobalDataSingleThread::singleton_.robots_[id]->age() << std::endl;
+            std::cout << "Age: " << Data::get()->robots[id]->age() << std::endl;
           }
-          if (GlobalDataSingleThread::singleton_.robots_[id]->isOk())
+          if (Data::get()->robots[id]->isOk())
           {
             std::cout << "Robot #" << id << " is enabled!" << std::endl;
           }

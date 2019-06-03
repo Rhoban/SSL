@@ -14,7 +14,7 @@ void ManagerWithGameState::analyseData(double time)
 
 void ManagerWithGameState::chooseAStrategy(double time)
 {
-  GameState& game_state = GlobalDataSingleThread::singleton_.referee_.game_state;
+  GameState& game_state = Data::get()->referee.game_state;
   if (game_state.stateIsNewer(last_change_stamp_))
   {
     clearStrategyAssignement();

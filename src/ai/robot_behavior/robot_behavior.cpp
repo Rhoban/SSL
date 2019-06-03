@@ -82,12 +82,12 @@ const data::Robot& RobotBehavior::robot() const
 
 rhoban_geometry::Point RobotBehavior::linearPosition() const
 {
-  return robot().getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  return robot().getMovement().linearPosition(Data::get()->ai_data.time);
 }
 
 ContinuousAngle RobotBehavior::angularPosition() const
 {
-  return robot().getMovement().angularPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  return robot().getMovement().angularPosition(Data::get()->ai_data.time);
 }
 
 bool RobotBehavior::isGoalie() const

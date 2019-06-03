@@ -197,6 +197,7 @@ int main(int argc, char** argv)
   else
   {
     AICommanderReal* commander_r = new AICommanderReal();
+    ExecutionManager::getManager().addTask(commander_r);
     ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
     commander = commander_r;
   }

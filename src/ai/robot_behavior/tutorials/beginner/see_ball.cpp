@@ -36,8 +36,7 @@ void SeeBall::update(double time, const data::Robot& robot, const data::Ball& ba
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position =
-      robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
   Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
 

@@ -41,7 +41,7 @@ VisionDataSingleThread::VisionDataSingleThread()
   }
   for (Team team = 0; team < 2; team++)
     for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
-      GlobalDataSingleThread::singleton_.robots_[team][rid].id = rid;
+      Data::get()->robots[team][rid].id = rid;
 }
 
 VisionDataSingleThread::~VisionDataSingleThread()
@@ -109,7 +109,7 @@ bool VisionDataTerminalPrinter::runTask()
   printf("%d\n", counter);
   printf("%d\n", VisionDataGlobal::singleton_.last_packets_.size());
   // VisionDataGlobal::singleton_.packets_buffer_.size());
-  auto& field = GlobalDataSingleThread::singleton_.field_;
+  auto& field = Data::get()->field;
   printf("Field is present : \n");
   printf("\t %f x %f \n", field.field_width_, field.field_length_);
 
@@ -147,9 +147,9 @@ bool VisionDataTerminalPrinter::runTask()
     printf("\n");
   }
 
-  if (GlobalDataSingleThread::singleton_.ball_.isActive())
-    printf("BALL is at %f %f\n", GlobalDataSingleThread::singleton_.ball_.movement_sample[0].linear_position.x,
-           GlobalDataSingleThread::singleton_.ball_.movement_sample[0].linear_position.y);
+  if (Data::get()->ball.isActive())
+    printf("BALL is at %f %f\n", Data::get()->ball.movement_sample[0].linear_position.x,
+           Data::get()->ball.movement_sample[0].linear_position.y);
   else
   {
     printf("BALL is not found\n");
@@ -160,11 +160,10 @@ bool VisionDataTerminalPrinter::runTask()
     printf("team %d\n", team);
     for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
     {
-      if (GlobalDataSingleThread::singleton_.robots_[team][robot].isActive())
-        printf("\t%d : (%f;%f;%f) ", robot,
-               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.x,
-               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].linear_position.y,
-               GlobalDataSingleThread::singleton_.robots_[team][robot].movement_sample[0].angular_position.value());
+      if (Data::get()->robots[team][robot].isActive())
+        printf("\t%d : (%f;%f;%f) ", robot, Data::get()->robots[team][robot].movement_sample[0].linear_position.x,
+               Data::get()->robots[team][robot].movement_sample[0].linear_position.y,
+               Data::get()->robots[team][robot].movement_sample[0].angular_position.value());
     }
     printf("\n");
   }
@@ -175,7 +174,7 @@ bool VisionDataTerminalPrinter::runTask()
 
 bool ChangeReferencePointOfView::runTask()
 {
-  if (GlobalDataSingleThread::singleton_.referee_.allyOnPositiveHalf())
+  if (Data::get()->referee.allyOnPositiveHalf())
   {
     for (uint cam_id = 0; cam_id < ai::Config::NB_CAMERAS; cam_id++)
     {

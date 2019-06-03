@@ -26,7 +26,7 @@
 
 namespace rhoban_ssl
 {
-class AICommanderReal : public AICommander
+class AICommanderReal : public AICommander, public Task
 {
 public:
   AICommanderReal();
@@ -40,8 +40,16 @@ public:
 
 protected:
   bool kicking_;
-  Master master_;
+  Master* master_;
   Kinematic kinematic_;
+
+  // Task interface
+public:
+  /**
+   * @brief this task launchs and stop the thread of the commander
+   * @return true while the thread running
+   */
+  bool runTask();
 };
 
 class UpdateElectronicInformations : public Task

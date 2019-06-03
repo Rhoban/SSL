@@ -78,8 +78,14 @@ void AICommanderSimulation::moveBall(double x, double y, double vx, double vy)
   client_.moveBall(x, y, vx, vy);
 }
 
-void AICommanderSimulation::moveRobot(bool yellow, int id, double x, double y, double theta, bool turnon)
+void AICommanderSimulation::moveRobot(bool ally, int id, double x, double y, double theta, bool turnon)
 {
+  bool yellow = true;
+  if ((ai::Config::we_are_blue && ally) || (!ally && !ai::Config::we_are_blue))
+  {
+    yellow = false;
+  }
+
   client_.moveRobot(yellow, id, x, y, theta * 180 / M_PI, turnon);
 }
 

@@ -31,21 +31,21 @@ CollisionComputing::CollisionComputing()
 std::list<std::pair<int, double> > CollisionComputing::getCollisions(int robot_id, const Vector2d& linear_velocity)
 {
   std::list<std::pair<int, double> > result;
-  const Robot* robot_1 = &(GlobalDataSingleThread::singleton_.robots_[Ally][robot_id]);
+  const Robot* robot_1 = &(Data::get()->robots[Ally][robot_id]);
 
   if (not(robot_1->isActive()))
   {
     return {};
   }
 
-  for (unsigned int i = 0; i < GlobalDataSingleThread::singleton_.all_robots.size(); i++)
+  for (unsigned int i = 0; i < Data::get()->all_robots.size(); i++)
   {
-    const Robot* robot_2 = GlobalDataSingleThread::singleton_.all_robots[i].second;
+    const Robot* robot_2 = Data::get()->all_robots[i].second;
     if (not(robot_2->isActive()))
     {
       continue;
     }
-    if (robot_1->id != robot_2->id or GlobalDataSingleThread::singleton_.all_robots[i].first != Ally)
+    if (robot_1->id != robot_2->id or Data::get()->all_robots[i].first != Ally)
     {
       double radius_error = ai::Config::radius_security_for_collision;
       std::pair<bool, double> collision = collisionTime(
@@ -63,23 +63,22 @@ std::list<std::pair<int, double> > CollisionComputing::getCollisions(int robot_i
 
 void CollisionComputing::computeTableOfCollisionTimes()
 {
-  GlobalDataSingleThread::singleton_.ai_data_.table_of_collision_times_.clear();
-  for (unsigned int i = 0; i < GlobalDataSingleThread::singleton_.all_robots.size(); i++)
+  Data::get()->ai_data.table_of_collision_times_.clear();
+  for (unsigned int i = 0; i < Data::get()->all_robots.size(); i++)
   {
-    for (unsigned int j = i + 1; j < GlobalDataSingleThread::singleton_.all_robots.size(); j++)
+    for (unsigned int j = i + 1; j < Data::get()->all_robots.size(); j++)
     {
-      Robot& robot_1 = *GlobalDataSingleThread::singleton_.all_robots[i].second;
-      Robot& robot_2 = *GlobalDataSingleThread::singleton_.all_robots[j].second;
+      Robot& robot_1 = *Data::get()->all_robots[i].second;
+      Robot& robot_2 = *Data::get()->all_robots[j].second;
       if ((robot_1.isActive()) && (robot_2.isActive()))
       {
         double radius_error = ai::Config::radius_security_for_collision;
         std::pair<bool, double> collision =
             collisionTime(ai::Config::robot_radius, *robot_1.movement, ai::Config::robot_radius, *robot_2.movement,
-                          radius_error, GlobalDataSingleThread::singleton_.ai_data_.time);
+                          radius_error, Data::get()->ai_data.time);
         if (collision.first)
         {
-          GlobalDataSingleThread::singleton_.ai_data_.table_of_collision_times_[std::pair<int, int>(i, j)] =
-              collision.second;
+          Data::get()->ai_data.table_of_collision_times_[std::pair<int, int>(i, j)] = collision.second;
         }
       }
     }

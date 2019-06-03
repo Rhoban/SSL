@@ -26,7 +26,8 @@ namespace robot_behavior
 namespace beginner
 {
 // Use opponent_corner_left() for the left corner.
-GoCorner::GoCorner() : RobotBehavior(), follower_(Factory::fixedConsignFollower()), target_corner_(opponentCornerLeft())
+GoCorner::GoCorner()
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), target_corner_(Data::get()->field.opponentCornerLeft())
 {
 }
 

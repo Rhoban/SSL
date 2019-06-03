@@ -50,21 +50,18 @@ void BeginnerRobotHaveBall ::update(double time, const data::Robot& robot, const
   // Find the robot that have the ball.
   if (opponent_have_ball)
   {
-    annotations_.addCross(
-        opponent_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(Data::get()->ai_data.time), "blue", false);
   }
   else if (ally_have_ball)
   {
-    annotations_.addCross(ally_closest.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time),
-                          "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(Data::get()->ai_data.time), "blue", false);
   }
   else
   {
     annotations_.addCross(ballPosition(), "red", false);
   }
 
-  const rhoban_geometry::Point& robot_position =
-      robot.getMovement().linearPosition(GlobalDataSingleThread::singleton_.ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
 }
 
 Control BeginnerRobotHaveBall::control() const

@@ -75,6 +75,8 @@ public:
    */
   bool isInsideTheField();
 
+  void initMovement();
+
   Mobile();
   virtual ~Mobile();
 };

@@ -95,7 +95,7 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
                                                                  // initialisation of your manager for example).
   assert(not(assign_goalie) or
          (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(),
-                                      GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) ==
+                                      Data::get()->referee.teams_info[Ally].goalkeeper_number) ==
                                 robot_ids.end()));  // If you declare that you are assigning a goal, you should not
                                                     // declar the goal id inside the list of field robots.
 
@@ -110,8 +110,8 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
   }
   assert(static_cast<unsigned int>(strategy.minRobots()) <= robot_ids.size());
 
-  strategy.setGoalie(GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number, assign_goalie);
-  strategy.setGoalieOpponent(GlobalDataSingleThread::singleton_.referee_.teams_info[Opponent].goalkeeper_number);
+  strategy.setGoalie(Data::get()->referee.teams_info[Ally].goalkeeper_number, assign_goalie);
+  strategy.setGoalieOpponent(Data::get()->referee.teams_info[Opponent].goalkeeper_number);
   strategy.setRobotAffectation(robot_ids);
   strategy.start(time);
 
@@ -152,7 +152,7 @@ void Manager::updateCurrentStrategies()
   for (const std::string& name : current_strategy_names_)
   {
     //@TODO : Remove the time passed.
-    getStrategy(name).update(GlobalDataSingleThread::singleton_.ai_data_.time);
+    getStrategy(name).update(Data::get()->ai_data.time);
   }
 }
 
@@ -174,7 +174,7 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
             }
           }
           if (this->getStrategy(name).haveToManageTheGoalie() and
-              int(GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) == id)
+              int(Data::get()->referee.teams_info[Ally].goalkeeper_number) == id)
           {
             id_is_present = true;
           }
@@ -202,12 +202,12 @@ std::string Manager::name()
 
 double Manager::time() const
 {
-  return GlobalDataSingleThread::singleton_.ai_data_.time;
+  return Data::get()->ai_data.time;
 }
 
 int Manager::dt() const
 {
-  return GlobalDataSingleThread::singleton_.ai_data_.dt;
+  return Data::get()->ai_data.dt;
 }
 
 void Manager::affectInvalidRobotsToInvalidRobotsStrategy()
@@ -235,10 +235,10 @@ void Manager::detectInvalidRobots()
 
   for (int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    if (GlobalDataSingleThread::singleton_.robots_[Ally][id].is_valid)
+    if (Data::get()->robots[Ally][id].is_valid)
     {
       valid_team_ids_.push_back(id);
-      if (int(GlobalDataSingleThread::singleton_.referee_.teams_info[Ally].goalkeeper_number) != id)
+      if (int(Data::get()->referee.teams_info[Ally].goalkeeper_number) != id)
       {
         valid_player_ids_.push_back(id);
       }
@@ -370,8 +370,7 @@ void Manager::aggregateAllStartingPositionOfAllStrategies(const std::list<std::s
     if (!getStrategy(strategy_with_goal_)
              .getStartingPositionForGoalie(this->goalie_linear_position_, this->goalie_angular_position_))
     {
-      this->goalie_linear_position_ =
-          rhoban_geometry::Point(-GlobalDataSingleThread::singleton_.field_.field_length_ / 2.0, 0.0);
+      this->goalie_linear_position_ = rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0);
       this->goalie_angular_position_ = ContinuousAngle(0.0);
     }
   }
@@ -388,15 +387,13 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
 
   std::function<double(const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos)>
       robot_ranking = [this](const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos) {
-        return Vector2d(pos.first -
-                        GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].getMovement().linearPosition(time()))
+        return Vector2d(pos.first - Data::get()->robots[Ally][robot_id].getMovement().linearPosition(time()))
             .normSquare();
       };
 
   std::function<double(const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id)>
       distance_ranking = [this](const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id) {
-        return Vector2d(pos.first -
-                        GlobalDataSingleThread::singleton_.robots_[Ally][robot_id].getMovement().linearPosition(time()))
+        return Vector2d(pos.first - Data::get()->robots[Ally][robot_id].getMovement().linearPosition(time()))
             .normSquare();
       };
 
@@ -423,7 +420,7 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
     robot_consigns_[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
         rhoban_geometry::Point(
             -((5.0 * ai::Config::robot_radius) * (i - starting_positions_.size()) + 1.5 * ai::Config::robot_radius),
-            -GlobalDataSingleThread::singleton_.field_.field_width_ / 2.0 + ai::Config::robot_radius),
+            -Data::get()->field.field_width_ / 2.0 + ai::Config::robot_radius),
         ContinuousAngle(0.0));
     robot_affectations_[i] = *it;
     it++;
@@ -540,7 +537,7 @@ void Manager::declareAndAssignNextStrategies(const std::list<std::string>& futur
     const std::string& strategy_name = elem.first;
     const std::vector<int>& affectation = elem.second;
     bool have_a_goalie = (getNextStrategyWithGoalie() == strategy_name);
-    assignStrategy(strategy_name, GlobalDataSingleThread::singleton_.ai_data_.time, affectation, have_a_goalie);
+    assignStrategy(strategy_name, Data::get()->ai_data.time, affectation, have_a_goalie);
   }
 }
 
@@ -558,7 +555,7 @@ rhoban_ssl::annotations::Annotations Manager::getAnnotations() const
 
 void Manager::setBallAvoidanceForAllRobots(bool value = true)
 {
-  GlobalDataSingleThread::singleton_.ai_data_.force_ball_avoidance = value;
+  Data::get()->ai_data.force_ball_avoidance = value;
 }
 
 Json::Value Manager::getProperties()

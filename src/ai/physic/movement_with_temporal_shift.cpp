@@ -46,7 +46,7 @@ const MovementSample& MovementWithTemporalShift::getSample() const
 
 double MovementWithTemporalShift::temporalShift() const
 {
-  return GlobalDataSingleThread::singleton_.ai_data_.time_shift_with_vision;
+  return Data::get()->ai_data.time_shift_with_vision;
 }
 
 double MovementWithTemporalShift::lastTime() const

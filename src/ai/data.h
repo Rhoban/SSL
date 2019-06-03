@@ -59,26 +59,27 @@ struct SharedData
 /**
  * This class is used to make transfer store global data accessed from many points.
  */
-class GlobalDataSingleThread
+class Data
 {
 public:
-  data::Robot robots_[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
+  data::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
   std::vector<std::pair<Team, data::Robot*>> all_robots;
 
-  data::Ball ball_;
-  data::Field field_;
-  data::AiData ai_data_;
-  data::Referee referee_;
+  data::Ball ball;
+  data::Field field;
+  data::AiData ai_data;
+  data::Referee referee;
 
-  SharedData shared_data_;
+  SharedData shared_data;
   // TODO refacto
   //  DataForViewer data_for_viewer_;
 
 private:
-  GlobalDataSingleThread();
+  Data();
+  static Data singleton_;
 
 public:
-  static GlobalDataSingleThread singleton_;
+  static Data* get();
 };
 
 }  // namespace rhoban_ssl
