@@ -23,10 +23,10 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Defensive::Defensive(ai::AiData& ai_data)
-  : Strategy(ai_data)
-  , degageur_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
-  , obstructeur_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
+Defensive::Defensive()
+  : Strategy()
+  , degageur_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur()))
+  , obstructeur_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor()))
 {
 }
 
@@ -80,10 +80,10 @@ void Defensive::assignBehaviorToRobots(
   assert(getPlayerIds().size() == 1);
   int robotID = playerId(0);  // we get the first if in get_player_ids()
 
-  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
+  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(Ally);
 
-  int id_to_obstruct = shirtNumberOfThreatMax(vision::Opponent);
-  obstructeur_->declareRobotToObstruct(id_to_obstruct, vision::Opponent);
+  int id_to_obstruct = shirtNumberOfThreatMax(Opponent);
+  obstructeur_->declareRobotToObstruct(id_to_obstruct, Opponent);
   if (nearest_ballID == robotID)
   {
     assign_behavior(robotID, degageur_);
@@ -108,7 +108,7 @@ Defensive::getStartingPositions(int number_of_avalaible_robots)
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(Data::get()->field.goalCenter(Ally), 0.0) };
 }
 
 //
@@ -118,7 +118,7 @@ Defensive::getStartingPositions(int number_of_avalaible_robots)
 //
 bool Defensive::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
-  linear_position = allyGoalCenter();
+  linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }

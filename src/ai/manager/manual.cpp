@@ -43,6 +43,7 @@
 
 #include <strategy/pvc_attaque_with_support_ms.h>
 #include <strategy/pvc_defensive_2.h>
+#include <strategy/pvc_defensive.h>
 
 namespace rhoban_ssl
 {
@@ -205,6 +206,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("PVC - Attaque With Support Ms",
                    std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs()));
   registerStrategy("PVC - Defensive 2", std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
+  registerStrategy("PVC - Defensive 1", std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
 }
 
 void Manual::update()
