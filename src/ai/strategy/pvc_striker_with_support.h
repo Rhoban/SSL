@@ -33,7 +33,7 @@ private:
   std::shared_ptr<robot_behavior::Striker> striker_;
 
 public:
-  StrikerWithSupport(ai::AiData& ai_data);
+  StrikerWithSupport();
   virtual ~StrikerWithSupport();
 
   virtual int minRobots() const;

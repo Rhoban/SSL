@@ -27,7 +27,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-StrikerWithSupport::StrikerWithSupport(ai::AiData& ai_data) : Strategy(ai_data)
+StrikerWithSupport::StrikerWithSupport() : Strategy()
 {
 }
 
@@ -65,7 +65,7 @@ void StrikerWithSupport::start(double time)
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
 
-  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker());
 }
 void StrikerWithSupport::stop(double time)
 {
@@ -90,13 +90,13 @@ void StrikerWithSupport::assignBehaviorToRobots(
 
     assign_behavior(playerId(0), striker_);
     int supportLeft = playerId(1);  // we get the first if in get_player_ids()
-    std::shared_ptr<robot_behavior::RobotFollower> support_behaviorL(new robot_behavior::RobotFollower(ai_data_));
-    support_behaviorL->declare_robot_to_follow_(playerId(0), Vector2d(1, 0.5), vision::Ally);
+    std::shared_ptr<robot_behavior::RobotFollower> support_behaviorL(new robot_behavior::RobotFollower());
+    support_behaviorL->declareRobotToFollow(playerId(0), Vector2d(1, 0.5), Ally);
     assign_behavior(supportLeft, support_behaviorL);
 
     int supportRight = playerId(2);  // we get the first if in get_player_ids()
-    std::shared_ptr<robot_behavior::RobotFollower> support_behaviorR(new robot_behavior::RobotFollower(ai_data_));
-    support_behaviorR->declare_robot_to_follow_(playerId(0), Vector2d(1, -0.5), vision::Ally);
+    std::shared_ptr<robot_behavior::RobotFollower> support_behaviorR(new robot_behavior::RobotFollower());
+    support_behaviorR->declareRobotToFollow(playerId(0), Vector2d(1, -0.5), Ally);
     assign_behavior(supportRight, support_behaviorR);
 
     behaviors_are_assigned_ = true;
@@ -131,7 +131,7 @@ StrikerWithSupport::getStartingPositions(int number_of_avalaible_robots)
 bool StrikerWithSupport::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                       ContinuousAngle& angular_position)
 {
-  linear_position = allyGoalCenter();
+  linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }
