@@ -27,7 +27,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-StrikerV2::StrikerV2(ai::AiData& ai_data) : Strategy(ai_data)
+StrikerV2::StrikerV2() : Strategy()
 {
 }
 
@@ -65,7 +65,7 @@ void StrikerV2::start(double time)
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
 
-  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker());
 }
 void StrikerV2::stop(double time)
 {
@@ -103,7 +103,7 @@ StrikerV2::getStartingPositions(int number_of_avalaible_robots)
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(Data::get()->field.goalCenter(Ally), 0.0) };
 }
 
 //
@@ -113,7 +113,7 @@ StrikerV2::getStartingPositions(int number_of_avalaible_robots)
 //
 bool StrikerV2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
-  linear_position = allyGoalCenter();
+  linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }
