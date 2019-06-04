@@ -62,7 +62,8 @@ double PidController::getDt() const
 
 void PidController::initTime(double start_time, double dt)
 {
-  //assert(dt > 0.0);
+  // dt == 0 only at ai_data initialization.
+  assert(dt >= 0.0);
   this->start_time = start_time;
   this->dt = dt;
   this->time = 0.0;

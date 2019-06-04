@@ -23,12 +23,12 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Defensive2::Defensive2(ai::AiData& ai_data)
-  : Strategy(ai_data)
-  , degageur1_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
-  , obstructeur1_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
-  , degageur2_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur(ai_data)))
-  , obstructeur2_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor(ai_data)))
+Defensive2::Defensive2()
+  : Strategy()
+  , degageur1_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur()))
+  , obstructeur1_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor()))
+  , degageur2_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur()))
+  , obstructeur2_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor()))
 {
 }
 
@@ -81,17 +81,17 @@ void Defensive2::assignBehaviorToRobots(
   // we assign now all the other behavior
   assert(getPlayerIds().size() == 2);
 
-  int id_to_obstruct1 = shirtNumberOfThreatMax(vision::Opponent);
-  int id_to_obstruct2 = shirtNumberOfThreatMax2(vision::Opponent);
+  int id_to_obstruct1 = shirtNumberOfThreatMax(Opponent);
+  int id_to_obstruct2 = shirtNumberOfThreatMax2(Opponent);
   int robotID1 = playerId(0);
   int robotID2 = playerId(1);
 
-  const ai::Robot& robot1 = getRobot(robotID1, vision::Ally);
-  const ai::Robot& robot2 = getRobot(robotID2, vision::Ally);
+  const data::Robot& robot1 = getRobot(robotID1, Ally);
+  const data::Robot& robot2 = getRobot(robotID2, Ally);
   const rhoban_geometry::Point& robot_position_1 = robot1.getMovement().linearPosition(time);
   const rhoban_geometry::Point& robot_position_2 = robot2.getMovement().linearPosition(time);
 
-  const ai::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, vision::Opponent);
+  const data::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, Opponent);
   const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.getMovement().linearPosition(time);
 
   double distance1 = (Vector2d(robot_position_1 - robot_to_obstruct_position1)).norm();
@@ -99,16 +99,16 @@ void Defensive2::assignBehaviorToRobots(
 
   if (distance1 < distance2)
   {
-    obstructeur1_->declareRobotToObstruct(id_to_obstruct1, vision::Opponent);
-    obstructeur2_->declareRobotToObstruct(id_to_obstruct2, vision::Opponent);
+    obstructeur1_->declareRobotToObstruct(id_to_obstruct1, Opponent);
+    obstructeur2_->declareRobotToObstruct(id_to_obstruct2, Opponent);
   }
   else
   {
-    obstructeur1_->declareRobotToObstruct(id_to_obstruct2, vision::Opponent);
-    obstructeur2_->declareRobotToObstruct(id_to_obstruct1, vision::Opponent);
+    obstructeur1_->declareRobotToObstruct(id_to_obstruct2, Opponent);
+    obstructeur2_->declareRobotToObstruct(id_to_obstruct1, Opponent);
   }
 
-  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(vision::Ally);
+  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(Ally);
 
   if (nearest_ballID == robotID1)
   {
@@ -143,7 +143,7 @@ Defensive2::getStartingPositions(int number_of_avalaible_robots)
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(Data::get()->field.goalCenter(Ally), 0.0) };
 }
 
 //
@@ -154,7 +154,7 @@ Defensive2::getStartingPositions(int number_of_avalaible_robots)
 bool Defensive2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                               ContinuousAngle& angular_position)
 {
-  linear_position = allyGoalCenter();
+  linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }

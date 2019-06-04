@@ -83,7 +83,7 @@ set (SOURCES
     #strategy/pvc_prepare_kickoff.cpp
     #strategy/pvc_offensive.cpp
     #strategy/pvc_defensive.cpp
-    #strategy/pvc_defensive_2.cpp
+    strategy/pvc_defensive_2.cpp
     #strategy/pvc_mur_stop.cpp
     #strategy/pvc_mur.cpp
     #strategy/pvc_mur_2.cpp

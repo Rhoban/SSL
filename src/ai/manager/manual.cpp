@@ -42,6 +42,7 @@
 #include <robot_behavior/pvc_wait_pass.h>
 
 #include <strategy/pvc_attaque_with_support_ms.h>
+#include <strategy/pvc_defensive_2.h>
 
 namespace rhoban_ssl
 {
@@ -200,9 +201,10 @@ Manual::Manual(std::string name) : Manager(name)
                                           },
                                           false  // we don't want to define a goal here !
                                           )));
-  
+
   registerStrategy("PVC - Attaque With Support Ms",
                    std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs()));
+  registerStrategy("PVC - Defensive 2", std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
 }
 
 void Manual::update()
