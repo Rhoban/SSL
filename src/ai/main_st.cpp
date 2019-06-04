@@ -216,7 +216,10 @@ int main(int argc, char** argv)
 
   ExecutionManager::getManager().run(0.01);
 
-  delete commander;
+  if (simulation.getValue())
+  {
+    delete commander;
+  }
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;
 }
