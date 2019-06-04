@@ -33,7 +33,7 @@ private:
   bool is_closest_1_;
 
 public:
-  MurStop(ai::AiData& ai_data);
+  MurStop();
   virtual ~MurStop();
 
   virtual int minRobots() const;

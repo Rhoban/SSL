@@ -28,7 +28,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-MurStop::MurStop(ai::AiData& ai_data) : Strategy(ai_data)
+MurStop::MurStop() : Strategy()
 {
 }
 
@@ -78,10 +78,10 @@ void MurStop::update(double time)
 void MurStop::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefKick(ai_data_, 1));
+  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefKick(1));
   static_cast<robot_behavior::MurDefKick*>(mur1.get())->declareMurRobotId(0, 2);
 
-  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefKick(ai_data_, 1));
+  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefKick(1));
   static_cast<robot_behavior::MurDefKick*>(mur2.get())->declareMurRobotId(1, 2);
 
   if (not(behaviors_are_assigned_))
@@ -117,7 +117,7 @@ MurStop::getStartingPositions(int number_of_avalaible_robots)
 //
 bool MurStop::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
-  linear_position = allyGoalCenter();
+  linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }
