@@ -21,7 +21,6 @@
 #include <robot_behavior/do_nothing.h>
 #include <robot_behavior/factory.h>
 #include <robot_behavior/consign_follower.h>
-#include <math/position.h>
 #include <core/collection.h>
 #include <debug.h>
 #include <core/print_collection.h>
@@ -30,8 +29,8 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-PrepareKickoff::PrepareKickoff(ai::AiData& ai_data)
-  : Strategy(ai_data), strategy_is_active_(false), placer_when_kicking_(ai_data), placer_when_no_kicking_(ai_data)
+PrepareKickoff::PrepareKickoff()
+  : Strategy(), strategy_is_active_(false), placer_when_kicking_(), placer_when_no_kicking_()
 {
 }
 
@@ -51,8 +50,8 @@ GoalieNeed PrepareKickoff::needsGoalie() const
 }
 void PrepareKickoff::updateStartingPositions()
 {
-  attacking_placement_ = ai_data_.defaultAttackingKickoffPlacement();
-  defending_placement_ = ai_data_.defaultDefendingKickoffPlacement();
+  attacking_placement_ = defaultAttackingKickoffPlacement();
+  defending_placement_ = defaultDefendingKickoffPlacement();
   std::function<std::pair<rhoban_geometry::Point, ContinuousAngle>(const Position&)> cvrt =
       [](const Position& position) {
         return std::pair<rhoban_geometry::Point, ContinuousAngle>(position.linear, position.angular);
@@ -210,6 +209,68 @@ rhoban_ssl::annotations::Annotations PrepareKickoff::getAnnotations() const
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }
   return annotations;
+}
+
+
+RobotPlacement::RobotPlacement() : goal_is_placed(false){};
+RobotPlacement::RobotPlacement(std::vector<Position> field_robot_position, Position goalie_position)
+  : goal_is_placed(true), field_robot_position(field_robot_position), goalie_position(goalie_position)
+{
+}
+RobotPlacement::RobotPlacement(std::vector<Position> field_robot_position)
+  : goal_is_placed(false), field_robot_position(field_robot_position)
+{
+}
+
+RobotPlacement PrepareKickoff::defaultAttackingKickoffPlacement() const
+{
+  //
+  //     A.
+  // B        C
+  //      D
+  //   E     F
+  //      G
+  //
+  return RobotPlacement(
+      {
+          Position(-0.8, .0, 0.0),                                   // A
+          Position(relative2absolute(-1.0 / 3.0, 2.0 / 3.0), 0.0),   // B
+          Position(relative2absolute(-1.0 / 3.0, -2.0 / 3.0), 0.0),  // C
+          Position(relative2absolute(-2.0 / 3.0, 1.0 / 2.0), 0.0),   // D
+          Position(relative2absolute(-2.0 / 3.0, -1.0 / 2.0), 0.0),  // E
+          Position(relative2absolute(-1.5 / 3.0, 0.0), 0.0),         // F
+          Position(relative2absolute(-2.5 / 3.0, 0.0), 0.0),         // G
+      },
+      Position(relative2absolute(-1.0, 0.0), 0.0  // G
+               ));
+}
+
+RobotPlacement PrepareKickoff::defaultDefendingKickoffPlacement() const
+{
+  //
+  //      .
+  // B    A    C
+  //      F
+  //   D     E
+  //      G
+  //
+  return RobotPlacement(
+      {
+          Position(relative2absolute(-1.0 / 3.0, 0.0), 0.0),         // A
+          Position(relative2absolute(-1.0 / 3.0, 2.0 / 3.0), 0.0),   // B
+          Position(relative2absolute(-1.0 / 3.0, -2.0 / 3.0), 0.0),  // C
+          Position(relative2absolute(-2.0 / 3.0, 1.0 / 2.0), 0.0),   // D
+          Position(relative2absolute(-2.0 / 3.0, -1.0 / 2.0), 0.0),  // E
+          Position(relative2absolute(-1.5 / 3.0, 0.0), 0.0),         // F
+          Position(relative2absolute(-2.5 / 3.0, 0.0), 0.0),         // G
+      },
+      Position(relative2absolute(-1.0, 0.0), 0.0  // G
+               ));
+}
+
+rhoban_geometry::Point PrepareKickoff::relative2absolute(double x, double y) const
+{
+  return rhoban_geometry::Point(Data::get()->field.field_length_ / 2.0 * x, Data::get()->field.field_width_ / 2.0 * y);
 }
 
 }  // namespace strategy

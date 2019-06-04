@@ -23,23 +23,39 @@
 #include <string>
 #include <robot_behavior/robot_behavior.h>
 #include "placer.h"
+#include "math/position.h"
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
+struct RobotPlacement
+{
+  bool goal_is_placed;
+  std::vector<Position> field_robot_position;
+  Position goalie_position;
+
+  RobotPlacement();
+  RobotPlacement(std::vector<Position> field_robot_position, Position goalie_position);
+  RobotPlacement(std::vector<Position> field_robot_position);
+};
+
 class PrepareKickoff : public Strategy
 {
 private:
   bool is_kicking_;
   bool strategy_is_active_;
-  ai::RobotPlacement attacking_placement_;
-  ai::RobotPlacement defending_placement_;
+  RobotPlacement attacking_placement_;
+  RobotPlacement defending_placement_;
   Placer placer_when_kicking_;
   Placer placer_when_no_kicking_;
 
+  RobotPlacement defaultAttackingKickoffPlacement() const;
+  RobotPlacement defaultDefendingKickoffPlacement() const;
+  rhoban_geometry::Point relative2absolute(double x, double y) const;
+
 public:
-  PrepareKickoff(ai::AiData& ai_data);
+  PrepareKickoff();
   virtual ~PrepareKickoff();
 
   virtual int minRobots() const;
