@@ -92,7 +92,7 @@ set (SOURCES
     #strategy/pvc_striker_with_support.cpp
     #strategy/pvc_striker_v2.cpp
     #strategy/pvc_striker_kick.cpp
-    #strategy/pvc_goalie_strat.cpp
+    strategy/pvc_goalie_strat.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp

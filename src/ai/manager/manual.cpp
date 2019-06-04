@@ -44,6 +44,7 @@
 #include <strategy/pvc_attaque_with_support_ms.h>
 #include <strategy/pvc_defensive_2.h>
 #include <strategy/pvc_defensive.h>
+#include <strategy/pvc_goalie_strat.h>
 
 namespace rhoban_ssl
 {
@@ -119,94 +120,97 @@ Manual::Manual(std::string name) : Manager(name)
                                                      false  // we don't want to define a goal here !
                                                      )));
 
-  registerStrategy("PVC - Degageur", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                         [&](double time, double dt) {
-                                           robot_behavior::Degageur* deg = new robot_behavior::Degageur();
-                                           return std::shared_ptr<robot_behavior::RobotBehavior>(deg);
-                                         },
-                                         false  // we don't want to define a goal here !
-                                         )));
-  registerStrategy("PVC - Goalie", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                       [&](double time, double dt) {
-                                         robot_behavior::Goalie* goal = new robot_behavior::Goalie();
-                                         return std::shared_ptr<robot_behavior::RobotBehavior>(goal);
-                                       },
-                                       false  // decoration
-                                       )));
-  registerStrategy("PVC - Mur Def Kick", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+  registerStrategy("PVC - B - Degageur", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                              [&](double time, double dt) {
-                                               robot_behavior::MurDefKick* mur = new robot_behavior::MurDefKick();
-                                               return std::shared_ptr<robot_behavior::RobotBehavior>(mur);
+                                               robot_behavior::Degageur* deg = new robot_behavior::Degageur();
+                                               return std::shared_ptr<robot_behavior::RobotBehavior>(deg);
                                              },
                                              false  // we don't want to define a goal here !
                                              )));
-  registerStrategy("PVC - Mur Defensor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                             [&](double time, double dt) {
-                                               robot_behavior::MurDefensor* mur = new robot_behavior::MurDefensor();
-                                               return std::shared_ptr<robot_behavior::RobotBehavior>(mur);
-                                             },
-                                             false  // we don't want to define a goal here !
-                                             )));
-  registerStrategy("PVC - Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+  registerStrategy("PVC - B - Goalie", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                            [&](double time, double dt) {
-                                             robot_behavior::Obstructor* obs = new robot_behavior::Obstructor();
-                                             obs->declareRobotToObstruct(2, Opponent);
-                                             return std::shared_ptr<robot_behavior::RobotBehavior>(obs);
+                                             robot_behavior::Goalie* goal = new robot_behavior::Goalie();
+                                             return std::shared_ptr<robot_behavior::RobotBehavior>(goal);
                                            },
-                                           false  // we don't want to define a goal here !
+                                           false  // decoration
                                            )));
-  registerStrategy("PVC - Robot Follower", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+  registerStrategy("PVC - B - Mur Def Kick", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                 [&](double time, double dt) {
+                                                   robot_behavior::MurDefKick* mur = new robot_behavior::MurDefKick();
+                                                   return std::shared_ptr<robot_behavior::RobotBehavior>(mur);
+                                                 },
+                                                 false  // we don't want to define a goal here !
+                                                 )));
+  registerStrategy("PVC - B - Mur Defensor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                 [&](double time, double dt) {
+                                                   robot_behavior::MurDefensor* mur = new robot_behavior::MurDefensor();
+                                                   return std::shared_ptr<robot_behavior::RobotBehavior>(mur);
+                                                 },
+                                                 false  // we don't want to define a goal here !
+                                                 )));
+  registerStrategy("PVC - B - Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                [&](double time, double dt) {
-                                                 robot_behavior::RobotFollower* follower =
-                                                     new robot_behavior::RobotFollower();
-                                                 follower->declareRobotToFollow(0, Vector2d(1, 0.5), Ally);
-                                                 return std::shared_ptr<robot_behavior::RobotBehavior>(follower);
+                                                 robot_behavior::Obstructor* obs = new robot_behavior::Obstructor();
+                                                 obs->declareRobotToObstruct(2, Opponent);
+                                                 return std::shared_ptr<robot_behavior::RobotBehavior>(obs);
                                                },
                                                false  // we don't want to define a goal here !
                                                )));
-  registerStrategy("PVC - Search Shoot Area", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                                  [&](double time, double dt) {
-                                                    robot_behavior::SearchShootArea* searcher =
-                                                        new robot_behavior::SearchShootArea();
-                                                    return std::shared_ptr<robot_behavior::RobotBehavior>(searcher);
-                                                  },
-                                                  false  // we don't want to define a goal here !
-                                                  )));
-  registerStrategy("PVC - Slow Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                             [&](double time, double dt) {
-                                               robot_behavior::SlowStriker* striker = new robot_behavior::SlowStriker();
-                                               striker->declarePointToStrike(Data::get()->field.goalCenter(Opponent));
-                                               striker->declareRobotToPass(1, Ally);
-                                               return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
-                                             },
-                                             false  // we don't want to define a goal here !
-                                             )));
-  registerStrategy("PVC - Striker AI", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                           [&](double time, double dt) {
-                                             robot_behavior::StrikerAi* striker = new robot_behavior::StrikerAi();
-                                             return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
-                                           },
-                                           false  // we don't want to define a goal here !
-                                           )));
-  registerStrategy("PVC - Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                        [&](double time, double dt) {
-                                          robot_behavior::Striker* striker = new robot_behavior::Striker();
-                                          return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
-                                        },
-                                        false  // we don't want to define a goal here !
-                                        )));
-  registerStrategy("PVC - Wait pass", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                          [&](double time, double dt) {
-                                            robot_behavior::WaitPass* wait = new robot_behavior::WaitPass();
-                                            return std::shared_ptr<robot_behavior::RobotBehavior>(wait);
-                                          },
-                                          false  // we don't want to define a goal here !
-                                          )));
+  registerStrategy("PVC - B - Robot Follower", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                   [&](double time, double dt) {
+                                                     robot_behavior::RobotFollower* follower =
+                                                         new robot_behavior::RobotFollower();
+                                                     follower->declareRobotToFollow(0, Vector2d(1, 0.5), Ally);
+                                                     return std::shared_ptr<robot_behavior::RobotBehavior>(follower);
+                                                   },
+                                                   false  // we don't want to define a goal here !
+                                                   )));
+  registerStrategy("PVC - B - Search Shoot Area", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                      [&](double time, double dt) {
+                                                        robot_behavior::SearchShootArea* searcher =
+                                                            new robot_behavior::SearchShootArea();
+                                                        return std::shared_ptr<robot_behavior::RobotBehavior>(searcher);
+                                                      },
+                                                      false  // we don't want to define a goal here !
+                                                      )));
+  registerStrategy("PVC - B - Slow Striker",
+                   std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                       [&](double time, double dt) {
+                         robot_behavior::SlowStriker* striker = new robot_behavior::SlowStriker();
+                         striker->declarePointToStrike(Data::get()->field.goalCenter(Opponent));
+                         striker->declareRobotToPass(1, Ally);
+                         return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
+                       },
+                       false  // we don't want to define a goal here !
+                       )));
+  registerStrategy("PVC - B - Striker AI", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                               [&](double time, double dt) {
+                                                 robot_behavior::StrikerAi* striker = new robot_behavior::StrikerAi();
+                                                 return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
+                                               },
+                                               false  // we don't want to define a goal here !
+                                               )));
+  registerStrategy("PVC - B - Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                            [&](double time, double dt) {
+                                              robot_behavior::Striker* striker = new robot_behavior::Striker();
+                                              return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
+                                            },
+                                            false  // we don't want to define a goal here !
+                                            )));
+  registerStrategy("PVC - B - Wait pass", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                              [&](double time, double dt) {
+                                                robot_behavior::WaitPass* wait = new robot_behavior::WaitPass();
+                                                return std::shared_ptr<robot_behavior::RobotBehavior>(wait);
+                                              },
+                                              false  // we don't want to define a goal here !
+                                              )));
 
   registerStrategy("PVC - Attaque With Support Ms",
                    std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs()));
   registerStrategy("PVC - Defensive 2", std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
   registerStrategy("PVC - Defensive 1", std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
+  registerStrategy("PVC - Goalie Strat (need goalie)",
+                   std::shared_ptr<strategy::Strategy>(new strategy::GoalieStrat()));
 }
 
 void Manual::update()
