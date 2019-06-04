@@ -34,6 +34,7 @@
 #include <robot_behavior/pvc_mur_def_kick.h>
 #include <robot_behavior/pvc_mur_defensor.h>
 #include <robot_behavior/pvc_obstructor.h>
+#include <robot_behavior/pvc_protect_ball.h>
 #include <robot_behavior/pvc_robot_follower.h>
 #include <robot_behavior/pvc_search_shoot_area.h>
 #include <robot_behavior/pvc_slow_striker.h>
@@ -165,6 +166,13 @@ Manual::Manual(std::string name) : Manager(name)
                                                },
                                                false  // we don't want to define a goal here !
                                                )));
+  registerStrategy("PVC - B - Protect Ball", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                 [&](double time, double dt) {
+                                                   robot_behavior::ProtectBall* pro = new robot_behavior::ProtectBall();
+                                                   return std::shared_ptr<robot_behavior::RobotBehavior>(pro);
+                                                 },
+                                                 false  // we don't want to define a goal here !
+                                                 )));
   registerStrategy("PVC - B - Robot Follower", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                    [&](double time, double dt) {
                                                      robot_behavior::RobotFollower* follower =

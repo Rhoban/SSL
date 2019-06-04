@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "protect_ball.h"
+#include "pvc_protect_ball.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 
@@ -25,12 +25,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-ProtectBall::ProtectBall(ai::AiData& ai_data)
-  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+ProtectBall::ProtectBall() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void ProtectBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void ProtectBall::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
