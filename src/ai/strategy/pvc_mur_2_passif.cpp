@@ -27,7 +27,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Mur_2_passif::Mur_2_passif(ai::AiData& ai_data) : Strategy(ai_data)
+Mur_2_passif::Mur_2_passif() : Strategy()
 {
 }
 
@@ -72,7 +72,7 @@ void Mur_2_passif::stop(double time)
 
 void Mur_2_passif::update(double time)
 {
-  int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Ally);
+  int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(Ally);
   is_closest_0_ = false;
   is_closest_1_ = false;
 
@@ -92,10 +92,10 @@ void Mur_2_passif::update(double time)
 void Mur_2_passif::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefensor(ai_data_, 1));
+  std::shared_ptr<robot_behavior::RobotBehavior> mur1(new robot_behavior::MurDefensor(1));
   static_cast<robot_behavior::MurDefensor*>(mur1.get())->declareMurRobotId(0, 2);
 
-  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefensor(ai_data_, 1));
+  std::shared_ptr<robot_behavior::RobotBehavior> mur2(new robot_behavior::MurDefensor(1));
 
   if (not(behaviors_are_assigned_))
   {
@@ -120,7 +120,7 @@ Mur_2_passif::getStartingPositions(int number_of_avalaible_robots)
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(allyGoalCenter(), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(Data::get()->field.goalCenter(Ally), 0.0) };
 }
 
 //
@@ -131,7 +131,7 @@ Mur_2_passif::getStartingPositions(int number_of_avalaible_robots)
 bool Mur_2_passif::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                 ContinuousAngle& angular_position)
 {
-  linear_position = allyGoalCenter();
+  linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }

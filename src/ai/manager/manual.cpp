@@ -45,6 +45,7 @@
 #include <strategy/pvc_defensive_2.h>
 #include <strategy/pvc_defensive.h>
 #include <strategy/pvc_goalie_strat.h>
+#include <strategy/pvc_mur_2_passif.h>
 
 namespace rhoban_ssl
 {
@@ -211,6 +212,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("PVC - Defensive 1", std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
   registerStrategy("PVC - Goalie Strat (need goalie)",
                    std::shared_ptr<strategy::Strategy>(new strategy::GoalieStrat()));
+  registerStrategy("PVC - Mur 2 Passif", std::shared_ptr<strategy::Strategy>(new strategy::Mur_2_passif()));
 }
 
 void Manual::update()

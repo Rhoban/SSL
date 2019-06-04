@@ -87,7 +87,7 @@ set (SOURCES
     #strategy/pvc_mur_stop.cpp
     #strategy/pvc_mur.cpp
     #strategy/pvc_mur_2.cpp
-    #strategy/pvc_mur_2_passif.cpp
+    strategy/pvc_mur_2_passif.cpp
     strategy/pvc_attaque_with_support_ms.cpp
     #strategy/pvc_striker_with_support.cpp
     #strategy/pvc_striker_v2.cpp
