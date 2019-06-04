@@ -27,7 +27,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-StrikerKick::StrikerKick(ai::AiData& ai_data) : Strategy(ai_data)
+StrikerKick::StrikerKick() : Strategy()
 {
 }
 
@@ -65,7 +65,7 @@ void StrikerKick::start(double time)
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
 
-  slow_striker_ = std::shared_ptr<robot_behavior::SlowStriker>(new robot_behavior::SlowStriker(ai_data_));
+  slow_striker_ = std::shared_ptr<robot_behavior::SlowStriker>(new robot_behavior::SlowStriker());
 }
 void StrikerKick::stop(double time)
 {
@@ -97,7 +97,7 @@ void StrikerKick::assignBehaviorToRobots(
 //     we minimize the distance between
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
-std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >#include <robot_behavior/slow_striker.h>
+std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
 StrikerKick::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
@@ -114,7 +114,7 @@ StrikerKick::getStartingPositions(int number_of_avalaible_robots)
 bool StrikerKick::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
                                                ContinuousAngle& angular_position)
 {
-  linear_position = allyGoalCenter();
+  linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }

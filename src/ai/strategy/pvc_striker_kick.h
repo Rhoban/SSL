@@ -33,7 +33,7 @@ private:
   std::shared_ptr<robot_behavior::SlowStriker> slow_striker_;
 
 public:
-  StrikerKick(ai::AiData& ai_data);
+  StrikerKick();
   virtual ~StrikerKick();
 
   virtual int minRobots() const;

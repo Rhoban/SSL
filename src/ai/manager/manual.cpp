@@ -51,6 +51,7 @@
 #include <strategy/pvc_mur.h>
 #include <strategy/pvc_offensive.h>
 #include <strategy/pvc_prepare_kickoff.h>
+#include <strategy/pvc_striker_kick.h>
 
 namespace rhoban_ssl
 {
@@ -224,6 +225,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("PVC - Offensive", std::shared_ptr<strategy::Strategy>(new strategy::Offensive()));
   registerStrategy("PVC - Prepare Kickoff (need all robots)",
                    std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
+  registerStrategy("PVC - StrikerKick", std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick()));
 }
 
 void Manual::update()
