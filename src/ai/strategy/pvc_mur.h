@@ -31,7 +31,7 @@ private:
   bool behaviors_are_assigned_;
 
 public:
-  Mur(ai::AiData& ai_data);
+  Mur();
   virtual ~Mur();
 
   virtual int minRobots() const;
