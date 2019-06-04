@@ -23,7 +23,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Offensive::Offensive(ai::AiData& ai_data) : Strategy(ai_data), is_closest_(false)
+Offensive::Offensive() : Strategy(), is_closest_(false)
 {
 }
 
@@ -59,8 +59,8 @@ const std::string Offensive::name = "offensive";
 void Offensive::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
-  search_ = std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea(ai_data_));
-  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker(ai_data_));
+  search_ = std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea());
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker());
   behaviors_are_assigned_ = false;
 }
 void Offensive::stop(double time)
@@ -75,7 +75,7 @@ void Offensive::update(double time)
 void Offensive::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (GameInformations::getShirtNumberOfClosestRobotToTheBall(vision::Ally) == playerId(0))
+  if (GameInformations::getShirtNumberOfClosestRobotToTheBall(Ally) == playerId(0))
   {
     is_closest_ = true;
   }
@@ -105,7 +105,7 @@ Offensive::getStartingPositions(int number_of_avalaible_robots)
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(ai_data_.relative2absolute(-1.0 / 3.0, 0.0), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(relative2absolute(-1.0 / 3.0, 0.0), 0.0) };
 }
 
 //
@@ -115,7 +115,7 @@ Offensive::getStartingPositions(int number_of_avalaible_robots)
 //
 bool Offensive::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
-  linear_position = allyGoalCenter();
+  linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }
@@ -131,6 +131,11 @@ rhoban_ssl::annotations::Annotations Offensive::getAnnotations() const
     annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
   }
   return annotations;
+}
+
+rhoban_geometry::Point Offensive::relative2absolute(double x, double y) const
+{
+  return rhoban_geometry::Point(Data::get()->field.field_length_ / 2.0 * x, Data::get()->field.field_width_ / 2.0 * y);
 }
 
 }  // namespace strategy

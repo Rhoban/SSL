@@ -36,8 +36,10 @@ private:
   std::shared_ptr<robot_behavior::SearchShootArea> search_;
   std::shared_ptr<robot_behavior::Striker> striker_;
 
+  rhoban_geometry::Point relative2absolute(double x, double y) const;
+
 public:
-  Offensive(ai::AiData& ai_data);
+  Offensive();
   virtual ~Offensive();
 
   virtual int minRobots() const;

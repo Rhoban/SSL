@@ -49,6 +49,7 @@
 #include <strategy/pvc_mur_2.h>
 #include <strategy/pvc_mur_stop.h>
 #include <strategy/pvc_mur.h>
+#include <strategy/pvc_offensive.h>
 
 namespace rhoban_ssl
 {
@@ -219,6 +220,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("PVC - Mur 2", std::shared_ptr<strategy::Strategy>(new strategy::Mur_2()));
   registerStrategy("PVC - Mur Stop", std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
   registerStrategy("PVC - Mur 1", std::shared_ptr<strategy::Strategy>(new strategy::Mur()));
+  registerStrategy("PVC - Offensive", std::shared_ptr<strategy::Strategy>(new strategy::Offensive()));
 }
 
 void Manual::update()
