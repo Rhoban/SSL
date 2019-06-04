@@ -527,53 +527,56 @@ void AI::moveBall(double x, double y, double v_x, double v_y)
 
 void AI::scan()
 {
-  if (!scanning_)
+  if (!ai::Config::is_in_simulation)
   {
-    save_control_before_scan_ = Data::get()->shared_data;
-    for (int n = 0; n < 3; n++)
+    if (!scanning_)
     {
-      for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+      save_control_before_scan_ = Data::get()->shared_data;
+      for (int n = 0; n < 3; n++)
       {
-        if (Data::get()->shared_data.final_control_for_robots[id].is_manually_controled_by_viewer)
+        for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
         {
-          Data::get()->shared_data.final_control_for_robots[id].control.active = false;
-          Data::get()->shared_data.final_control_for_robots[id].control.ignore = false;
+          if (Data::get()->shared_data.final_control_for_robots[id].is_manually_controled_by_viewer)
+          {
+            Data::get()->shared_data.final_control_for_robots[id].control.active = false;
+            Data::get()->shared_data.final_control_for_robots[id].control.ignore = false;
+          }
         }
       }
+      scanning_ = true;
+      scan_starting_time_ = Data::get()->ai_data.time;
     }
-    scanning_ = true;
-    scan_starting_time_ = Data::get()->ai_data.time;
-  }
-  else
-  {
-    double scan_waiting_time_ = Data::get()->ai_data.time - scan_starting_time_;
-    if (scan_waiting_time_ > SCAN_WAITING_DELAY)
+    else
     {
-      for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+      double scan_waiting_time_ = Data::get()->ai_data.time - scan_starting_time_;
+      if (scan_waiting_time_ > SCAN_WAITING_DELAY)
       {
-        Control& control = Data::get()->shared_data.final_control_for_robots[id].control;
-        if (ai::Config::is_in_simulation)
+        for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
         {
-          if (id <= 7)
+          Control& control = Data::get()->shared_data.final_control_for_robots[id].control;
+          if (ai::Config::is_in_simulation)
           {
-            control.ignore = false;
+            if (id <= 7)
+            {
+              control.ignore = false;
+            }
           }
-        }
-        else
-        {
-          control.ignore = !Data::get()->robots[id]->isOk();
+          else
+          {
+            control.ignore = !Data::get()->robots[id]->isOk();
 
-          if (id == 3)
-          {
-            std::cout << "Age: " << Data::get()->robots[id]->age() << std::endl;
-          }
-          if (Data::get()->robots[id]->isOk())
-          {
-            std::cout << "Robot #" << id << " is enabled!" << std::endl;
+            if (id == 3)
+            {
+              std::cout << "Age: " << Data::get()->robots[id]->age() << std::endl;
+            }
+            if (Data::get()->robots[id]->isOk())
+            {
+              std::cout << "Robot #" << id << " is enabled!" << std::endl;
+            }
           }
         }
+        scanning_ = false;
       }
-      scanning_ = false;
     }
   }
 }
