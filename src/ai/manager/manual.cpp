@@ -41,6 +41,8 @@
 #include <robot_behavior/pvc_striker.h>
 #include <robot_behavior/pvc_wait_pass.h>
 
+#include <strategy/pvc_attaque_with_support_ms.h>
+
 namespace rhoban_ssl
 {
 namespace manager
@@ -198,6 +200,9 @@ Manual::Manual(std::string name) : Manager(name)
                                           },
                                           false  // we don't want to define a goal here !
                                           )));
+  
+  registerStrategy("PVC - Attaque With Support Ms",
+                   std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs()));
 }
 
 void Manual::update()
