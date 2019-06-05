@@ -402,7 +402,7 @@ bool TimeUpdater::runTask()
 
 std::vector<std::string> AI::getAvailableManagers()
 {
-  list2vector(manager::Factory::availableManagers());
+  return list2vector(manager::Factory::availableManagers());
 }
 
 std::shared_ptr<manager::Manager> AI::getCurrentManager() const
@@ -503,7 +503,14 @@ void AI::enableRobot(uint number, bool enabled)
 
 void AI::moveRobot(bool ally, uint number, double x, double y, double theta)
 {
-  if (!ally)
+  if (Data::get()->referee.allyOnPositiveHalf())
+  {
+    x *= -1;
+    y *= -1;
+    theta += M_PI;
+  }
+
+  if (!ally || ai::Config::is_in_simulation)
   {
     commander_->moveRobot(ally, int(number), x, y, theta, true);
   }
@@ -522,6 +529,11 @@ void AI::moveRobot(bool ally, uint number, double x, double y, double theta)
 
 void AI::moveBall(double x, double y, double v_x, double v_y)
 {
+  if (Data::get()->referee.allyOnPositiveHalf())
+  {
+    x *= -1;
+    y *= -1;
+  }
   commander_->moveBall(x, y, v_x, v_y);
 }
 

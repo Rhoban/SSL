@@ -113,7 +113,6 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["place_ball"].isNull())
     {
-      // TODO ADD SPEED
       ai_->moveBall(viewer_packet["place_ball"]["position"]["x"].asDouble(),
                     viewer_packet["place_ball"]["position"]["y"].asDouble(), 0.0, 0.0);
     }
