@@ -310,10 +310,17 @@ Json::Value ViewerCommunication::aiPacket()
   // todo
   packet["ai"]["managers"]["current"]["name"] = ai_->getCurrentManager().get()->name();
 
-  for (uint i = 0; i < ai_->getCurrentManager().get()->getAvailableStrategies().size(); ++i)
+  int i = 0;
+  for (auto& strat_name : ai_->getCurrentManager().get()->getCurrentStrategyNames())
   {
-    packet["ai"]["managers"]["current"]["strategies_used"][i]["name"] =
-        ai_->getCurrentManager().get()->getAvailableStrategies().at(i);
+    packet["ai"]["managers"]["current"]["strategies_used"][i]["name"] = strat_name;
+
+    for (uint k = 0; k < ai_->getCurrentManager().get()->getStrategy(strat_name).getPlayerIds().size(); ++k)
+    {
+      packet["ai"]["managers"]["current"]["strategies_used"][i]["active_bots"][0][k] =
+          ai_->getCurrentManager().get()->getStrategy(strat_name).getPlayerIds().at(k);
+    }
+    i++;
   }
 
   // we send all strategies in manual manager
