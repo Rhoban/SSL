@@ -189,7 +189,7 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
   }
 }
 
-Manager::Manager(std::string name) : manager_name_(name), blue_is_not_set_(true)
+Manager::Manager(std::string name) : GameInformations(), manager_name_(name), blue_is_not_set_(true)
 {
   registerStrategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
   registerStrategy(MANAGER__PLACER, std::shared_ptr<strategy::Strategy>(new strategy::Placer()));

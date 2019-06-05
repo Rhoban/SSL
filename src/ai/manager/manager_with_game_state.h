@@ -14,9 +14,9 @@ class ManagerWithGameState : public Manager
 public:
   ManagerWithGameState(std::string name);
 
-  void update(double time);
-  void analyseData(double time);
-  void chooseAStrategy(double time);
+  void update();
+  void analyseData();
+  void chooseAStrategy();
 
   // Begin of a new state
   virtual void startStop() = 0;

@@ -40,8 +40,8 @@
 
 //TODO
 //PVC behaviors:
-#include <robot_behavior/goalie.h>
-#include <robot_behavior/protect_ball.h>
+#include <robot_behavior/pvc_goalie.h>
+#include <robot_behavior/pvc_protect_ball.h>
 
 
 #define GOALIE "goalie"
@@ -51,9 +51,8 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_state)
-  : ManagerWithGameState(ai_data, game_state)
-  , game_state_(game_state)
+PlanVeschambres::PlanVeschambres(std::string name)
+  : ManagerWithGameState(name)
   , penalty_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , goalie_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , offensive_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
@@ -155,41 +154,39 @@ PlanVeschambres::PlanVeschambres(ai::AiData& ai_data, const GameState& game_stat
   halt_strats_[2] = { strategy::Halt::name };
   halt_strats_[1] = {};
 
-  registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
-  registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2(ai_data)));
+  registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
+  registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2()));
   registerStrategy(strategy::PrepareKickoff::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
   registerStrategy(GOALIE, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                               ai_data,
                                [&](double time, double dt) {
-                                 robot_behavior::Goalie* goalie = new robot_behavior::Goalie(ai_data);
+                                 robot_behavior::Goalie* goalie = new robot_behavior::Goalie();
                                  return std::shared_ptr<robot_behavior::RobotBehavior>(goalie);
                                },
                                true)));
   registerStrategy(PROTECT_BALL, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                                     ai_data,
                                      [&](double time, double dt) {
                                        robot_behavior::ProtectBall* protect_ball =
-                                           new robot_behavior::ProtectBall(ai_data);
+                                           new robot_behavior::ProtectBall();
                                        return std::shared_ptr<robot_behavior::RobotBehavior>(protect_ball);
                                      },
                                      false)));
-  registerStrategy(strategy::Offensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Offensive(ai_data)));
+  registerStrategy(strategy::Offensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Offensive()));
   registerStrategy(strategy::StrikerKick::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick(ai_data)));
-  registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop(ai_data)));
-  registerStrategy(strategy::Defensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive(ai_data)));
-  registerStrategy(strategy::Defensive2::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive2(ai_data)));
-  registerStrategy(strategy::Mur::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur(ai_data)));
-  registerStrategy(strategy::Mur_2::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur_2(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick()));
+  registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
+  registerStrategy(strategy::Defensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
+  registerStrategy(strategy::Defensive2::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
+  registerStrategy(strategy::Mur::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur()));
+  registerStrategy(strategy::Mur_2::name, std::shared_ptr<strategy::Strategy>(new strategy::Mur_2()));
   registerStrategy(strategy::Mur_2_passif::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::Mur_2_passif(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::Mur_2_passif()));
   registerStrategy(strategy::AttaqueWithSupportMs::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs()));
   registerStrategy(strategy::StrikerWithSupport::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::StrikerWithSupport(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::StrikerWithSupport()));
   registerStrategy(strategy::GoalieStrat::name,
-                   std::shared_ptr<strategy::Strategy>(new strategy::GoalieStrat(ai_data)));
+                   std::shared_ptr<strategy::Strategy>(new strategy::GoalieStrat()));
   assignStrategy(strategy::Halt::name, 0.0,
                  getTeamIds());  // TODO TIME !
 }

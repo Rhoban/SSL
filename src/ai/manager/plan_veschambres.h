@@ -28,7 +28,6 @@ namespace manager
 class PlanVeschambres : public ManagerWithGameState
 {
 private:
-  const GameState& game_state_;
 
   // penalty
   std::vector<std::list<std::string> > penalty_strats_;
@@ -52,7 +51,7 @@ private:
   std::list<std::string> future_strats_;
 
 public:
-  PlanVeschambres(ai::AiData& ai_data, const GameState& game_state);
+  PlanVeschambres(std::string name);
 
   // Begin of a new state
   virtual void startStop();

@@ -20,7 +20,7 @@
 #include "factory.h"
 
 #include "manual.h"
-//#include "plan_veschambres.h"
+#include "plan_veschambres.h"
 
 namespace rhoban_ssl
 {
@@ -49,13 +49,12 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
   {
     manager = std::shared_ptr<Manager>(new Manual(manager_name));
   }
-  /*
+
   if (manager_name == names::PLAN_VESCHAMBRES)
   {
-    manager = std::shared_ptr<Manager>(new PlanVeschambres(ai_data, game_state));
+    manager = std::shared_ptr<Manager>(new PlanVeschambres(manager_name));
   }
-  
-  */
+
   return manager;
 }
 

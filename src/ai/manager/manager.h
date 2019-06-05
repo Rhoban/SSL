@@ -31,7 +31,7 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-class Manager
+class Manager : public GameInformations
 {
 public:
   static constexpr const char* MANAGER__REMOVE_ROBOTS = "manager__remove_robots";

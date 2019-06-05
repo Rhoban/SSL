@@ -8,11 +8,11 @@ ManagerWithGameState::ManagerWithGameState(std::string name) : Manager(name), la
 {
 }
 
-void ManagerWithGameState::analyseData(double time)
+void ManagerWithGameState::analyseData()
 {
 }
 
-void ManagerWithGameState::chooseAStrategy(double time)
+void ManagerWithGameState::chooseAStrategy()
 {
   GameState& game_state = Data::get()->referee.game_state;
   if (game_state.stateIsNewer(last_change_stamp_))
@@ -189,12 +189,12 @@ void ManagerWithGameState::chooseAStrategy(double time)
   }
 }
 
-void ManagerWithGameState::update(double time)
+void ManagerWithGameState::update()
 {
   // update_strategies(time);
   updateCurrentStrategies();
-  analyseData(time);
-  chooseAStrategy(time);
+  analyseData();
+  chooseAStrategy();
 }
 
 ManagerWithGameState::~ManagerWithGameState()
