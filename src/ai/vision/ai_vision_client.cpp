@@ -88,13 +88,8 @@ bool SslGeometryPacketAnalyzer::runTask()
       {  // update camera relative informations...
         camera_done_ = true;
       }
-      // remove packet as we treated it
-      i = vision::VisionDataGlobal::singleton_.last_packets_.erase(i);
     }
-    else
-    {
-      ++i;
-    }
+    ++i;
   }
   return !(field_done_ && camera_done_);
 }
@@ -142,8 +137,8 @@ bool DetectionPacketAnalyzer::runTask()
         }
       }
       time_synchroniser_.update(current);
-      i = vision::VisionDataGlobal::singleton_.last_packets_.erase(i);
     }
+    ++i;
   }
   time_synchroniser_.syncTimeShift(&Data::get()->ai_data.time_shift_with_vision);
   return true;
@@ -164,34 +159,40 @@ bool UpdateRobotInformation::runTask()
       for (int c = 0; c < ai::Config::NB_CAMERAS; ++c)
         detections[team][r][c] = nullptr;
 
-  for (int camera_id = 0; camera_id < ai::Config::NB_CAMERAS; ++camera_id)
+  for (uint camera_id = 0; camera_id < ai::Config::NB_CAMERAS; ++camera_id)
   {
     auto& camera = vision::VisionDataSingleThread::singleton_.last_camera_detection_[camera_id];
     for (auto& r : camera.allies_)
     {
       if (r.confidence_ < 0)
         continue;
-      if (not(objectCoordonateIsValid(r.x_ / 1000.0, r.y_ / 1000.0, part_of_the_field_used_)))
+      if (not(objectCoordonateIsValid(double(r.x_) / 1000.0, double(r.y_) / 1000.0, part_of_the_field_used_)))
         continue;
       if (r.robot_id_ >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
         continue;
-      int i = 0;
+      uint i = 0;
       while (detections[Ally][r.robot_id_][i] != nullptr)
         i += 1;
-      detections[Ally][r.robot_id_][i] = &r;
+      if (i < ai::Config::NB_CAMERAS)
+        detections[Ally][r.robot_id_][i] = &r;
+      else
+        DEBUG("WARNING: too much vision for robot!");
     }
     for (auto& r : camera.opponents_)
     {
       if (r.confidence_ < 0)
         continue;
-      if (not(objectCoordonateIsValid(r.x_ / 1000.0, r.y_ / 1000.0, part_of_the_field_used_)))
+      if (not(objectCoordonateIsValid(double(r.x_) / 1000.0, double(r.y_) / 1000.0, part_of_the_field_used_)))
         continue;
       if (r.robot_id_ >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
         continue;
-      int i = 0;
+      uint i = 0;
       while (detections[Opponent][r.robot_id_][i] != nullptr)
         i += 1;
-      detections[Opponent][r.robot_id_][i] = &r;
+      if (i < ai::Config::NB_CAMERAS)
+        detections[Opponent][r.robot_id_][i] = &r;
+      else
+        DEBUG("WARNING: too much vision for robot!");
     }
   }
 
@@ -253,7 +254,7 @@ bool UpdateBallInformation::runTask()
     }
   if (nballs > 0)
   {
-    pos = pos / (double)nballs;
+    pos = pos / double(nballs);
     Data::get()->ball.update((tmin + tmax) / 2.0, pos);
   }
   return true;
