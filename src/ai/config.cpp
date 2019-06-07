@@ -93,8 +93,8 @@ void Config::load(const std::string& config_path)
   front_wheel_angle = robot_conf["front_wheel_angle"].asDouble();
   assert(front_wheel_angle > 0.0);
 
-  max_wheel_speed = robot_conf["rear_wheel_angle"].asDouble();
-  assert(max_wheel_speed > 0.0);
+  rear_wheel_angle = robot_conf["rear_wheel_angle"].asDouble();
+  assert(rear_wheel_angle > 0.0);
 
   enable_movement_with_integration = root["movement_prediction"]["enable_integration"].asBool();
 

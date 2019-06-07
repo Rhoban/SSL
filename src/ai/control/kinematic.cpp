@@ -68,7 +68,7 @@ bool WarningMaximumVelocity::runTask()
         wheels_speed.frontLeft > ai::Config::max_wheel_speed || wheels_speed.frontRight > ai::Config::max_wheel_speed)
     {
       DEBUG("WARNING: Robot " << i << " reached the velocity limit of the wheel.");
-      DEBUG("linear_velocity " << ctrl.linear_velocity << "angular_velocity " << ctrl.angular_velocity);
+      DEBUG("linear_velocity " << ctrl.linear_velocity << " angular_velocity " << ctrl.angular_velocity);
     }
   }
   return true;
