@@ -120,7 +120,8 @@ bool DetectionPacketAnalyzer::runTask()
         for (auto& i : current.opponents_)
           i.confidence_ = -1;
         // By default we take the first information of the ball
-        current.balls_[0] = frame.balls(0);
+        if (frame.balls_size() > 0)
+          current.balls_[0] = frame.balls(0);
         // If the camera see more than one ball
         for (int i = 1; i < frame.balls_size(); ++i)
         {
