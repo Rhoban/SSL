@@ -49,6 +49,9 @@ double Config::radius_security_for_avoidance;
 double Config::wheel_radius = 0.03;
 double Config::wheel_excentricity = 0.08;
 double Config::wheel_nb_turns_acceleration_limit = 150.0;
+double Config::max_wheel_speed;
+double Config::front_wheel_angle;
+double Config::rear_wheel_angle;
 
 double Config::rules_avoidance_distance;
 double Config::convergence_coefficient;
@@ -83,6 +86,15 @@ void Config::load(const std::string& config_path)
 
   wheel_excentricity = robot_conf["wheel_excentricity"].asDouble();
   assert(wheel_excentricity > 0.0);
+
+  max_wheel_speed = robot_conf["max_wheel_speed"].asDouble();
+  assert(max_wheel_speed > 0.0);
+
+  front_wheel_angle = robot_conf["front_wheel_angle"].asDouble();
+  assert(front_wheel_angle > 0.0);
+
+  max_wheel_speed = robot_conf["rear_wheel_angle"].asDouble();
+  assert(max_wheel_speed > 0.0);
 
   enable_movement_with_integration = root["movement_prediction"]["enable_integration"].asBool();
 

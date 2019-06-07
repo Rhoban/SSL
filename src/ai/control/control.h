@@ -73,6 +73,8 @@ std::ostream& operator<<(std::ostream& out, const Control& control);
 
 namespace rhoban_ssl
 {
+namespace control
+{
 class ControlSender : public Task
 {
 private:
@@ -84,5 +86,5 @@ public:
 public:
   bool runTask();
 };
-
+}  // namespace control
 }  // namespace rhoban_ssl
