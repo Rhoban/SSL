@@ -119,8 +119,17 @@ bool DetectionPacketAnalyzer::runTask()
           i.confidence_ = -1;
         for (auto& i : current.opponents_)
           i.confidence_ = -1;
-        for (int i = 0; i < frame.balls_size() && i < ai::Config::MAX_BALLS_DETECTED; ++i)
-          current.balls_[i] = frame.balls(i);
+        // By default we take the first information of the ball
+        current.balls_[0] = frame.balls(0);
+        // If the camera see more than one ball
+        for (int i = 1; i < frame.balls_size(); ++i)
+        {
+          // We update the information of the unique ball if the confidence is higher than the first ball
+          if (current.balls_[0].confidence_ < frame.balls(i).confidence())
+          {
+            current.balls_[0] = frame.balls(i);
+          }
+        }
         if (ai::Config::we_are_blue)
         {
           for (int i = 0; i < frame.robots_blue_size(); ++i)

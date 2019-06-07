@@ -86,7 +86,7 @@ struct CameraDetectionFrame
   double t_sent_;
   unsigned int frame_number_;
   int camera_id_;
-  struct BallDetection balls_[ai::Config::MAX_BALLS_DETECTED];
+  struct BallDetection balls_[ai::Config::MAX_BALLS_DETECTED_PER_CAMERA];
   struct RobotDetection allies_[ai::Config::NB_OF_ROBOTS_BY_TEAM];
   struct RobotDetection opponents_[ai::Config::NB_OF_ROBOTS_BY_TEAM];
   CameraDetectionFrame();

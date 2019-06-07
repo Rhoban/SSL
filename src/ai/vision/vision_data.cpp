@@ -119,7 +119,7 @@ bool VisionDataTerminalPrinter::runTask()
     printf("CAMERA %d (%d): \n", camera, cam.frame_number_);
     printf("\t time: %lf / %lf \n", cam.t_capture_, cam.t_sent_);
     int nballs = 0;
-    for (int i = 0; i < ai::Config::MAX_BALLS_DETECTED; ++i)
+    for (int i = 0; i < ai::Config::MAX_BALLS_DETECTED_PER_CAMERA; ++i)
       if (cam.balls_[i].confidence_ >= 0)
         nballs += 1;
     int nallies = 0;
@@ -180,7 +180,7 @@ bool ChangeReferencePointOfView::runTask()
     {
       if (!VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].inverted)
       {
-        for (uint ball_id = 0; ball_id < ai::Config::MAX_BALLS_DETECTED; ball_id++)
+        for (uint ball_id = 0; ball_id < ai::Config::MAX_BALLS_DETECTED_PER_CAMERA; ball_id++)
         {
           struct BallDetection& ball =
               VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].balls_[ball_id];
