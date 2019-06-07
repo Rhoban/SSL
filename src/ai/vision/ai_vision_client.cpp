@@ -217,69 +217,70 @@ bool UpdateRobotInformation::runTask()
         detections[Opponent][r.robot_id_][camera_id] = &r;
       }
     }
-
-    // now we have all informations by robots
-    for (int team = 0; team < 2; ++team)
-      for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
-      {
-        bool present = false;
-        for (uint i = 0; i < ai::Config::NB_CAMERAS; ++i)
-        {
-          if (detections[team][robot][i] != nullptr)
-          {
-            present = true;
-            break;
-          }
-        }
-        if (present)
-        {
-          vision::TimedPosition position = vision::Factory::filter(detections[team][robot]);
-          if (position.time_ > 0)
-          {
-            if (position.orientation_is_defined_)
-              Data::get()->robots[team][robot].update(position.time_, position.position_.linear,
-                                                      position.position_.angular);
-            else
-              Data::get()->robots[team][robot].update(position.time_, position.position_.linear);
-          }
-        }
-        else
-        {
-          // robot is not present in vision
-        }
-      }
-    return true;
   }
-
-  UpdateBallInformation::UpdateBallInformation(vision::PartOfTheField part_of_the_field_used)
-    : part_of_the_field_used_(part_of_the_field_used)
-  {
-  }
-
-  bool UpdateBallInformation::runTask()
-  {
-    int nballs = 0;
-    Point pos(0, 0);
-    double tmin = std::numeric_limits<double>::max(), tmax = -std::numeric_limits<double>::min(), t;
-    // parse all cameras and balls
-    for (auto& c : vision::VisionDataSingleThread::singleton_.last_camera_detection_)
-      for (auto& b : c.balls_)
-      {
-        if (b.confidence_ > 0)
-        {
-          pos += Point(double(b.x_) / 1000.0, double(b.y_) / 1000.0);
-          t = b.camera_->t_capture_;
-          tmin = std::min(tmin, t);
-          tmax = std::max(tmax, t);
-          nballs += 1;
-        }
-      }
-    if (nballs > 0)
+  // now we have all informations by robots
+  for (int team = 0; team < 2; ++team)
+    for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
     {
-      pos = pos / double(nballs);
-      Data::get()->ball.update((tmin + tmax) / 2.0, pos);
+      bool present = false;
+      for (uint i = 0; i < ai::Config::NB_CAMERAS; ++i)
+      {
+        if (detections[team][robot][i] != nullptr)
+        {
+          present = true;
+          break;
+        }
+      }
+      if (present)
+      {
+        vision::TimedPosition position = vision::Factory::filter(detections[team][robot]);
+        if (position.time_ > 0)
+        {
+          if (position.orientation_is_defined_)
+            Data::get()->robots[team][robot].update(position.time_, position.position_.linear,
+                                                    position.position_.angular);
+          else
+            Data::get()->robots[team][robot].update(position.time_, position.position_.linear);
+        }
+      }
+      else
+      {
+        // robot is not present in vision
+      }
     }
-    return true;
+
+  return true;
+}
+
+UpdateBallInformation::UpdateBallInformation(vision::PartOfTheField part_of_the_field_used)
+  : part_of_the_field_used_(part_of_the_field_used)
+{
+}
+
+bool UpdateBallInformation::runTask()
+{
+  int nballs = 0;
+  Point pos(0, 0);
+  double tmin = std::numeric_limits<double>::max(), tmax = -std::numeric_limits<double>::min(), t;
+  // parse all cameras and balls
+  for (auto& c : vision::VisionDataSingleThread::singleton_.last_camera_detection_)
+    for (auto& b : c.balls_)
+    {
+      if (b.confidence_ > 0)
+      {
+        pos += Point(double(b.x_) / 1000.0, double(b.y_) / 1000.0);
+        t = b.camera_->t_capture_;
+        tmin = std::min(tmin, t);
+        tmax = std::max(tmax, t);
+        nballs += 1;
+      }
+    }
+  if (nballs > 0)
+  {
+    pos = pos / double(nballs);
+    Data::get()->ball.update((tmin + tmax) / 2.0, pos);
   }
+  return true;
+}
 }  // namespace vision
-}  // namespace vision
+}  // namespace rhoban_ssl
