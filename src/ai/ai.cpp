@@ -276,8 +276,6 @@ void AI::setManager(std::string managerName)
   }
   else
   {
-    // remove all the robots accessible by the manual manager
-    manual_manager_->declareTeamIds({});
     strategy_manager_ = manager::Factory::constructManager(managerName);
   }
 
@@ -303,7 +301,7 @@ void AI::pauseManager()
   }
 }
 
-void AI::stopManager()
+void AI::stopStrategyManager()
 {
   setManager(manager::names::MANUAL);
   strategy_manager_->clearStrategyAssignement();
@@ -391,9 +389,11 @@ bool TimeUpdater::runTask()
     std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
     Data::get()->ai_data.time = 1;
   }
+
   //#ifndef NDEBUG
   //  for (unsigned int i = 0; i < Data::get()->all_robots.size(); i++)
   //  {
+  // // this assert in invalid because the lasttime is a timestamp from camera and ai_data.time a time in second.
   //    assert(Data::get()->all_robots.at(i).second->getMovement().lastTime() - 0.000001 <= Data::get()->ai_data.time);
   //  }
   //#endif
@@ -464,11 +464,10 @@ std::string AI::getStrategyOf(uint robot_number)
 
 void AI::setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::string strat_name)
 {
-  // remove the bot from the team of the current manager
-  strategy_manager_.get()->removeIdsInTeam(robot_numbers);
-
-  // add the bot in the team of the manual manager
-  manual_manager_.get()->addIdsInTeam(robot_numbers);
+  if (strategy_manager_ != manual_manager_)
+  {
+    stopStrategyManager();
+  }
 
   // apply the strategy
   manual_manager_.get()->assignStrategy(strat_name, Data::get()->ai_data.time, robot_numbers);

@@ -90,7 +90,7 @@ public:
    * Its clear all robotbehavior assignements and replace them with the Halt
    * behavior.
    */
-  void stopManager();
+  void stopStrategyManager();
 
   /**
    * @brief getCurrentManager returns the manager that currently running in the AI.
