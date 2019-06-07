@@ -119,8 +119,18 @@ bool DetectionPacketAnalyzer::runTask()
           i.confidence_ = -1;
         for (auto& i : current.opponents_)
           i.confidence_ = -1;
-        for (int i = 0; i < frame.balls_size(); ++i)
-          current.balls_[i] = frame.balls(i);
+        // By default we take the first information of the ball
+        if (frame.balls_size() > 0)
+          current.balls_[0] = frame.balls(0);
+        // If the camera see more than one ball
+        for (int i = 1; i < frame.balls_size(); ++i)
+        {
+          // We update the information of the unique ball if the confidence is higher than the first ball
+          if (current.balls_[0].confidence_ < frame.balls(i).confidence())
+          {
+            current.balls_[0] = frame.balls(i);
+          }
+        }
         if (ai::Config::we_are_blue)
         {
           for (int i = 0; i < frame.robots_blue_size(); ++i)
@@ -170,13 +180,10 @@ bool UpdateRobotInformation::runTask()
         continue;
       if (r.robot_id_ >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
         continue;
-      uint i = 0;
-      while (detections[Ally][r.robot_id_][i] != nullptr)
-        i += 1;
-      if (i < ai::Config::NB_CAMERAS)
-        detections[Ally][r.robot_id_][i] = &r;
-      else
-        DEBUG("WARNING: too much vision for robot!");
+
+      if (detections[Ally][r.robot_id_][camera_id] != nullptr)
+        DEBUG("WARNING: (Ally) too much vision for robot" << r.robot_id_ << " on camera " << camera_id);
+      detections[Ally][r.robot_id_][camera_id] = &r;
     }
     for (auto& r : camera.opponents_)
     {
@@ -186,13 +193,10 @@ bool UpdateRobotInformation::runTask()
         continue;
       if (r.robot_id_ >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
         continue;
-      uint i = 0;
-      while (detections[Opponent][r.robot_id_][i] != nullptr)
-        i += 1;
-      if (i < ai::Config::NB_CAMERAS)
-        detections[Opponent][r.robot_id_][i] = &r;
-      else
+
+      if (detections[Opponent][r.robot_id_][camera_id] != nullptr)
         DEBUG("WARNING: too much vision for robot!");
+      detections[Opponent][r.robot_id_][camera_id] = &r;
     }
   }
 

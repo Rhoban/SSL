@@ -22,29 +22,32 @@ Factory::filter(int robot_id, const SSL_DetectionRobot& robot_frame, bool ally,
 TimedPosition Factory::filter(RobotDetection** robots)
 {
   TimedPosition t;
-  int i;
   double average_time = 0.0;
   rhoban_geometry::Point linear_average(0.0, 0.0);
   ContinuousAngle angular_average(0.0);
   double sina = 0.0;
   double cosa = 0.0;
   int n_angular = 0;
-
-  for (i = 0; i < ai::Config::NB_CAMERAS && robots[i] != nullptr; ++i)
+  int cmpt = 0;
+  for (uint i = 0; i < ai::Config::NB_CAMERAS; ++i)
   {
-    average_time += robots[i]->camera_->t_capture_;
-    linear_average += rhoban_geometry::Point(robots[i]->x_ / 1000.0, robots[i]->y_ / 1000.0);
-    if (robots[i]->has_orientation_)
+    if (robots[i] != nullptr)
     {
-      sina += sin(robots[i]->orientation_);
-      cosa += cos(robots[i]->orientation_);
-      n_angular++;
+      cmpt += 1;
+      average_time += robots[i]->camera_->t_capture_;
+      linear_average += rhoban_geometry::Point(robots[i]->x_ / 1000.0, robots[i]->y_ / 1000.0);
+      if (robots[i]->has_orientation_)
+      {
+        sina += sin(robots[i]->orientation_);
+        cosa += cos(robots[i]->orientation_);
+        n_angular++;
+      }
     }
   }
-  if (i > 0)
+  if (cmpt > 0)
   {
-    t.time_ = average_time / (double)i;
-    t.position_.linear = linear_average / (double)i;
+    t.time_ = average_time / (double)cmpt;
+    t.position_.linear = linear_average / (double)cmpt;
     if (n_angular == 0)
       t.orientation_is_defined_ = false;
     else
