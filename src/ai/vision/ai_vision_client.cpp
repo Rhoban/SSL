@@ -119,7 +119,7 @@ bool DetectionPacketAnalyzer::runTask()
           i.confidence_ = -1;
         for (auto& i : current.opponents_)
           i.confidence_ = -1;
-        for (int i = 0; i < frame.balls_size(); ++i)
+        for (int i = 0; i < frame.balls_size() && i < ai::Config::MAX_BALLS_DETECTED; ++i)
           current.balls_[i] = frame.balls(i);
         if (ai::Config::we_are_blue)
         {
@@ -170,13 +170,10 @@ bool UpdateRobotInformation::runTask()
         continue;
       if (r.robot_id_ >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
         continue;
-      uint i = 0;
-      while (detections[Ally][r.robot_id_][i] != nullptr)
-        i += 1;
-      if (i < ai::Config::NB_CAMERAS)
-        detections[Ally][r.robot_id_][i] = &r;
-      else
-        DEBUG("WARNING: too much vision for robot!");
+
+      if (detections[Ally][r.robot_id_][camera_id] != nullptr)
+        DEBUG("WARNING: (Ally) too much vision for robot" << r.robot_id_ << " on camera " << camera_id);
+      detections[Ally][r.robot_id_][camera_id] = &r;
     }
     for (auto& r : camera.opponents_)
     {
@@ -186,13 +183,10 @@ bool UpdateRobotInformation::runTask()
         continue;
       if (r.robot_id_ >= ai::Config::NB_OF_ROBOTS_BY_TEAM)
         continue;
-      uint i = 0;
-      while (detections[Opponent][r.robot_id_][i] != nullptr)
-        i += 1;
-      if (i < ai::Config::NB_CAMERAS)
-        detections[Opponent][r.robot_id_][i] = &r;
-      else
+
+      if (detections[Opponent][r.robot_id_][camera_id] != nullptr)
         DEBUG("WARNING: too much vision for robot!");
+      detections[Opponent][r.robot_id_][camera_id] = &r;
     }
   }
 
