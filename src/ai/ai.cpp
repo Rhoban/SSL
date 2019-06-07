@@ -391,12 +391,12 @@ bool TimeUpdater::runTask()
     std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
     Data::get()->ai_data.time = 1;
   }
-#ifndef NDEBUG
-  for (unsigned int i = 0; i < Data::get()->all_robots.size(); i++)
-  {
-    assert(Data::get()->all_robots.at(i).second->getMovement().lastTime() - 0.000001 <= Data::get()->ai_data.time);
-  }
-#endif
+  //#ifndef NDEBUG
+  //  for (unsigned int i = 0; i < Data::get()->all_robots.size(); i++)
+  //  {
+  //    assert(Data::get()->all_robots.at(i).second->getMovement().lastTime() - 0.000001 <= Data::get()->ai_data.time);
+  //  }
+  //#endif
   return true;
 }
 

@@ -68,11 +68,12 @@ SSL_WrapperPacket* VisionDataGlobal::getNewPacket()
 void VisionDataGlobal::reset()
 {
   arena_->Reset();
+  last_packets_.clear();
 }
 
 // internal allocator for arena
 
-#define PROTOBUF_ALLOC_BLOCK 1024 * 1024
+#define PROTOBUF_ALLOC_BLOCK 10 * 1024 * 1024
 
 struct BlocksSet
 {
@@ -117,6 +118,8 @@ VisionDataGlobal::VisionDataGlobal()
   options.max_block_size = PROTOBUF_ALLOC_BLOCK;
   options.block_alloc = arena_allocator;
   options.block_dealloc = arena_deallocator;
+  options.initial_block = new char[PROTOBUF_ALLOC_BLOCK];
+  options.initial_block_size = PROTOBUF_ALLOC_BLOCK;
   arena_ = new google::protobuf::Arena(options);
 }
 
