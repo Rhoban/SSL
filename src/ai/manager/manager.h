@@ -83,18 +83,8 @@ public:
    */
   void declareTeamIds(const std::vector<int>& team_ids);
 
-  /**
-   * @brief removeIdsInTeam
-   */
-  void removeIdsInTeam(const std::vector<int>& robot_numbers_to_remove);
-
-  /**
-   * @brief addIdsInTeam
-   */
-  void addIdsInTeam(const std::vector<int>& robot_numbers_to_add);
-
   double time() const;
-  int dt() const;
+  double dt() const;
 
   const std::string& getNextStrategyWithGoalie() const;
 

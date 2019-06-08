@@ -72,7 +72,7 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["stop_manager"].isNull())
     {
-      ai_->stopManager();
+      ai_->stopStrategyManager();
     }
     else if (!viewer_packet["halt_bot"].isNull())
     {
@@ -98,10 +98,6 @@ void ViewerCommunication::processIncomingPackets()
         robot_numbers.push_back(viewer_packet["set_strategy"]["bots"][i].asInt());
       }
       ai_->setStrategyManuallyOf(robot_numbers, viewer_packet["set_strategy"]["name"].asString());
-    }
-    else if (!viewer_packet["give_bot_to_manager"].isNull())
-    {
-      ai_->getCurrentManager().get()->addIdsInTeam({ viewer_packet["give_bot_to_manager"].asInt() });
     }
     else if (!viewer_packet["place_bot"].isNull())
     {

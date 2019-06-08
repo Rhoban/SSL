@@ -15,9 +15,10 @@ struct Config
   // todo move to GlobalData ?
   static std::string team_name;
 
-  static constexpr int NB_OF_ROBOTS_BY_TEAM = 16;
+  static constexpr int NB_OF_ROBOTS_BY_TEAM = 8;
   static constexpr unsigned int NB_CAMERAS = 4;
-  static constexpr unsigned int MAX_BALLS_DETECTED = 4;
+  // The Kalman filter doesn't support more than 1 ball per camera
+  static constexpr unsigned int MAX_BALLS_DETECTED_PER_CAMERA = 1;
 
   static bool enable_movement_with_integration;
 
@@ -30,6 +31,10 @@ struct Config
 
   static double robot_radius;
   static double ball_radius;
+  static double max_wheel_speed;
+  static double rear_wheel_angle;
+  static double front_wheel_angle;
+
   static Vector2d waiting_goal_position;
   static uint default_goalie_id;
 

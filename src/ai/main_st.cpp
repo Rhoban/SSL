@@ -35,6 +35,7 @@
 #include <referee/referee_packet_analyzer.h>
 #include <data/computed_data.h>
 #include <control/control.h>
+#include <control/kinematic.h>
 #include <viewer/viewer_communication.h>
 
 #define TEAM_NAME "AMC"
@@ -208,7 +209,8 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new data::CollisionComputing());
   ExecutionManager::getManager().addTask(new TimeUpdater());
   ExecutionManager::getManager().addTask(ai_);
-  ExecutionManager::getManager().addTask(new ControlSender(commander));
+  ExecutionManager::getManager().addTask(new control::WarningMaximumVelocity());
+  ExecutionManager::getManager().addTask(new control::ControlSender(commander));
 
   // viewer
   ExecutionManager::getManager().addTask(new viewer::ViewerServer());
