@@ -7,6 +7,7 @@
         "ntpd_enable" : false
     },
     "robot" : {
+	"robot_center_to_dribbler_center" : 0.073,
         "robot_radius" : 0.09,
         "wheel_radius" : 0.03,
         "wheel_excentricity" : 0.08,
