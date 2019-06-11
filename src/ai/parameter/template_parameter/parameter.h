@@ -18,42 +18,41 @@
 */
 
 #pragma once
+#include <iostream>
 #include <json/json.h>
-#include <list>
 
 namespace rhoban_ssl
 {
-namespace viewer
+
+namespace type_parameters
 {
-class PropertiesFactory
+enum Type
 {
-private:
-  Json::Value json;
+  NoneParameter,
+  IntParameter
+};
+}
+
+namespace parameter
+{
+
+class Parameter
+{
+protected:
+  type_parameters::Type type_;
+  std::string comment_;
 
 public:
-  PropertiesFactory();
-
-  void addSetValue(std::string name, std::string default_value);
-
-  void addSetValue(std::string name, int default_value);
-
-  void addSetValue(std::string name, double default_value);
-
-  void addRangeValue(std::string name, int min, int max, int step, int default_value);
-
-  void addRangeValue(std::string name, double min, double max, double step, double default_value);
-
-  // void addList(std::string name, std::list<std::string> string_list);
-
-  // void addList(std::string name, std::list<int> string_list);
-
-  // void addList(std::string name, std::list<double> string_list);
-
-  void clear();
-
-  Json::Value& getJson();
-
-  ~PropertiesFactory();
+  Parameter(std::string comment, type_parameters::Type type);
+  /**
+   * @brief Obtain the json of the parameters.
+   * @return
+   */
+  virtual Json::Value getJson() = 0;
+  /**
+   * @brief Destructor of the class.
+   */
+  virtual ~Parameter();
 };
-}  // namespace viewer
+}  // namespace parameter
 }  // namespace rhoban_ssl

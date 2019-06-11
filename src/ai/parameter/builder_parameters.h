@@ -18,42 +18,40 @@
 */
 
 #pragma once
-
-#include <manager/manager.h>
-#include <parameter/builder_parameters.h>
+#include <iostream>
+#include <vector>
+#include "template_parameter/value_parameter.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace parameter
 {
-class Manual : public Manager
+class BuilderParameters
 {
 private:
-  /** Builder parameters */
-  parameter::BuilderParameters builder_parameter_;
+  std::vector<Parameter> parameters_;
 
 public:
   /**
    * @brief Constructor.
    */
-  Manual(std::string name);
-  /**
-   * @brief Update the manager after each loop.
-   */
-  void update();
-  /**
-   * @brief Get all properties of the manager shown in the viewer.
-   */
-  virtual Json::Value getProperties();
-  /**
-   * @brief Set the properties send by the viewer.
-   */
-  virtual void setProperties(Json::Value);
+  BuilderParameters();
 
   /**
-   * @brief Destructor
+   * @brief new_int Create a new int parameters.
+   * @param name Name of the parameters.
+   * @param comment Comment of the parameters.
+   * @param default_value Set the default value (optional - default value : 0).
+   * @param writable Is the value is writable (optional - default value : false).
    */
-  ~Manual();
+  void new_int(std::string name, std::string comment, int default_value = 0, bool writable = false);
+
+  Json::Value getJson();
+
+  /**
+   * @brief Destructor.
+   */
+  ~BuilderParameters();
 };
-}  // namespace manager
+}  // namespace parameter
 }  // namespace rhoban_ssl

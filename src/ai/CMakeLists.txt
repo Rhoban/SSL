@@ -41,7 +41,6 @@ set (SOURCES
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp
     viewer/viewer_communication.cpp
-    viewer/properties.cpp
     robot_behavior/factory.cpp
     robot_behavior/do_nothing.cpp
     robot_behavior/position_follower.cpp
@@ -97,6 +96,11 @@ set (SOURCES
     referee/referee_packet_analyzer.cpp
     referee/game_state.cpp
     annotations/annotations.cpp
+
+    # parameters
+    parameter/builder_parameters.cpp
+    parameter/template_parameter/parameter.cpp
+    parameter/template_parameter/value_parameter.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)

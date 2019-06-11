@@ -5,7 +5,7 @@ build_*
 devel_*
 logs_*
 CMakeLists.txt.user
-
+CMakeFiles
 
 .catkin_tools
 **_debug

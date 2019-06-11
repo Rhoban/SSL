@@ -17,43 +17,31 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
-
-#include <manager/manager.h>
-#include <parameter/builder_parameters.h>
+#include "builder_parameters.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace parameter
 {
-class Manual : public Manager
+BuilderParameters::BuilderParameters()
 {
-private:
-  /** Builder parameters */
-  parameter::BuilderParameters builder_parameter_;
+}
 
-public:
-  /**
-   * @brief Constructor.
-   */
-  Manual(std::string name);
-  /**
-   * @brief Update the manager after each loop.
-   */
-  void update();
-  /**
-   * @brief Get all properties of the manager shown in the viewer.
-   */
-  virtual Json::Value getProperties();
-  /**
-   * @brief Set the properties send by the viewer.
-   */
-  virtual void setProperties(Json::Value);
+// TODO : Add in queue.
+void BuilderParameters::new_int(std::string name, std::string comment, int value) {
+    parameters_.push_back(IntParameter(name, comment, false, value));
+}
 
-  /**
-   * @brief Destructor
-   */
-  ~Manual();
-};
-}  // namespace manager
+void BuilderParameters::new_int(std::string name, std::string comment, bool writable, int value) {
+    IntParameter(name, comment, writable, value);
+}
+
+
+BuilderParameters::~BuilderParameters()
+{
+
+}
+
+
+}  // namespace viewer
 }  // namespace rhoban_ssl
