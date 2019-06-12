@@ -197,7 +197,7 @@ bool ChangeReferencePointOfView::runTask()
 
           if (ally_robot.has_orientation_)
           {
-            ally_robot.orientation_ = fmodf32(ally_robot.orientation_ + M_PIf32, M_PIf32 * 2.0f);
+            ally_robot.orientation_ = fmodf(ally_robot.orientation_ + M_PI, M_PI * 2.0f);
           }
 
           struct RobotDetection& opponent_robot =
@@ -207,7 +207,7 @@ bool ChangeReferencePointOfView::runTask()
 
           if (opponent_robot.has_orientation_)
           {
-            opponent_robot.orientation_ = fmodf32(opponent_robot.orientation_ + M_PIf32, M_PIf32 * 2.0f);
+            opponent_robot.orientation_ = fmodf(opponent_robot.orientation_ + M_PI, M_PI * 2.0f);
           }
         }
         VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].inverted = true;
