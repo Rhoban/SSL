@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 SCHMITZ Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,10 +21,14 @@
 #pragma once
 
 #include <json/json.h>
-#include <vector>
 #include <math/vector2d.h>
 #include <rhoban_geometry/segment.h>
 #include <math/box.h>
+#include "shape/shape.h"
+
+// Shape
+#include "shape/circle.h"
+//#include "shape/arrow.h"
 
 namespace rhoban_ssl
 {
@@ -34,11 +39,12 @@ class Annotations
 public:
   Annotations();
 
-  void clear();
-  void addCircle(double x, double y, double r, std::string color = "white", bool dashed = false);
-  void addCircle(const rhoban_geometry::Point& origin, double r, std::string color = "white", bool dashed = false);
-  void addCircle(const Vector2d& origin, double r, std::string color = "white", bool dashed = false);
-
+  void addCircle(double x, double y, double r, std::string border_color = "white",
+                 std::string stroke_color = "transparent", bool dashed = false);
+  void addCircle(const rhoban_geometry::Point& origin, double r, std::string border_color = "white",
+                 std::string stroke_color = "transparent", bool dashed = false);
+  void addCircle(const Vector2d& origin, double r, std::string border_color = "white",
+                 std::string stroke_color = "transparent", bool dashed = false);
   void addBox(const rhoban_ssl::Box& box, std::string color = "white", bool dashed = false);
 
   void addText(const std::string& text, double x, double y, std::string color = "white");
@@ -56,14 +62,16 @@ public:
   void addCross(const Vector2d& position, std::string color = "white", bool dashed = false);
 
   void addAnnotations(const Annotations& annotations);
+  void clear();
+  Json::Value toJson();
 
-  Json::Value toJson() const;
-  std::string toJsonString() const;
-
-  void mapPositions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct);
+  // void mapPositions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct);
 
 protected:
   Json::Value json_;
+
+private:
+  std::vector<shape::Shape*> shapes_;
 };
 }  // namespace annotations
 }  // namespace rhoban_ssl

@@ -2,7 +2,8 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
+    Copyright 2018 Gregwar
+    Copyright 2019 SCHMITZ Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,106 +20,49 @@
 */
 
 #include "annotations.h"
+#include <debug.h>
 
 namespace rhoban_ssl
 {
 namespace annotations
 {
-void Annotations::mapPositions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct)
-{
-  for (unsigned int i = 0; i < json_.size(); i++)
-  {
-    Json::Value& annotation = json_[i];
-    std::string type = annotation["type"].asString();
-    rhoban_geometry::Point point;
-    if (type == "arrow")
-    {
-      point = fct(rhoban_geometry::Point(annotation["x"].asDouble(), annotation["y"].asDouble()));
-      annotation["x"] = point.getX();
-      annotation["y"] = point.getY();
-      point = fct(rhoban_geometry::Point(annotation["toX"].asDouble(), annotation["toY"].asDouble()));
-      annotation["toX"] = point.getX();
-      annotation["toY"] = point.getY();
-    }
-    else if (type == "text" or type == "cross" or type == "circle")
-    {
-      point = fct(rhoban_geometry::Point(annotation["x"].asDouble(), annotation["y"].asDouble()));
-      annotation["x"] = point.getX();
-      annotation["y"] = point.getY();
-    }
-    else
-    {
-      std::cerr << "Unknown annotation type : " << type << "." << std::endl;
-      assert(false);
-    }
-  }
-}
 
 Annotations::Annotations() : json_(Json::arrayValue)
 {
 }
 
-void Annotations::clear()
+void Annotations::addCircle(double x, double y, double r, std::string border_color, std::string stroke_color,
+                            bool dashed)
 {
-  json_ = Json::Value(Json::arrayValue);
+  shapes_.push_back(new shape::Circle(x, y, r, border_color, stroke_color, dashed));
 }
 
-void Annotations::addCircle(double x, double y, double r, std::string color, bool dashed)
+void Annotations::addCircle(const rhoban_geometry::Point& origin, double r, std::string border_color,
+                            std::string stroke_color, bool dashed)
 {
-  Json::Value annotation;
-
-  annotation["type"] = "circle";
-  annotation["color"] = color;
-  annotation["dashed"] = dashed;
-
-  annotation["x"] = x;
-  annotation["y"] = y;
-  annotation["r"] = r;
-
-  json_.append(annotation);
+  addCircle(origin.getX(), origin.getY(), r, border_color, stroke_color, dashed);
+}
+void Annotations::addCircle(const Vector2d& origin, double r, std::string border_color, std::string stroke_color,
+                            bool dashed)
+{
+  addCircle(origin.getX(), origin.getY(), r, border_color, stroke_color, dashed);
 }
 
-void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color, bool dashed)
+Json::Value Annotations::toJson()
 {
-  addArrow(s.A, s.B, color, dashed);
-}
-
-void Annotations::addArrow(double x, double y, double toX, double toY, std::string color, bool dashed)
-{
-  Json::Value annotation;
-
-  annotation["type"] = "arrow";
-  annotation["color"] = color;
-  annotation["dashed"] = dashed;
-
-  annotation["x"] = x;
-  annotation["y"] = y;
-  annotation["toX"] = toX;
-  annotation["toY"] = toY;
-
-  json_.append(annotation);
-}
-
-void Annotations::addAnnotations(const Annotations& annotations)
-{
-  for (unsigned int i = 0; i < annotations.json_.size(); i++)
+  for (auto it = shapes_.begin(); it != shapes_.end(); it++)
   {
-    json_.append(annotations.json_[i]);
+    json_.append((*it)->toJson());
   }
+  return json_;
 }
+
+///////////////////////////////////////////////////////////
+// TO IMPLEMENT THAT
 
 void Annotations::addCross(double x, double y, std::string color, bool dashed)
 {
-  Json::Value annotation;
-
-  annotation["type"] = "cross";
-  annotation["color"] = color;
-  annotation["dashed"] = dashed;
-
-  annotation["x"] = x;
-  annotation["y"] = y;
-
-  json_.append(annotation);
+  DEBUG("To implement");
 }
 
 void Annotations::addCross(const rhoban_geometry::Point& position, std::string color, bool dashed)
@@ -130,17 +74,20 @@ void Annotations::addCross(const Vector2d& position, std::string color, bool das
   addCross(position.getX(), position.getY(), color, dashed);
 }
 
-Json::Value Annotations::toJson() const
+void Annotations::addAnnotations(const Annotations& annotations)
 {
-  return json_;
+  //  for (unsigned int i = 0; i < annotations.json_.size(); i++)
+  //  {
+  //    json_.append(annotations.json_[i]);
+  //  }
+  DEBUG("TO IMPLEMENT");
 }
 
-std::string Annotations::toJsonString() const
+void Annotations::clear()
 {
-  Json::FastWriter writer;
-
-  return writer.write(json_);
+  DEBUG("TO IMPLEMENT");
 }
+
 void Annotations::addArrow(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end, std::string color,
                            bool dashed)
 {
@@ -153,17 +100,7 @@ void Annotations::addArrow(const Vector2d& origin, const Vector2d& end, std::str
 
 void Annotations::addText(const std::string& text, double x, double y, std::string color)
 {
-  Json::Value annotation;
-
-  annotation["type"] = "text";
-  annotation["text"] = text;
-  annotation["color"] = color;
-  annotation["dashed"] = false;
-
-  annotation["x"] = x;
-  annotation["y"] = y;
-
-  json_.append(annotation);
+  DEBUG(" TO IMPLEMENT");
 }
 void Annotations::addText(const std::string& text, const rhoban_geometry::Point& point, std::string color)
 {
@@ -176,19 +113,18 @@ void Annotations::addText(const std::string& text, const Vector2d& point, std::s
 
 void Annotations::addBox(const rhoban_ssl::Box& box, std::string color, bool dashed)
 {
-  addArrow(box.getWestSegment(), color, dashed);
-  addArrow(box.getEastSegment(), color, dashed);
-  addArrow(box.getNorthSegment(), color, dashed);
-  addArrow(box.getSouthSegment(), color, dashed);
+  DEBUG(" TO IMPLEMENT");
 }
 
-void Annotations::addCircle(const rhoban_geometry::Point& origin, double r, std::string color, bool dashed)
+void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color, bool dashed)
 {
-  addCircle(origin.getX(), origin.getY(), r, color, dashed);
+  addArrow(s.A, s.B, color, dashed);
 }
-void Annotations::addCircle(const Vector2d& origin, double r, std::string color, bool dashed)
+
+void Annotations::addArrow(double x, double y, double toX, double toY, std::string color, bool dashed)
 {
-  addCircle(origin.getX(), origin.getY(), r, color, dashed);
+  DEBUG(" TO IMPLEMENT");
 }
+
 }  // namespace annotations
 }  // namespace rhoban_ssl

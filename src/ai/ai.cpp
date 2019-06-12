@@ -429,8 +429,13 @@ void AI::emergency()
   commander_->flush();
 }
 
-void AI::getAnnotations(annotations::Annotations& annotations) const
+Json::Value AI::getAnnotations() const
 {
+  Json::Value json = Json::Value();
+  annotations::Annotations annotations = annotations::Annotations();
+  annotations.addCircle(0, 0, 1, "red", "transparent", false);
+  json["annotations"] = annotations.toJson();
+  return json;
   //  annotations.addAnnotations(getManager()->getAnnotations());
   //  annotations.addAnnotations(getRobotBehaviorAnnotations());
 
