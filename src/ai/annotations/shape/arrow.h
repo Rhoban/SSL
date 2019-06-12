@@ -17,7 +17,11 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "circle.h"
+#pragma once
+
+#include "shape.h"
+#include <rhoban_geometry/point.h>
+#include <iostream>
 
 namespace rhoban_ssl
 {
@@ -25,33 +29,19 @@ namespace annotations
 {
 namespace shape
 {
-
-Circle::Circle(double x, double y, double radius, std::string border_color, std::string stroke_color, bool dashed)
-  : Shape()
-  , circle_(rhoban_geometry::Circle(x, y, radius))
-  , border_color_(border_color)
-  , stroke_color_(stroke_color)
-  , dashed_(dashed)
+class Arrow : public Shape
 {
-}
+private:
+  rhoban_geometry::Point origin_;
+  rhoban_geometry::Point to_;
+  std::string stroke_color_;
+  bool dashed_;
 
-Json::Value Circle::toJson()
-{
-  Json::Value annotation;
+public:
+  Arrow(double x, double y, double toX, double toY, std::string stroke_color, bool dashed);
 
-  annotation["type"] = "circle";
-
-  annotation["circle"]["x"] = circle_.getCenter().getX();
-  annotation["circle"]["y"] = circle_.getCenter().getY();
-  annotation["circle"]["radius"] = circle_.getRadius();
-
-  annotation["border_color"] = border_color_;
-  annotation["stroke_color"] = stroke_color_;
-  annotation["dashed"] = dashed_;
-
-  return annotation;
-}
-
+  virtual Json::Value toJson();
+};
 }  // namespace shape
 }  // namespace annotations
 }  // namespace rhoban_ssl

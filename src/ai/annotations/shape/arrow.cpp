@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "circle.h"
+#include "arrow.h"
 
 namespace rhoban_ssl
 {
@@ -26,26 +26,26 @@ namespace annotations
 namespace shape
 {
 
-Circle::Circle(double x, double y, double radius, std::string border_color, std::string stroke_color, bool dashed)
+Arrow::Arrow(double x, double y, double to_x, double to_y, std::string stroke_color, bool dashed)
   : Shape()
-  , circle_(rhoban_geometry::Circle(x, y, radius))
-  , border_color_(border_color)
+  , origin_(rhoban_geometry::Point(x, y))
+  , to_(rhoban_geometry::Point(to_x, to_y))
   , stroke_color_(stroke_color)
   , dashed_(dashed)
 {
 }
 
-Json::Value Circle::toJson()
+Json::Value Arrow::toJson()
 {
   Json::Value annotation;
 
-  annotation["type"] = "circle";
+  annotation["type"] = "arrow";
 
-  annotation["circle"]["x"] = circle_.getCenter().getX();
-  annotation["circle"]["y"] = circle_.getCenter().getY();
-  annotation["circle"]["radius"] = circle_.getRadius();
+  annotation["origin"]["x"] = origin_.getX();
+  annotation["origin"]["y"] = origin_.getY();
+  annotation["to"]["x"] = to_.getX();
+  annotation["to"]["y"] = to_.getY();
 
-  annotation["border_color"] = border_color_;
   annotation["stroke_color"] = stroke_color_;
   annotation["dashed"] = dashed_;
 

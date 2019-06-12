@@ -31,6 +31,23 @@ Annotations::Annotations() : json_(Json::arrayValue)
 {
 }
 
+Json::Value Annotations::toJson()
+{
+  for (auto it = shapes_.begin(); it != shapes_.end(); it++)
+  {
+    json_.append((*it)->toJson());
+  }
+  return json_;
+}
+
+Annotations::~Annotations()
+{
+}
+
+/*******************************************************************************************
+ *                                      Circle                                             *
+ *******************************************************************************************/
+
 void Annotations::addCircle(double x, double y, double r, std::string border_color, std::string stroke_color,
                             bool dashed)
 {
@@ -48,80 +65,96 @@ void Annotations::addCircle(const Vector2d& origin, double r, std::string border
   addCircle(origin.getX(), origin.getY(), r, border_color, stroke_color, dashed);
 }
 
-Json::Value Annotations::toJson()
+/*******************************************************************************************
+ *                                      Cross                                              *
+ *******************************************************************************************/
+
+void Annotations::addCross(double x, double y, std::string stroke_color, bool dashed)
 {
-  for (auto it = shapes_.begin(); it != shapes_.end(); it++)
+  shapes_.push_back(new shape::Cross(x, y, stroke_color, dashed));
+}
+
+void Annotations::addCross(const rhoban_geometry::Point& position, std::string stroke_color, bool dashed)
+{
+  addCross(position.getX(), position.getY(), stroke_color, dashed);
+}
+
+void Annotations::addCross(const Vector2d& position, std::string stroke_color, bool dashed)
+{
+  addCross(position.getX(), position.getY(), stroke_color, dashed);
+}
+
+/*******************************************************************************************
+ *                                      Arrow                                              *
+ *******************************************************************************************/
+
+void Annotations::addArrow(double x, double y, double to_x, double to_y, std::string stroke_color, bool dashed)
+{
+  shapes_.push_back(new shape::Arrow(x, y, to_x, to_y, stroke_color, dashed));
+}
+
+void Annotations::addArrow(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
+                           std::string stroke_color, bool dashed)
+{
+  addArrow(origin.getX(), origin.getY(), end.getX(), end.getY(), stroke_color, dashed);
+}
+void Annotations::addArrow(const Vector2d& origin, const Vector2d& end, std::string stroke_color, bool dashed)
+{
+  addArrow(origin.getX(), origin.getY(), end.getX(), end.getY(), stroke_color, dashed);
+}
+
+/*******************************************************************************************
+ *                                      Polygon                                            *
+ *******************************************************************************************/
+
+/*******************************************************************************************
+ *                                      Utility                                            *
+ *******************************************************************************************/
+
+void Annotations::addAnnotations(const Annotations& annotations)
+{
+  for (auto it = annotations.shapes_.begin(); it != annotations.shapes_.end(); it++)
   {
-    json_.append((*it)->toJson());
+    shapes_.push_back(*it);
   }
-  return json_;
 }
 
 ///////////////////////////////////////////////////////////
 // TO IMPLEMENT THAT
-
-void Annotations::addCross(double x, double y, std::string color, bool dashed)
-{
-  DEBUG("To implement");
-}
-
-void Annotations::addCross(const rhoban_geometry::Point& position, std::string color, bool dashed)
-{
-  addCross(position.getX(), position.getY(), color, dashed);
-}
-void Annotations::addCross(const Vector2d& position, std::string color, bool dashed)
-{
-  addCross(position.getX(), position.getY(), color, dashed);
-}
-
-void Annotations::addAnnotations(const Annotations& annotations)
-{
-  //  for (unsigned int i = 0; i < annotations.json_.size(); i++)
-  //  {
-  //    json_.append(annotations.json_[i]);
-  //  }
-  DEBUG("TO IMPLEMENT");
-}
 
 void Annotations::clear()
 {
   DEBUG("TO IMPLEMENT");
 }
 
-void Annotations::addArrow(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end, std::string color,
-                           bool dashed)
-{
-  addArrow(origin.getX(), origin.getY(), end.getX(), end.getY(), color, dashed);
-}
-void Annotations::addArrow(const Vector2d& origin, const Vector2d& end, std::string color, bool dashed)
-{
-  addArrow(origin.getX(), origin.getY(), end.getX(), end.getY(), color, dashed);
-}
-
-void Annotations::addText(const std::string& text, double x, double y, std::string color)
-{
-  DEBUG(" TO IMPLEMENT");
-}
-void Annotations::addText(const std::string& text, const rhoban_geometry::Point& point, std::string color)
-{
-  addText(text, point.getX(), point.getY(), color);
-};
-void Annotations::addText(const std::string& text, const Vector2d& point, std::string color)
-{
-  addText(text, point.getX(), point.getY(), color);
-}
-
-void Annotations::addBox(const rhoban_ssl::Box& box, std::string color, bool dashed)
-{
-  DEBUG(" TO IMPLEMENT");
-}
-
+// To discuss
 void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color, bool dashed)
 {
   addArrow(s.A, s.B, color, dashed);
 }
 
-void Annotations::addArrow(double x, double y, double toX, double toY, std::string color, bool dashed)
+// TO REMOVE
+void Annotations::addText(const std::string& text, double x, double y, std::string color)
+{
+  DEBUG(" TO IMPLEMENT");
+}
+
+// TO REMOVE
+
+void Annotations::addText(const std::string& text, const rhoban_geometry::Point& point, std::string color)
+{
+  addText(text, point.getX(), point.getY(), color);
+}
+
+// TO REMOVE
+
+void Annotations::addText(const std::string& text, const Vector2d& point, std::string color)
+{
+  addText(text, point.getX(), point.getY(), color);
+}
+
+// TO REMOVE WITH POLYGON
+void Annotations::addBox(const rhoban_ssl::Box& box, std::string color, bool dashed)
 {
   DEBUG(" TO IMPLEMENT");
 }

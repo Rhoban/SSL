@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "circle.h"
+#include "cross.h"
 
 namespace rhoban_ssl
 {
@@ -26,26 +26,18 @@ namespace annotations
 namespace shape
 {
 
-Circle::Circle(double x, double y, double radius, std::string border_color, std::string stroke_color, bool dashed)
-  : Shape()
-  , circle_(rhoban_geometry::Circle(x, y, radius))
-  , border_color_(border_color)
-  , stroke_color_(stroke_color)
-  , dashed_(dashed)
+Cross::Cross(double x, double y, std::string stroke_color, bool dashed)
+  : Shape(), origin_(rhoban_geometry::Point(x, y)), stroke_color_(stroke_color), dashed_(dashed)
 {
 }
 
-Json::Value Circle::toJson()
+Json::Value Cross::toJson()
 {
   Json::Value annotation;
 
-  annotation["type"] = "circle";
-
-  annotation["circle"]["x"] = circle_.getCenter().getX();
-  annotation["circle"]["y"] = circle_.getCenter().getY();
-  annotation["circle"]["radius"] = circle_.getRadius();
-
-  annotation["border_color"] = border_color_;
+  annotation["type"] = "cross";
+  annotation["origin"]["x"] = origin_.getX();
+  annotation["origin"]["y"] = origin_.getY();
   annotation["stroke_color"] = stroke_color_;
   annotation["dashed"] = dashed_;
 
