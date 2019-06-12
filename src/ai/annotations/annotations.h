@@ -156,10 +156,6 @@ public:
 
   void addBox(const rhoban_ssl::Box& box, std::string color = "white", bool dashed = false);
 
-  void addText(const std::string& text, double x, double y, std::string color = "white");
-  void addText(const std::string& text, const rhoban_geometry::Point& point, std::string color = "white");
-  void addText(const std::string& text, const Vector2d& point, std::string color = "white");
-
   void addArrow(const rhoban_geometry::Segment& s, std::string color = "white", bool dashed = false);
 
   void clear();

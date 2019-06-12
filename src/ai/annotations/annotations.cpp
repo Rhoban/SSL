@@ -119,38 +119,18 @@ void Annotations::addAnnotations(const Annotations& annotations)
   }
 }
 
-///////////////////////////////////////////////////////////
-// TO IMPLEMENT THAT
-
 void Annotations::clear()
 {
-  DEBUG("TO IMPLEMENT");
+  shapes_.clear();
 }
+
+///////////////////////////////////////////////////////////
+// TO IMPLEMENT THAT
 
 // To discuss
 void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color, bool dashed)
 {
   addArrow(s.A, s.B, color, dashed);
-}
-
-// TO REMOVE
-void Annotations::addText(const std::string& text, double x, double y, std::string color)
-{
-  DEBUG(" TO IMPLEMENT");
-}
-
-// TO REMOVE
-
-void Annotations::addText(const std::string& text, const rhoban_geometry::Point& point, std::string color)
-{
-  addText(text, point.getX(), point.getY(), color);
-}
-
-// TO REMOVE
-
-void Annotations::addText(const std::string& text, const Vector2d& point, std::string color)
-{
-  addText(text, point.getX(), point.getY(), color);
 }
 
 // TO REMOVE WITH POLYGON
