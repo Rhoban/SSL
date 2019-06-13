@@ -25,7 +25,6 @@ namespace annotations
 {
 namespace shape
 {
-
 Cross::Cross(double x, double y, std::string stroke_color, bool dashed)
   : Shape(), origin_(rhoban_geometry::Point(x, y)), stroke_color_(stroke_color), dashed_(dashed)
 {

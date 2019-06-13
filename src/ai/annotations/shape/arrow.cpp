@@ -25,7 +25,6 @@ namespace annotations
 {
 namespace shape
 {
-
 Arrow::Arrow(double x, double y, double to_x, double to_y, std::string stroke_color, bool dashed)
   : Shape()
   , origin_(rhoban_geometry::Point(x, y))

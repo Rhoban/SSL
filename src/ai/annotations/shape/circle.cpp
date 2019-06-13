@@ -25,11 +25,10 @@ namespace annotations
 {
 namespace shape
 {
-
-Circle::Circle(double x, double y, double radius, std::string border_color, std::string stroke_color, bool dashed)
+Circle::Circle(double x, double y, double radius, std::string fill_color, std::string stroke_color, bool dashed)
   : Shape()
   , circle_(rhoban_geometry::Circle(x, y, radius))
-  , border_color_(border_color)
+  , fill_color_(fill_color)
   , stroke_color_(stroke_color)
   , dashed_(dashed)
 {
@@ -45,7 +44,7 @@ Json::Value Circle::toJson()
   annotation["circle"]["y"] = circle_.getCenter().getY();
   annotation["circle"]["radius"] = circle_.getRadius();
 
-  annotation["border_color"] = border_color_;
+  annotation["fill_color"] = fill_color_;
   annotation["stroke_color"] = stroke_color_;
   annotation["dashed"] = dashed_;
 

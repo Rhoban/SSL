@@ -433,17 +433,12 @@ Json::Value AI::getAnnotations() const
 {
   Json::Value json = Json::Value();
   annotations::Annotations annotations = annotations::Annotations();
-  annotations.addCircle(0, 0, 1, "red", "transparent", false);
+
+  annotations.addAnnotations(strategy_manager_->getAnnotations());
+  annotations.addAnnotations(getRobotBehaviorAnnotations());
+
   json["annotations"] = annotations.toJson();
   return json;
-  //  annotations.addAnnotations(getManager()->getAnnotations());
-  //  annotations.addAnnotations(getRobotBehaviorAnnotations());
-
-  //  std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point&
-  //  p) {
-  //    return this->ai_data_.team_point_of_view.fromFrame(p);
-  //  };
-  //  annotations.mapPositions(fct);
 }
 
 std::string AI::getRobotBehaviorOf(uint robot_number)

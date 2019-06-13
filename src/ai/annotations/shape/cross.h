@@ -29,7 +29,7 @@ namespace annotations
 {
 namespace shape
 {
-class Cross: public Shape
+class Cross : public Shape
 {
 private:
   rhoban_geometry::Point origin_;
@@ -40,8 +40,6 @@ public:
   Cross(double x, double y, std::string stroke_color, bool dashed);
 
   virtual Json::Value toJson();
-
-
 };
 }  // namespace shape
 }  // namespace annotations

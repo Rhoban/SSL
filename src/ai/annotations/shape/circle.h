@@ -33,12 +33,12 @@ class Circle : public Shape
 {
 private:
   rhoban_geometry::Circle circle_;
-  std::string border_color_;
+  std::string fill_color_;
   std::string stroke_color_;
   bool dashed_;
 
 public:
-  Circle(double x, double y, double radius, std::string border_color, std::string stroke_color, bool dashed);
+  Circle(double x, double y, double radius, std::string fill_color, std::string stroke_color, bool dashed);
 
   virtual Json::Value toJson();
 };

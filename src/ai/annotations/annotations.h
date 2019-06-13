@@ -143,6 +143,10 @@ public:
    */
   void addAnnotations(const Annotations& annotations);
   /**
+   * @brief clear
+   */
+  void clear();
+  /**
    * @brief toJson
    * @return
    */
@@ -157,10 +161,6 @@ public:
   void addBox(const rhoban_ssl::Box& box, std::string color = "white", bool dashed = false);
 
   void addArrow(const rhoban_geometry::Segment& s, std::string color = "white", bool dashed = false);
-
-  void clear();
-
-  // void mapPositions(std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct);
 
 protected:
   std::vector<shape::Shape*> shapes_;
