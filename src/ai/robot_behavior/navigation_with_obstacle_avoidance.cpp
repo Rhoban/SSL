@@ -36,6 +36,7 @@ NavigationWithObstacleAvoidance::NavigationWithObstacleAvoidance(double time, do
   , position_follower_avoidance_(time, dt)
   , target_position_(0.0, 0.0)
   , target_angle_(0.0)
+  , last_angle_choice_(time)
 {
 }
 
@@ -185,7 +186,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   /////////////////////////////////////////////////////////////////
   sign_of_avoidance_rotation_ = 1.0;  // TODO
 
-  data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
+  // data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
   Vector2d obstacle_to_goal = vector2point(target_position_) - obstacle_linear_position;
   Vector2d current_to_goal = vector2point(target_position_) - linearPosition();
   double angle = vector2angle(current_to_goal).value() - vector2angle(obstacle_to_goal).value();
@@ -208,6 +209,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
     avoidance_convergence = (XX + YY) * (XX + YY);
   }
 
+  if (time() - last_angle_choice_ > ANGLE_CHOICE_DELAY)
   {
     if (angle < 0.0)
     {
@@ -215,8 +217,8 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
     }
     else
       sign_of_avoidance_rotation_ = -1;
+    last_angle_choice_ = time();
   }
-
   /////////////////////////////////////////////////////////////////
   // We compute now the limit cycle rotation
   /////////////////////////////////////////////////////////////////
@@ -289,6 +291,7 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
 {
   position_follower_.update(time, robot, ball);  // We use the future command to predict collision
   determineTheClosestObstacle();
+
   if (min_time_collision_ >= 0)
   {
     computeTheRadiusOfLimitCycle();
@@ -296,6 +299,10 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
     convertCycleDirectionToLinearAndAngularVelocity();
 
     position_follower_avoidance_.update(time, robot, ball);
+  }
+  else
+  {
+    last_angle_choice_ = time;
   }
 }
 
