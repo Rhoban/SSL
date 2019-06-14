@@ -25,6 +25,7 @@
 #include <rhoban_geometry/segment.h>
 #include <math/box.h>
 #include "shape/shape.h"
+#include <memory>
 
 // Shape
 #include "shape/circle.h"
@@ -163,7 +164,7 @@ public:
   void addArrow(const rhoban_geometry::Segment& s, std::string color = "white", bool dashed = false);
 
 protected:
-  std::vector<shape::Shape*> shapes_;
+  std::vector<std::shared_ptr<shape::Shape>> shapes_;
 
 private:
   Json::Value json_;
