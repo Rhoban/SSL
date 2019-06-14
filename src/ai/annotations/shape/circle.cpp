@@ -25,7 +25,7 @@ namespace annotations
 {
 namespace shape
 {
-Circle::Circle(double x, double y, double radius, std::string fill_color, std::string stroke_color, bool dashed)
+Circle::Circle(double x, double y, double radius, std::string stroke_color, std::string fill_color, bool dashed)
   : Shape()
   , circle_(rhoban_geometry::Circle(x, y, radius))
   , fill_color_(fill_color)

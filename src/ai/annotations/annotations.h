@@ -52,8 +52,8 @@ public:
    * @param stroke_color
    * @param dashed
    */
-  void addCircle(double x, double y, double r, std::string border_color = "white",
-                 std::string stroke_color = "transparent", bool dashed = false);
+  void addCircle(double x, double y, double r, std::string stroke_color = "white",
+                 std::string fill_color = "transparent", bool dashed = false);
   /**
    * @brief addCircle
    * @param x
@@ -63,8 +63,8 @@ public:
    * @param stroke_color
    * @param dashed
    */
-  void addCircle(const rhoban_geometry::Point& origin, double r, std::string border_color = "white",
-                 std::string stroke_color = "transparent", bool dashed = false);
+  void addCircle(const rhoban_geometry::Point& origin, double r, std::string stroke_color = "white",
+                 std::string fill_color = "transparent", bool dashed = false);
   /**
    * @brief addCircle
    * @param x
@@ -74,8 +74,8 @@ public:
    * @param stroke_color
    * @param dashed
    */
-  void addCircle(const Vector2d& origin, double r, std::string border_color = "white",
-                 std::string stroke_color = "transparent", bool dashed = false);
+  void addCircle(const Vector2d& origin, double r, std::string stroke_color = "white",
+                 std::string fill_color = "transparent", bool dashed = false);
 
   /*******************************************************************************************
    *                                      Cross                                              *

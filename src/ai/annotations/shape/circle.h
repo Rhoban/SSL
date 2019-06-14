@@ -38,7 +38,7 @@ private:
   bool dashed_;
 
 public:
-  Circle(double x, double y, double radius, std::string fill_color, std::string stroke_color, bool dashed);
+  Circle(double x, double y, double radius, std::string stroke_color, std::string fill_color, bool dashed);
 
   virtual Json::Value toJson();
 };

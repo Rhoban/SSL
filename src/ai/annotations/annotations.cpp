@@ -47,20 +47,20 @@ Annotations::~Annotations()
  *                                      Circle                                             *
  *******************************************************************************************/
 
-void Annotations::addCircle(double x, double y, double r, std::string fill_color, std::string stroke_color, bool dashed)
+void Annotations::addCircle(double x, double y, double r, std::string stroke_color, std::string fill_color, bool dashed)
 {
-  shapes_.push_back(new shape::Circle(x, y, r, fill_color, stroke_color, dashed));
+  shapes_.push_back(new shape::Circle(x, y, r, stroke_color, fill_color, dashed));
 }
 
-void Annotations::addCircle(const rhoban_geometry::Point& origin, double r, std::string fill_color,
-                            std::string stroke_color, bool dashed)
+void Annotations::addCircle(const rhoban_geometry::Point& origin, double r, std::string stroke_color,
+                            std::string fill_color, bool dashed)
 {
-  addCircle(origin.getX(), origin.getY(), r, fill_color, stroke_color, dashed);
+  addCircle(origin.getX(), origin.getY(), r, stroke_color, fill_color, dashed);
 }
-void Annotations::addCircle(const Vector2d& origin, double r, std::string fill_color, std::string stroke_color,
+void Annotations::addCircle(const Vector2d& origin, double r, std::string stroke_color, std::string fill_color,
                             bool dashed)
 {
-  addCircle(origin.getX(), origin.getY(), r, fill_color, stroke_color, dashed);
+  addCircle(origin.getX(), origin.getY(), r, stroke_color, fill_color, dashed);
 }
 
 /*******************************************************************************************
