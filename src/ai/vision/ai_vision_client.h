@@ -26,7 +26,7 @@
 #include "factory.h"
 #include "client_config.h"
 #include "robot_position_filter.h"
-#include "time_synchroniser.h"
+#include "time_synchronizer.h"
 
 namespace rhoban_ssl
 {
@@ -48,7 +48,7 @@ public:
   virtual bool runTask() override;
 
 private:
-  TimeSynchroniser time_synchroniser_;
+  TimeSynchronizer time_synchroniser_;
 };
 
 class UpdateRobotInformation : public Task

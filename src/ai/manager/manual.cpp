@@ -30,12 +30,22 @@
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 
+#include <robot_behavior/tests/test_time_synchronizer.h>
+
 namespace rhoban_ssl
 {
 namespace manager
 {
 Manual::Manual(std::string name) : Manager(name)
 {
+  registerStrategy("Test_time_synchronizer", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                 [&](double time, double dt) {
+                                                   robot_behavior::tests::TestTimeSynchronizer* test =
+                                                       new robot_behavior::tests::TestTimeSynchronizer();
+                                                   return std::shared_ptr<robot_behavior::RobotBehavior>(test);
+                                                 },
+                                                 false  // we don't want to define a goal here !
+                                                 )));
   registerStrategy("Beginner go to ball",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        [&](double time, double dt) {

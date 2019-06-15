@@ -69,7 +69,7 @@ TEST(test_circular_vector, insert)
   }
 }
 
-TEST(test_circular_vector, size)
+TEST(test_circular_vector, maxSize)
 {
   {
     CircularVector<double> vec(42);
@@ -82,6 +82,53 @@ TEST(test_circular_vector, size)
   {
     CircularVector<double> vec;
     EXPECT_TRUE(vec.size() == 0);
+  }
+}
+
+TEST(test_circular_vector, size)
+{
+  {
+    CircularVector<double> vec(3);
+    DEBUG(vec.numberOfElements());
+    EXPECT_TRUE(vec.numberOfElements() == 0);
+
+    vec.insert(-2);
+    DEBUG(vec.numberOfElements());
+    EXPECT_TRUE(vec.numberOfElements() == 1);
+
+    vec.insert(3);
+    DEBUG(vec.numberOfElements());
+    EXPECT_TRUE(vec.numberOfElements() == 2);
+
+    vec.insert(4);
+    DEBUG(vec.numberOfElements());
+    EXPECT_TRUE(vec.numberOfElements() == 3);
+
+    vec.insert(2);
+    DEBUG(vec.numberOfElements());
+    EXPECT_TRUE(vec.numberOfElements() == 3);
+  }
+  {
+    CircularVector<double> vec;
+    EXPECT_TRUE(vec.numberOfElements() == 0);
+  }
+}
+
+TEST(test_circular_vector, clear)
+{
+  {
+    CircularVector<double> vec(42);
+    EXPECT_TRUE(vec.numberOfElements() == 0);
+
+    vec.insert(-2);
+    vec.insert(-2);
+    vec.insert(-2);
+    vec.insert(-2);
+
+    EXPECT_TRUE(vec.numberOfElements() == 4);
+    vec.clear();
+    EXPECT_TRUE(vec.numberOfElements() == 0);
+    EXPECT_TRUE(vec.size() == 42);
   }
 }
 

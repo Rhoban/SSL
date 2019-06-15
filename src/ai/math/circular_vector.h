@@ -29,26 +29,47 @@ class CircularVector
 private:
   std::vector<T> vector_;
   unsigned int index_;
+  unsigned int nb_elements_;
 
 public:
-  CircularVector() : vector_(0), index_(0)
+  CircularVector() : vector_(0), index_(0), nb_elements_(0)
   {
   }
-  CircularVector(unsigned int size) : vector_(size), index_(0)
+  CircularVector(unsigned int size) : vector_(size), index_(0), nb_elements_(0)
   {
   }
-  CircularVector(const CircularVector<T>& cv) : vector_(cv.vector_), index_(cv.index_)
+  CircularVector(const CircularVector<T>& cv) : vector_(cv.vector_), index_(cv.index_), nb_elements_(0)
   {
+  }
+
+  /**
+   * @brief returns the number of element that have been inserted in the circular vector.
+   * @return the number of elements in the circular vector.
+   */
+  unsigned int numberOfElements() const
+  {
+    return nb_elements_;
+  }
+
+  void clear()
+  {
+    nb_elements_ = 0;
+    unsigned int max_size = size();
+    vector_.clear();
+    vector_.resize(max_size);
   }
 
   unsigned int size() const
   {
     return vector_.size();
   }
+
   void resize(unsigned int size)
   {
     std::rotate(vector_.begin(), vector_.begin() + index_, vector_.end());
     index_ = 0;
+    if (nb_elements_ >= size)
+      nb_elements_ = size;
     vector_.resize(size);
   }
 
@@ -59,6 +80,8 @@ public:
       index_ = vector_.size();
     }
     index_ -= 1;
+    if (nb_elements_ < size())
+      nb_elements_++;
     vector_[index_] = element;
   }
 

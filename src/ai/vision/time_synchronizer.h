@@ -28,10 +28,10 @@ namespace rhoban_ssl
  *
  * This class must to be use during the analyse of DetectionPackets in vision.
  */
-class TimeSynchroniser
+class TimeSynchronizer
 {
 public:
-  TimeSynchroniser();
+  TimeSynchronizer();
 
   void update(const vision::CameraDetectionFrame& detection_frame);
 
