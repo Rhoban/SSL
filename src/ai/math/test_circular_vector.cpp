@@ -126,7 +126,9 @@ TEST(test_circular_vector, clear)
     vec.insert(-2);
 
     EXPECT_TRUE(vec.numberOfElements() == 4);
+
     vec.clear();
+
     EXPECT_TRUE(vec.numberOfElements() == 0);
     EXPECT_TRUE(vec.size() == 42);
   }
@@ -136,6 +138,8 @@ TEST(test_circular_vector, resize)
 {
   {
     CircularVector<double> vec(5);
+
+    EXPECT_TRUE(vec.numberOfElements() == 0);
 
     vec.insert(1);
     vec.insert(2);
@@ -151,10 +155,12 @@ TEST(test_circular_vector, resize)
     EXPECT_TRUE(vec[3] == 4);
     EXPECT_TRUE(vec[4] == 3);
 
+    EXPECT_TRUE(vec.numberOfElements() == 5);
     EXPECT_TRUE(vec.size() == 5);
 
     vec.resize(10);
 
+    EXPECT_TRUE(vec.numberOfElements() == 5);
     EXPECT_TRUE(vec.size() == 10);
 
     EXPECT_TRUE(vec[0] == 7);
@@ -176,8 +182,11 @@ TEST(test_circular_vector, resize)
     EXPECT_TRUE(vec[6] == 4);
     EXPECT_TRUE(vec[7] == 3);
 
+    EXPECT_TRUE(vec.numberOfElements() == 8);
+
     vec.resize(4);
 
+    EXPECT_TRUE(vec.numberOfElements() == 4);
     EXPECT_TRUE(vec.size() == 4);
 
     EXPECT_TRUE(vec[0] == 10);
