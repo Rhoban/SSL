@@ -135,10 +135,11 @@ public:
 
 public:
   /**
-   * @brief Create and initialize context, protocols and websocket.
-   * @param port
+   * @brief Constructor.
+   *
+   * Create and init context, protocols and websocket.
    */
-  ViewerServer(int port);
+  ViewerServer();
 
   /**
    * @brief ~ViewerServer
