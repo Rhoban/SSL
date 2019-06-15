@@ -209,7 +209,7 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new data::CollisionComputing());
   ExecutionManager::getManager().addTask(new TimeUpdater());
   ExecutionManager::getManager().addTask(ai_);
-  ExecutionManager::getManager().addTask(new control::WarningMaximumVelocity());
+  ExecutionManager::getManager().addTask(new control::LimitVelocities());
   ExecutionManager::getManager().addTask(new control::ControlSender(commander));
 
   // viewer

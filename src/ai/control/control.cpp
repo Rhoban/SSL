@@ -169,5 +169,48 @@ bool ControlSender::runTask()
   commander_->flush();
   return true;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+LimitVelocities::LimitVelocities()
+{
+}
+
+bool LimitVelocities::runTask()
+{
+  for (uint i = 0; i < Data::get()->shared_data.final_control_for_robots.size(); ++i)
+  {
+    Control ctrl = Data::get()->shared_data.final_control_for_robots[i].control;
+    Kinematic::WheelsSpeed wheels_speed =
+        kinematic_.compute(ctrl.linear_velocity.getX(), ctrl.linear_velocity.getY(), ctrl.angular_velocity.value());
+
+    double lambda_1 = 1.0;
+    double lambda_2 = 1.0;
+    double lambda_3 = 1.0;
+    double lambda_4 = 1.0;
+
+    if (abs(wheels_speed.frontLeft) > 0)
+      lambda_1 = ai::Config::max_wheel_speed / abs(wheels_speed.frontLeft);
+    if (abs(wheels_speed.frontRight) > 0)
+      lambda_2 = ai::Config::max_wheel_speed / abs(wheels_speed.frontRight);
+    if (abs(wheels_speed.backLeft) > 0)
+      lambda_3 = ai::Config::max_wheel_speed / abs(wheels_speed.backLeft);
+    if (abs(wheels_speed.backRight) > 0)
+      lambda_4 = ai::Config::max_wheel_speed / abs(wheels_speed.backRight);
+
+    double lambda = std::min(lambda_1, lambda_2);
+    lambda = std::min(lambda, lambda_3);
+    lambda = std::min(lambda, lambda_4);
+
+    if (lambda < 1.0)
+    {
+      std::cerr << "WARNING: ROBOT " << i << " reached the wheel's speed limit!" << std::endl;
+      ctrl.linear_velocity *= lambda;
+      ctrl.angular_velocity *= lambda;
+    }
+  }
+  return true;
+}
+
 }  // namespace control
 }  // namespace rhoban_ssl

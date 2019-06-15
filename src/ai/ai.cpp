@@ -81,32 +81,6 @@ float sign(float x)
   return -1.0;
 }
 
-void AI::limitsVelocity(Control& ctrl) const
-{
-#if 1
-  if (ai::Config::translation_velocity_limit > 0.0)
-  {
-    if (ctrl.linear_velocity.norm() > ai::Config::translation_velocity_limit)
-    {
-      ctrl.linear_velocity *= ai::Config::translation_velocity_limit / ctrl.linear_velocity.norm();
-      std::cerr << "AI WARNING : we reached the "
-                   "limit translation velocity !"
-                << std::endl;
-    }
-  }
-  if (ai::Config::rotation_velocity_limit > 0.0)
-  {
-    if (std::fabs(ctrl.angular_velocity.value()) > ai::Config::rotation_velocity_limit)
-    {
-      ctrl.angular_velocity = ai::Config::rotation_velocity_limit * sign(ctrl.angular_velocity.value());
-      std::cerr << "AI WARNING : we reached the "
-                   "limit rotation velocity !"
-                << std::endl;
-    }
-  }
-#endif
-}
-
 void AI::preventCollision(int robot_id, Control& ctrl)
 {
   const data::Robot& robot = Data::get()->robots[Ally][robot_id];
@@ -233,7 +207,6 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
   ctrl.changeToRelativeControl(
       Data::get()->robots[Ally][robot_id].getMovement().angularPosition(Data::get()->ai_data.time),
       Data::get()->ai_data.dt);
-  limitsVelocity(ctrl);
 }
 
 Control AI::getRobotControl(robot_behavior::RobotBehavior& robot_behavior, data::Robot& robot)
