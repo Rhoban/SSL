@@ -20,9 +20,9 @@
 
 #pragma once
 
-#include <ai_data.h>
 #include <referee/game_state.h>
 #include "manager.h"
+#include "manual.h"
 
 namespace rhoban_ssl
 {
@@ -30,8 +30,12 @@ namespace manager
 {
 struct names
 {
+<<<<<<< HEAD
   static constexpr const char* MANUAL = "manual";
   static constexpr const char* PLAN_VESCHAMBRES = "PlanVeschambres";
+=======
+  static constexpr const char* MANUAL = "Manual";
+>>>>>>> XM_improvement_single_thread
 };
 
 class Factory
@@ -42,9 +46,8 @@ private:
 public:
   static const std::list<std::string>& availableManagers();
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name, ai::AiData& ai,
-                                                   GameState& game_state);
+  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
 };
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+}  // namespace manager
+}  // namespace rhoban_ssl

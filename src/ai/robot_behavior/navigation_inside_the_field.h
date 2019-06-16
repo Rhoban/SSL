@@ -21,8 +21,6 @@
 
 #include "robot_behavior.h"
 #include "navigation_with_obstacle_avoidance.h"
-#include <ai_data.h>
-
 namespace rhoban_ssl
 {
 namespace robot_behavior
@@ -47,13 +45,13 @@ private:
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  NavigationInsideTheField(ai::AiData& ai_data, double time, double dt);
+  NavigationInsideTheField(double time, double dt);
 
 protected:
-  void update_control(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void update_control(double time, const data::Robot& robot, const data::Ball& ball);
 
 public:
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 

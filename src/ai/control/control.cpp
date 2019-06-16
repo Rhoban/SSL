@@ -19,6 +19,7 @@
 */
 #include "control.h"
 #include <math/matrix2d.h>
+#include <data.h>
 
 #define CALCULUS_ERROR 0.000
 
@@ -105,9 +106,68 @@ std::ostream& operator<<(std::ostream& out, const Control& control)
 {
   out << "{ctrl : "
       << "[lin vel. : " << control.linear_velocity << ", ang vel. : " << control.angular_velocity << "]"
-      << ", kick : " << control.kick << ", chip kick : " << control.chipKick << ", kickPower : " << control.kickPower
+      << ", kick : " << control.kick << ", chip kick : " << control.chip_kick << ", kickPower : " << control.kick_power
       << ", spin : " << control.spin << ", charge : " << control.charge << ", acitve : " << control.active
       << ", ignore : " << control.ignore << "}";
 
   return out;
 }
+
+namespace rhoban_ssl
+{
+namespace control
+{
+ControlSender::ControlSender(rhoban_ssl::AICommander* commander) : commander_(commander)
+{
+}
+
+bool ControlSender::runTask()
+{
+  for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot_id)
+  {
+    Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_id].control;
+    if (robot_id >= 8)
+    {                      // HACK - becaus hardware doesn't support more than 8 robots
+      continue;            // HACK
+    }                      // HACK
+    assert(robot_id < 8);  // HACK !
+    if (!ctrl.ignore)
+    {
+      if (!ctrl.active)
+      {
+        commander_->set(robot_id, true, 0.0, 0.0, 0.0);
+      }
+      else
+      {
+        // if( robot_id == 1 ){
+        //    DEBUG( "CTRL : " << ctrl );
+        //}
+        int kick = 0;
+        if (ctrl.kick)
+          kick = 1;
+        else if (ctrl.chip_kick)
+          kick = 2;
+
+        if (ctrl.tare_odom)
+        {
+          commander_->set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(),
+                          kick, ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
+
+          );
+          // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
+        }
+        else
+        {
+          commander_->set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1],
+                          ctrl.angular_velocity.value(), kick, ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom);
+        }
+      }
+    }
+  }
+  // XXX: Flushing takes some time in real mode, and should be done in parallel
+  // along with the computing of the AI
+  commander_->flush();
+  return true;
+}
+}  // namespace control
+}  // namespace rhoban_ssl

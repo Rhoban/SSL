@@ -26,7 +26,7 @@ namespace strategy
 {
 const std::string Halt::name = "halt";
 
-Halt::Halt(ai::AiData& ai_data) : Strategy(ai_data)
+Halt::Halt() : Strategy()
 {
 }
 
@@ -56,12 +56,11 @@ void Halt::assignBehaviorToRobots(
 {
   if (haveToManageTheGoalie())
   {
-    assign_behavior(getGoalie(),
-                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
+    assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
   }
   for (int id : getPlayerIds())
   {
-    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
+    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
   }
 }
 
