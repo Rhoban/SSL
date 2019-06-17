@@ -14,11 +14,12 @@ catkin_package(
 )
 
 find_package(Protobuf REQUIRED)
+find_package(GSL REQUIRED)
 
 include_directories(${PROTOBUF_INCLUDE_DIRS} .)
 include_directories(${catkin_INCLUDE_DIRS} .)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
-
+include_directories(${GSL_INCLUDE_DIR})
 set (SOURCES
     data.cpp
     data/ball.cpp
@@ -97,6 +98,7 @@ set (SOURCES
     math/intersection.cpp
     math/box.cpp
     math/lines.cpp
+    math/gsl/gsl_matrix.cpp
     core/export_to_plot.cpp
     core/logger.cpp
     core/gnu_plot.cpp
@@ -114,7 +116,7 @@ set (SOURCES
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 set(TEST_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
 
-set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} websockets)
+set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} websockets GSL::gsl)
 
 add_library (ssl_ai ${SOURCES})
 target_link_libraries(ssl_ai ${ALL_LIBS})
@@ -154,6 +156,7 @@ if(CATKIN_ENABLE_TESTING)
     math/test_tangents.cpp
     math/test_vector2d.cpp
     math/test_matrix2d.cpp
+    math/gsl/gsl_tests.cpp
   )
 
   foreach(test_source ${TEST_SOURCES})
