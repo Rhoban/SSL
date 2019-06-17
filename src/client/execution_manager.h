@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <set>
 
 namespace rhoban_ssl
 {
@@ -19,11 +19,12 @@ public:
  */
 class ExecutionManager
 {
-  std::list<Task*> tasks_;       // tasks actually executed in run loop
-  std::list<Task*> add_buffer_;  // need if task are added during the run loop
+  std::set<std::pair<int, Task*>> tasks_;       // tasks actually executed in run loop
+  std::set<std::pair<int, Task*>> add_buffer_;  // need if task are added during the run loop
   ExecutionManager();
   static ExecutionManager execution_manager_singleton_;
   bool shutdown_;
+  int current_max_priority_;
 
 public:
   static ExecutionManager& getManager();
@@ -31,7 +32,7 @@ public:
    * @brief addTask add a task to the manager. This new Task must be allocated with new as it will be deallocated with
    * delete
    */
-  void addTask(Task*);
+  void addTask(Task*, int priority = -1);
   /**
    * @brief run Run all task in a loop until all tasks auto-removed
    * @param min_loop_duration : minimum time between to loops over registered tasks

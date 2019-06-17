@@ -72,13 +72,16 @@ void RobotDetection::operator=(const SSL_DetectionRobot& r)
   confidence_ = r.confidence();  // set to -1 if not valid
   x_ = r.x();
   y_ = r.y();
-  if ((has_orientation_ = r.has_orientation()) == true)
+  has_orientation_ = r.has_orientation();
+  if (has_orientation_ == true)
     orientation_ = r.orientation();
   pixel_x_ = r.pixel_x();
   pixel_y_ = r.pixel_y();
-  if ((has_height_ = r.has_height()) == true)
+  has_height_ = r.has_height();
+  if (has_height_ == true)
     height_ = r.height();
-  if ((has_id_ = r.has_robot_id()) == true)
+  has_id_ = r.has_robot_id();
+  if (has_id_ == true)
     robot_id_ = r.robot_id();
 }
 

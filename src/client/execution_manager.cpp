@@ -10,7 +10,7 @@ namespace rhoban_ssl
 {
 ExecutionManager ExecutionManager::execution_manager_singleton_;
 
-ExecutionManager::ExecutionManager() : shutdown_(false)
+ExecutionManager::ExecutionManager() : shutdown_(false), current_max_priority_(100)
 {
 }
 
@@ -19,15 +19,21 @@ ExecutionManager& ExecutionManager::getManager()
   return ExecutionManager::execution_manager_singleton_;
 }
 
-void ExecutionManager::addTask(Task* t)
+void ExecutionManager::addTask(Task* t, int priority)
 {
-  add_buffer_.push_back(t);
+  if (priority == -1)
+  {
+    priority = current_max_priority_;
+    current_max_priority_ += 1;
+  }
+
+  add_buffer_.insert(std::pair<int, Task*>(priority, t));
 }
 
 void ExecutionManager::run(double min_loop_duration)
 {
   using std::chrono::high_resolution_clock;
-  std::vector<Task*> to_remove;
+  std::vector<std::pair<int, Task*> > to_remove;
   high_resolution_clock::time_point start;
   long min_loop_d = long(min_loop_duration * 1e9);
   do
@@ -35,21 +41,21 @@ void ExecutionManager::run(double min_loop_duration)
     start = high_resolution_clock::now();
     for (auto i : add_buffer_)
     {
-      tasks_.push_back(i);
+      tasks_.insert(i);
     }
     add_buffer_.clear();
     to_remove.clear();
     for (auto i : tasks_)
     {
-      if (i->runTask() == false)
+      if (i.second->runTask() == false)
       {
         to_remove.push_back(i);
       }
     }
     for (auto i : to_remove)
     {
-      tasks_.remove(i);
-      delete i;
+      tasks_.erase(i);
+      delete i.second;
     }
 
     long loop_duration =
@@ -66,7 +72,7 @@ void ExecutionManager::run(double min_loop_duration)
   std::cout << std::endl << "DELETING TASKS" << std::endl;
   std::cout << "----------------------" << std::endl;
   for (auto i = tasks_.begin(); i != tasks_.end(); ++i)
-    delete *i;
+    delete i->second;
   std::cout << "----------------------" << std::endl;
   std::cout << "END" << std::endl;
 }

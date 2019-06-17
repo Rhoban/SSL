@@ -8,6 +8,7 @@
 #include "multicast_client_single_thread.h"
 #include "client_config.h"
 #include <google/protobuf/arena.h>
+#include <list>
 
 namespace rhoban_ssl
 {
