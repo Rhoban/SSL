@@ -34,6 +34,8 @@
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/tutorials/medium/follow_robot.h>
 
+#include <strategy/caterpillar.h>
+
 namespace rhoban_ssl
 {
 namespace manager
@@ -115,6 +117,7 @@ Manual::Manual(std::string name) : Manager(name)
                                                   },
                                                   false  // we don't want to define a goal here !
                                                   )));
+ registerStrategy(strategy::Caterpillar::name, std::shared_ptr<strategy::Strategy>(new strategy::Caterpillar()));                                            
 }
 
 void Manual::update()
