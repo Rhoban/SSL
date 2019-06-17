@@ -19,11 +19,11 @@
 */
 
 #include "ai_commander_real.h"
+#include "data.h"
 
 namespace rhoban_ssl
 {
-AICommanderReal::AICommanderReal(bool yellow) : AICommander(yellow), kicking_(false), master_("/dev/ttyACM0", 1000000)
-// master("/dev/ttyACM1", 1000000)
+AICommanderReal::AICommanderReal() : AICommander(), kicking_(false), master_(nullptr)
 {
 }
 
@@ -62,7 +62,7 @@ void AICommanderReal::flush()
       {
         packet.actions |= ACTION_DRIBBLE;
       }
-      if (command.tareOdom)
+      if (command.tare_odom)
       {
         packet.actions |= ACTION_TARE_ODOM;
       }
@@ -72,34 +72,66 @@ void AICommanderReal::flush()
       packet.actions = 0;
     }
 
-    packet.kickPower = 120 * command.kickPower;
+    packet.kickPower = 120 * command.kick_power;
 
-    if (command.tareOdom)
+    if (command.tare_odom)
     {
-      packet.t_speed = command.thetaSpeed * 10000;
+      packet.t_speed = command.theta_speed * 10000;
     }
     else
     {
-      packet.t_speed = command.thetaSpeed * 1000;
+      packet.t_speed = command.theta_speed * 1000;
     }
-    packet.x_speed = command.xSpeed * 1000;
-    packet.y_speed = command.ySpeed * 1000;
-    packet.t_speed = command.thetaSpeed * 1000;
+    packet.x_speed = command.x_speed * 1000;
+    packet.y_speed = command.y_speed * 1000;
+    packet.t_speed = command.theta_speed * 1000;
 
-    master_.addRobotPacket(command.robot_id, packet);
+    master_->addRobotPacket(command.robot_id, packet);
   }
 
-  master_.send();
+  master_->send();
   commands_.clear();
 }
 
 Master* AICommanderReal::getMaster()
 {
-  return &master_;
+  return master_;
 }
 
 AICommanderReal::~AICommanderReal()
 {
+  master_->stop();
+  delete master_;
+}
+
+bool AICommanderReal::runTask()
+{
+  if (master_ == nullptr)
+  {
+    master_ = new Master("/dev/ttyACM0", 1000000);
+    // master("/dev/ttyACM1", 1000000)
+  }
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+UpdateElectronicInformations::UpdateElectronicInformations(AICommanderReal* commander) : commander_(commander)
+{
+}
+
+bool UpdateElectronicInformations::runTask()
+{
+  rhoban_ssl::Master* master = commander_->getMaster();
+  for (unsigned int id = 0; id < MAX_ROBOTS; id++)
+  {
+    auto robot = master->robots[id];
+    if (robot.isOk())
+    {
+      Data::get()->robots[Ally][id].electronics = robot.status;
+    }
+  }
+  return true;
 }
 
 }  // namespace rhoban_ssl

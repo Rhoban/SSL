@@ -25,26 +25,27 @@
 #include <map>
 #include <memory>
 #include <vector>
-#include <ai_data.h>
-#include <strategy/placer.h>
 #include <annotations/annotations.h>
 
 namespace rhoban_ssl
 {
 namespace manager
 {
-class Manager : public GameInformations
+class Manager
 {
 public:
   static constexpr const char* MANAGER__REMOVE_ROBOTS = "manager__remove_robots";
   static constexpr const char* MANAGER__PLACER = "manager__placer";
 
 private:
+  std::string manager_name_;
+
   bool blue_is_not_set_;
   bool blue_team_on_positive_half_;
-  int goalie_id_;
-  int goalie_opponent_id_;
+
+  // TODO change vector int to a std::unordered_set of int for team_ids_
   std::vector<int> team_ids_;
+
   std::vector<int> valid_team_ids_;
   std::vector<int> valid_player_ids_;
   std::vector<int> invalid_team_ids_;
@@ -55,31 +56,42 @@ private:
   void affectInvalidRobotsToInvalidRobotsStrategy();
   void detectInvalidRobots();
 
-protected:
-  ai::AiData& ai_data_;
-
 public:
-  int time() const;
-  int dt() const;
+  Manager(std::string name);
 
+  /**
+   * @brief returns the name of the manager
+   *
+   * The name of all manager are define in the factory and set
+   * at the construction.
+   * @return a string
+   */
+  std::string name();
+
+  /**
+   * @brief getAvailableStrategies
+   * @return all name of available strategies in a vector
+   */
   std::vector<std::string> getAvailableStrategies();
 
-  Manager(ai::AiData& ai_data);
-
-  ai::Team getTeam() const;
-  const std::string& getTeamName() const;
-  void declareGoalieId(int goalie_id);
-  void declareGoalieOpponentId(int goalie_opponent_id);
+  /**
+   * @brief declareTeamIds sets the robots in the team of
+   * the manager.
+   *
+   * A robot in the team can be assigned to a strategy.
+   * @param team_ids
+   */
   void declareTeamIds(const std::vector<int>& team_ids);
+
+  double time() const;
+  double dt() const;
+
   const std::string& getNextStrategyWithGoalie() const;
+
   const std::vector<int>& getTeamIds() const;
   const std::vector<int>& getValidTeamIds() const;
   const std::vector<int>& getValidPlayerIds() const;
   const std::vector<int>& getInvalidTeamIds() const;
-  // return the goalie id. If id<0 then no goalie is declared.
-  int getGoalieId() const;
-  // return the opponent goalie id. If id<0 then no opponent goalie is declared.
-  int getGoalieOpponentId() const;
 
   template <typename STRATEGY>
   STRATEGY& getStrategy(const std::string& name)
@@ -105,17 +117,13 @@ public:
                       bool assign_goalie = false);
   void declareAndAssignNextStrategies(const std::list<std::string>& future_strats);
 
-  virtual void update(double time) = 0;
+  virtual void update() = 0;
 
   virtual void updateStrategies(double time);
-  virtual void updateCurrentStrategies(double time);
+  virtual void updateCurrentStrategies();
 
   virtual void assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior>>& robot_behaviors,
                                       double time, double dt);
-
-  void changeAllyAndOpponentGoalieId(int blue_goalie_id, int yellow_goalie_id);
-
-  void changeTeamAndPointOfView(ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis);
 
   void removeInvalidRobots();
 
@@ -123,7 +131,7 @@ public:
 
 private:
   std::list<std::string> determineTheRobotNeedsForTheStrategies(const std::list<std::string>& next_strategies);
-  unsigned int nb_of_extra_robots_non_affected_;
+  // unsigned int nb_of_extra_robots_non_affected_;
   unsigned int minimal_nb_of_robots_to_be_affected_;
   unsigned int nb_of_extra_robots_;
   std::string strategy_with_arbitrary_number_of_robot_;
@@ -192,7 +200,11 @@ public:
   //      return annotations;
   //  }
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+
+  virtual Json::Value getProperties();
+
+  virtual void setProperties(Json::Value);
 };
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+}  // namespace manager
+}  // namespace rhoban_ssl

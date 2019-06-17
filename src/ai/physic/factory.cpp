@@ -19,31 +19,39 @@
 
 #include "factory.h"
 
-#include <ai_data.h>
 #include <physic/movement_predicted_by_integration.h>
 #include <physic/movement_with_no_prediction.h>
 #include <physic/movement_on_new_frame.h>
 #include <physic/movement_with_temporal_shift.h>
+#include <data.h>
 
 namespace rhoban_ssl
 {
 namespace physic
 {
-Movement* Factory::movement(ai::AiData& ai_data)
+Movement* Factory::movement()
 {
-  return new MovementWithTemporalShift(
-      // new Movement_with_no_prediction()
-      new MovementPredictedByIntegration(), [&ai_data]() { return ai_data.time_shift_with_vision; });
+  Movement* movement = nullptr;
+
+  if (ai::Config::enable_movement_with_integration)
+  {
+    movement = new MovementPredictedByIntegration();
+  }
+  else
+  {
+    movement = new MovementWithNoPrediction();
+  }
+  return new MovementWithTemporalShift(movement);
 }
 
-Movement* Factory::robotMovement(ai::AiData& ai_data)
+Movement* Factory::robotMovement()
 {
-  return Factory::movement(ai_data);
+  return Factory::movement();
 }
 
-Movement* Factory::ballMovement(ai::AiData& ai_data)
+Movement* Factory::ballMovement()
 {
-  return Factory::movement(ai_data);
+  return Factory::movement();
 }
 
 };  // namespace physic

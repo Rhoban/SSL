@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com) (Refacto)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -567,30 +568,30 @@ TEST(test_machine_state, to_dot)
 
     machine.start();
 
-    EXPECT_TRUE(machine.to_dot() == "digraph G {\n"
-                                    " graph [ordering=\"out\"]\n"
-                                    "\n"
-                                    " v0 [label=\"end\" shape=\"oval\"];\n"
-                                    " v1 [label=\"middle\" shape=\"oval\"];\n"
-                                    " v2 [label=\"start\" shape=\"doubleoctagon\"style=\"filled\" "
-                                    "fillcolor=\"gold\"];\n"
-                                    "\n"
-                                    " v2->v1 [label=\"initialisation\"];\n"
-                                    " v1->v0 [label=\"next\"];\n"
-                                    "}\n");
+    EXPECT_TRUE(machine.toDot() == "digraph G {\n"
+                                   " graph [ordering=\"out\"]\n"
+                                   "\n"
+                                   " v0 [label=\"end\" shape=\"oval\"];\n"
+                                   " v1 [label=\"middle\" shape=\"oval\"];\n"
+                                   " v2 [label=\"start\" shape=\"doubleoctagon\"style=\"filled\" "
+                                   "fillcolor=\"gold\"];\n"
+                                   "\n"
+                                   " v2->v1 [label=\"initialisation\"];\n"
+                                   " v1->v0 [label=\"next\"];\n"
+                                   "}\n");
 
     machine.run();
 
-    EXPECT_TRUE(machine.to_dot() == "digraph G {\n"
-                                    " graph [ordering=\"out\"]\n"
-                                    "\n"
-                                    " v0 [label=\"end\" shape=\"oval\"style=\"filled\" fillcolor=\"gold\"];\n"
-                                    " v1 [label=\"middle\" shape=\"oval\"];\n"
-                                    " v2 [label=\"start\" shape=\"doubleoctagon\"];\n"
-                                    "\n"
-                                    " v2->v1 [label=\"initialisation\"];\n"
-                                    " v1->v0 [label=\"next\"];\n"
-                                    "}\n");
+    EXPECT_TRUE(machine.toDot() == "digraph G {\n"
+                                   " graph [ordering=\"out\"]\n"
+                                   "\n"
+                                   " v0 [label=\"end\" shape=\"oval\"style=\"filled\" fillcolor=\"gold\"];\n"
+                                   " v1 [label=\"middle\" shape=\"oval\"];\n"
+                                   " v2 [label=\"start\" shape=\"doubleoctagon\"];\n"
+                                   "\n"
+                                   " v2->v1 [label=\"initialisation\"];\n"
+                                   " v1->v0 [label=\"next\"];\n"
+                                   "}\n");
   }
 }
 
@@ -825,8 +826,8 @@ TEST(test_machine_state, register_follower)
 
     Follower f1("f1");
     Follower f2("f2");
-    machine.register_follower(f1);
-    machine.register_follower(f2);
+    machine.registerFollower(f1);
+    machine.registerFollower(f2);
 
     EXPECT_TRUE(out.str() == "");
     EXPECT_TRUE(data.str() == "");

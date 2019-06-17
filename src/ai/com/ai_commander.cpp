@@ -23,38 +23,30 @@
 
 namespace rhoban_ssl
 {
-AICommander::AICommander(bool yellow) : yellow_(yellow)
+AICommander::AICommander()
 {
-}
-
-void AICommander::setYellow(bool value)
-{
-  if (this->yellow_ != value)
-  {
-    this->yellow_ = value;
-  }
 }
 
 AICommander::~AICommander()
 {
 }
 
-void AICommander::set(uint8_t robot_id, bool enabled, double xSpeed, double ySpeed, double thetaSpeed, int kick,
-                      float kickPower, bool spin, bool charge, bool tareOdom)
+void AICommander::set(uint8_t robot_id, bool enabled, double x_speed, double y_speed, double theta_speed, int kick,
+                      float kick_power, bool spin, bool charge, bool tare_odom)
 {
-  assert(kickPower >= 0.0 && kickPower <= 1.0);
+  assert(kick_power >= 0.0 && kick_power <= 1.0);
 
   Command command;
   command.enabled = enabled;
   command.robot_id = robot_id;
-  command.xSpeed = xSpeed;
-  command.ySpeed = ySpeed;
-  command.thetaSpeed = thetaSpeed;
+  command.x_speed = x_speed;
+  command.y_speed = y_speed;
+  command.theta_speed = theta_speed;
   command.kick = kick;
   command.spin = spin;
   command.charge = charge;
-  command.kickPower = kickPower;
-  command.tareOdom = tareOdom;
+  command.kick_power = kick_power;
+  command.tare_odom = tare_odom;
   commands_.push_back(command);
 }
 

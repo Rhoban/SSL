@@ -14,13 +14,14 @@
     GNU Lesser General Public License for more details.
 
     You should have received a copy of the GNU Lesser General Public License
-    along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+    along with SSL.  If not, see <http://www.gnu.org/licenses/.
 */
 
 #include "manager.h"
 
 #include <debug.h>
 #include <strategy/halt.h>
+#include <strategy/placer.h>
 #include <algorithm>
 #include <core/collection.h>
 #include <core/print_collection.h>
@@ -31,55 +32,9 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-int Manager::getGoalieOpponentId() const
-{
-  return goalie_opponent_id_;
-}
-
-void Manager::declareGoalieOpponentId(int goalie_opponent_id)
-{
-  if (goalie_opponent_id >= ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-    return;
-  if (this->goalie_opponent_id_ >= 0)
-  {
-    ai_data_.robots[vision::Opponent][this->goalie_opponent_id_].is_goalie = false;
-  }
-  this->goalie_opponent_id_ = goalie_opponent_id;
-  if (goalie_opponent_id >= 0)
-  {
-    ai_data_.robots[vision::Opponent][goalie_opponent_id].is_goalie = true;
-  }
-}
-void Manager::declareGoalieId(int goalie_id)
-{
-  if (goalie_id >= ai::Constants::NB_OF_ROBOTS_BY_TEAM)
-    return;
-  if (this->goalie_id_ >= 0)
-  {
-    ai_data_.robots[vision::Ally][this->goalie_id_].is_goalie = false;
-  }
-  this->goalie_id_ = goalie_id;
-  if (goalie_id >= 0)
-  {
-    ai_data_.robots[vision::Ally][this->goalie_id_].is_goalie = true;
-  }
-}
-int Manager::getGoalieId() const
-{
-  return goalie_id_;
-}
 void Manager::declareTeamIds(const std::vector<int>& team_ids)
 {
   this->team_ids_ = team_ids;
-}
-
-ai::Team Manager::getTeam() const
-{
-  return ai_data_.team_color;
-}
-const std::string& Manager::getTeamName() const
-{
-  return ai_data_.team_name;
 }
 
 const std::vector<int>& Manager::getTeamIds() const
@@ -110,7 +65,8 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
                                                                  // register them with register_strategy() (during the
                                                                  // initialisation of your manager for example).
   assert(not(assign_goalie) or
-         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(), goalie_id_) ==
+         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(),
+                                      Data::get()->referee.teams_info[Ally].goalkeeper_number) ==
                                 robot_ids.end()));  // If you declare that you are assigning a goal, you should not
                                                     // declar the goal id inside the list of field robots.
 
@@ -125,8 +81,8 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
   }
   assert(static_cast<unsigned int>(strategy.minRobots()) <= robot_ids.size());
 
-  strategy.setGoalie(goalie_id_, assign_goalie);
-  strategy.setGoalieOpponent(goalie_opponent_id_);
+  strategy.setGoalie(Data::get()->referee.teams_info[Ally].goalkeeper_number, assign_goalie);
+  strategy.setGoalieOpponent(Data::get()->referee.teams_info[Opponent].goalkeeper_number);
   strategy.setRobotAffectation(robot_ids);
   strategy.start(time);
 
@@ -157,15 +113,17 @@ void Manager::updateStrategies(double time)
 {
   for (std::pair<std::string, std::shared_ptr<strategy::Strategy> > elem : strategies_)
   {
+    // REFACTO : TODO Remove the time passed.
     elem.second->update(time);
   }
 }
 
-void Manager::updateCurrentStrategies(double time)
+void Manager::updateCurrentStrategies()
 {
   for (const std::string& name : current_strategy_names_)
   {
-    getStrategy(name).update(time);
+    //@TODO : Remove the time passed.
+    getStrategy(name).update(Data::get()->ai_data.time);
   }
 }
 
@@ -186,7 +144,8 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
               break;
             }
           }
-          if (this->getStrategy(name).have_to_manage_the_goalie() and getGoalieId() == id)
+          if (this->getStrategy(name).haveToManageTheGoalie() and
+              int(Data::get()->referee.teams_info[Ally].goalkeeper_number) == id)
           {
             id_is_present = true;
           }
@@ -201,52 +160,25 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
   }
 }
 
-void Manager::changeAllyAndOpponentGoalieId(int blue_goalie_id, int yellow_goalie_id)
+Manager::Manager(std::string name) : manager_name_(name), blue_is_not_set_(true)
 {
-  declareGoalieId((getTeam() == ai::Team::Yellow) ? yellow_goalie_id : blue_goalie_id);
-  declareGoalieOpponentId((getTeam() == ai::Team::Yellow) ? blue_goalie_id : yellow_goalie_id);
+  registerStrategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
+  registerStrategy(MANAGER__PLACER, std::shared_ptr<strategy::Strategy>(new strategy::Placer()));
 }
 
-void Manager::changeTeamAndPointOfView(ai::Team team, bool blue_have_it_s_goal_on_positive_x_axis)
+std::string Manager::name()
 {
-  if (team != ai::Unknown and getTeam() != team)
-  {
-    assert(team == ai::Blue or team == ai::Yellow);
-    ai_data_.changeTeamColor(team);
-    blue_is_not_set_ = true;
-  }
-  // We change the point of view of the team
-  if (blue_is_not_set_ or blue_team_on_positive_half_ != blue_have_it_s_goal_on_positive_x_axis)
-  {
-    blue_is_not_set_ = false;
-    blue_team_on_positive_half_ = blue_have_it_s_goal_on_positive_x_axis;
-    if ((getTeam() == ai::Blue and blue_have_it_s_goal_on_positive_x_axis) or
-        (getTeam() == ai::Yellow and !blue_have_it_s_goal_on_positive_x_axis))
-    {
-      ai_data_.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(-1.0, 0.0), Vector2d(0.0, -1.0));
-    }
-    else
-    {
-      ai_data_.changeFrameForAllObjects(rhoban_geometry::Point(0.0, 0.0), Vector2d(1.0, 0.0), Vector2d(0.0, 1.0));
-    }
-  }
+  return manager_name_;
 }
 
-Manager::Manager(ai::AiData& ai_data)
-  : GameInformations(ai_data), blue_is_not_set_(true), goalie_id_(-1), goalie_opponent_id_(-1), ai_data_(ai_data)
+double Manager::time() const
 {
-  registerStrategy(MANAGER__REMOVE_ROBOTS, std::shared_ptr<strategy::Strategy>(new strategy::Halt(ai_data)));
-  registerStrategy(MANAGER__PLACER, std::shared_ptr<strategy::Strategy>(new strategy::Placer(ai_data)));
+  return Data::get()->ai_data.time;
 }
 
-int Manager::time() const
+double Manager::dt() const
 {
-  return ai_data_.time;
-}
-
-int Manager::dt() const
-{
-  return ai_data_.dt;
+  return Data::get()->ai_data.dt;
 }
 
 void Manager::affectInvalidRobotsToInvalidRobotsStrategy()
@@ -268,26 +200,16 @@ void Manager::detectInvalidRobots()
   // TODO : we need to detect when the list of invalid robot change.
   // When it change, then, we need to reaffect robot ids.
 
-  int nb_valid = 0;
-  int n_robots = team_ids_.size();
-  for (int i = 0; i < n_robots; i++)
-  {
-    if (ai_data_.robotIsValid(team_ids_[i]))
-    {
-      nb_valid++;
-    }
-  }
   valid_team_ids_.clear();
   valid_player_ids_.clear();
-
   invalid_team_ids_.clear();
-  for (int i = 0; i < n_robots; i++)
+
+  for (int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    int id = team_ids_[i];
-    if (ai_data_.robotIsValid(id))
+    if (Data::get()->robots[Ally][id].isActive())
     {
       valid_team_ids_.push_back(id);
-      if (goalie_id_ != id)
+      if (int(Data::get()->referee.teams_info[Ally].goalkeeper_number) != id)
       {
         valid_player_ids_.push_back(id);
       }
@@ -419,7 +341,7 @@ void Manager::aggregateAllStartingPositionOfAllStrategies(const std::list<std::s
     if (!getStrategy(strategy_with_goal_)
              .getStartingPositionForGoalie(this->goalie_linear_position_, this->goalie_angular_position_))
     {
-      this->goalie_linear_position_ = rhoban_geometry::Point(-ai_data_.field.fieldLength / 2.0, 0.0);
+      this->goalie_linear_position_ = rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0);
       this->goalie_angular_position_ = ContinuousAngle(0.0);
     }
   }
@@ -436,12 +358,14 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
 
   std::function<double(const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos)>
       robot_ranking = [this](const int& robot_id, const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos) {
-        return Vector2d(pos.first - this->getRobot(robot_id).getMovement().linearPosition(time())).normSquare();
+        return Vector2d(pos.first - Data::get()->robots[Ally][robot_id].getMovement().linearPosition(time()))
+            .normSquare();
       };
 
   std::function<double(const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id)>
       distance_ranking = [this](const std::pair<rhoban_geometry::Point, ContinuousAngle>& pos, const int& robot_id) {
-        return Vector2d(pos.first - this->getRobot(robot_id).getMovement().linearPosition(time())).normSquare();
+        return Vector2d(pos.first - Data::get()->robots[Ally][robot_id].getMovement().linearPosition(time()))
+            .normSquare();
       };
 
   matching::Matchings matchings = matching::galeShapleyAlgorithm(getValidPlayerIds(), choising_positions, robot_ranking,
@@ -465,9 +389,9 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
   for (unsigned int i = starting_positions_.size(); i < getValidPlayerIds().size(); i++)
   {
     robot_consigns_[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
-        rhoban_geometry::Point(-((5.0 * ai_data_.constants.robot_radius) * (i - starting_positions_.size()) +
-                                 1.5 * ai_data_.constants.robot_radius),
-                               -ai_data_.field.fieldWidth / 2.0 + ai_data_.constants.robot_radius),
+        rhoban_geometry::Point(
+            -((5.0 * ai::Config::robot_radius) * (i - starting_positions_.size()) + 1.5 * ai::Config::robot_radius),
+            -Data::get()->field.field_width_ / 2.0 + ai::Config::robot_radius),
         ContinuousAngle(0.0));
     robot_affectations_[i] = *it;
     it++;
@@ -541,7 +465,7 @@ void Manager::declareNextStrategies(const std::list<std::string>& next_strategie
   std::list<std::string> next_valid_strategies = determineTheRobotNeedsForTheStrategies(next_strategies);
 
   DEBUG("============== determ. ======");
-  DEBUG("nb_of_extra_robots_non_affected : " << nb_of_extra_robots_non_affected_);
+  // DEBUG("nb_of_extra_robots_non_affected : " << nb_of_extra_robots_non_affected_);
   DEBUG("minimal_nb_of_robots_to_be_affected : " << minimal_nb_of_robots_to_be_affected_);
   DEBUG("nb_of_extra_robots : " << nb_of_extra_robots_);
   DEBUG("strategy_with_arbitrary_number_of_robot : " << strategy_with_arbitrary_number_of_robot_);
@@ -584,7 +508,7 @@ void Manager::declareAndAssignNextStrategies(const std::list<std::string>& futur
     const std::string& strategy_name = elem.first;
     const std::vector<int>& affectation = elem.second;
     bool have_a_goalie = (getNextStrategyWithGoalie() == strategy_name);
-    assignStrategy(strategy_name, ai_data_.time, affectation, have_a_goalie);
+    assignStrategy(strategy_name, Data::get()->ai_data.time, affectation, have_a_goalie);
   }
 }
 
@@ -602,8 +526,18 @@ rhoban_ssl::annotations::Annotations Manager::getAnnotations() const
 
 void Manager::setBallAvoidanceForAllRobots(bool value = true)
 {
-  ai_data_.force_ball_avoidance = value;
+  Data::get()->ai_data.force_ball_avoidance = value;
 }
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+Json::Value Manager::getProperties()
+{
+  // @ TODO : Create a default behavior
+  return Json::Value();
+}
+
+void Manager::setProperties(Json::Value)
+{
+}
+
+}  // namespace manager
+}  // namespace rhoban_ssl

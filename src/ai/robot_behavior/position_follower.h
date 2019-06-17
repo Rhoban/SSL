@@ -35,7 +35,7 @@ private:
   RobotControlWithPositionFollowing robot_control_;
 
 public:
-  PositionFollower(ai::AiData& ai_data, double time, double dt);
+  PositionFollower(double time, double dt);
 
   void setTranslationPid(double kp, double ki, double kd);
   void setOrientationPid(double kp, double ki, double kd);
@@ -49,7 +49,7 @@ protected:
   void updateControl(double time);
 
 public:
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;

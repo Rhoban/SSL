@@ -23,6 +23,7 @@ class ExecutionManager
   std::list<Task*> add_buffer_;  // need if task are added during the run loop
   ExecutionManager();
   static ExecutionManager execution_manager_singleton_;
+  bool shutdown_;
 
 public:
   static ExecutionManager& getManager();
@@ -36,5 +37,6 @@ public:
    * @param min_loop_duration : minimum time between to loops over registered tasks
    */
   void run(double min_loop_duration);
+  void shutdown();
 };
-}  // namespace rhobanssl
+}  // namespace rhoban_ssl

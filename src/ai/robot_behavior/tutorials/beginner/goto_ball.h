@@ -35,9 +35,9 @@ private:
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Goto_ball(ai::AiData& ai_data);
+  Goto_ball();
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 

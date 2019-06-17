@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com) (Refacto)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -30,8 +31,12 @@ using namespace rhoban_ssl;
 struct Man
 {
   int value;
-  Man(int v) : value(v){};
-  Man() : value(0.0){};
+  Man(int v) : value(v)
+  {
+  }
+  Man() : value(0.0)
+  {
+  }
 };
 
 std::ostream& operator<<(std::ostream& out, const Man& man)
@@ -43,8 +48,12 @@ std::ostream& operator<<(std::ostream& out, const Man& man)
 struct Woman
 {
   double value;
-  Woman(double v) : value(v){};
-  Woman() : value(0.0){};
+  Woman(double v) : value(v)
+  {
+  }
+  Woman() : value(0.0)
+  {
+  }
 };
 
 std::ostream& operator<<(std::ostream& out, const Woman& woman)

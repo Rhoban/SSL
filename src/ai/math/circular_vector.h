@@ -21,6 +21,7 @@
 #include <vector>
 #include <algorithm>
 #include <assert.h>
+#include <ostream>
 
 template <typename T>
 class CircularVector

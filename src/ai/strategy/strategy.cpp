@@ -23,28 +23,28 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Strategy::Strategy(ai::AiData& ai_data)
-  : GameInformations(ai_data), ai_data_(ai_data), goalie_id_(-1), manage_a_goalie_(false), goalie_opponent_id_(-1)
+Strategy::Strategy()
+  : GameInformations(), goalie_id_(ai::Config::default_goalie_id), manage_a_goalie_(false), goalie_opponent_id_(-1)
 {
 }
 
-void Strategy::setGoalie(int id, bool to_be_managed)
+void Strategy::setGoalie(uint id, bool to_be_managed)
 {
   goalie_id_ = id;
   manage_a_goalie_ = to_be_managed;
 }
 
-bool Strategy::have_to_manage_the_goalie() const
+bool Strategy::haveToManageTheGoalie() const
 {
-  return ((needsGoalie() != GoalieNeed::NO) and manage_a_goalie_ and goalie_id_ >= 0);
+  return ((needsGoalie() != GoalieNeed::NO) and manage_a_goalie_);
 }
 
-void Strategy::setGoalieOpponent(int id)
+void Strategy::setGoalieOpponent(uint id)
 {
-  goalie_opponent_id_ = id;
+  goalie_opponent_id_ = int(id);
 }
 
-int Strategy::getGoalie() const
+uint Strategy::getGoalie() const
 {
   return goalie_id_;
 }

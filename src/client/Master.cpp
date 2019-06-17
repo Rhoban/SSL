@@ -1,6 +1,8 @@
 #include <iostream>
 #include <unistd.h>
 #include "Master.h"
+#include <signal.h>
+#include <assert.h>
 
 namespace rhoban_ssl
 {
@@ -153,6 +155,11 @@ void Master::execute()
 
   serial.write("master\nmaster\nmaster\n");
 
+  sigset_t set;
+  sigemptyset(&set);
+  assert(pthread_sigmask(SIG_SETMASK, &set, NULL) == 0);
+
+  std::cout << "Thread communication with robots STARTED" << std::endl;
   while (running)
   {
     // XXX: Maybe we should use something like select() here
@@ -255,5 +262,6 @@ void Master::execute()
       mutex.unlock();
     }
   }
+  std::cout << "Thread communication with robots CLOSED" << std::endl;
 }
 }  // namespace rhoban_ssl

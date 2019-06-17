@@ -36,9 +36,9 @@ private:
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  SeeRobot(ai::AiData& ai_data, int target_id = 0);
+  SeeRobot(int target_id = 0);
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 

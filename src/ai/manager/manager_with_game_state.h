@@ -9,13 +9,10 @@ namespace manager
 {
 class ManagerWithGameState : public Manager
 {
-private:
-  const GameState& game_state_;
-
   unsigned int last_change_stamp_;
 
 public:
-  ManagerWithGameState(ai::AiData& ai_data, const GameState& game_state);
+  ManagerWithGameState(std::string name);
 
   void update(double time);
   void analyseData(double time);

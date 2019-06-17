@@ -28,7 +28,7 @@ namespace robot_behavior
 class ConsignFollower : public RobotBehavior
 {
 public:
-  ConsignFollower(ai::AiData& ai_data);
+  ConsignFollower();
 
   virtual void setFollowingPosition(const rhoban_geometry::Point& position_to_follow, const ContinuousAngle& angle) = 0;
 
