@@ -29,18 +29,56 @@ namespace annotations
 {
 namespace shape
 {
+/**
+ * @brief Arrow for annotations of the viewer.
+ */
 class Arrow : public Shape
 {
 private:
+  /**
+   * @brief The start point of the arrow
+   */
   rhoban_geometry::Point origin_;
-  rhoban_geometry::Point to_;
+  /**
+   * @brief The final point of the arrow
+   */
+  rhoban_geometry::Point end_;
+  /**
+   * @brief The color of the arrow
+   */
   std::string stroke_color_;
+  /**
+   * @brief Shape is dashed ?
+   */
   bool dashed_;
 
 public:
-  Arrow(double x, double y, double toX, double toY, std::string stroke_color, bool dashed);
-
+  /**
+   * @brief Constructor
+   * @param x x of the origin point
+   * @param y y of the origin point
+   * @param toX x of the final point
+   * @param toY y of the final point
+   * @param stroke_color color of the arrow
+   * @param dashed
+   */
+  Arrow(double x, double y, double to_x, double to_y, std::string stroke_color, bool dashed);
+  /**
+   * @brief Constructor
+   * @param origin The origin point
+   * @param to The final point
+   * @param stroke_color color of the arrow
+   * @param dashed shape is dashed ?
+   */
+  Arrow(rhoban_geometry::Point origin, rhoban_geometry::Point to, std::string stroke_color, bool dashed);
+  /**
+   * @see Shape
+   */
   virtual Json::Value toJson();
+  /**
+   * @brief Destructor
+   */
+  virtual ~Arrow();
 };
 }  // namespace shape
 }  // namespace annotations

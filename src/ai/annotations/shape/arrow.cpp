@@ -28,9 +28,14 @@ namespace shape
 Arrow::Arrow(double x, double y, double to_x, double to_y, std::string stroke_color, bool dashed)
   : Shape()
   , origin_(rhoban_geometry::Point(x, y))
-  , to_(rhoban_geometry::Point(to_x, to_y))
+  , end_(rhoban_geometry::Point(to_x, to_y))
   , stroke_color_(stroke_color)
   , dashed_(dashed)
+{
+}
+
+Arrow::Arrow(rhoban_geometry::Point origin, rhoban_geometry::Point to, std::string stroke_color, bool dashed)
+  : Shape(), origin_(origin), end_(to), stroke_color_(stroke_color), dashed_(dashed)
 {
 }
 
@@ -42,13 +47,17 @@ Json::Value Arrow::toJson()
 
   annotation["origin"]["x"] = origin_.getX();
   annotation["origin"]["y"] = origin_.getY();
-  annotation["to"]["x"] = to_.getX();
-  annotation["to"]["y"] = to_.getY();
+  annotation["end"]["x"] = end_.getX();
+  annotation["end"]["y"] = end_.getY();
 
   annotation["stroke_color"] = stroke_color_;
   annotation["dashed"] = dashed_;
 
   return annotation;
+}
+
+Arrow::~Arrow()
+{
 }
 
 }  // namespace shape

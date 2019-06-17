@@ -34,6 +34,17 @@ Circle::Circle(double x, double y, double radius, std::string stroke_color, std:
 {
 }
 
+Circle::Circle(rhoban_geometry::Point p, double radius, std::string stroke_color, std::string fill_color, bool dashed)
+  : Shape()
+  , circle_(rhoban_geometry::Circle(p, radius))
+  , fill_color_(fill_color)
+  , stroke_color_(stroke_color)
+  , dashed_(dashed)
+{
+}
+
+Circle(rhoban_geometry::Point p, double radius, std::string stroke_color, std::string fill_color, bool dashed);
+
 Json::Value Circle::toJson()
 {
   Json::Value annotation;

@@ -30,7 +30,9 @@ namespace shape
 class Shape
 {
 public:
+  Shape();
   virtual Json::Value toJson() = 0;
+  virtual ~Shape();
 };
 }  // namespace shape
 }  // namespace annotations

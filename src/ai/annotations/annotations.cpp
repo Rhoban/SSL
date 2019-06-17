@@ -55,7 +55,7 @@ void Annotations::addCircle(double x, double y, double r, std::string stroke_col
 void Annotations::addCircle(const rhoban_geometry::Point& origin, double r, std::string stroke_color,
                             std::string fill_color, bool dashed)
 {
-  addCircle(origin.getX(), origin.getY(), r, stroke_color, fill_color, dashed);
+  shapes_.push_back(std::make_shared<shape::Circle>(origin, r, stroke_color, fill_color, dashed));
 }
 void Annotations::addCircle(const Vector2d& origin, double r, std::string stroke_color, std::string fill_color,
                             bool dashed)
@@ -74,7 +74,7 @@ void Annotations::addCross(double x, double y, std::string stroke_color, bool da
 
 void Annotations::addCross(const rhoban_geometry::Point& position, std::string stroke_color, bool dashed)
 {
-  addCross(position.getX(), position.getY(), stroke_color, dashed);
+  shapes_.push_back(std::make_shared<shape::Cross>(position, stroke_color, dashed));
 }
 
 void Annotations::addCross(const Vector2d& position, std::string stroke_color, bool dashed)
@@ -94,8 +94,9 @@ void Annotations::addArrow(double x, double y, double to_x, double to_y, std::st
 void Annotations::addArrow(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,
                            std::string stroke_color, bool dashed)
 {
-  addArrow(origin.getX(), origin.getY(), end.getX(), end.getY(), stroke_color, dashed);
+  shapes_.push_back(std::make_shared<shape::Arrow>(origin, end, stroke_color, dashed));
 }
+
 void Annotations::addArrow(const Vector2d& origin, const Vector2d& end, std::string stroke_color, bool dashed)
 {
   addArrow(origin.getX(), origin.getY(), end.getX(), end.getY(), stroke_color, dashed);

@@ -29,18 +29,57 @@ namespace annotations
 {
 namespace shape
 {
+/**
+ * @brief Circle for annotations of the viewer.
+ */
 class Circle : public Shape
 {
 private:
+  /**
+   * @brief The circle contains the geometry of the shape.
+   */
   rhoban_geometry::Circle circle_;
+  /**
+   * @brief Color to fill the circle.
+   */
   std::string fill_color_;
+  /**
+   * @brief Color of the border of the circle
+   */
   std::string stroke_color_;
+  /**
+   * @brief dashed_ shape is dashed ?
+   */
   bool dashed_;
 
 public:
+  /**
+   * @brief Constructor
+   * @param x x of the center
+   * @param y y of the center
+   * @param radius radius of the circle
+   * @param stroke_color Color of the border of the circle
+   * @param fill_color Color to fill the circle.
+   * @param dashed shape is dashed ?
+   */
   Circle(double x, double y, double radius, std::string stroke_color, std::string fill_color, bool dashed);
-
+  /**
+   * @brief Constructor
+   * @param p point of the circle
+   * @param radius radius of the circle
+   * @param stroke_color Color of the border of the circle
+   * @param fill_color Color to fill the circle.
+   * @param dashed the circle is dashed ?
+   */
+  Circle(rhoban_geometry::Point p, double radius, std::string stroke_color, std::string fill_color, bool dashed);
+  /**
+   * @see Shape
+   */
   virtual Json::Value toJson();
+  /**
+   * @brief Destructor
+   */
+  virtual ~Circle();
 };
 }  // namespace shape
 }  // namespace annotations

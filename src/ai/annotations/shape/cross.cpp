@@ -26,7 +26,12 @@ namespace annotations
 namespace shape
 {
 Cross::Cross(double x, double y, std::string stroke_color, bool dashed)
-  : Shape(), origin_(rhoban_geometry::Point(x, y)), stroke_color_(stroke_color), dashed_(dashed)
+  : Shape(), center_(rhoban_geometry::Point(x, y)), stroke_color_(stroke_color), dashed_(dashed)
+{
+}
+
+Cross::Cross(rhoban_geometry::Point p, std::string stroke_color, bool dashed)
+  : Shape(), center_(p), stroke_color_(stroke_color), dashed_(dashed)
 {
 }
 
@@ -35,12 +40,16 @@ Json::Value Cross::toJson()
   Json::Value annotation;
 
   annotation["type"] = "cross";
-  annotation["origin"]["x"] = origin_.getX();
-  annotation["origin"]["y"] = origin_.getY();
+  annotation["origin"]["x"] = center_.getX();
+  annotation["origin"]["y"] = center_.getY();
   annotation["stroke_color"] = stroke_color_;
   annotation["dashed"] = dashed_;
 
   return annotation;
+}
+
+Cross::~Cross()
+{
 }
 
 }  // namespace shape
