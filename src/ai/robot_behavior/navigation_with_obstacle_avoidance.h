@@ -34,10 +34,8 @@ namespace robot_behavior
 class NavigationWithObstacleAvoidance : public ConsignFollower
 {
 private:
-  const double ANGLE_CHOICE_DELAY =
-      0.1;  // a small value is sufficient to avoid big rotational direction indecision in front of a wall.
+  bool avoided_;
   const double AVOID_MOMENT = 0.35;  // time in second before collision, when robot begin avoidance.
-  double last_angle_choice_;
 
   bool ignore_the_ball_;
   bool ignore_robot_[2 * ai::Config::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.

@@ -36,7 +36,8 @@ NavigationWithObstacleAvoidance::NavigationWithObstacleAvoidance(double time, do
   , position_follower_avoidance_(time, dt)
   , target_position_(0.0, 0.0)
   , target_angle_(0.0)
-  , last_angle_choice_(time)
+  , sign_of_avoidance_rotation_(1)
+  , avoided_(true)
 {
 }
 
@@ -184,7 +185,6 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   /////////////////////////////////////////////////////////////////
   // We compute the sens of avoidance rotatiion
   /////////////////////////////////////////////////////////////////
-  sign_of_avoidance_rotation_ = 1.0;  // TODO
 
   // data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
   Vector2d obstacle_to_goal = vector2point(target_position_) - obstacle_linear_position;
@@ -209,15 +209,16 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
     avoidance_convergence = (XX + YY) * (XX + YY);
   }
 
-  if (time() - last_angle_choice_ > ANGLE_CHOICE_DELAY)
+  if (avoided_)
   {
+    DEBUG("choix");
     if (angle < 0.0)
     {
       sign_of_avoidance_rotation_ = 1;
     }
     else
       sign_of_avoidance_rotation_ = -1;
-    last_angle_choice_ = time();
+    avoided_ = false;
   }
   /////////////////////////////////////////////////////////////////
   // We compute now the limit cycle rotation
@@ -292,7 +293,7 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
   position_follower_.update(time, robot, ball);  // We use the future command to predict collision
   determineTheClosestObstacle();
 
-  if (min_time_collision_ >= 0)
+  if (min_time_collision_ >= 0 && min_time_collision_ < AVOID_MOMENT)
   {
     computeTheRadiusOfLimitCycle();
     computeTheLimitCycleDirection();
@@ -302,7 +303,7 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
   }
   else
   {
-    last_angle_choice_ = time;
+    avoided_ = true;
   }
 }
 
