@@ -26,14 +26,14 @@ namespace medium
  * With this behavior, the robot will go to its target until it reach a defined distance.
  * In short it follow its target without collide it.
  */
-FollowRobot::FollowRobot(ai::AiData& ai_data, int target_id)
-  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+FollowRobot::FollowRobot(int target_id)
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 
 {
   target_id_ = target_id;
 }
 
-void FollowRobot::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void FollowRobot::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -41,15 +41,15 @@ void FollowRobot::update(double time, const ai::Robot& robot, const ai::Ball& ba
 
   annotations_.clear();
 
-  rhoban_geometry::Point follow_position = robot.getMovement().linearPosition(ai_data_.time);
-  ContinuousAngle follow_rotation = robot.getMovement().angularPosition(ai_data_.time);
+  rhoban_geometry::Point follow_position = robot.getMovement().linearPosition(time);
+  ContinuousAngle follow_rotation = robot.getMovement().angularPosition(time);
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to follow itself will do nothing.
-  if (target_id_ != robot.id())
+  if (target_id_ != robot.id)
   {
-    rhoban_geometry::Point target_position = getRobot(target_id_).getMovement().linearPosition(ai_data_.time);
-    rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(ai_data_.time);
+    rhoban_geometry::Point target_position = getRobot(target_id_).getMovement().linearPosition(time);
+    rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
 
     Vector2d vect_robot_target = target_position - robot_position;
     follow_rotation = vector2angle(vect_robot_target);
@@ -71,12 +71,12 @@ void FollowRobot::update(double time, const ai::Robot& robot, const ai::Ball& ba
   follower_->update(time, robot, ball);
 }
 
-void FollowRobot::setRobotIdToFollow(int target_id)
+void FollowRobot::setRobotIdToFollow(uint target_id)
 {
   target_id_ = target_id;
 }
 
-int FollowRobot::getRobotIdToFollow() const
+uint FollowRobot::getRobotIdToFollow() const
 {
   return target_id_;
 }

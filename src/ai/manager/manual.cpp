@@ -32,6 +32,7 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/tutorials/medium/follow_robot.h>
 
 namespace rhoban_ssl
 {
@@ -106,7 +107,14 @@ Manual::Manual(std::string name) : Manager(name)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
-  
+  registerStrategy("Medium - Follow robot 0", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                  [&](double time, double dt) {
+                                                    robot_behavior::medium::FollowRobot* follower =
+                                                        new robot_behavior::medium::FollowRobot(0);
+                                                    return std::shared_ptr<robot_behavior::RobotBehavior>(follower);
+                                                  },
+                                                  false  // we don't want to define a goal here !
+                                                  )));
 }
 
 void Manual::update()

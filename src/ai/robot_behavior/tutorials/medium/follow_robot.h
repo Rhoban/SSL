@@ -46,7 +46,7 @@ private:
   /**
    * @brief The target robot to follow.
    */
-  int target_id_;
+  uint target_id_;
 
 public:
   /**
@@ -56,7 +56,7 @@ public:
    * @param target_id : ID of robot to follow.
    * @see ai::AiData
    */
-  FollowRobot(ai::AiData& ai_data, int target_id = 0);
+  FollowRobot(int target_id = 0);
 
   /**
    * @brief At each iteration of this function, the robot go to a point on the line between it and the target, at a
@@ -68,7 +68,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   /**
    * @return the control of the behavior.
@@ -79,13 +79,13 @@ public:
    * @brief target_id_ setter.
    * @param target_id : ID to set.
    */
-  void setRobotIdToFollow(int target_id);
+  void setRobotIdToFollow(uint target_id);
 
   /**
    * @brief target_id_ getter.
    * @return target_id_.
    */
-  int getRobotIdToFollow() const;
+  uint getRobotIdToFollow() const;
 
   /**
    * @see rhoban_ssl::annotations::Annotations
