@@ -151,7 +151,7 @@ public:
    * @param dashed
    */
   void addLine(rhoban_geometry::Point p1, rhoban_geometry::Point p2, std::string stroke_color = "white",
-               std::string fill_color = "transparent", bool dashed = false);
+               bool dashed = false);
 
   /**
    * @brief addBox
