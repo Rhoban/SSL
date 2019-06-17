@@ -36,6 +36,7 @@ class NavigationWithObstacleAvoidance : public ConsignFollower
 private:
   const double ANGLE_CHOICE_DELAY =
       0.1;  // a small value is sufficient to avoid big rotational direction indecision in front of a wall.
+  const double AVOID_MOMENT = 0.35;  // time in second before collision, when robot begin avoidance.
   double last_angle_choice_;
 
   bool ignore_the_ball_;

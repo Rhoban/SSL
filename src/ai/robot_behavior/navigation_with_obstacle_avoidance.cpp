@@ -308,7 +308,7 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
 
 Control NavigationWithObstacleAvoidance::control() const
 {
-  if (min_time_collision_ >= 0)
+  if (min_time_collision_ >= 0 && min_time_collision_ < AVOID_MOMENT)
   {
     return position_follower_avoidance_.control();
   }
