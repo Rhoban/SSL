@@ -31,6 +31,7 @@
 #include "shape/circle.h"
 #include "shape/cross.h"
 #include "shape/arrow.h"
+#include "shape/polygon.h"
 
 namespace rhoban_ssl
 {
@@ -135,9 +136,42 @@ public:
    */
   void addArrow(const Vector2d& origin, const Vector2d& end, std::string stroke_color = "white", bool dashed = false);
 
+  void addArrow(const rhoban_geometry::Segment& s, std::string stroke_color = "white", bool dashed = false);
+
+  /*******************************************************************************************
+   *                                        Polygon                                          *
+   *******************************************************************************************/
+
+  /**
+   * @brief addLine
+   * @param p1
+   * @param p2
+   * @param stroke_color
+   * @param fill_color
+   * @param dashed
+   */
+  void addLine(rhoban_geometry::Point p1, rhoban_geometry::Point p2, std::string stroke_color = "white",
+               std::string fill_color = "transparent", bool dashed = false);
+
+  /**
+   * @brief addBox
+   * @param box
+   * @param stroke_color
+   * @param fill_color
+   * @param dashed
+   */
+  void addBox(Box box, std::string stroke_color = "white", std::string fill_color = "transparent", bool dashed = false);
+
+  /**
+   * @brief addPolygon
+   * @param polygon
+   */
+  void addPolygon(shape::Polygon polygon);
+
   /*******************************************************************************************
    *                                        Utility                                          *
    *******************************************************************************************/
+
   /**
    * @brief addAnnotations
    * @param annotations
@@ -156,12 +190,6 @@ public:
    * @brief Destructor
    */
   ~Annotations();
-
-  // TODO : Implement or remove !
-
-  void addBox(const rhoban_ssl::Box& box, std::string color = "white", bool dashed = false);
-
-  void addArrow(const rhoban_geometry::Segment& s, std::string color = "white", bool dashed = false);
 
 protected:
   std::vector<std::shared_ptr<shape::Shape>> shapes_;

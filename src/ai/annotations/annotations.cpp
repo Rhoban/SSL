@@ -49,7 +49,6 @@ Annotations::~Annotations()
 
 void Annotations::addCircle(double x, double y, double r, std::string stroke_color, std::string fill_color, bool dashed)
 {
-  //  std::unique_ptr<shape::Shap> p(new shape::Circle(x, y, r, stroke_color, fill_color, dashed));
   shapes_.push_back(std::make_shared<shape::Circle>(x, y, r, stroke_color, fill_color, dashed));
 }
 
@@ -102,9 +101,36 @@ void Annotations::addArrow(const Vector2d& origin, const Vector2d& end, std::str
   addArrow(origin.getX(), origin.getY(), end.getX(), end.getY(), stroke_color, dashed);
 }
 
+void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color, bool dashed)
+{
+  addArrow(s.A, s.B, color, dashed);
+}
+
 /*******************************************************************************************
  *                                      Polygon                                            *
  *******************************************************************************************/
+
+void Annotations::addLine(rhoban_geometry::Point p1, rhoban_geometry::Point p2, std::string stroke_color,
+                          std::string fill_color, bool dashed)
+{
+  std::shared_ptr<shape::Polygon> polygon(new shape::Polygon(p1.getX(), p2.getY(), stroke_color, fill_color, dashed));
+  polygon->add_point(p2);
+  shapes_.push_back(polygon);
+}
+
+void Annotations::addBox(Box box, std::string stroke_color, std::string fill_color, bool dashed)
+{
+  std::shared_ptr<shape::Polygon> polygon(new shape::Polygon(box.getNE(), stroke_color, fill_color, dashed));
+  polygon->add_point(box.getNW());
+  polygon->add_point(box.getSE());
+  polygon->add_point(box.getSW());
+  shapes_.push_back(polygon);
+}
+
+void Annotations::addPolygon(shape::Polygon polygon)
+{
+  shapes_.push_back(std::make_shared<shape::Polygon>(polygon));
+}
 
 /*******************************************************************************************
  *                                      Utility                                            *
@@ -121,21 +147,6 @@ void Annotations::addAnnotations(const Annotations& annotations)
 void Annotations::clear()
 {
   shapes_.clear();
-}
-
-///////////////////////////////////////////////////////////
-// TO IMPLEMENT THAT
-
-// To discuss
-void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color, bool dashed)
-{
-  addArrow(s.A, s.B, color, dashed);
-}
-
-// TO REMOVE WITH POLYGON
-void Annotations::addBox(const rhoban_ssl::Box& box, std::string color, bool dashed)
-{
-  DEBUG(" TO IMPLEMENT");
 }
 
 }  // namespace annotations

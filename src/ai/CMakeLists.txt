@@ -102,6 +102,7 @@ set (SOURCES
     annotations/shape/circle.cpp
     annotations/shape/cross.cpp
     annotations/shape/arrow.cpp
+    annotations/shape/polygon.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
