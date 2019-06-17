@@ -60,7 +60,7 @@ public:
    * @param toX x of the final point
    * @param toY y of the final point
    * @param stroke_color color of the arrow
-   * @param dashed
+   * @param dashed shape is dashed ?
    */
   Arrow(double x, double y, double to_x, double to_y, std::string stroke_color, bool dashed);
   /**

@@ -68,6 +68,10 @@ Json::Value Polygon::toJson()
   return annotation;
 }
 
+Polygon::~Polygon()
+{
+}
+
 }  // namespace shape
 }  // namespace annotations
 }  // namespace rhoban_ssl
