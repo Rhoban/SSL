@@ -30,17 +30,19 @@ BuilderParameters::BuilderParameters()
 
 void BuilderParameters::new_int(std::string name, std::string comment, int value, bool writable)
 {
-  parameters_.push_back(new IntParameter(name, comment, value, writable));
+  parameters_.push_back(std::make_shared<IntParameter>(name, comment, value, writable));
 }
 
 Json::Value BuilderParameters::getJson()
 {
+  Json::Value json = Json::arrayValue;
   for (auto it = parameters_.begin(); it != parameters_.end(); ++it)
   {
-    // DEBUG((*it)->getJson());
+     json.append((*it)->getJson());
   }
 
-  return Json::Value();
+  parameters_.clear();
+  return json;
 }
 
 BuilderParameters::~BuilderParameters()

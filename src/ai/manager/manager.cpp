@@ -529,13 +529,12 @@ void Manager::setBallAvoidanceForAllRobots(bool value = true)
   Data::get()->ai_data.force_ball_avoidance = value;
 }
 
-Json::Value Manager::getProperties()
+Json::Value Manager::getParameters()
 {
-  // @ TODO : Create a default behavior
   return Json::Value();
 }
 
-void Manager::setProperties(Json::Value)
+void Manager::setParameters(Json::Value)
 {
 }
 

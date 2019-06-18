@@ -108,19 +108,16 @@ Manual::Manual(std::string name) : Manager(name)
 void Manual::update()
 {
   updateCurrentStrategies();
-  this->getProperties();
 }
 
-Json::Value Manual::getProperties()
+Json::Value Manual::getParameters()
 {
-  Json::Value properties;
   builder_parameter_.new_int("Test", "Test pour envoyer sur le paramètre", 0, true);
   builder_parameter_.new_int("Test 2", "Test pour envoyer sur le paramètre (2 ème test)", 0, true);
-  builder_parameter_.getJson();
-  return properties;
+  return builder_parameter_.getJson();
 }
 
-void Manual::setProperties(Json::Value json)
+void Manual::setParameters(Json::Value json)
 {
   DEBUG(json);
 }

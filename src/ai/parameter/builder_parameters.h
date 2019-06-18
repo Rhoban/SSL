@@ -30,7 +30,7 @@ namespace parameter
 class BuilderParameters
 {
 private:
-  std::vector<Parameter*> parameters_;
+  std::vector<std::shared_ptr<Parameter>> parameters_;
 
 public:
   /**
@@ -45,7 +45,7 @@ public:
    * @param default_value Set the default value (optional - default value : 0).
    * @param writable Is the value is writable (optional - default value : false).
    */
-  void new_int(std::string name, std::string comment, int default_value = 0, bool writable = false);
+  void new_int(std::string name, std::string comment="", int default_value = 0, bool writable = false);
 
   Json::Value getJson();
 

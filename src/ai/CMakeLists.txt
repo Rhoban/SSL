@@ -103,7 +103,6 @@ set (SOURCES
     annotations/shape/cross.cpp
     annotations/shape/arrow.cpp
     annotations/shape/polygon.cpp
-
     # parameters
     parameter/builder_parameters.cpp
     parameter/template_parameter/parameter.cpp

@@ -136,6 +136,7 @@ void ViewerCommunication::sendViewerPackets()
   viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(annotationsPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(parameterPacket());
 }
 
 Json::Value ViewerCommunication::fieldPacket()
@@ -351,6 +352,12 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
 Json::Value ViewerCommunication::annotationsPacket()
 {
   return ai_->getAnnotations();
+}
+
+Json::Value ViewerCommunication::parameterPacket() {
+    Json::Value packet;
+    packet["parameter"] = ai_->getCurrentManager()->getParameters();
+    return packet;
 }
 
 }  // namespace viewer

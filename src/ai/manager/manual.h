@@ -42,13 +42,13 @@ public:
    */
   void update();
   /**
-   * @brief Get all properties of the manager shown in the viewer.
+   * @brief Get all parameter of the manager shown in the viewer.
    */
-  virtual Json::Value getProperties();
+  virtual Json::Value getParameters();
   /**
-   * @brief Set the properties send by the viewer.
+   * @brief Set the parameter send by the viewer.
    */
-  virtual void setProperties(Json::Value);
+  virtual void setParameters(Json::Value);
 
   /**
    * @brief Destructor

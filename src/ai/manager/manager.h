@@ -201,9 +201,9 @@ public:
   //  }
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual Json::Value getProperties();
+  virtual Json::Value getParameters();
 
-  virtual void setProperties(Json::Value);
+  virtual void setParameters(Json::Value);
 };
 
 }  // namespace manager
