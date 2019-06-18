@@ -38,7 +38,7 @@ public:
   // std::list<SSL_WrapperPacket*> packets_buffer_;
   std::list<SSL_WrapperPacket*> last_packets_;
   static VisionDataGlobal singleton_;
-  SSL_WrapperPacket* getNewPacket();
+  inline SSL_WrapperPacket* getNewPacket();
   void reset();
 };
 

@@ -46,8 +46,11 @@ SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_
 
 Data Data::singleton_;
 
-Data::Data()
+Data::Data() : time_delta_cameras_to_ai(std::numeric_limits<double>::max())
 {
+  for (uint c = 0; c < ai::Config::NB_CAMERAS; ++c)
+    time_delta_between_cameras_and_cam_0[c] = 1;  // default time delta between camera set to 1 sec
+
   for (int team_id = 0; team_id < 2; team_id++)
   {
     for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)

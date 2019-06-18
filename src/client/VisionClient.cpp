@@ -135,6 +135,13 @@ bool VisionClientSingleThread::process(char* buffer, size_t len)
 
   if (packet->ParsePartialFromArray(buffer, len))
   {
+    /*if (packet->has_detection())
+      std::cout << packet->detection().frame_number() << std::endl;
+    else if (packet->has_geometry())
+      std::cout << "geometry!" << std::endl;
+    else
+      std::cout << "UNKNOWN!!!" << std::endl;
+      */
     VisionDataGlobal::singleton_.last_packets_.push_back(packet);
     return true;
   }

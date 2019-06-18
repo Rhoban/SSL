@@ -32,6 +32,22 @@ namespace rhoban_ssl
 {
 namespace vision
 {
+class CameraTimeSynchronizer : public Task
+{
+  double last_t_capture_[ai::Config::NB_CAMERAS];
+
+public:
+  CameraTimeSynchronizer();
+
+  // Task interface
+public:
+  bool runTask();
+
+private:
+  void syncDeltaAiCamera(double current_cpu_time, double camera_time);
+  void syncDeltaBetweenCameras();
+};
+
 class SslGeometryPacketAnalyzer : public Task
 {
   bool field_done_;
@@ -46,9 +62,6 @@ class DetectionPacketAnalyzer : public Task
 {
 public:
   virtual bool runTask() override;
-
-private:
-  TimeSynchroniser time_synchroniser_;
 };
 
 class UpdateRobotInformation : public Task

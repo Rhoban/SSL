@@ -33,6 +33,58 @@ namespace rhoban_ssl
 {
 namespace vision
 {
+CameraTimeSynchronizer::CameraTimeSynchronizer()
+{
+  for (uint i = 0; i < ai::Config::NB_CAMERAS; ++i)
+    last_t_capture_[i] = -1.0;
+}
+
+bool CameraTimeSynchronizer::runTask()
+{
+  using std::chrono::high_resolution_clock;
+  high_resolution_clock::time_point now = high_resolution_clock::now();
+
+  int count = 0;
+  for (auto& p : VisionDataGlobal::singleton_.last_packets_)
+  {
+    if (p->has_detection())
+    {
+      count += 1;
+      unsigned int cid = p->detection().camera_id();
+      last_t_capture_[cid] = p->detection().t_capture();
+
+      if (cid == 0)
+      {
+        syncDeltaAiCamera(now.time_since_epoch().count(), last_t_capture_[0]);
+      }
+    }
+  }
+
+  if (count == ai::Config::NB_CAMERAS)
+    syncDeltaBetweenCameras();
+
+  return true;
+}
+
+void CameraTimeSynchronizer::syncDeltaAiCamera(double current_cpu_time, double camera_time)
+{
+  double new_delta = current_cpu_time - camera_time;
+  if (new_delta < Data::get()->time_delta_cameras_to_ai)
+  {
+    Data::get()->time_delta_cameras_to_ai = new_delta;
+  }
+}
+
+void CameraTimeSynchronizer::syncDeltaBetweenCameras()
+{
+  for (uint c = 1; c < ai::Config::NB_CAMERAS; ++c)
+  {
+    double new_delta = last_t_capture_[0] - last_t_capture_[c];
+    if (new_delta < Data::get()->time_delta_between_cameras_and_cam_0[c])
+      Data::get()->time_delta_between_cameras_and_cam_0[c] = new_delta;
+  }
+}
+
 SslGeometryPacketAnalyzer::SslGeometryPacketAnalyzer() : field_done_(false), camera_done_(false)
 {
   // setup field and camera to default values
@@ -41,13 +93,12 @@ SslGeometryPacketAnalyzer::SslGeometryPacketAnalyzer() : field_done_(false), cam
 
 bool SslGeometryPacketAnalyzer::runTask()
 {
-  for (auto i = vision::VisionDataGlobal::singleton_.last_packets_.begin();
-       i != vision::VisionDataGlobal::singleton_.last_packets_.end();)
+  for (auto& p : vision::VisionDataGlobal::singleton_.last_packets_)
   {
-    if ((*i)->has_geometry())
+    if (p->has_geometry())
     {
       // process geometry data and update global
-      auto& geometry = (*i)->geometry();
+      auto& geometry = p->geometry();
       if ((field_done_ == false) && (geometry.has_field()))
       {
         data::Field& field = Data::get()->field;
@@ -89,29 +140,29 @@ bool SslGeometryPacketAnalyzer::runTask()
         camera_done_ = true;
       }
     }
-    ++i;
   }
   return !(field_done_ && camera_done_);
 }
 
 bool DetectionPacketAnalyzer::runTask()
 {
-  for (auto i = vision::VisionDataGlobal::singleton_.last_packets_.begin();
-       i != vision::VisionDataGlobal::singleton_.last_packets_.end();)
+  for (auto& p : vision::VisionDataGlobal::singleton_.last_packets_)
   {
-    if ((*i)->has_detection())
+    if (p->has_detection())
     {
-      auto& frame = (*i)->detection();
+      auto& frame = p->detection();
       vision::CameraDetectionFrame& current =
           vision::VisionDataSingleThread::singleton_.last_camera_detection_[frame.camera_id()];
-      //
+
       if (frame.frame_number() > current.frame_number_)
       {
         current.inverted = false;
         current.frame_number_ = frame.frame_number();
         current.t_sent_ = frame.t_sent();
-        current.t_capture_ = frame.t_capture();
         current.camera_id_ = int(frame.camera_id());
+        // sync all camera's t_capture with the camera 0
+        current.t_capture_ = frame.t_capture() + Data::get()->time_delta_between_cameras_and_cam_0[current.camera_id_];
+
         // invalidate previous data
         for (auto& i : current.balls_)
           i.confidence_ = -1;
@@ -146,11 +197,8 @@ bool DetectionPacketAnalyzer::runTask()
             current.allies_[i] = frame.robots_yellow(i);
         }
       }
-      time_synchroniser_.update(current);
     }
-    ++i;
   }
-  time_synchroniser_.syncTimeShift(&Data::get()->ai_data.time_shift_with_vision);
   return true;
 }
 
@@ -166,7 +214,7 @@ bool UpdateRobotInformation::runTask()
   vision::RobotDetection* detections[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS];
   for (int team = 0; team < 2; ++team)
     for (int r = 0; r < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++r)
-      for (int c = 0; c < ai::Config::NB_CAMERAS; ++c)
+      for (uint c = 0; c < ai::Config::NB_CAMERAS; ++c)
         detections[team][r][c] = nullptr;
 
   for (uint camera_id = 0; camera_id < ai::Config::NB_CAMERAS; ++camera_id)
@@ -282,5 +330,6 @@ bool UpdateBallInformation::runTask()
   }
   return true;
 }
+
 }  // namespace vision
 }  // namespace rhoban_ssl

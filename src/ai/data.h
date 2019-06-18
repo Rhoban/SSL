@@ -62,6 +62,9 @@ struct SharedData
 class Data
 {
 public:
+  double time_delta_between_cameras_and_cam_0[ai::Config::NB_CAMERAS];
+  double time_delta_cameras_to_ai;
+
   data::Robot robots[2][ai::Config::NB_OF_ROBOTS_BY_TEAM];
   std::vector<std::pair<Team, data::Robot*>> all_robots;
 

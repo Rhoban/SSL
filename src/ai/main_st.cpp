@@ -187,47 +187,48 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
   ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
+  ExecutionManager::getManager().addTask(new vision::CameraTimeSynchronizer());
+
   ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
   ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
   ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
-  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
-  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used));
+  // ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
+  // ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
+  // ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used));
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
-  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10));
+  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(1));
 
   // refereee
-  ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
-  ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
+  // ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS,
+  // SSL_REFEREE_PORT)); ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
   // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
-  ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
-
-  if (simulation.getValue())
-  {
-    commander = new AICommanderSimulation();
-  }
-  else
-  {
-    AICommanderReal* commander_r = new AICommanderReal();
-    ExecutionManager::getManager().addTask(commander_r);
-    ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
-    commander = commander_r;
-  }
-
+  // ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
+  /*
+    if (simulation.getValue())
+    {
+      commander = new AICommanderSimulation();
+    }
+    else
+    {
+       AICommanderReal* commander_r = new AICommanderReal();
+       ExecutionManager::getManager().addTask(commander_r);
+       ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
+       commander = commander_r;
+    }
+  */
   // ai
   AI* ai_ = nullptr;
   ai_ = new AI(manager_name.getValue(), commander);
-  ExecutionManager::getManager().addTask(new data::CollisionComputing());
-  ExecutionManager::getManager().addTask(new TimeUpdater());
-  ExecutionManager::getManager().addTask(ai_);
-  ExecutionManager::getManager().addTask(new control::WarningMaximumVelocity());
-  ExecutionManager::getManager().addTask(new control::ControlSender(commander));
+  //  ExecutionManager::getManager().addTask(new data::CollisionComputing());
+  //  ExecutionManager::getManager().addTask(new TimeUpdater());
+  //  ExecutionManager::getManager().addTask(ai_);
+  //  ExecutionManager::getManager().addTask(new control::WarningMaximumVelocity());
+  //  ExecutionManager::getManager().addTask(new control::ControlSender(commander));
 
   // viewer
-  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
-  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
-
-  ExecutionManager::getManager().run(0.01);
+  //   ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
+  //   ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
+  ExecutionManager::getManager().run(0.001);
 
   if (simulation.getValue())
   {
