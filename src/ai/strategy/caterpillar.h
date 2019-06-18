@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 RomainPC (romainpc.lechat@laposte.net)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -16,12 +16,11 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 #pragma once
 
 #include "strategy.h"
-#include <string>
-#include <robot_behavior/tutorials/medium/follow_robot.h>
+#include <robot_behavior/do_nothing.h>
+#include <robot_behavior/tutorials/beginner/goto_ball.h>
 
 namespace rhoban_ssl
 {
@@ -30,23 +29,33 @@ namespace strategy
 class Caterpillar : public Strategy
 {
 private:
-  std::vector<std::shared_ptr<robot_behavior::medium::FollowRobot>> behaviors_;
+  bool behaviors_are_assigned_;
+  std::shared_ptr<robot_behavior::DoNothing> degageur1_;
+  std::shared_ptr<robot_behavior::Beginner::Goto_ball> obstructeur1_;
+  std::shared_ptr<robot_behavior::DoNothing> degageur2_;
+  std::shared_ptr<robot_behavior::Beginner::Goto_ball> obstructeur2_;
 
 public:
   Caterpillar();
+  virtual ~Caterpillar();
 
-  int minRobots() const;
-  int maxRobots() const;
+  virtual int minRobots() const;
+  virtual int maxRobots() const;
   virtual GoalieNeed needsGoalie() const;
 
   static const std::string name;
 
-  void start(double time);
-  void stop(double time);
+  virtual void start(double time);
+  virtual void stop(double time);
 
-  void assignBehaviorToRobots(std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior,
-                              double time, double dt);
-  virtual ~Caterpillar();
+  virtual void update(double time);
+
+  virtual void assignBehaviorToRobots(
+      std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
+
+  virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+  getStartingPositions(int number_of_avalaible_robots);
+  virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 };
