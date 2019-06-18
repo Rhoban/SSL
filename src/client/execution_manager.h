@@ -1,6 +1,8 @@
 #pragma once
 
 #include <set>
+#include <vector>
+#include <chrono>
 
 namespace rhoban_ssl
 {
@@ -12,6 +14,17 @@ class Task
 public:
   virtual ~Task();
   virtual bool runTask(void) = 0;
+};
+
+class TimeStatTask : public Task
+{
+  std::vector<std::chrono::high_resolution_clock::time_point> last_times;
+  int counter_;
+  int print_freq_;
+
+public:
+  TimeStatTask(int print_freq);
+  virtual bool runTask(void) override;
 };
 
 /**

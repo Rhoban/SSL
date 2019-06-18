@@ -86,4 +86,34 @@ Task::~Task()
 {
 }
 
+TimeStatTask::TimeStatTask(int print_freq) : last_times(print_freq), counter_(0), print_freq_(print_freq)
+{
+}
+
+bool TimeStatTask::runTask()
+{
+  using std::chrono::high_resolution_clock;
+  last_times[counter_] = high_resolution_clock::now();
+  counter_ += 1;
+  if (counter_ == print_freq_)
+  {
+    long durations = 0, min = 1000000000, max = -1;
+    for (int i = 0; i < (counter_ - 1); ++i)
+    {
+      long d = std::chrono::duration_cast<std::chrono::nanoseconds>(last_times[i + 1] - last_times[i]).count();
+      durations += d;
+      if (d > max)
+        max = d;
+      if (d < min)
+        min = d;
+    }
+    double average = (((double)durations) / ((double)print_freq_ - 1)) / 1000000000.0;
+    double dmin = ((double)min) / 1000000000.0;
+    double dmax = ((double)max) / 1000000000.0;
+    std::cout << "execution manager loop stat: " << dmin << " " << average << " " << dmax << std::endl;
+    counter_ = 0;
+  }
+  return true;
+}
+
 }  // namespace rhoban_ssl
