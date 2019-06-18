@@ -32,13 +32,8 @@ class Robot : public Mobile
 public:
   Robot();
 
-  int id;
+  uint id;
   bool is_goalie;
-
-  /**
-   * @brief is_valid to remove
-   */
-  bool is_valid;
 
   // todo default state
   struct packet_robot electronics;

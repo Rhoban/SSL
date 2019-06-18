@@ -63,6 +63,7 @@ private:
   Json::Value refereePacket();
   Json::Value informationsPacket();
   Json::Value aiPacket();
+  Json::Value annotationsPacket();
 
   // move to AI
   void processBotsControlBot(const Json::Value& packet);

@@ -20,6 +20,7 @@
 #include <viewer_server.h>
 #include <manager/factory.h>
 #include <core/collection.h>
+#include <annotations/annotations.h>
 
 namespace rhoban_ssl
 {
@@ -72,7 +73,7 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["stop_manager"].isNull())
     {
-      ai_->stopManager();
+      ai_->stopStrategyManager();
     }
     else if (!viewer_packet["halt_bot"].isNull())
     {
@@ -98,10 +99,6 @@ void ViewerCommunication::processIncomingPackets()
         robot_numbers.push_back(viewer_packet["set_strategy"]["bots"][i].asInt());
       }
       ai_->setStrategyManuallyOf(robot_numbers, viewer_packet["set_strategy"]["name"].asString());
-    }
-    else if (!viewer_packet["give_bot_to_manager"].isNull())
-    {
-      ai_->getCurrentManager().get()->addIdsInTeam({ viewer_packet["give_bot_to_manager"].asInt() });
     }
     else if (!viewer_packet["place_bot"].isNull())
     {
@@ -138,6 +135,7 @@ void ViewerCommunication::sendViewerPackets()
   viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(annotationsPacket());
 }
 
 Json::Value ViewerCommunication::fieldPacket()
@@ -348,6 +346,11 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
 
     manual_ctrl.tare_odom = packet["tare_odometry"].asBool();
   }
+}
+
+Json::Value ViewerCommunication::annotationsPacket()
+{
+  return ai_->getAnnotations();
 }
 
 }  // namespace viewer

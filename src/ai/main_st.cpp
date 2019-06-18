@@ -35,11 +35,13 @@
 #include <referee/referee_packet_analyzer.h>
 #include <data/computed_data.h>
 #include <control/control.h>
+#include <control/kinematic.h>
 #include <viewer/viewer_communication.h>
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
+#define SERVER_PORT 7882
 
 using namespace rhoban_ssl;
 
@@ -130,6 +132,14 @@ int main(int argc, char** argv)
                                         "string",                    // short description of the expected value.
                                         cmd);
 
+  TCLAP::ValueArg<int> viewer_port("v",            // short argument name  (with one character)
+                                   "viewer_port",  // long argument name
+                                   "Viewer server port",
+                                   false,        // Flag is not required
+                                   SERVER_PORT,  // Default value
+                                   "int",        // short description of the expected value.
+                                   cmd);
+
   cmd.parse(argc, argv);
 
   AICommander* commander;
@@ -174,8 +184,10 @@ int main(int argc, char** argv)
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
+  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
   ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
+  ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
   ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
   ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
   ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
@@ -208,10 +220,11 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new data::CollisionComputing());
   ExecutionManager::getManager().addTask(new TimeUpdater());
   ExecutionManager::getManager().addTask(ai_);
-  ExecutionManager::getManager().addTask(new ControlSender(commander));
+  ExecutionManager::getManager().addTask(new control::WarningMaximumVelocity());
+  ExecutionManager::getManager().addTask(new control::ControlSender(commander));
 
   // viewer
-  ExecutionManager::getManager().addTask(new viewer::ViewerServer());
+  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
   ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
 
   ExecutionManager::getManager().run(0.01);

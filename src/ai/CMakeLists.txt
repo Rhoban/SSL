@@ -73,6 +73,7 @@ set (SOURCES
     control/robot_control_with_position_following.cpp
     control/pid.cpp
     control/control.cpp
+    control/kinematic.cpp
     physic/movement_predicted_by_integration.cpp
     physic/movement_with_no_prediction.cpp
     physic/movement_on_new_frame.cpp
@@ -94,8 +95,14 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/referee_packet_analyzer.cpp
-    referee/game_state.cpp
+    referee/game_state.cpp    
+    # Annotations
     annotations/annotations.cpp
+    annotations/shape/shape.cpp
+    annotations/shape/circle.cpp
+    annotations/shape/cross.cpp
+    annotations/shape/arrow.cpp
+    annotations/shape/polygon.cpp
 
     # parameters
     parameter/builder_parameters.cpp

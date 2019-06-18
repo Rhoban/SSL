@@ -90,7 +90,7 @@ public:
    * Its clear all robotbehavior assignements and replace them with the Halt
    * behavior.
    */
-  void stopManager();
+  void stopStrategyManager();
 
   /**
    * @brief getCurrentManager returns the manager that currently running in the AI.
@@ -123,7 +123,7 @@ public:
    * @brief getAnnotations
    * @param annotations
    */
-  void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
+  Json::Value getAnnotations() const;
 
   /**
    * @brief Returns the name of the robotbehavior assigned to the robot with the number

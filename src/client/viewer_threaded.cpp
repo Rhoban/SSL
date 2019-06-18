@@ -54,7 +54,7 @@ int main()
 {
   signal(SIGINT, stop);
 
-  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ViewerServer());
+  rhoban_ssl::ExecutionManager::getManager().addTask(new rhoban_ssl::viewer::ViewerServer(7882));
   rhoban_ssl::ExecutionManager::getManager().addTask(new SendFieldPacket());
   rhoban_ssl::ExecutionManager::getManager().run(0.5);
   return 0;

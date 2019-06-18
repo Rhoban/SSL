@@ -37,35 +37,6 @@ void Manager::declareTeamIds(const std::vector<int>& team_ids)
   this->team_ids_ = team_ids;
 }
 
-void Manager::removeIdsInTeam(const std::vector<int>& robot_numbers_to_remove)
-{
-  for (int robot_number : robot_numbers_to_remove)
-  {
-    for (auto it = team_ids_.begin(); it != team_ids_.end();)
-    {
-      if (*it == robot_number)
-      {
-        it = team_ids_.erase(it);
-      }
-      else
-      {
-        ++it;
-      }
-    }
-  }
-}
-
-void Manager::addIdsInTeam(const std::vector<int>& robot_numbers_to_add)
-{
-  for (int robot_number : robot_numbers_to_add)
-  {
-    if (std::find(team_ids_.begin(), team_ids_.end(), robot_number) == team_ids_.end())
-    {
-      team_ids_.push_back(robot_number);
-    }
-  }
-}
-
 const std::vector<int>& Manager::getTeamIds() const
 {
   return team_ids_;
@@ -205,7 +176,7 @@ double Manager::time() const
   return Data::get()->ai_data.time;
 }
 
-int Manager::dt() const
+double Manager::dt() const
 {
   return Data::get()->ai_data.dt;
 }
@@ -235,7 +206,7 @@ void Manager::detectInvalidRobots()
 
   for (int id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
   {
-    if (Data::get()->robots[Ally][id].is_valid)
+    if (Data::get()->robots[Ally][id].isActive())
     {
       valid_team_ids_.push_back(id);
       if (int(Data::get()->referee.teams_info[Ally].goalkeeper_number) != id)

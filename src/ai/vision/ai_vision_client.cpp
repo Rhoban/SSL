@@ -182,9 +182,19 @@ bool UpdateRobotInformation::runTask()
         continue;
 
       if (detections[Ally][r.robot_id_][camera_id] != nullptr)
-        DEBUG("WARNING: (Ally) too much vision for robot" << r.robot_id_ << " on camera " << camera_id);
-      detections[Ally][r.robot_id_][camera_id] = &r;
+      {
+        if (detections[Ally][r.robot_id_][camera_id]->confidence_ < r.confidence_)
+        {
+          DEBUG("WARNING: (Ally) too much vision for robot" << r.robot_id_ << " on camera " << camera_id);
+          detections[Ally][r.robot_id_][camera_id] = &r;
+        }
+      }
+      else
+      {
+        detections[Ally][r.robot_id_][camera_id] = &r;
+      }
     }
+
     for (auto& r : camera.opponents_)
     {
       if (r.confidence_ < 0)
@@ -195,11 +205,19 @@ bool UpdateRobotInformation::runTask()
         continue;
 
       if (detections[Opponent][r.robot_id_][camera_id] != nullptr)
-        DEBUG("WARNING: too much vision for robot!");
-      detections[Opponent][r.robot_id_][camera_id] = &r;
+      {
+        if (detections[Opponent][r.robot_id_][camera_id]->confidence_ < r.confidence_)
+        {
+          DEBUG("WARNING: (Opponent) too much vision for robot" << r.robot_id_ << " on camera " << camera_id);
+          detections[Opponent][r.robot_id_][camera_id] = &r;
+        }
+      }
+      else
+      {
+        detections[Opponent][r.robot_id_][camera_id] = &r;
+      }
     }
   }
-
   // now we have all informations by robots
   for (int team = 0; team < 2; ++team)
     for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
@@ -230,6 +248,7 @@ bool UpdateRobotInformation::runTask()
         // robot is not present in vision
       }
     }
+
   return true;
 }
 
