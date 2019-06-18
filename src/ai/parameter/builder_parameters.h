@@ -21,6 +21,7 @@
 #include <iostream>
 #include <vector>
 #include "template_parameter/value_parameter.h"
+#include <memory>
 
 namespace rhoban_ssl
 {
@@ -29,7 +30,7 @@ namespace parameter
 class BuilderParameters
 {
 private:
-  std::vector<Parameter> parameters_;
+  std::vector<Parameter*> parameters_;
 
 public:
   /**

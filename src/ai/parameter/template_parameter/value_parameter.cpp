@@ -24,7 +24,7 @@ namespace rhoban_ssl
 namespace parameter
 {
 ValueParameter::ValueParameter(std::string name, std::string comment, bool writable, type_parameters::Type type)
-  : Parameter(comment, type), name_(name), writable_(false)
+  : Parameter(comment, type), name_(name), writable_(writable)
 {
 }
 

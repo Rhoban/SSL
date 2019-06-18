@@ -30,14 +30,14 @@ BuilderParameters::BuilderParameters()
 
 void BuilderParameters::new_int(std::string name, std::string comment, int value, bool writable)
 {
-  IntParameter(name, comment, value, writable);
+  parameters_.push_back(new IntParameter(name, comment, value, writable));
 }
 
 Json::Value BuilderParameters::getJson()
 {
   for (auto it = parameters_.begin(); it != parameters_.end(); ++it)
   {
-    DEBUG(it->getJson().asString());
+    // DEBUG((*it)->getJson());
   }
 
   return Json::Value();
