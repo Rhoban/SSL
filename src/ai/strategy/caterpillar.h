@@ -19,7 +19,7 @@
 #pragma once
 
 #include "strategy.h"
-#include <robot_behavior/do_nothing.h>
+#include <robot_behavior/tutorials/medium/follow_robot.h>
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 
 namespace rhoban_ssl
@@ -30,10 +30,15 @@ class Caterpillar : public Strategy
 {
 private:
   bool behaviors_are_assigned_;
-  std::shared_ptr<robot_behavior::DoNothing> degageur1_;
-  std::shared_ptr<robot_behavior::Beginner::Goto_ball> obstructeur1_;
-  std::shared_ptr<robot_behavior::DoNothing> degageur2_;
-  std::shared_ptr<robot_behavior::Beginner::Goto_ball> obstructeur2_;
+
+  std::shared_ptr<robot_behavior::Beginner::Goto_ball> head_;
+  std::shared_ptr<robot_behavior::medium::FollowRobot> follower1_;
+  std::shared_ptr<robot_behavior::medium::FollowRobot> follower2_;
+  std::shared_ptr<robot_behavior::medium::FollowRobot> follower3_;
+  std::shared_ptr<robot_behavior::medium::FollowRobot> follower4_;
+  std::shared_ptr<robot_behavior::medium::FollowRobot> follower5_;
+  std::shared_ptr<robot_behavior::medium::FollowRobot> follower6_;
+  std::shared_ptr<robot_behavior::medium::FollowRobot> follower7_;
 
 public:
   Caterpillar();

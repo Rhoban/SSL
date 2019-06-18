@@ -25,10 +25,14 @@ namespace strategy
 {
 Caterpillar::Caterpillar()
   : Strategy()
-  , degageur1_(std::shared_ptr<robot_behavior::DoNothing>(new robot_behavior::DoNothing()))
-  , obstructeur1_(std::shared_ptr<robot_behavior::Beginner::Goto_ball>(new robot_behavior::Beginner::Goto_ball()))
-  , degageur2_(std::shared_ptr<robot_behavior::DoNothing>(new robot_behavior::DoNothing()))
-  , obstructeur2_(std::shared_ptr<robot_behavior::Beginner::Goto_ball>(new robot_behavior::Beginner::Goto_ball()))
+  , head_(std::shared_ptr<robot_behavior::Beginner::Goto_ball>(new robot_behavior::Beginner::Goto_ball()))
+  , follower1_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
+  , follower2_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
+  , follower3_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
+  , follower4_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
+  , follower5_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
+  , follower6_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
+  , follower7_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
 {
 }
 
@@ -42,7 +46,7 @@ Caterpillar::~Caterpillar()
  */
 int Caterpillar::minRobots() const
 {
-  return 2;
+  return 8;
 }
 
 /*
@@ -51,7 +55,7 @@ int Caterpillar::minRobots() const
  */
 int Caterpillar::maxRobots() const
 {
-  return 2;
+  return 8;
 }
 
 GoalieNeed Caterpillar::needsGoalie() const
@@ -78,44 +82,24 @@ void Caterpillar::update(double time)
 void Caterpillar::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  // we assign now all the other behavior
-  assert(getPlayerIds().size() == 2);
+  // head:
+  assign_behavior(playerId(0), head_);
 
-  int id_to_obstruct1 = shirtNumberOfThreatMax(Opponent);
-  int id_to_obstruct2 = shirtNumberOfThreatMax2(Opponent);
-  int robotID1 = playerId(0);
-  int robotID2 = playerId(1);
-
-  const data::Robot& robot1 = getRobot(robotID1, Ally);
-  const data::Robot& robot2 = getRobot(robotID2, Ally);
-  const rhoban_geometry::Point& robot_position_1 = robot1.getMovement().linearPosition(time);
-  const rhoban_geometry::Point& robot_position_2 = robot2.getMovement().linearPosition(time);
-
-  const data::Robot& robot_to_obstruct1 = getRobot(id_to_obstruct1, Opponent);
-  const rhoban_geometry::Point& robot_to_obstruct_position1 = robot_to_obstruct1.getMovement().linearPosition(time);
-
-  double distance1 = (Vector2d(robot_position_1 - robot_to_obstruct_position1)).norm();
-  double distance2 = (Vector2d(robot_position_2 - robot_to_obstruct_position1)).norm();
-
-  int nearest_ballID = getShirtNumberOfClosestRobotToTheBall(Ally);
-
-  if (nearest_ballID == robotID1)
-  {
-    assign_behavior(robotID1, degageur1_);
-  }
-  else
-  {
-    assign_behavior(robotID1, obstructeur1_);
-  }
-
-  if (nearest_ballID == robotID2)
-  {
-    assign_behavior(robotID2, degageur2_);
-  }
-  else
-  {
-    assign_behavior(robotID2, obstructeur2_);
-  }
+  // queue:
+  follower1_->setRobotIdToFollow(playerId(0));
+  assign_behavior(playerId(1), follower1_);
+  follower2_->setRobotIdToFollow(playerId(1));
+  assign_behavior(playerId(2), follower2_);
+  follower3_->setRobotIdToFollow(playerId(2));
+  assign_behavior(playerId(3), follower3_);
+  follower4_->setRobotIdToFollow(playerId(3));
+  assign_behavior(playerId(4), follower4_);
+  follower5_->setRobotIdToFollow(playerId(4));
+  assign_behavior(playerId(5), follower5_);
+  follower6_->setRobotIdToFollow(playerId(5));
+  assign_behavior(playerId(6), follower6_);
+  follower7_->setRobotIdToFollow(playerId(6));
+  assign_behavior(playerId(7), follower7_);
 
   behaviors_are_assigned_ = true;
 }
@@ -140,7 +124,8 @@ Caterpillar::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Caterpillar::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool Caterpillar::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
+                                               ContinuousAngle& angular_position)
 {
   linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
