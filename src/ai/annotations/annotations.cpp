@@ -114,7 +114,7 @@ void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color,
 void Annotations::addLine(rhoban_geometry::Point p1, rhoban_geometry::Point p2, std::string stroke_color, bool dashed)
 {
   std::shared_ptr<shape::Polygon> polygon(
-      new shape::Polygon(p1.getX(), p2.getY(), stroke_color, "transparent", dashed));
+      new shape::Polygon(p1.getX(), p1.getY(), stroke_color, "transparent", dashed));
   polygon->add_point(p2);
   shapes_.push_back(polygon);
 }

@@ -51,6 +51,7 @@ Json::Value Polygon::toJson()
 {
   Json::Value annotation;
   Json::Value points(Json::arrayValue);
+  annotation["type"] = "polygon";
 
   for (auto it = points_.begin(); it != points_.end(); it++)
   {
