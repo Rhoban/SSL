@@ -99,6 +99,7 @@ set (SOURCES
     referee/game_state.cpp    
     # Annotations
     annotations/annotations.cpp
+    annotations/shape/shape.cpp
     annotations/shape/circle.cpp
     annotations/shape/cross.cpp
     annotations/shape/arrow.cpp
