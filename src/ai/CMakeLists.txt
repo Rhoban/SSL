@@ -96,8 +96,13 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/referee_packet_analyzer.cpp
-    referee/game_state.cpp
+    referee/game_state.cpp    
+    # Annotations
     annotations/annotations.cpp
+    annotations/shape/circle.cpp
+    annotations/shape/cross.cpp
+    annotations/shape/arrow.cpp
+    annotations/shape/polygon.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
