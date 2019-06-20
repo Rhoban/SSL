@@ -160,5 +160,34 @@ bool VisionProtoBufReset::runTask()
   }
   return true;
 }
+
+VisionPacketStat::VisionPacketStat(int freq) : freq_(freq), counter_(0), sum_(0), min_(100), max_(0)
+{
+}
+
+bool VisionPacketStat::runTask()
+{
+  if (counter_ == freq_)
+  {
+    std::cout << "vision packet stat: (min/avg/max)" << min_ << " " << ((double)sum_) / ((double)freq_) << " " << max_
+              << std::endl;
+    counter_ = 0;
+    min_ = 100;
+    max_ = 0;
+    sum_ = 0;
+  }
+  else
+  {
+    int s = VisionDataGlobal::singleton_.last_packets_.size();
+    sum_ += s;
+    if (s < min_)
+      min_ = s;
+    if (s > max_)
+      max_ = s;
+    counter_ += 1;
+  }
+  return true;
+}
+
 }  // namespace vision
 }  // namespace rhoban_ssl

@@ -67,8 +67,8 @@ private:
  * The limit is defined in the config.json file and depends of the vectorial control
  * implementation in the firmware.
  */
-class WarningMaximumVelocity : public Task {
-
+class WarningMaximumVelocity : public Task
+{
 private:
   Kinematic kinematic_;
 
@@ -79,4 +79,3 @@ public:
 
 }  // namespace control
 }  // namespace rhoban_ssl
-

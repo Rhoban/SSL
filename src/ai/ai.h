@@ -123,7 +123,7 @@ public:
    * @brief getAnnotations
    * @param annotations
    */
-  void getAnnotations(rhoban_ssl::annotations::Annotations& annotations) const;
+  Json::Value getAnnotations() const;
 
   /**
    * @brief Returns the name of the robotbehavior assigned to the robot with the number

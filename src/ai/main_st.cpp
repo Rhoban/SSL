@@ -184,8 +184,10 @@ int main(int argc, char** argv)
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
+  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
   ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
+  ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
   ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
   ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
   ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
