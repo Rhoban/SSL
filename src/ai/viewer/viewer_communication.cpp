@@ -20,6 +20,7 @@
 #include <viewer_server.h>
 #include <manager/factory.h>
 #include <core/collection.h>
+#include <annotations/annotations.h>
 
 namespace rhoban_ssl
 {
@@ -134,6 +135,7 @@ void ViewerCommunication::sendViewerPackets()
   viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(annotationsPacket());
 }
 
 Json::Value ViewerCommunication::fieldPacket()
@@ -344,6 +346,11 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
 
     manual_ctrl.tare_odom = packet["tare_odometry"].asBool();
   }
+}
+
+Json::Value ViewerCommunication::annotationsPacket()
+{
+  return ai_->getAnnotations();
 }
 
 }  // namespace viewer

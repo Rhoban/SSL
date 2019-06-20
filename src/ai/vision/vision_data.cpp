@@ -72,13 +72,16 @@ void RobotDetection::operator=(const SSL_DetectionRobot& r)
   confidence_ = r.confidence();  // set to -1 if not valid
   x_ = r.x();
   y_ = r.y();
-  if ((has_orientation_ = r.has_orientation()) == true)
+  has_orientation_ = r.has_orientation();
+  if (has_orientation_ == true)
     orientation_ = r.orientation();
   pixel_x_ = r.pixel_x();
   pixel_y_ = r.pixel_y();
-  if ((has_height_ = r.has_height()) == true)
+  has_height_ = r.has_height();
+  if (has_height_ == true)
     height_ = r.height();
-  if ((has_id_ = r.has_robot_id()) == true)
+  has_id_ = r.has_robot_id();
+  if (has_id_ == true)
     robot_id_ = r.robot_id();
 }
 
@@ -197,7 +200,7 @@ bool ChangeReferencePointOfView::runTask()
 
           if (ally_robot.has_orientation_)
           {
-            ally_robot.orientation_ = fmodf32(ally_robot.orientation_ + M_PIf32, M_PIf32 * 2.0f);
+            ally_robot.orientation_ = fmodf(ally_robot.orientation_ + M_PI, M_PI * 2.0f);
           }
 
           struct RobotDetection& opponent_robot =
@@ -207,7 +210,7 @@ bool ChangeReferencePointOfView::runTask()
 
           if (opponent_robot.has_orientation_)
           {
-            opponent_robot.orientation_ = fmodf32(opponent_robot.orientation_ + M_PIf32, M_PIf32 * 2.0f);
+            opponent_robot.orientation_ = fmodf(opponent_robot.orientation_ + M_PI, M_PI * 2.0f);
           }
         }
         VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].inverted = true;
