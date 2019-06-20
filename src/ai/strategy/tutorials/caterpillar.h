@@ -18,7 +18,7 @@
 */
 #pragma once
 
-#include "strategy.h"
+#include <strategy/strategy.h>
 #include <robot_behavior/tutorials/medium/follow_robot.h>
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 

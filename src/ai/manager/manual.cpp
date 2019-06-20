@@ -34,7 +34,7 @@
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/tutorials/medium/follow_robot.h>
 
-#include <strategy/caterpillar.h>
+#include <strategy/tutorials/caterpillar.h>
 
 namespace rhoban_ssl
 {
