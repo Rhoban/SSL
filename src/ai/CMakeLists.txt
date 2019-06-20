@@ -36,7 +36,7 @@ set (SOURCES
     vision/print_protobuf.cpp
     vision/robot_position_filter.cpp
     vision/factory.cpp
-    vision/time_synchroniser.cpp
+    vision/time_synchronizer.cpp
     com/ai_commander.cpp
     com/ai_commander_simulation.cpp
     com/ai_commander_real.cpp

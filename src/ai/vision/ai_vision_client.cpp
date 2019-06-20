@@ -33,58 +33,6 @@ namespace rhoban_ssl
 {
 namespace vision
 {
-CameraTimeSynchronizer::CameraTimeSynchronizer()
-{
-  for (uint i = 0; i < ai::Config::NB_CAMERAS; ++i)
-    last_t_capture_[i] = -1.0;
-}
-
-bool CameraTimeSynchronizer::runTask()
-{
-  using std::chrono::high_resolution_clock;
-  high_resolution_clock::time_point now = high_resolution_clock::now();
-
-  int count = 0;
-  for (auto& p : VisionDataGlobal::singleton_.last_packets_)
-  {
-    if (p->has_detection())
-    {
-      count += 1;
-      unsigned int cid = p->detection().camera_id();
-      last_t_capture_[cid] = p->detection().t_capture();
-
-      if (cid == 0)
-      {
-        syncDeltaAiCamera(now.time_since_epoch().count(), last_t_capture_[0]);
-      }
-    }
-  }
-
-  if (count == ai::Config::NB_CAMERAS)
-    syncDeltaBetweenCameras();
-
-  return true;
-}
-
-void CameraTimeSynchronizer::syncDeltaAiCamera(double current_cpu_time, double camera_time)
-{
-  double new_delta = current_cpu_time - camera_time;
-  if (new_delta < Data::get()->time_delta_cameras_to_ai)
-  {
-    Data::get()->time_delta_cameras_to_ai = new_delta;
-  }
-}
-
-void CameraTimeSynchronizer::syncDeltaBetweenCameras()
-{
-  for (uint c = 1; c < ai::Config::NB_CAMERAS; ++c)
-  {
-    double new_delta = last_t_capture_[0] - last_t_capture_[c];
-    if (new_delta < Data::get()->time_delta_between_cameras_and_cam_0[c])
-      Data::get()->time_delta_between_cameras_and_cam_0[c] = new_delta;
-  }
-}
-
 SslGeometryPacketAnalyzer::SslGeometryPacketAnalyzer() : field_done_(false), camera_done_(false)
 {
   // setup field and camera to default values

@@ -26,28 +26,12 @@
 #include "factory.h"
 #include "client_config.h"
 #include "robot_position_filter.h"
-#include "time_synchroniser.h"
+#include "time_synchronizer.h"
 
 namespace rhoban_ssl
 {
 namespace vision
 {
-class CameraTimeSynchronizer : public Task
-{
-  double last_t_capture_[ai::Config::NB_CAMERAS];
-
-public:
-  CameraTimeSynchronizer();
-
-  // Task interface
-public:
-  bool runTask();
-
-private:
-  void syncDeltaAiCamera(double current_cpu_time, double camera_time);
-  void syncDeltaBetweenCameras();
-};
-
 class SslGeometryPacketAnalyzer : public Task
 {
   bool field_done_;

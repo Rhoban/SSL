@@ -23,6 +23,41 @@
 
 namespace rhoban_ssl
 {
+namespace vision
+{
+class CameraTimeSynchronizer : public Task
+{
+  double last_t_capture_[ai::Config::NB_CAMERAS];
+
+public:
+  CameraTimeSynchronizer();
+
+  // Task interface
+public:
+  bool runTask() override;
+
+private:
+  void syncDeltaAiCamera(double current_cpu_time, double camera_time);
+  void syncDeltaBetweenCameras();
+};
+
+class StatCameraTimeIntervalStability : public Task
+{
+private:
+  uint counter_;
+  uint freq_;
+  double sum_, min_, max_;
+  bool init;
+  double last_t_capture_;
+
+public:
+  StatCameraTimeIntervalStability(uint freq);
+
+  // Task interface
+public:
+  bool runTask() override;
+};
+
 /**
  * @brief The TimeSynchroniser class computes the time shift with the vision.
  *
@@ -50,4 +85,5 @@ private:
   double average(const CircularVector<double>& buffer);
 };
 
+}  // namespace vision
 }  // namespace rhoban_ssl
