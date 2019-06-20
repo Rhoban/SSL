@@ -364,7 +364,7 @@ rhoban_ssl::annotations::Annotations NavigationWithObstacleAvoidance::getAnnotat
   rhoban_ssl::annotations::Annotations annotations;
   //    annotations.addCircle( linear_position(), radius_of_limit_cycle );
 
-  if (min_time_collision_ >= 0)
+  if (min_time_collision_ >= 0 && min_time_collision_ < AVOID_MOMENT)
   {
     annotations.addArrow(linearPosition(),
                          linearPosition() + limit_cycle_direction_ * (limit_cycle_direction_.norm()) * 10, "red");
