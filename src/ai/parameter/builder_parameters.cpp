@@ -38,7 +38,7 @@ Json::Value BuilderParameters::getJson()
   Json::Value json = Json::arrayValue;
   for (auto it = parameters_.begin(); it != parameters_.end(); ++it)
   {
-     json.append((*it)->getJson());
+    json.append((*it)->getJson());
   }
 
   parameters_.clear();

@@ -25,7 +25,6 @@ namespace rhoban_ssl
 {
 namespace parameter
 {
-
 class ValueParameter : public Parameter
 {
 protected:

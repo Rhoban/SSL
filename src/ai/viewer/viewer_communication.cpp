@@ -354,10 +354,11 @@ Json::Value ViewerCommunication::annotationsPacket()
   return ai_->getAnnotations();
 }
 
-Json::Value ViewerCommunication::parameterPacket() {
-    Json::Value packet;
-    packet["parameters"]["manager"] = ai_->getCurrentManager()->getParameters();
-    return packet;
+Json::Value ViewerCommunication::parameterPacket()
+{
+  Json::Value packet;
+  packet["parameters"]["manager"] = ai_->getCurrentManager()->getParameters();
+  return packet;
 }
 
 }  // namespace viewer

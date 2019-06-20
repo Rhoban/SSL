@@ -23,7 +23,6 @@
 
 namespace rhoban_ssl
 {
-
 namespace type_parameters
 {
 enum Type
@@ -35,7 +34,6 @@ enum Type
 
 namespace parameter
 {
-
 class Parameter
 {
 protected:

@@ -48,11 +48,11 @@ IntParameter::IntParameter(std::string name, std::string comment, int value, boo
 Json::Value IntParameter::getJson()
 {
   Json::Value json;
-  json[name_]["name"] = name_;
-  json[name_]["type"] = "integer";
-  json[name_]["value"] = this->value_;
-  json[name_]["comment"] = this->comment_;
-  json[name_]["writable"] = this->writable_;
+  json["name"] = name_;
+  json["type"] = "integer";
+  json["value"] = this->value_;
+  json["comment"] = this->comment_;
+  json["writable"] = this->writable_;
   return json;
 }
 
