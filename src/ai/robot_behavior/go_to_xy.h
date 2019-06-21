@@ -26,8 +26,6 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
-{
 class GoToXY : public RobotBehavior
 {
 private:
@@ -61,6 +59,5 @@ public:
   virtual ~GoToXY();
 };
 
-};  // namespace beginner
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

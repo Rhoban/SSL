@@ -24,8 +24,6 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
-{
 GoToXY::GoToXY(rhoban_geometry::Point point, double reach_radius)
   : RobotBehavior()
   , follower_(Factory::fixedConsignFollower())
@@ -105,6 +103,5 @@ rhoban_ssl::annotations::Annotations GoToXY::getAnnotations() const
   return annotations;
 }
 
-}  // namespace beginner
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl

@@ -33,7 +33,7 @@
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/tutorials/medium/follow_robot.h>
-#include <robot_behavior/tutorials/beginner/go_to_xy.h>
+#include <robot_behavior/go_to_xy.h>
 
 #include <strategy/tutorials/caterpillar.h>
 
@@ -120,8 +120,7 @@ Manual::Manual(std::string name) : Manager(name)
                                                   )));
   registerStrategy("Beginner - Go to XY", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                               [&](double time, double dt) {
-                                                robot_behavior::beginner::GoToXY* go =
-                                                    new robot_behavior::beginner::GoToXY();
+                                                robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
                                                 go->setPoint(rhoban_geometry::Point(1, 2));
                                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                                               },

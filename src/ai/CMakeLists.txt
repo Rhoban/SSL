@@ -57,7 +57,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
-    robot_behavior/tutorials/beginner/go_to_xy.cpp
+    robot_behavior/go_to_xy.cpp
     robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     ai.cpp

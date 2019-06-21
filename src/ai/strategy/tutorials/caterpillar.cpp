@@ -32,7 +32,7 @@ Caterpillar::Caterpillar()
 
 Caterpillar::Caterpillar(std::vector<rhoban_geometry::Point> path)
   : Strategy()
-  , head_path_(std::shared_ptr<robot_behavior::beginner::GoToXY>(new robot_behavior::beginner::GoToXY()))
+  , head_path_(std::shared_ptr<robot_behavior::GoToXY>(new robot_behavior::GoToXY()))
   , path_mode_(true)
   , path_(path)
   , path_index_(0)

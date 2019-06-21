@@ -21,7 +21,7 @@
 #include <strategy/strategy.h>
 #include <robot_behavior/tutorials/medium/follow_robot.h>
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
-#include <robot_behavior/tutorials/beginner/go_to_xy.h>
+#include <robot_behavior/go_to_xy.h>
 
 namespace rhoban_ssl
 {
@@ -35,7 +35,7 @@ private:
   int CATERPILLAR_SIZE = 6;
 
   std::shared_ptr<robot_behavior::Beginner::Goto_ball> head_ball_;
-  std::shared_ptr<robot_behavior::beginner::GoToXY> head_path_;
+  std::shared_ptr<robot_behavior::GoToXY> head_path_;
 
   std::vector<std::shared_ptr<robot_behavior::medium::FollowRobot>> followers_;
 
