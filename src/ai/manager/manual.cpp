@@ -128,7 +128,10 @@ Manual::Manual(std::string name) : Manager(name)
                                               false  // we don't want to define a goal here !
                                               )));
 
-  registerStrategy("Tutorial - Caterpillar", std::shared_ptr<strategy::Strategy>(new strategy::Caterpillar()));
+  registerStrategy("Tutorial - Caterpillar",
+                   std::shared_ptr<strategy::Strategy>(new strategy::Caterpillar(std::vector<rhoban_geometry::Point>{
+                       rhoban_geometry::Point(-1, 4.25), rhoban_geometry::Point(-3, 4.25),
+                       rhoban_geometry::Point(-3, -4.25), rhoban_geometry::Point(-1, -4.25) })));
 }
 
 void Manual::update()

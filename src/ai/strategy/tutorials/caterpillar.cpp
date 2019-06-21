@@ -24,8 +24,20 @@ namespace rhoban_ssl
 namespace strategy
 {
 Caterpillar::Caterpillar()
-  : Strategy(), head_(std::shared_ptr<robot_behavior::Beginner::Goto_ball>(new robot_behavior::Beginner::Goto_ball()))
+  : Strategy()
+  , head_ball_(std::shared_ptr<robot_behavior::Beginner::Goto_ball>(new robot_behavior::Beginner::Goto_ball()))
+  , path_mode_(false)
 {
+}
+
+Caterpillar::Caterpillar(std::vector<rhoban_geometry::Point> path)
+  : Strategy()
+  , head_path_(std::shared_ptr<robot_behavior::beginner::GoToXY>(new robot_behavior::beginner::GoToXY()))
+  , path_mode_(true)
+  , path_(path)
+  , path_index_(0)
+{
+  head_path_->setReachRadius(0.1);
 }
 
 Caterpillar::~Caterpillar()
@@ -66,6 +78,11 @@ void Caterpillar::start(double time)
     followers_.push_back(
         std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()));
   }
+  if (path_mode_)
+  {
+    head_path_->setPoint(path_.at(0));
+    path_index_++;
+  }
 }
 void Caterpillar::stop(double time)
 {
@@ -74,13 +91,28 @@ void Caterpillar::stop(double time)
 
 void Caterpillar::update(double time)
 {
+  if (path_mode_)
+  {
+    if (head_path_->isReached())
+    {
+      head_path_->setPoint(path_.at(path_index_ % path_.size()));
+      path_index_++;
+    }
+  }
 }
 
 void Caterpillar::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   // head:
-  assign_behavior(playerId(0), head_);
+  if (path_mode_)
+  {  // path mode, head indefintly visits in order a list of points.
+    assign_behavior(playerId(0), head_path_);
+  }
+  else
+  {  // normal mode, head always follows the ball.
+    assign_behavior(playerId(0), head_ball_);
+  }
 
   // queue:
   for (int i = 0; i < CATERPILLAR_SIZE - 1; i++)
