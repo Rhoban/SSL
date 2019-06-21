@@ -29,7 +29,6 @@ namespace robot_behavior
 {
 NavigationWithObstacleAvoidance::NavigationWithObstacleAvoidance(double time, double dt)
   : ConsignFollower()
-  , avoided_(true)
   , ignore_the_ball_(false)
   , ignore_robot_()
   , ball_radius_avoidance_(ai::Config::robot_radius)
@@ -37,7 +36,6 @@ NavigationWithObstacleAvoidance::NavigationWithObstacleAvoidance(double time, do
   , position_follower_avoidance_(time, dt)
   , target_position_(0.0, 0.0)
   , target_angle_(0.0)
-  , sign_of_avoidance_rotation_(1)
 {
 }
 
@@ -91,7 +89,7 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
     data::Robot* r = Data::get()->all_robots.at(j).second;
     if (r->isActive() == false)
       continue;
-    if (r->id != robot().id && r->id != (uint)closest_robot_)
+    if (r->id != robot().id && r->id != closest_robot_)
     {
       rhoban_geometry::Point rpos = r->getMovement().linearPosition(r->getMovement().lastTime());
       Vector2d v = (rpos - robot().getMovement().linearPosition(robot().getMovement().lastTime()));
@@ -106,7 +104,6 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
   }
 
   ball_is_the_obstacle_ = false;
-
   if (not(ignore_the_ball_))
   {
     double radius_error = ai::Config::radius_security_for_collision;
@@ -186,8 +183,9 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   /////////////////////////////////////////////////////////////////
   // We compute the sens of avoidance rotatiion
   /////////////////////////////////////////////////////////////////
+  sign_of_avoidance_rotation_ = 1.0;  // TODO
 
-  // data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
+  data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
   Vector2d obstacle_to_goal = vector2point(target_position_) - obstacle_linear_position;
   Vector2d current_to_goal = vector2point(target_position_) - linearPosition();
   double angle = vector2angle(current_to_goal).value() - vector2angle(obstacle_to_goal).value();
@@ -210,7 +208,6 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
     avoidance_convergence = (XX + YY) * (XX + YY);
   }
 
-  if (avoided_)
   {
     if (angle < 0.0)
     {
@@ -218,8 +215,8 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
     }
     else
       sign_of_avoidance_rotation_ = -1;
-    avoided_ = false;
   }
+
   /////////////////////////////////////////////////////////////////
   // We compute now the limit cycle rotation
   /////////////////////////////////////////////////////////////////
@@ -292,8 +289,7 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
 {
   position_follower_.update(time, robot, ball);  // We use the future command to predict collision
   determineTheClosestObstacle();
-
-  if (min_time_collision_ >= 0 && min_time_collision_ < AVOID_MOMENT)
+  if (min_time_collision_ >= 0)
   {
     computeTheRadiusOfLimitCycle();
     computeTheLimitCycleDirection();
@@ -301,15 +297,11 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
 
     position_follower_avoidance_.update(time, robot, ball);
   }
-  else
-  {
-    avoided_ = true;
-  }
 }
 
 Control NavigationWithObstacleAvoidance::control() const
 {
-  if (min_time_collision_ >= 0 && min_time_collision_ < AVOID_MOMENT)
+  if (min_time_collision_ >= 0)
   {
     return position_follower_avoidance_.control();
   }
