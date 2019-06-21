@@ -24,15 +24,7 @@ namespace rhoban_ssl
 namespace strategy
 {
 Caterpillar::Caterpillar()
-  : Strategy()
-  , head_(std::shared_ptr<robot_behavior::Beginner::Goto_ball>(new robot_behavior::Beginner::Goto_ball()))
-  , follower1_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
-  , follower2_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
-  , follower3_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
-  , follower4_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
-  , follower5_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
-  , follower6_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
-  , follower7_(std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()))
+  : Strategy(), head_(std::shared_ptr<robot_behavior::Beginner::Goto_ball>(new robot_behavior::Beginner::Goto_ball()))
 {
 }
 
@@ -46,7 +38,7 @@ Caterpillar::~Caterpillar()
  */
 int Caterpillar::minRobots() const
 {
-  return 8;
+  return CATERPILLAR_SIZE;
 }
 
 /*
@@ -55,7 +47,7 @@ int Caterpillar::minRobots() const
  */
 int Caterpillar::maxRobots() const
 {
-  return 8;
+  return CATERPILLAR_SIZE;
 }
 
 GoalieNeed Caterpillar::needsGoalie() const
@@ -67,12 +59,17 @@ const std::string Caterpillar::name = "LA CHENILLE !";
 
 void Caterpillar::start(double time)
 {
-  DEBUG("START PREPARE KICKOFF");
+  DEBUG("START CATERPILLAR");
   behaviors_are_assigned_ = false;
+  for (int i = 1; i < CATERPILLAR_SIZE; i++)
+  {
+    followers_.push_back(
+        std::shared_ptr<robot_behavior::medium::FollowRobot>(new robot_behavior::medium::FollowRobot()));
+  }
 }
 void Caterpillar::stop(double time)
 {
-  DEBUG("STOP PREPARE KICKOFF");
+  DEBUG("STOP CATERPILLAR");
 }
 
 void Caterpillar::update(double time)
@@ -86,20 +83,11 @@ void Caterpillar::assignBehaviorToRobots(
   assign_behavior(playerId(0), head_);
 
   // queue:
-  follower1_->setRobotIdToFollow(playerId(0));
-  assign_behavior(playerId(1), follower1_);
-  follower2_->setRobotIdToFollow(playerId(1));
-  assign_behavior(playerId(2), follower2_);
-  follower3_->setRobotIdToFollow(playerId(2));
-  assign_behavior(playerId(3), follower3_);
-  follower4_->setRobotIdToFollow(playerId(3));
-  assign_behavior(playerId(4), follower4_);
-  follower5_->setRobotIdToFollow(playerId(4));
-  assign_behavior(playerId(5), follower5_);
-  follower6_->setRobotIdToFollow(playerId(5));
-  assign_behavior(playerId(6), follower6_);
-  follower7_->setRobotIdToFollow(playerId(6));
-  assign_behavior(playerId(7), follower7_);
+  for (int i = 0; i < CATERPILLAR_SIZE - 1; i++)
+  {
+    followers_.at(i)->setRobotIdToFollow(playerId(i));
+    assign_behavior(playerId(i + 1), followers_.at(i));
+  }
 
   behaviors_are_assigned_ = true;
 }

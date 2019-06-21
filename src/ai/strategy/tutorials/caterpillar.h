@@ -31,14 +31,10 @@ class Caterpillar : public Strategy
 private:
   bool behaviors_are_assigned_;
 
+  int CATERPILLAR_SIZE = 6;
+
   std::shared_ptr<robot_behavior::Beginner::Goto_ball> head_;
-  std::shared_ptr<robot_behavior::medium::FollowRobot> follower1_;
-  std::shared_ptr<robot_behavior::medium::FollowRobot> follower2_;
-  std::shared_ptr<robot_behavior::medium::FollowRobot> follower3_;
-  std::shared_ptr<robot_behavior::medium::FollowRobot> follower4_;
-  std::shared_ptr<robot_behavior::medium::FollowRobot> follower5_;
-  std::shared_ptr<robot_behavior::medium::FollowRobot> follower6_;
-  std::shared_ptr<robot_behavior::medium::FollowRobot> follower7_;
+  std::vector<std::shared_ptr<robot_behavior::medium::FollowRobot>> followers_;
 
 public:
   Caterpillar();
@@ -58,7 +54,7 @@ public:
   virtual void assignBehaviorToRobots(
       std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt);
 
-  virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
+  virtual std::list<std::pair<rhoban_geometry::Point, ContinuousAngle>>
   getStartingPositions(int number_of_avalaible_robots);
   virtual bool getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position);
 
