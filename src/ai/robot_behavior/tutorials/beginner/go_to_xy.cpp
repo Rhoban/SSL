@@ -26,8 +26,12 @@ namespace robot_behavior
 {
 namespace beginner
 {
-GoToXY::GoToXY(rhoban_geometry::Point point)
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), target_point_(point)
+GoToXY::GoToXY(rhoban_geometry::Point point, double reach_radius)
+  : RobotBehavior()
+  , follower_(Factory::fixedConsignFollower())
+  , target_point_(point)
+  , reached_(false)
+  , reach_radius_(reach_radius)
 
 {
 }
@@ -40,9 +44,15 @@ void GoToXY::update(double time, const data::Robot& robot, const data::Ball& bal
 
   annotations_.clear();
 
+  const rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
+
+  if (robot_position.getDist(target_point_) <= reach_radius_)
+  {
+    reached_ = true;
+  }
   rhoban_geometry::Point position_follower = target_point_;
 
-  Vector2d vect_robot_target = target_point_ - robot.getMovement().linearPosition(time);
+  Vector2d vect_robot_target = target_point_ - robot_position;
   ContinuousAngle rotation_follower = vector2angle(vect_robot_target);
 
   follower_->setFollowingPosition(position_follower, rotation_follower);
@@ -53,11 +63,27 @@ void GoToXY::update(double time, const data::Robot& robot, const data::Ball& bal
 void GoToXY::setPoint(rhoban_geometry::Point point)
 {
   target_point_ = point;
+  reached_ = false;
 }
 
 rhoban_geometry::Point GoToXY::getPoint() const
 {
   return target_point_;
+}
+
+void GoToXY::setReachRadius(double radius)
+{
+  reach_radius_ = radius;
+}
+
+double GoToXY::getReachRadius() const
+{
+  return reach_radius_;
+}
+
+bool GoToXY::isReached()
+{
+  return reached_;
 }
 
 Control GoToXY::control() const

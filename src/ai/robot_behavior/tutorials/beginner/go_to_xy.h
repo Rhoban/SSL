@@ -36,8 +36,11 @@ private:
 
   rhoban_geometry::Point target_point_;
 
+  bool reached_;
+  double reach_radius_;
+
 public:
-  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0));
+  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -46,6 +49,12 @@ public:
   void setPoint(rhoban_geometry::Point point);
 
   rhoban_geometry::Point getPoint() const;
+
+  void setReachRadius(double radius);
+
+  double getReachRadius() const;
+
+  bool isReached();
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
