@@ -25,11 +25,11 @@ namespace annotations
 {
 namespace shape
 {
-Shape::Shape() {
-
+Shape::Shape()
+{
 }
-Shape::~Shape() {
-
+Shape::~Shape()
+{
 }
 }  // namespace shape
 }  // namespace annotations

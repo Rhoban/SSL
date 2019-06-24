@@ -96,7 +96,11 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/referee_packet_analyzer.cpp
-    referee/game_state.cpp    
+    referee/game_state.cpp
+    # Strategy
+
+    # Robot Behavior
+    robot_behavior/kicker/placement.cpp
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp
