@@ -18,14 +18,13 @@
 */
 
 #include "value_parameter.h"
-#include <debug.h>
 
 namespace rhoban_ssl
 {
 namespace parameter
 {
-ValueParameter::ValueParameter(std::string name, std::string comment, bool writable, type_parameters::Type type)
-  : Parameter(comment, type, name), writable_(writable)
+ValueParameter::ValueParameter(std::string name, std::string comment, bool writable)
+  : Parameter(comment, name), writable_(writable)
 {
 }
 
@@ -38,7 +37,7 @@ ValueParameter::~ValueParameter()
  **************************************************************************/
 
 BoolParameter::BoolParameter(std::string name, std::string comment, bool value, bool writable)
-  : ValueParameter(name, comment, writable, type_parameters::Type::IntParameter), value_(value)
+  : ValueParameter(name, comment, writable), value_(value)
 {
 }
 
@@ -67,7 +66,7 @@ BoolParameter::~BoolParameter()
  **************************************************************************/
 
 IntParameter::IntParameter(std::string name, std::string comment, int value, bool writable)
-  : ValueParameter(name, comment, writable, type_parameters::Type::IntParameter), value_(value)
+  : ValueParameter(name, comment, writable), value_(value)
 {
 }
 
@@ -95,9 +94,58 @@ IntParameter::~IntParameter()
  *                          Double parameter
  **************************************************************************/
 
+DoubleParameter::DoubleParameter(std::string name, std::string comment, double value, bool writable)
+  : ValueParameter(name, comment, writable), value_(value)
+{
+}
+
+Json::Value DoubleParameter::getJson()
+{
+  Json::Value json;
+  json["name"] = name_;
+  json["type"] = "double";
+  json["value"] = this->value_;
+  json["comment"] = this->comment_;
+  json["writable"] = this->writable_;
+  return json;
+}
+
+void DoubleParameter::setJson(Json::Value json)
+{
+  value_ = json["value"].asDouble();
+}
+
+DoubleParameter::~DoubleParameter()
+{
+}
+
 /**************************************************************************
  *                          String parameter
  **************************************************************************/
 
+StringParameter::StringParameter(std::string name, std::string comment, std::string value, bool writable)
+  : ValueParameter(name, comment, writable), value_(value)
+{
+}
+
+Json::Value StringParameter::getJson()
+{
+  Json::Value json;
+  json["name"] = name_;
+  json["type"] = "string";
+  json["value"] = this->value_;
+  json["comment"] = this->comment_;
+  json["writable"] = this->writable_;
+  return json;
+}
+
+void StringParameter::setJson(Json::Value json)
+{
+  value_ = json["value"].asString();
+}
+
+StringParameter::~StringParameter()
+{
+}
 }  // namespace parameter
 }  // namespace rhoban_ssl

@@ -38,7 +38,9 @@ Manual::Manual(std::string name) : Manager(name)
 {
   // Create parameters
   builder_parameter_.new_int("Test", "Test pour envoyer sur le paramètre", 0, true);
-  builder_parameter_.new_bool("Test 2", "Test pour envoyer sur le paramètre (2 ème test)", true, true);
+  builder_parameter_.new_bool("Test 2", "Test pour envoyer sur le paramètre (2 ème test)", true, false);
+  builder_parameter_.new_double("Test 3", "Test pour envoyer sur le paramètre (2 ème test)", 1.0, true);
+  builder_parameter_.new_string("Test 4", "Test pour envoyer sur le paramètre (2 ème test)", "Coucou", true);
 
   registerStrategy("Beginner go to ball",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
@@ -118,11 +120,7 @@ Json::Value Manual::getParameters()
 {
   Json::Value json;
   json["manager"] = builder_parameter_.getJson();
-
-  //  for (const std::string& name : getCurrentStrategyNames())
-  //  {
-  //    json["strategies"]["names"].append(getStrategy(name).getParameters());
-  //  }
+  // @TODO : Faire les stratégies.
   return json;
 }
 

@@ -40,7 +40,7 @@ public:
    * @param comment Detail of the parameter.
    * @param writable Indicate if the user can change the parameter.
    */
-  ValueParameter(std::string name, std::string comment, bool writable, type_parameters::Type type);
+  ValueParameter(std::string name, std::string comment, bool writable);
 
   /**
    * @brief Destructor.
@@ -49,7 +49,7 @@ public:
 };
 
 /**************************************************************************
- *                          Boolean parameter
+ *                          Boolean parameter                             *
  **************************************************************************/
 
 class BoolParameter : public ValueParameter
@@ -74,7 +74,7 @@ public:
 };
 
 /**************************************************************************
- *                          Integer parameter
+ *                          Integer parameter                             *
  **************************************************************************/
 
 class IntParameter : public ValueParameter
@@ -96,6 +96,56 @@ public:
   virtual Json::Value getJson();
   virtual void setJson(Json::Value json);
   virtual ~IntParameter();
+};
+
+/**************************************************************************
+ *                          Double parameter                              *
+ **************************************************************************/
+
+class DoubleParameter : public ValueParameter
+{
+private:
+  /**
+   * @brief The value of the parameter.
+   */
+  double value_;
+
+public:
+  /**
+   * @brief Constructor of the class
+   * @param name Name of the parameter.
+   * @param comment Detail of the parameter.
+   * @param writable Indicate if the user can change the parameter.
+   */
+  DoubleParameter(std::string name, std::string comment, double value, bool writable);
+  virtual Json::Value getJson();
+  virtual void setJson(Json::Value json);
+  virtual ~DoubleParameter();
+};
+
+/**************************************************************************
+ *                          String parameter                              *
+ **************************************************************************/
+
+class StringParameter : public ValueParameter
+{
+private:
+  /**
+   * @brief The value of the parameter.
+   */
+  std::string value_;
+
+public:
+  /**
+   * @brief Constructor of the class
+   * @param name Name of the parameter.
+   * @param comment Detail of the parameter.
+   * @param writable Indicate if the user can change the parameter.
+   */
+  StringParameter(std::string name, std::string comment, std::string value, bool writable);
+  virtual Json::Value getJson();
+  virtual void setJson(Json::Value json);
+  virtual ~StringParameter();
 };
 
 }  // namespace parameter

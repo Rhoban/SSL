@@ -23,8 +23,7 @@ namespace rhoban_ssl
 {
 namespace parameter
 {
-Parameter::Parameter(std::string comment, type_parameters::Type type, std::string name)
-  : type_(type), comment_(comment), name_(name)
+Parameter::Parameter(std::string comment, std::string name) : comment_(comment), name_(name)
 {
 }
 

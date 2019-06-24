@@ -23,26 +23,16 @@
 
 namespace rhoban_ssl
 {
-namespace type_parameters
-{
-enum Type
-{
-  NoneParameter,
-  IntParameter
-};
-}
-
 namespace parameter
 {
 class Parameter
 {
 protected:
-  type_parameters::Type type_;
   std::string comment_;
   std::string name_;
 
 public:
-  Parameter(std::string comment, type_parameters::Type type, std::string name);
+  Parameter(std::string comment, std::string name);
   /**
    * @brief Obtain the json of the parameters.
    * @return

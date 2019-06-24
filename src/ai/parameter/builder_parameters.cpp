@@ -38,6 +38,16 @@ void BuilderParameters::new_bool(std::string name, std::string comment, bool def
   parameters_.push_back(std::make_shared<BoolParameter>(name, comment, default_value, writable));
 }
 
+void BuilderParameters::new_double(std::string name, std::string comment, double default_value, bool writable)
+{
+  parameters_.push_back(std::make_shared<DoubleParameter>(name, comment, default_value, writable));
+}
+
+void BuilderParameters::new_string(std::string name, std::string comment, std::string default_value, bool writable)
+{
+  parameters_.push_back(std::make_shared<StringParameter>(name, comment, default_value, writable));
+}
+
 Json::Value BuilderParameters::getJson()
 {
   Json::Value json = Json::arrayValue;

@@ -49,6 +49,10 @@ public:
 
   void new_bool(std::string name, std::string comment = "", bool default_value = false, bool writable = false);
 
+  void new_double(std::string name, std::string comment = "", double default_value = 0.0, bool writable = false);
+
+  void new_string(std::string name, std::string comment = "", std::string default_value = "", bool writable = false);
+
   Json::Value getJson();
 
   void parse(Json::Value tab_json);
