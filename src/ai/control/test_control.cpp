@@ -20,7 +20,7 @@
 
 #include <gtest/gtest.h>
 
-#include "robot_behavior.h"
+#include "robot_control.h"
 
 TEST(test_robot_behavior, constructors)
 {

@@ -96,6 +96,19 @@ ContinuousAngle vector2angle(Vector2d direction)
   return ContinuousAngle(res);
 }
 
+ContinuousAngle vectors2angle(Vector2d v1, Vector2d v2)
+{
+  double norm_1 = v1.norm();
+  double norm_2 = v2.norm();
+  assert(norm_1 != 0.0 && norm_2 != 0.0);
+  v1 /= norm_1;
+  v2 /= norm_2;
+  double res = std::acos(scalarProduct(v1, v2));
+  if (vectorialProduct(v1, v2) < 0)
+    res = -res;
+  return ContinuousAngle(res);
+}
+
 Vector2d Vector2d::perpendicular()
 {
   return Vector2d(-this->getY(), this->getX());
