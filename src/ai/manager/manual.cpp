@@ -69,8 +69,8 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Beginner Annotations - Ball position",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        [&](double time, double dt) {
-                         robot_behavior::BeginnerAnnotationsBallPosition* ball_position =
-                             new robot_behavior::BeginnerAnnotationsBallPosition();
+                         robot_behavior::beginner::AnnotationsBallPosition* ball_position =
+                             new robot_behavior::beginner::AnnotationsBallPosition();
                          return std::shared_ptr<robot_behavior::RobotBehavior>(ball_position);
                        },
                        false  // we don't want to define a goal here !
