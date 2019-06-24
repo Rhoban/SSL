@@ -337,9 +337,9 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
     manual_ctrl.linear_velocity[1] = packet["speed"]["y"].asDouble();
     manual_ctrl.angular_velocity = packet["speed"]["theta"].asDouble();
 
-    manual_ctrl.kick = packet["kicker"]["kick"].asBool();
-    manual_ctrl.chip_kick = packet["kicker"]["chip_kick"].asBool();
-    manual_ctrl.kick_power = packet["kicker"]["power"].asFloat();
+    manual_ctrl.kick = packet["kickers"]["kick"].asBool();
+    manual_ctrl.chip_kick = packet["kickers"]["chip_kick"].asBool();
+    manual_ctrl.kick_power = packet["kickers"]["power"].asFloat();
     manual_ctrl.charge = packet["charge"].asBool();
 
     manual_ctrl.spin = packet["spin"].asBool();
