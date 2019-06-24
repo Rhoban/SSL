@@ -117,6 +117,10 @@ void ViewerCommunication::processIncomingPackets()
     {
       ai_->scan();
     }
+    else if (!viewer_packet["send_parameters"].isNull())
+    {
+      ai_->getCurrentManager()->setParameters(viewer_packet["send_parameters"]);
+    }
     else
     {
       DEBUG("Invalid viewer packet");
@@ -329,7 +333,6 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
   uint robot_number = packet["number"].asUInt();
 
   Control& manual_ctrl = Data::get()->shared_data.final_control_for_robots[robot_number].control;
-
   if (!manual_ctrl.ignore)
   {
     Data::get()->shared_data.final_control_for_robots[robot_number].is_manually_controled_by_viewer = true;

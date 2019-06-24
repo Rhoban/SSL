@@ -29,10 +29,6 @@ class ValueParameter : public Parameter
 {
 protected:
   /**
-   * @brief The name of the parameter.
-   */
-  std::string name_;
-  /**
    * @brief Indicate if the user can change the parameter.
    */
   bool writable_;
@@ -46,17 +42,41 @@ public:
    */
   ValueParameter(std::string name, std::string comment, bool writable, type_parameters::Type type);
 
-  /**
-   * @brief @todo
-   * @return
-   */
-  virtual Json::Value getJson() = 0;
 
   /**
    * @brief Destructor.
    */
   virtual ~ValueParameter();
 };
+
+/**************************************************************************
+ *                          Boolean parameter
+ **************************************************************************/
+
+class BoolParameter : public ValueParameter
+{
+private:
+  /**
+   * @brief The value of the parameter.
+   */
+  bool value_;
+
+public:
+  /**
+   * @brief Constructor of the class
+   * @param name Name of the parameter.
+   * @param comment Detail of the parameter.
+   * @param writable Indicate if the user can change the parameter.
+   */
+  BoolParameter(std::string name, std::string comment, bool value, bool writable);
+  virtual Json::Value getJson();
+  virtual void setJson(Json::Value json);
+  virtual ~BoolParameter();
+};
+
+/**************************************************************************
+ *                          Integer parameter
+ **************************************************************************/
 
 class IntParameter : public ValueParameter
 {
@@ -75,7 +95,8 @@ public:
    */
   IntParameter(std::string name, std::string comment, int value, bool writable);
   virtual Json::Value getJson();
-  ~IntParameter();
+  virtual void setJson(Json::Value json);
+  virtual ~IntParameter();
 };
 
 }  // namespace parameter

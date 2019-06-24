@@ -18,13 +18,14 @@
 */
 
 #include "value_parameter.h"
+#include <debug.h>
 
 namespace rhoban_ssl
 {
 namespace parameter
 {
 ValueParameter::ValueParameter(std::string name, std::string comment, bool writable, type_parameters::Type type)
-  : Parameter(comment, type), name_(name), writable_(writable)
+  : Parameter(comment, type, name), writable_(writable)
 {
 }
 
@@ -35,6 +36,31 @@ ValueParameter::~ValueParameter()
 /**************************************************************************
  *                          Boolean parameter
  **************************************************************************/
+
+BoolParameter::BoolParameter(std::string name, std::string comment, bool value, bool writable)
+  : ValueParameter(name, comment, writable, type_parameters::Type::IntParameter), value_(value)
+{
+}
+
+Json::Value BoolParameter::getJson()
+{
+  Json::Value json;
+  json["name"] = name_;
+  json["type"] = "boolean";
+  json["value"] = this->value_;
+  json["comment"] = this->comment_;
+  json["writable"] = this->writable_;
+  return json;
+}
+
+void BoolParameter::setJson(Json::Value json)
+{
+  value_ = json["value"].asBool();
+}
+
+BoolParameter::~BoolParameter()
+{
+}
 
 /**************************************************************************
  *                          Integer parameter
@@ -54,6 +80,11 @@ Json::Value IntParameter::getJson()
   json["comment"] = this->comment_;
   json["writable"] = this->writable_;
   return json;
+}
+
+void IntParameter::setJson(Json::Value json)
+{
+  value_ = json["value"].asInt();
 }
 
 IntParameter::~IntParameter()

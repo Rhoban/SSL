@@ -36,6 +36,11 @@ namespace manager
 {
 Manual::Manual(std::string name) : Manager(name)
 {
+
+  // Create parameters
+  builder_parameter_.new_int("Test", "Test pour envoyer sur le paramètre", 0, true);
+  builder_parameter_.new_bool("Test 2", "Test pour envoyer sur le paramètre (2 ème test)", true, true);
+
   registerStrategy("Beginner go to ball",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        [&](double time, double dt) {
@@ -112,14 +117,12 @@ void Manual::update()
 
 Json::Value Manual::getParameters()
 {
-  builder_parameter_.new_int("Test", "Test pour envoyer sur le paramètre", 0, true);
-  builder_parameter_.new_int("Test 2", "Test pour envoyer sur le paramètre (2 ème test)", 0, true);
   return builder_parameter_.getJson();
 }
 
 void Manual::setParameters(Json::Value json)
 {
-  DEBUG(json);
+  builder_parameter_.parse(json["manager_data"]);
 }
 
 Manual::~Manual()

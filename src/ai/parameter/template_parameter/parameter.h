@@ -39,14 +39,19 @@ class Parameter
 protected:
   type_parameters::Type type_;
   std::string comment_;
-
+  std::string name_;
 public:
-  Parameter(std::string comment, type_parameters::Type type);
+  Parameter(std::string comment, type_parameters::Type type, std::string name);
   /**
    * @brief Obtain the json of the parameters.
    * @return
    */
+
+  virtual std::string getName();
+
   virtual Json::Value getJson() = 0;
+
+  virtual void setJson(Json::Value json) = 0;
   /**
    * @brief Destructor of the class.
    */

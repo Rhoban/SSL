@@ -47,7 +47,14 @@ public:
    */
   void new_int(std::string name, std::string comment = "", int default_value = 0, bool writable = false);
 
+  void new_bool(std::string name, std::string comment = "", bool default_value = false, bool writable = false);
+
+
   Json::Value getJson();
+
+  void parse(Json::Value tab_json);
+
+  std::shared_ptr<Parameter> getParameterByName(std::string name);
 
   /**
    * @brief Destructor.

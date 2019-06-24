@@ -28,9 +28,14 @@ BuilderParameters::BuilderParameters()
 {
 }
 
-void BuilderParameters::new_int(std::string name, std::string comment, int value, bool writable)
+void BuilderParameters::new_int(std::string name, std::string comment, int default_value, bool writable)
 {
-  parameters_.push_back(std::make_shared<IntParameter>(name, comment, value, writable));
+  parameters_.push_back(std::make_shared<IntParameter>(name, comment, default_value, writable));
+}
+
+void BuilderParameters::new_bool(std::string name, std::string comment, bool default_value, bool writable)
+{
+  parameters_.push_back(std::make_shared<BoolParameter>(name, comment, default_value, writable));
 }
 
 Json::Value BuilderParameters::getJson()
@@ -41,8 +46,26 @@ Json::Value BuilderParameters::getJson()
     json.append((*it)->getJson());
   }
 
-  parameters_.clear();
   return json;
+}
+
+void BuilderParameters::parse(Json::Value tab_json)
+{
+  for (auto json = tab_json.begin(); json != tab_json.end(); json++)
+  {
+    getParameterByName((*json)["name"].asString())->setJson((*json));
+  }
+}
+
+std::shared_ptr<Parameter> BuilderParameters::getParameterByName(std::string name)
+{
+  for (auto it = parameters_.begin(); it != parameters_.end(); it++)
+  {
+    if ((*it)->getName().compare(name) == 0)
+    {
+      return (*it);
+    }
+  }
 }
 
 BuilderParameters::~BuilderParameters()
