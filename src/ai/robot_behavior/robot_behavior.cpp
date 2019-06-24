@@ -100,6 +100,14 @@ rhoban_ssl::annotations::Annotations RobotBehavior::getAnnotations() const
   return rhoban_ssl::annotations::Annotations();
 }
 
+Json::Value RobotBehavior::getParameters()
+{
+}
+
+void RobotBehavior::setParameters(Json::Value)
+{
+}
+
 bool RobotBehavior::infraRed() const
 {
   return robot().infraRed();

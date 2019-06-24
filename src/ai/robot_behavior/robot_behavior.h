@@ -81,6 +81,15 @@ public:
   bool isGoalie() const;
 
   bool infraRed() const;
+
+  /**
+   * @brief Get all parameter of the manager shown in the viewer.
+   */
+  virtual Json::Value getParameters();
+  /**
+   * @brief Set the parameter send by the viewer.
+   */
+  virtual void setParameters(Json::Value);
 };
 
 namespace detail

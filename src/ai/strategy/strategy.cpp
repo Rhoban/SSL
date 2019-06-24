@@ -91,6 +91,14 @@ bool Strategy::getStartingPositionForGoalie(rhoban_geometry::Point& linear_posit
   return false;
 }
 
+Json::Value Strategy::getParameters()
+{
+}
+
+void Strategy::setParameters(Json::Value)
+{
+}
+
 Strategy::~Strategy()
 {
 }

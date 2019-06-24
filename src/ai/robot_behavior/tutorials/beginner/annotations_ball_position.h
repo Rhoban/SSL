@@ -21,19 +21,24 @@
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
+#include <parameter/builder_parameters.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
+namespace beginner
+{
 /** Tutorial class to show how to move a robot in the side corner. */
-class BeginnerAnnotationsBallPosition : public RobotBehavior
+class AnnotationsBallPosition : public RobotBehavior
 {
 private:
   rhoban_ssl::annotations::Annotations annotations_;
+  parameter::BuilderParameters builder_parameter_;
+  bool show_annotation_;
 
 public:
-  BeginnerAnnotationsBallPosition();
+  AnnotationsBallPosition();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -41,8 +46,13 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~BeginnerAnnotationsBallPosition();
+  virtual Json::Value getParameters();
+
+  virtual void setParameters(Json::Value);
+
+  virtual ~AnnotationsBallPosition();
 };
 
+};  // namespace beginner
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

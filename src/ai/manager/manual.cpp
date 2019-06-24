@@ -117,7 +117,14 @@ void Manual::update()
 
 Json::Value Manual::getParameters()
 {
-  return builder_parameter_.getJson();
+  Json::Value json;
+  json["manager"] = builder_parameter_.getJson();
+  json["strategies"] = Json::arrayValue;
+  for (const std::string& name : getCurrentStrategyNames())
+  {
+    json["strategies"]["names"].append(getStrategy(name).getParameters());
+  }
+  return json;
 }
 
 void Manual::setParameters(Json::Value json)

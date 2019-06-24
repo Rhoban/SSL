@@ -23,11 +23,16 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-BeginnerAnnotationsBallPosition::BeginnerAnnotationsBallPosition() : RobotBehavior()
+namespace beginner
 {
+
+AnnotationsBallPosition::AnnotationsBallPosition() : RobotBehavior(), show_annotation_(true)
+{
+
+  builder_parameter_.new_bool("annotations", "Afficher les annotations", true, true);
 }
 
-void BeginnerAnnotationsBallPosition::update(double time, const data::Robot& robot, const data::Ball& ball)
+void AnnotationsBallPosition::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // Do not remove this line.
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
@@ -37,21 +42,33 @@ void BeginnerAnnotationsBallPosition::update(double time, const data::Robot& rob
   annotations_.addCross(ballPosition(), "red", false);
 }
 
-Control BeginnerAnnotationsBallPosition::control() const
+Control AnnotationsBallPosition::control() const
 {
   return Control();
 }
 
-BeginnerAnnotationsBallPosition::~BeginnerAnnotationsBallPosition()
+Json::Value AnnotationsBallPosition::getParameters()
 {
+  return builder_parameter_.getJson();
 }
 
-rhoban_ssl::annotations::Annotations BeginnerAnnotationsBallPosition::getAnnotations() const
+void AnnotationsBallPosition::setParameters(Json::Value json)
+{
+  builder_parameter_.parse(json);
+  DEBUG(json["annotations"]);
+}
+
+rhoban_ssl::annotations::Annotations AnnotationsBallPosition::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(annotations_);
   return annotations;
 }
 
+AnnotationsBallPosition::~AnnotationsBallPosition()
+{
+}
+
+}  // namespace beginner
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl

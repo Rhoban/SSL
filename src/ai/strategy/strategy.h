@@ -140,6 +140,15 @@ public:
   //  }
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
+  /**
+   * @brief Get all parameter of the manager shown in the viewer.
+   */
+  virtual Json::Value getParameters();
+  /**
+   * @brief Set the parameter send by the viewer.
+   */
+  virtual void setParameters(Json::Value);
+
   virtual ~Strategy();
 
   /*

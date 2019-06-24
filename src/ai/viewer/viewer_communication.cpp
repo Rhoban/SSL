@@ -360,7 +360,7 @@ Json::Value ViewerCommunication::annotationsPacket()
 Json::Value ViewerCommunication::parameterPacket()
 {
   Json::Value packet;
-  packet["parameters"]["manager"] = ai_->getCurrentManager()->getParameters();
+  packet["parameters"] = ai_->getCurrentManager()->getParameters();
   return packet;
 }
 
