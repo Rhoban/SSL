@@ -36,7 +36,6 @@ namespace manager
 {
 Manual::Manual(std::string name) : Manager(name)
 {
-
   // Create parameters
   builder_parameter_.new_int("Test", "Test pour envoyer sur le paramètre", 0, true);
   builder_parameter_.new_bool("Test 2", "Test pour envoyer sur le paramètre (2 ème test)", true, true);
@@ -119,11 +118,11 @@ Json::Value Manual::getParameters()
 {
   Json::Value json;
   json["manager"] = builder_parameter_.getJson();
-  json["strategies"] = Json::arrayValue;
-  for (const std::string& name : getCurrentStrategyNames())
-  {
-    json["strategies"]["names"].append(getStrategy(name).getParameters());
-  }
+
+  //  for (const std::string& name : getCurrentStrategyNames())
+  //  {
+  //    json["strategies"]["names"].append(getStrategy(name).getParameters());
+  //  }
   return json;
 }
 

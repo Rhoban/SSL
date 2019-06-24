@@ -120,6 +120,7 @@ void ViewerCommunication::processIncomingPackets()
     else if (!viewer_packet["send_parameters"].isNull())
     {
       ai_->getCurrentManager()->setParameters(viewer_packet["send_parameters"]);
+      ai_->setBehaviorParameters(viewer_packet["send_parameters"]["behaviors_data"]);
     }
     else
     {
@@ -361,6 +362,7 @@ Json::Value ViewerCommunication::parameterPacket()
 {
   Json::Value packet;
   packet["parameters"] = ai_->getCurrentManager()->getParameters();
+  packet["parameters"]["behaviors"] = ai_->getBehaviorParameters();
   return packet;
 }
 

@@ -102,6 +102,7 @@ rhoban_ssl::annotations::Annotations RobotBehavior::getAnnotations() const
 
 Json::Value RobotBehavior::getParameters()
 {
+  return Json::Value();
 }
 
 void RobotBehavior::setParameters(Json::Value)

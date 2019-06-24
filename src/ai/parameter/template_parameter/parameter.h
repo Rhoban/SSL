@@ -40,6 +40,7 @@ protected:
   type_parameters::Type type_;
   std::string comment_;
   std::string name_;
+
 public:
   Parameter(std::string comment, type_parameters::Type type, std::string name);
   /**

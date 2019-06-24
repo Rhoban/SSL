@@ -49,7 +49,6 @@ public:
 
   void new_bool(std::string name, std::string comment = "", bool default_value = false, bool writable = false);
 
-
   Json::Value getJson();
 
   void parse(Json::Value tab_json);

@@ -51,9 +51,16 @@ Json::Value BuilderParameters::getJson()
 
 void BuilderParameters::parse(Json::Value tab_json)
 {
-  for (auto json = tab_json.begin(); json != tab_json.end(); json++)
+  if (tab_json.isArray())
   {
-    getParameterByName((*json)["name"].asString())->setJson((*json));
+    for (auto json = tab_json.begin(); json != tab_json.end(); json++)
+    {
+      getParameterByName((*json)["name"].asString())->setJson((*json));
+    }
+  }
+  else
+  {
+    getParameterByName(tab_json["name"].asString())->setJson(tab_json);
   }
 }
 

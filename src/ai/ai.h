@@ -27,6 +27,7 @@
 #include <core/machine_state.h>
 #include <manager/manager.h>
 #include <annotations/annotations.h>
+#include <json/json.h>
 
 namespace rhoban_ssl
 {
@@ -153,6 +154,17 @@ public:
    */
   void haltRobot(uint robot_number);
 
+  /**
+   * @brief Get all parameters for robot behaviors and transform in json to send in viewer.
+   * @return json The json that contains all parameters.
+   */
+  Json::Value getBehaviorParameters();
+
+  /**
+   * @brief TODO
+   * @param json
+   */
+  void setBehaviorParameters(Json::Value tab_json);
   /**
    * @brief enableRobot
    * @param id

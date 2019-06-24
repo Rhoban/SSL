@@ -25,10 +25,8 @@ namespace robot_behavior
 {
 namespace beginner
 {
-
 AnnotationsBallPosition::AnnotationsBallPosition() : RobotBehavior(), show_annotation_(true)
 {
-
   builder_parameter_.new_bool("annotations", "Afficher les annotations", true, true);
 }
 
@@ -55,13 +53,16 @@ Json::Value AnnotationsBallPosition::getParameters()
 void AnnotationsBallPosition::setParameters(Json::Value json)
 {
   builder_parameter_.parse(json);
-  DEBUG(json["annotations"]);
+  show_annotation_ = json["value"].asBool();
 }
 
 rhoban_ssl::annotations::Annotations AnnotationsBallPosition::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(annotations_);
+  if (show_annotation_)
+  {
+    annotations.addAnnotations(annotations_);
+  }
   return annotations;
 }
 

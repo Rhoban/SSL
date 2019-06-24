@@ -26,6 +26,7 @@
 #include <math/continuous_angle.h>
 #include <memory>
 #include <annotations/annotations.h>
+#include <json/json.h>
 
 namespace rhoban_ssl
 {
@@ -141,7 +142,7 @@ public:
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
-   * @brief Get all parameter of the manager shown in the viewer.
+   * @brief Get all parameter of the strategy shown in the viewer.
    */
   virtual Json::Value getParameters();
   /**

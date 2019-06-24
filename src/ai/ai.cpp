@@ -592,4 +592,35 @@ void AI::scan()
   }
 }
 
+Json::Value AI::getBehaviorParameters()
+{
+  Json::Value json = Json::Value();
+  Json::Value json_tmp;
+
+  for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
+  {
+    robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
+    json_tmp = robot_behavior.getParameters();
+    if (!json_tmp.isNull())
+    {
+      json[std::to_string(robot_id)] = json_tmp;
+    }
+  }
+  return json;
+}
+
+void AI::setBehaviorParameters(Json::Value tab_json)
+{
+  for (auto json = tab_json.begin(); json != tab_json.end(); json++)
+  {
+    int robot_id = (*json)["robot_id"].asInt();
+
+    if (robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM && robot_id > 0)
+    {
+      robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
+      robot_behavior.setParameters(*(json));
+    }
+  }
+}
+
 }  // namespace rhoban_ssl

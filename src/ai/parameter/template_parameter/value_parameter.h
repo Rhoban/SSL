@@ -42,7 +42,6 @@ public:
    */
   ValueParameter(std::string name, std::string comment, bool writable, type_parameters::Type type);
 
-
   /**
    * @brief Destructor.
    */
