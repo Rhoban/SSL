@@ -373,6 +373,80 @@ TEST(test_vector2d, perpendicular)
   }
 }
 
+TEST(test_vector2d, vectors2angle)
+{
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(1.0, 0.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 0.00 < 0.00001);
+  }
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(std::sqrt(3.0) / 2.0, 1.0 / 2.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 30.00 < 0.00001);
+  }
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(std::sqrt(2) / 2.0, std::sqrt(2) / 2.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 45.00 < 0.00001);
+  }
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(1.0 / 2.0, std::sqrt(3) / 2.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 60.00 < 0.00001);
+  }
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(0.0, 1.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 90.00 < 0.00001);
+  }
+  {
+    Vector2d v1(-1.0 / 2.0, std::sqrt(3) / 2.0);
+    Vector2d v2(0.0, 1.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 120.00 < 0.00001);
+  }
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(-std::sqrt(2) / 2.0, std::sqrt(2) / 2.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 135.00 < 0.00001);
+  }
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(-std::sqrt(3) / 2.0, 1.0 / 2.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 150.00 < 0.00001);
+  }
+  {
+    Vector2d v1(1.0, 0.0);
+    Vector2d v2(-1.0, 0.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - 180.00 < 0.00001);
+  }
+  {
+    Vector2d v1(std::sqrt(3) / 2.0, 1.0 / 2.0);
+    Vector2d v2(1.0, 0.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - (-30.00) < 0.00001);
+  }
+  {
+    Vector2d v1(std::sqrt(2) / 2.0, std::sqrt(2) / 2.0);
+    Vector2d v2(1.0, 0.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - (-45.00) < 0.00001);
+  }
+  {
+    Vector2d v1(1 / 2, std::sqrt(3) / 2);
+    Vector2d v2(1.0, 0.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - (-60.00) < 0.00001);
+  }
+  {
+    Vector2d v1(0.0, 1.0);
+    Vector2d v2(1.0, 0.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - (-90.00) < 0.00001);
+  }
+  {
+    Vector2d v1(0.0, 4.0);
+    Vector2d v2(4.0, 0.0);
+    EXPECT_TRUE(rhoban_utils::rad2deg(vectors2angle(v1, v2).value()) - (-90.00) < 0.00001);
+  }
+}
+
 int main(int argc, char** argv)
 {
   ::testing::InitGoogleTest(&argc, argv);
