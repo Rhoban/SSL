@@ -79,7 +79,7 @@ void MulticastClientSingleThread::init()
     std::cerr << "\033[31;5mWARNING:\033[0m there is more than one interface wih multicast support! " << std::endl;
     std::cerr << "         This will probably lead to duplicate packets reception " << std::endl;
     std::cerr << "         Check your 'interface' with ifconfig and turn multicast off " << std::endl;
-    std::cerr << "         on unwanted iterface with command: ifconfig eth0 -muticast" << std::endl;
+    std::cerr << "         on unwanted interface with command:" << std::endl << "ifconfig eth0 -multicast" << std::endl;
     std::cerr << "         or set environment variable SSL_MULTICAST_IFNAME to one of the following values"
               << std::endl;
     for (auto it = interfaces.begin(); it != interfaces.end(); ++it)
