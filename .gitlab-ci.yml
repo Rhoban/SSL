@@ -14,6 +14,14 @@ build:
         - master
         - develop
     script:
+        - mkdir -p ./src/{rhoban,rhobandeps}
+        - git clone https://github.com/Rhoban/geometry.git ./src/rhoban/geometry
+        - git clone https://github.com/Rhoban/random.git ./src/rhoban/random
+        - git clone https://github.com/Rhoban/utils.git ./src/rhoban/utils
+        - git clone https://github.com/Rhoban/eigen.git ./src/rhobandeps/eigen
+        - git clone https://github.com/Rhoban/serial.git ./src/rhobandeps/serial
+        - git clone https://github.com/Rhoban/jsoncpp.git ./src/rhobandeps/jsoncpp
+        - git clone https://github.com/Rhoban/tclap.git ./src/rhobandeps/tclap
         - ./workspace setup
         - ./workspace install
         - ./workspace build
