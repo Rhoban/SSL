@@ -31,20 +31,20 @@ namespace Beginner
 class SeeRobot : public RobotBehavior
 {
 private:
-  int target_robot_id_;
+  uint target_robot_id_;
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  SeeRobot(int target_id = 0);
+  SeeRobot(uint target_id = 0);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 
-  void setRobotIdToSee(int id);
+  void setRobotIdToSee(uint id);
 
-  int getRobotIdToSee() const;
+  uint getRobotIdToSee() const;
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
