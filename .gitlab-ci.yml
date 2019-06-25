@@ -1,0 +1,26 @@
+image: ubuntu:18.04
+
+stages:
+    - build
+  
+before_script:
+    - apt-get install -y g++ git cmake libprotobuf-dev \
+      protobuf-compiler php php-cli php-xml \
+      libgtest-dev libqt5widgets5 qt5-default libqt5webkit5-dev libwebsockets-dev \
+      python-pip python-empy
+    - pip install -U catkin_tools
+  
+build:
+    stage: build
+    only:
+        - master
+        - develop
+    script:
+        - ./workspace setup
+        - ./workspace install
+        - ./workspace build
+    artifacts:
+        name: app
+        paths:
+            - bin
+
