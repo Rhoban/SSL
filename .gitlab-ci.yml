@@ -4,6 +4,7 @@ stages:
     - build
   
 before_script:
+    - export DEBIAN_FRONTEND=noninteractive 
     - apt-get update -qq && apt-get install -y -qq g++ git cmake libprotobuf-dev protobuf-compiler php php-cli php-xml libgtest-dev libqt5widgets5 qt5-default libqt5webkit5-dev libwebsockets-dev python-pip python-empy
     - pip install -U catkin_tools
   
