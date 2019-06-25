@@ -59,6 +59,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/kick_to_xy.cpp
+    robot_behavior/test/kick_measure.cpp
     ai.cpp
     debug.cpp
     manager/manager.cpp

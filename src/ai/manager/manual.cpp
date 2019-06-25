@@ -30,6 +30,7 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/test/kick_measure.h>
 
 namespace rhoban_ssl
 {
@@ -88,6 +89,14 @@ Manual::Manual(std::string name) : Manager(name)
                                                  },
                                                  false  // we don't want to define a goal here !
                                                  )));
+  registerStrategy("Test - KickMeasure", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                             [&](double time, double dt) {
+                                               robot_behavior::test::KickMeasure* kick_m =
+                                                   new robot_behavior::test::KickMeasure(1.0);
+                                               return std::shared_ptr<robot_behavior::RobotBehavior>(kick_m);
+                                             },
+                                             false  // we don't want to define a goal here !
+                                             )));
   registerStrategy("Beginner - Robot near ball", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                      [&](double time, double dt) {
                                                        robot_behavior::BeginnerRobotNearBall* near_ball =
