@@ -52,7 +52,7 @@ public:
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see ai::AiData
    */
-  Defender(ai::AiData& ai_data);
+  Defender();
 
   /**
    * @brief Is the ball is inside the penalty area.
@@ -67,7 +67,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   /**
    * @see Control.

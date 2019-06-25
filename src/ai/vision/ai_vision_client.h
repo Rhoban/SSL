@@ -23,54 +23,50 @@
 #include <VisionClient.h>
 #include "vision_data.h"
 #include <data.h>
-#include <ai_data.h>
 #include "factory.h"
 #include "client_config.h"
 #include "robot_position_filter.h"
+#include "time_synchroniser.h"
 
 namespace rhoban_ssl
 {
-class AIVisionClient : public VisionClient
+namespace vision
+{
+class SslGeometryPacketAnalyzer : public Task
+{
+  bool field_done_;
+  bool camera_done_;
+
+public:
+  SslGeometryPacketAnalyzer();
+  virtual bool runTask() override;
+};
+
+class DetectionPacketAnalyzer : public Task
 {
 public:
-  AIVisionClient(Data& shared_data_, ai::Team my_team_, bool simulation = false,
-                 vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
-
-  AIVisionClient(Data& shared_data_, ai::Team my_team_, bool simulation, std::string addr = SSL_VISION_ADDRESS,
-                 std::string port = SSL_VISION_PORT, std::string sim_port = SSL_SIMULATION_VISION_PORT,
-                 vision::PartOfTheField part_of_the_field_used_ = vision::PartOfTheField::ALL_FIELD);
-
-  void setRobotPos(ai::Team team, int id, double x, double y, double orientation);
-
-protected:
-  virtual void packetReceived();
-
-  Data& shared_data_;
-
-  vision::PartOfTheField part_of_the_field_used_;
-
-  std::map<int, SSL_DetectionFrame> camera_detections_;
-
-  std::map<int,                              // CMAERA ID
-           std::pair<double,                 // camera have found a ball at time?
-                     rhoban_geometry::Point  // detecte ball
-                     > >
-      ball_camera_detections_;
-
-  void updateRobotInformation(const SSL_DetectionFrame& detection, const SSL_DetectionRobot& robot, bool ally,
-                              ai::Team team_color);
+  virtual bool runTask() override;
 
 private:
-  vision::VisionData old_vision_data_;
-  vision::VisionData vision_data_;
-  ai::Team my_team_;
-  std::map<int, SSL_DetectionFrame> historic_;
-
-  rhoban_geometry::Point averageFilter(const rhoban_geometry::Point& new_ball,
-                                       std::map<int,                              // CMAERA ID
-                                                std::pair<double,                 // camera have found a ball
-                                                          rhoban_geometry::Point  // detecte ball
-                                                          > >& ball_camera_detections_,
-                                       vision::PartOfTheField part_of_the_field_used_);
+  TimeSynchroniser time_synchroniser_;
 };
+
+class UpdateRobotInformation : public Task
+{
+  vision::PartOfTheField part_of_the_field_used_;
+
+public:
+  UpdateRobotInformation(vision::PartOfTheField part_of_the_field_used);
+  virtual bool runTask() override;
+};
+
+class UpdateBallInformation : public Task
+{
+  vision::PartOfTheField part_of_the_field_used_;
+
+public:
+  UpdateBallInformation(vision::PartOfTheField part_of_the_field_used);
+  virtual bool runTask() override;
+};
+}  // namespace vision
 }  // namespace rhoban_ssl

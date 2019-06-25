@@ -18,17 +18,16 @@
 */
 
 #include "data.h"
+#include <config.h>
+#include <physic/factory.h>
 
 namespace rhoban_ssl
 {
-Data::Data(ai::Team initial_team_color)
-{
-  data_from_ai_.team_color = initial_team_color;
-}
-
 SharedData::FinalControl::FinalControl()
-  : hardware_is_responding(false), is_disabled_by_viewer(false), is_manually_controled_by_viewer(false)
+  : hardware_is_responding(false), is_disabled_by_viewer(false), is_manually_controled_by_viewer(true)
 {
+  control.active = false;
+  control.ignore = true;
 }
 
 SharedData::FinalControl::FinalControl(const FinalControl& control)
@@ -39,104 +38,27 @@ SharedData::FinalControl::FinalControl(const FinalControl& control)
 {
 }
 
-SharedData::SharedData() : final_control_for_robots(ai::Constants::NB_OF_ROBOTS_BY_TEAM)
+SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_TEAM)
 {
 }
 
-Data& Data::operator<<(const vision::VisionData& vision_data)
+///////////////////////////////////////////////////////////////////////
+
+Data Data::singleton_;
+
+Data::Data()
 {
-  mutex_for_vision_data_.lock();
-  vision_data_ = vision_data;
-  mutex_for_vision_data_.unlock();
-  return *this;
+  for (int team_id = 0; team_id < 2; team_id++)
+  {
+    for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
+    {
+      all_robots.push_back(std::pair<Team, data::Robot*>(team_id, &(robots[team_id][robot_id])));
+    }
+  }
 }
 
-Data& Data::operator>>(vision::VisionData& vision_data)
+Data* Data::get()
 {
-  mutex_for_vision_data_.lock();
-  vision_data = vision_data_;
-  mutex_for_vision_data_.unlock();
-  return *this;
+  return &singleton_;
 }
-
-Data& Data::operator<<(const DataFromAi& data_from_ai)
-{
-  mutex_for_ai_data_.lock();
-  data_from_ai_ = data_from_ai;
-  mutex_for_ai_data_.unlock();
-  return *this;
-}
-
-Data& Data::operator>>(DataFromAi& data_from_ai)
-{
-  mutex_for_ai_data_.lock();
-  data_from_ai = data_from_ai_;
-  mutex_for_ai_data_.unlock();
-  return *this;
-}
-
-Data& Data::operator<<(const SharedData& shared_data)
-{
-  mutex_for_shared_data_.lock();
-  shared_data_ = shared_data;
-  mutex_for_shared_data_.unlock();
-  return *this;
-}
-
-Data& Data::operator>>(SharedData& shared_data)
-{
-  mutex_for_shared_data_.lock();
-  shared_data = shared_data_;
-  mutex_for_shared_data_.unlock();
-  return *this;
-}
-
-void Data::editVisionData(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(vision::VisionData& vision_data)> vision_data_editor)
-{
-  mutex_for_vision_data_.lock();
-  vision_data_editor(vision_data_);
-  mutex_for_vision_data_.unlock();
-}
-
-void Data::editDataFromAi(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(DataFromAi& data_from_ai)> data_from_ai_editor)
-{
-  mutex_for_ai_data_.lock();
-  data_from_ai_editor(data_from_ai_);
-  mutex_for_ai_data_.unlock();
-}
-
-void Data::editSharedData(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(SharedData& shared_data)> shared_data_editor)
-{
-  mutex_for_shared_data_.lock();
-  shared_data_editor(shared_data_);
-  mutex_for_shared_data_.unlock();
-}
-
-Data& Data::operator<<(const DataForViewer& data_for_viewer)
-{
-  mutex_for_viewer_data_.lock();
-  data_for_viewer_ = data_for_viewer;
-  mutex_for_viewer_data_.unlock();
-  return *this;
-}
-
-Data& Data::operator>>(DataForViewer& data_for_viewer)
-{
-  mutex_for_viewer_data_.lock();
-  data_for_viewer = data_for_viewer_;
-  mutex_for_viewer_data_.unlock();
-  return *this;
-}
-
-void Data::editDataForViewer(  // Use that function if you ha no choice. Prefer << and >> operator.
-    std::function<void(DataForViewer& data_for_viewer)> data_for_viewer_editor)
-{
-  mutex_for_viewer_data_.lock();
-  data_for_viewer_editor(data_for_viewer_);
-  mutex_for_viewer_data_.unlock();
-}
-
 }  // namespace rhoban_ssl

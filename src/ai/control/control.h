@@ -23,7 +23,9 @@
 
 #include <math/continuous_angle.h>
 #include <math/vector2d.h>
-#include <ai_data.h>
+#include <execution_manager.h>
+#include <com/ai_commander.h>
+#include <config.h>
 
 class Control
 {
@@ -41,17 +43,17 @@ public:
 
   bool charge = false;
   bool kick = false;
-  bool chipKick = false;
-  float kickPower = 1.0;
+  bool chip_kick = false;
+  float kick_power = 1.0;
   bool spin = false;
 
   bool active = true;
   bool ignore = false;
-  bool tareOdom = false;  // Reset references for Odometry robot
+  bool tare_odom = false;  // Reset references for Odometry robot
 
-  Control(bool isAbsolute = true);
+  Control(bool is_absolute = true);
 
-  Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool isAbsolute = true);
+  Control(const Vector2d& linear_velocity, const ContinuousAngle& angular_velocity, bool is_absolute = true);
 
   Control(bool kick, bool active, bool ignore);
 
@@ -67,9 +69,26 @@ public:
   static Control makeIgnored();
   static Control makeNull();
 
-  static double getNeededPower(double distance, int robot_id,
-                              rhoban_ssl::ai::AiData& ai_data);  // return needed kick power ([0;1]) to throw the ball
-                                                                 // at a certain distance (m)
+  static double getNeededPower(double distance, int robot_id);  // return needed kick power ([0;1]) to throw the ball
+                                                                // at a certain distance (m)
 };
 
 std::ostream& operator<<(std::ostream& out, const Control& control);
+
+namespace rhoban_ssl
+{
+namespace control
+{
+class ControlSender : public Task
+{
+private:
+  AICommander* commander_;
+
+public:
+  ControlSender(AICommander* commander);
+  // Task interface
+public:
+  bool runTask();
+};
+}  // namespace control
+}  // namespace rhoban_ssl

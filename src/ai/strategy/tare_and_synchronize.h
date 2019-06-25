@@ -42,7 +42,7 @@ private:
 public:
   double getTemporalShiftBetweenVision() const;
 
-  TareAndSynchronize(ai::AiData& ai_data_);
+  TareAndSynchronize();
 
   int minRobots() const;
   int maxRobots() const;

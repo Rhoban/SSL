@@ -27,18 +27,16 @@ class MovementWithTemporalShift : public Movement
 {
 private:
   Movement* movement_;
-  std::function<double()> temporal_shift;
+  double temporalShift() const;
 
 public:
-  // We assume that v1 and v2 are orthonormal
-  void set_shift(double shift_time);
+  MovementWithTemporalShift(Movement* movement);
+  virtual ~MovementWithTemporalShift();
 
   virtual double lastTime() const;
 
   virtual Movement* clone() const;
   const Movement* getOriginalMovement() const;
-
-  MovementWithTemporalShift(Movement* movement, std::function<double()> temporal_shift);
 
   virtual void setSample(const MovementSample& samples);
   virtual const MovementSample& getSample() const;
@@ -53,8 +51,6 @@ public:
   virtual ContinuousAngle angularAcceleration(double time) const;
 
   virtual void print(std::ostream& stream) const;
-
-  virtual ~MovementWithTemporalShift();
 };
 
 }  // namespace rhoban_ssl

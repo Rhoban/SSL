@@ -569,29 +569,29 @@ TEST(test_machine_state, to_dot)
     machine.start();
 
     EXPECT_TRUE(machine.toDot() == "digraph G {\n"
-                                    " graph [ordering=\"out\"]\n"
-                                    "\n"
-                                    " v0 [label=\"end\" shape=\"oval\"];\n"
-                                    " v1 [label=\"middle\" shape=\"oval\"];\n"
-                                    " v2 [label=\"start\" shape=\"doubleoctagon\"style=\"filled\" "
-                                    "fillcolor=\"gold\"];\n"
-                                    "\n"
-                                    " v2->v1 [label=\"initialisation\"];\n"
-                                    " v1->v0 [label=\"next\"];\n"
-                                    "}\n");
+                                   " graph [ordering=\"out\"]\n"
+                                   "\n"
+                                   " v0 [label=\"end\" shape=\"oval\"];\n"
+                                   " v1 [label=\"middle\" shape=\"oval\"];\n"
+                                   " v2 [label=\"start\" shape=\"doubleoctagon\"style=\"filled\" "
+                                   "fillcolor=\"gold\"];\n"
+                                   "\n"
+                                   " v2->v1 [label=\"initialisation\"];\n"
+                                   " v1->v0 [label=\"next\"];\n"
+                                   "}\n");
 
     machine.run();
 
     EXPECT_TRUE(machine.toDot() == "digraph G {\n"
-                                    " graph [ordering=\"out\"]\n"
-                                    "\n"
-                                    " v0 [label=\"end\" shape=\"oval\"style=\"filled\" fillcolor=\"gold\"];\n"
-                                    " v1 [label=\"middle\" shape=\"oval\"];\n"
-                                    " v2 [label=\"start\" shape=\"doubleoctagon\"];\n"
-                                    "\n"
-                                    " v2->v1 [label=\"initialisation\"];\n"
-                                    " v1->v0 [label=\"next\"];\n"
-                                    "}\n");
+                                   " graph [ordering=\"out\"]\n"
+                                   "\n"
+                                   " v0 [label=\"end\" shape=\"oval\"style=\"filled\" fillcolor=\"gold\"];\n"
+                                   " v1 [label=\"middle\" shape=\"oval\"];\n"
+                                   " v2 [label=\"start\" shape=\"doubleoctagon\"];\n"
+                                   "\n"
+                                   " v2->v1 [label=\"initialisation\"];\n"
+                                   " v1->v0 [label=\"next\"];\n"
+                                   "}\n");
   }
 }
 

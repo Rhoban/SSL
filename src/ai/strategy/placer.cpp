@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace strategy
 {
-Placer::Placer(ai::AiData& ai_data) : Strategy(ai_data), goalie_is_defined_(false)
+Placer::Placer() : Strategy(), goalie_is_defined_(false)
 {
 }
 
@@ -64,7 +64,7 @@ void Placer::assignBehaviorToRobots(
     if (haveToManageTheGoalie())
     {
       robot_behavior::ConsignFollower* follower =
-          robot_behavior::Factory::fixedConsignFollower(ai_data_, goalie_linear_position_, goalie_angular_position_);
+          robot_behavior::Factory::fixedConsignFollower(goalie_linear_position_, goalie_angular_position_);
       follower->avoidTheBall(true);
       assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(follower));
     }
@@ -73,8 +73,8 @@ void Placer::assignBehaviorToRobots(
     for (int i = 0; i < nb_players; i++)
     {
       int id = playerId(i);
-      robot_behavior::ConsignFollower* follower = robot_behavior::Factory::fixedConsignFollower(
-          ai_data_, player_positions_[id].first, player_positions_[id].second);
+      robot_behavior::ConsignFollower* follower =
+          robot_behavior::Factory::fixedConsignFollower(player_positions_[id].first, player_positions_[id].second);
       follower->avoidTheBall(true);
       assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(follower));
     }

@@ -3,7 +3,7 @@
 #include <mutex>
 #include <thread>
 #include <rhoban_utils/timing/time_stamp.h>
-#include <referee.pb.h>
+#include <ssl_referee.pb.h>
 #include "MulticastClient.h"
 
 namespace rhoban_ssl
@@ -14,9 +14,9 @@ public:
   RefereeClient();
   RefereeClient(std::string addr, std::string port);
   bool process(char* buffer, size_t len);
-  SSL_Referee getData();
+  Referee getData();
 
 protected:
-  SSL_Referee data;
+  Referee data;
 };
 }  // namespace rhoban_ssl

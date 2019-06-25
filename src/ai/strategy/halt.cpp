@@ -26,7 +26,7 @@ namespace strategy
 {
 const std::string Halt::name = "halt";
 
-Halt::Halt(ai::AiData& ai_data) : Strategy(ai_data)
+Halt::Halt() : Strategy()
 {
 }
 
@@ -56,12 +56,11 @@ void Halt::assignBehaviorToRobots(
 {
   if (haveToManageTheGoalie())
   {
-    assign_behavior(getGoalie(),
-                    std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
+    assign_behavior(getGoalie(), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
   }
   for (int id : getPlayerIds())
   {
-    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing(ai_data_)));
+    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
   }
 }
 
@@ -73,12 +72,6 @@ rhoban_ssl::annotations::Annotations Halt::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
-  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
-  {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
-    // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-    annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
-  }
   return annotations;
 }
 

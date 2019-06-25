@@ -59,7 +59,7 @@ public:
    * @param target_point : target point
    * @see ai::AiData
    */
-  KickToXY(ai::AiData& ai_data, rhoban_geometry::Point target_point = rhoban_geometry::Point(0.0, 0.0));
+  KickToXY(rhoban_geometry::Point target_point = rhoban_geometry::Point(0.0, 0.0));
 
   /**
    * @brief The robot will continulsy go to the ball and then kick the ball. The ball will arrive on the specified
@@ -70,7 +70,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   /**
    * @return the control of the behavior.

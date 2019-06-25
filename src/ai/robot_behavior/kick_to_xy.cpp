@@ -20,14 +20,13 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-KickToXY::KickToXY(ai::AiData& ai_data, rhoban_geometry::Point target_point)
-  : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+KickToXY::KickToXY(rhoban_geometry::Point target_point) : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 
 {
   target_point_ = target_point;
 }
 
-void KickToXY::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void KickToXY::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update position from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -35,8 +34,8 @@ void KickToXY::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 
   annotations_.clear();
 
-  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(ai_data_.time);
-  ContinuousAngle robot_rotation = robot.getMovement().angularPosition(ai_data_.time);
+  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
+  ContinuousAngle robot_rotation = robot.getMovement().angularPosition(time);
 
   Vector2d ball_target_vector = target_point_ - ballPosition();
   double ball_target_distance = ball_target_vector.norm();
@@ -67,7 +66,7 @@ void KickToXY::update(double time, const ai::Robot& robot, const ai::Ball& ball)
     robot_rotation = detail::vec2angle(ball_target_vector);
   }
   // set kick power:
-  kick_power_ = Control::getNeededPower(ball_target_distance, robot.id(), ai_data_);
+  kick_power_ = Control::getNeededPower(ball_target_distance, robot.id);
 
   follower_->setFollowingPosition(robot_position, robot_rotation);
   follower_->avoidTheBall(false);
@@ -77,7 +76,7 @@ void KickToXY::update(double time, const ai::Robot& robot, const ai::Ball& ball)
 Control KickToXY::control() const
 {
   Control ctrl = follower_->control();
-  ctrl.kickPower = kick_power_;
+  ctrl.kick_power = kick_power_;
   ctrl.kick = true;
   ctrl.charge = true;
   return ctrl;

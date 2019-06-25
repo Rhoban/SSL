@@ -9,6 +9,9 @@
         "robot_radius" : 0.09,
         "wheel_radius" : 0.03,
         "wheel_excentricity" : 0.08,
+	"max_wheel_speed" : 7,  
+        "front_wheel_angle" : 120.0,
+	"rear_wheel_angle" : 45.0,
         "wheel_nb_turns_acceleration_limit" : {
             "simu" : 150.0,
             "real" : 150.0
@@ -49,9 +52,6 @@
             "simu" : 0.0,
             "real" : 0
         }
-    },
-    "team" : {
-        "nb_of_robots_by_team" : 16
     },
     "ball" : {
         "radius_ball" : 0.021375
