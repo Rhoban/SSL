@@ -110,19 +110,19 @@ bool VisionDataTerminalPrinter::runTask()
   counter += 1;
   printf("\033[2J\033[1;1H");
   printf("%d\n", counter);
-  printf("%d\n", VisionDataGlobal::singleton_.last_packets_.size());
+  printf("%lu\n", VisionDataGlobal::singleton_.last_packets_.size());
   // VisionDataGlobal::singleton_.packets_buffer_.size());
   auto& field = Data::get()->field;
   printf("Field is present : \n");
   printf("\t %f x %f \n", field.field_width_, field.field_length_);
 
-  for (int camera = 0; camera < ai::Config::NB_CAMERAS; ++camera)
+  for (uint camera = 0; camera < ai::Config::NB_CAMERAS; ++camera)
   {
     auto& cam = VisionDataSingleThread::singleton_.last_camera_detection_[camera];
     printf("CAMERA %d (%d): \n", camera, cam.frame_number_);
     printf("\t time: %lf / %lf \n", cam.t_capture_, cam.t_sent_);
     int nballs = 0;
-    for (int i = 0; i < ai::Config::MAX_BALLS_DETECTED_PER_CAMERA; ++i)
+    for (uint i = 0; i < ai::Config::MAX_BALLS_DETECTED_PER_CAMERA; ++i)
       if (cam.balls_[i].confidence_ >= 0)
         nballs += 1;
     int nallies = 0;
