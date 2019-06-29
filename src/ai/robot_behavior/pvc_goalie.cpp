@@ -39,9 +39,10 @@ rhoban_geometry::Point Goalie::calculateGoalPosition(const rhoban_geometry::Poin
 Goalie::Goalie()
   : Goalie::Goalie(Vector2d(-Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0),
                    Vector2d(-Data::get()->field.field_length_ / 2.0, -Data::get()->field.goal_width_ / 2.0),
-                   rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0) + ai::Config::waiting_goal_position,
-                   Data::get()->field.penalty_area_depth_, ai::Config::robot_radius,
-                   Data::get()->ai_data.time, Data::get()->ai_data.dt)
+                   rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0) +
+                       ai::Config::waiting_goal_position,
+                   Data::get()->field.penalty_area_depth_, ai::Config::robot_radius, Data::get()->ai_data.time,
+                   Data::get()->ai_data.dt)
 {
 }
 
@@ -137,7 +138,8 @@ void Goalie::update(double time, const data::Robot& robot, const data::Ball& bal
 
   if (defensive_approach_ == 0)
   {
-    rhoban_geometry::Point new_goal_center = Data::get()->field.goalCenter(Ally) + rhoban_geometry::Point(offset_goal, 0.0);
+    rhoban_geometry::Point new_goal_center =
+        Data::get()->field.goalCenter(Ally) + rhoban_geometry::Point(offset_goal, 0.0);
 
     rhoban_geometry::Point protect_position = ballPosition();
     if (ballPosition().getX() < Data::get()->field.goalCenter(Ally).getX())
@@ -206,7 +208,8 @@ rhoban_ssl::annotations::Annotations Goalie::getAnnotations() const
     {
       annotations_text = "Dash";
     }
-    annotations_local.addText(annotations_text, linearPosition().getX() + 0.15, linearPosition().getY() + 0.60, "red");
+    // annotations_local.addText(annotations_text, linearPosition().getX() + 0.15, linearPosition().getY() + 0.60,
+    // "red");
 
     // DEBUG("nb_future_ball = " << future_ball_positions.size() );
     // for (int i = 0; i < future_ball_positions.size(); i++) {

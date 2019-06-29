@@ -121,13 +121,14 @@ bool StrikerV2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_posi
 rhoban_ssl::annotations::Annotations StrikerV2::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
-
-  for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
-  {
-    const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
-    // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-    annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30, "white");
-  }
+  /*
+    for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
+    {
+      const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
+      // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+      annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30,
+    "white");
+    }*/
   return annotations;
 }
 
