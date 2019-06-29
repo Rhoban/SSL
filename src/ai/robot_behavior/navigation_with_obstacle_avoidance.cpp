@@ -89,7 +89,7 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
     data::Robot* r = Data::get()->all_robots.at(j).second;
     if (r->isActive() == false)
       continue;
-    if (r->id != robot().id && r->id != closest_robot_)
+    if (r->id != robot().id && r->id != (uint)closest_robot_)
     {
       rhoban_geometry::Point rpos = r->getMovement().linearPosition(r->getMovement().lastTime());
       Vector2d v = (rpos - robot().getMovement().linearPosition(robot().getMovement().lastTime()));
@@ -185,7 +185,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   /////////////////////////////////////////////////////////////////
   sign_of_avoidance_rotation_ = 1.0;  // TODO
 
-  data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
+  // data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
   Vector2d obstacle_to_goal = vector2point(target_position_) - obstacle_linear_position;
   Vector2d current_to_goal = vector2point(target_position_) - linearPosition();
   double angle = vector2angle(current_to_goal).value() - vector2angle(obstacle_to_goal).value();

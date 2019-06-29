@@ -28,6 +28,8 @@ void MulticastClientSingleThread::init()
   // Listing interfaces
   std::map<unsigned int, Interface> interfaces;
   ifaddrs* ifs = nullptr;
+
+  char* ifname = getenv("SSL_MULTICAST_IFNAME");
   if (getifaddrs(&ifs) < 0)
   {
     std::cerr << "Can't get network interface list" << std::endl;
@@ -41,14 +43,17 @@ void MulticastClientSingleThread::init()
       {
         if (i->ifa_addr->sa_family == AF_INET /*|| i->ifa_addr->sa_family == AF_INET6*/)
         {
-          unsigned int ifindex = if_nametoindex(i->ifa_name);
-          if (ifindex)
+          if ((ifname == nullptr) || (strcmp(i->ifa_name, ifname) == 0))
           {
-            Interface interface;
-            interface.name = i->ifa_name;
-            interface.family = i->ifa_addr->sa_family;
-            interface.index = ifindex;
-            interfaces[ifindex] = interface;
+            unsigned int ifindex = if_nametoindex(i->ifa_name);
+            if (ifindex)
+            {
+              Interface interface;
+              interface.name = i->ifa_name;
+              interface.family = i->ifa_addr->sa_family;
+              interface.index = ifindex;
+              interfaces[ifindex] = interface;
+            }
           }
         }
       }
@@ -63,6 +68,23 @@ void MulticastClientSingleThread::init()
 
   // For each interface, running a thread
   running = true;
+
+  if (interfaces.size() == 0)
+  {
+    std::cerr << "\033[31;5mWARNING:\033[0m there is no interface wih multicast support! " << std::endl;
+    std::cerr << "         considere using ifconfig to check your setup " << std::endl;
+  }
+  if (interfaces.size() > 1)
+  {
+    std::cerr << "\033[31;5mWARNING:\033[0m there is more than one interface wih multicast support! " << std::endl;
+    std::cerr << "         This will probably lead to duplicate packets reception " << std::endl;
+    std::cerr << "         Check your 'interface' with ifconfig and turn multicast off " << std::endl;
+    std::cerr << "         on unwanted interface with command:" << std::endl << "ifconfig eth0 -multicast" << std::endl;
+    std::cerr << "         or set environment variable SSL_MULTICAST_IFNAME to one of the following values"
+              << std::endl;
+    for (auto it = interfaces.begin(); it != interfaces.end(); ++it)
+      std::cerr << "         export SSL_MULTICAST_IFNAME=" << it->second.name << std::endl;
+  }
 
   sockets_fds_ = new struct pollfd[interfaces.size()];
   nfds_ = 0;
@@ -165,8 +187,9 @@ for (auto thread : threads)
 }
 */
 }
-#define VLEN 20
-#define BUFSIZE 100
+
+//#define VLEN 20
+//#define BUFSIZE 100
 
 bool MulticastClientSingleThread::runTask()
 {

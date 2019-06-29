@@ -8,6 +8,7 @@
 #include "multicast_client_single_thread.h"
 #include "client_config.h"
 #include <google/protobuf/arena.h>
+#include <list>
 
 namespace rhoban_ssl
 {
@@ -57,5 +58,17 @@ public:
   VisionClientSingleThread(std::string addr, std::string port);
   virtual bool process(char* buffer_, size_t len) override;
 };
+
+class VisionPacketStat : public Task
+{
+  int freq_;
+  int counter_;
+  int sum_, min_, max_;
+
+public:
+  VisionPacketStat(int freq);
+  virtual bool runTask(void) override;
+};
+
 }  // namespace vision
 }  // namespace rhoban_ssl

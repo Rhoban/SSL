@@ -317,7 +317,7 @@ void AI::updateRobots()
     SharedData::FinalControl& final_control = Data::get()->shared_data.final_control_for_robots[robot_id];
 
     data::Robot& robot = Data::get()->robots[Ally][robot_id];
-    assert(robot.id == robot_id);
+    assert(robot.id == (uint)robot_id);
     robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)
@@ -429,16 +429,16 @@ void AI::emergency()
   commander_->flush();
 }
 
-void AI::getAnnotations(annotations::Annotations& annotations) const
+Json::Value AI::getAnnotations() const
 {
-  //  annotations.addAnnotations(getManager()->getAnnotations());
-  //  annotations.addAnnotations(getRobotBehaviorAnnotations());
+  Json::Value json = Json::Value();
+  annotations::Annotations annotations = annotations::Annotations();
 
-  //  std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point&
-  //  p) {
-  //    return this->ai_data_.team_point_of_view.fromFrame(p);
-  //  };
-  //  annotations.mapPositions(fct);
+  annotations.addAnnotations(strategy_manager_->getAnnotations());
+  annotations.addAnnotations(getRobotBehaviorAnnotations());
+
+  json["annotations"] = annotations.toJson();
+  return json;
 }
 
 std::string AI::getRobotBehaviorOf(uint robot_number)

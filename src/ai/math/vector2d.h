@@ -77,7 +77,7 @@ double normSquare(const Vector2d& v1);
 Vector2d normalized(const Vector2d& v1);
 
 ContinuousAngle vector2angle(Vector2d direction);
-
+ContinuousAngle vectors2angle(Vector2d v1, Vector2d v2);
 Vector2d operator*(double alpha, const Vector2d& v);
 
 std::ostream& operator<<(std::ostream& out, const Vector2d& v);
