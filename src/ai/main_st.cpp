@@ -203,19 +203,20 @@ int main(int argc, char** argv)
 
   ExecutionManager::getManager().addTask(new data::CollisionComputing());
 
-  // ai
-  AI* ai_ = nullptr;
-  ai_ = new AI(manager_name.getValue());
+  // BEGIN AI related tasks:
 
-  ExecutionManager::getManager().addTask(new TimeUpdater());
-  ExecutionManager::getManager().addTask(ai_);
+  ExecutionManager::getManager().addTask(new ai::TimeUpdater());
+  ai::AI* ai = new ai::AI(manager_name.getValue());
+  ExecutionManager::getManager().addTask(ai);
+
+  // END  AI related tasks:
 
   ExecutionManager::getManager().addTask(new control::WarningMaximumVelocity());
   ExecutionManager::getManager().addTask(new control::Commander());
 
   // viewer
   ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
-  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
+  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
 
   ExecutionManager::getManager().run(0.01);
 

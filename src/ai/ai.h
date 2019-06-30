@@ -30,6 +30,8 @@
 
 namespace rhoban_ssl
 {
+namespace ai
+{
 /**
  * @brief The AI class
  */
@@ -196,5 +198,5 @@ class TimeUpdater : public Task
 public:
   bool runTask();
 };
-
+};
 };  // namespace rhoban_ssl

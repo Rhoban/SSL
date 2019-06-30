@@ -37,6 +37,8 @@
 
 namespace rhoban_ssl
 {
+namespace ai
+{
 AI::AI(std::string manager_name) : running_(true)
 {
   initRobotBehaviors();
@@ -540,5 +542,5 @@ void AI::scan()
     }
   }
 }
-
+}
 }  // namespace rhoban_ssl

@@ -26,7 +26,7 @@ namespace rhoban_ssl
 {
 namespace viewer
 {
-ViewerCommunication::ViewerCommunication(AI* ai)
+ViewerCommunication::ViewerCommunication(ai::AI* ai)
   : ai_(ai), last_sending_time_(rhoban_utils::TimeStamp::now().getTimeSec())
 {
 }
