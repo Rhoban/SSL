@@ -19,12 +19,14 @@
 
 #pragma once
 
-#include "robot_behavior.h"
-#include "factory.h"
+#include "../robot_behavior.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
+{
+namespace tests
 {
 class TestVelocityConsign : public RobotBehavior
 {
@@ -40,18 +42,18 @@ private:
   ContinuousAngle angular_velocity_;
 
 public:
-  TestVelocityConsign(ai::AiData& ai_data);
+  TestVelocityConsign();
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
-  static TestVelocityConsign* getWMovement(ai::AiData& ai_data, double velocity);
-  static TestVelocityConsign* getEMovement(ai::AiData& ai_data, double velocity);
-  static TestVelocityConsign* getNMovement(ai::AiData& ai_data, double velocity);
-  static TestVelocityConsign* getSMovement(ai::AiData& ai_data, double velocity);
-  static TestVelocityConsign* getNWMovement(ai::AiData& ai_data, double velocity);
-  static TestVelocityConsign* getNEMovement(ai::AiData& ai_data, double velocity);
-  static TestVelocityConsign* getSWMovement(ai::AiData& ai_data, double velocity);
-  static TestVelocityConsign* getSEMovement(ai::AiData& ai_data, double velocity);
+  static TestVelocityConsign* getWMovement(double velocity);
+  static TestVelocityConsign* getEMovement(double velocity);
+  static TestVelocityConsign* getNMovement(double velocity);
+  static TestVelocityConsign* getSMovement(double velocity);
+  static TestVelocityConsign* getNWMovement(double velocity);
+  static TestVelocityConsign* getNEMovement(double velocity);
+  static TestVelocityConsign* getSWMovement(double velocity);
+  static TestVelocityConsign* getSEMovement(double velocity);
 
   void setLinearVelocity(const Vector2d& velocity);
   void setAngularVelocity(const ContinuousAngle& angle);
@@ -63,5 +65,6 @@ public:
   virtual ~TestVelocityConsign();
 };
 
+};  // namespace tests
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

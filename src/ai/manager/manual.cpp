@@ -133,6 +133,16 @@ Manual::Manual(std::string name) : Manager(name)
                        },
                        false  // we don't want to define a goal here !
                        )));
+  registerStrategy("Test - Velocity consign", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                  [&](double time, double dt) {
+                                                    robot_behavior::tests::TestRelativeVelocityConsign* test_vc =
+                                                        new robot_behavior::tests::TestRelativeVelocityConsign();
+                                                    test_vc->setAngularVelocity(1);
+                                                    test_vc->setLinearVelocity(Vector2d(0.8, 0));
+                                                    return std::shared_ptr<robot_behavior::RobotBehavior>(test_vc);
+                                                  },
+                                                  false  // we don't want to define a goal here !
+                                                  )));
 }
 
 void Manual::update()

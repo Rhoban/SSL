@@ -24,9 +24,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
+namespace tests
+{
 #define PERIOD 10.0
 
-TestVelocityConsign::TestVelocityConsign(ai::AiData& ai_data) : RobotBehavior(ai_data)
+TestVelocityConsign::TestVelocityConsign() : RobotBehavior()
 {
 }
 
@@ -40,7 +42,7 @@ void TestVelocityConsign::setLinearVelocity(const Vector2d& linear_velocity)
   this->linear_velocity_ = linear_velocity;
 }
 
-void TestVelocityConsign::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void TestVelocityConsign::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -67,54 +69,55 @@ rhoban_ssl::annotations::Annotations TestVelocityConsign::getAnnotations() const
   return annotations;
 }
 
-TestVelocityConsign* TestVelocityConsign::getWMovement(ai::AiData& ai_data, double velocity)
+TestVelocityConsign* TestVelocityConsign::getWMovement(double velocity)
 {
-  TestVelocityConsign* res = new TestVelocityConsign(ai_data);
+  TestVelocityConsign* res = new TestVelocityConsign();
   res->setLinearVelocity(Vector2d(-1.0, 0.0) * velocity);
   return res;
 }
-TestVelocityConsign* TestVelocityConsign::getEMovement(ai::AiData& ai_data, double velocity)
+TestVelocityConsign* TestVelocityConsign::getEMovement(double velocity)
 {
-  TestVelocityConsign* res = new TestVelocityConsign(ai_data);
+  TestVelocityConsign* res = new TestVelocityConsign();
   res->setLinearVelocity(Vector2d(1.0, 0.0) * velocity);
   return res;
 }
-TestVelocityConsign* TestVelocityConsign::getNMovement(ai::AiData& ai_data, double velocity)
+TestVelocityConsign* TestVelocityConsign::getNMovement(double velocity)
 {
-  TestVelocityConsign* res = new TestVelocityConsign(ai_data);
+  TestVelocityConsign* res = new TestVelocityConsign();
   res->setLinearVelocity(Vector2d(0.0, 1.0) * velocity);
   return res;
 }
-TestVelocityConsign* TestVelocityConsign::getSMovement(ai::AiData& ai_data, double velocity)
+TestVelocityConsign* TestVelocityConsign::getSMovement(double velocity)
 {
-  TestVelocityConsign* res = new TestVelocityConsign(ai_data);
+  TestVelocityConsign* res = new TestVelocityConsign();
   res->setLinearVelocity(Vector2d(0.0, -1.0) * velocity);
   return res;
 }
-TestVelocityConsign* TestVelocityConsign::getNWMovement(ai::AiData& ai_data, double velocity)
+TestVelocityConsign* TestVelocityConsign::getNWMovement(double velocity)
 {
-  TestVelocityConsign* res = new TestVelocityConsign(ai_data);
+  TestVelocityConsign* res = new TestVelocityConsign();
   res->setLinearVelocity(Vector2d(-1.0, 1.0) * velocity);
   return res;
 }
-TestVelocityConsign* TestVelocityConsign::getNEMovement(ai::AiData& ai_data, double velocity)
+TestVelocityConsign* TestVelocityConsign::getNEMovement(double velocity)
 {
-  TestVelocityConsign* res = new TestVelocityConsign(ai_data);
+  TestVelocityConsign* res = new TestVelocityConsign();
   res->setLinearVelocity(Vector2d(1.0, 1.0) * velocity);
   return res;
 }
-TestVelocityConsign* TestVelocityConsign::getSWMovement(ai::AiData& ai_data, double velocity)
+TestVelocityConsign* TestVelocityConsign::getSWMovement(double velocity)
 {
-  TestVelocityConsign* res = new TestVelocityConsign(ai_data);
+  TestVelocityConsign* res = new TestVelocityConsign();
   res->setLinearVelocity(Vector2d(-1.0, -1.0) * velocity);
   return res;
 }
-TestVelocityConsign* TestVelocityConsign::getSEMovement(ai::AiData& ai_data, double velocity)
+TestVelocityConsign* TestVelocityConsign::getSEMovement(double velocity)
 {
-  TestVelocityConsign* res = new TestVelocityConsign(ai_data);
+  TestVelocityConsign* res = new TestVelocityConsign();
   res->setLinearVelocity(Vector2d(1.0, -1.0) * velocity);
   return res;
 }
 
+}  // namespace tests
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
