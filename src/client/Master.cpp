@@ -39,8 +39,10 @@ Master::Master(std::string port, unsigned int baudrate)
     }
     catch (std::exception& e)
     {
-      std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! " << std::endl
+      std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! "
+                << std::endl
                 << e.what() << std::endl;
+      serial = nullptr;
     }
   });
 
