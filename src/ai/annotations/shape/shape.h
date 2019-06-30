@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
+    Copyright 2019 SCHMITZ Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,26 +19,21 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <SimClient.h>
-#include "ai_commander.h"
+#include <json/json.h>
 
 namespace rhoban_ssl
 {
-class AICommanderSimulation : public AICommander
+namespace annotations
+{
+namespace shape
+{
+class Shape
 {
 public:
-  AICommanderSimulation();
-
-  virtual void flush();
-
-  virtual void moveBall(double x, double y, double vx = 0, double vy = 0);
-
-  virtual void moveRobot(bool ally, int id, double x, double y, double theta, bool turnon);
-
-  virtual ~AICommanderSimulation();
-
-protected:
-  SimClient client_;
+  Shape();
+  virtual Json::Value toJson() = 0;
+  virtual ~Shape();
 };
+}  // namespace shape
+}  // namespace annotations
 }  // namespace rhoban_ssl

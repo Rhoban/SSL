@@ -23,8 +23,6 @@
 #include <fenv.h>
 #include <tclap/CmdLine.h>
 #include <vision/ai_vision_client.h>
-#include <com/ai_commander_real.h>
-#include <com/ai_commander_simulation.h>
 #include "ai.h"
 #include "data.h"
 #include <core/print_collection.h>
@@ -41,6 +39,7 @@
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
+#define SERVER_PORT 7882
 
 using namespace rhoban_ssl;
 
@@ -131,16 +130,24 @@ int main(int argc, char** argv)
                                         "string",                    // short description of the expected value.
                                         cmd);
 
+  TCLAP::ValueArg<int> viewer_port("v",            // short argument name  (with one character)
+                                   "viewer_port",  // long argument name
+                                   "Viewer server port",
+                                   false,        // Flag is not required
+                                   SERVER_PORT,  // Default value
+                                   "int",        // short description of the expected value.
+                                   cmd);
+
   cmd.parse(argc, argv);
 
-  AICommander* commander;
-  if (em.getValue())
-  {
-    commander = new AICommanderReal();
-    commander->stopAll();
-    commander->flush();
-    return 0;
-  }
+  //  AICommander* commander;
+  //  if (em.getValue())
+  //  {
+  //    commander = new AICommanderReal();
+  //    commander->stopAll();
+  //    commander->flush();
+  //    return 0;
+  //  }
 
   std::string theport;
   if (simulation.getValue())
@@ -171,12 +178,15 @@ int main(int argc, char** argv)
     assert(false);
   }
 
-  ai::Config::load(config_path.getValue());
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
+  ai::Config::load(config_path.getValue());
+
+  //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
   ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
+  // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
   ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
   ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
   ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
@@ -191,37 +201,27 @@ int main(int argc, char** argv)
   // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
   ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
 
-  if (simulation.getValue())
-  {
-    commander = new AICommanderSimulation();
-  }
-  else
-  {
-    AICommanderReal* commander_r = new AICommanderReal();
-    ExecutionManager::getManager().addTask(commander_r);
-    ExecutionManager::getManager().addTask(new rhoban_ssl::UpdateElectronicInformations(commander_r));
-    commander = commander_r;
-  }
-
-  // ai
-  AI* ai_ = nullptr;
-  ai_ = new AI(manager_name.getValue(), commander);
   ExecutionManager::getManager().addTask(new data::CollisionComputing());
-  ExecutionManager::getManager().addTask(new TimeUpdater());
-  ExecutionManager::getManager().addTask(ai_);
+
+  ExecutionManager::getManager().addTask(new ai::TimeUpdater());
+
+  // BEGIN AI related tasks:
+
+  ExecutionManager::getManager().addTask(new ai::TimeUpdater());
+  ai::AI* ai = new ai::AI(manager_name.getValue());
+  ExecutionManager::getManager().addTask(ai);
+
+  // END  AI related tasks:
+
   ExecutionManager::getManager().addTask(new control::LimitVelocities());
-  ExecutionManager::getManager().addTask(new control::ControlSender(commander));
+  ExecutionManager::getManager().addTask(new control::Commander());
 
   // viewer
-  ExecutionManager::getManager().addTask(new viewer::ViewerServer());
-  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
+  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
+  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
 
   ExecutionManager::getManager().run(0.01);
 
-  if (simulation.getValue())
-  {
-    delete commander;
-  }
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;
 }

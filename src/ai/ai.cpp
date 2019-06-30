@@ -31,14 +31,15 @@
 #include <core/collection.h>
 #include <manager/factory.h>
 #include <debug.h>
-#include <com/ai_commander_real.h>
 #include <utility>
 #include <data/computed_data.h>
 #include <strategy/placer.h>
 
 namespace rhoban_ssl
 {
-AI::AI(std::string manager_name, AICommander* commander) : running_(true), commander_(commander)
+namespace ai
+{
+AI::AI(std::string manager_name) : running_(true)
 {
   initRobotBehaviors();
   for (auto& mobile : Data::get()->all_robots)
@@ -290,7 +291,7 @@ void AI::updateRobots()
     SharedData::FinalControl& final_control = Data::get()->shared_data.final_control_for_robots[robot_id];
 
     data::Robot& robot = Data::get()->robots[Ally][robot_id];
-    assert(robot.id == robot_id);
+    assert(robot.id == (uint)robot_id);
     robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)
@@ -388,30 +389,16 @@ std::shared_ptr<manager::Manager> AI::getManualManager()
   return manual_manager_;
 }
 
-void AI::emergency()
+Json::Value AI::getAnnotations() const
 {
-  for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
-  {
-    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
-    final_control.is_manually_controled_by_viewer = true;
-    final_control.control.ignore = true;
-    final_control.control.active = false;
-  }
+  Json::Value json = Json::Value();
+  annotations::Annotations annotations = annotations::Annotations();
 
-  commander_->stopAll();
-  commander_->flush();
-}
+  annotations.addAnnotations(strategy_manager_->getAnnotations());
+  annotations.addAnnotations(getRobotBehaviorAnnotations());
 
-void AI::getAnnotations(annotations::Annotations& annotations) const
-{
-  //  annotations.addAnnotations(getManager()->getAnnotations());
-  //  annotations.addAnnotations(getRobotBehaviorAnnotations());
-
-  //  std::function<rhoban_geometry::Point(const rhoban_geometry::Point& p)> fct = [this](const rhoban_geometry::Point&
-  //  p) {
-  //    return this->ai_data_.team_point_of_view.fromFrame(p);
-  //  };
-  //  annotations.mapPositions(fct);
+  json["annotations"] = annotations.toJson();
+  return json;
 }
 
 std::string AI::getRobotBehaviorOf(uint robot_number)
@@ -473,42 +460,6 @@ void AI::enableRobot(uint number, bool enabled)
   }
 }
 
-void AI::moveRobot(bool ally, uint number, double x, double y, double theta)
-{
-  if (Data::get()->referee.allyOnPositiveHalf())
-  {
-    x *= -1;
-    y *= -1;
-    theta += M_PI;
-  }
-
-  if (!ally || ai::Config::is_in_simulation)
-  {
-    commander_->moveRobot(ally, int(number), x, y, theta, true);
-  }
-  else
-  {
-    std::pair<rhoban_geometry::Point, ContinuousAngle> target_pos{ rhoban_geometry::Point(x, y),
-                                                                   ContinuousAngle(theta) };
-    getCurrentManager()
-        .get()
-        ->getStrategy<strategy::Placer>(manager::Manager::MANAGER__PLACER)
-        .setPositions({ int(number) }, { target_pos });
-
-    setStrategyManuallyOf({ int(number) }, manager::Manager::MANAGER__PLACER);
-  }
-}
-
-void AI::moveBall(double x, double y, double v_x, double v_y)
-{
-  if (Data::get()->referee.allyOnPositiveHalf())
-  {
-    x *= -1;
-    y *= -1;
-  }
-  commander_->moveBall(x, y, v_x, v_y);
-}
-
 void AI::scan()
 {
   if (!ai::Config::is_in_simulation)
@@ -564,5 +515,5 @@ void AI::scan()
     }
   }
 }
-
+}
 }  // namespace rhoban_ssl

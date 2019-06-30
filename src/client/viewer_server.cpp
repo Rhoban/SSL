@@ -57,7 +57,7 @@ void ViewerServer::run()
   std::cout << "Thread viewer server CLOSED" << std::endl;
 }
 
-ViewerServer::ViewerServer() : thread_launched_(false)
+ViewerServer::ViewerServer(int port) : thread_launched_(false)
 {
   // prevent an invalid second instanciation of the task.
   instance_counter_++;
@@ -75,12 +75,14 @@ ViewerServer::ViewerServer() : thread_launched_(false)
   struct lws_context_creation_info info;
   memset(&info, 0, sizeof info); /* otherwise uninitialized garbage */
 
-  // move to configuration
-  info.port = 7882;
+  info.port = port;
   info.protocols = protocols_;
-  info.vhost_name = "localhost";
+  // info.vhost_name = "localhost";
 
   lws_set_log_level(2, nullptr);
+  context_ = lws_create_context(&info);
+
+  lws_context_destroy(context_);
   context_ = lws_create_context(&info);
 }
 

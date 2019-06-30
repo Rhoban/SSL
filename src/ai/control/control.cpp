@@ -112,6 +112,7 @@ std::ostream& operator<<(std::ostream& out, const Control& control)
 
   return out;
 }
+<<<<<<< HEAD
 
 namespace rhoban_ssl
 {

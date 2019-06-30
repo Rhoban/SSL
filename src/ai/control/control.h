@@ -87,16 +87,5 @@ public:
   bool runTask();
 };
 
-class ControlSender : public Task
-{
-private:
-  AICommander* commander_;
-
-public:
-  ControlSender(AICommander* commander);
-  // Task interface
-public:
-  bool runTask();
-};
 }  // namespace control
 }  // namespace rhoban_ssl

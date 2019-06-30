@@ -38,8 +38,6 @@ set (SOURCES
     vision/factory.cpp
     vision/time_synchroniser.cpp
     com/ai_commander.cpp
-    com/ai_commander_simulation.cpp
-    com/ai_commander_real.cpp
     viewer/viewer_communication.cpp
     viewer/properties.cpp
     robot_behavior/factory.cpp
@@ -95,9 +93,16 @@ set (SOURCES
     math/lines.cpp
     core/export_to_plot.cpp
     core/logger.cpp
+    core/gnu_plot.cpp
     referee/referee_packet_analyzer.cpp
-    referee/game_state.cpp
+    referee/game_state.cpp    
+    # Annotations
     annotations/annotations.cpp
+    annotations/shape/shape.cpp
+    annotations/shape/circle.cpp
+    annotations/shape/cross.cpp
+    annotations/shape/arrow.cpp
+    annotations/shape/polygon.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)

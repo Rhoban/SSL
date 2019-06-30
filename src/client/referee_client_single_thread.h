@@ -3,7 +3,7 @@
 #include "multicast_client_single_thread.h"
 #include "ssl_referee.pb.h"
 #include <google/protobuf/arena.h>
-
+#include <list>
 namespace rhoban_ssl
 {
 namespace referee

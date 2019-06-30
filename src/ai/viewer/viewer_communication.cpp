@@ -20,12 +20,13 @@
 #include <viewer_server.h>
 #include <manager/factory.h>
 #include <core/collection.h>
+#include <annotations/annotations.h>
 
 namespace rhoban_ssl
 {
 namespace viewer
 {
-ViewerCommunication::ViewerCommunication(AI* ai)
+ViewerCommunication::ViewerCommunication(ai::AI* ai)
   : ai_(ai), last_sending_time_(rhoban_utils::TimeStamp::now().getTimeSec())
 {
 }
@@ -54,7 +55,7 @@ void ViewerCommunication::processIncomingPackets()
 
     if (!viewer_packet["emergency"].isNull())
     {
-      ai_->emergency();
+      Data::get()->commander->emergency();
     }
     else if (!viewer_packet["set_packets_per_second"].isNull())
     {
@@ -102,15 +103,17 @@ void ViewerCommunication::processIncomingPackets()
     else if (!viewer_packet["place_bot"].isNull())
     {
       bool ally = viewer_packet["place_bot"]["ally"].asBool();
-      ai_->moveRobot(ally, viewer_packet["place_bot"]["number"].asUInt(),
-                     viewer_packet["place_bot"]["position"]["x"].asDouble(),
-                     viewer_packet["place_bot"]["position"]["y"].asDouble(),
-                     viewer_packet["place_bot"]["position"]["orientation"].asDouble());
+      Data::get()->commander->moveRobot(ally, viewer_packet["place_bot"]["number"].asUInt(),
+                                        viewer_packet["place_bot"]["position"]["x"].asDouble(),
+                                        viewer_packet["place_bot"]["position"]["y"].asDouble(),
+                                        viewer_packet["place_bot"]["position"]["orientation"].asDouble());
     }
     else if (!viewer_packet["place_ball"].isNull())
     {
-      ai_->moveBall(viewer_packet["place_ball"]["position"]["x"].asDouble(),
-                    viewer_packet["place_ball"]["position"]["y"].asDouble(), 0.0, 0.0);
+      Data::get()->commander->moveBall(viewer_packet["place_ball"]["position"]["x"].asDouble(),
+                                       viewer_packet["place_ball"]["position"]["y"].asDouble(),
+                                       viewer_packet["place_ball"]["speed"]["x"].asDouble(),
+                                       viewer_packet["place_ball"]["speed"]["y"].asDouble());
     }
     else if (!viewer_packet["scan"].isNull())
     {
@@ -134,6 +137,7 @@ void ViewerCommunication::sendViewerPackets()
   viewer::ViewerDataGlobal::get().packets_to_send.push(refereePacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(informationsPacket());
   viewer::ViewerDataGlobal::get().packets_to_send.push(aiPacket());
+  viewer::ViewerDataGlobal::get().packets_to_send.push(annotationsPacket());
 }
 
 Json::Value ViewerCommunication::fieldPacket()
@@ -344,6 +348,11 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
 
     manual_ctrl.tare_odom = packet["tare_odometry"].asBool();
   }
+}
+
+Json::Value ViewerCommunication::annotationsPacket()
+{
+  return ai_->getAnnotations();
 }
 
 }  // namespace viewer

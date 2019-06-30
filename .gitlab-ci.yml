@@ -1,0 +1,32 @@
+image: ubuntu:18.04
+
+stages:
+    - build
+  
+before_script:
+    - export DEBIAN_FRONTEND=noninteractive 
+    - apt-get update -qq && apt-get install -y -qq g++ git cmake libprotobuf-dev protobuf-compiler php php-cli php-xml libgtest-dev libqt5widgets5 qt5-default libqt5webkit5-dev libwebsockets-dev python-pip python-empy
+    - pip install -U catkin_tools
+  
+build:
+    stage: build
+    only:
+        - master
+        - develop
+    script:
+        - mkdir -p ./src/{rhoban,rhobandeps}
+        - git clone https://github.com/Rhoban/geometry.git ./src/rhoban/geometry
+        - git clone https://github.com/Rhoban/random.git ./src/rhoban/random
+        - git clone https://github.com/Rhoban/utils.git ./src/rhoban/utils
+        - git clone https://github.com/RhobanDeps/eigen.git ./src/rhobandeps/eigen
+        - git clone https://github.com/RhobanDeps/serial.git ./src/rhobandeps/serial
+        - git clone https://github.com/RhobanDeps/jsoncpp.git ./src/rhobandeps/jsoncpp
+        - git clone https://github.com/RhobanDeps/tclap.git ./src/rhobandeps/tclap
+        - ./workspace setup
+        - ./workspace install
+        - ./workspace build
+    artifacts:
+        name: app
+        paths:
+            - bin
+

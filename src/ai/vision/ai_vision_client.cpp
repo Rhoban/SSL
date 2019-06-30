@@ -166,7 +166,7 @@ bool UpdateRobotInformation::runTask()
   vision::RobotDetection* detections[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS];
   for (int team = 0; team < 2; ++team)
     for (int r = 0; r < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++r)
-      for (int c = 0; c < ai::Config::NB_CAMERAS; ++c)
+      for (uint c = 0; c < ai::Config::NB_CAMERAS; ++c)
         detections[team][r][c] = nullptr;
 
   for (uint camera_id = 0; camera_id < ai::Config::NB_CAMERAS; ++camera_id)
