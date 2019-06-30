@@ -214,8 +214,8 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new control::Commander());
 
   // viewer
-  //  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
-  //  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
+  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
+  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
 
   ExecutionManager::getManager().run(0.01);
 

@@ -48,7 +48,18 @@ public:
 
   void moveBall(double x, double y, double vx, double vy);
 
-  void moveRobot(bool ally, int id, double x, double y, double theta, bool turn_on);
+  void moveRobot(bool ally, int id, double x, double y, double theta);
+
+  /**
+   * @brief An emergency call stop all robots connected with the ai.
+   *
+   * It's change the control for each robot to manual.
+   * Moreover all manual control are ignore and desactivate.
+   *
+   * After control desactivations in the ai, the commander sends a stop
+   * command to all robots.
+   */
+  void emergency();
 
 private:
   Master* real_;

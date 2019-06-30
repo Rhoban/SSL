@@ -109,17 +109,6 @@ public:
   std::shared_ptr<manager::Manager> getManualManager();
 
   /**
-   * @brief An emergency call stop all robots connected with the ai.
-   *
-   * It's change the control for each robot to manual.
-   * Moreover all manual control are ignore and desactivate.
-   *
-   * After control desactivations in the ai, the commander sends a stop
-   * command to all robots.
-   */
-  //  void emergency();
-
-  /**
    * @brief getAnnotations
    * @param annotations
    */
@@ -159,10 +148,6 @@ public:
    * @param enabled
    */
   void enableRobot(uint number, bool enabled);
-
-  //  void moveRobot(bool ally, uint number, double x, double y, double theta);
-
-  //  void moveBall(double x, double y, double v_x, double v_y);
 
 private:
   // move to config

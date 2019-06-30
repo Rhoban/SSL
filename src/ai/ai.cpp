@@ -414,20 +414,6 @@ std::shared_ptr<manager::Manager> AI::getManualManager()
   return manual_manager_;
 }
 
-// void AI::emergency()
-//{
-//  for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
-//  {
-//    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
-//    final_control.is_manually_controled_by_viewer = true;
-//    final_control.control.ignore = true;
-//    final_control.control.active = false;
-//  }
-
-//  commander_->stopAll();
-//  commander_->flush();
-//}
-
 Json::Value AI::getAnnotations() const
 {
   Json::Value json = Json::Value();
@@ -498,42 +484,6 @@ void AI::enableRobot(uint number, bool enabled)
     }
   }
 }
-
-// void AI::moveRobot(bool ally, uint number, double x, double y, double theta)
-//{
-//  if (Data::get()->referee.allyOnPositiveHalf())
-//  {
-//    x *= -1;
-//    y *= -1;
-//    theta += M_PI;
-//  }
-
-//  if (!ally || ai::Config::is_in_simulation)
-//  {
-//    commander_->moveRobot(ally, int(number), x, y, theta, true);
-//  }
-//  else
-//  {
-//    std::pair<rhoban_geometry::Point, ContinuousAngle> target_pos{ rhoban_geometry::Point(x, y),
-//                                                                   ContinuousAngle(theta) };
-//    getCurrentManager()
-//        .get()
-//        ->getStrategy<strategy::Placer>(manager::Manager::MANAGER__PLACER)
-//        .setPositions({ int(number) }, { target_pos });
-
-//    setStrategyManuallyOf({ int(number) }, manager::Manager::MANAGER__PLACER);
-//  }
-//}
-
-// void AI::moveBall(double x, double y, double v_x, double v_y)
-//{
-//  if (Data::get()->referee.allyOnPositiveHalf())
-//  {
-//    x *= -1;
-//    y *= -1;
-//  }
-//  commander_->moveBall(x, y, v_x, v_y);
-//}
 
 void AI::scan()
 {

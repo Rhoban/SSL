@@ -147,6 +147,16 @@ void Master::addParamPacket(int robot, struct packet_params params)
   addPacket(robot, INSTRUCTION_PARAMS, (char*)&params, sizeof(params));
 }
 
+void Master::updateRobot(uint id, packet_robot& r)
+{
+  if (robots[id].isOk())
+  {
+    mutex.lock();
+    r = robots[id].status;
+    mutex.unlock();
+  }
+}
+
 void Master::sendPacket()
 {
   uint8_t data[packet.size() + 4];

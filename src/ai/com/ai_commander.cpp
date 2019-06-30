@@ -41,6 +41,11 @@ Commander::Commander() : real_(nullptr), sim_(nullptr)
       real_ = new Master("/dev/ttyACM0", 1000000);
     }
   }
+  if (Data::get()->commander != nullptr)
+  {
+    throw "commander already set!";
+  }
+  Data::get()->commander = this;
 }
 
 Commander::~Commander()
@@ -50,6 +55,10 @@ Commander::~Commander()
 
   if (real_ != nullptr)
     delete real_;
+
+  assert(Data::get()->commander == this);
+
+  Data::get()->commander = nullptr;
 }
 
 void Commander::set(uint8_t robot_id, bool enabled, double x_speed, double y_speed, double theta_speed, int kick,
@@ -79,10 +88,30 @@ void Commander::stopAll()
   }
 }
 
+void Commander::emergency()
+{
+  for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+  {
+    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
+    final_control.is_manually_controled_by_viewer = true;
+    final_control.control.ignore = true;
+    final_control.control.active = false;
+  }
+
+  this->stopAll();
+  // this->flush();
+}
+
 void Commander::moveBall(double x, double y, double vx, double vy)
 {
   if (ai::Config::is_in_simulation)
   {
+    if (Data::get()->referee.allyOnPositiveHalf())
+    {
+      x *= -1;
+      y *= -1;
+    }
+    std::cerr << "move ball " << vx << " " << vy << std::endl;
     sim_->moveBall(x, y, vx, vy);
   }
   else
@@ -91,10 +120,18 @@ void Commander::moveBall(double x, double y, double vx, double vy)
   }
 }
 
-void Commander::moveRobot(bool ally, int id, double x, double y, double theta, bool turn_on)
+void Commander::moveRobot(bool ally, int id, double x, double y, double theta)
 {
+  static const bool turn_on = true;
   if (ai::Config::is_in_simulation)
   {
+    if (Data::get()->referee.allyOnPositiveHalf())
+    {
+      x *= -1;
+      y *= -1;
+      theta += M_PI;
+    }
+
     bool yellow = true;
     if ((ai::Config::we_are_blue && ally) || (!ally && !ai::Config::we_are_blue))
     {
@@ -234,7 +271,7 @@ void Commander::updateRobotsCommands()
           set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(), kick,
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
-          );
+              );
           // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
         }
         else
@@ -251,18 +288,12 @@ void Commander::updateElectronicInformations()
 {
   for (unsigned int id = 0; id < MAX_ROBOTS; id++)
   {
-    auto robot = real_->robots[id];
-    if (robot.isOk())
-    {
-      Data::get()->robots[Ally][id].electronics = robot.status;
-    }
+    real_->updateRobot(id, Data::get()->robots[Ally][id].electronics);
   }
 }
 
 void Commander::send()
 {
-  updateRobotsCommands();
-
   for (auto& cmd : commands_)
   {
     if (ai::Config::is_in_simulation)
@@ -288,9 +319,12 @@ bool Commander::runTask()
   if (!ai::Config::is_in_simulation)
     updateElectronicInformations();
 
+  updateRobotsCommands();
+
   send();
 
   return true;
 }
+
 }  // namespace control
 }  // namespace rhoban_ssl
