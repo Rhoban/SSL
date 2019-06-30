@@ -271,7 +271,7 @@ void Commander::updateRobotsCommands()
           set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(), kick,
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
-              );
+          );
           // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
         }
         else

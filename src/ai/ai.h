@@ -196,5 +196,5 @@ class TimeUpdater : public Task
 public:
   bool runTask();
 };
-};
+};  // namespace ai
 };  // namespace rhoban_ssl

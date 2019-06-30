@@ -515,5 +515,5 @@ void AI::scan()
     }
   }
 }
-}
+}  // namespace ai
 }  // namespace rhoban_ssl
