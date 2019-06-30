@@ -203,8 +203,6 @@ int main(int argc, char** argv)
 
   ExecutionManager::getManager().addTask(new data::CollisionComputing());
 
-  ExecutionManager::getManager().addTask(new ai::TimeUpdater());
-
   // BEGIN AI related tasks:
 
   ExecutionManager::getManager().addTask(new ai::TimeUpdater());
