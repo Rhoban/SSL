@@ -59,6 +59,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/tests/test_infra.cpp
+    robot_behavior/tests/test_kicker.cpp
     ai.cpp
     debug.cpp
     manager/manager.cpp

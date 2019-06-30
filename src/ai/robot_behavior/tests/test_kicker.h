@@ -19,12 +19,13 @@
 
 #pragma once
 
-#include "robot_behavior.h"
-#include "factory.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
+{
+namespace tests
 {
 class TestKicker : public RobotBehavior
 {
@@ -33,9 +34,9 @@ private:
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  TestKicker(ai::AiData& ai_data);
+  TestKicker();
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 
@@ -44,5 +45,6 @@ public:
   virtual ~TestKicker();
 };
 
+};  // namespace tests
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

@@ -24,11 +24,13 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-TestKicker::TestKicker(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+namespace tests
+{
+TestKicker::TestKicker() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void TestKicker::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void TestKicker::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -65,5 +67,6 @@ rhoban_ssl::annotations::Annotations TestKicker::getAnnotations() const
   return annotations;
 }
 
+}  // namespace tests
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
