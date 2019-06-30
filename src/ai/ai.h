@@ -37,7 +37,7 @@ class AI : public Task
 {
 public:
   // bool is_in_simulation;
-  AI(std::string manager_name, AICommander* commander);
+  AI(std::string manager_name);
 
   bool runTask() override;
 
@@ -117,7 +117,7 @@ public:
    * After control desactivations in the ai, the commander sends a stop
    * command to all robots.
    */
-  void emergency();
+  //  void emergency();
 
   /**
    * @brief getAnnotations
@@ -160,9 +160,9 @@ public:
    */
   void enableRobot(uint number, bool enabled);
 
-  void moveRobot(bool ally, uint number, double x, double y, double theta);
+  //  void moveRobot(bool ally, uint number, double x, double y, double theta);
 
-  void moveBall(double x, double y, double v_x, double v_y);
+  //  void moveBall(double x, double y, double v_x, double v_y);
 
 private:
   // move to config
@@ -174,7 +174,7 @@ private:
 private:
   bool running_;
 
-  AICommander* commander_;
+  // AICommander* commander_;
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
 

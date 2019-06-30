@@ -117,10 +117,6 @@ namespace rhoban_ssl
 {
 namespace control
 {
-ControlSender::ControlSender(rhoban_ssl::AICommander* commander) : commander_(commander)
-{
-}
-
 bool ControlSender::runTask()
 {
   for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot_id)

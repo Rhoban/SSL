@@ -81,6 +81,9 @@ ViewerServer::ViewerServer(int port) : thread_launched_(false)
 
   lws_set_log_level(2, nullptr);
   context_ = lws_create_context(&info);
+
+  lws_context_destroy(context_);
+  context_ = lws_create_context(&info);
 }
 
 ViewerServer::~ViewerServer()

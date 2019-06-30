@@ -50,7 +50,7 @@ protected:
   bool receivedAnswer;
   rhoban_utils::TimeStamp lastSend;
 
-  serial::Serial serial;
+  serial::Serial * serial;
   std::thread* thread;
   std::mutex mutex;
   std::string tmpPacket;
