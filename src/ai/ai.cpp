@@ -31,7 +31,6 @@
 #include <core/collection.h>
 #include <manager/factory.h>
 #include <debug.h>
-#include <com/ai_commander_real.h>
 #include <utility>
 #include <data/computed_data.h>
 #include <strategy/placer.h>
