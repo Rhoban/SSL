@@ -17,7 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "goto_ball.h"
+#include "poke_ball.h"
 #include <math/vector2d.h>
 
 namespace rhoban_ssl
@@ -26,11 +26,11 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-Goto_ball::Goto_ball() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+Poke_ball::Poke_ball() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void Goto_ball::update(double time, const data::Robot& robot, const data::Ball& ball)
+void Poke_ball::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -38,35 +38,72 @@ void Goto_ball::update(double time, const data::Robot& robot, const data::Ball& 
 
   annotations_.clear();
 
-  rhoban_geometry::Point robot_position = ballPosition();
-  ContinuousAngle angle = 0.0;
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
 
-  follower_->setFollowingPosition(robot_position, angle);
+  Vector2d direction = poke_direction_ - robot_position;
+  ContinuousAngle target_rotation = vector2angle(direction);
+
+  ContinuousAngle robot_rotation = robot.getMovement().angularPosition(Data::get()->ai_data.time);
+  ContinuousAngle diff_angle = target_rotation - robot_rotation;
+  
+  //TODO: modulo 360 ?
+  if(diff_angle.abs() < 20){
+    ready_to_kick_ = true;
+  }
+  else{
+    ready_to_kick_ = false;
+  }
+  
+
+  follower_->setFollowingPosition(poke_direction_, target_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }
 
-Control Goto_ball::control() const
+Control Poke_ball::control() const
 {
-  Control ctrl = follower_->control();
-  if (dribbler_is_active_)
+  Control ctrl = follower_->control();  
+  if (ready_to_kick_)
   {
-    /* code */
+    ctrl.kick_power = kick_power_;
+    ctrl.charge = true;
+    ctrl.kick = true;
   }
-  
+  else
+  {
+    ctrl.charge = false;
+    ctrl.kick = false;
+  }
+    
   return ctrl;
 }
 
-void Goto_ball::dribbler(const bool is_active){
-  dribbler_is_active_ = is_active;
+void Poke_ball::setPokeDirection(rhoban_geometry::Point poke_direction){
+  poke_direction_ = poke_direction;
 }
 
-Goto_ball::~Goto_ball()
+void Poke_ball::setKickPower(double kick_power){
+  if (kick_power > 1)
+  {
+    kick_power_ = 1;
+  }
+  else if (kick_power < 0)
+  {
+    kick_power_ = 0;
+  }
+  else
+  {
+    kick_power_ = kick_power;
+  }
+  
+}
+
+Poke_ball::~Poke_ball()
 {
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Goto_ball::getAnnotations() const
+rhoban_ssl::annotations::Annotations Poke_ball::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);

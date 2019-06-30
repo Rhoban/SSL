@@ -28,15 +28,17 @@ namespace robot_behavior
 {
 namespace Beginner
 {
-class Goto_ball : public RobotBehavior
+class Poke_ball : public RobotBehavior
 {
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
-  bool dribbler_is_active_ = false;
+  bool ready_to_kick_ = false;
+  double kick_power_ = 0.3;
+  rhoban_geometry::Point poke_direction_ = Data::get()->field.goalCenter(Opponent);
 
 public:
-  Goto_ball();
+  Poke_ball();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -45,14 +47,22 @@ public:
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   /**
-   * @brief Active or desactive the dribbler.
+   * @brief set the direction of the poke (kick)
    *
-   * @param isActive
-   * true = active the dribbler. false = Desactive the dribbler
+   * @param poke_direction
+   * rhoban_geometry::Point for the poke direction. Default: opponent goalCenter.
    */
-  void dribbler(const bool is_active = true);
+  void setPokeDirection(rhoban_geometry::Point poke_direction);
 
-  virtual ~Goto_ball();
+  /**
+   * @brief set kick power of the poke 
+   *
+   * @param kick_power
+   * value between 0 and 1
+   */
+  void Poke_ball::setKickPower(double kick_power)
+
+  virtual ~Poke_ball();
 };
 
 };  // namespace Beginner
