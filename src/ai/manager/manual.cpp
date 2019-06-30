@@ -29,6 +29,7 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/tests/test_infra.h>
 
 namespace rhoban_ssl
 {
@@ -103,6 +104,14 @@ Manual::Manual(std::string name) : Manager(name)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
+  registerStrategy("Test - IR", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                    [&](double time, double dt) {
+                                      robot_behavior::tests::TestInfra* test_ir =
+                                          new robot_behavior::tests::TestInfra();
+                                      return std::shared_ptr<robot_behavior::RobotBehavior>(test_ir);
+                                    },
+                                    false  // we don't want to define a goal here !
+                                    )));
 }
 
 void Manual::update()

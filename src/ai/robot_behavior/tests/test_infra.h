@@ -19,25 +19,26 @@
 
 #pragma once
 
-#include "robot_behavior.h"
-#include "factory.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
+namespace tests
+{
 class TestInfra : public RobotBehavior
 {
 private:
   Vector2d translation_;
-  vision::Team team_;
+  Team team_;
 
   ConsignFollower* follower_;
 
 public:
-  TestInfra(ai::AiData& ai_data);
+  TestInfra();
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 
@@ -46,5 +47,6 @@ public:
   virtual ~TestInfra();
 };
 
+};  // namespace tests
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl
