@@ -61,7 +61,7 @@ void BeginnerRobotHaveBall ::update(double time, const data::Robot& robot, const
     annotations_.addCross(ballPosition(), "red", false);
   }
 
-  //const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
+  // const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
 }
 
 Control BeginnerRobotHaveBall::control() const
