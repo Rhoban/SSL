@@ -95,6 +95,7 @@ set (SOURCES
     math/lines.cpp
     core/export_to_plot.cpp
     core/logger.cpp
+    core/gnu_plot.cpp
     referee/referee_packet_analyzer.cpp
     referee/game_state.cpp    
     # Annotations
