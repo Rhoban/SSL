@@ -317,7 +317,7 @@ void AI::updateRobots()
     SharedData::FinalControl& final_control = Data::get()->shared_data.final_control_for_robots[robot_id];
 
     data::Robot& robot = Data::get()->robots[Ally][robot_id];
-    assert(robot.id == robot_id);
+    assert(robot.id == (uint)robot_id);
     robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     robot_behavior.update(time, robot, ball);
     if (final_control.is_disabled_by_viewer)

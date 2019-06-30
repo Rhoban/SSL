@@ -44,7 +44,7 @@ void MovementSample::insert(const PositionSample& sample)
 
     double filtered_dt = 0.0;
     // small filter
-    for (int it = 0; it < (this->size() - 2); it++)
+    for (uint it = 0; it < (this->size() - 2); it++)
     {
       filtered_dt += ((*this)[it].time - (*this)[it + 1].time);
     }
@@ -55,7 +55,7 @@ void MovementSample::insert(const PositionSample& sample)
     CircularVector<PositionSample>::insert(sample);
     double filtered_dt = 0.0;
     // small filter
-    for (int it = 0; it < (this->size() - 2); it++)
+    for (uint it = 0; it < (this->size() - 2); it++)
     {
       filtered_dt += ((*this)[it].time - (*this)[it + 1].time);
     }
