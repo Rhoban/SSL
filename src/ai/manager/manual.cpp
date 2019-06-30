@@ -31,6 +31,7 @@
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/tests/test_infra.h>
 #include <robot_behavior/tests/test_kicker.h>
+#include <robot_behavior/tests/test_relative_velocity_consign.h>
 
 namespace rhoban_ssl
 {
@@ -121,6 +122,17 @@ Manual::Manual(std::string name) : Manager(name)
                                         },
                                         false  // we don't want to define a goal here !
                                         )));
+  registerStrategy("Test - Relative velocity consign",
+                   std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                       [&](double time, double dt) {
+                         robot_behavior::tests::TestRelativeVelocityConsign* test_rvc =
+                             new robot_behavior::tests::TestRelativeVelocityConsign();
+                         test_rvc->setAngularVelocity(1);  // tourbilol
+                         test_rvc->setLinearVelocity(Vector2d(0.8, 0));
+                         return std::shared_ptr<robot_behavior::RobotBehavior>(test_rvc);
+                       },
+                       false  // we don't want to define a goal here !
+                       )));
 }
 
 void Manual::update()

@@ -19,11 +19,13 @@
 
 #pragma once
 
-#include "robot_behavior.h"
+#include "../robot_behavior.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
+{
+namespace tests
 {
 class TestRelativeVelocityConsign : public RobotBehavior
 {
@@ -31,7 +33,7 @@ private:
   Control relative_control_;
 
 public:
-  TestRelativeVelocityConsign(ai::AiData& ai_data);
+  TestRelativeVelocityConsign();
   virtual ~TestRelativeVelocityConsign();
 
   void setLinearVelocity(const Vector2d& linear_velocity);
@@ -39,18 +41,18 @@ public:
 
   // RobotBehavior interface
 public:
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
   virtual Control control() const;
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
   // Tests
 public:
-  static TestRelativeVelocityConsign* getMovementAngularVelocityOnly(ai::AiData& ai_data_, double angular_velocity);
-  static TestRelativeVelocityConsign* getMovementLinearVelocityOnly(ai::AiData& ai_data_, Vector2d linear_velocity);
-  static TestRelativeVelocityConsign* getMovementAngularAndLinearVelocity(ai::AiData& ai_data_,
-                                                                          Vector2d linear_velocity,
+  static TestRelativeVelocityConsign* getMovementAngularVelocityOnly(double angular_velocity);
+  static TestRelativeVelocityConsign* getMovementLinearVelocityOnly(Vector2d linear_velocity);
+  static TestRelativeVelocityConsign* getMovementAngularAndLinearVelocity(Vector2d linear_velocity,
                                                                           double angular_velocity);
 };
 
+};  // namespace tests
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl
