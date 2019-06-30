@@ -13,8 +13,6 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-namespace RhIO
-{
 class GnuPlotSignal
 {
 public:
@@ -113,5 +111,3 @@ private:
   bool mode2D;
   bool mode3D;
 };
-}  // namespace RhIO
-

@@ -4,8 +4,6 @@
 float histories[] = { 15.0, 30.0, 60.0, 3.0 };
 #define HISTORIES (sizeof(histories) / sizeof(float))
 
-namespace RhIO
-{
 GnuPlotSignal::GnuPlotSignal(std::string name_) : name(name_)
 {
 }
@@ -260,4 +258,3 @@ void GnuPlot::changeHistory()
   history = (history + 1) % HISTORIES;
   printf("History set to %gs\n", histories[history]);
 }
-}  // namespace RhIO
