@@ -107,67 +107,57 @@ std::ostream& operator<<(std::ostream& out, const Control& control)
   out << "{ctrl : "
       << "[lin vel. : " << control.linear_velocity << ", ang vel. : " << control.angular_velocity << "]"
       << ", kick : " << control.kick << ", chip kick : " << control.chip_kick << ", kickPower : " << control.kick_power
-      << ", spin : " << control.spin << ", charge : " << control.charge << ", acitve : " << control.active
+      << ", spin : " << control.spin << ", charge : " << control.charge << ", active : " << control.active
       << ", ignore : " << control.ignore << "}";
 
   return out;
 }
 
+///////////////////////////////////////////////////////////////////////////
+
 namespace rhoban_ssl
 {
 namespace control
 {
-ControlSender::ControlSender(rhoban_ssl::AICommander* commander) : commander_(commander)
+LimitVelocities::LimitVelocities()
 {
 }
 
-bool ControlSender::runTask()
+bool LimitVelocities::runTask()
 {
-  for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot_id)
+  for (uint i = 0; i < Data::get()->shared_data.final_control_for_robots.size(); ++i)
   {
-    Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_id].control;
-    if (robot_id >= 8)
-    {                      // HACK - becaus hardware doesn't support more than 8 robots
-      continue;            // HACK
-    }                      // HACK
-    assert(robot_id < 8);  // HACK !
-    if (!ctrl.ignore)
+    Control ctrl = Data::get()->shared_data.final_control_for_robots[i].control;
+    Kinematic::WheelsSpeed wheels_speed =
+        kinematic_.compute(ctrl.linear_velocity.getX(), ctrl.linear_velocity.getY(), ctrl.angular_velocity.value());
+
+    double lambda_1 = 1.0;
+    double lambda_2 = 1.0;
+    double lambda_3 = 1.0;
+    double lambda_4 = 1.0;
+
+    if (abs(wheels_speed.frontLeft) > 0)
+      lambda_1 = ai::Config::max_wheel_speed / abs(wheels_speed.frontLeft);
+    if (abs(wheels_speed.frontRight) > 0)
+      lambda_2 = ai::Config::max_wheel_speed / abs(wheels_speed.frontRight);
+    if (abs(wheels_speed.backLeft) > 0)
+      lambda_3 = ai::Config::max_wheel_speed / abs(wheels_speed.backLeft);
+    if (abs(wheels_speed.backRight) > 0)
+      lambda_4 = ai::Config::max_wheel_speed / abs(wheels_speed.backRight);
+
+    double lambda = std::min(lambda_1, lambda_2);
+    lambda = std::min(lambda, lambda_3);
+    lambda = std::min(lambda, lambda_4);
+
+    if (lambda < 1.0)
     {
-      if (!ctrl.active)
-      {
-        commander_->set(robot_id, true, 0.0, 0.0, 0.0);
-      }
-      else
-      {
-        // if( robot_id == 1 ){
-        //    DEBUG( "CTRL : " << ctrl );
-        //}
-        int kick = 0;
-        if (ctrl.kick)
-          kick = 1;
-        else if (ctrl.chip_kick)
-          kick = 2;
-
-        if (ctrl.tare_odom)
-        {
-          commander_->set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(),
-                          kick, ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
-
-          );
-          // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
-        }
-        else
-        {
-          commander_->set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1],
-                          ctrl.angular_velocity.value(), kick, ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom);
-        }
-      }
+      std::cerr << "WARNING: ROBOT " << i << " reached the wheel's speed limit!" << std::endl;
+      ctrl.linear_velocity *= lambda;
+      ctrl.angular_velocity *= lambda;
     }
   }
-  // XXX: Flushing takes some time in real mode, and should be done in parallel
-  // along with the computing of the AI
-  commander_->flush();
   return true;
 }
+
 }  // namespace control
 }  // namespace rhoban_ssl

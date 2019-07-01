@@ -1,8 +1,8 @@
-
 /*
     This file is part of SSL.
 
     Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -22,36 +22,36 @@
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
-#include <math/tangents.h>
 #include <math/vector2d.h>
+#include <math.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class Opener : public RobotBehavior
+namespace keeper
+{
+class Clearer : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point point_towards_strike_;
-  int robot_to_pass_id_;
-  Team robot_to_pass_team_;
-  bool needKick_;
-
+  rhoban_geometry::Point target_point_towards_strike_;
+  bool need_kick_;
   ConsignFollower* follower_;
 
 public:
-  Opener();
+  Clearer();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   void declarePointToStrike(rhoban_geometry::Point point);
+  void declareNeedKick(bool need_kick);
 
   virtual Control control() const;
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Opener();
+  virtual ~Clearer();
 };
-
+};  // namespace keeper
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

@@ -43,6 +43,8 @@ public:
   void addRobotPacket(int robot, struct packet_master robotPacket);
   void addParamPacket(int robot, struct packet_params params);
 
+  void updateRobot(uint id, struct packet_robot& r);
+
 protected:
   bool running;
   bool shouldSend;
@@ -50,7 +52,7 @@ protected:
   bool receivedAnswer;
   rhoban_utils::TimeStamp lastSend;
 
-  serial::Serial serial;
+  serial::Serial* serial;
   std::thread* thread;
   std::mutex mutex;
   std::string tmpPacket;

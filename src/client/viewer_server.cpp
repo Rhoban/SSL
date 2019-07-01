@@ -77,9 +77,12 @@ ViewerServer::ViewerServer(int port) : thread_launched_(false)
 
   info.port = port;
   info.protocols = protocols_;
-  // info.vhost_name = "localhost";
+  info.vhost_name = "localhost";
 
   lws_set_log_level(2, nullptr);
+  context_ = lws_create_context(&info);
+
+  lws_context_destroy(context_);
   context_ = lws_create_context(&info);
 }
 

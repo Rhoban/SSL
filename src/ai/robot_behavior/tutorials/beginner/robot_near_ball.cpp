@@ -37,8 +37,8 @@ void BeginnerRobotNearBall::update(double time, const data::Robot& robot, const 
   int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Opponent);
 
   // Get the robot ally and opponent.
-  data::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Ally);
-  data::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Opponent);
+  const data::Robot& ally_closest = getRobot(nb_ally_closest_to_the_ball, Ally);
+  const data::Robot& opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Opponent);
 
   // Create the vector between the robots and the ball.
   Vector2d vec_ally_to_ball = ballPosition() - ally_closest.getMovement().linearPosition(Data::get()->ai_data.time);

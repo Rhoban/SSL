@@ -26,17 +26,17 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
 class SeeRobot : public RobotBehavior
 {
 private:
-  uint target_robot_id_;
+  uint target_robot_number;
   ConsignFollower* follower_;
-  rhoban_ssl::annotations::Annotations annotations_;
+  annotations::Annotations annotations_;
 
 public:
-  SeeRobot(uint target_id = 0);
+  SeeRobot(uint target_number = 0);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -51,6 +51,6 @@ public:
   virtual ~SeeRobot();
 };
 
-};  // namespace Beginner
+};  // namespace beginner
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

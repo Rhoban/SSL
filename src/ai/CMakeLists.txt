@@ -38,8 +38,6 @@ set (SOURCES
     vision/factory.cpp
     vision/time_synchroniser.cpp
     com/ai_commander.cpp
-    com/ai_commander_simulation.cpp
-    com/ai_commander_real.cpp
     viewer/viewer_communication.cpp
     viewer/properties.cpp
     robot_behavior/factory.cpp
@@ -94,6 +92,7 @@ set (SOURCES
     math/lines.cpp
     core/export_to_plot.cpp
     core/logger.cpp
+    core/gnu_plot.cpp
     referee/referee_packet_analyzer.cpp
     referee/game_state.cpp
     # Manager
@@ -104,6 +103,8 @@ set (SOURCES
     manager/match.cpp
     # Strategy
     strategy/keeper/keeper.h
+    # Behavior
+    robot_behavior/keeper/clearer.cpp
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp
@@ -121,8 +122,11 @@ set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} websockets)
 add_library (ssl_ai ${SOURCES})
 target_link_libraries(ssl_ai ${ALL_LIBS})
 
-add_executable(ai_st main_st.cpp)
-target_link_libraries(ai_st ssl_ai ${ALL_LIBS})
+add_executable(ai main.cpp)
+target_link_libraries(ai ssl_ai ${ALL_LIBS})
+
+add_executable(see_robot executables/see_robot.cpp)
+target_link_libraries(see_robot ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
