@@ -17,14 +17,14 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "keeper.h"
+#include "keeper_strat.h"
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
 KeeperStrat::KeeperStrat()
-  : Strategy()//, degageur_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur()))
+  : Strategy(), clearer_(std::shared_ptr<robot_behavior::keeper::Clearer>(new robot_behavior::keeper::Clearer()))
 {
 }
 
@@ -59,13 +59,13 @@ const std::string KeeperStrat::name = "goalie_strat";
 
 void KeeperStrat::start(double time)
 {
-  DEBUG("START PREPARE KICKOFF");
-  //goalie_ = std::shared_ptr<robot_behavior::Goalie>(new robot_behavior::Goalie());
+  DEBUG("START KEEPER STRAT");
+  goalie_ = std::shared_ptr<robot_behavior::Keeper>(new robot_behavior::Keeper());
   behaviors_are_assigned_ = false;
 }
 void KeeperStrat::stop(double time)
 {
-  DEBUG("STOP PREPARE KICKOFF");
+  DEBUG("STOP KEEPER STRAT");
 }
 
 void KeeperStrat::update(double time)
@@ -81,7 +81,7 @@ void KeeperStrat::assignBehaviorToRobots(
 
   if (allyPenaltyArea().is_inside(ballPosition()))
   {
-    assign_behavior(goalieID, degageur_);
+    assign_behavior(goalieID, clearer_);
   }
   else
   {
@@ -98,7 +98,7 @@ void KeeperStrat::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-KeeperStrat::getStartingPositions(int number_of_avalaible_robots) const
+KeeperStrat::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
@@ -106,18 +106,30 @@ KeeperStrat::getStartingPositions(int number_of_avalaible_robots) const
   return { std::pair<rhoban_geometry::Point, ContinuousAngle>(Data::get()->field.goalCenter(Ally), 0.0) };
 }
 
-
+//
+// This function return false if you don't want to
+// give a staring position. So the manager will chose
+// a default position for you.
+//
 bool KeeperStrat::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
-                                               ContinuousAngle& angular_position) const
+                                               ContinuousAngle& angular_position)
 {
   linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-annotations::Annotations KeeperStrat::getAnnotations() const
+rhoban_ssl::annotations::Annotations KeeperStrat::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
+  /*
+    for (auto it = this->getPlayerIds().begin(); it != this->getPlayerIds().end(); it++)
+    {
+      const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
+      // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
+      annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30,
+    "white");
+    }*/
   return annotations;
 }
 

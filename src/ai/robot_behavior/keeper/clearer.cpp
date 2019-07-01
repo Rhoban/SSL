@@ -42,17 +42,20 @@ void Clearer::update(double time, const data::Robot& robot, const data::Ball& ba
   Vector2d ball_target = target_point_towards_strike_ - ballPosition();
   double dist_ball_target = ball_target.norm();
 
-  if (dist_ball_target - 0 < 0.0001)
+  // to avoid division by 0
+  if (dist_ball_target < 0.0001)
   {
-    return;
+    dist_ball_target = 0.0001;
   }
   ball_target = ball_target / dist_ball_target;
 
   Vector2d ball_robot = robot_position - ballPosition();
   double dist_ball_robot = ball_robot.norm();
-  if (dist_ball_robot - 0 < 0.0001)
+
+  // to avoid division by 0
+  if (dist_ball_robot < 0.0001)
   {
-    return;
+    dist_ball_robot = 0.0001;
   }
   ball_robot = ball_robot / dist_ball_robot;
 
@@ -67,6 +70,10 @@ void Clearer::update(double time, const data::Robot& robot, const data::Ball& ba
   else
   {
     follower_->avoidTheBall(false);
+    if (scalar_ball_robot == 1.04)
+    {
+      scalar_ball_robot = 1.042;
+    }
     target_radius_from_ball = 1.0 / (24.0 * (scalar_ball_robot - 1.04)) + 0.44;
 
     if (dist_ball_robot < 0.4)

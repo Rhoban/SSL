@@ -59,6 +59,7 @@ set (SOURCES
     robot_behavior/keeper/keeper.cpp
     robot_behavior/defender/defensive_wall.cpp
     robot_behavior/defender/kick_wall.cpp
+    robot_behavior/obstructor.cpp
     ai.cpp
     debug.cpp
     strategy/strategy.cpp
@@ -66,6 +67,7 @@ set (SOURCES
     strategy/placer.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
+    strategy/keeper/keeper_strat.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
@@ -102,7 +104,6 @@ set (SOURCES
     manager/factory.cpp
     manager/match.cpp
     # Strategy
-    strategy/keeper/keeper.h
     strategy/wall.cpp
     strategy/wall_2.cpp
     # Behavior

@@ -33,6 +33,9 @@
 #include <robot_behavior/keeper/keeper.h>
 #include <robot_behavior/defender/defensive_wall.h>
 #include <robot_behavior/defender/kick_wall.h>
+#include <robot_behavior/obstructor.h>
+
+#include <strategy/keeper/keeper_strat.h>
 
 #include <strategy/wall.h>
 #include <strategy/wall_2.h>
@@ -142,6 +145,15 @@ Manual::Manual(std::string name) : Manager(name)
 
   registerStrategy("Wall1", std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
   registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
+  registerStrategy("Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                     [&](double time, double dt) {
+                                       robot_behavior::Obstructor* obstructor = new robot_behavior::Obstructor();
+                                       obstructor->declareRobotToObstruct(3);
+                                       return std::shared_ptr<robot_behavior::RobotBehavior>(obstructor);
+                                     },
+                                     false  // we don't want to define a goal here !
+                                     )));
+  registerStrategy("Keeper Strat (need goalie)", std::shared_ptr<strategy::Strategy>(new strategy::KeeperStrat()));
 }
 
 void Manual::update()
