@@ -56,6 +56,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
+    robot_behavior/ben_stealer.cpp
     ai.cpp
     debug.cpp
     manager/manager.cpp
