@@ -58,6 +58,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
+    robot_behavior/keeper/keeper.cpp
     ai.cpp
     debug.cpp
     strategy/strategy.cpp

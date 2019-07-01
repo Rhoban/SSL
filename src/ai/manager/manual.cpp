@@ -29,6 +29,7 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/keeper/keeper.h>
 
 namespace rhoban_ssl
 {
@@ -103,6 +104,13 @@ Manual::Manual(std::string name) : Manager(name)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
+  registerStrategy("Keeper", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                 [&](double time, double dt) {
+                                   robot_behavior::Keeper* keeper = new robot_behavior::Keeper();
+                                   return std::shared_ptr<robot_behavior::RobotBehavior>(keeper);
+                                 },
+                                 false  // we don't want to define a goal here !
+                                 )));
 }
 
 void Manual::update()
