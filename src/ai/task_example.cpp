@@ -31,7 +31,7 @@ TaskExample::TaskExample()
 bool TaskExample::runTask()
 {
   compter_++;
-  if(compter_ == 1000)
+  if (compter_ == 1000)
   {
     DEBUG("compter_ == 1000");
     return false;
@@ -43,4 +43,4 @@ TaskExample::~TaskExample()
 {
 }
 
-} // namespace rhoban_ssl
+}  // namespace rhoban_ssl

@@ -187,8 +187,7 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
 
-  //ExecutionManager::getManager().addTask(new TaskExample());
-  ExecutionManager::getManager().addTask(new stats::ResourceUsage());
+  // ExecutionManager::getManager().addTask(new TaskExample());
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
@@ -232,6 +231,11 @@ int main(int argc, char** argv)
   // viewer
   ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
   ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai_));
+
+  // stats
+  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop 
+  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(false, true));  // print
+  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, true, 100));  // both every 100 loop
 
   ExecutionManager::getManager().run(0.01);
 

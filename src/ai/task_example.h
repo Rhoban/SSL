@@ -25,29 +25,28 @@ namespace rhoban_ssl
 class TaskExample : public Task
 {
 private:
-    int compter_;
+  int compter_;
 
 public:
-    /**
-     * @brief Construct a new Task object
-     * 
-     */
-    TaskExample();
+  /**
+   * @brief Construct a new Task object
+   *
+   */
+  TaskExample();
 
-    /**
-     * @brief Just increment compter_ value at each loop turn
-     * 
-     * @return true : continue the runTask 
-     * @return false : stop the runTask
-     */
-    virtual bool runTask() override;
+  /**
+   * @brief Just increment compter_ value at each loop turn
+   *
+   * @return true : continue the runTask
+   * @return false : stop the runTask
+   */
+  virtual bool runTask() override;
 
-    /**
-     * @brief Destroy the Task object
-     * 
-     */
-    ~TaskExample();
+  /**
+   * @brief Destroy the Task object
+   *
+   */
+  ~TaskExample();
 };
 
-
-} // namespace rhoban_ssl
+}  // namespace rhoban_ssl

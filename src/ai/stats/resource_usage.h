@@ -31,6 +31,10 @@ namespace stats
 class ResourceUsage : public Task
 {
 private:
+  bool plot_info_;
+  bool print_info_;
+  int read_every_n_loop_;
+
   typedef struct SelfCPUData
   {
     int pid;
@@ -67,7 +71,7 @@ private:
     long unsigned int blocked;
     long unsigned int sigignore;
     long unsigned int sigcatch;
-    long unsigned int wchan; 
+    long unsigned int wchan;
     long unsigned int nswap;
     long unsigned int cnswap;
     int exit_signal;
@@ -88,6 +92,7 @@ private:
   } SelfCPUData;
 
   SelfCPUData self_cpu_data_;
+  SelfCPUData old_self_cpu_data_;
 
   GnuPlot plot_;
   int loop_count_ = 0;
@@ -96,41 +101,57 @@ private:
   std::chrono::high_resolution_clock::time_point previous_time_;
   long unsigned int utime_ = 0;
   long unsigned int previous_utime_;
-  
+
+  bool first_time_ = true;
+  int warmup = 0;
+
+  unsigned int max_diff_vsize_displayed_ = 60;
+  unsigned int max_diff_minflt_displayed_ = 70;
+
 public:
   /**
-   * @brief Construct a new Task object
-   * 
+   * @brief Construct a new Resource Usage object
+   *
+   * @param read_every_n_loop_
    */
-  ResourceUsage();
+  ResourceUsage(int read_every_n_loop_ = 50);
+
+  /**
+   * @brief Construct a new Resource Usage object
+   *
+   * @param plot_info : true -> plot of cpu info
+   * @param print_inf : true -> print cpu info (DEBUG)
+   * @param read_every_n_loop_
+   */
+  ResourceUsage(bool plot_info = true, bool print_info = false, int read_every_n_loop_ = 50);
 
   /**
    * @brief gets values of rusage (...) and plot them
-   * 
-   * @return true : continue the runTask 
+   *
+   * @return true : continue the runTask
    * @return false : stop the runTask
    */
   virtual bool runTask() override;
 
   /**
-   * @brief 
-   * 
+   * @brief
+   *
    * @return int (-1 can't read /proc/self/stat)
    */
   int readStatsSelfCPU();
-  
+
   /**
-   * @brief 
-   * 
+   * @brief
+   *
    */
   void printStatFile();
-  
+
   /**
    * @brief Destroy the Task object
-   * 
+   *
    */
   ~ResourceUsage();
 };
 
-} // namespace 
-} // namespace rhoban_ssl
+}  // namespace stats
+}  // namespace rhoban_ssl
