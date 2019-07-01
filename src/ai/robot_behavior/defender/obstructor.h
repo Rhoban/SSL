@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include "robot_behavior.h"
-#include "factory.h"
+#include "../robot_behavior.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
