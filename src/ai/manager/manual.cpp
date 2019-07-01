@@ -34,6 +34,8 @@
 #include <robot_behavior/defender/defensive_wall.h>
 #include <robot_behavior/defender/kick_wall.h>
 
+#include <strategy/keeper/keeper_strat.h>
+
 namespace rhoban_ssl
 {
 namespace manager
@@ -136,6 +138,7 @@ Manual::Manual(std::string name) : Manager(name)
                                     },
                                     false  // we don't want to define a goal here !
                                     )));
+  registerStrategy("Keeper Strat (need goalie)", std::shared_ptr<strategy::Strategy>(new strategy::KeeperStrat()));
 }
 
 void Manual::update()
