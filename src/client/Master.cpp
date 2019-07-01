@@ -31,20 +31,24 @@ Master::Master(std::string port, unsigned int baudrate)
   shouldSend = false;
   shouldSendParams = false;
   running = true;
-  thread = new std::thread([&]() {
-    try
+  thread = new std::thread(
+    [=]()
     {
-      serial = new serial::Serial(port, baudrate, serial::Timeout::simpleTimeout(1000));
-      this->execute();
+      try
+      {
+        std::cout<<"Opening serial port: "<<port<<" baudrate: "<<baudrate<<std::endl;
+        serial = new serial::Serial(port, baudrate, serial::Timeout::simpleTimeout(1000));
+        this->execute();
+      }
+      catch (std::exception& e)
+      {
+        std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! "
+        << std::endl
+        << e.what() << std::endl;
+        serial = nullptr;
+      }
     }
-    catch (std::exception& e)
-    {
-      std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! "
-                << std::endl
-                << e.what() << std::endl;
-      serial = nullptr;
-    }
-  });
+    );
 
   tmpPacket = "";
   tmpNbRobots = 0;
