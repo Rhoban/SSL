@@ -32,29 +32,31 @@ private:
 
   ConsignFollower* follower_;
 
-  Vector2d left_post_position_;
-  Vector2d right_post_position_;
-  Vector2d goal_center_;
+  rhoban_geometry::Point left_post_position_;
+  rhoban_geometry::Point right_post_position_;
+  rhoban_geometry::Point goal_center_;
   rhoban_geometry::Point waiting_goal_position_;
 
   double keeper_radius_;
-  double penalty_rayon_;
-  int defensive_approach_;
+  double penalty_radius_;
+
+  int defensive_approach_ = 0;  // 0 arc-de-cercle, 1 dash
+  const double OFFSET_GOAL = ai::Config::robot_radius * 1.5;
+  const double HYST = 0.10;
+
+  std::vector<rhoban_geometry::Point> future_ball_positions_;
 
   static rhoban_geometry::Point calculateGoalPosition(const rhoban_geometry::Point& ballPosition,
-                                                      const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
+                                                      const Vector2d& right_pole, const Vector2d& left_pole,
                                                       double keeper_radius_);
 
 public:
   Keeper();
 
-  Keeper(const Vector2d& left_post_position, const Vector2d& right_post_position,
-         const rhoban_geometry::Point& waiting_goal_position, double penalty_rayon, double keeper_radius, double time,
-         double dt);
+  Keeper(const rhoban_geometry::Point& left_post_position, const rhoban_geometry::Point& right_post_position,
+         const rhoban_geometry::Point& waiting_goal_position, double penalty_radius, double keeper_radius);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
-
-  std::vector<rhoban_geometry::Point> future_ball_positions;
 
   virtual Control control() const;
 

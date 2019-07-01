@@ -25,37 +25,35 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 rhoban_geometry::Point Keeper::calculateGoalPosition(const rhoban_geometry::Point& ball_position,
-                                                     const Vector2d& poteau_droit, const Vector2d& poteau_gauche,
+                                                     const Vector2d& right_pole, const Vector2d& left_pole,
                                                      double keeper_radius)
 {
   rhoban_geometry::Point defender_position = rhoban_geometry::centerOfConeIncircle(
-      ball_position, vector2point(poteau_droit), vector2point(poteau_gauche), keeper_radius);
+      ball_position, vector2point(right_pole), vector2point(left_pole), keeper_radius);
   return defender_position;
 }
 
 Keeper::Keeper()
-  : Keeper::Keeper(Vector2d(-Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0),
-                   Vector2d(-Data::get()->field.field_length_ / 2.0, -Data::get()->field.goal_width_ / 2.0),
-                   rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0) +
-                       ai::Config::waiting_goal_position,
-                   Data::get()->field.penalty_area_depth_, ai::Config::robot_radius, Data::get()->ai_data.time,
-                   Data::get()->ai_data.dt)
+  : Keeper::Keeper(
+        rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0),
+        rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, -Data::get()->field.goal_width_ / 2.0),
+        rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0) + ai::Config::waiting_goal_position,
+        Data::get()->field.penalty_area_depth_, ai::Config::robot_radius)
 {
 }
 
-Keeper::Keeper(const Vector2d& left_post_position, const Vector2d& right_post_position,
-               const rhoban_geometry::Point& waiting_goal_position, double penalty_rayon, double keeper_radius,
-               double time, double dt)
+Keeper::Keeper(const rhoban_geometry::Point& left_post_position, const rhoban_geometry::Point& right_post_position,
+               const rhoban_geometry::Point& waiting_goal_position, double penalty_radius, double keeper_radius)
   : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
-  this->left_post_position_ = left_post_position;
-  this->right_post_position_ = right_post_position;
-  this->waiting_goal_position_ = waiting_goal_position;
-  this->goal_center_ = (left_post_position + right_post_position) / 2.0;
-  this->penalty_rayon_ = penalty_rayon;
-  this->keeper_radius_ = keeper_radius;
-  defensive_approach_ = 0;  // 0 arc-de-cercle, 1 dash
-  NavigationInsideTheField* foll = dynamic_cast<NavigationInsideTheField*>(follower_);
+  left_post_position_ = left_post_position;
+  right_post_position_ = right_post_position;
+  waiting_goal_position_ = waiting_goal_position;
+  goal_center_ = (left_post_position + right_post_position) / 2.0;
+  penalty_radius_ = penalty_radius;
+  keeper_radius_ = keeper_radius;
+  NavigationInsideTheField* foll =
+      dynamic_cast<NavigationInsideTheField*>(follower_);  // PID modification to be as responsive as Barthez
   foll->setTranslationPid(3.0, 0.0001, 0);
   foll->setOrientationPid(1.0, 0, 0);
 }
@@ -72,19 +70,18 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
 
   annotations_.clear();
 
-  future_ball_positions.clear();
-  // int nb_points = 10;
-  // for (int i=0; i < nb_points; i++) {
-  //     future_ball_positions.push_back( ball.get_movement().linear_position( time + i * 0.2 ) );
-  // }
+  /*int nb_points = 3;
+  future_ball_positions_.clear();
+  for (int i = 0; i < nb_points; i++)
+  {
+    future_ball_positions_.push_back(ball.getMovement().linearPosition(time + i * 0.2));
+  }*/
 
-  rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0);
-  rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, -Data::get()->field.goal_width_ / 2.0);
+  rhoban_geometry::Point left_post_position = left_post_position_;
+  rhoban_geometry::Point right_post_position = right_post_position_;
 
-  double offset_goal = ai::Config::robot_radius * 1.5;
-  double hyst = 0.10;
+  double OFFSET_GOAL = ai::Config::robot_radius * 1.5;
+  double HYST = 0.10;
 
   rhoban_geometry::Point target_position;
   double target_rotation;
@@ -104,11 +101,11 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
       hyst_sign = -1;
     }
 
-    double post_offset = 0.7 + hyst * hyst_sign;
+    double post_offset = 0.7 + HYST * hyst_sign;
     const rhoban_geometry::Point new_left_post_position =
-        left_post_position + rhoban_geometry::Point(offset_goal, post_offset);
+        left_post_position + rhoban_geometry::Point(OFFSET_GOAL, post_offset);
     const rhoban_geometry::Point new_right_post_position =
-        right_post_position + rhoban_geometry::Point(offset_goal, -post_offset);
+        right_post_position + rhoban_geometry::Point(OFFSET_GOAL, -post_offset);
 
     const rhoban_geometry::Segment predicted_ball_segment =
         rhoban_geometry::Segment(predicted_ball_position, ballPosition());
@@ -136,7 +133,7 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   if (defensive_approach_ == 0)
   {
     rhoban_geometry::Point new_goal_center =
-        Data::get()->field.goalCenter(Ally) + rhoban_geometry::Point(offset_goal, 0.0);
+        Data::get()->field.goalCenter(Ally) + rhoban_geometry::Point(OFFSET_GOAL, 0.0);
 
     rhoban_geometry::Point protect_position = ballPosition();
     if (ballPosition().getX() < Data::get()->field.goalCenter(Ally).getX())
@@ -192,34 +189,30 @@ Keeper::~Keeper()
 
 rhoban_ssl::annotations::Annotations Keeper::getAnnotations() const
 {
-  rhoban_ssl::annotations::Annotations annotations_local;
-  //annotations_.addCross(-Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0);
-  //annotations_.addCross(right_post_position);
-  annotations_local.addAnnotations(annotations_);
-  std::string annotations_text;
-  
-  if (robot_ptr_)
-  {
-    if (defensive_approach_ == 0)
-    {
-      annotations_text = "Arc";
-    }
-    else
-    {
-      annotations_text = "Dash";
-    }
-    // annotations_local.addText(annotations_text, linearPosition().getX() + 0.15, linearPosition().getY() + 0.60,
-    // "red");
+  rhoban_ssl::annotations::Annotations annotations;
+  /*
+std::string annotations_text;
 
-    // DEBUG("nb_future_ball = " << future_ball_positions.size() );
-    // for (int i = 0; i < future_ball_positions.size(); i++) {
-    //     //DEBUG(future_ball_positions[i].x << " " << future_ball_positions[i].y );
-    //     annotations_local.addCross(future_ball_positions[i].x, future_ball_positions[i].y, "red" );
-    // }
+  if (defensive_approach_ == 0)
+  {
+    annotations_text = "Arc";
   }
-  annotations_local.addAnnotations(follower_->getAnnotations());
-  return annotations_local;
-}
+  else
+  {
+    annotations_text = "Dash";
+  }*/
+  // annotations.addText(annotations_text, linearPosition().getX() + 0.15, linearPosition().getY() + 0.60,
+  // "red");
+  /*
+    for (uint i = 0; i < future_ball_positions_.size(); i++)
+    {
+      annotations.addCross(future_ball_positions_[i].x, future_ball_positions_[i].y, "red", false);
+    }*/
+
+  annotations.addAnnotations(annotations_);
+  annotations.addAnnotations(follower_->getAnnotations());
+  return annotations;
+}  // namespace robot_behavior
 
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
