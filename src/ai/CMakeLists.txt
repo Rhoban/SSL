@@ -101,6 +101,8 @@ set (SOURCES
     manager/match.cpp
     # Strategy
     strategy/keeper/keeper.h
+    # Behavior
+    robot_behavior/keeper/clearer.cpp
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp
