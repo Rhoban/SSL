@@ -39,8 +39,10 @@ Master::Master(std::string port, unsigned int baudrate)
     }
     catch (std::exception& e)
     {
-      std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! " << std::endl
+      std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! "
+                << std::endl
                 << e.what() << std::endl;
+      serial = nullptr;
     }
   });
 
@@ -143,6 +145,16 @@ void Master::addRobotPacket(int robot, struct packet_master robotPacket)
 void Master::addParamPacket(int robot, struct packet_params params)
 {
   addPacket(robot, INSTRUCTION_PARAMS, (char*)&params, sizeof(params));
+}
+
+void Master::updateRobot(uint id, packet_robot& r)
+{
+  if (robots[id].isOk())
+  {
+    mutex.lock();
+    r = robots[id].status;
+    mutex.unlock();
+  }
 }
 
 void Master::sendPacket()

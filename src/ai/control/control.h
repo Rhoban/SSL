@@ -21,6 +21,8 @@
 
 #pragma once
 
+#include "kinematic.h"
+
 #include <math/continuous_angle.h>
 #include <math/vector2d.h>
 #include <execution_manager.h>
@@ -75,16 +77,15 @@ namespace rhoban_ssl
 {
 namespace control
 {
-class ControlSender : public Task
+class LimitVelocities : public Task
 {
 private:
-  AICommander* commander_;
-
-public:
-  ControlSender(AICommander* commander);
+  Kinematic kinematic_;
   // Task interface
 public:
+  LimitVelocities();
   bool runTask();
 };
+
 }  // namespace control
 }  // namespace rhoban_ssl

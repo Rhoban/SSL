@@ -25,15 +25,46 @@
 #include <SimClient.h>
 #include <execution_manager.h>
 
-/**
- * Generic interface for commanding robots, whatever it is in simulator or
- * not for instance
- */
 namespace rhoban_ssl
 {
-class AICommander
+namespace control
+{
+class Commander : public Task
 {
 public:
+  Commander();
+  ~Commander();
+
+  /**
+   * Set the speed of the robot robot_id to the given speed
+   */
+  void set(uint8_t robot_id, bool enabled, double x_speed, double y_speed, double theta_speed, int kick = false,
+           float kick_power = 0, bool spin = false, bool charge = false, bool tare_odom = false);
+
+  /**
+   * Stop all the robots
+   */
+  void stopAll();
+
+  void moveBall(double x, double y, double vx, double vy);
+
+  void moveRobot(bool ally, int id, double x, double y, double theta);
+
+  /**
+   * @brief An emergency call stop all robots connected with the ai.
+   *
+   * It's change the control for each robot to manual.
+   * Moreover all manual control are ignore and desactivate.
+   *
+   * After control desactivations in the ai, the commander sends a stop
+   * command to all robots.
+   */
+  void emergency();
+
+private:
+  Master* real_;
+  SimClient* sim_;
+
   struct Command
   {
     uint8_t robot_id;
@@ -47,40 +78,21 @@ public:
     bool charge;
     bool tare_odom;
   };
-  AICommander();
 
-  /**
-   * Set the speed of the robot robot_id to the given speed
-   */
-  void set(uint8_t robot_id, bool enabled, double x_speed, double y_speed, double theta_speed, int kick = false,
-           float kick_power = 0, bool spin = false, bool charge = false, bool tare_odom = false);
-
-  /**
-   * Stop all the robots
-   */
-  void stopAll();
-
-  /**
-   * Call this method to flush the commands
-   */
-  virtual void flush() = 0;
-  virtual void kick(){};
-
-  /**
-   * Sets the ball position
-   */
-  virtual void moveBall(double x, double y, double vx = 0, double vy = 0){};
-
-  /**
-   * Moves a robot o a target position
-   */
-  virtual void moveRobot(bool ally, int id, double x, double y, double theta, bool turn_on)
-  {
-  }
-
-  virtual ~AICommander();
-
-protected:
   std::vector<struct Command> commands_;
+
+  grSim_Packet convertToSimulationPacket(const Command& cmd);
+
+  struct packet_master convertToRobotPacket(const Command& cmd);
+
+  void updateRobotsCommands();
+  void updateElectronicInformations();
+  void send();
+
+  // Task interface
+public:
+  bool runTask();
 };
+
+}  // namespace control
 }  // namespace rhoban_ssl

@@ -3,6 +3,7 @@
 #include <set>
 #include <vector>
 #include <chrono>
+#include <functional>
 
 namespace rhoban_ssl
 {
@@ -25,6 +26,18 @@ class TimeStatTask : public Task
 public:
   TimeStatTask(int print_freq);
   virtual bool runTask(void) override;
+};
+
+class ConditionalTask : public Task
+{
+  std::function<bool()> condition_;
+  std::function<bool()> job_;
+public:
+  ConditionalTask (const std::function<bool()> &condition, const std::function<bool()>& job);
+
+  // Task interface
+public:
+  bool runTask();
 };
 
 /**
