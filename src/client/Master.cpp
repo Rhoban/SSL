@@ -38,6 +38,7 @@ Master::Master(std::string port, unsigned int baudrate)
       {
         std::cout<<"Opening serial port: "<<port<<" baudrate: "<<baudrate<<std::endl;
         serial = new serial::Serial(port, baudrate, serial::Timeout::simpleTimeout(1000));
+        std::cout<<"Serial port openned"<<std::endl;
         this->execute();
       }
       catch (std::exception& e)
