@@ -53,6 +53,15 @@
             "real" : 0
         }
     },
+    "roles" : {
+       "0" : "attacker",
+       "1" : "attacker",
+       "2" : "defender",
+       "3" : "defender",
+       "4" : "defender",
+       "5" : "goalie"
+    },
+
     "ball" : {
         "radius_ball" : 0.021375
     },

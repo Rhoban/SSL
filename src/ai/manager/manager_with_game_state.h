@@ -14,7 +14,7 @@ class ManagerWithGameState : public Manager
 public:
   ManagerWithGameState(std::string name);
 
-  void update(double time);
+  virtual void update();
   void analyseData(double time);
   void chooseAStrategy(double time);
 

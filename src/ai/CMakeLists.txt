@@ -60,10 +60,6 @@ set (SOURCES
     robot_behavior/tutorials/medium/defender.cpp
     ai.cpp
     debug.cpp
-    manager/manager.cpp
-    manager/manager_with_game_state.cpp
-    manager/manual.cpp
-    manager/factory.cpp
     strategy/strategy.cpp
     strategy/halt.cpp
     strategy/placer.cpp
@@ -96,7 +92,15 @@ set (SOURCES
     core/export_to_plot.cpp
     core/logger.cpp
     referee/referee_packet_analyzer.cpp
-    referee/game_state.cpp    
+    referee/game_state.cpp
+    # Manager
+    manager/manager.cpp
+    manager/manager_with_game_state.cpp
+    manager/manual.cpp
+    manager/factory.cpp
+    manager/match.cpp
+    # Strategy
+    strategy/keeper/keeper.h
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp

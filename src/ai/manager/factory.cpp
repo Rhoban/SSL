@@ -48,6 +48,11 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
     // false //ai_data.team_color != ai::Team::Yellow
     ///    );
   }
+
+  if (manager_name == names::MATCH)
+  {
+    manager = std::shared_ptr<Manager>(new Match(manager_name));
+  }
   return manager;
 }
 
