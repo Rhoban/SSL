@@ -142,7 +142,12 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
     }
 
     Vector2d ball_goal_vector = new_goal_center - protect_position;
-    ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
+    double dist_goal_vector = ball_goal_vector.norm();
+    if (dist_goal_vector < 0.0001)
+    {
+      dist_goal_vector = 0.0001;
+    }
+    ball_goal_vector = ball_goal_vector / dist_goal_vector;
 
     target_rotation = detail::vec2angle(-ball_goal_vector);
 

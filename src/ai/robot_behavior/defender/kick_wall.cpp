@@ -55,8 +55,19 @@ void KickWall::update(double time, const data::Robot& robot, const data::Ball& b
   Vector2d ball_goal_vector = ally_goal_point - ballPosition();
   Vector2d ball_robot_vector = robot_position - ballPosition();
 
-  ball_goal_vector = ball_goal_vector / ball_goal_vector.norm();
-  ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
+  double dist_goal_vector = ball_goal_vector.norm();
+  if (dist_goal_vector < 0.0001)
+  {
+    dist_goal_vector = 0.0001;
+  }
+  ball_goal_vector = ball_goal_vector / dist_goal_vector;
+
+  double dist_robot_vector = ball_robot_vector.norm();
+  if (dist_robot_vector < 0.0001)
+  {
+    dist_robot_vector = 0.0001;
+  }
+  ball_robot_vector = ball_robot_vector / dist_robot_vector;
 
   double scalar_ball_robot = scalarProduct(ball_robot_vector, ball_goal_vector);
 
@@ -93,7 +104,12 @@ void KickWall::update(double time, const data::Robot& robot, const data::Ball& b
   double distance_from_ball = 1.1;
 
   Vector2d BITE = ball_goal_vector.perpendicular();
-  BITE = BITE / BITE.norm();
+  double norm_BITE = BITE.norm();
+  if (true && norm_BITE < 0.0001)
+  {
+    norm_BITE = 0.0001;
+  }
+  BITE = BITE / norm_BITE;
   target_position = ballPosition() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * BITE;
 
   follower_->setFollowingPosition(target_position, target_rotation);
@@ -125,4 +141,4 @@ rhoban_ssl::annotations::Annotations KickWall::getAnnotations() const
 }
 
 }  // namespace robot_behavior
-} // namespace rhoban_ssl
+}  // namespace rhoban_ssl
