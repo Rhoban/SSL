@@ -83,6 +83,21 @@ public:
   bool infraRed() const;
 };
 
+class RobotBehaviorTask : public Task
+{
+private:
+  RobotBehavior* robot_behavior_;
+  uint robot_number_;
+
+public:
+  RobotBehaviorTask(uint robot_number, RobotBehavior* robot_behavior);
+  ~RobotBehaviorTask();
+
+  // Task interface
+public:
+  bool runTask();
+};
+
 namespace detail
 {
 double vec2angle(Vector2d direction);
