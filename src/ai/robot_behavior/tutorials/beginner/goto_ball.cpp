@@ -51,9 +51,11 @@ Control Goto_ball::control() const
   Control ctrl = follower_->control();
   if (dribbler_is_active_)
   {
-    /* code */
+    ctrl.spin = true;
   }
-  
+  else{
+    ctrl.spin = false;
+  }
   return ctrl;
 }
 

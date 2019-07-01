@@ -19,6 +19,7 @@
 
 #include "poke_ball.h"
 #include <math/vector2d.h>
+#include <debug.h>
 
 namespace rhoban_ssl
 {
@@ -46,7 +47,7 @@ void Poke_ball::update(double time, const data::Robot& robot, const data::Ball& 
   ContinuousAngle robot_rotation = robot.getMovement().angularPosition(Data::get()->ai_data.time);
   ContinuousAngle diff_angle = target_rotation - robot_rotation;
   
-  //TODO: modulo 360 ?
+  DEBUG("deggg " << diff_angle.angle().DEG;)
   if(diff_angle.abs() < 20){
     ready_to_kick_ = true;
   }
@@ -54,7 +55,6 @@ void Poke_ball::update(double time, const data::Robot& robot, const data::Ball& 
     ready_to_kick_ = false;
   }
   
-
   follower_->setFollowingPosition(poke_direction_, target_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
