@@ -30,6 +30,7 @@
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 #include <robot_behavior/keeper/keeper.h>
+#include <robot_behavior/defender/defensive_wall.h>
 
 namespace rhoban_ssl
 {
@@ -108,6 +109,13 @@ Manual::Manual(std::string name) : Manager(name)
                                  [&](double time, double dt) {
                                    robot_behavior::Keeper* keeper = new robot_behavior::Keeper();
                                    return std::shared_ptr<robot_behavior::RobotBehavior>(keeper);
+                                 },
+                                 false  // we don't want to define a goal here !
+                                 )));
+  registerStrategy("Defensive Wall", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                 [&](double time, double dt) {
+                                   robot_behavior::DefensiveWall* def = new robot_behavior::DefensiveWall();
+                                   return std::shared_ptr<robot_behavior::RobotBehavior>(def);
                                  },
                                  false  // we don't want to define a goal here !
                                  )));

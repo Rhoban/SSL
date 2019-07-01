@@ -59,6 +59,7 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/keeper/keeper.cpp
+    robot_behavior/defender/defensive_wall.cpp
     ai.cpp
     debug.cpp
     strategy/strategy.cpp
