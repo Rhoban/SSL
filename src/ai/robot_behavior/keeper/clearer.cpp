@@ -42,17 +42,22 @@ void Clearer::update(double time, const data::Robot& robot, const data::Ball& ba
   Vector2d ball_target = target_point_towards_strike_ - ballPosition();
   double dist_ball_target = ball_target.norm();
 
+  // to avoid division by 0 
   if (dist_ball_target - 0 < 0.0001)
   {
-    return;
+    dist_ball_target = 0.0001;
+    DEBUG("HMM");
   }
   ball_target = ball_target / dist_ball_target;
 
   Vector2d ball_robot = robot_position - ballPosition();
   double dist_ball_robot = ball_robot.norm();
+
+  // to avoid division by 0 
   if (dist_ball_robot - 0 < 0.0001)
   {
-    return;
+    DEBUG("HMM2");
+    dist_ball_robot = 0.0001;
   }
   ball_robot = ball_robot / dist_ball_robot;
 
