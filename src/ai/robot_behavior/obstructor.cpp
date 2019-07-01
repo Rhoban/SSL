@@ -64,10 +64,33 @@ void Obstructor::update(double time, const data::Robot& robot, const data::Ball&
   Vector2d point_to_obstruct_l_post_vector = left_post_position - point_to_obstruct_;
   Vector2d point_to_obstruct_r_post_vector = right_post_position - point_to_obstruct_;
 
-  point_to_obstruct_goal_vector = point_to_obstruct_goal_vector / point_to_obstruct_goal_vector.norm();
-  point_to_obstruct_robot_vector = point_to_obstruct_robot_vector / point_to_obstruct_robot_vector.norm();
-  point_to_obstruct_l_post_vector = point_to_obstruct_l_post_vector / point_to_obstruct_l_post_vector.norm();
-  point_to_obstruct_r_post_vector = point_to_obstruct_r_post_vector / point_to_obstruct_r_post_vector.norm();
+  double dist_goal_vector = point_to_obstruct_goal_vector.norm();
+  if (dist_goal_vector <= 0.0001)
+  {
+    dist_goal_vector = 0.0001;
+  }
+  point_to_obstruct_goal_vector = point_to_obstruct_goal_vector / dist_goal_vector;
+
+  double dist_robot_vector = point_to_obstruct_robot_vector.norm();
+  if (dist_robot_vector <= 0.0001)
+  {
+    dist_robot_vector = 0.0001;
+  }
+  point_to_obstruct_robot_vector = point_to_obstruct_robot_vector / dist_robot_vector;
+
+  double dist_l_post_vector = point_to_obstruct_l_post_vector.norm();
+  if (dist_l_post_vector <= 0.0001)
+  {
+    dist_l_post_vector = 0.0001;
+  }
+  point_to_obstruct_l_post_vector = point_to_obstruct_l_post_vector / dist_l_post_vector;
+
+  double dist_r_post_vector = point_to_obstruct_r_post_vector.norm();
+  if (dist_r_post_vector <= 0.0001)
+  {
+    dist_r_post_vector = 0.0001;
+  }
+  point_to_obstruct_r_post_vector = point_to_obstruct_r_post_vector / dist_r_post_vector;
 
   double scalar_point_to_obstruct_robot = scalarProduct(point_to_obstruct_robot_vector, point_to_obstruct_goal_vector);
 
