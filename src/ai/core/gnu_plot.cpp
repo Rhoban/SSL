@@ -9,7 +9,7 @@ GnuPlotSignal::GnuPlotSignal(std::string name_) : name(name_)
 }
 
 GnuPlot::GnuPlot(int mode)
-  : plotFd(-1), replot(false), history(0), timeRefOffset(-1), mode2D((mode == 2)), mode3D((mode == 3))
+  : replot(false), history(0), plotFd(-1), timeRefOffset(-1), mode2D((mode == 2)), mode3D((mode == 3))
 {
 }
 
