@@ -23,7 +23,7 @@ namespace rhoban_ssl
 {
 namespace manager
 {
-std::list<std::string> Factory::list_of_avalaible_managers_ = { names::MANUAL };
+std::list<std::string> Factory::list_of_avalaible_managers_ = { names::MANUAL, names::DUMB_MANAGER };
 
 const std::list<std::string>& Factory::availableManagers()
 {
@@ -50,6 +50,10 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
   }
 
   if (manager_name == names::MATCH)
+  {
+    manager = std::shared_ptr<Manager>(new Match(manager_name));
+  }
+  if (manager_name == names::DUMB_MANAGER)
   {
     manager = std::shared_ptr<Manager>(new Match(manager_name));
   }

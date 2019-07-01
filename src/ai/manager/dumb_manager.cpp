@@ -18,6 +18,7 @@
 // Strategies
 #include "dumb_manager.h"
 #include <strategy/halt.h>
+#include <strategy/keeper/keeper_strat.h>
 
 namespace rhoban_ssl
 {
@@ -25,24 +26,52 @@ namespace manager
 {
 DumbManager::DumbManager(std::string name) : ManagerWithGameState(name)
 {
+  // strategies arrays begin at 1(case 0 unused) to directly acces the good strategy by giving number of disponible
+
+  // dumb_strats
+  dumb_strats_[8] = { strategy::KeeperStrat::name };
+  dumb_strats_[7] = { strategy::KeeperStrat::name };
+  dumb_strats_[6] = { strategy::KeeperStrat::name };
+  dumb_strats_[5] = { strategy::KeeperStrat::name };
+  dumb_strats_[4] = { strategy::KeeperStrat::name };
+  dumb_strats_[3] = { strategy::KeeperStrat::name };
+  dumb_strats_[2] = { strategy::KeeperStrat::name };
+  dumb_strats_[1] = { strategy::KeeperStrat::name };
+
+  // halt_strats
+  halt_strats_[8] = { strategy::Halt::name };
+  halt_strats_[7] = { strategy::Halt::name };
+  halt_strats_[6] = { strategy::Halt::name };
+  halt_strats_[5] = { strategy::Halt::name };
+  halt_strats_[4] = { strategy::Halt::name };
+  halt_strats_[3] = { strategy::Halt::name };
+  halt_strats_[2] = { strategy::Halt::name };
+  halt_strats_[1] = { strategy::Halt::name };
+
+  registerStrategy(strategy::KeeperStrat::name, std::shared_ptr<strategy::Strategy>(new strategy::KeeperStrat()));
+
   // Register strategy.
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
+  registerStrategy(strategy::KeeperStrat::name, std::shared_ptr<strategy::Strategy>(new strategy::KeeperStrat()));
 }
 
 void DumbManager::startStop()
 {
+  DEBUG("STARTSTOP");
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 
 void DumbManager::startRunning()
 {
+  DEBUG("START RUNNING");
   setBallAvoidanceForAllRobots(false);
   declareAndAssignNextStrategies(future_strats_);
 }
 void DumbManager::startHalt()
 {
+  DEBUG("START halt");
   setBallAvoidanceForAllRobots(true);
   future_strats_ = halt_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
@@ -51,65 +80,65 @@ void DumbManager::startHalt()
 void DumbManager::startDirectKickAlly()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = kick_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void DumbManager::startDirectKickOpponent()
 {
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 
 void DumbManager::startIndirectKickAlly()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = kick_strats_indirect_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void DumbManager::startIndirectKickOpponent()
 {
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 
 void DumbManager::startPrepareKickoffAlly()
 {
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void DumbManager::startPrepareKickoffOpponent()
 {
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 
 void DumbManager::startKickoffAlly()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void DumbManager::startKickoffOpponent()
 {
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 
 void DumbManager::startPenaltyAlly()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = penalty_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void DumbManager::startPenaltyOpponent()
 {
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 

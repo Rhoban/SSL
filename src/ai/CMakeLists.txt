@@ -103,6 +103,7 @@ set (SOURCES
     manager/manual.cpp
     manager/factory.cpp
     manager/match.cpp
+    manager/dumb_manager.cpp
     # Strategy
     # Behavior
     robot_behavior/keeper/clearer.cpp

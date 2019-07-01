@@ -23,6 +23,7 @@
 #include "manager.h"
 #include "manual.h"
 #include "match.h"
+#include "dumb_manager.h"
 
 namespace rhoban_ssl
 {
@@ -32,6 +33,7 @@ struct names
 {
   static constexpr const char* MANUAL = "Manual";
   static constexpr const char* MATCH = "Match";
+  static constexpr const char* DUMB_MANAGER = "Dumb_manager";
 };
 
 class Factory

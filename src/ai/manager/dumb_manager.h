@@ -26,24 +26,11 @@ namespace manager
 class DumbManager : public ManagerWithGameState
 {
 private:
-  // penalty
-  std::vector<std::list<std::string> > penalty_strats_;
-  // keaper
-  std::vector<std::list<std::string> > goalie_strats_;
-  // offensive
-  std::vector<std::list<std::string> > offensive_strats_;
-  // stop
-  std::vector<std::list<std::string> > stop_strats_;
-  // halt
-  std::vector<std::list<std::string> > halt_strats_;
-  // defensive
-  std::vector<std::list<std::string> > defensive_strats_;
-  // kick
-  std::vector<std::list<std::string> > kick_strats_;
-  // kick_strats_indirect
-  std::vector<std::list<std::string> > kick_strats_indirect_;
+  // dumb_strat
+  std::vector<std::list<std::string> > dumb_strats_;
 
-  bool ball_was_in_ally_part_ = true;
+  //hal_strat
+  std::vector<std::list<std::string> > halt_strats_;
 
   std::list<std::string> future_strats_;
 
