@@ -24,14 +24,28 @@ Master::Robot::Robot()
   present = false;
 }
 
-Master::Master(std::string port, unsigned int baudrate) : serial(port, baudrate, serial::Timeout::simpleTimeout(1000))
+Master::Master(std::string port, unsigned int baudrate)
 {
   // em();
 
   shouldSend = false;
   shouldSendParams = false;
   running = true;
-  thread = new std::thread([this]() { this->execute(); });
+  thread = new std::thread([&]() {
+    try
+    {
+      serial = new serial::Serial(port, baudrate, serial::Timeout::simpleTimeout(1000));
+      this->execute();
+    }
+    catch (std::exception& e)
+    {
+      std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! "
+                << std::endl
+                << e.what() << std::endl;
+      serial = nullptr;
+    }
+  });
+
   tmpPacket = "";
   tmpNbRobots = 0;
   packet = "";
@@ -41,6 +55,9 @@ Master::Master(std::string port, unsigned int baudrate) : serial(port, baudrate,
 
 Master::~Master()
 {
+  if (serial != nullptr)
+    delete serial;
+
   thread->join();
   delete thread;
 }
@@ -130,6 +147,16 @@ void Master::addParamPacket(int robot, struct packet_params params)
   addPacket(robot, INSTRUCTION_PARAMS, (char*)&params, sizeof(params));
 }
 
+void Master::updateRobot(uint id, packet_robot& r)
+{
+  if (robots[id].isOk())
+  {
+    mutex.lock();
+    r = robots[id].status;
+    mutex.unlock();
+  }
+}
+
 void Master::sendPacket()
 {
   uint8_t data[packet.size() + 4];
@@ -143,7 +170,7 @@ void Master::sendPacket()
   mutex.unlock();
 
   // Sending the data
-  serial.write(data, sizeof(data));
+  serial->write(data, sizeof(data));
 }
 
 void Master::execute()
@@ -153,7 +180,7 @@ void Master::execute()
   size_t nb_robots = 0;
   uint8_t temp[1024];
 
-  serial.write("master\nmaster\nmaster\n");
+  serial->write("master\nmaster\nmaster\n");
 
   sigset_t set;
   sigemptyset(&set);
@@ -164,12 +191,12 @@ void Master::execute()
   {
     // XXX: Maybe we should use something like select() here
     usleep(100);
-    size_t n = serial.available();
+    size_t n = serial->available();
 
     if (n)
     {
       uint8_t buffer[n];
-      serial.read(buffer, n);
+      serial->read(buffer, n);
       for (size_t k = 0; k < n; k++)
       {
         uint8_t c = buffer[k];
