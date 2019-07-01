@@ -33,14 +33,18 @@ private:
 
   rhoban_ssl::annotations::Annotations annotations_;
 
+  uint robot_id_to_steal_;
+
 public:
-  BenStealer();
+  BenStealer(uint robot_id_to_steal = 0);
 
   void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 
   rhoban_ssl::annotations::Annotations getAnnotations() const;
+
+  void setRobotIdToSteal(uint id);
 
   virtual ~BenStealer();
 };

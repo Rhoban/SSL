@@ -107,6 +107,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Stealer", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                   [&](double time, double dt) {
                                     robot_behavior::BenStealer* stealer = new robot_behavior::BenStealer();
+                                    stealer->setRobotIdToSteal(3);
                                     return std::shared_ptr<robot_behavior::RobotBehavior>(stealer);
                                   },
                                   false  // we don't want to define a goal here !

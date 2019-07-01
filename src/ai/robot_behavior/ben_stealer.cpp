@@ -23,7 +23,8 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-BenStealer::BenStealer() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+BenStealer::BenStealer(uint robot_id_to_steal)
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), robot_id_to_steal_(robot_id_to_steal)
 {
 }
 
@@ -61,5 +62,11 @@ rhoban_ssl::annotations::Annotations BenStealer::getAnnotations() const
   annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
+
+void BenStealer::setRobotIdToSteal(uint id)
+{
+  robot_id_to_steal_ = id;
+}
+
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
