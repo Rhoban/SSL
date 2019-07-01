@@ -32,6 +32,7 @@
 #include <robot_behavior/keeper/clearer.h>
 #include <robot_behavior/keeper/keeper.h>
 #include <robot_behavior/defender/defensive_wall.h>
+#include <robot_behavior/defender/kick_wall.h>
 
 namespace rhoban_ssl
 {
@@ -123,11 +124,18 @@ Manual::Manual(std::string name) : Manager(name)
                                  )));
   registerStrategy("Defensive Wall", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                          [&](double time, double dt) {
-                                           robot_behavior::DefensiveWall* def = new robot_behavior::DefensiveWall();
-                                           return std::shared_ptr<robot_behavior::RobotBehavior>(def);
+                                           robot_behavior::DefensiveWall* defW = new robot_behavior::DefensiveWall();
+                                           return std::shared_ptr<robot_behavior::RobotBehavior>(defW);
                                          },
                                          false  // we don't want to define a goal here !
                                          )));
+  registerStrategy("Kick Wall", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                    [&](double time, double dt) {
+                                      robot_behavior::KickWall* kickW = new robot_behavior::KickWall();
+                                      return std::shared_ptr<robot_behavior::RobotBehavior>(kickW);
+                                    },
+                                    false  // we don't want to define a goal here !
+                                    )));
 }
 
 void Manual::update()
