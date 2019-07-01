@@ -22,7 +22,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 DefensiveWall::DefensiveWall(bool fixed_consign_follower_without_repsecting_authorized_location_bool)
-  : RobotBehavior(), mur_robot_id_(0), mur_nb_robot_(1)
+  : RobotBehavior(), wall_robot_id_(0), wall_nb_robot_(1)
 {
   if (fixed_consign_follower_without_repsecting_authorized_location_bool == 0)
   {
@@ -76,9 +76,9 @@ void DefensiveWall::update(double time, const data::Robot& robot, const data::Ba
 
   double multiple_robot_offset = ai::Config::robot_radius + 0.07;
 
-  if (mur_nb_robot_ == 2)
+  if (wall_nb_robot_ == 2)
   {
-    if (mur_robot_id_ == 0)
+    if (wall_robot_id_ == 0)
     {
       multiple_robot_offset = multiple_robot_offset;
     }
@@ -135,10 +135,10 @@ Control DefensiveWall::control() const
   return ctrl;
 }
 
-void DefensiveWall::declareMurRobotId(int id, int mur_nb_robots)
+void DefensiveWall::declareWallRobotId(int id, int wall_nb_robots)
 {
-  mur_robot_id_ = id;
-  mur_nb_robot_ = mur_nb_robots;
+  wall_robot_id_ = id;
+  wall_nb_robot_ = wall_nb_robots;
 }
 
 DefensiveWall::~DefensiveWall()
