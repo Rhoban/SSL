@@ -34,7 +34,6 @@
 #include <robot_behavior/defender/defensive_wall.h>
 #include <robot_behavior/defender/kick_wall.h>
 #include <robot_behavior/obstructor.h>
-
 #include <strategy/keeper/keeper_strat.h>
 
 namespace rhoban_ssl
