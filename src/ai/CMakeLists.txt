@@ -103,6 +103,8 @@ set (SOURCES
     manager/match.cpp
     # Strategy
     strategy/keeper/keeper.h
+    strategy/wall.cpp
+    strategy/wall_2.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp
     # Annotations
