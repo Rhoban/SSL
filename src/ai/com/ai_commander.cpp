@@ -99,7 +99,7 @@ void Commander::emergency()
   }
 
   this->stopAll();
-  // this->flush();
+  this->send();
 }
 
 void Commander::moveBall(double x, double y, double vx, double vy)

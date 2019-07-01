@@ -49,6 +49,7 @@ bool ViewerCommunication::runTask()
 void ViewerCommunication::processIncomingPackets()
 {
   std::queue<Json::Value> incoming_packets = viewer::ViewerDataGlobal::get().received_packets.getAndclear();
+
   while (!incoming_packets.empty())
   {
     Json::Value viewer_packet = incoming_packets.front();

@@ -113,8 +113,11 @@ set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} websockets)
 add_library (ssl_ai ${SOURCES})
 target_link_libraries(ssl_ai ${ALL_LIBS})
 
-add_executable(ai_st main_st.cpp)
-target_link_libraries(ai_st ssl_ai ${ALL_LIBS})
+add_executable(ai main.cpp)
+target_link_libraries(ai ssl_ai ${ALL_LIBS})
+
+add_executable(see_robot executables/see_robot.cpp)
+target_link_libraries(see_robot ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

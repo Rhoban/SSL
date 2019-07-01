@@ -42,11 +42,6 @@ namespace ai
 AI::AI(std::string manager_name) : running_(true)
 {
   initRobotBehaviors();
-  for (auto& mobile : Data::get()->all_robots)
-  {
-    mobile.second->initMovement();
-  }
-  Data::get()->ball.initMovement();
 
   manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
 
@@ -515,5 +510,19 @@ void AI::scan()
     }
   }
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+bool InitMobiles::runTask()
+{
+  for (auto& mobile : Data::get()->all_robots)
+  {
+    mobile.second->initMovement();
+  }
+  Data::get()->ball.initMovement();
+
+  return false;
+}
+
 }  // namespace ai
 }  // namespace rhoban_ssl

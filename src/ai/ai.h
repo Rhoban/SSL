@@ -196,5 +196,13 @@ class TimeUpdater : public Task
 public:
   bool runTask();
 };
+
+class InitMobiles : public Task
+{
+  // Task interface
+public:
+  bool runTask();
+};
+
 };  // namespace ai
 };  // namespace rhoban_ssl

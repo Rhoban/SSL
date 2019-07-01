@@ -107,7 +107,7 @@ std::ostream& operator<<(std::ostream& out, const Control& control)
   out << "{ctrl : "
       << "[lin vel. : " << control.linear_velocity << ", ang vel. : " << control.angular_velocity << "]"
       << ", kick : " << control.kick << ", chip kick : " << control.chip_kick << ", kickPower : " << control.kick_power
-      << ", spin : " << control.spin << ", charge : " << control.charge << ", acitve : " << control.active
+      << ", spin : " << control.spin << ", charge : " << control.charge << ", active : " << control.active
       << ", ignore : " << control.ignore << "}";
 
   return out;

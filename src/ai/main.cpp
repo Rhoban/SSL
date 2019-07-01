@@ -36,7 +36,7 @@
 #include <control/kinematic.h>
 #include <viewer/viewer_communication.h>
 
-#define TEAM_NAME "AMC"
+#define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 #define SERVER_PORT 7882
@@ -140,14 +140,12 @@ int main(int argc, char** argv)
 
   cmd.parse(argc, argv);
 
-  //  AICommander* commander;
-  //  if (em.getValue())
-  //  {
-  //    commander = new AICommanderReal();
-  //    commander->stopAll();
-  //    commander->flush();
-  //    return 0;
-  //  }
+  if (em.getValue())
+  {
+    control::Commander commander;
+    commander.emergency();
+    return 0;
+  }
 
   std::string theport;
   if (simulation.getValue())
@@ -182,6 +180,8 @@ int main(int argc, char** argv)
   ai::Config::is_in_simulation = simulation.getValue();
 
   ai::Config::load(config_path.getValue());
+
+  ExecutionManager::getManager().addTask(new ai::InitMobiles());
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision

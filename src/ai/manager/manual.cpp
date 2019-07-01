@@ -80,8 +80,8 @@ Manual::Manual(std::string name) : Manager(name)
                                               )));
   registerStrategy("Beginner - See Robot 3", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                  [&](double time, double dt) {
-                                                   robot_behavior::Beginner::SeeRobot* see_robot =
-                                                       new robot_behavior::Beginner::SeeRobot();
+                                                   robot_behavior::beginner::SeeRobot* see_robot =
+                                                       new robot_behavior::beginner::SeeRobot();
                                                    see_robot->setRobotIdToSee(3);
                                                    return std::shared_ptr<robot_behavior::RobotBehavior>(see_robot);
                                                  },
