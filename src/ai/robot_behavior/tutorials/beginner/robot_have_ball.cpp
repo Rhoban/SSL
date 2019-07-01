@@ -38,8 +38,8 @@ void BeginnerRobotHaveBall ::update(double time, const data::Robot& robot, const
   int nb_opponent_closest_to_the_ball = getShirtNumberOfClosestRobotToTheBall(Opponent);
 
   // Get the robot ally and opponent.
-  const data::Robot& ally_closest = getRobot(nb_ally_closest_to_the_ball, Ally);
-  const data::Robot& opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Opponent);
+  data::Robot ally_closest = getRobot(nb_ally_closest_to_the_ball, Ally);
+  data::Robot opponent_closest = getRobot(nb_opponent_closest_to_the_ball, Opponent);
 
   // Find if the robot has the ball.
   int ally_have_ball = GameInformations::infraRed(nb_ally_closest_to_the_ball, Ally);
@@ -61,7 +61,7 @@ void BeginnerRobotHaveBall ::update(double time, const data::Robot& robot, const
     annotations_.addCross(ballPosition(), "red", false);
   }
 
-  // const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
+  //const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
 }
 
 Control BeginnerRobotHaveBall::control() const

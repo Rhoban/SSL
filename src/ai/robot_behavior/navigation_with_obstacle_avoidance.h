@@ -34,10 +34,6 @@ namespace robot_behavior
 class NavigationWithObstacleAvoidance : public ConsignFollower
 {
 private:
-  bool avoided_;
-  const double AVOID_MOMENT = 0.35;                // time in second before collision, when robot begin avoidance.
-  const double INFINITE_DODGING_PREVENTION = 0.5;  // empirical
-
   bool ignore_the_ball_;
   bool ignore_robot_[2 * ai::Config::NB_OF_ROBOTS_BY_TEAM];  // 2 *  because there is 2 teams.
   double ball_radius_avoidance_;
