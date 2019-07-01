@@ -37,6 +37,8 @@
 #include <control/control.h>
 #include <control/kinematic.h>
 #include <viewer/viewer_communication.h>
+#include <task_example.h>
+#include <stats/resource_usage.h>
 
 #define TEAM_NAME "AMC"
 #define ZONE_NAME "all"
@@ -184,6 +186,9 @@ int main(int argc, char** argv)
   ai::Config::is_in_simulation = simulation.getValue();
 
   ai::Config::load(config_path.getValue());
+
+  //ExecutionManager::getManager().addTask(new TaskExample());
+  ExecutionManager::getManager().addTask(new stats::ResourceUsage());
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision

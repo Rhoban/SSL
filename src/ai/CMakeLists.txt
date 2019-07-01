@@ -60,6 +60,7 @@ set (SOURCES
     robot_behavior/tutorials/medium/defender.cpp
     ai.cpp
     debug.cpp
+    task_example.cpp
     manager/manager.cpp
     manager/manager_with_game_state.cpp
     manager/manual.cpp
@@ -105,6 +106,8 @@ set (SOURCES
     annotations/shape/cross.cpp
     annotations/shape/arrow.cpp
     annotations/shape/polygon.cpp
+    # Statistiques
+    stats/resource_usage.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
