@@ -135,8 +135,8 @@ Manual::Manual(std::string name) : Manager(name)
 
   registerStrategy("Tutorial - Caterpillar",
                    std::shared_ptr<strategy::Strategy>(new strategy::Caterpillar(std::vector<rhoban_geometry::Point>{
-                       rhoban_geometry::Point(-1, 4.25), rhoban_geometry::Point(-3, 4.25),
-                       rhoban_geometry::Point(-3, -4.25), rhoban_geometry::Point(-1, -4.25) })));
+                       rhoban_geometry::Point(-3, 3), rhoban_geometry::Point(3, 3), rhoban_geometry::Point(-3, -3),
+                       rhoban_geometry::Point(3, -3) })));
   registerStrategy("Stealer", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                   [&](double time, double dt) {
                                     robot_behavior::BenStealer* stealer = new robot_behavior::BenStealer();
