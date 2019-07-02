@@ -86,22 +86,24 @@ void Kalman::kalmanSpeedPrefilter(vision::RobotDetection* previous_detections[2]
   for (int team = 0; team < 2; ++team){
     for (int r = 0; r < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++r){
       for (uint c = 0; c < ai::Config::NB_CAMERAS; ++c){
-        if((previous_detections[team][r][c] != nullptr) && (new_detections[team][r][c] != nullptr) && (dt <= 0.0)){
-          new_detections[team][r][c]->v_x_ = (new_detections[team][r][c]->x_ - previous_detections[team][r][c]->x_) / dt;
+        if(new_detections[team][r][c] != nullptr) {
+          if((previous_detections[team][r][c] != nullptr) && (dt > 0.0)){
+            new_detections[team][r][c]->v_x_ = (new_detections[team][r][c]->x_ - previous_detections[team][r][c]->x_) / dt;
 
-          new_detections[team][r][c]->v_y_ = (new_detections[team][r][c]->y_ - new_detections[team][r][c]->y_) / dt;
+            new_detections[team][r][c]->v_y_ = (new_detections[team][r][c]->y_ - new_detections[team][r][c]->y_) / dt;
 
-          if(previous_detections[team][r][c]->has_orientation_ && new_detections[team][r][c]->has_orientation_){
-            new_detections[team][r][c]->angular_speed_ = (new_detections[team][r][c]->orientation_ - previous_detections[team][r][c]->orientation_) / dt;
+            if(previous_detections[team][r][c]->has_orientation_ && new_detections[team][r][c]->has_orientation_){
+              new_detections[team][r][c]->angular_speed_ = (new_detections[team][r][c]->orientation_ - previous_detections[team][r][c]->orientation_) / dt;
+            }
+            else {
+              new_detections[team][r][c]->angular_speed_ = 0.0;
+            }
           }
           else {
+            new_detections[team][r][c]->v_x_ = 0.0;
+            new_detections[team][r][c]->v_y_ = 0.0;
             new_detections[team][r][c]->angular_speed_ = 0.0;
           }
-        }
-        else {
-          new_detections[team][r][c]->v_x_ = 0.0;
-          new_detections[team][r][c]->v_y_ = 0.0;
-          new_detections[team][r][c]->angular_speed_ = 0.0;
         }
       }
     }

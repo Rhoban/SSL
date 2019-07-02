@@ -254,6 +254,7 @@ bool UpdateRobotInformation::runTask()
       {
         //vision::TimedPosition position = vision::Factory::filter(detections[team][robot]);
         vision::TimedPosition position = kalman_.kalmanFilter(detections[team][robot], current_time);
+        DEBUG("result of kalman is" << position.position_);
         if (position.time_ > 0)
         {
           if (position.orientation_is_defined_)
