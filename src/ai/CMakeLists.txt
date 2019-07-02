@@ -71,6 +71,8 @@ set (SOURCES
     robot_behavior/tests/test_velocity_consign.cpp
     robot_behavior/tests/test_follow_path.cpp
     robot_behavior/tests/test_field_info.cpp
+    robot_behavior/go_to_xy.cpp
+    robot_behavior/poke_ball.cpp
     ai.cpp
     debug.cpp
     task_example.cpp

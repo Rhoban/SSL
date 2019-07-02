@@ -26,9 +26,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace Beginner
-{
-class Poke_ball : public RobotBehavior
+class PokeBall : public RobotBehavior
 {
 private:
   ConsignFollower* follower_;
@@ -38,7 +36,7 @@ private:
   rhoban_geometry::Point poke_direction_ = Data::get()->field.goalCenter(Opponent);
 
 public:
-  Poke_ball();
+  PokeBall();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -60,11 +58,10 @@ public:
    * @param kick_power
    * value between 0 and 1
    */
-  void Poke_ball::setKickPower(double kick_power)
+  void setKickPower(double kick_power);
 
-  virtual ~Poke_ball();
+  virtual ~PokeBall();
 };
 
-};  // namespace Beginner
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

@@ -25,13 +25,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace Beginner
-{
-Poke_ball::Poke_ball() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+PokeBall::PokeBall() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void Poke_ball::update(double time, const data::Robot& robot, const data::Ball& ball)
+void PokeBall::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -47,7 +45,7 @@ void Poke_ball::update(double time, const data::Robot& robot, const data::Ball& 
   ContinuousAngle robot_rotation = robot.getMovement().angularPosition(Data::get()->ai_data.time);
   ContinuousAngle diff_angle = target_rotation - robot_rotation;
   
-  DEBUG("deggg " << diff_angle.angle().DEG;)
+  // DEBUG("deggg " << diff_angle.angle().DEG;)
   if(diff_angle.abs() < 20){
     ready_to_kick_ = true;
   }
@@ -60,7 +58,7 @@ void Poke_ball::update(double time, const data::Robot& robot, const data::Ball& 
   follower_->update(time, robot, ball);
 }
 
-Control Poke_ball::control() const
+Control PokeBall::control() const
 {
   Control ctrl = follower_->control();  
   if (ready_to_kick_)
@@ -78,11 +76,11 @@ Control Poke_ball::control() const
   return ctrl;
 }
 
-void Poke_ball::setPokeDirection(rhoban_geometry::Point poke_direction){
+void PokeBall::setPokeDirection(rhoban_geometry::Point poke_direction){
   poke_direction_ = poke_direction;
 }
 
-void Poke_ball::setKickPower(double kick_power){
+void PokeBall::setKickPower(double kick_power){
   if (kick_power > 1)
   {
     kick_power_ = 1;
@@ -98,19 +96,17 @@ void Poke_ball::setKickPower(double kick_power){
   
 }
 
-Poke_ball::~Poke_ball()
+PokeBall::~PokeBall()
 {
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Poke_ball::getAnnotations() const
+rhoban_ssl::annotations::Annotations PokeBall::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
   annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }
-
-}  // namespace Beginner
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
