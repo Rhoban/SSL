@@ -64,6 +64,51 @@ TimedPosition Factory::filter(RobotDetection** robots)
 /***********************************/
 /* START OF KALMAN FILTER CODE */
 /***********************************/
+double Kalman::kalmanTimePrefilter(CameraDetectionFrame last_camera_detections[ai::Config::NB_CAMERAS]) {
+  double current_time = 0.0;
+  int nb_cameras = 0;
+  for(unsigned int k = 0; k < ai::Config::NB_CAMERAS; ++k) {
+    if(last_camera_detections[k].frame_number_ != 0){
+      current_time += last_camera_detections[k].t_capture_;
+      nb_cameras++;
+    }
+  }
+  if(nb_cameras > 0) {
+    current_time = current_time / nb_cameras;
+  }
+  else {
+    current_time = 0.0;
+  }
+  return current_time;
+}
+
+void Kalman::kalmanSpeedPrefilter(vision::RobotDetection* previous_detections[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS], vision::RobotDetection* new_detections[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS], double dt){
+  for (int team = 0; team < 2; ++team){
+    for (int r = 0; r < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++r){
+      for (uint c = 0; c < ai::Config::NB_CAMERAS; ++c){
+        if((previous_detections[team][r][c] != nullptr) && (new_detections[team][r][c] != nullptr) && (dt <= 0.0)){
+          new_detections[team][r][c]->v_x_ = (new_detections[team][r][c]->x_ - previous_detections[team][r][c]->x_) / dt;
+
+          new_detections[team][r][c]->v_y_ = (new_detections[team][r][c]->y_ - new_detections[team][r][c]->y_) / dt;
+
+          if(previous_detections[team][r][c]->has_orientation_ && new_detections[team][r][c]->has_orientation_){
+            new_detections[team][r][c]->angular_speed_ = (new_detections[team][r][c]->orientation_ - previous_detections[team][r][c]->orientation_) / dt;
+          }
+          else {
+            new_detections[team][r][c]->angular_speed_ = 0.0;
+          }
+        }
+        else {
+          new_detections[team][r][c]->v_x_ = 0.0;
+          new_detections[team][r][c]->v_y_ = 0.0;
+          new_detections[team][r][c]->angular_speed_ = 0.0;
+        }
+      }
+    }
+  }
+}
+
+
 //This function set at 0 a subvector_length-sized submatrix from the observation_model
 void Kalman::disableOrientation(GslMatrix* observation_model, size_t row_offset, size_t col_offset, size_t subvector_length)
 {
@@ -126,13 +171,6 @@ TimedPosition Kalman::kalmanFilter(RobotDetection** robot_views, double cadence_
   GslMatrix predicted_state_covariance = rhoban_ssl::GslMatrix(KALMAN_STATE_VECTOR_SIZE, KALMAN_STATE_VECTOR_SIZE);
   GslMatrix new_state_covariance = rhoban_ssl::GslMatrix(KALMAN_STATE_VECTOR_SIZE, KALMAN_STATE_VECTOR_SIZE);
 
-  //printf("Time considerations : previous time was %lf, new time is %lf\n", -(dt - cadence_time), previous_kalman_execution_time_);
-  /*printf("Printing of previous matrices from Kalman \n");
-  printf("Previous State Matrix\n");
-  std::cout << previous_state;
-  printf("\nPrevious State Covariance Matrix\n");
-  std::cout << previous_state_covariance;*/
-
   /* Predict Phase */
   /*** Setup of predict phase required matrices ***/
 
@@ -147,18 +185,11 @@ TimedPosition Kalman::kalmanFilter(RobotDetection** robot_views, double cadence_
   /*** Computing of predicted state ***/
 
   //printf("Computing of predicted state...");
-/*
-  printf("Printing of physical model from Kalman \n");
-  std::cout << physical_model;*/
 
   previous_state.multMatrixBLAS(&predicted_state, &physical_model, &null_vector);
   previous_state_covariance.multMatrixBLASKalman(&predicted_state_covariance, &physical_model, &physical_model,
                                       &process_noise_matrix, 1.0, 1.0, false, false, true);
-/*
-    printf("\nPrinting of predicted state from Kalman \n");
-    std::cout << predicted_state;*/
 
-  //printf("done\n");
   /* Update Phase */
 
   /*** Setup of predict phase required matrices ***/
@@ -205,11 +236,6 @@ TimedPosition Kalman::kalmanFilter(RobotDetection** robot_views, double cadence_
     for(unsigned int i = 0; i< ai::Config::NB_CAMERAS; ++i) {
 
       RobotDetection* robot_view = robot_views[i];
-      /* NO CHECK IS DONE FOR VIABILITY OF COORDINATES SINCE IT IS DONE IN THE RUNNING TASK BEFORE CALLING THE FILTER
-      if (!objectCoordonateIsValid(robot_view.x_ / 1000.0, robot_view.y_ / 1000.0, part_of_the_field_used))
-      {
-        continue;
-      }*/
       if ((robot_view != nullptr) && (robot_view->has_id_)) //Discard every camera view but the most recent one (the last in the table)
       {
         observation.setElement(counter * KALMAN_OBSERVATION_VECTOR_ELEMENTAR_SIZE, 0, robot_view->x_ / 1000.0);
@@ -239,9 +265,6 @@ TimedPosition Kalman::kalmanFilter(RobotDetection** robot_views, double cadence_
 
 
     /****** Innovation computing ******/
-  /*  
-      printf("\nPrinting of observation_model matrix from Kalman \n");
-      std::cout << observation_model;*/
 
     predicted_state.multMatrixBLAS(&innovation, &observation_model, &observation, -1.0, 1.0, false, false);
     predicted_state_covariance.multMatrixBLASKalman(&innovation_cov_matrix, &observation_model, &observation_model,
@@ -258,7 +281,6 @@ TimedPosition Kalman::kalmanFilter(RobotDetection** robot_views, double cadence_
     innovation.multMatrixBLAS(&new_state, &gain, &predicted_state);
     observation_model.multMatrixBLASKalman(&new_state_covariance, &gain, &predicted_state_covariance,
                                           &predicted_state_covariance, -1.0, 1.0, false, false, false);
-    //printf("done\n");
   }
   else {
 
@@ -279,12 +301,6 @@ TimedPosition Kalman::kalmanFilter(RobotDetection** robot_views, double cadence_
     new_state.copyMatrix(&previous_state_);
     new_state_covariance.copyMatrix(&previous_state_covariance_);
 
-/*    printf("\nPrinting of new matrices from Kalman \n");
-    printf("New State Matrix\n");
-    std::cout << new_state;
-    printf("\nNew State Covariance Matrix\n");
-    std::cout << new_state_covariance;
-   */ 
     return t;
   }
   else
@@ -299,13 +315,7 @@ TimedPosition Kalman::kalmanFilter(RobotDetection** robot_views, double cadence_
     previous_kalman_execution_time_ = cadence_time;
     new_state.copyMatrix(&previous_state_);
     new_state_covariance.copyMatrix(&previous_state_covariance_);
-/*
-    printf("\nPrinting of new matrices from Kalman \n");
-    printf("New State Matrix\n");
-    std::cout << new_state;
-    printf("\nNew State Covariance Matrix\n");
-    std::cout << new_state_covariance;
-*/
+
     return t;
   }
 }

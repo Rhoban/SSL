@@ -54,6 +54,11 @@ private:
 class UpdateRobotInformation : public Task
 {
   vision::PartOfTheField part_of_the_field_used_;
+  double time_of_previous_execution_;
+  vision::Kalman kalman_;
+  vision::RobotDetection* previous_detections_[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS];
+  void updateParams(vision::RobotDetection* detections[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS], double new_time);
+  
 
 public:
   UpdateRobotInformation(vision::PartOfTheField part_of_the_field_used);

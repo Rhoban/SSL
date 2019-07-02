@@ -146,19 +146,32 @@ bool DetectionPacketAnalyzer::runTask()
             current.allies_[i] = frame.robots_yellow(i);
         }
       }
-      time_synchroniser_.update(current);
+      //time_synchroniser_.update(current);
     }
     ++i;
   }
-  time_synchroniser_.syncTimeShift(&Data::get()->ai_data.time_shift_with_vision);
+  //time_synchroniser_.syncTimeShift(&Data::get()->ai_data.time_shift_with_vision);
   return true;
 }
 
 UpdateRobotInformation::UpdateRobotInformation(vision::PartOfTheField part_of_the_field_used)
-  : part_of_the_field_used_(part_of_the_field_used)
+  : part_of_the_field_used_(part_of_the_field_used), time_of_previous_execution_(0.0), kalman_(Kalman())
 {
+  for (int team = 0; team < 2; ++team)
+    for (int r = 0; r < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++r)
+      for (uint c = 0; c < ai::Config::NB_CAMERAS; ++c)
+        previous_detections_[team][r][c] = nullptr;
 }
 
+void UpdateRobotInformation::updateParams(vision::RobotDetection* detections[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS], double new_time) {
+  time_of_previous_execution_ = new_time;
+  for (int team = 0; team < 2; ++team)
+    for (int r = 0; r < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++r)
+      for (uint c = 0; c < ai::Config::NB_CAMERAS; ++c)
+        previous_detections_[team][r][c] = detections[team][r][c];
+
+
+}
 bool UpdateRobotInformation::runTask()
 {
   // go throught cameras and look for robots
@@ -168,6 +181,9 @@ bool UpdateRobotInformation::runTask()
     for (int r = 0; r < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++r)
       for (uint c = 0; c < ai::Config::NB_CAMERAS; ++c)
         detections[team][r][c] = nullptr;
+
+
+  double current_time = kalman_.kalmanTimePrefilter(vision::VisionDataSingleThread::singleton_.last_camera_detection_); //current_time is the average time of the 4 camera times
 
   for (uint camera_id = 0; camera_id < ai::Config::NB_CAMERAS; ++camera_id)
   {
@@ -218,6 +234,9 @@ bool UpdateRobotInformation::runTask()
       }
     }
   }
+  // computes speed of robots in related RobotDetection
+  kalman_.kalmanSpeedPrefilter(previous_detections_, detections, current_time - time_of_previous_execution_);
+
   // now we have all informations by robots
   for (int team = 0; team < 2; ++team)
     for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
@@ -233,8 +252,8 @@ bool UpdateRobotInformation::runTask()
       }
       if (present)
       {
-        vision::TimedPosition position = vision::Factory::filter(detections[team][robot]);
-        //vision::TimedPosition position = vision::Factory::kalmanFilter(detections[team][robot], );
+        //vision::TimedPosition position = vision::Factory::filter(detections[team][robot]);
+        vision::TimedPosition position = kalman_.kalmanFilter(detections[team][robot], current_time);
         if (position.time_ > 0)
         {
           if (position.orientation_is_defined_)
@@ -249,7 +268,7 @@ bool UpdateRobotInformation::runTask()
         // robot is not present in vision
       }
     }
-
+  UpdateRobotInformation::updateParams(detections, current_time);
   return true;
 }
 

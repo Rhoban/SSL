@@ -57,6 +57,10 @@ public :
   GslMatrix previous_state_covariance_ ;
   double previous_kalman_execution_time_;
 
+  double kalmanTimePrefilter(CameraDetectionFrame last_camera_detections[ai::Config::NB_CAMERAS]);
+
+  void kalmanSpeedPrefilter(vision::RobotDetection* previous_detections[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS], vision::RobotDetection* new_detections[2][ai::Config::NB_OF_ROBOTS_BY_TEAM][ai::Config::NB_CAMERAS], double dt);
+
   void disableOrientation(GslMatrix* observation_model, size_t row_offset, size_t col_offset, size_t subvector_length);
 
   void setupPredictPhaseParams(GslMatrix* physical_model, GslMatrix* process_noise_matrix, double dt);
