@@ -122,6 +122,9 @@ target_link_libraries(see_robot ssl_ai ${ALL_LIBS})
 add_executable(plot_xyt executables/plot_xyt.cpp)
 target_link_libraries(plot_xyt ssl_ai ${ALL_LIBS})
 
+add_executable(goalie executables/goalie.cpp)
+target_link_libraries(goalie ssl_ai ${ALL_LIBS})
+
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
 if(CATKIN_ENABLE_TESTING)
