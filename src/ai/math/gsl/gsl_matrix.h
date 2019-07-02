@@ -23,6 +23,7 @@
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_linalg.h>
 #include <gsl/gsl_blas.h>
+#include <debug.h>
 
 namespace rhoban_ssl
 {
@@ -191,5 +192,8 @@ public:
   int inverseMatrix(GslMatrix* dest) const;
 
   ~GslMatrix();
+ 
 };
+
+  std::ostream& operator<<(std::ostream& Str, const GslMatrix & v); 
 }  // namespace rhoban_ssl

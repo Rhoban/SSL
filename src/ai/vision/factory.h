@@ -20,6 +20,12 @@
 
 #include "robot_position_filter.h"
 #include <math/position.h>
+#include <math/gsl/gsl_matrix.h>
+#include <debug.h>
+
+#define KALMAN_STATE_VECTOR_SIZE 4             // tuple (x,y,theta ; vx, vy, vtheta)
+#define KALMAN_STATE_SUBVECTOR_SIZE 2         // subtuple position/speed 
+#define KALMAN_OBSERVATION_VECTOR_ELEMENTAR_SIZE 4  // position and speed in base (x, y, theta)
 
 namespace rhoban_ssl
 {
@@ -42,6 +48,25 @@ public:
          vision::PartOfTheField part_of_the_field_used);
 
   static TimedPosition filter(RobotDetection** robots);
+};
+
+class Kalman
+{
+public :
+  GslMatrix previous_state_ ;
+  GslMatrix previous_state_covariance_ ;
+  double previous_kalman_execution_time_;
+
+  void disableOrientation(GslMatrix* observation_model, size_t row_offset, size_t col_offset, size_t subvector_length);
+
+  void setupPredictPhaseParams(GslMatrix* physical_model, GslMatrix* process_noise_matrix, double dt);
+
+  void setupUpdatePhaseParams(GslMatrix* observation_model, const int camera_number, GslMatrix* observation_noise_matrix);
+
+  TimedPosition kalmanFilter(RobotDetection** robots, double cadence_time);
+
+  Kalman();
+  ~Kalman();
 };
 
 };  // namespace vision

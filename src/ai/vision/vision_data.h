@@ -58,7 +58,10 @@ struct RobotDetection
   float confidence_;  // set to -1 if not valid
   float x_;
   float y_;
+  float v_x_;
+  float v_y_;
   float orientation_;
+  float angular_speed_;
   float pixel_x_;
   float pixel_y_;
 

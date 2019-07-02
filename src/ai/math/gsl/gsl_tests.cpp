@@ -142,15 +142,15 @@ int testBasicAssessors()
 
 int testCopy()
 {
-  GslMatrix m = GslMatrix(4, 4);
-  GslMatrix n = GslMatrix(4, 4);
+  GslMatrix m = GslMatrix(4, 3);
+  GslMatrix n = GslMatrix(4, 3);
   double error = 0.0000001;
 
   m.setAll(2.0);
   m.copyMatrix(&n);
   for (int i = 0; i < 4; i++)
   {
-    for (int j = 0; j < 4; j++)
+    for (int j = 0; j < 3; j++)
     {
       if (!(eq(n.getElement(i, j), 2.0, error)))
         return 0;
@@ -294,6 +294,8 @@ int testInversible()
 
   return 1;
 }
+ 
+
 
 int main()
 {
