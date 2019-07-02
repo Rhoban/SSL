@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,20 +17,20 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "goto_ball.h"
+#include "test_kicker.h"
 #include <math/vector2d.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
+namespace tests
 {
-GotoBall::GotoBall() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+TestKicker::TestKicker() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void GotoBall::update(double time, const data::Robot& robot, const data::Ball& ball)
+void TestKicker::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -38,26 +38,28 @@ void GotoBall::update(double time, const data::Robot& robot, const data::Ball& b
 
   annotations_.clear();
 
-  rhoban_geometry::Point robot_position = ballPosition();
-  ContinuousAngle angle = 0.0;
+  const rhoban_geometry::Point& target_position = centerAllyField();
+  ContinuousAngle target_rotation(M_PI);
 
-  follower_->setFollowingPosition(robot_position, angle);
   follower_->avoidTheBall(false);
+  follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
 }
 
-Control GotoBall::control() const
+Control TestKicker::control() const
 {
   Control ctrl = follower_->control();
+  ctrl.kick = true;
+  ctrl.charge = true;
   return ctrl;
 }
 
-GotoBall::~GotoBall()
+TestKicker::~TestKicker()
 {
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations GotoBall::getAnnotations() const
+rhoban_ssl::annotations::Annotations TestKicker::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
@@ -65,6 +67,6 @@ rhoban_ssl::annotations::Annotations GotoBall::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Beginner
+}  // namespace tests
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
