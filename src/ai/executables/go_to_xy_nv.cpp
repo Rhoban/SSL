@@ -301,12 +301,12 @@ int main(int argc, char** argv)
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
   // ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
   
-  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
+  // ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
   // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
-  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
-  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
+  // ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
+  // ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
+  // ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
+  // ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
 
   robot_behavior::tests::TestGoToDestinationNV* c = new robot_behavior::tests::TestGoToDestinationNV();
   std::cout << "X is :" << xvel.getValue() << " and y is " << yvel.getValue() << std::endl;
