@@ -89,14 +89,16 @@ fi
 
 if [ "$restart" = true ]
 then
+    sudo ip route del default
     sudo service network-manager restart
     sudo ifconfig $wlan up
-    sudo ifconfig $eth down
-    sudo ip route del default via default dev $eth
-else
-    sudo ip addr add 10.1.0.52/24 dev $eth
     sudo ifconfig $eth up
+    sudo ifconfig lo -multicast
+else
+    sudo ip addr add 10.1.0.52/24 dev lo
+    sudo ifconfig $eth down
     sudo ifconfig $wlan down
-    sudo ip route del default via default dev $wlan
-    sudo ip route add default via default dev $eth
+    sudo ip route del default 
+    sudo ip route add default via 10.1.0.1 dev lo
+    sudo ifconfig lo multicast
 fi

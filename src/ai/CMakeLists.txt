@@ -69,6 +69,7 @@ set (SOURCES
     robot_behavior/tests/test_field_info.cpp
     ai.cpp
     debug.cpp
+    task_example.cpp
     strategy/strategy.cpp
     strategy/halt.cpp
     strategy/placer.cpp
@@ -123,6 +124,8 @@ set (SOURCES
     annotations/shape/cross.cpp
     annotations/shape/arrow.cpp
     annotations/shape/polygon.cpp
+    # Statistiques
+    stats/resource_usage.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
