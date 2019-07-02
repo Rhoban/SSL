@@ -51,7 +51,7 @@ void TestVelocityConsign::update(double time, const data::Robot& robot, const da
 
 Control TestVelocityConsign::control() const
 {
-  Control ctrl;
+  Control ctrl(false);
   ctrl.linear_velocity = linear_velocity_;
   ctrl.angular_velocity = angular_velocity_;
   return ctrl;

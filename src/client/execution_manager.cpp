@@ -132,4 +132,19 @@ bool ConditionalTask::runTask()
   return true;
 }
 
+TimeoutTask::TimeoutTask(double d) : duration(d), start(std::chrono::high_resolution_clock::now())
+{
+}
+
+bool TimeoutTask::runTask()
+{
+  if ((std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start)
+           .count()) > (duration * 1000.0))
+  {
+    rhoban_ssl::ExecutionManager::getManager().shutdown();
+    return false;
+  }
+  return true;
+}
+
 }  // namespace rhoban_ssl
