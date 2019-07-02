@@ -36,9 +36,10 @@
 #include <control/kinematic.h>
 #include <viewer/viewer_communication.h>
 #include <robot_behavior/tutorials/beginner/see_robot.h>
+#include <robot_behavior/tutorials/beginner/goalie.h>
 #include <strategy/from_robot_behavior.h>
 
-#define TEAM_NAME "nAMeC"
+#define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 #define SERVER_PORT 7882
@@ -150,16 +151,6 @@ int main(int argc, char** argv)
                                        // value.
                                        cmd);
 
-  TCLAP::ValueArg<uint> targeted_robot("t",                      // short argument name  (with one character)
-                                       "targeted_robot_number",  // long argument name
-                                       "The number of the targeted robot that will be focus by the assigned robot."
-                                       "The robot must be an Ally",
-                                       true,                                       // Flag is required
-                                       0,                                          // Default value
-                                       "robot number between 0-8 (unsigned int)",  // short description of the expected
-                                       // value.
-                                       cmd);
-
   cmd.parse(argc, argv);
 
   if (em.getValue())
@@ -221,9 +212,9 @@ int main(int argc, char** argv)
         ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
         ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
         ExecutionManager::getManager().addTask(
-            new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(),
-                                                  new robot_behavior::beginner::SeeRobot(targeted_robot.getValue())),
+            new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(), new robot_behavior::beginner::Goalie()),
             102);
+        Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = true;
         return false;
       }));
 

@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,20 +17,21 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "goto_ball.h"
+#include "test_follow_path.h"
 #include <math/vector2d.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
+namespace tests
 {
-GotoBall::GotoBall() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+TestFollowPath::TestFollowPath(std::vector<rhoban_geometry::Point> path)
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), path_(path), path_index_(0)
 {
 }
 
-void GotoBall::update(double time, const data::Robot& robot, const data::Ball& ball)
+void TestFollowPath::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -38,26 +39,35 @@ void GotoBall::update(double time, const data::Robot& robot, const data::Ball& b
 
   annotations_.clear();
 
-  rhoban_geometry::Point robot_position = ballPosition();
-  ContinuousAngle angle = 0.0;
+  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
+  rhoban_geometry::Point next_point = path_.at(path_index_ % path_.size());
 
-  follower_->setFollowingPosition(robot_position, angle);
+  if (robot_position.getDist(next_point) <= REACH_RADIUS)
+  {
+    path_index_++;
+    next_point = path_.at(path_index_ % path_.size());
+  }
+
+  Vector2d vect_robot_target = next_point - robot_position;
+  ContinuousAngle target_rotation = vector2angle(vect_robot_target);
+
   follower_->avoidTheBall(false);
+  follower_->setFollowingPosition(next_point, target_rotation);
   follower_->update(time, robot, ball);
 }
 
-Control GotoBall::control() const
+Control TestFollowPath::control() const
 {
   Control ctrl = follower_->control();
   return ctrl;
 }
 
-GotoBall::~GotoBall()
+TestFollowPath::~TestFollowPath()
 {
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations GotoBall::getAnnotations() const
+rhoban_ssl::annotations::Annotations TestFollowPath::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
@@ -65,6 +75,6 @@ rhoban_ssl::annotations::Annotations GotoBall::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Beginner
+}  // namespace tests
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl

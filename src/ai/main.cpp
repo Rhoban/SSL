@@ -35,8 +35,10 @@
 #include <control/control.h>
 #include <control/kinematic.h>
 #include <viewer/viewer_communication.h>
+#include <task_example.h>
+#include <stats/resource_usage.h>
 
-#define TEAM_NAME "NAMeC"
+#define TEAM_NAME "nAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 #define SERVER_PORT 7882
@@ -181,6 +183,8 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
 
+  // ExecutionManager::getManager().addTask(new TaskExample());
+  
   ExecutionManager::getManager().addTask(new ai::InitMobiles());
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
@@ -198,7 +202,7 @@ int main(int argc, char** argv)
   // refereee
   ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
   ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
-  // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
+  ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
   ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
 
   ExecutionManager::getManager().addTask(new data::CollisionComputing());
@@ -217,6 +221,11 @@ int main(int argc, char** argv)
   // viewer
   ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
   ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
+
+  // stats
+  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop 
+  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(false, true));  // print
+  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, true, 100));  // both every 100 loop
 
   ExecutionManager::getManager().run(0.01);
 

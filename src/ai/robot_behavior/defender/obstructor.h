@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 TO COMPLETE
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,33 +19,33 @@
 
 #pragma once
 
-#include <referee/game_state.h>
-#include "manager.h"
-#include "manual.h"
-#include "match.h"
-#include "dumb_manager.h"
+#include "../robot_behavior.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace robot_behavior
 {
-struct names
-{
-  static constexpr const char* MANUAL = "Manual";
-  static constexpr const char* MATCH = "Match";
-  static constexpr const char* DUMB_MANAGER = "Dumb_manager";
-};
-
-class Factory
+class Obstructor : public RobotBehavior
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers_;
+  rhoban_geometry::Point point_to_obstruct_;
+  int robot_to_obstruct_id_;
+  Team robot_to_obstruct_team_;
+
+  ConsignFollower* follower_;
 
 public:
-  static const std::list<std::string>& availableManagers();
+  Obstructor();
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+
+  virtual Control control() const;
+  void declareRobotToObstruct(int robot_id, Team team = Opponent);
+
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+  virtual ~Obstructor();
 };
 
-}  // namespace manager
-}  // namespace rhoban_ssl
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

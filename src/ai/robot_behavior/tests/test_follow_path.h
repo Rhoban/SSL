@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,33 +19,37 @@
 
 #pragma once
 
-#include <referee/game_state.h>
-#include "manager.h"
-#include "manual.h"
-#include "match.h"
-#include "dumb_manager.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace robot_behavior
 {
-struct names
+namespace tests
 {
-  static constexpr const char* MANUAL = "Manual";
-  static constexpr const char* MATCH = "Match";
-  static constexpr const char* DUMB_MANAGER = "Dumb_manager";
-};
-
-class Factory
+class TestFollowPath : public RobotBehavior
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
+
+  std::vector<rhoban_geometry::Point> path_;
+  int path_index_;
+
+  const double REACH_RADIUS = 0.1;
 
 public:
-  static const std::list<std::string>& availableManagers();
+  TestFollowPath(std::vector<rhoban_geometry::Point>);
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+
+  virtual Control control() const;
+
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+
+  virtual ~TestFollowPath();
 };
 
-}  // namespace manager
-}  // namespace rhoban_ssl
+};  // namespace tests
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

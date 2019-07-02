@@ -37,8 +37,9 @@
 #include <viewer/viewer_communication.h>
 #include <robot_behavior/tutorials/beginner/see_robot.h>
 #include <strategy/from_robot_behavior.h>
+#include <core/gnu_plot.h>
 
-#define TEAM_NAME "nAMeC"
+#define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 #define SERVER_PORT 7882
@@ -142,18 +143,8 @@ int main(int argc, char** argv)
 
   TCLAP::ValueArg<uint> assigned_robot("r",             // short argument name  (with one character)
                                        "robot_number",  // long argument name
-                                       "The number of the robot that will see the robot number given in "
+                                       "The number of the robot that will follow (x,y) position"
                                        "parameter",
-                                       true,                                       // Flag is required
-                                       0,                                          // Default value
-                                       "robot number between 0-8 (unsigned int)",  // short description of the expected
-                                       // value.
-                                       cmd);
-
-  TCLAP::ValueArg<uint> targeted_robot("t",                      // short argument name  (with one character)
-                                       "targeted_robot_number",  // long argument name
-                                       "The number of the targeted robot that will be focus by the assigned robot."
-                                       "The robot must be an Ally",
                                        true,                                       // Flag is required
                                        0,                                          // Default value
                                        "robot number between 0-8 (unsigned int)",  // short description of the expected
@@ -215,17 +206,28 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used), 4);
   ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used), 5);
 
-  ExecutionManager::getManager().addTask(new ConditionalTask(
-      []() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
-      [&]() -> bool {
-        ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
-        ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
-        ExecutionManager::getManager().addTask(
-            new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(),
-                                                  new robot_behavior::beginner::SeeRobot(targeted_robot.getValue())),
-            102);
-        return false;
-      }));
+  class LocalTask : public Task
+  {
+    GnuPlot plot;
+    int rid;
+    std::chrono::high_resolution_clock::time_point start;
+
+  public:
+    LocalTask(int rid) : rid(rid), start(std::chrono::high_resolution_clock::now())
+    {
+    }
+    bool runTask()
+    {
+      plot.setX(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start)
+                    .count());
+      plot.push("x", Data::get()->robots[Ally][rid].getMovement().linearPosition(0).x);
+      plot.push("y", Data::get()->robots[Ally][rid].getMovement().linearPosition(0).y);
+      plot.render();
+      return true;
+    }
+  };
+
+  ExecutionManager::getManager().addTask(new LocalTask(assigned_robot.getValue()));
 
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
   ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
