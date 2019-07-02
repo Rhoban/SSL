@@ -34,12 +34,24 @@ void BenStealer::update(double time, const data::Robot& robot, const data::Ball&
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
-  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
-  ContinuousAngle robot_rotation = robot.getMovement().angularPosition(time);
+  rhoban_geometry::Point robot_position = linearPosition();
+  // ContinuousAngle robot_rotation = angularPosition();
 
   rhoban_geometry::Point target_position = robot_position;
-  double target_rotation = robot_rotation.value();
 
+  // this behavior supposes that the victim moves forward.
+  const data::Robot& victim = Data::get()->robots[Opponent][robot_id_to_steal_];
+  rhoban_geometry::Point victim_position = victim.getMovement().linearPosition(time);
+  ContinuousAngle victim_rotation = victim.getMovement().angularPosition(time);
+
+  target_position = rhoban_geometry::Point(victim_position.x + APPROACH_PERIMETER * std::cos(victim_rotation.value()),
+                                           victim_position.y + APPROACH_PERIMETER * std::sin(victim_rotation.value()));
+
+  Vector2d vect_robot_victim = victim_position - robot_position;
+  ContinuousAngle target_rotation = vector2angle(vect_robot_victim);
+
+  follower_->avoidTheBall(false);
+  annotations_.addCross(target_position);
   follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
 }
@@ -63,7 +75,7 @@ rhoban_ssl::annotations::Annotations BenStealer::getAnnotations() const
   return annotations;
 }
 
-void BenStealer::setRobotIdToSteal(uint id)
+void BenStealer::setRobotIdToSteal(uint id)  // id of opponent
 {
   robot_id_to_steal_ = id;
 }

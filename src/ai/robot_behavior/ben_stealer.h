@@ -35,6 +35,8 @@ private:
 
   uint robot_id_to_steal_;
 
+  const double APPROACH_PERIMETER = 0.3;
+
 public:
   BenStealer(uint robot_id_to_steal = 0);
 
