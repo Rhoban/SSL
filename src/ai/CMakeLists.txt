@@ -60,7 +60,6 @@ set (SOURCES
     robot_behavior/defender/defensive_wall.cpp
     robot_behavior/defender/kick_wall.cpp
     robot_behavior/obstructor.cpp
-    robot_behavior/striker.cpp
     ai.cpp
     debug.cpp
     strategy/strategy.cpp
@@ -107,9 +106,11 @@ set (SOURCES
     # Strategy
     strategy/wall.cpp
     strategy/wall_2.cpp
+    strategy/pass.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp
     robot_behavior/attacker/receiver.cpp
+    robot_behavior/attacker/striker.cpp
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp
