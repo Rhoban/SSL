@@ -33,6 +33,7 @@
 #include <robot_behavior/tests/test_kicker.h>
 #include <robot_behavior/tests/test_relative_velocity_consign.h>
 #include <robot_behavior/tests/test_follow_path.h>
+#include <robot_behavior/tests/test_field_info.h>
 
 namespace rhoban_ssl
 {
@@ -177,6 +178,15 @@ Manual::Manual(std::string name) : Manager(name)
           },
           false  // we don't want to define a goal here !
           )));
+
+  registerStrategy("Test - Info Field", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                            [&](double time, double dt) {
+                                              robot_behavior::tests::TestFieldInfo* field_info =
+                                                  new robot_behavior::tests::TestFieldInfo();
+                                              return std::shared_ptr<robot_behavior::RobotBehavior>(field_info);
+                                            },
+                                            false  // we don't want to define a goal here !
+                                            )));
 }
 
 void Manual::update()

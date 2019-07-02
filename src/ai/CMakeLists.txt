@@ -61,6 +61,7 @@ set (SOURCES
     robot_behavior/tests/test_relative_velocity_consign.cpp
     robot_behavior/tests/test_velocity_consign.cpp
     robot_behavior/tests/test_follow_path.cpp
+    robot_behavior/tests/test_field_info.cpp
     ai.cpp
     debug.cpp
     manager/manager.cpp
