@@ -214,6 +214,7 @@ int main(int argc, char** argv)
         ExecutionManager::getManager().addTask(
             new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(), new robot_behavior::beginner::Goalie()),
             102);
+        Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = true;
         return false;
       }));
 
