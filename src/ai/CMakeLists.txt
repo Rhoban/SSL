@@ -165,6 +165,7 @@ if(CATKIN_ENABLE_TESTING)
     math/test_vector2d.cpp
     math/test_matrix2d.cpp
     math/gsl/gsl_tests.cpp
+    vision/test_kalman.cpp
   )
 
   foreach(test_source ${TEST_SOURCES})
