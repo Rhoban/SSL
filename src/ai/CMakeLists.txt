@@ -20,6 +20,7 @@ include_directories(${catkin_INCLUDE_DIRS} .)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set (SOURCES
+    core/plot_velocity.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -57,8 +58,15 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/ben_stealer.cpp
+    robot_behavior/tests/test_infra.cpp
+    robot_behavior/tests/test_kicker.cpp
+    robot_behavior/tests/test_relative_velocity_consign.cpp
+    robot_behavior/tests/test_velocity_consign.cpp
+    robot_behavior/tests/test_follow_path.cpp
+    robot_behavior/tests/test_field_info.cpp
     ai.cpp
     debug.cpp
+    task_example.cpp
     manager/manager.cpp
     manager/manager_with_game_state.cpp
     manager/manual.cpp
@@ -104,6 +112,8 @@ set (SOURCES
     annotations/shape/cross.cpp
     annotations/shape/arrow.cpp
     annotations/shape/polygon.cpp
+    # Statistiques
+    stats/resource_usage.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
@@ -119,6 +129,15 @@ target_link_libraries(ai ssl_ai ${ALL_LIBS})
 
 add_executable(see_robot executables/see_robot.cpp)
 target_link_libraries(see_robot ssl_ai ${ALL_LIBS})
+
+add_executable(plot_xyt executables/plot_xyt.cpp)
+target_link_libraries(plot_xyt ssl_ai ${ALL_LIBS})
+
+add_executable(goalie executables/goalie.cpp)
+target_link_libraries(goalie ssl_ai ${ALL_LIBS})
+
+add_executable(goto_ball executables/goto_ball.cpp)
+target_link_libraries(goto_ball ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

@@ -36,4 +36,4 @@ RUN ./workspace install
 
 RUN ./workspace build
 
-CMD ./bin/ai_st -s -y 
+CMD ./bin/ai -s -y 
