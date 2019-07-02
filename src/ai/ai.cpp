@@ -34,6 +34,7 @@
 #include <utility>
 #include <data/computed_data.h>
 #include <strategy/placer.h>
+#include <data.h>
 
 namespace rhoban_ssl
 {
@@ -248,7 +249,8 @@ void AI::setManager(std::string managerName)
     strategy_manager_ = manager::Factory::constructManager(managerName);
   }
 
-  Data::get()->robots[Ally][ai::Config::default_goalie_id].is_goalie = true;
+  // Data::get()->robots[Ally][ai::Config::default_goalie_id].is_goalie = true;
+  Data::get()->referee.teams_info->goalkeeper_number; 
   strategy_manager_->declareTeamIds(robot_ids);
 }
 

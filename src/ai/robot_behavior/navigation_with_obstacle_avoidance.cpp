@@ -170,6 +170,17 @@ void NavigationWithObstacleAvoidance::convertCycleDirectionToLinearAndAngularVel
 
   rhoban_geometry::Point pos = linearPosition() + limit_cycle_direction_ / (limit_cycle_direction_.norm()) * 1.0;
 
+  double dist =
+      linearPosition().getDist(Data::get()->all_robots[closest_robot_].second->getMovement().linearPosition(time()));
+
+  // avoid the problem where 2 allies bots infinitely avoid themselves until they leave the field like two small
+  // dragonfly.
+  if (Data::get()->all_robots[closest_robot_].first == Ally && dist < INFINITE_DODGING_PREVENTION &&
+      robot().getMovement().linearVelocity(time()).norm() <=
+          Data::get()->all_robots[closest_robot_].second->getMovement().linearVelocity(time()).norm())
+  {
+    pos = linearPosition();
+  }
   position_follower_avoidance_.setFollowingPosition(pos, target_angle_);
 }
 
@@ -230,9 +241,6 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
       Vector2d(sign_of_avoidance_rotation_ * s.getY() + s.getX() * delta_radius,
                -sign_of_avoidance_rotation_ * s.getX() + s.getY() * delta_radius);
 
-  DEBUG("------------------------------------");
-  DEBUG(obstacle_linear_velocity);
-  DEBUG(obstacle_point_of_view_.limit_cycle_direction);
   limit_cycle_direction_ = obstacle_point_of_view_.limit_cycle_direction + obstacle_linear_velocity;
 }
 

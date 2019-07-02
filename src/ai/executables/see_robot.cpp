@@ -38,7 +38,7 @@
 #include <robot_behavior/tutorials/beginner/see_robot.h>
 #include <strategy/from_robot_behavior.h>
 
-#define TEAM_NAME "NAMeC"
+#define TEAM_NAME "nAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 #define SERVER_PORT 7882
