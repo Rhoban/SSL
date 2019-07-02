@@ -108,6 +108,7 @@ set (SOURCES
     strategy/wall_2.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp
+    robot_behavior/attacker/receiver.cpp
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp
