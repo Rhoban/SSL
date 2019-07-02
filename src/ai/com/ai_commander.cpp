@@ -23,6 +23,8 @@
 #include <config.h>
 #include <data.h>
 
+#include <unistd.h>
+
 namespace rhoban_ssl
 {
 namespace control
@@ -50,6 +52,8 @@ Commander::Commander() : real_(nullptr), sim_(nullptr)
 
 Commander::~Commander()
 {
+  emergency();
+  usleep(1000);
   if (sim_ != nullptr)
     delete sim_;
 
@@ -271,7 +275,7 @@ void Commander::updateRobotsCommands()
           set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(), kick,
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
-          );
+              );
           // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
         }
         else

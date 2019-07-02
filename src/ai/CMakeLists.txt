@@ -158,6 +158,9 @@ target_link_libraries(goalie ssl_ai ${ALL_LIBS})
 add_executable(goto_ball executables/goto_ball.cpp)
 target_link_libraries(goto_ball ssl_ai ${ALL_LIBS})
 
+add_executable(goto_nv executables/goto_nv.cpp)
+target_link_libraries(goto_nv ssl_ai ${ALL_LIBS})
+
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
 if(CATKIN_ENABLE_TESTING)
