@@ -123,8 +123,8 @@ void Annotations::addBox(Box box, std::string stroke_color, std::string fill_col
 {
   std::shared_ptr<shape::Polygon> polygon(new shape::Polygon(box.getNE(), stroke_color, fill_color, dashed));
   polygon->add_point(box.getNW());
-  polygon->add_point(box.getSE());
   polygon->add_point(box.getSW());
+  polygon->add_point(box.getSE());
   shapes_.push_back(polygon);
 }
 

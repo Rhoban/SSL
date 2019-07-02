@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,54 +17,59 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "goto_ball.h"
+#include "test_infra.h"
+#include <math/tangents.h>
 #include <math/vector2d.h>
+#include <math/continuous_angle.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
+namespace tests
 {
-GotoBall::GotoBall() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+TestInfra::TestInfra() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void GotoBall::update(double time, const data::Robot& robot, const data::Ball& ball)
+void TestInfra::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
-  // DO NOT REMOVE THAT LINE
+  // DO NOT REMOVE THAT LIN
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
+  // Now
+  //  this->robot_linear_position
+  //  this->robot_angular_position
+  // are all avalaible
 
-  annotations_.clear();
+  rhoban_geometry::Point target_position = robot.getMovement().linearPosition(time);
 
-  rhoban_geometry::Point robot_position = ballPosition();
-  ContinuousAngle angle = 0.0;
+  bool value = GameInformations::infraRed(robot.id, Ally);
+  std::cout << "Value infra red : " << value << '\n';
 
-  follower_->setFollowingPosition(robot_position, angle);
-  follower_->avoidTheBall(false);
+  // follower->avoid_the_ball(true);
+  double target_rotation = detail::vec2angle(ballPosition() - target_position);
+
+  follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
 }
 
-Control GotoBall::control() const
+Control TestInfra::control() const
 {
   Control ctrl = follower_->control();
   return ctrl;
 }
 
-GotoBall::~GotoBall()
+TestInfra::~TestInfra()
 {
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations GotoBall::getAnnotations() const
+rhoban_ssl::annotations::Annotations TestInfra::getAnnotations() const
 {
-  rhoban_ssl::annotations::Annotations annotations;
-  annotations.addAnnotations(this->annotations_);
-  annotations.addAnnotations(follower_->getAnnotations());
-  return annotations;
+  return follower_->getAnnotations();
 }
 
-}  // namespace Beginner
+}  // namespace tests
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl

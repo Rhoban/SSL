@@ -55,6 +55,12 @@
 #include <strategy/pvc_striker_kick.h>
 #include <strategy/pvc_striker_v2.h>
 #include <strategy/pvc_striker_with_support.h>
+#include <robot_behavior/ben_stealer.h>
+#include <robot_behavior/tests/test_infra.h>
+#include <robot_behavior/tests/test_kicker.h>
+#include <robot_behavior/tests/test_relative_velocity_consign.h>
+#include <robot_behavior/tests/test_follow_path.h>
+#include <robot_behavior/tests/test_field_info.h>
 
 namespace rhoban_ssl
 {
@@ -65,8 +71,8 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Beginner go to ball",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        [&](double time, double dt) {
-                         robot_behavior::Beginner::Goto_ball* beginner_goto_ball =
-                             new robot_behavior::Beginner::Goto_ball();
+                         robot_behavior::beginner::GotoBall* beginner_goto_ball =
+                             new robot_behavior::beginner::GotoBall();
                          return std::shared_ptr<robot_behavior::RobotBehavior>(beginner_goto_ball);
                        },
                        false  // we don't want to define a goal here !
@@ -106,8 +112,8 @@ Manual::Manual(std::string name) : Manager(name)
                                               )));
   registerStrategy("Beginner - See Robot 3", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                  [&](double time, double dt) {
-                                                   robot_behavior::Beginner::SeeRobot* see_robot =
-                                                       new robot_behavior::Beginner::SeeRobot();
+                                                   robot_behavior::beginner::SeeRobot* see_robot =
+                                                       new robot_behavior::beginner::SeeRobot();
                                                    see_robot->setRobotIdToSee(3);
                                                    return std::shared_ptr<robot_behavior::RobotBehavior>(see_robot);
                                                  },
@@ -239,6 +245,93 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("PVC - StrikerV2", std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2()));
   registerStrategy("PVC - Striker With Support",
                    std::shared_ptr<strategy::Strategy>(new strategy::StrikerWithSupport()));
+  registerStrategy("Stealer", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                  [&](double time, double dt) {
+                                    robot_behavior::BenStealer* stealer = new robot_behavior::BenStealer();
+                                    stealer->setRobotIdToSteal(3);
+                                    return std::shared_ptr<robot_behavior::RobotBehavior>(stealer);
+                                  },
+                                  false  // we don't want to define a goal here !
+                                  )));
+  registerStrategy("Test - IR", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                    [&](double time, double dt) {
+                                      robot_behavior::tests::TestInfra* test_ir =
+                                          new robot_behavior::tests::TestInfra();
+                                      return std::shared_ptr<robot_behavior::RobotBehavior>(test_ir);
+                                    },
+                                    false  // we don't want to define a goal here !
+                                    )));
+  registerStrategy("Test - Kicker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                        [&](double time, double dt) {
+                                          robot_behavior::tests::TestKicker* test_kick =
+                                              new robot_behavior::tests::TestKicker();
+                                          return std::shared_ptr<robot_behavior::RobotBehavior>(test_kick);
+                                        },
+                                        false  // we don't want to define a goal here !
+                                        )));
+  registerStrategy("Test - Relative velocity consign",
+                   std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                       [&](double time, double dt) {
+                         robot_behavior::tests::TestRelativeVelocityConsign* test_rvc =
+                             new robot_behavior::tests::TestRelativeVelocityConsign();
+                         test_rvc->setAngularVelocity(1);  // tourbilol
+                         test_rvc->setLinearVelocity(Vector2d(0.8, 0));
+                         return std::shared_ptr<robot_behavior::RobotBehavior>(test_rvc);
+                       },
+                       false  // we don't want to define a goal here !
+                       )));
+  registerStrategy("Test - Velocity consign", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                  [&](double time, double dt) {
+                                                    robot_behavior::tests::TestRelativeVelocityConsign* test_vc =
+                                                        new robot_behavior::tests::TestRelativeVelocityConsign();
+                                                    test_vc->setAngularVelocity(1);
+                                                    test_vc->setLinearVelocity(Vector2d(0.8, 0));
+                                                    return std::shared_ptr<robot_behavior::RobotBehavior>(test_vc);
+                                                  },
+                                                  false  // we don't want to define a goal here !
+                                                  )));
+  registerStrategy(
+      "Test - Follow Path",
+      std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+          [&](double time, double dt) {
+            robot_behavior::tests::TestFollowPath* test_fp = new robot_behavior::tests::TestFollowPath(
+
+                /* std::vector<rhoban_geometry::Point>{
+                     // path under all 4 cams
+                     rhoban_geometry::Point(-3, 2.75), rhoban_geometry::Point(-3, -2.75),
+                     rhoban_geometry::Point(3, -2.75), rhoban_geometry::Point(3, 2.75) }*/
+                /*std::vector<rhoban_geometry::Point>{ // path under left cams
+                    rhoban_geometry::Point(-3,
+                   2.75), rhoban_geometry::Point(-3, -2.75) }*/
+                /* std::vector<rhoban_geometry::Point>{ // path under right cams
+                                                      rhoban_geometry::Point(3, 2.75),
+                                                      rhoban_geometry::Point(3, -2.75) });*/
+                /*std::vector<rhoban_geometry::Point>{ // path under bottom cams
+                                                      rhoban_geometry::Point(-3, -2.75),
+                                                      rhoban_geometry::Point(3, -2.75) });*/
+                /*std::vector<rhoban_geometry::Point>{ // path under top cams
+                                                     rhoban_geometry::Point(-3, 2.75),
+                                                     rhoban_geometry::Point(3, 2.75) });*/
+                /*std::vector<rhoban_geometry::Point>{ // path trouh the center *2
+                                                     rhoban_geometry::Point(1, 1), rhoban_geometry::Point(-1, -1),
+                                                     rhoban_geometry::Point(-1, 1), rhoban_geometry::Point(1, -1) });*/
+                std::vector<rhoban_geometry::Point>{ // path under left bottom cam
+                                                     rhoban_geometry::Point(-3, -2.75),
+                                                     rhoban_geometry::Point(-3.5, -2.75) });
+
+            return std::shared_ptr<robot_behavior::RobotBehavior>(test_fp);
+          },
+          false  // we don't want to define a goal here !
+          )));
+
+  registerStrategy("Test - Info Field", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                            [&](double time, double dt) {
+                                              robot_behavior::tests::TestFieldInfo* field_info =
+                                                  new robot_behavior::tests::TestFieldInfo();
+                                              return std::shared_ptr<robot_behavior::RobotBehavior>(field_info);
+                                            },
+                                            false  // we don't want to define a goal here !
+                                            )));
 }
 
 void Manual::update()

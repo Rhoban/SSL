@@ -26,31 +26,39 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
-{
-class SeeRobot : public RobotBehavior
+class BenStealer : public RobotBehavior
 {
 private:
-  uint target_robot_number;
   ConsignFollower* follower_;
-  annotations::Annotations annotations_;
+
+  rhoban_ssl::annotations::Annotations annotations_;
+
+  uint robot_id_to_steal_;
+
+  bool in_front_of_;
+  bool go_back_;
+
+  const double APPROACH_PERIMETER = 0.4;
+  const double ZONE_PRECISION_RADIUS = 0.1;
+  const double RESET_RADIUS = 0.6;
+  const double FINAL_APPROACH_RADIUS_FIRST_VALUE = 0.1;
+  const double FINAL_APPROACH_DECREASE_SPEED = 0.001;
+
+  double final_approach_value_;
 
 public:
-  SeeRobot(uint target_number = 0);
+  BenStealer(uint robot_id_to_steal = 0);
 
-  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+  void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 
-  void setRobotIdToSee(uint id);
+  rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  uint getRobotIdToSee() const;
+  void setRobotIdToSteal(uint id);
 
-  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
-
-  virtual ~SeeRobot();
+  virtual ~BenStealer();
 };
 
-};  // namespace beginner
-};  // namespace robot_behavior
-};  // namespace rhoban_ssl
+}  // namespace robot_behavior
+}  // namespace rhoban_ssl
