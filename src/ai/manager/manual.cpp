@@ -39,8 +39,8 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Beginner go to ball",
                    std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                        [&](double time, double dt) {
-                         robot_behavior::Beginner::Goto_ball* beginner_goto_ball =
-                             new robot_behavior::Beginner::Goto_ball();
+                         robot_behavior::beginner::GotoBall* beginner_goto_ball =
+                             new robot_behavior::beginner::GotoBall();
                          return std::shared_ptr<robot_behavior::RobotBehavior>(beginner_goto_ball);
                        },
                        false  // we don't want to define a goal here !

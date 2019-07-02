@@ -20,6 +20,7 @@ include_directories(${catkin_INCLUDE_DIRS} .)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set (SOURCES
+    core/plot_velocity.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -124,6 +125,9 @@ target_link_libraries(plot_xyt ssl_ai ${ALL_LIBS})
 
 add_executable(goalie executables/goalie.cpp)
 target_link_libraries(goalie ssl_ai ${ALL_LIBS})
+
+add_executable(goto_ball executables/goto_ball.cpp)
+target_link_libraries(goto_ball ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
