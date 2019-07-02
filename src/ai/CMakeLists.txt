@@ -57,6 +57,10 @@ set (SOURCES
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
+    robot_behavior/keeper/keeper.cpp
+    robot_behavior/defender/defensive_wall.cpp
+    robot_behavior/defender/kick_wall.cpp
+    robot_behavior/defender/obstructor.cpp
     robot_behavior/tests/test_infra.cpp
     robot_behavior/tests/test_kicker.cpp
     robot_behavior/tests/test_relative_velocity_consign.cpp
@@ -66,15 +70,12 @@ set (SOURCES
     ai.cpp
     debug.cpp
     task_example.cpp
-    manager/manager.cpp
-    manager/manager_with_game_state.cpp
-    manager/manual.cpp
-    manager/factory.cpp
     strategy/strategy.cpp
     strategy/halt.cpp
     strategy/placer.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
+    strategy/keeper/keeper_strat.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
@@ -103,7 +104,19 @@ set (SOURCES
     core/logger.cpp
     core/gnu_plot.cpp
     referee/referee_packet_analyzer.cpp
-    referee/game_state.cpp    
+    referee/game_state.cpp
+    # Manager
+    manager/manager.cpp
+    manager/manager_with_game_state.cpp
+    manager/manual.cpp
+    manager/factory.cpp
+    manager/match.cpp
+    manager/dumb_manager.cpp
+    # Strategy
+    strategy/wall.cpp
+    strategy/wall_2.cpp
+    # Behavior
+    robot_behavior/keeper/clearer.cpp
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp

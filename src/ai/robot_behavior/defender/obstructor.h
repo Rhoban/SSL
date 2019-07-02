@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 TO COMPLETE
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,30 +19,33 @@
 
 #pragma once
 
-#include <manager/manager.h>
+#include "../robot_behavior.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace robot_behavior
 {
-class Manual_old : public Manager
+class Obstructor : public RobotBehavior
 {
 private:
-  bool strategy_was_assigned_;
-  bool goal_to_positive_axis_;
-  int ally_goalie_id_;
-  int opponent_goalie_id_;
+  rhoban_geometry::Point point_to_obstruct_;
+  int robot_to_obstruct_id_;
+  Team robot_to_obstruct_team_;
 
-  void assignPointOfViewAndGoalie();
+  ConsignFollower* follower_;
 
 public:
-  Manual_old();
-  void defineGoalToPositiveAxis(bool value = true);
+  Obstructor();
 
-  void update(double time);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
-  virtual ~Manual_old();
+  virtual Control control() const;
+  void declareRobotToObstruct(int robot_id, Team team = Opponent);
+
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+  virtual ~Obstructor();
 };
 
-};  // namespace manager
+};  // namespace robot_behavior
 };  // namespace rhoban_ssl
