@@ -25,8 +25,8 @@ namespace robot_behavior
 {
 namespace attacker
 {
-Receiver::Receiver(rhoban_geometry::Point point)
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), target_(point)
+Receiver::Receiver()
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
@@ -37,12 +37,32 @@ void Receiver::update(double time, const data::Robot& robot, const data::Ball& b
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
   const rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
+  Vector2d ball_direction = ball.getMovement().linearVelocity(time);
   Vector2d robot_ball = ballPosition() - robot_position;
 
-  annotations_.clear();
-  rhoban_geometry::Point target_position = target_;
+  
+  rhoban_geometry::Point target_position = robot_position;
   double target_rotation = vector2angle(robot_ball).value();
 
+  DEBUG(ball_direction.norm());
+  
+  if (ball_direction.norm() - 0.00001 > 0)
+    {
+      ball_direction = ball_direction / ball_direction.norm();
+      
+      double dist_robot_ball = robot_ball.norm();
+  
+      double teta = vectors2angle(ball_direction, robot_ball).value(); 
+      
+      
+      target_position = ballPosition() - dist_robot_ball * cos(teta) * ball_direction;
+      
+      // if (teta <= 5 )
+      //   {
+      //     target_position = ballPosition();
+      //   }
+    }
+   
   follower_->setFollowingPosition(target_position, target_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);

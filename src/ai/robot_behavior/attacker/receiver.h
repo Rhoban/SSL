@@ -21,6 +21,8 @@
 
 #include <robot_behavior/robot_behavior.h>
 #include <robot_behavior/factory.h>
+#include <math/vector2d.h>
+#include <debug.h>
 
 namespace rhoban_ssl
 {
@@ -33,10 +35,9 @@ class Receiver : public RobotBehavior
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
-  rhoban_geometry::Point target_;
 
 public:
-  Receiver(rhoban_geometry::Point point);
+  Receiver();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 

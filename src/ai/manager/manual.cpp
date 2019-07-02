@@ -42,8 +42,6 @@
 #include <strategy/wall.h>
 #include <strategy/wall_2.h>
 
-#include <strategy/pass.h>
-
 #include <robot_behavior/tests/test_infra.h>
 #include <robot_behavior/tests/test_kicker.h>
 #include <robot_behavior/tests/test_relative_velocity_consign.h>
@@ -155,8 +153,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Receiver", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                    [&](double time, double dt) {
                                      robot_behavior::attacker::Receiver* receiver =
-                                         new robot_behavior::attacker::Receiver(
-                                             Data::get()->ball.getMovement().linearPosition(time));
+                                         new robot_behavior::attacker::Receiver();
                                      return std::shared_ptr<robot_behavior::RobotBehavior>(receiver);
                                    },
                                    false  // we don't want to define a goal here !
@@ -176,8 +173,6 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Pass", std::shared_ptr<strategy::Strategy>(new strategy::Pass()));
   
 
-  registerStrategy("Wall1", std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
-  registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
   registerStrategy("Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                      [&](double time, double dt) {
                                        robot_behavior::Obstructor* obstructor = new robot_behavior::Obstructor();
