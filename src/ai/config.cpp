@@ -3,6 +3,7 @@
 #include <fstream>
 #include "config.h"
 #include "debug.h"
+#include <data.h>
 
 namespace rhoban_ssl
 {
@@ -178,6 +179,7 @@ void Config::load(const std::string& config_path)
   penalty_rayon = root["goalie"]["penalty_rayon"].asDouble();  // penalty rayon for the goalie
   assert(penalty_rayon > 0.0);
   default_goalie_id = root["goalie"]["default_id"].asUInt();  // penalty rayon for the goalie
+  Data::get()->referee.teams_info->goalkeeper_number = default_goalie_id;
   assert(default_goalie_id >= 0);
   assert(default_goalie_id < Config::NB_OF_ROBOTS_BY_TEAM);
 

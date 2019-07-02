@@ -74,19 +74,19 @@ GameState::GameState()
   // STATES
   machine_state_.addState(state_name::stop,
                           [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            DEBUG(state_name::stop);
+                            // DEBUG(state_name::stop);
                           });
   machine_state_.addState(state_name::running,
                           [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            DEBUG(state_name::running);
+                            // DEBUG(state_name::running);
                           });
   machine_state_.addState(state_name::halt,
                           [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            DEBUG(state_name::halt);
+                            // DEBUG(state_name::halt);
                           });
   machine_state_.addState(state_name::free_kick,
                           [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
-                            DEBUG(state_name::free_kick);
+                            // DEBUG(state_name::free_kick);
                           });
   machine_state_.addState(state_name::kickoff,
                           [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
