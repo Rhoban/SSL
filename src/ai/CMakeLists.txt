@@ -21,6 +21,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set (SOURCES
     core/plot_velocity.cpp
+    core/plot_xy.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
