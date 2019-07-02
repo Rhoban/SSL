@@ -36,7 +36,7 @@
 #include <control/kinematic.h>
 #include <viewer/viewer_communication.h>
 
-#define TEAM_NAME "NAMeC"
+#define TEAM_NAME "nAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 #define SERVER_PORT 7882
@@ -198,7 +198,7 @@ int main(int argc, char** argv)
   // refereee
   ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
   ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
-  // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
+  ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
   ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
 
   ExecutionManager::getManager().addTask(new data::CollisionComputing());

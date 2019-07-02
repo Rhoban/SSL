@@ -168,6 +168,9 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
   registerStrategy("Pass", std::shared_ptr<strategy::Strategy>(new strategy::Pass()));
   
+
+  registerStrategy("Wall1", std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
+  registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
   registerStrategy("Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                      [&](double time, double dt) {
                                        robot_behavior::Obstructor* obstructor = new robot_behavior::Obstructor();

@@ -8,7 +8,7 @@ namespace rhoban_ssl
 {
 namespace ai
 {
-std::string Config::team_name = "NAMec";
+std::string Config::team_name = "nAMeC";
 
 std::vector<unsigned int> Config::attackers_;
 std::vector<unsigned int> Config::defenders_;
