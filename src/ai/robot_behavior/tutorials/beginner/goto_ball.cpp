@@ -39,9 +39,11 @@ void GotoBall::update(double time, const data::Robot& robot, const data::Ball& b
   annotations_.clear();
 
   rhoban_geometry::Point robot_position = ballPosition();
-  ContinuousAngle angle = 0.0;
 
-  follower_->setFollowingPosition(robot_position, angle);
+  Vector2d vect_robot_ball = ballPosition() - robot.getMovement().linearPosition(time);
+  ContinuousAngle follow_rotation = vector2angle(vect_robot_ball);
+
+  follower_->setFollowingPosition(robot_position, follow_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }

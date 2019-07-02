@@ -230,9 +230,6 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
       Vector2d(sign_of_avoidance_rotation_ * s.getY() + s.getX() * delta_radius,
                -sign_of_avoidance_rotation_ * s.getX() + s.getY() * delta_radius);
 
-  DEBUG("------------------------------------");
-  DEBUG(obstacle_linear_velocity);
-  DEBUG(obstacle_point_of_view_.limit_cycle_direction);
   limit_cycle_direction_ = obstacle_point_of_view_.limit_cycle_direction + obstacle_linear_velocity;
 }
 
