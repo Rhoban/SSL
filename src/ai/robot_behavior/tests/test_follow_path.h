@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
+    Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,26 +19,37 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <SimClient.h>
-#include "ai_commander.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
-class AICommanderSimulation : public AICommander
+namespace robot_behavior
 {
+namespace tests
+{
+class TestFollowPath : public RobotBehavior
+{
+private:
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
+
+  std::vector<rhoban_geometry::Point> path_;
+  int path_index_;
+
+  const double REACH_RADIUS = 0.1;
+
 public:
-  AICommanderSimulation();
+  TestFollowPath(std::vector<rhoban_geometry::Point>);
 
-  virtual void flush();
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
-  virtual void moveBall(double x, double y, double vx = 0, double vy = 0);
+  virtual Control control() const;
 
-  virtual void moveRobot(bool ally, int id, double x, double y, double theta, bool turnon);
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~AICommanderSimulation();
-
-protected:
-  SimClient client_;
+  virtual ~TestFollowPath();
 };
-}  // namespace rhoban_ssl
+
+};  // namespace tests
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

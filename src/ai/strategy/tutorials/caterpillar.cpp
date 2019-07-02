@@ -25,7 +25,7 @@ namespace strategy
 {
 Caterpillar::Caterpillar()
   : Strategy()
-  , head_ball_(std::shared_ptr<robot_behavior::Beginner::Goto_ball>(new robot_behavior::Beginner::Goto_ball()))
+  , head_ball_(std::shared_ptr<robot_behavior::beginner::GotoBall>(new robot_behavior::beginner::GotoBall()))
   , path_mode_(false)
 {
 }

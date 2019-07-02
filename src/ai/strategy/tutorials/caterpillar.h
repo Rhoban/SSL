@@ -34,7 +34,7 @@ private:
 
   int CATERPILLAR_SIZE = 6;
 
-  std::shared_ptr<robot_behavior::Beginner::Goto_ball> head_ball_;
+  std::shared_ptr<robot_behavior::beginner::GotoBall> head_ball_;
   std::shared_ptr<robot_behavior::GoToXY> head_path_;
 
   std::vector<std::shared_ptr<robot_behavior::medium::FollowRobot>> followers_;

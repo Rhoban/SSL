@@ -8,7 +8,7 @@ namespace rhoban_ssl
 {
 namespace ai
 {
-std::string Config::team_name = "AMC";
+std::string Config::team_name = "NAMec";
 
 bool Config::enable_movement_with_integration = true;
 bool Config::we_are_blue = true;

@@ -2,7 +2,6 @@
     This file is part of SSL.
 
     Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,48 +19,32 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <Kinematic.h>
-#include "ai_commander.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
-class AICommanderReal : public AICommander, public Task
+namespace robot_behavior
 {
-public:
-  AICommanderReal();
-
-  virtual void flush();
-  virtual void kick();
-
-  Master* getMaster();
-
-  virtual ~AICommanderReal();
-
-protected:
-  bool kicking_;
-  Master* master_;
-  Kinematic kinematic_;
-
-  // Task interface
-public:
-  /**
-   * @brief this task launchs and stop the thread of the commander
-   * @return true while the thread running
-   */
-  bool runTask();
-};
-
-class UpdateElectronicInformations : public Task
+namespace tests
+{
+class TestKicker : public RobotBehavior
 {
 private:
-  AICommanderReal* commander_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  UpdateElectronicInformations(AICommanderReal* commander);
+  TestKicker();
 
-  // Task interface
-public:
-  bool runTask();
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+
+  virtual Control control() const;
+
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+
+  virtual ~TestKicker();
 };
-}  // namespace rhoban_ssl
+
+};  // namespace tests
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

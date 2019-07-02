@@ -20,6 +20,7 @@ include_directories(${catkin_INCLUDE_DIRS} .)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set (SOURCES
+    core/plot_velocity.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -38,8 +39,6 @@ set (SOURCES
     vision/factory.cpp
     vision/time_synchroniser.cpp
     com/ai_commander.cpp
-    com/ai_commander_simulation.cpp
-    com/ai_commander_real.cpp
     viewer/viewer_communication.cpp
     viewer/properties.cpp
     robot_behavior/factory.cpp
@@ -60,8 +59,16 @@ set (SOURCES
     robot_behavior/go_to_xy.cpp
     robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
+    robot_behavior/ben_stealer.cpp
+    robot_behavior/tests/test_infra.cpp
+    robot_behavior/tests/test_kicker.cpp
+    robot_behavior/tests/test_relative_velocity_consign.cpp
+    robot_behavior/tests/test_velocity_consign.cpp
+    robot_behavior/tests/test_follow_path.cpp
+    robot_behavior/tests/test_field_info.cpp
     ai.cpp
     debug.cpp
+    task_example.cpp
     manager/manager.cpp
     manager/manager_with_game_state.cpp
     manager/manual.cpp
@@ -98,6 +105,7 @@ set (SOURCES
     math/lines.cpp
     core/export_to_plot.cpp
     core/logger.cpp
+    core/gnu_plot.cpp
     referee/referee_packet_analyzer.cpp
     referee/game_state.cpp    
     # Annotations
@@ -107,6 +115,8 @@ set (SOURCES
     annotations/shape/cross.cpp
     annotations/shape/arrow.cpp
     annotations/shape/polygon.cpp
+    # Statistiques
+    stats/resource_usage.cpp
 )
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/../../bin/)
@@ -117,8 +127,20 @@ set(ALL_LIBS ${catkin_LIBRARIES} ${PROTOBUF_LIBRARIES} websockets)
 add_library (ssl_ai ${SOURCES})
 target_link_libraries(ssl_ai ${ALL_LIBS})
 
-add_executable(ai_st main_st.cpp)
-target_link_libraries(ai_st ssl_ai ${ALL_LIBS})
+add_executable(ai main.cpp)
+target_link_libraries(ai ssl_ai ${ALL_LIBS})
+
+add_executable(see_robot executables/see_robot.cpp)
+target_link_libraries(see_robot ssl_ai ${ALL_LIBS})
+
+add_executable(plot_xyt executables/plot_xyt.cpp)
+target_link_libraries(plot_xyt ssl_ai ${ALL_LIBS})
+
+add_executable(goalie executables/goalie.cpp)
+target_link_libraries(goalie ssl_ai ${ALL_LIBS})
+
+add_executable(goto_ball executables/goto_ball.cpp)
+target_link_libraries(goto_ball ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

@@ -56,6 +56,11 @@ struct SharedData
   SharedData();
 };
 
+namespace control
+{
+class Commander;
+}
+
 /**
  * This class is used to make transfer store global data accessed from many points.
  */
@@ -69,6 +74,8 @@ public:
   data::Field field;
   data::AiData ai_data;
   data::Referee referee;
+
+  control::Commander* commander;
 
   SharedData shared_data;
   // TODO refacto
