@@ -130,8 +130,10 @@ int GslMatrix::multMatrixBLASKalman(GslMatrix* dest, const GslMatrix* a, const G
   size_t inter_cols_number = 0;
   if (transB)
   {
-    if (transA)
+    if (transC)
     {
+      inter_rows_number = this->getColumns();
+      inter_cols_number = c->getRows();
     }
     else
     {
@@ -141,7 +143,7 @@ int GslMatrix::multMatrixBLASKalman(GslMatrix* dest, const GslMatrix* a, const G
   }
   else
   {
-    if (transA)
+    if (transC)
     {
       inter_rows_number = this->getRows();
       inter_cols_number = c->getRows();
@@ -252,4 +254,19 @@ GslMatrix::~GslMatrix()
   gsl_matrix_free(m_);
 }
 
+std::ostream & operator<<(std::ostream & Str, const GslMatrix & v) { 
+  // print something from v to str, e.g: Str << v.getX();
+  size_t rows = v.getRows();
+  size_t cols = v.getColumns();
+  Str << '\n';
+  for(size_t i = 0; i< rows; ++i){
+    for (size_t j = 0; j<cols; ++j){
+      Str << v.getElement(i,j);
+      Str << ' ';
+    }
+    Str << '\n';
+  }
+  
+  return Str;
+}
 }  // namespace rhoban_ssl
