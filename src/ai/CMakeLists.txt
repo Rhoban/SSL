@@ -59,7 +59,7 @@ set (SOURCES
     robot_behavior/keeper/keeper.cpp
     robot_behavior/defender/defensive_wall.cpp
     robot_behavior/defender/kick_wall.cpp
-    robot_behavior/defender/obstructor.cpp
+    robot_behavior/obstructor.cpp
     ai.cpp
     debug.cpp
     strategy/strategy.cpp
@@ -103,8 +103,9 @@ set (SOURCES
     manager/manual.cpp
     manager/factory.cpp
     manager/match.cpp
-    manager/dumb_manager.cpp
     # Strategy
+    strategy/wall.cpp
+    strategy/wall_2.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp
     # Annotations
