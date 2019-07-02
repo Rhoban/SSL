@@ -26,7 +26,7 @@ namespace strategy
 Defensive::Defensive()
   : Strategy()
   , degageur_(std::shared_ptr<robot_behavior::Degageur>(new robot_behavior::Degageur()))
-  , obstructeur_(std::shared_ptr<robot_behavior::Obstructor>(new robot_behavior::Obstructor()))
+  , obstructeur_(std::shared_ptr<robot_behavior::PVCObstructor>(new robot_behavior::PVCObstructor()))
 {
 }
 

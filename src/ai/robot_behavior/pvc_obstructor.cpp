@@ -25,7 +25,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-Obstructor::Obstructor()
+PVCObstructor::PVCObstructor()
   : RobotBehavior()
   , robot_to_obstruct_id_(-1)
   , robot_to_obstruct_team_(Opponent)
@@ -33,7 +33,7 @@ Obstructor::Obstructor()
 {
 }
 
-void Obstructor::update(double time, const data::Robot& robot, const data::Ball& ball)
+void PVCObstructor::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -103,7 +103,7 @@ void Obstructor::update(double time, const data::Robot& robot, const data::Ball&
   follower_->update(time, robot, ball);
 }
 
-Control Obstructor::control() const
+Control PVCObstructor::control() const
 {
   Control ctrl = follower_->control();
   // ctrl.spin = true; // We active the dribler !
@@ -111,18 +111,18 @@ Control Obstructor::control() const
   return ctrl;
 }
 
-void Obstructor::declareRobotToObstruct(int robot_id, Team team)
+void PVCObstructor::declareRobotToObstruct(int robot_id, Team team)
 {
   robot_to_obstruct_id_ = robot_id;
   robot_to_obstruct_team_ = team;
 }
 
-Obstructor::~Obstructor()
+PVCObstructor::~PVCObstructor()
 {
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Obstructor::getAnnotations() const
+rhoban_ssl::annotations::Annotations PVCObstructor::getAnnotations() const
 {
   return follower_->getAnnotations();
 }

@@ -32,9 +32,9 @@ class Defensive2 : public Strategy
 private:
   bool behaviors_are_assigned_;
   std::shared_ptr<robot_behavior::Degageur> degageur1_;
-  std::shared_ptr<robot_behavior::Obstructor> obstructeur1_;
+  std::shared_ptr<robot_behavior::PVCObstructor> obstructeur1_;
   std::shared_ptr<robot_behavior::Degageur> degageur2_;
-  std::shared_ptr<robot_behavior::Obstructor> obstructeur2_;
+  std::shared_ptr<robot_behavior::PVCObstructor> obstructeur2_;
 
 public:
   Defensive2();
