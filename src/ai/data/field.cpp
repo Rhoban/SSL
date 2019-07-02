@@ -37,15 +37,15 @@ void Field::updateAdditionnalInformations()
   quarter_centers_[SE] = rhoban_geometry::Point(-field_length_ / 4.0, field_width_ / 4.0);
 
   penalty_areas_[Ally] =
-      Box(rhoban_geometry::Point(-field_length_ / 2.0, penalty_area_width_ / 2.0),
-          rhoban_geometry::Point(-field_length_ / 2.0 + penalty_area_depth_, -penalty_area_width_ / 2.0));
+      Box(rhoban_geometry::Point(-field_length_ / 2.0, -penalty_area_width_ / 2.0),
+          rhoban_geometry::Point(-field_length_ / 2.0 + penalty_area_depth_, penalty_area_width_ / 2.0));
 
   penalty_areas_[Opponent] =
-      Box(rhoban_geometry::Point(field_length_ / 2.0, penalty_area_width_ / 2.0),
-          rhoban_geometry::Point(field_length_ / 2.0 - penalty_area_depth_, -penalty_area_width_ / 2.0));
+      Box(rhoban_geometry::Point(field_length_ / 2.0, -penalty_area_width_ / 2.0),
+          rhoban_geometry::Point(field_length_ / 2.0 - penalty_area_depth_, penalty_area_width_ / 2.0));
 
-  center_half_field[Ally] = rhoban_geometry::Point(-field_length_ / 4.0, field_width_ / 2.0);
-  center_half_field[Opponent] = rhoban_geometry::Point(field_length_ / 4.0, field_width_ / 2.0);
+  center_half_field[Ally] = rhoban_geometry::Point(-field_length_ / 4.0, 0);
+  center_half_field[Opponent] = rhoban_geometry::Point(field_length_ / 4.0, 0);
 }
 
 bool Field::isInside(const rhoban_geometry::Point& point) const
@@ -73,6 +73,12 @@ rhoban_geometry::Point Field::getSW() const
 {
   return corners_[SW];
 }
+
+rhoban_geometry::Point Field::getCorner(const Field::cardinal_position& cardinal_position) const
+{
+  return corners_[cardinal_position];
+}
+
 rhoban_geometry::Point Field::getNW() const
 {
   return corners_[NW];

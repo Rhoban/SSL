@@ -116,4 +116,20 @@ bool TimeStatTask::runTask()
   return true;
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+rhoban_ssl::ConditionalTask::ConditionalTask(const std::function<bool()>& condition, const std::function<bool()>& job)
+  : condition_(condition), job_(job)
+{
+}
+
+bool ConditionalTask::runTask()
+{
+  if (condition_())
+  {
+    return job_();
+  }
+  return true;
+}
+
 }  // namespace rhoban_ssl

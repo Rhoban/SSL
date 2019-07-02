@@ -1,48 +1,45 @@
 /*
     This file is part of SSL.
-
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-
+    Copyright 2018 TO COMPLETE
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     SSL is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
 
-#include <manager/manager.h>
+#include "../robot_behavior.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace robot_behavior
 {
-class Manual_old : public Manager
+class KickWall : public RobotBehavior
 {
 private:
-  bool strategy_was_assigned_;
-  bool goal_to_positive_axis_;
-  int ally_goalie_id_;
-  int opponent_goalie_id_;
-
-  void assignPointOfViewAndGoalie();
+  int mur_robot_id_;
+  int mur_nb_robot_;
+  ConsignFollower* follower_;
 
 public:
-  Manual_old();
-  void defineGoalToPositiveAxis(bool value = true);
+  KickWall(bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
-  void update(double time);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+  void declareMurRobotId(int id, int mur_nb_robots);
 
-  virtual ~Manual_old();
+  virtual Control control() const;
+
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+  virtual ~KickWall();
 };
 
-};  // namespace manager
-};  // namespace rhoban_ssl
+};  // namespace robot_behavior
+}; // namespace rhoban_ssl

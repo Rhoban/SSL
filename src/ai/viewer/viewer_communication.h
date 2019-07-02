@@ -32,7 +32,7 @@ namespace viewer
 class ViewerCommunication : public Task
 {
 private:
-  AI* ai_;
+  ai::AI* ai_;
 
   /**
    * @brief The time when the last packets has been send to the viewer.
@@ -47,7 +47,7 @@ private:
   double sending_delay = 0.016;
 
 public:
-  ViewerCommunication(AI* ai);
+  ViewerCommunication(ai::AI* ai);
 
   // Task interface
 public:

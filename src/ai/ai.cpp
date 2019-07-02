@@ -31,21 +31,18 @@
 #include <core/collection.h>
 #include <manager/factory.h>
 #include <debug.h>
-#include <com/ai_commander_real.h>
 #include <utility>
 #include <data/computed_data.h>
 #include <strategy/placer.h>
+#include <data.h>
 
 namespace rhoban_ssl
 {
-AI::AI(std::string manager_name, AICommander* commander) : running_(true), commander_(commander)
+namespace ai
+{
+AI::AI(std::string manager_name) : running_(true)
 {
   initRobotBehaviors();
-  for (auto& mobile : Data::get()->all_robots)
-  {
-    mobile.second->initMovement();
-  }
-  Data::get()->ball.initMovement();
 
   manual_manager_ = manager::Factory::constructManager(manager::names::MANUAL);
 
@@ -79,32 +76,6 @@ float sign(float x)
     return 1.0;
   }
   return -1.0;
-}
-
-void AI::limitsVelocity(Control& ctrl) const
-{
-#if 1
-  if (ai::Config::translation_velocity_limit > 0.0)
-  {
-    if (ctrl.linear_velocity.norm() > ai::Config::translation_velocity_limit)
-    {
-      ctrl.linear_velocity *= ai::Config::translation_velocity_limit / ctrl.linear_velocity.norm();
-      std::cerr << "AI WARNING : we reached the "
-                   "limit translation velocity !"
-                << std::endl;
-    }
-  }
-  if (ai::Config::rotation_velocity_limit > 0.0)
-  {
-    if (std::fabs(ctrl.angular_velocity.value()) > ai::Config::rotation_velocity_limit)
-    {
-      ctrl.angular_velocity = ai::Config::rotation_velocity_limit * sign(ctrl.angular_velocity.value());
-      std::cerr << "AI WARNING : we reached the "
-                   "limit rotation velocity !"
-                << std::endl;
-    }
-  }
-#endif
 }
 
 void AI::preventCollision(int robot_id, Control& ctrl)
@@ -233,7 +204,6 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
   ctrl.changeToRelativeControl(
       Data::get()->robots[Ally][robot_id].getMovement().angularPosition(Data::get()->ai_data.time),
       Data::get()->ai_data.dt);
-  limitsVelocity(ctrl);
 }
 
 Control AI::getRobotControl(robot_behavior::RobotBehavior& robot_behavior, data::Robot& robot)
@@ -279,7 +249,8 @@ void AI::setManager(std::string managerName)
     strategy_manager_ = manager::Factory::constructManager(managerName);
   }
 
-  Data::get()->robots[Ally][ai::Config::default_goalie_id].is_goalie = true;
+  // Data::get()->robots[Ally][ai::Config::default_goalie_id].is_goalie = true;
+  Data::get()->referee.teams_info->goalkeeper_number; 
   strategy_manager_->declareTeamIds(robot_ids);
 }
 
@@ -415,20 +386,6 @@ std::shared_ptr<manager::Manager> AI::getManualManager()
   return manual_manager_;
 }
 
-void AI::emergency()
-{
-  for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
-  {
-    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
-    final_control.is_manually_controled_by_viewer = true;
-    final_control.control.ignore = true;
-    final_control.control.active = false;
-  }
-
-  commander_->stopAll();
-  commander_->flush();
-}
-
 Json::Value AI::getAnnotations() const
 {
   Json::Value json = Json::Value();
@@ -500,42 +457,6 @@ void AI::enableRobot(uint number, bool enabled)
   }
 }
 
-void AI::moveRobot(bool ally, uint number, double x, double y, double theta)
-{
-  if (Data::get()->referee.allyOnPositiveHalf())
-  {
-    x *= -1;
-    y *= -1;
-    theta += M_PI;
-  }
-
-  if (!ally || ai::Config::is_in_simulation)
-  {
-    commander_->moveRobot(ally, int(number), x, y, theta, true);
-  }
-  else
-  {
-    std::pair<rhoban_geometry::Point, ContinuousAngle> target_pos{ rhoban_geometry::Point(x, y),
-                                                                   ContinuousAngle(theta) };
-    getCurrentManager()
-        .get()
-        ->getStrategy<strategy::Placer>(manager::Manager::MANAGER__PLACER)
-        .setPositions({ int(number) }, { target_pos });
-
-    setStrategyManuallyOf({ int(number) }, manager::Manager::MANAGER__PLACER);
-  }
-}
-
-void AI::moveBall(double x, double y, double v_x, double v_y)
-{
-  if (Data::get()->referee.allyOnPositiveHalf())
-  {
-    x *= -1;
-    y *= -1;
-  }
-  commander_->moveBall(x, y, v_x, v_y);
-}
-
 void AI::scan()
 {
   if (!ai::Config::is_in_simulation)
@@ -592,4 +513,18 @@ void AI::scan()
   }
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+bool InitMobiles::runTask()
+{
+  for (auto& mobile : Data::get()->all_robots)
+  {
+    mobile.second->initMovement();
+  }
+  Data::get()->ball.initMovement();
+
+  return false;
+}
+
+}  // namespace ai
 }  // namespace rhoban_ssl

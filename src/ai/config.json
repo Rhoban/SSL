@@ -9,7 +9,7 @@
         "robot_radius" : 0.09,
         "wheel_radius" : 0.03,
         "wheel_excentricity" : 0.08,
-	"max_wheel_speed" : 7,  
+	"max_wheel_speed" : 7.0,  
         "front_wheel_angle" : 120.0,
 	"rear_wheel_angle" : 45.0,
         "wheel_nb_turns_acceleration_limit" : {
@@ -53,6 +53,15 @@
             "real" : 0
         }
     },
+    "roles" : {
+       "0" : "attacker",
+       "1" : "attacker",
+       "2" : "defender",
+       "3" : "defender",
+       "4" : "defender",
+       "5" : "goalie"
+    },
+
     "ball" : {
         "radius_ball" : 0.021375
     },

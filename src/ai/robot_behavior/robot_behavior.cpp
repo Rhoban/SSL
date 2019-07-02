@@ -105,5 +105,36 @@ bool RobotBehavior::infraRed() const
   return robot().infraRed();
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+RobotBehaviorTask::RobotBehaviorTask(uint robot_number, robot_behavior::RobotBehavior* robot_behavior)
+  : robot_behavior_(robot_behavior), robot_number_(robot_number)
+{
+  auto& final_control = Data::get()->shared_data.final_control_for_robots[robot_number];
+  final_control.is_manually_controled_by_viewer = false;
+}
+
+RobotBehaviorTask::~RobotBehaviorTask()
+{
+  delete robot_behavior_;
+}
+
+bool RobotBehaviorTask::runTask()
+{
+  data::Robot& robot = Data::get()->robots[Ally][robot_number_];
+  data::Ball& ball = Data::get()->ball;
+
+  double time = Data::get()->ai_data.time;
+  double dt = Data::get()->ai_data.dt;
+  //  DEBUG("t : " << robot_behavior_-><< std::endl << "time : " << time << std::endl << "dt : " << dt);
+
+  robot_behavior_->update(time, robot, ball);
+  Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_number_].control;
+
+  ctrl = robot_behavior_->control();
+  ctrl.changeToRelativeControl(robot.getMovement().angularPosition(time), dt);
+  return true;
+}
+
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl

@@ -26,16 +26,16 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-class Goto_ball : public RobotBehavior
+class GotoBall : public RobotBehavior
 {
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  Goto_ball();
+  GotoBall();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -43,7 +43,7 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Goto_ball();
+  virtual ~GotoBall();
 };
 
 };  // namespace Beginner

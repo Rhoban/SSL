@@ -3,12 +3,17 @@
 #include <fstream>
 #include "config.h"
 #include "debug.h"
+#include <data.h>
 
 namespace rhoban_ssl
 {
 namespace ai
 {
-std::string Config::team_name = "AMC";
+std::string Config::team_name = "nAMeC";
+
+std::vector<unsigned int> Config::attackers_;
+std::vector<unsigned int> Config::defenders_;
+std::vector<unsigned int> Config::goalies_;
 
 bool Config::enable_movement_with_integration = true;
 bool Config::we_are_blue = true;
@@ -174,10 +179,44 @@ void Config::load(const std::string& config_path)
   penalty_rayon = root["goalie"]["penalty_rayon"].asDouble();  // penalty rayon for the goalie
   assert(penalty_rayon > 0.0);
   default_goalie_id = root["goalie"]["default_id"].asUInt();  // penalty rayon for the goalie
+  Data::get()->referee.teams_info->goalkeeper_number = default_goalie_id;
   assert(default_goalie_id >= 0);
   assert(default_goalie_id < Config::NB_OF_ROBOTS_BY_TEAM);
 
   enable_kicking = true;
+
+  DEBUG("test");
+
+  for (unsigned int i = 0; i < 16; i++)
+  {
+    if (!root["roles"][std::to_string(i)].isString())
+    {
+      continue;
+    }
+    std::string robot_role = root["roles"][std::to_string(i)].asString();
+    if (robot_role == "attacker")
+    {
+      attackers_.push_back(i);
+    }
+    else if (robot_role == "defender")
+    {
+      defenders_.push_back(i);
+    }
+    else if (robot_role == "goalie")
+    {
+      goalies_.push_back(i);
+    }
+    else
+    {
+      std::cerr << "Doesn't know this role" << std::endl;
+    }
+  }
+
+  for (auto it = root["can_be_goalie"].begin(); it != root["can_be_goalie"].end(); it++)
+  {
+    unsigned int id = (*it).asUInt();
+    goalies_.push_back(id);
+  }
 }
 }  // namespace ai
 }  // namespace rhoban_ssl

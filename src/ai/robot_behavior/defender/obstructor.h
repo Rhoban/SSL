@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-    Copyright 2018 TO COMPLETE -> Gregwar
+    Copyright 2018 TO COMPLETE
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,26 +19,33 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <SimClient.h>
-#include "ai_commander.h"
+#include "../robot_behavior.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
-class AICommanderSimulation : public AICommander
+namespace robot_behavior
 {
+class Obstructor : public RobotBehavior
+{
+private:
+  rhoban_geometry::Point point_to_obstruct_;
+  int robot_to_obstruct_id_;
+  Team robot_to_obstruct_team_;
+
+  ConsignFollower* follower_;
+
 public:
-  AICommanderSimulation();
+  Obstructor();
 
-  virtual void flush();
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
-  virtual void moveBall(double x, double y, double vx = 0, double vy = 0);
+  virtual Control control() const;
+  void declareRobotToObstruct(int robot_id, Team team = Opponent);
 
-  virtual void moveRobot(bool ally, int id, double x, double y, double theta, bool turnon);
-
-  virtual ~AICommanderSimulation();
-
-protected:
-  SimClient client_;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+  virtual ~Obstructor();
 };
-}  // namespace rhoban_ssl
+
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl
