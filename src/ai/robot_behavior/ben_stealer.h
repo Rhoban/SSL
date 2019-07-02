@@ -35,7 +35,15 @@ private:
 
   uint robot_id_to_steal_;
 
-  const double APPROACH_PERIMETER = 0.3;
+  bool in_front_of_;
+
+  const double APPROACH_PERIMETER = 0.4;
+  const double ZONE_PRECISION_RADIUS = 0.1;
+  const double RESET_RADIUS = 0.5;
+  const double FINAL_APPROACH_RADIUS_FIRST_VALUE = 0.1;
+  const double FINAL_APPROACH_DECREASE_SPEED = 0.002;
+
+  double final_approach_value_;
 
 public:
   BenStealer(uint robot_id_to_steal = 0);

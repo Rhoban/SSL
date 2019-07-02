@@ -24,7 +24,11 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 BenStealer::BenStealer(uint robot_id_to_steal)
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), robot_id_to_steal_(robot_id_to_steal)
+  : RobotBehavior()
+  , follower_(Factory::fixedConsignFollower())
+  , robot_id_to_steal_(robot_id_to_steal)
+  , in_front_of_(false)
+  , final_approach_value_(FINAL_APPROACH_RADIUS_FIRST_VALUE)
 {
 }
 
@@ -39,16 +43,43 @@ void BenStealer::update(double time, const data::Robot& robot, const data::Ball&
 
   rhoban_geometry::Point target_position = robot_position;
 
-  // this behavior supposes that the victim moves forward.
   const data::Robot& victim = Data::get()->robots[Opponent][robot_id_to_steal_];
   rhoban_geometry::Point victim_position = victim.getMovement().linearPosition(time);
   ContinuousAngle victim_rotation = victim.getMovement().angularPosition(time);
 
-  target_position = rhoban_geometry::Point(victim_position.x + APPROACH_PERIMETER * std::cos(victim_rotation.value()),
-                                           victim_position.y + APPROACH_PERIMETER * std::sin(victim_rotation.value()));
-
   Vector2d vect_robot_victim = victim_position - robot_position;
   ContinuousAngle target_rotation = vector2angle(vect_robot_victim);
+
+  follower_->avoidRobot(victim.id + ai::Config::NB_OF_ROBOTS_BY_TEAM,
+                        true);  //+ ai::Config::NB_OF_ROBOTS_BY_TEAM because id return the id of the bot relative to
+                                // its team.
+
+  // differents phases of the behavior:
+  double dist_with_victim;
+  if (!in_front_of_)
+  {
+    dist_with_victim = APPROACH_PERIMETER;
+  }
+  else
+  {
+    dist_with_victim = final_approach_value_ + ai::Config::robot_radius;
+    final_approach_value_ -= FINAL_APPROACH_DECREASE_SPEED;
+    follower_->avoidRobot(victim.id + ai::Config::NB_OF_ROBOTS_BY_TEAM, false);
+  }
+
+  target_position = rhoban_geometry::Point(victim_position.x + dist_with_victim * std::cos(victim_rotation.value()),
+                                           victim_position.y + dist_with_victim * std::sin(victim_rotation.value()));
+
+  // compute booleans:
+  if (robot_position.getDist(target_position) <= ZONE_PRECISION_RADIUS)
+  {
+    in_front_of_ = true;
+  }
+  if (robot_position.getDist(victim_position) >= RESET_RADIUS)
+  {
+    in_front_of_ = false;
+    final_approach_value_ = FINAL_APPROACH_RADIUS_FIRST_VALUE;
+  }
 
   follower_->avoidTheBall(false);
   annotations_.addCross(target_position);
@@ -59,6 +90,14 @@ void BenStealer::update(double time, const data::Robot& robot, const data::Ball&
 Control BenStealer::control() const
 {
   Control ctrl = follower_->control();
+  if (in_front_of_)
+  {
+    ctrl.spin = true;
+  }
+  else
+  {
+    ctrl.spin = false;
+  }
   return ctrl;
 }
 
