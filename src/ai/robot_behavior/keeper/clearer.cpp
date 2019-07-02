@@ -27,7 +27,7 @@ namespace robot_behavior
 namespace keeper
 {
 Clearer::Clearer()
-  : RobotBehavior(), target_point_towards_strike_(0, 0), need_kick_(false), follower_(Factory::fixedConsignFollower())
+  : RobotBehavior(), target_point_towards_strike_(0, 0), chip_kick_(false), follower_(Factory::fixedConsignFollower())
 {
 }
 
@@ -100,7 +100,7 @@ Control Clearer::control() const
   ctrl.charge = true;
   ctrl.kick_power = 1.0;
 
-  if (need_kick_)
+  if (chip_kick_)
   {
     ctrl.chip_kick = false;
     ctrl.kick = true;
@@ -118,9 +118,9 @@ void Clearer::declarePointToStrike(rhoban_geometry::Point point)
   target_point_towards_strike_ = point;
 }
 
-void Clearer::declareNeedKick(bool need_kick)
+void Clearer::chipKick(bool chip_kick)
 {
-  need_kick_ = need_kick;
+  chip_kick_ = chip_kick;
 }
 
 Clearer::~Clearer()

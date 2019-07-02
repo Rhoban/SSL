@@ -35,7 +35,7 @@ class Clearer : public RobotBehavior
 {
 private:
   rhoban_geometry::Point target_point_towards_strike_;
-  bool need_kick_;
+  bool chip_kick_;
   ConsignFollower* follower_;
 
 public:
@@ -44,7 +44,7 @@ public:
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   void declarePointToStrike(rhoban_geometry::Point point);
-  void declareNeedKick(bool need_kick);
+  void chipKick(bool chip_kick);
 
   virtual Control control() const;
 
