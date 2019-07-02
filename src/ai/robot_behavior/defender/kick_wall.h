@@ -1,52 +1,45 @@
 /*
     This file is part of SSL.
-
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
-
+    Copyright 2018 TO COMPLETE
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
-
     SSL is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
-
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #pragma once
 
-#include <referee/game_state.h>
-#include "manager.h"
-#include "manual.h"
-#include "match.h"
-#include "dumb_manager.h"
+#include "../robot_behavior.h"
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace robot_behavior
 {
-struct names
-{
-  static constexpr const char* MANUAL = "manual";
-  static constexpr const char* PLAN_VESCHAMBRES = "Plan_Veschambres";
-  static constexpr const char* MATCH = "Match";
-  static constexpr const char* DUMB_MANAGER = "Dumb_manager";
-};
-
-class Factory
+class KickWall : public RobotBehavior
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers_;
+  int mur_robot_id_;
+  int mur_nb_robot_;
+  ConsignFollower* follower_;
 
 public:
-  static const std::list<std::string>& availableManagers();
+  KickWall(bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+  void declareMurRobotId(int id, int mur_nb_robots);
+
+  virtual Control control() const;
+
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+  virtual ~KickWall();
 };
 
-}  // namespace manager
-}  // namespace rhoban_ssl
+};  // namespace robot_behavior
+}; // namespace rhoban_ssl

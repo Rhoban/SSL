@@ -20,6 +20,10 @@ struct Config
   // The Kalman filter doesn't support more than 1 ball per camera
   static constexpr unsigned int MAX_BALLS_DETECTED_PER_CAMERA = 1;
 
+  static std::vector<unsigned int> attackers_;
+  static std::vector<unsigned int> defenders_;
+  static std::vector<unsigned int> goalies_;
+
   static bool enable_movement_with_integration;
 
   static bool we_are_blue;
@@ -69,6 +73,8 @@ struct Config
   static double rules_avoidance_distance;
   static double convergence_coefficient;
   static double coefficient_to_increase_avoidance_convergence;
+
+  static std::vector<std::vector<double>> kick_settings;
 
   static void load(const std::string& config_path);
 };

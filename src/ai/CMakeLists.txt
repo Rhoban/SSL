@@ -21,6 +21,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set (SOURCES
     core/plot_velocity.cpp
+    core/plot_xy.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -56,6 +57,8 @@ set (SOURCES
     robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
+    robot_behavior/go_to_xy.cpp
+    robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/pvc_striker_ai.cpp
     robot_behavior/pvc_search_shoot_area.cpp
@@ -69,7 +72,13 @@ set (SOURCES
     robot_behavior/pvc_slow_striker.cpp
     robot_behavior/pvc_robot_follower.cpp
     robot_behavior/pvc_protect_ball.cpp
+    robot_behavior/kick_to_xy.cpp
+    robot_behavior/test/kick_measure.cpp
     robot_behavior/ben_stealer.cpp
+    robot_behavior/keeper/keeper.cpp
+    robot_behavior/defender/defensive_wall.cpp
+    robot_behavior/defender/kick_wall.cpp
+    robot_behavior/defender/obstructor.cpp
     robot_behavior/tests/test_infra.cpp
     robot_behavior/tests/test_kicker.cpp
     robot_behavior/tests/test_relative_velocity_consign.cpp
@@ -101,6 +110,8 @@ set (SOURCES
     strategy/pvc_striker_v2.cpp
     strategy/pvc_striker_kick.cpp
     strategy/pvc_goalie_strat.cpp
+    strategy/tutorials/caterpillar.cpp
+    strategy/keeper/keeper_strat.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
@@ -129,7 +140,19 @@ set (SOURCES
     core/logger.cpp
     core/gnu_plot.cpp
     referee/referee_packet_analyzer.cpp
-    referee/game_state.cpp    
+    referee/game_state.cpp
+    # Manager
+    manager/manager.cpp
+    manager/manager_with_game_state.cpp
+    manager/manual.cpp
+    manager/factory.cpp
+    manager/match.cpp
+    manager/dumb_manager.cpp
+    # Strategy
+    strategy/wall.cpp
+    strategy/wall_2.cpp
+    # Behavior
+    robot_behavior/keeper/clearer.cpp
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp
