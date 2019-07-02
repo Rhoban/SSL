@@ -19,6 +19,7 @@
 #include "dumb_manager.h"
 #include <strategy/halt.h>
 #include <strategy/keeper/keeper_strat.h>
+#include <strategy/wall_2.h>
 
 namespace rhoban_ssl
 {
@@ -31,13 +32,13 @@ DumbManager::DumbManager(std::string name)
 {
   // strategies arrays begin at 1(case 0 unused) to directly acces the good strategy by giving number of disponible
   // dumb_strats
-  dumb_strats_[8] = { strategy::KeeperStrat::name };
-  dumb_strats_[7] = { strategy::KeeperStrat::name };
-  dumb_strats_[6] = { strategy::KeeperStrat::name };
-  dumb_strats_[5] = { strategy::KeeperStrat::name };
-  dumb_strats_[4] = { strategy::KeeperStrat::name };
-  dumb_strats_[3] = { strategy::KeeperStrat::name };
-  dumb_strats_[2] = { strategy::KeeperStrat::name };
+  dumb_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name };
+  dumb_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name };
+  dumb_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name };
+  dumb_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name };
+  dumb_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall_2::name };
+  dumb_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall_2::name };
+  dumb_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall_2::name };
   dumb_strats_[1] = { strategy::KeeperStrat::name };
 
   // halt_strats
@@ -53,6 +54,7 @@ DumbManager::DumbManager(std::string name)
   // Register strategy.
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
   registerStrategy(strategy::KeeperStrat::name, std::shared_ptr<strategy::Strategy>(new strategy::KeeperStrat()));
+  registerStrategy(strategy::Wall_2::name, std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
 }
 
 void DumbManager::startStop()

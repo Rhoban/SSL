@@ -21,6 +21,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set (SOURCES
     core/plot_velocity.cpp
+    core/plot_xy.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -56,7 +57,10 @@ set (SOURCES
     robot_behavior/tutorials/beginner/annotations_ball_position.cpp
     robot_behavior/tutorials/beginner/see_ball.cpp
     robot_behavior/tutorials/beginner/see_robot.cpp
+    robot_behavior/go_to_xy.cpp
+    robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
+    robot_behavior/ben_stealer.cpp
     robot_behavior/keeper/keeper.cpp
     robot_behavior/defender/defensive_wall.cpp
     robot_behavior/defender/kick_wall.cpp
@@ -75,6 +79,7 @@ set (SOURCES
     strategy/placer.cpp
     strategy/tare_and_synchronize.cpp
     strategy/from_robot_behavior.cpp
+    strategy/tutorials/caterpillar.cpp
     strategy/keeper/keeper_strat.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp

@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
-    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
+    Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,38 +19,45 @@
 
 #pragma once
 
-#include <robot_behavior/robot_behavior.h>
-#include <robot_behavior/factory.h>
-#include <math/vector2d.h>
-#include <math.h>
+#include "robot_behavior/factory.h"
+#include "robot_behavior/robot_behavior.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace keeper
-{
-class Clearer : public RobotBehavior
+class GoToXY : public RobotBehavior
 {
 private:
-  rhoban_geometry::Point target_point_towards_strike_;
-  bool chip_kick_;
   ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
+
+  rhoban_geometry::Point target_point_;
+
+  bool reached_;
+  double reach_radius_;
 
 public:
-  Clearer();
+  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
-  void declarePointToStrike(rhoban_geometry::Point point);
-  void chipKick(bool chip_kick);
-
   virtual Control control() const;
+
+  void setPoint(rhoban_geometry::Point point);
+
+  rhoban_geometry::Point getPoint() const;
+
+  void setReachRadius(double radius);
+
+  double getReachRadius() const;
+
+  bool isReached();
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~Clearer();
+  virtual ~GoToXY();
 };
-};  // namespace keeper
+
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

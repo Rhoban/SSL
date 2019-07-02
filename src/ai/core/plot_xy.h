@@ -5,15 +5,15 @@
 
 namespace rhoban_ssl
 {
-class PlotVelocity : public Task
+class PlotXy : public Task
 {
   GnuPlot plot;
   int rid;
   std::chrono::high_resolution_clock::time_point start;
 
 public:
-  ~PlotVelocity();
-  PlotVelocity(int rid);
+  ~PlotXy();
+  PlotXy(int rid);
 
   bool runTask();
 };

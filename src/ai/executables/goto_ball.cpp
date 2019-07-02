@@ -40,6 +40,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 #include <core/plot_velocity.h>
+#include <core/plot_xy.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
@@ -218,6 +219,7 @@ int main(int argc, char** argv)
             102);
         Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = false;
         ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()));
+        ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
         return false;
       }));
 
