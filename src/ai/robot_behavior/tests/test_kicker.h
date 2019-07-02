@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,23 +19,22 @@
 
 #pragma once
 
-#include <robot_behavior/robot_behavior.h>
-#include <robot_behavior/factory.h>
+#include "../factory.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
+namespace tests
 {
-class GotoBall : public RobotBehavior
+class TestKicker : public RobotBehavior
 {
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  GotoBall();
+  TestKicker();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -43,9 +42,9 @@ public:
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~GotoBall();
+  virtual ~TestKicker();
 };
 
-};  // namespace Beginner
+};  // namespace tests
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

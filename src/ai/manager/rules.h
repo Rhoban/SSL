@@ -115,7 +115,7 @@ public:
 
   virtual void continueStop()
   {
-     MANAGER::continueStop();
+    MANAGER::continueStop();
   }
 
   virtual void continueRunning()

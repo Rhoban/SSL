@@ -32,8 +32,9 @@ class ConditionalTask : public Task
 {
   std::function<bool()> condition_;
   std::function<bool()> job_;
+
 public:
-  ConditionalTask (const std::function<bool()> &condition, const std::function<bool()>& job);
+  ConditionalTask(const std::function<bool()>& condition, const std::function<bool()>& job);
 
   // Task interface
 public:
