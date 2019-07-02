@@ -35,6 +35,7 @@
 #include <robot_behavior/defender/kick_wall.h>
 #include <robot_behavior/obstructor.h>
 #include <robot_behavior/striker.h>
+#include <robot_behavior/attacker/receiver.h>
 
 #include <strategy/keeper/keeper_strat.h>
 
@@ -143,6 +144,15 @@ Manual::Manual(std::string name) : Manager(name)
                                     },
                                     false  // we don't want to define a goal here !
                                     )));
+  registerStrategy("Receiver", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                   [&](double time, double dt) {
+                                     robot_behavior::attacker::Receiver* receiver =
+                                         new robot_behavior::attacker::Receiver(
+                                             Data::get()->ball.getMovement().linearPosition(time));
+                                     return std::shared_ptr<robot_behavior::RobotBehavior>(receiver);
+                                   },
+                                   false  // we don't want to define a goal here !
+                                   )));
 
   registerStrategy("Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                     [&](double time, double dt) {
