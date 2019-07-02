@@ -60,6 +60,8 @@ set (SOURCES
     robot_behavior/go_to_xy.cpp
     robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
+    robot_behavior/kick_to_xy.cpp
+    robot_behavior/test/kick_measure.cpp
     robot_behavior/ben_stealer.cpp
     robot_behavior/keeper/keeper.cpp
     robot_behavior/defender/defensive_wall.cpp

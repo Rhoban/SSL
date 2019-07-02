@@ -74,6 +74,8 @@ struct Config
   static double convergence_coefficient;
   static double coefficient_to_increase_avoidance_convergence;
 
+  static std::vector<std::vector<double>> kick_settings;
+
   static void load(const std::string& config_path);
 };
 }  // namespace ai

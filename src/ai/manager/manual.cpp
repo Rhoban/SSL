@@ -20,6 +20,7 @@
 
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/position_follower.h>
+#include <robot_behavior/kick_to_xy.h>
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 #include <robot_behavior/tutorials/beginner/go_corner.h>
 #include <robot_behavior/tutorials/beginner/goalie.h>
@@ -32,6 +33,7 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/test/kick_measure.h>
 #include <robot_behavior/tutorials/medium/follow_robot.h>
 #include <robot_behavior/go_to_xy.h>
 
@@ -109,6 +111,14 @@ Manual::Manual(std::string name) : Manager(name)
                                                  },
                                                  false  // we don't want to define a goal here !
                                                  )));
+  registerStrategy("Test - KickMeasure", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                             [&](double time, double dt) {
+                                               robot_behavior::test::KickMeasure* kick_m =
+                                                   new robot_behavior::test::KickMeasure(1.0);
+                                               return std::shared_ptr<robot_behavior::RobotBehavior>(kick_m);
+                                             },
+                                             false  // we don't want to define a goal here !
+                                             )));
   registerStrategy("Beginner - Robot near ball", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                      [&](double time, double dt) {
                                                        robot_behavior::BeginnerRobotNearBall* near_ball =
@@ -125,6 +135,13 @@ Manual::Manual(std::string name) : Manager(name)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
+  registerStrategy("Kick to a point", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                          [&](double time, double dt) {
+                                            robot_behavior::KickToXY* kick = new robot_behavior::KickToXY();
+                                            return std::shared_ptr<robot_behavior::RobotBehavior>(kick);
+                                          },
+                                          false  // we don't want to define a goal here !
+                                          )));
   registerStrategy("Medium - Follow robot 0", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                   [&](double time, double dt) {
                                                     robot_behavior::medium::FollowRobot* follower =

@@ -27,6 +27,7 @@
 #include <math/vector2d.h>
 #include <execution_manager.h>
 #include <com/ai_commander.h>
+#include <config.h>
 
 class Control
 {
@@ -69,6 +70,9 @@ public:
   static Control makeDesactivated();
   static Control makeIgnored();
   static Control makeNull();
+
+  static double getNeededPower(double distance, int robot_id);  // return needed kick power ([0;1]) to throw the ball
+                                                                // at a certain distance (m)
 };
 
 std::ostream& operator<<(std::ostream& out, const Control& control);
