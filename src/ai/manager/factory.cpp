@@ -18,6 +18,7 @@
 */
 
 #include "factory.h"
+#include "rules.h"
 
 namespace rhoban_ssl
 {
@@ -55,7 +56,7 @@ std::shared_ptr<Manager> Factory::constructManager(const std::string& manager_na
   }
   if (manager_name == names::DUMB_MANAGER)
   {
-    manager = std::shared_ptr<Manager>(new Match(manager_name));
+    manager = std::shared_ptr<Manager>(new Rules<DumbManager>(manager_name)); // Affect "Rules" to PlanVeschambres
   }
   return manager;
 }
