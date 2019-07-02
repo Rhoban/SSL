@@ -28,6 +28,7 @@ BenStealer::BenStealer(uint robot_id_to_steal)
   , follower_(Factory::fixedConsignFollower())
   , robot_id_to_steal_(robot_id_to_steal)
   , in_front_of_(false)
+  , go_back_(false)
   , final_approach_value_(FINAL_APPROACH_RADIUS_FIRST_VALUE)
 {
 }
@@ -56,7 +57,15 @@ void BenStealer::update(double time, const data::Robot& robot, const data::Ball&
 
   // differents phases of the behavior:
   double dist_with_victim;
-  if (!in_front_of_)
+  if (go_back_)
+  {
+    dist_with_victim = RESET_RADIUS + 0.1;
+    if (robot_position.getDist(victim_position) <= APPROACH_PERIMETER)
+    {
+      follower_->avoidRobot(victim.id + ai::Config::NB_OF_ROBOTS_BY_TEAM, false);
+    }
+  }
+  else if (!in_front_of_)
   {
     dist_with_victim = APPROACH_PERIMETER;
   }
@@ -78,7 +87,13 @@ void BenStealer::update(double time, const data::Robot& robot, const data::Ball&
   if (robot_position.getDist(victim_position) >= RESET_RADIUS)
   {
     in_front_of_ = false;
+    go_back_ = false;
     final_approach_value_ = FINAL_APPROACH_RADIUS_FIRST_VALUE;
+  }
+
+  if (/*IR_ACTIVED || */ robot_position.getDist(victim_position) <= (2 * ai::Config::robot_radius))
+  {
+    go_back_ = true;
   }
 
   follower_->avoidTheBall(false);
@@ -90,7 +105,7 @@ void BenStealer::update(double time, const data::Robot& robot, const data::Ball&
 Control BenStealer::control() const
 {
   Control ctrl = follower_->control();
-  if (in_front_of_)
+  if (in_front_of_ || go_back_)
   {
     ctrl.spin = true;
   }

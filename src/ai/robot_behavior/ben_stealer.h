@@ -36,12 +36,13 @@ private:
   uint robot_id_to_steal_;
 
   bool in_front_of_;
+  bool go_back_;
 
   const double APPROACH_PERIMETER = 0.4;
   const double ZONE_PRECISION_RADIUS = 0.1;
-  const double RESET_RADIUS = 0.5;
+  const double RESET_RADIUS = 0.6;
   const double FINAL_APPROACH_RADIUS_FIRST_VALUE = 0.1;
-  const double FINAL_APPROACH_DECREASE_SPEED = 0.002;
+  const double FINAL_APPROACH_DECREASE_SPEED = 0.001;
 
   double final_approach_value_;
 
