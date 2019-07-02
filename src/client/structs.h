@@ -50,5 +50,5 @@ struct packet_robot
 
   int16_t xpos;  // Data planned by odometry
   int16_t ypos;  // In mm
-  int16_t ang;   // In rad/10
+  int16_t ang;   // In rad/1000
 } __attribute__((packed));

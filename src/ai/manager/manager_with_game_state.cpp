@@ -189,8 +189,9 @@ void ManagerWithGameState::chooseAStrategy(double time)
   }
 }
 
-void ManagerWithGameState::update(double time)
+void ManagerWithGameState::update()
 {
+  double time = Data::get()->ai_data.time;
   // update_strategies(time);
   updateCurrentStrategies();
   analyseData(time);

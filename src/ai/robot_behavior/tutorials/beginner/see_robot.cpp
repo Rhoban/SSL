@@ -24,12 +24,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace Beginner
+namespace beginner
 {
-SeeRobot::SeeRobot(int target_id) : RobotBehavior(), follower_(Factory::fixedConsignFollower())
-
+SeeRobot::SeeRobot(uint target_number)
+  : RobotBehavior(), target_robot_number(target_number), follower_(Factory::fixedConsignFollower())
 {
-  target_robot_id_ = target_id;
 }
 
 void SeeRobot::update(double time, const data::Robot& robot, const data::Ball& ball)
@@ -46,10 +45,10 @@ void SeeRobot::update(double time, const data::Robot& robot, const data::Ball& b
 
   // Condition to check if the target robot is not the robot itself.
   // A robot which try to look itself will do nothing.
-  if (target_robot_id_ != robot.id)
+  if (target_robot_number != robot.id)
   {
     const rhoban_geometry::Point& target_position =
-        getRobot(target_robot_id_).getMovement().linearPosition(Data::get()->ai_data.time);
+        Data::get()->robots[Ally][target_robot_number].getMovement().linearPosition(Data::get()->ai_data.time);
 
     Vector2d direction = target_position - robot_position;
     target_rotation = vector2angle(direction);
@@ -58,17 +57,18 @@ void SeeRobot::update(double time, const data::Robot& robot, const data::Ball& b
   follower_->setFollowingPosition(robot_position, target_rotation);
 
   follower_->avoidTheBall(false);
+
   follower_->update(time, robot, ball);
 }
 
-void SeeRobot::setRobotIdToSee(int id)
+void SeeRobot::setRobotIdToSee(uint id)
 {
-  target_robot_id_ = id;
+  target_robot_number = id;
 }
 
-int SeeRobot::getRobotIdToSee() const
+uint SeeRobot::getRobotIdToSee() const
 {
-  return target_robot_id_;
+  return target_robot_number;
 }
 
 Control SeeRobot::control() const
@@ -90,6 +90,6 @@ rhoban_ssl::annotations::Annotations SeeRobot::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Beginner
+}  // namespace beginner
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl

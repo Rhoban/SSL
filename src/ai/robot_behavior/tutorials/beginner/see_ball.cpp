@@ -67,6 +67,12 @@ rhoban_ssl::annotations::Annotations SeeBall::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(this->annotations_);
+
+  annotations.addCross(Data::get()->field.getPenaltyArea(Ally).NE);
+  annotations.addCross(Data::get()->field.getPenaltyArea(Ally).SW, "green");
+
+  annotations.addBox(Data::get()->field.getPenaltyArea(Ally), "blue", "blue");
+  annotations.addBox(Data::get()->field.getPenaltyArea(Opponent), "blue", "blue");
   annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
 }

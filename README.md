@@ -15,13 +15,13 @@ You will need these apt repositories:
 
     apt-get install g++ cmake libprotobuf-dev \
             protobuf-compiler php php-cli php-xml \
-            libgtest-dev libqt5widgets5 qt5-default libqt5webkit5-dev
+            libgtest-dev libqt5widgets5 qt5-default libqt5webkit5-dev libwebsockets-dev gnuplot
 
 ### Catkin
 
 Now install catkin:
 
-    sudo apt-get install python-pip python-empy 
+    sudo apt-get install python-pip python-empy
     # Eventually, if necessary, install python3-trollius
     sudo apt-get install python3-trollius
     sudo pip install -U catkin_tools
@@ -98,11 +98,11 @@ This will create a debug and release profile with CodeBlocks support (needed by 
 Then:
 
     ./workspace setup
-    
+
 and
 
     ./workspace build --profile=qtcreator_debug
-    
+
 and/or:
 
     ./workspace build --profile=qtcreator_release

@@ -30,6 +30,8 @@
 
 namespace rhoban_ssl
 {
+namespace ai
+{
 /**
  * @brief The AI class
  */
@@ -37,7 +39,7 @@ class AI : public Task
 {
 public:
   // bool is_in_simulation;
-  AI(std::string manager_name, AICommander* commander);
+  AI(std::string manager_name);
 
   bool runTask() override;
 
@@ -109,17 +111,6 @@ public:
   std::shared_ptr<manager::Manager> getManualManager();
 
   /**
-   * @brief An emergency call stop all robots connected with the ai.
-   *
-   * It's change the control for each robot to manual.
-   * Moreover all manual control are ignore and desactivate.
-   *
-   * After control desactivations in the ai, the commander sends a stop
-   * command to all robots.
-   */
-  void emergency();
-
-  /**
    * @brief getAnnotations
    * @param annotations
    */
@@ -160,10 +151,6 @@ public:
    */
   void enableRobot(uint number, bool enabled);
 
-  void moveRobot(bool ally, uint number, double x, double y, double theta);
-
-  void moveBall(double x, double y, double v_x, double v_y);
-
 private:
   // move to config
   const double SCAN_WAITING_DELAY = 0.030;
@@ -174,7 +161,7 @@ private:
 private:
   bool running_;
 
-  AICommander* commander_;
+  // AICommander* commander_;
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
 
@@ -186,8 +173,6 @@ private:
 
   void updateRobots();
   void prepareToSendControl(int robot_id, Control& control);
-
-  void limitsVelocity(Control& ctrl) const;
   void preventCollision(int robot_id, Control& ctrl);
 
   rhoban_ssl::annotations::Annotations getRobotBehaviorAnnotations() const;
@@ -212,4 +197,12 @@ public:
   bool runTask();
 };
 
+class InitMobiles : public Task
+{
+  // Task interface
+public:
+  bool runTask();
+};
+
+};  // namespace ai
 };  // namespace rhoban_ssl

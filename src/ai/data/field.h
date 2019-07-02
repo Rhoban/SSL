@@ -92,6 +92,8 @@ public:
   rhoban_geometry::Point getNW() const;
   rhoban_geometry::Point getSW() const;
 
+  rhoban_geometry::Point getCorner(const cardinal_position& cardinal_position) const;
+
   /**
    * @brief returns the position of the opponant left corner.
    * @return a point
