@@ -21,7 +21,7 @@
 #include <math/matrix2d.h>
 #include <data.h>
 
-#define CALCULUS_ERROR 0.000
+#define CALCULUS_ERROR 1e-9
 
 Control::Control(bool is_absolute) : is_absolute_(is_absolute)
 {

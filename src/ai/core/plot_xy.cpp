@@ -1,6 +1,11 @@
 #include "plot_xy.h"
 #include <data.h>
 
+rhoban_ssl::PlotXy::~PlotXy()
+{
+  plot.closeWindow();
+}
+
 rhoban_ssl::PlotXy::PlotXy(int rid) : rid(rid), start(std::chrono::high_resolution_clock::now())
 {
 }

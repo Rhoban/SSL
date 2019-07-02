@@ -1,6 +1,11 @@
 #include "plot_velocity.h"
 #include <data.h>
 
+rhoban_ssl::PlotVelocity::~PlotVelocity()
+{
+  plot.closeWindow();
+}
+
 rhoban_ssl::PlotVelocity::PlotVelocity(int rid) : rid(rid), start(std::chrono::high_resolution_clock::now())
 {
 }
