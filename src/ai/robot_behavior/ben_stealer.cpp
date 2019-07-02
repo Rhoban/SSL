@@ -91,7 +91,7 @@ void BenStealer::update(double time, const data::Robot& robot, const data::Ball&
     final_approach_value_ = FINAL_APPROACH_RADIUS_FIRST_VALUE;
   }
 
-  if (/*IR_ACTIVED || */ robot_position.getDist(victim_position) <= (2 * ai::Config::robot_radius))
+  if (infraRed() || robot_position.getDist(victim_position) <= (2 * ai::Config::robot_radius))
   {
     go_back_ = true;
   }
