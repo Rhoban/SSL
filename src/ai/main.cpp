@@ -202,7 +202,7 @@ int main(int argc, char** argv)
   // refereee
   ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
   ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
-  ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
+  // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
   ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
 
   ExecutionManager::getManager().addTask(new data::CollisionComputing());
