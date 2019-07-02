@@ -33,8 +33,12 @@
 #include <robot_behavior/keeper/keeper.h>
 #include <robot_behavior/defender/defensive_wall.h>
 #include <robot_behavior/defender/kick_wall.h>
-#include <robot_behavior/defender/obstructor.h>
+#include <robot_behavior/obstructor.h>
+
 #include <strategy/keeper/keeper_strat.h>
+
+#include <strategy/wall.h>
+#include <strategy/wall_2.h>
 
 namespace rhoban_ssl
 {
@@ -138,7 +142,10 @@ Manual::Manual(std::string name) : Manager(name)
                                     },
                                     false  // we don't want to define a goal here !
                                     )));
-  registerStrategy("Defensor - Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+
+  registerStrategy("Wall1", std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
+  registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
+  registerStrategy("Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                      [&](double time, double dt) {
                                        robot_behavior::Obstructor* obstructor = new robot_behavior::Obstructor();
                                        obstructor->declareRobotToObstruct(3);

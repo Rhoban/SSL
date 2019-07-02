@@ -25,15 +25,15 @@ namespace robot_behavior
 class DefensiveWall : public RobotBehavior
 {
 private:
-  int mur_robot_id_;
-  int mur_nb_robot_;
+  int wall_robot_id_;
+  int wall_nb_robot_;
   ConsignFollower* follower_;
 
 public:
   DefensiveWall(bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
-  void declareMurRobotId(int id, int mur_nb_robots);
+  void declareWallRobotId(int id, int wall_nb_robots);
 
   virtual Control control() const;
 
