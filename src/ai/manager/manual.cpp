@@ -23,12 +23,19 @@
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 #include <robot_behavior/tutorials/beginner/go_corner.h>
 #include <robot_behavior/tutorials/beginner/goalie.h>
+#include <robot_behavior/tutorials/beginner/goto_ball.h>
+#include <robot_behavior/tutorials/beginner/robot_have_ball.h>
+#include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/medium/defender.h>
 #include <robot_behavior/tutorials/beginner/see_ball.h>
 #include <robot_behavior/tutorials/beginner/see_robot.h>
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/tutorials/medium/follow_robot.h>
+#include <robot_behavior/go_to_xy.h>
+
+#include <strategy/tutorials/caterpillar.h>
 #include <robot_behavior/ben_stealer.h>
 #include <robot_behavior/tests/test_infra.h>
 #include <robot_behavior/tests/test_kicker.h>
@@ -109,6 +116,27 @@ Manual::Manual(std::string name) : Manager(name)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
+  registerStrategy("Medium - Follow robot 0", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                  [&](double time, double dt) {
+                                                    robot_behavior::medium::FollowRobot* follower =
+                                                        new robot_behavior::medium::FollowRobot(0);
+                                                    return std::shared_ptr<robot_behavior::RobotBehavior>(follower);
+                                                  },
+                                                  false  // we don't want to define a goal here !
+                                                  )));
+  registerStrategy("Beginner - Go to XY", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                              [&](double time, double dt) {
+                                                robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
+                                                go->setPoint(rhoban_geometry::Point(1, 2));
+                                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                                              },
+                                              false  // we don't want to define a goal here !
+                                              )));
+
+  registerStrategy("Tutorial - Caterpillar",
+                   std::shared_ptr<strategy::Strategy>(new strategy::Caterpillar(std::vector<rhoban_geometry::Point>{
+                       rhoban_geometry::Point(-3, 3), rhoban_geometry::Point(3, 3), rhoban_geometry::Point(-3, -3),
+                       rhoban_geometry::Point(3, -3) })));
   registerStrategy("Stealer", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                   [&](double time, double dt) {
                                     robot_behavior::BenStealer* stealer = new robot_behavior::BenStealer();
