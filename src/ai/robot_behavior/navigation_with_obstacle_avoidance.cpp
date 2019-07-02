@@ -172,18 +172,21 @@ void NavigationWithObstacleAvoidance::convertCycleDirectionToLinearAndAngularVel
   assert(limit_cycle_direction_.norm() != 0.0);
 
   rhoban_geometry::Point pos = linearPosition() + limit_cycle_direction_ / (limit_cycle_direction_.norm()) * 1.0;
-  /*
-    double dist =
-        linearPosition().getDist(Data::get()->all_robots[closest_robot_].second->getMovement().linearPosition(time()));
+  // DO NOT USE THE FOLLOWING TEMP VARIABLE AT (*), need to understand why there is a segfault
+  // double dist =
+  //  linearPosition().getDist(Data::get()->all_robots[closest_robot_].second->getMovement().linearPosition(time()));
 
-    // avoid the problem where 2 allies bots infinitely avoid themselves until they leave the field like two small
-    // dragonfly.
-    if (Data::get()->all_robots[closest_robot_].first == Ally && dist < INFINITE_DODGING_PREVENTION &&
-        robot().getMovement().linearVelocity(time()).norm() <=
-            Data::get()->all_robots[closest_robot_].second->getMovement().linearVelocity(time()).norm())
-    {
-      pos = linearPosition();
-    }*/
+  // avoid the problem where 2 allies bots infinitely avoid themselves until they leave the field like two small
+  // dragonfly.
+  if (Data::get()->all_robots[closest_robot_].first == Ally &&
+      linearPosition().getDist(
+          Data::get()->all_robots[closest_robot_].second->getMovement().linearPosition(time()))  //(*)
+          < INFINITE_DODGING_PREVENTION &&
+      robot().getMovement().linearVelocity(time()).norm() <=
+          Data::get()->all_robots[closest_robot_].second->getMovement().linearVelocity(time()).norm())
+  {
+    pos = linearPosition();
+  }
   position_follower_avoidance_.setFollowingPosition(pos, target_angle_);
 }
 
