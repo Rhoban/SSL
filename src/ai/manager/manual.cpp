@@ -29,6 +29,7 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+#include <robot_behavior/ben_stealer.h>
 #include <robot_behavior/tests/test_infra.h>
 #include <robot_behavior/tests/test_kicker.h>
 #include <robot_behavior/tests/test_relative_velocity_consign.h>
@@ -108,6 +109,14 @@ Manual::Manual(std::string name) : Manager(name)
                                                      },
                                                      false  // we don't want to define a goal here !
                                                      )));
+  registerStrategy("Stealer", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                  [&](double time, double dt) {
+                                    robot_behavior::BenStealer* stealer = new robot_behavior::BenStealer();
+                                    stealer->setRobotIdToSteal(3);
+                                    return std::shared_ptr<robot_behavior::RobotBehavior>(stealer);
+                                  },
+                                  false  // we don't want to define a goal here !
+                                  )));
   registerStrategy("Test - IR", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                     [&](double time, double dt) {
                                       robot_behavior::tests::TestInfra* test_ir =
