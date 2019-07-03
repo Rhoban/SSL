@@ -23,7 +23,15 @@ namespace robot_behavior
 namespace test
 {
 KickMeasure::KickMeasure(double kick_power)
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), kick_power_(kick_power), started_(false)
+  : RobotBehavior()
+  , follower_(Factory::fixedConsignFollower())
+  , kick_power_(kick_power)
+  , started_(false)
+  , countdown_(5)
+  , measures_done_(false)
+  , reached_dist_(-1)
+  , max_speed_(-1)
+  , printed_(false)
 
 {
 }
@@ -40,7 +48,7 @@ void KickMeasure::update(double time, const data::Robot& robot, const data::Ball
   {
     started_ = true;
     std::cout << ("BEGIN KICK MEASURE with a power of :") << std::endl;
-    std::cout << "         " << (kick_power_ * 100) << "  %" << std::endl;
+    std::cout << "         " << (kick_power_ * 100) << " %" << std::endl;
     std::cout << ("put the ball in front of the kicker at center before the countdown end !") << std::endl;
     std::cout << (countdown_) << std::endl;
     last_time_ = time;
@@ -54,12 +62,55 @@ void KickMeasure::update(double time, const data::Robot& robot, const data::Ball
         last_time_ = time;
         countdown_--;
         std::cout << (countdown_) << std::endl;
+        if (countdown_ == 0)
+        {
+          ball_first_position_ = ballPosition();
+        }
       }
     }
     else
     {
       // main behavior:
-      std::cout << ("ok") << std::endl;
+      if (!measures_done_)
+      {
+        double speed = ball.getMovement().linearVelocity(time).norm();
+        std::cout << ("instant speed : ") << speed << std::endl;
+        if (speed > max_speed_)
+        {
+          max_speed_ = speed;
+        }
+        if (speed <= 0.05 && (time - last_time_) > 2.0)
+        {
+          measures_done_ = true;
+        }
+      }
+      else
+      {
+        if (!printed_)
+        {
+          reached_dist_ = ball_first_position_.getDist(ballPosition());
+          if (ballPosition().x > (Data::get()->field.field_length_ / 2) ||
+              ballPosition().x < -(Data::get()->field.field_length_ / 2) ||
+              ballPosition().y > (Data::get()->field.field_width_ / 2) ||
+              ballPosition().y < -(Data::get()->field.field_width_ / 2))
+          {
+            reached_dist_ = -1;
+          }
+          std::cout << ("RESULTS :") << std::endl;
+          std::cout << ("Reached distance :") << std::endl;
+          if (reached_dist_ == -1)
+          {
+            std::cout << ("ball exited the field") << std::endl;
+          }
+          else
+          {
+            std::cout << "         " << reached_dist_ << " m" << std::endl;
+          }
+          std::cout << ("Maximum ball speed :") << std::endl;
+          std::cout << "         " << max_speed_ << " m/s" << std::endl;
+          printed_ = true;
+        }
+      }
     }
   }
 
@@ -73,9 +124,12 @@ Control KickMeasure::control() const
   Control ctrl = follower_->control();
   ctrl.kick_power = kick_power_;
   ctrl.charge = true;
-  if(started_ && countdown_ == 0){
+  if (started_ && countdown_ == 0)
+  {
     ctrl.kick = true;
-  }else{
+  }
+  else
+  {
     ctrl.kick = false;
   }
 

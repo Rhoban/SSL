@@ -48,7 +48,15 @@ private:
   bool started_;
 
   double last_time_;
-  int countdown_ = 5;
+  int countdown_;
+  bool measures_done_;
+
+  double reached_dist_;
+  double max_speed_;
+
+  rhoban_geometry::Point ball_first_position_;
+
+  bool printed_;
 
 public:
   /**
