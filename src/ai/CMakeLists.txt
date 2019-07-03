@@ -121,6 +121,7 @@ set (SOURCES
     manager/factory.cpp
     manager/match.cpp
     manager/dumb_manager.cpp
+    manager/lord_of_darkness.cpp
     # Strategy
     strategy/offensive.cpp
     strategy/defensive.cpp
