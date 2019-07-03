@@ -140,6 +140,14 @@ int main(int argc, char** argv)
                                    "int",        // short description of the expected value.
                                    cmd);
 
+  TCLAP::ValueArg<bool> side_blue("k",            // short argument name  (with one character)
+                                   "side",  // long argument name
+                                   "blue on positive side",
+                                   false,        // Flag is not required
+                                   false,  // Default value
+                                   "bool",        // short description of the expected value.
+                                   cmd);
+
   cmd.parse(argc, argv);
 
   if (em.getValue())
@@ -182,7 +190,7 @@ int main(int argc, char** argv)
   ai::Config::is_in_simulation = simulation.getValue();
 
   ai::Config::load(config_path.getValue());
-
+  Data::get()->referee.blue_team_on_positive_half = side_blue.getValue();
   // ExecutionManager::getManager().addTask(new TaskExample());
 
   ExecutionManager::getManager().addTask(new ai::InitMobiles());

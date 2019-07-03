@@ -278,6 +278,8 @@ bool UpdateBallInformation::runTask()
   for (auto& c : vision::VisionDataSingleThread::singleton_.last_camera_detection_)
     for (auto& b : c.balls_)
     {
+      if (not(objectCoordonateIsValid(double(b.x_) / 1000.0, double(b.y_) / 1000.0, part_of_the_field_used_)))
+        continue;
       if (b.confidence_ > 0)
       {
         pos += Point(double(b.x_) / 1000.0, double(b.y_) / 1000.0);
