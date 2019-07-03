@@ -75,7 +75,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   halt_strats_[4] = { strategy::Halt::name };
   halt_strats_[3] = { strategy::Halt::name };
   halt_strats_[2] = { strategy::Halt::name };
-  halt_strats_[1] = {};
+  halt_strats_[1] = { strategy::Halt::name };
 
   stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
   stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
@@ -161,11 +161,11 @@ LordOfDarkness::LordOfDarkness(std::string name)
   kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
   kick_strats_indirect_[1] = { strategy::KeeperStrat::name };
 
-  direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
-  direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
-  direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
-  direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF", "SNF"  };
-  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF" , "SNF" };
+  direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF", "SNF", "SNF" };
+  direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF", "SNF", "SNF" };
+  direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF", "SNF", "SNF" };
+  direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF", "SNF" };
+  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF", "SNF" };
   direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF" };
   direct_opponent_strats_[2] = { strategy::KeeperStrat::name, "SNF" };
   direct_opponent_strats_[1] = { strategy::KeeperStrat::name };
