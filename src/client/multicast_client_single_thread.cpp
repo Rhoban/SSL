@@ -360,11 +360,11 @@ public:
   UDP()
   {
     fd = -1;
-    close();
+    // close();
   }
   ~UDP()
   {
-    close();
+    // close();
   }
 
   bool open(int port = 0, bool share_port_for_multicasting = false, bool multicast_include_localhost = false,
@@ -548,9 +548,9 @@ bool MulticastClientSingleThread2019::runTask()
   for (unsigned int i = 0; i < nfds_; ++i)
     sockets_fds_[i].revents = 0;
 
-  int e = poll(sockets_fds_, nfds_, 0);
+  int e = poll(sockets_fds_, nfds_, 10);
 
-  printf("poll return %d \n", e);
+  // printf("poll return %d \n", e);
 
   for (unsigned int i = 0; i < nfds_; ++i)
   {

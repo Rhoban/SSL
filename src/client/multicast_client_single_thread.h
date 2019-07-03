@@ -123,6 +123,6 @@ protected:
   void init();
 };
 
-typedef MulticastClientSingleThreadLegacy MulticastClientSingleThread;
+typedef MulticastClientSingleThread2019 MulticastClientSingleThread;
 
 }  // namespace rhoban_ssl
