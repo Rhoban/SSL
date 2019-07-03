@@ -41,16 +41,6 @@ public:
   bool runTask();
 };
 
-class TimeoutTask : public Task
-{
-  double duration;
-  std::chrono::high_resolution_clock::time_point start;
-
-public:
-  TimeoutTask(double d);
-  virtual bool runTask(void) override;
-};
-
 /**
  * @brief The ExecutionManager class is used to register tasks and execute them in a loop
  */

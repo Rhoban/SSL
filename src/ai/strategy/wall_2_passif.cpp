@@ -17,19 +17,21 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "wall.h"
+#include "wall_2_passif.h"
 
+//#include <robot_behavior/goalie.h>
+//#include <robot_behavior/striker.h>
 #include <robot_behavior/defender/defensive_wall.h>
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-Wall::Wall() : Strategy()
+Wall2Passif::Wall2Passif() : Strategy()
 {
 }
 
-Wall::~Wall()
+Wall2Passif::~Wall2Passif()
 {
 }
 
@@ -37,59 +39,78 @@ Wall::~Wall()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Wall::minRobots() const
+int Wall2Passif::minRobots() const
 {
-  return 1;
+  return 2;
 }
 
 /*
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Wall::maxRobots() const
+int Wall2Passif::maxRobots() const
 {
-  return 1;
+  return 2;
 }
 
-GoalieNeed Wall::needsGoalie() const
+GoalieNeed Wall2Passif::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-const std::string Wall::name = "wall";
+const std::string Wall2Passif::name = "Wall2Passif";
 
-void Wall::start(double time)
+void Wall2Passif::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
 }
-void Wall::stop(double time)
+void Wall2Passif::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Wall::update(double time)
+void Wall2Passif::update(double time)
 {
-  // const std::vector<int> & players = get_player_ids();
-  // int nb_robots = players.size();
-  // for( int robot_id : players){
-  //	const ai::Robot & robot = get_robot( robot_id );
-  //}
+  int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(Ally);
+  is_closest_0_ = false;
+  is_closest_1_ = false;
+
+  if (nearest_ally_robot_from_ball == playerId(0))
+  {
+    is_closest_0_ = true;
+  }
+  else
+  {
+    if (nearest_ally_robot_from_ball == playerId(1))
+    {
+      is_closest_1_ = true;
+    }
+  }
 }
 
-void Wall::assignBehaviorToRobots(
+void Wall2Passif::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
+  std::shared_ptr<robot_behavior::RobotBehavior> wall1(new robot_behavior::DefensiveWall(1));
+  static_cast<robot_behavior::DefensiveWall*>(wall1.get())->declareWallRobotId(0, 2);
+
+  std::shared_ptr<robot_behavior::RobotBehavior> wall2(new robot_behavior::DefensiveWall(1));
+  static_cast<robot_behavior::DefensiveWall*>(wall2.get())->declareWallRobotId(1, 2);
+
   if (not(behaviors_are_assigned_))
   {
-    // We first assign the behhavior of the goalie.
+    assert(getPlayerIds().size() == 2);
 
-    // we assign now all the other behavior
-    assert(getPlayerIds().size() == 1);
-    int id = playerId(0);  // we get the first if in get_player_ids()
-    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DefensiveWall()));
+    assign_behavior(playerId(0), wall1);
+    assign_behavior(playerId(1), wall2);
 
     behaviors_are_assigned_ = true;
+  }
+  else
+  {
+    assign_behavior(playerId(0), wall1);
+    assign_behavior(playerId(1), wall2);
   }
 }
 
@@ -100,7 +121,7 @@ void Wall::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Wall::getStartingPositions(int number_of_avalaible_robots)
+Wall2Passif::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
@@ -113,14 +134,15 @@ Wall::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Wall::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool Wall2Passif::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position,
+                                               ContinuousAngle& angular_position)
 {
   linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Wall::getAnnotations() const
+rhoban_ssl::annotations::Annotations Wall2Passif::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   /*

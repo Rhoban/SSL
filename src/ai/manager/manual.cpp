@@ -47,6 +47,8 @@
 #include <robot_behavior/keeper/keeper.h>
 #include <robot_behavior/defender/defensive_wall.h>
 #include <robot_behavior/defender/kick_wall.h>
+#include <robot_behavior/attacker/striker.h>
+#include <robot_behavior/attacker/receiver.h>
 #include <robot_behavior/defender/obstructor.h>
 #include <robot_behavior/go_to_xy.h>
 #include <robot_behavior/poke_ball.h>
@@ -60,6 +62,10 @@
 #include <strategy/wall_2.h>
 #include <strategy/defensive_2.h>
 #include <strategy/striker_v2.h>
+#include <strategy/pass.h>
+#include <strategy/wall.h>
+#include <strategy/wall_2.h>
+
 #include <robot_behavior/tests/test_infra.h>
 #include <robot_behavior/tests/test_kicker.h>
 #include <robot_behavior/tests/test_relative_velocity_consign.h>
@@ -72,6 +78,7 @@
 #include <strategy/striker_kick.h>
 #include <strategy/attackms.h>
 #include <robot_behavior/protect_ball.h>
+#include <strategy/wall_2_passif.h>
 #include <robot_behavior/slow_striker.h>
 
 namespace rhoban_ssl
@@ -135,7 +142,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Test - KickMeasure", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                              [&](double time, double dt) {
                                                robot_behavior::test::KickMeasure* kick_m =
-                                                   new robot_behavior::test::KickMeasure(1.0);
+                                                   new robot_behavior::test::KickMeasure(0.7);
                                                return std::shared_ptr<robot_behavior::RobotBehavior>(kick_m);
                                              },
                                              false  // we don't want to define a goal here !
@@ -262,9 +269,23 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Mur Stop", std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
   registerStrategy("prepare kickoff", std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
   registerStrategy("Defensive", std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
+  registerStrategy("Striker V2 (strat)", std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2()));
+  registerStrategy("Receiver", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                   [&](double time, double dt) {
+                                     robot_behavior::attacker::Receiver* receiver =
+                                         new robot_behavior::attacker::Receiver();
+                                     return std::shared_ptr<robot_behavior::RobotBehavior>(receiver);
+                                   },
+                                   false  // we don't want to define a goal here !
+                                   )));
+
+  
+  
   registerStrategy("Wall1", std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
   registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
-  registerStrategy("Striker V2 (strat)", std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2()));
+  registerStrategy("Pass", std::shared_ptr<strategy::Strategy>(new strategy::Pass()));
+  
+
   registerStrategy("Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                      [&](double time, double dt) {
                                        robot_behavior::Obstructor* obstructor = new robot_behavior::Obstructor();
@@ -394,7 +415,16 @@ Manual::Manual(std::string name) : Manager(name)
                                   },
                                   false  // we don't want to define a goal here !
                                   )));
+  registerStrategy("Striker ES MK", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                    [&](double time, double dt) {
+                                      robot_behavior::attacker::Striker* strike =
+					new robot_behavior::attacker::Striker(Data::get()->field.opponentCornerLeft());
+                                      return std::shared_ptr<robot_behavior::RobotBehavior>(strike);
+                                    },
+                                    false  // we don't want to define a goal here !
+                                    )));
   registerStrategy("Defensive2", std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
+  registerStrategy("Wall2Passif", std::shared_ptr<strategy::Strategy>(new strategy::Wall2Passif()));
 }
 
 void Manual::update()

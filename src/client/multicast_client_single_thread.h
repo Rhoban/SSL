@@ -19,7 +19,7 @@ namespace rhoban_ssl
  * This is a generic multicast client that listens on all possible interfaces
  * (running one thread per interface) for incoming packets
  */
-class MulticastClientSingleThread : public virtual rhoban_ssl::Task
+class MulticastClientSingleThreadLegacy : public virtual rhoban_ssl::Task
 {
   struct mmsghdr msgs[VLEN];
   struct iovec iovecs[VLEN];
@@ -40,8 +40,8 @@ public:
    * @param addr Multicast address to listen
    * @param port Multicast port to listen
    */
-  MulticastClientSingleThread(std::string addr, std::string port);
-  virtual ~MulticastClientSingleThread();
+  MulticastClientSingleThreadLegacy(std::string addr, std::string port);
+  virtual ~MulticastClientSingleThreadLegacy();
 
   /**
    * Process an incoming packet, must be implemented in subclass and will be called to process data in buffer
@@ -51,18 +51,6 @@ public:
    * @return         Returns true if the contents is a valid packet
    */
   virtual bool process(char* buffer_, size_t len) = 0;
-
-  /**
-   * Is there valid received packet ?
-   */
-  bool hasData() const;
-
-  /**
-   * How many packets were received ?
-   */
-  unsigned int getPackets();
-
-  void shutdown();
 
   bool runTask();
 
@@ -86,5 +74,55 @@ protected:
    */
   // virtual void packetReceived();
 };
+
+/**
+ * This is a generic multicast client that listens on all possible interfaces
+ * (running one thread per interface) for incoming packets
+ */
+class MulticastClientSingleThread2019 : public virtual rhoban_ssl::Task
+{
+  struct mmsghdr msgs[VLEN];
+  struct iovec iovecs[VLEN];
+  char bufs[VLEN][BUFSIZE];
+
+public:
+  /**
+   * At instanciation, provide the address and the port to listen to for the
+   * multicast client to listen to
+   *
+   * @param addr Multicast address to listen
+   * @param port Multicast port to listen
+   */
+  MulticastClientSingleThread2019(std::string addr, std::string port);
+  virtual ~MulticastClientSingleThread2019();
+
+  /**
+   * Process an incoming packet, must be implemented in subclass and will be called to process data in buffer
+   *
+   * @param  buffer  A buffer containing received bytes
+   * @param  len     Number of bytes in the buffer
+   * @return         Returns true if the contents is a valid packet
+   */
+  virtual bool process(char* buffer_, size_t len) = 0;
+
+  bool runTask();
+
+protected:
+  struct pollfd* sockets_fds_;
+  nfds_t nfds_;
+  std::string addr;
+  int port;
+  bool receivedData;
+  volatile bool running;
+  rhoban_utils::TimeStamp lastData;
+  unsigned int packets;
+
+  /**
+   * Initializes the multicast client
+   */
+  void init();
+};
+
+typedef MulticastClientSingleThread2019 MulticastClientSingleThread;
 
 }  // namespace rhoban_ssl

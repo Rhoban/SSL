@@ -31,25 +31,21 @@ Master::Master(std::string port, unsigned int baudrate)
   shouldSend = false;
   shouldSendParams = false;
   running = true;
-  thread = new std::thread(
-    [=]()
-    {
-      try
-      {
-        std::cout<<"Opening serial port: "<<port<<" baudrate: "<<baudrate<<std::endl;
-        serial = new serial::Serial(port, baudrate, serial::Timeout::simpleTimeout(1000));
-        std::cout<<"Serial port openned"<<std::endl;
-        this->execute();
-      }
-      catch (std::exception& e)
-      {
-        std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! "
-        << std::endl
-        << e.what() << std::endl;
-        serial = nullptr;
-      }
-    }
-    );
+  try
+  {
+    std::cout << "Opening serial port: " << port << " baudrate: " << baudrate << std::endl;
+    serial = new serial::Serial(port, baudrate, serial::Timeout::simpleTimeout(1000));
+    std::cout << "Serial port openned" << std::endl;
+  }
+  catch (std::exception& e)
+  {
+    std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! "
+              << std::endl
+              << e.what() << std::endl;
+    serial = nullptr;
+  }
+
+  thread = new std::thread([=]() { this->execute(); });
 
   tmpPacket = "";
   tmpNbRobots = 0;
@@ -60,10 +56,14 @@ Master::Master(std::string port, unsigned int baudrate)
 
 Master::~Master()
 {
-  if (serial != nullptr)
-    delete serial;
-
+  stop();
   thread->join();
+  if (serial != nullptr)
+  {
+    serial->close();
+    delete serial;
+  }
+
   delete thread;
 }
 
@@ -154,12 +154,9 @@ void Master::addParamPacket(int robot, struct packet_params params)
 
 void Master::updateRobot(uint id, packet_robot& r)
 {
-  if (robots[id].isOk())
-  {
-    mutex.lock();
-    r = robots[id].status;
-    mutex.unlock();
-  }
+  mutex.lock();
+  r = robots[id].status;
+  mutex.unlock();
 }
 
 void Master::sendPacket()
