@@ -172,7 +172,8 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2()));
   registerStrategy(strategy::Offensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Offensive()));
   registerStrategy(strategy::StrikerKick::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick()));
-  registerStrategy(strategy::AttaqueWithSupportMs::name, std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs()));
+  registerStrategy(strategy::AttaqueWithSupportMs::name,
+                   std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs()));
 
   registerStrategy("kickoff_ally_placement_M", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                    [&](double time, double dt) {
@@ -209,6 +210,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
                                                    false  // we don't want to define a goal here !
                                                    )));
   registerStrategy(strategy::PrepareKickoff::name, std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
+  registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
 
   registerStrategy(PROTECT_BALL, std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                      [&](double time, double dt) {
@@ -221,6 +223,9 @@ LordOfDarkness::LordOfDarkness(std::string name)
 void LordOfDarkness::startStop()
 {
   DEBUG("STARTSTOP");
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
 void LordOfDarkness::startRunning()
@@ -240,20 +245,28 @@ void LordOfDarkness::startHalt()
 
 void LordOfDarkness::startDirectKickAlly()
 {
-  // setBallAvoidanceForAllRobots(false);
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = kick_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startDirectKickOpponent()
 {
-  // setBallAvoidanceForAllRobots(true);
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
 void LordOfDarkness::startIndirectKickAlly()
 {
-  // setBallAvoidanceForAllRobots(false);
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = kick_strats_indirect_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startIndirectKickOpponent()
 {
-  // setBallAvoidanceForAllRobots(true);
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
 void LordOfDarkness::startPrepareKickoffAlly()
@@ -282,11 +295,15 @@ void LordOfDarkness::startKickoffOpponent()
 
 void LordOfDarkness::startPenaltyAlly()
 {
-  // setBallAvoidanceForAllRobots(false);
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = penalty_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startPenaltyOpponent()
 {
-  // setBallAvoidanceForAllRobots(true);
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
 // Continue
