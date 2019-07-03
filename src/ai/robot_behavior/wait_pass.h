@@ -19,35 +19,34 @@
 
 #pragma once
 
-#include <referee/game_state.h>
-#include "manager.h"
-#include "manual.h"
-#include "match.h"
-#include "dumb_manager.h"
-#include "lord_of_darkness.h"
+#include "robot_behavior.h"
+#include "factory.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace robot_behavior
 {
-struct names
-{
-  static constexpr const char* MANUAL = "Manual";
-  static constexpr const char* MATCH = "Match";
-  static constexpr const char* DUMB_MANAGER = "Dumb_manager";
-  static constexpr const char* LORD_OF_DARKNESS = "Lord of Darkness";
-};
-
-class Factory
+class WaitPass : public RobotBehavior
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers_;
+  Vector2d translation_;
+  Team team_;
+  double distance_ball_;
+
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  static const std::list<std::string>& availableManagers();
+  WaitPass();
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+
+  virtual Control control() const;
+
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+
+  virtual ~WaitPass();
 };
 
-}  // namespace manager
-}  // namespace rhoban_ssl
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl
