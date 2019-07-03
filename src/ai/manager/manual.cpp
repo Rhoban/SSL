@@ -114,7 +114,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Test - KickMeasure", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                              [&](double time, double dt) {
                                                robot_behavior::test::KickMeasure* kick_m =
-                                                   new robot_behavior::test::KickMeasure(1.0);
+                                                   new robot_behavior::test::KickMeasure(0.7);
                                                return std::shared_ptr<robot_behavior::RobotBehavior>(kick_m);
                                              },
                                              false  // we don't want to define a goal here !
