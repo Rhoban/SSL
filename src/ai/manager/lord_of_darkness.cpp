@@ -196,6 +196,8 @@ void LordOfDarkness::startPrepareKickoffOpponent()
 void LordOfDarkness::startKickoffAlly()
 {
   // setBallAvoidanceForAllRobots(false);
+  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startKickoffOpponent()
 {
