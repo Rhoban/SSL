@@ -19,7 +19,6 @@
 
 // ./bin/go_to_xy_nv -r 2 -s -X 1 -Y 0 -T 0 -d 5 --xdest 1000  --angdest 0 --ydest 0
 
-
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
@@ -45,6 +44,7 @@
 #include <robot_behavior/tests/test_go_to_destination_nv.h>
 #include <core/plot_velocity.h>
 #include <core/plot_xy.h>
+#include <core/timeout_task.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
@@ -198,7 +198,7 @@ int main(int argc, char** argv)
                                 // value.
                                 cmd);
 
-  TCLAP::ValueArg<double> ydest("l",     // short argument name  (with one character)
+  TCLAP::ValueArg<double> ydest("l",      // short argument name  (with one character)
                                 "ydest",  // long argument name
                                 "The y destination "
                                 "parameter",
@@ -300,7 +300,7 @@ int main(int argc, char** argv)
 
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
   // ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
-  
+
   // ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
   // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
   // ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
