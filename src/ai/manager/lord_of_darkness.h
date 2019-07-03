@@ -49,6 +49,7 @@ private:
   // kick_strats_indirect
   std::vector<std::list<std::string> > kick_strats_indirect_;
 
+  std::vector<std::list<std::string> > direct_opponent_strats_;
 
   std::string PROTECT_BALL = "gobelin";
 

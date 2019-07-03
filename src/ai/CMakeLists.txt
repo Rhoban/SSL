@@ -79,6 +79,7 @@ set (SOURCES
     robot_behavior/slow_striker.cpp
     robot_behavior/striker_ai.cpp
     robot_behavior/wait_pass.cpp
+    robot_behavior/stop_not_far.cpp
     ai.cpp
     debug.cpp
     task_example.cpp
