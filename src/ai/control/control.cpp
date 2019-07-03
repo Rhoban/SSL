@@ -169,13 +169,13 @@ bool LimitVelocities::runTask()
     double lambda_3 = 1.0;
     double lambda_4 = 1.0;
 
-    if (abs(wheels_speed.frontLeft) > 0)
+    if (abs(wheels_speed.frontLeft) > ai::Config::max_wheel_speed)
       lambda_1 = ai::Config::max_wheel_speed / abs(wheels_speed.frontLeft);
-    if (abs(wheels_speed.frontRight) > 0)
+    if (abs(wheels_speed.frontRight) > ai::Config::max_wheel_speed)
       lambda_2 = ai::Config::max_wheel_speed / abs(wheels_speed.frontRight);
-    if (abs(wheels_speed.backLeft) > 0)
+    if (abs(wheels_speed.backLeft) > ai::Config::max_wheel_speed)
       lambda_3 = ai::Config::max_wheel_speed / abs(wheels_speed.backLeft);
-    if (abs(wheels_speed.backRight) > 0)
+    if (abs(wheels_speed.backRight) > ai::Config::max_wheel_speed)
       lambda_4 = ai::Config::max_wheel_speed / abs(wheels_speed.backRight);
 
     double lambda = std::min(lambda_1, lambda_2);
@@ -184,9 +184,12 @@ bool LimitVelocities::runTask()
 
     if (lambda < 1.0)
     {
-      std::cerr << "WARNING: ROBOT " << i << " reached the wheel's speed limit!" << std::endl;
+      std::cerr << "WARNING: ROBOT " << i << " reached the wheel's speed limit! " << ctrl.linear_velocity.norm()
+                << std::endl;
       ctrl.linear_velocity *= lambda;
       ctrl.angular_velocity *= lambda;
+      std::cerr << "WARNING: ROBOT " << lambda << " reached the wheel's speed limit! " << ctrl.linear_velocity.norm()
+                << std::endl;
     }
   }
   return true;
