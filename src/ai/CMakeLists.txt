@@ -85,6 +85,7 @@ set (SOURCES
     strategy/from_robot_behavior.cpp
     strategy/tutorials/caterpillar.cpp
     strategy/keeper/keeper_strat.cpp
+    strategy/go_to_xy_strat.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
