@@ -49,6 +49,7 @@
 
 #include <strategy/wall.h>
 #include <strategy/wall_2.h>
+#include <strategy/defensive_2.h>
 #include <robot_behavior/tests/test_infra.h>
 #include <robot_behavior/tests/test_kicker.h>
 #include <robot_behavior/tests/test_relative_velocity_consign.h>
@@ -309,6 +310,7 @@ Manual::Manual(std::string name) : Manager(name)
                                   },
                                   false  // we don't want to define a goal here !
                                   )));
+  registerStrategy("Defensive2", std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
 }
 
 void Manual::update()
