@@ -35,10 +35,10 @@ class Receiver : public RobotBehavior
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
-  bool catch_ball_;
+  
 public:
   
-  Receiver(bool catch_ball=false);
+  Receiver();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
