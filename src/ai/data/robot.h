@@ -38,6 +38,7 @@ public:
   // todo default state
   struct packet_robot electronics;
 
+  rhoban_geometry::Point dribblerCenter(double time) const;
   /**
    * @brief infraRed returns true if the infrared barrier of the robot detects somethings
    * @return bool : infrared barrier detection
