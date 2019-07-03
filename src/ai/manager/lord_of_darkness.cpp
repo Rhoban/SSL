@@ -17,6 +17,9 @@
 
 // Strategies
 #include "lord_of_darkness.h"
+
+//#include "game_informations.h"
+
 #include <strategy/halt.h>
 #include <strategy/keeper/keeper_strat.h>
 #include <strategy/wall_2.h>
@@ -34,12 +37,15 @@
 #include <strategy/striker_kick.h>
 #include <strategy/attackms.h>
 
+#include <data.h>
+
 namespace rhoban_ssl
 {
 namespace manager
 {
 LordOfDarkness::LordOfDarkness(std::string name)
   : ManagerWithGameState(name)
+  , offensive_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , defensive_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , halt_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , kickoff_ally_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
@@ -52,6 +58,23 @@ LordOfDarkness::LordOfDarkness(std::string name)
   , direct_opponent_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
 {
   // strategies arrays begin at 1(case 0 unused) to directly acces the good strategy by giving number of disponible
+
+
+  offensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
+                           strategy::StrikerV2::name, strategy::Offensive::name };
+  offensive_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
+                           strategy::StrikerV2::name, strategy::Offensive::name };
+  offensive_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
+                           strategy::StrikerV2::name, strategy::Offensive::name };
+  offensive_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
+                           strategy::StrikerV2::name };
+  offensive_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive::name,
+                           strategy::StrikerV2::name };
+  offensive_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::StrikerV2::name };
+  offensive_strats_[2] = { strategy::KeeperStrat::name, strategy::StrikerV2::name };
+  offensive_strats_[1] = { strategy::KeeperStrat::name };
+
+
 
   defensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
                            strategy::Offensive::name };
@@ -248,9 +271,20 @@ void LordOfDarkness::startStop()
 void LordOfDarkness::startRunning()
 {
   DEBUG("START RUNNING");
-  // setBallAvoidanceForAllRobots(false);
-  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  setBallAvoidanceForAllRobots(false);
+  if (Data::get()->ball.movement_sample[0].linear_position.x <= 0)
+  {
+    //+ 1 because the method getValidPlayerIds() doesn't count goalie.
+    future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+    ball_was_in_ally_part_ = true;
+  }
+  else
+  {
+    future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+    ball_was_in_ally_part_ = false;
+  }
   declareAndAssignNextStrategies(future_strats_);
+
 }
 void LordOfDarkness::startHalt()
 {
@@ -331,20 +365,20 @@ void LordOfDarkness::continueStop()
 
 void LordOfDarkness::continueRunning()
 {
-  //  if (ballPosition().getX() <= 0 and not(ball_was_in_ally_part_))
-  //  {
-  //    clearStrategyAssignement();
-  //    future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
-  //    ball_was_in_ally_part_ = true;
-  //   declareAndAssignNextStrategies(future_strats_);
-  //  }
-  //  else if (ballPosition().getX() > 0 and ball_was_in_ally_part_)
-  //  {
-  //   clearStrategyAssignement();
-  //    future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
-  //    ball_was_in_ally_part_ = false;
-  //    declareAndAssignNextStrategies(future_strats_);
-  //  }
+   if (Data::get()->ball.movement_sample[0].linear_position.x <= 0 and not(ball_was_in_ally_part_))
+   {
+     clearStrategyAssignement();
+     future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+     ball_was_in_ally_part_ = true;
+    declareAndAssignNextStrategies(future_strats_);
+   }
+   else if (Data::get()->ball.movement_sample[0].linear_position.x > 0 and ball_was_in_ally_part_)
+   {
+    clearStrategyAssignement();
+     future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+     ball_was_in_ally_part_ = false;
+     declareAndAssignNextStrategies(future_strats_);
+   }
 }
 void LordOfDarkness::continueHalt()
 {

@@ -26,6 +26,9 @@ namespace manager
 class LordOfDarkness : public ManagerWithGameState
 {
 private:
+
+  std::vector<std::list<std::string> > offensive_strats_;
+  
   // defensive strats:
   std::vector<std::list<std::string> > defensive_strats_;
 
@@ -52,6 +55,8 @@ private:
   std::vector<std::list<std::string> > direct_opponent_strats_;
 
   std::string PROTECT_BALL = "gobelin";
+
+  bool ball_was_in_ally_part_ = true;
 
 public:
   LordOfDarkness(std::string name);
