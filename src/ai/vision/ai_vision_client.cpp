@@ -96,6 +96,8 @@ bool SslGeometryPacketAnalyzer::runTask()
 
 bool DetectionPacketAnalyzer::runTask()
 {
+  double now = Data::get()->time.now();
+
   for (auto i = vision::VisionDataGlobal::singleton_.last_packets_.begin();
        i != vision::VisionDataGlobal::singleton_.last_packets_.end();)
   {
@@ -104,13 +106,25 @@ bool DetectionPacketAnalyzer::runTask()
       auto& frame = (*i)->detection();
       vision::CameraDetectionFrame& current =
           vision::VisionDataSingleThread::singleton_.last_camera_detection_[frame.camera_id()];
-      //
+
       if (frame.frame_number() > current.frame_number_)
       {
         current.inverted = false;
         current.frame_number_ = frame.frame_number();
         current.t_sent_ = frame.t_sent();
-        current.t_capture_ = frame.t_capture();
+        if (!ai::Config::ntpd_enable)
+        {
+          double diff = current.t_sent_ - now;
+          if (diff < Data::get()->time.time_shift_with_vision)
+            Data::get()->time.time_shift_with_vision = diff;
+          current.t_capture_ = frame.t_capture() - Data::get()->time.time_shift_with_vision;
+          current.t_sent_ = frame.t_sent() - Data::get()->time.time_shift_with_vision;
+        }
+        else
+        {
+          current.t_capture_ = Data::get()->time.syncVisionTimeWithProgramTimeLine(frame.t_capture());
+        }
+
         current.camera_id_ = int(frame.camera_id());
         // invalidate previous data
         for (auto& i : current.balls_)
@@ -146,11 +160,9 @@ bool DetectionPacketAnalyzer::runTask()
             current.allies_[i] = frame.robots_yellow(i);
         }
       }
-      time_synchroniser_.update(current);
     }
     ++i;
   }
-  time_synchroniser_.syncTimeShift(&Data::get()->ai_data.time_shift_with_vision);
   return true;
 }
 
