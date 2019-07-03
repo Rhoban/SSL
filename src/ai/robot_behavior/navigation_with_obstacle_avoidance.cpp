@@ -29,6 +29,7 @@ namespace robot_behavior
 {
 NavigationWithObstacleAvoidance::NavigationWithObstacleAvoidance(double time, double dt)
   : ConsignFollower()
+  , avoided_(true)
   , ignore_the_ball_(false)
   , ignore_robot_()
   , ball_radius_avoidance_(ai::Config::robot_radius)
@@ -36,6 +37,7 @@ NavigationWithObstacleAvoidance::NavigationWithObstacleAvoidance(double time, do
   , position_follower_avoidance_(time, dt)
   , target_position_(0.0, 0.0)
   , target_angle_(0.0)
+  , sign_of_avoidance_rotation_(1)
 {
 }
 
@@ -104,6 +106,7 @@ void NavigationWithObstacleAvoidance::determineTheClosestObstacle()
   }
 
   ball_is_the_obstacle_ = false;
+
   if (not(ignore_the_ball_))
   {
     double radius_error = ai::Config::radius_security_for_collision;
@@ -169,7 +172,18 @@ void NavigationWithObstacleAvoidance::convertCycleDirectionToLinearAndAngularVel
   assert(limit_cycle_direction_.norm() != 0.0);
 
   rhoban_geometry::Point pos = linearPosition() + limit_cycle_direction_ / (limit_cycle_direction_.norm()) * 1.0;
+  /*
+    double dist =
+        linearPosition().getDist(Data::get()->all_robots[closest_robot_].second->getMovement().linearPosition(time()));
 
+    // avoid the problem where 2 allies bots infinitely avoid themselves until they leave the field like two small
+    // dragonfly.
+    if (Data::get()->all_robots[closest_robot_].first == Ally && dist < INFINITE_DODGING_PREVENTION &&
+        robot().getMovement().linearVelocity(time()).norm() <=
+            Data::get()->all_robots[closest_robot_].second->getMovement().linearVelocity(time()).norm())
+    {
+      pos = linearPosition();
+    }*/
   position_follower_avoidance_.setFollowingPosition(pos, target_angle_);
 }
 
@@ -183,7 +197,6 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   /////////////////////////////////////////////////////////////////
   // We compute the sens of avoidance rotatiion
   /////////////////////////////////////////////////////////////////
-  sign_of_avoidance_rotation_ = 1.0;  // TODO
 
   // data::Robot& obstacle = *(Data::get()->all_robots[closest_robot_].second);
   Vector2d obstacle_to_goal = vector2point(target_position_) - obstacle_linear_position;
@@ -208,6 +221,7 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
     avoidance_convergence = (XX + YY) * (XX + YY);
   }
 
+  if (avoided_)
   {
     if (angle < 0.0)
     {
@@ -215,8 +229,8 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
     }
     else
       sign_of_avoidance_rotation_ = -1;
+    avoided_ = false;
   }
-
   /////////////////////////////////////////////////////////////////
   // We compute now the limit cycle rotation
   /////////////////////////////////////////////////////////////////
@@ -289,7 +303,8 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
 {
   position_follower_.update(time, robot, ball);  // We use the future command to predict collision
   determineTheClosestObstacle();
-  if (min_time_collision_ >= 0)
+
+  if (min_time_collision_ >= 0 && min_time_collision_ < AVOID_MOMENT)
   {
     computeTheRadiusOfLimitCycle();
     computeTheLimitCycleDirection();
@@ -297,11 +312,15 @@ void NavigationWithObstacleAvoidance::updateControl(double time, const data::Rob
 
     position_follower_avoidance_.update(time, robot, ball);
   }
+  else
+  {
+    avoided_ = true;
+  }
 }
 
 Control NavigationWithObstacleAvoidance::control() const
 {
-  if (min_time_collision_ >= 0)
+  if (min_time_collision_ >= 0 && min_time_collision_ < AVOID_MOMENT)
   {
     return position_follower_avoidance_.control();
   }
@@ -356,7 +375,7 @@ rhoban_ssl::annotations::Annotations NavigationWithObstacleAvoidance::getAnnotat
   rhoban_ssl::annotations::Annotations annotations;
   //    annotations.addCircle( linear_position(), radius_of_limit_cycle );
 
-  if (min_time_collision_ >= 0)
+  if (min_time_collision_ >= 0 && min_time_collision_ < AVOID_MOMENT)
   {
     annotations.addArrow(linearPosition(),
                          linearPosition() + limit_cycle_direction_ * (limit_cycle_direction_.norm()) * 10, "red");

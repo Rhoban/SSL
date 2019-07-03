@@ -62,6 +62,8 @@ double Config::rules_avoidance_distance;
 double Config::convergence_coefficient;
 double Config::coefficient_to_increase_avoidance_convergence;
 
+std::vector<std::vector<double>> Config::kick_settings;
+
 void Config::load(const std::string& config_path)
 {
   DEBUG("We load constants from the configuration file : " << config_path << ".");
@@ -182,6 +184,22 @@ void Config::load(const std::string& config_path)
   Data::get()->referee.teams_info->goalkeeper_number = default_goalie_id;
   assert(default_goalie_id >= 0);
   assert(default_goalie_id < Config::NB_OF_ROBOTS_BY_TEAM);
+
+  // load kick settings:
+  int nb_robots_in_team = root["nb_robots"].asInt();
+  assert(nb_robots_in_team >= 0);
+  int nb_points = root["nb_points"].asInt();
+  assert(nb_points > 0);
+  for (int i = 0; i < nb_robots_in_team; i++)
+  {
+    kick_settings.push_back(std::vector<double>());
+    for (int j = 0; j < nb_points; j++)
+    {
+      double distance = root["robots"][i]["kick_curve"][j].asDouble();
+      assert(distance >= 0.0);
+      kick_settings.back().push_back(distance);
+    }
+  }
 
   enable_kicking = true;
 

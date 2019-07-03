@@ -60,6 +60,8 @@ set (SOURCES
     robot_behavior/go_to_xy.cpp
     robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
+    robot_behavior/kick_to_xy.cpp
+    robot_behavior/test/kick_measure.cpp
     robot_behavior/ben_stealer.cpp
     robot_behavior/keeper/keeper.cpp
     robot_behavior/defender/defensive_wall.cpp
@@ -158,6 +160,9 @@ target_link_libraries(goalie ssl_ai ${ALL_LIBS})
 
 add_executable(goto_ball executables/goto_ball.cpp)
 target_link_libraries(goto_ball ssl_ai ${ALL_LIBS})
+
+add_executable(goto_nv executables/goto_nv.cpp)
+target_link_libraries(goto_nv ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

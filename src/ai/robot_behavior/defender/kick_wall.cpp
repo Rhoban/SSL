@@ -103,14 +103,14 @@ void KickWall::update(double time, const data::Robot& robot, const data::Ball& b
 
   double distance_from_ball = 1.1;
 
-  Vector2d BITE = ball_goal_vector.perpendicular();
-  double norm_BITE = BITE.norm();
-  if (true && norm_BITE < 0.0001)
+  Vector2d ball_perpendicular = ball_goal_vector.perpendicular();
+  double norm_ball_perpendicular = ball_perpendicular.norm();
+  if (true and norm_ball_perpendicular < 0.0001)
   {
-    norm_BITE = 0.0001;
+    norm_ball_perpendicular = 0.0001;
   }
-  BITE = BITE / norm_BITE;
-  target_position = ballPosition() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * BITE;
+  ball_perpendicular = ball_perpendicular / norm_ball_perpendicular;
+  target_position = ballPosition() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * ball_perpendicular;
 
   follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
