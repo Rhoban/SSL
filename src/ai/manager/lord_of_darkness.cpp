@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 SCHMITZ Etienne (hello@etienne-schmitz.com)
+    GNAGNAGNA
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -25,6 +25,8 @@
 #include <strategy/offensive.h>
 #include <strategy/defensive.h>
 #include <strategy/defensive_2.h>
+#include <robot_behavior/go_to_xy.h>
+#include <strategy/from_robot_behavior.h>
 
 namespace rhoban_ssl
 {
@@ -34,8 +36,11 @@ LordOfDarkness::LordOfDarkness(std::string name)
   : ManagerWithGameState(name)
   , defensive_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , halt_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , kickoff_ally_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , kickoff_opponent_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
 {
   // strategies arrays begin at 1(case 0 unused) to directly acces the good strategy by giving number of disponible
+
   defensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
                            strategy::Offensive::name };
   defensive_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
@@ -51,14 +56,45 @@ LordOfDarkness::LordOfDarkness(std::string name)
   defensive_strats_[1] = { strategy::KeeperStrat::name };
 
   // halt_strats
-  halt_strats_[8] = { strategy::Halt::name };
-  halt_strats_[7] = { strategy::Halt::name };
-  halt_strats_[6] = { strategy::Halt::name };
+  halt_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
+                      strategy::Offensive::name };
+  halt_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
+                      strategy::Offensive::name };
+  halt_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
+                      strategy::Offensive::name };
   halt_strats_[5] = { strategy::Halt::name };
   halt_strats_[4] = { strategy::Halt::name };
   halt_strats_[3] = { strategy::Halt::name };
   halt_strats_[2] = { strategy::Halt::name };
   halt_strats_[1] = { strategy::Halt::name };
+
+  // kickoff_ally
+  kickoff_ally_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M",
+                              "kickoff_ally_placement_R", "kickoff_ally_placement_L" };
+  kickoff_ally_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M",
+                              "kickoff_ally_placement_R", "kickoff_ally_placement_L" };
+  kickoff_ally_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M",
+                              "kickoff_ally_placement_R", "kickoff_ally_placement_L" };
+  kickoff_ally_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M",
+                              "kickoff_ally_placement_R" };
+  kickoff_ally_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M" };
+  kickoff_ally_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "kickoff_ally_placement_M" };
+  kickoff_ally_strats_[2] = { strategy::KeeperStrat::name, "kickoff_ally_placement_M" };
+  kickoff_ally_strats_[1] = { strategy::KeeperStrat::name };
+
+  // kickoff_opponent
+  kickoff_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_opponent_placement_M",
+                                  "kickoff_ally_placement_R", "kickoff_ally_placement_L" };
+  kickoff_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_opponent_placement_M",
+                                  "kickoff_ally_placement_R", "kickoff_ally_placement_L" };
+  kickoff_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_opponent_placement_M",
+                                  "kickoff_ally_placement_R", "kickoff_ally_placement_L" };
+  kickoff_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_opponent_placement_M",
+                                  "kickoff_ally_placement_R" };
+  kickoff_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_opponent_placement_M" };
+  kickoff_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "kickoff_opponent_placement_M" };
+  kickoff_opponent_strats_[2] = { strategy::KeeperStrat::name, "kickoff_opponent_placement_M" };
+  kickoff_opponent_strats_[1] = { strategy::KeeperStrat::name };
 
   // Register strategy.
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
@@ -69,6 +105,41 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy(strategy::Defensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
   registerStrategy(strategy::StrikerV2::name, std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2()));
   registerStrategy(strategy::Offensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Offensive()));
+
+  registerStrategy("kickoff_ally_placement_M", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                   [&](double time, double dt) {
+                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
+                                                     go->setPoint(rhoban_geometry::Point(-0.15, 0));
+                                                     return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                                                   },
+                                                   false  // we don't want to define a goal here !
+                                                   )));
+  registerStrategy("kickoff_opponent_placement_M", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                       [&](double time, double dt) {
+                                                         robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
+                                                         go->setPoint(rhoban_geometry::Point(-0.6, 0));
+                                                         return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                                                       },
+                                                       false  // we don't want to define a goal here !
+                                                       )));
+
+  registerStrategy("kickoff_ally_placement_L", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                   [&](double time, double dt) {
+                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
+                                                     go->setPoint(rhoban_geometry::Point(-2, 2));
+                                                     return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                                                   },
+                                                   false  // we don't want to define a goal here !
+                                                   )));
+
+  registerStrategy("kickoff_ally_placement_R", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                                   [&](double time, double dt) {
+                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
+                                                     go->setPoint(rhoban_geometry::Point(-2, -2));
+                                                     return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                                                   },
+                                                   false  // we don't want to define a goal here !
+                                                   )));
 }
 
 void LordOfDarkness::startStop()
@@ -112,10 +183,14 @@ void LordOfDarkness::startIndirectKickOpponent()
 void LordOfDarkness::startPrepareKickoffAlly()
 {
   // setBallAvoidanceForAllRobots(true);
+  future_strats_ = kickoff_ally_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startPrepareKickoffOpponent()
 {
-  // setBallAvoidanceForAllRobots(true);
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = kickoff_opponent_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
 void LordOfDarkness::startKickoffAlly()

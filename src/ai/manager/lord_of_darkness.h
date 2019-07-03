@@ -33,6 +33,10 @@ private:
   //halt_strat
   std::vector<std::list<std::string> > halt_strats_;
 
+  std::vector<std::list<std::string> > kickoff_ally_strats_;
+
+  std::vector<std::list<std::string> > kickoff_opponent_strats_;
+
   std::list<std::string> future_strats_;
 
 public:
