@@ -160,7 +160,7 @@ bool LimitVelocities::runTask()
 {
   for (uint i = 0; i < Data::get()->shared_data.final_control_for_robots.size(); ++i)
   {
-    Control ctrl = Data::get()->shared_data.final_control_for_robots[i].control;
+    Control& ctrl = Data::get()->shared_data.final_control_for_robots[i].control;
     Kinematic::WheelsSpeed wheels_speed =
         kinematic_.compute(ctrl.linear_velocity.getX(), ctrl.linear_velocity.getY(), ctrl.angular_velocity.value());
 
