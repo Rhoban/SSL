@@ -27,6 +27,7 @@
 #include <strategy/defensive_2.h>
 #include <robot_behavior/go_to_xy.h>
 #include <robot_behavior/protect_ball.h>
+#include <robot_behavior/stop_not_far.h>
 #include <strategy/from_robot_behavior.h>
 #include <strategy/mur_stop.h>
 #include <strategy/prepare_kickoff.h>
@@ -48,6 +49,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   , stop_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , kick_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , kick_strats_indirect_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , direct_opponent_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
 {
   // strategies arrays begin at 1(case 0 unused) to directly acces the good strategy by giving number of disponible
 
@@ -66,17 +68,14 @@ LordOfDarkness::LordOfDarkness(std::string name)
   defensive_strats_[1] = { strategy::KeeperStrat::name };
 
   // halt_strats
-  halt_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                      strategy::Offensive::name };
-  halt_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                      strategy::Offensive::name };
-  halt_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                      strategy::Offensive::name };
+  halt_strats_[8] = { strategy::Halt::name };
+  halt_strats_[7] = { strategy::Halt::name };
+  halt_strats_[6] = { strategy::Halt::name };
   halt_strats_[5] = { strategy::Halt::name };
   halt_strats_[4] = { strategy::Halt::name };
   halt_strats_[3] = { strategy::Halt::name };
   halt_strats_[2] = { strategy::Halt::name };
-  halt_strats_[1] = { strategy::Halt::name };
+  halt_strats_[1] = {};
 
   stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
   stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
@@ -162,6 +161,15 @@ LordOfDarkness::LordOfDarkness(std::string name)
   kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
   kick_strats_indirect_[1] = { strategy::KeeperStrat::name };
 
+  direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
+  direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
+  direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
+  direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF", "SNF"  };
+  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF" , "SNF" };
+  direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF" };
+  direct_opponent_strats_[2] = { strategy::KeeperStrat::name, "SNF" };
+  direct_opponent_strats_[1] = { strategy::KeeperStrat::name };
+
   // Register strategy.
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
   registerStrategy(strategy::KeeperStrat::name, std::shared_ptr<strategy::Strategy>(new strategy::KeeperStrat()));
@@ -209,6 +217,15 @@ LordOfDarkness::LordOfDarkness(std::string name)
                                                    },
                                                    false  // we don't want to define a goal here !
                                                    )));
+
+  registerStrategy("SNF", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::StopNotFar* go = new robot_behavior::StopNotFar();
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
+
   registerStrategy(strategy::PrepareKickoff::name, std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
   registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
 
@@ -223,8 +240,8 @@ LordOfDarkness::LordOfDarkness(std::string name)
 void LordOfDarkness::startStop()
 {
   DEBUG("STARTSTOP");
-  setBallAvoidanceForAllRobots(true);
-  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
+  setBallAvoidanceForAllRobots(false);
+  future_strats_ = direct_opponent_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 
@@ -249,10 +266,10 @@ void LordOfDarkness::startDirectKickAlly()
   future_strats_ = kick_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
-void LordOfDarkness::startDirectKickOpponent()
+void LordOfDarkness::startDirectKickOpponent()  //
 {
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = direct_opponent_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 
@@ -262,10 +279,10 @@ void LordOfDarkness::startIndirectKickAlly()
   future_strats_ = kick_strats_indirect_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
-void LordOfDarkness::startIndirectKickOpponent()
+void LordOfDarkness::startIndirectKickOpponent()  //
 {
   setBallAvoidanceForAllRobots(true);
-  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = direct_opponent_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 
@@ -290,7 +307,7 @@ void LordOfDarkness::startKickoffAlly()
 }
 void LordOfDarkness::startKickoffOpponent()
 {
-  // setBallAvoidanceForAllRobots(true);
+  setBallAvoidanceForAllRobots(false);
 }
 
 void LordOfDarkness::startPenaltyAlly()

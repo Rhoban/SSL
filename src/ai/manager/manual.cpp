@@ -39,6 +39,7 @@
 #include <robot_behavior/striker.h>
 #include <robot_behavior/striker_ai.h>
 #include <robot_behavior/wait_pass.h>
+#include <robot_behavior/stop_not_far.h>
 
 #include <strategy/tutorials/caterpillar.h>
 #include <robot_behavior/ben_stealer.h>
@@ -374,6 +375,14 @@ Manual::Manual(std::string name) : Manager(name)
                                             [&](double time, double dt) {
                                               robot_behavior::SearchShootArea* ssa =
                                                   new robot_behavior::SearchShootArea();
+                                              return std::shared_ptr<robot_behavior::RobotBehavior>(ssa);
+                                            },
+                                            false  // we don't want to define a goal here !
+                                            )));
+  registerStrategy("stop not far aller ça part", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                            [&](double time, double dt) {
+                                              robot_behavior::StopNotFar* ssa =
+                                                  new robot_behavior::StopNotFar();
                                               return std::shared_ptr<robot_behavior::RobotBehavior>(ssa);
                                             },
                                             false  // we don't want to define a goal here !
