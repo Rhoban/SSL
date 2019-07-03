@@ -37,6 +37,14 @@ annotations::Annotations TestFieldInfo::getAnnotations() const
 
   annotations.addCross(Data::get()->field.centerMark(), "black");
 
+  annotations.addCross(Data::get()->field.getGoal(Ally).pole_left_, "blue");
+  annotations.addCross(Data::get()->field.getGoal(Ally).pole_right_, "blue");
+  annotations.addCross(Data::get()->field.getGoal(Ally).goal_center_, "blue");
+
+  annotations.addCross(Data::get()->field.getGoal(Opponent).pole_left_, "red");
+  annotations.addCross(Data::get()->field.getGoal(Opponent).pole_right_, "red");
+  annotations.addCross(Data::get()->field.getGoal(Opponent).goal_center_, "red");
+
   return annotations;
 }
 

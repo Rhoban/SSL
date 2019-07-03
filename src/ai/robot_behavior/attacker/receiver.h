@@ -19,45 +19,36 @@
 
 #pragma once
 
-#include "mobile.h"
-
-#include <structs.h>
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
+#include <math/vector2d.h>
+#include <debug.h>
 
 namespace rhoban_ssl
 {
-namespace data
+namespace robot_behavior
 {
-class Robot : public Mobile
+namespace attacker
 {
+class Receiver : public RobotBehavior
+{
+private:
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
+  bool activate_dribbler_;
+
 public:
-  Robot();
+  Receiver();
 
-  uint id;
-  bool is_goalie;
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
-  // todo default state
-  struct packet_robot electronics;
+  virtual Control control() const;
 
-  rhoban_geometry::Point dribblerCenter(double time) const;
-  /**
-   * @brief infraRed returns true if the infrared barrier of the robot detects somethings
-   * @return bool : infrared barrier detection
-   */
-  bool infraRed() const;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  /**
-   * @brief electronics informations, returns true if an error with drivers is detected
-   * on the robot.
-   * @return bool : Error with drivers
-   */
-  bool driverError() const;
-
-  /**
-   * @brief returns true if the robot is alive and ok
-   * @return bool : robot is alive and ok
-   */
-  bool isOk() const;
+  virtual ~Receiver();
 };
 
-}  // namespace data
-}  // namespace rhoban_ssl
+};  // namespace attacker
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl
