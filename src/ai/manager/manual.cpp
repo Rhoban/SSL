@@ -51,6 +51,7 @@
 #include <strategy/wall.h>
 #include <strategy/wall_2.h>
 #include <strategy/defensive_2.h>
+#include <strategy/striker_v2.h>
 #include <robot_behavior/tests/test_infra.h>
 #include <robot_behavior/tests/test_kicker.h>
 #include <robot_behavior/tests/test_relative_velocity_consign.h>
@@ -208,6 +209,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("Defensive", std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
   registerStrategy("Wall1", std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
   registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
+  registerStrategy("Striker V2 (strat)", std::shared_ptr<strategy::Strategy>(new strategy::StrikerV2()));
   registerStrategy("Obstructor", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                      [&](double time, double dt) {
                                        robot_behavior::Obstructor* obstructor = new robot_behavior::Obstructor();
