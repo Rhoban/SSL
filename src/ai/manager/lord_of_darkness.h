@@ -26,10 +26,11 @@ namespace manager
 class LordOfDarkness : public ManagerWithGameState
 {
 private:
-  // dumb_strat
-  std::vector<std::list<std::string> > dumb_strats_;
 
-  //hal_strat
+  //defensive strats:
+  std::vector<std::list<std::string> > defensive_strats_;
+
+  //halt_strat
   std::vector<std::list<std::string> > halt_strats_;
 
   std::list<std::string> future_strats_;
