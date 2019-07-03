@@ -25,8 +25,8 @@ namespace robot_behavior
 {
 namespace attacker
 {
-Receiver::Receiver()
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+Receiver::Receiver(bool catch_ball)
+  : RobotBehavior(), catch_ball_(catch_ball), follower_(Factory::fixedConsignFollower())
 {
 }
 
@@ -44,9 +44,9 @@ void Receiver::update(double time, const data::Robot& robot, const data::Ball& b
   rhoban_geometry::Point target_position = robot_position;
   double target_rotation = vector2angle(robot_ball).value();
 
-  DEBUG(ball_direction.norm());
+  // DEBUG(ball_direction.norm());
   
-  if (ball_direction.norm() - 0.00001 > 0)
+  if (ball_direction.norm() - 0.00001 > 0 && catch_ball_ == true)
     {
       ball_direction = ball_direction / ball_direction.norm();
       

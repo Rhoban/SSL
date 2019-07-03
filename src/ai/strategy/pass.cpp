@@ -82,7 +82,7 @@ void Pass::assignBehaviorToRobots(
 {
   std::shared_ptr<robot_behavior::RobotBehavior> striker(new robot_behavior::attacker::Striker(getRobot(playerId(1)).getMovement().linearPosition(time)));
 
-  std::shared_ptr<robot_behavior::RobotBehavior> receiver(new robot_behavior::attacker::Receiver());
+  std::shared_ptr<robot_behavior::RobotBehavior> receiver(new robot_behavior::attacker::Receiver(true));
   
   if (not(behaviors_are_assigned_))
   {
