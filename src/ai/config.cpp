@@ -19,8 +19,8 @@ bool Config::enable_movement_with_integration = true;
 bool Config::we_are_blue = true;
 bool Config::is_in_simulation = true;
 
-int Config::frame_per_second = 60;
-double Config::period = 1.0 / 60.0;
+double Config::period = 0.01;
+bool Config::ntpd_enable = false;
 
 double Config::robot_radius = 0.09;
 double Config::ball_radius = 0.021375;
@@ -81,9 +81,10 @@ void Config::load(const std::string& config_path)
 
   auto robot_conf = root["robot"];
 
-  frame_per_second = root["time"]["frame_per_second"].asInt();
-  assert(frame_per_second > 0);
-  period = 1.0 / frame_per_second;
+  period = root["time"]["period"].asDouble();
+  assert(period > 0);
+
+  ntpd_enable = root["time"]["ntpd_enable"].asBool();
 
   robot_radius = robot_conf["robot_radius"].asDouble();
   assert(robot_radius > 0.0);

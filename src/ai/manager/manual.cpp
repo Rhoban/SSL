@@ -33,7 +33,7 @@
 #include <robot_behavior/tutorials/beginner/robot_near_ball.h>
 #include <robot_behavior/tutorials/beginner/robot_have_ball.h>
 #include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
-#include <robot_behavior/test/kick_measure.h>
+#include <robot_behavior/tests/kick_measure.h>
 #include <robot_behavior/tutorials/medium/follow_robot.h>
 #include <robot_behavior/go_to_xy.h>
 

@@ -39,7 +39,7 @@ void KickMeasure::update(double time, const data::Robot& robot, const data::Ball
   rhoban_geometry::Point follow_position = robot.getMovement().linearPosition(time);
   ContinuousAngle follow_rotation = robot.getMovement().angularPosition(time);
 
-  double distance = follow_position.getDist(ballPosition());
+  // double distance = follow_position.getDist(ballPosition());
 
   // Display of distance:
   // annotations_.addText(std::to_string(distance), ballPosition().x - 0.25, ballPosition().y - 0.25, "white");

@@ -38,7 +38,6 @@ set (SOURCES
     vision/print_protobuf.cpp
     vision/robot_position_filter.cpp
     vision/factory.cpp
-    vision/time_synchroniser.cpp
     com/ai_commander.cpp
     viewer/viewer_communication.cpp
     viewer/properties.cpp
@@ -61,7 +60,7 @@ set (SOURCES
     robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/kick_to_xy.cpp
-    robot_behavior/test/kick_measure.cpp
+    robot_behavior/tests/kick_measure.cpp
     robot_behavior/ben_stealer.cpp
     robot_behavior/keeper/keeper.cpp
     robot_behavior/defender/defensive_wall.cpp
@@ -73,6 +72,7 @@ set (SOURCES
     robot_behavior/tests/test_velocity_consign.cpp
     robot_behavior/tests/test_follow_path.cpp
     robot_behavior/tests/test_field_info.cpp
+    robot_behavior/tests/test_go_to_destination_nv.cpp
     ai.cpp
     debug.cpp
     task_example.cpp
@@ -163,6 +163,13 @@ target_link_libraries(goto_ball ssl_ai ${ALL_LIBS})
 
 add_executable(goto_nv executables/goto_nv.cpp)
 target_link_libraries(goto_nv ssl_ai ${ALL_LIBS})
+
+add_executable(go_to_xy_nv executables/go_to_xy_nv.cpp)
+target_link_libraries(go_to_xy_nv ssl_ai ${ALL_LIBS})
+
+add_executable(go_to_xy executables/go_to_xy.cpp)
+target_link_libraries(go_to_xy ssl_ai ${ALL_LIBS})
+
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

@@ -8,7 +8,7 @@ Field::Field()
 {
   field_length_ = 9.0;
   field_width_ = 6.0;
-  goal_width_ = 1.0;
+  goal_width_ = 0.6;
   goal_depth_ = 0.6;
   boundary_width_ = 0.1;
   penalty_area_depth_ = 1.0;
@@ -18,10 +18,23 @@ Field::Field()
 void Field::updateAdditionnalInformations()
 {
   rhoban_geometry::Point ally_goal_center(-field_length_ / 2.0, 0.0);
-  goal_center_[Ally] = ally_goal_center;
+  rhoban_geometry::Point ally_pole_left(ally_goal_center.getX(), ally_goal_center.getY() - (goal_width_ / 2));
+
+  rhoban_geometry::Point ally_pole_right(ally_goal_center.getX(), ally_goal_center.getY() + (goal_width_ / 2));
+  goal_[Ally].goal_center_ = ally_goal_center;
+  goal_[Ally].pole_left_ = ally_pole_left;
+  goal_[Ally].pole_right_ = ally_pole_right;
 
   rhoban_geometry::Point opponent_goal_center(field_length_ / 2.0, 0.0);
-  goal_center_[Opponent] = opponent_goal_center;
+  rhoban_geometry::Point opponent_pole_left(opponent_goal_center.getX(),
+                                            opponent_goal_center.getY() - (goal_width_ / 2));
+
+  rhoban_geometry::Point opponent_pole_right(opponent_goal_center.getX(),
+                                             opponent_goal_center.getY() + (goal_width_ / 2));
+
+  goal_[Opponent].goal_center_ = opponent_goal_center;
+  goal_[Opponent].pole_left_ = opponent_pole_left;
+  goal_[Opponent].pole_right_ = opponent_pole_right;
 
   // SW
   corners_[SW] = rhoban_geometry::Point(-field_length_ / 2.0, -field_width_ / 2.0);
@@ -66,7 +79,12 @@ Box Field::getPenaltyArea(Team team) const
 
 rhoban_geometry::Point Field::goalCenter(Team team) const
 {
-  return goal_center_[team];
+  return goal_[team].goal_center_;
+}
+
+goal Field::getGoal(Team team) const
+{
+  return goal_[team];
 }
 
 rhoban_geometry::Point Field::getSW() const
