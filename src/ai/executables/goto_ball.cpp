@@ -226,7 +226,7 @@ int main(int argc, char** argv)
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
   ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
 
-  // ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
+  ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
   ExecutionManager::getManager().addTask(new control::Commander(), 1001);
 
   ExecutionManager::getManager().run(0.01);

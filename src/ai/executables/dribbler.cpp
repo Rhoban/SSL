@@ -42,6 +42,7 @@
 #include <robot_behavior/tests/test_velocity_consign.h>
 #include <core/plot_velocity.h>
 #include <core/plot_xy.h>
+#include <core/timeout_task.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
@@ -94,7 +95,6 @@ int main(int argc, char** argv)
                                        // value.
                                        cmd);
 
-
   cmd.parse(argc, argv);
 
   ai::Config::is_in_simulation = simulation.getValue();
@@ -102,26 +102,44 @@ int main(int argc, char** argv)
 
   class LocalTask : public Task
   {
-    GnuPlot plot;
     int rid;
-    std::chrono::high_resolution_clock::time_point start;
 
   public:
-    LocalTask(int rid) : rid(rid), start(std::chrono::high_resolution_clock::now())
+    LocalTask(int rid) : rid(rid)
     {
     }
     bool runTask()
     {
+      if (Data::get()->time.now() < 2)
+        return true;
+      /*
+            Control c(false);
+            c.ignore = false;
+            c.active = true;
+            c.spin = true;
+            c.linear_velocity[0] = 0;
+            c.linear_velocity[1] = 0;
+
+            Control& ctrl = Data::get()->shared_data.final_control_for_robots[rid].control;
+            ctrl = c;
+      */
+
+      // Data::get()->shared_data.final_control_for_robots[rid].control = Control(false);
+      Data::get()->shared_data.final_control_for_robots[rid].control.ignore = false;
       Data::get()->shared_data.final_control_for_robots[rid].control.active = true;
-      Data::get()->shared_data.final_control_for_robots[rid].control.linear_velocity[0]=1.0;
+      Data::get()->shared_data.final_control_for_robots[rid].control.linear_velocity[0] = 0.0;
+      Data::get()->shared_data.final_control_for_robots[rid].control.linear_velocity[1] = 0.0;
+      // Data::get()->shared_data.final_control_for_robots[rid].control.fix_rotation = 0.0;
       Data::get()->shared_data.final_control_for_robots[rid].control.spin = true;
+
       return true;
     }
   };
 
   ExecutionManager::getManager().addTask(new LocalTask(assigned_robot.getValue()));
   ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
-  ExecutionManager::getManager().addTask(new control::Commander(), 1001);
+  control::Commander* c = new control::Commander();
+  ExecutionManager::getManager().addTask(c, 1001);
   ExecutionManager::getManager().addTask(new TimeoutTask(running_time.getValue()), 1001);
 
   ExecutionManager::getManager().run(0.01);
