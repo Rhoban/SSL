@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
+    Copyright 2019 Jérémy Bezamat (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -84,9 +85,20 @@ bool GoToXY::isReached()
   return reached_;
 }
 
+void GoToXY::dribbler(const bool is_active){
+  dribbler_is_active_ = is_active;
+}
+
 Control GoToXY::control() const
 {
   Control ctrl = follower_->control();
+  if (dribbler_is_active_)
+  {
+    ctrl.spin = true;
+  }
+  else{
+    ctrl.spin = false;
+  }
   return ctrl;
 }
 

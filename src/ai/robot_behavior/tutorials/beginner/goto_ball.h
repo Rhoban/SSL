@@ -33,7 +33,8 @@ class GotoBall : public RobotBehavior
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
-  bool dribbler_is_active_ = false;
+  bool dribbler_is_active_;
+  int offset_;
 
 public:
   GotoBall();
@@ -50,7 +51,9 @@ public:
    * @param isActive
    * true = active the dribbler. false = Desactive the dribbler
    */
-  void dribbler(const bool is_active = true);
+  void dribbler(const bool is_active);
+
+  void setOffset(const int offset);
 
   virtual ~GotoBall();
 };

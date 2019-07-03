@@ -2,6 +2,7 @@
     This file is part of SSL.
 
     Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
+    Copyright 2019 Jérémy Bezamat (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -36,6 +37,7 @@ private:
 
   bool reached_;
   double reach_radius_;
+  bool dribbler_is_active_ = false;
 
 public:
   GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01);
@@ -53,6 +55,8 @@ public:
   double getReachRadius() const;
 
   bool isReached();
+  
+  void dribbler(const bool is_active);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 

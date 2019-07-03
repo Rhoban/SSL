@@ -47,6 +47,7 @@
 #include <robot_behavior/go_to_xy.h>
 #include <robot_behavior/poke_ball.h>
 #include <strategy/keeper/keeper_strat.h>
+#include <strategy/zizou.h>
 
 #include <strategy/wall.h>
 #include <strategy/wall_2.h>
@@ -311,6 +312,7 @@ Manual::Manual(std::string name) : Manager(name)
                                             },
                                             false  // we don't want to define a goal here !
                                             )));
+  registerStrategy("zizou", std::shared_ptr<strategy::Strategy>(new strategy::Zizou()));
 }
 
 void Manual::update()
