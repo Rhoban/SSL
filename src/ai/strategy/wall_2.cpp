@@ -100,7 +100,7 @@ void Wall_2::assignBehaviorToRobots(
   static_cast<robot_behavior::DefensiveWall*>(wall2.get())->declareWallRobotId(1, 2);
   std::shared_ptr<robot_behavior::RobotBehavior> clear1(new robot_behavior::keeper::Clearer());
 
-  static_cast<robot_behavior::keeper::Clearer*>(clear1.get())->declarePointToStrike(Data::get()->field.goal_center_[Opponent]);
+  static_cast<robot_behavior::keeper::Clearer*>(clear1.get())->declarePointToStrike(Data::get()->field.goalCenter(Opponent));
   static_cast<robot_behavior::keeper::Clearer*>(clear1.get())->chipKick(true);
   
 
