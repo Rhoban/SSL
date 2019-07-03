@@ -35,7 +35,7 @@ class Receiver : public RobotBehavior
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
-  
+  bool activate_dribbler_;
 public:
   
   Receiver();

@@ -28,6 +28,7 @@ namespace attacker
 Receiver::Receiver()
   : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
+  activate_dribbler_ = false;
 }
 
 void Receiver::update(double time, const data::Robot& robot, const data::Ball& ball)
@@ -44,12 +45,20 @@ void Receiver::update(double time, const data::Robot& robot, const data::Ball& b
   rhoban_geometry::Point target_position = robot_position;
   double target_rotation = vector2angle(robot_ball).value();
 
+  double dist_robot_ball = robot_ball.norm();
+
+  if (dist_robot_ball < 0.05)
+    {
+      activate_dribbler_ = true;
+    }
+  else{
+    activate_dribbler_ = false;
+  }
   // DEBUG(ball_direction.norm());
   
   if (ball_direction.norm() - 0.00001 > 0)
     {
       
-      double dist_robot_ball = robot_ball.norm();
   
       double teta = vectors2angle(ball_direction, robot_ball).value(); 
       
@@ -99,6 +108,13 @@ void Receiver::update(double time, const data::Robot& robot, const data::Ball& b
 Control Receiver::control() const
 {
   Control ctrl = follower_->control();
+  if (activate_dribbler_ == true)
+    {
+      ctrl.spin = true;
+    }
+  else{
+    ctrl.spin = false;
+  }
   return ctrl;
 }
 
