@@ -45,6 +45,11 @@ private:
    */
   double kick_power_;
 
+  bool started_;
+
+  double last_time_;
+  int countdown_ = 5;
+
 public:
   /**
    * @brief Constructor.

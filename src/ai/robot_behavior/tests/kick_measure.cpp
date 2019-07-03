@@ -22,10 +22,10 @@ namespace robot_behavior
 {
 namespace test
 {
-KickMeasure::KickMeasure(double kick_power) : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+KickMeasure::KickMeasure(double kick_power)
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), kick_power_(kick_power), started_(false)
 
 {
-  kick_power_ = kick_power;
 }
 
 void KickMeasure::update(double time, const data::Robot& robot, const data::Ball& ball)
@@ -36,16 +36,34 @@ void KickMeasure::update(double time, const data::Robot& robot, const data::Ball
 
   annotations_.clear();
 
-  rhoban_geometry::Point follow_position = robot.getMovement().linearPosition(time);
-  ContinuousAngle follow_rotation = robot.getMovement().angularPosition(time);
+  if (!started_)
+  {
+    started_ = true;
+    std::cout << ("BEGIN KICK MEASURE with a power of :") << std::endl;
+    std::cout << "         " << (kick_power_ * 100) << "  %" << std::endl;
+    std::cout << ("put the ball in front of the kicker at center before the countdown end !") << std::endl;
+    std::cout << (countdown_) << std::endl;
+    last_time_ = time;
+  }
+  else
+  {
+    if (countdown_ > 0)
+    {
+      if (time - last_time_ >= 1.0)
+      {
+        last_time_ = time;
+        countdown_--;
+        std::cout << (countdown_) << std::endl;
+      }
+    }
+    else
+    {
+      // main behavior:
+      std::cout << ("ok") << std::endl;
+    }
+  }
 
-  // double distance = follow_position.getDist(ballPosition());
-
-  // Display of distance:
-  // annotations_.addText(std::to_string(distance), ballPosition().x - 0.25, ballPosition().y - 0.25, "white");
-  // DEBUG(distance);
-
-  follower_->setFollowingPosition(follow_position, follow_rotation);
+  follower_->setFollowingPosition(linearPosition(), 0);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }
@@ -54,8 +72,13 @@ Control KickMeasure::control() const
 {
   Control ctrl = follower_->control();
   ctrl.kick_power = kick_power_;
-  ctrl.kick = true;
   ctrl.charge = true;
+  if(started_ && countdown_ == 0){
+    ctrl.kick = true;
+  }else{
+    ctrl.kick = false;
+  }
+
   return ctrl;
 }
 
