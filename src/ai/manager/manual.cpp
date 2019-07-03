@@ -45,6 +45,7 @@
 #include <robot_behavior/defender/kick_wall.h>
 #include <robot_behavior/defender/obstructor.h>
 #include <strategy/keeper/keeper_strat.h>
+#include <strategy/go_to_xy_strat.h>
 
 #include <strategy/wall.h>
 #include <strategy/wall_2.h>
@@ -163,6 +164,12 @@ Manual::Manual(std::string name) : Manager(name)
                    std::shared_ptr<strategy::Strategy>(new strategy::Caterpillar(std::vector<rhoban_geometry::Point>{
                        rhoban_geometry::Point(-3, 3), rhoban_geometry::Point(3, 3), rhoban_geometry::Point(-3, -3),
                        rhoban_geometry::Point(3, -3) })));
+
+  registerStrategy("go to xy strat",
+                   std::shared_ptr<strategy::Strategy>(new strategy::GoToXYStrat(std::vector<rhoban_geometry::Point>{
+                       rhoban_geometry::Point(-3, 3), rhoban_geometry::Point(3, 3), rhoban_geometry::Point(-3, -3),
+                       rhoban_geometry::Point(3, -3) })));
+  
   registerStrategy("Stealer", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                   [&](double time, double dt) {
                                     robot_behavior::BenStealer* stealer = new robot_behavior::BenStealer();
