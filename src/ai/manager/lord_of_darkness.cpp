@@ -264,8 +264,8 @@ LordOfDarkness::LordOfDarkness(std::string name)
 
 void LordOfDarkness::startStop()
 {
-  DEBUG("STARTSTOP");
-  setBallAvoidanceForAllRobots(false);
+  DEBUG("START STOP");
+  setBallAvoidanceForAllRobots(true);
   future_strats_ = direct_opponent_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
