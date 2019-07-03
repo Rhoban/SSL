@@ -36,6 +36,7 @@
 #include <robot_behavior/tests/kick_measure.h>
 #include <robot_behavior/tutorials/medium/follow_robot.h>
 #include <robot_behavior/go_to_xy.h>
+#include <robot_behavior/striker.h>
 
 #include <strategy/tutorials/caterpillar.h>
 #include <robot_behavior/ben_stealer.h>
@@ -301,6 +302,13 @@ Manual::Manual(std::string name) : Manager(name)
                                             },
                                             false  // we don't want to define a goal here !
                                             )));
+  registerStrategy("Striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                  [&](double time, double dt) {
+                                    robot_behavior::Striker* striker = new robot_behavior::Striker();
+                                    return std::shared_ptr<robot_behavior::RobotBehavior>(striker);
+                                  },
+                                  false  // we don't want to define a goal here !
+                                  )));
 }
 
 void Manual::update()
