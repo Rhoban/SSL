@@ -61,6 +61,7 @@ set (SOURCES
     robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/kick_to_xy.cpp
+    robot_behavior/striker.cpp
     robot_behavior/tests/kick_measure.cpp
     robot_behavior/ben_stealer.cpp
     robot_behavior/keeper/keeper.cpp
@@ -73,7 +74,15 @@ set (SOURCES
     robot_behavior/tests/test_velocity_consign.cpp
     robot_behavior/tests/test_follow_path.cpp
     robot_behavior/tests/test_field_info.cpp
+    robot_behavior/go_to_xy.cpp
+    robot_behavior/poke_ball.cpp
     robot_behavior/tests/test_go_to_destination_nv.cpp
+    robot_behavior/search_shoot_area.cpp
+    robot_behavior/protect_ball.cpp
+    robot_behavior/slow_striker.cpp
+    robot_behavior/striker_ai.cpp
+    robot_behavior/wait_pass.cpp
+    robot_behavior/stop_not_far.cpp
     ai.cpp
     debug.cpp
     task_example.cpp
@@ -84,6 +93,12 @@ set (SOURCES
     strategy/from_robot_behavior.cpp
     strategy/tutorials/caterpillar.cpp
     strategy/keeper/keeper_strat.cpp
+    strategy/zizou.cpp
+    strategy/go_to_xy_strat.cpp
+    strategy/mur_stop.cpp
+    strategy/attackms.cpp
+    strategy/striker_kick.cpp
+    strategy/prepare_kickoff.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp
@@ -120,9 +135,15 @@ set (SOURCES
     manager/factory.cpp
     manager/match.cpp
     manager/dumb_manager.cpp
+    manager/lord_of_darkness.cpp
     # Strategy
+    strategy/offensive.cpp
+    strategy/defensive.cpp
     strategy/wall.cpp
     strategy/wall_2.cpp
+    strategy/defensive_2.cpp
+    strategy/striker_v2.cpp
+    strategy/wall_2_passif.cpp
     strategy/pass.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp

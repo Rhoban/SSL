@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
-    Copyright 2019 Jérémy Bezamat (jeremy.bezamat@gmail.com)
+    Copyright 2018 TO COMPLETE
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,47 +19,32 @@
 
 #pragma once
 
-#include "robot_behavior/factory.h"
-#include "robot_behavior/robot_behavior.h"
+#include "robot_behavior.h"
+#include "factory.h"
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class GoToXY : public RobotBehavior
+class Striker : public RobotBehavior
 {
 private:
+  bool use_custom_vector_;
+  rhoban_geometry::Point striking_point_;
   ConsignFollower* follower_;
-  rhoban_ssl::annotations::Annotations annotations_;
-
-  rhoban_geometry::Point target_point_;
-
-  bool reached_;
-  double reach_radius_;
-  bool dribbler_is_active_ = false;
 
 public:
-  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01);
+  Striker();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 
-  void setPoint(rhoban_geometry::Point point);
-
-  rhoban_geometry::Point getPoint() const;
-
-  void setReachRadius(double radius);
-
-  double getReachRadius() const;
-
-  bool isReached();
-  
-  void dribbler(const bool is_active);
+  void declarePointToStrike(rhoban_geometry::Point point);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~GoToXY();
+  virtual ~Striker();
 };
 
 };  // namespace robot_behavior

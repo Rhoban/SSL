@@ -1,8 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
-    Copyright 2019 Jérémy Bezamat (jeremy.bezamat@gmail.com)
+    Copyright 2019 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,47 +19,48 @@
 
 #pragma once
 
-#include "robot_behavior/factory.h"
-#include "robot_behavior/robot_behavior.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class GoToXY : public RobotBehavior
+class PokeBall : public RobotBehavior
 {
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
-
-  rhoban_geometry::Point target_point_;
-
-  bool reached_;
-  double reach_radius_;
-  bool dribbler_is_active_ = false;
+  bool ready_to_kick_ = false;
+  double kick_power_ = 0.3;
+  rhoban_geometry::Point poke_direction_ = Data::get()->field.goalCenter(Opponent);
 
 public:
-  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01);
+  PokeBall();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 
-  void setPoint(rhoban_geometry::Point point);
-
-  rhoban_geometry::Point getPoint() const;
-
-  void setReachRadius(double radius);
-
-  double getReachRadius() const;
-
-  bool isReached();
-  
-  void dribbler(const bool is_active);
-
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~GoToXY();
+  /**
+   * @brief set the direction of the poke (kick)
+   *
+   * @param poke_direction
+   * rhoban_geometry::Point for the poke direction. Default: opponent goalCenter.
+   */
+  void setPokeDirection(rhoban_geometry::Point poke_direction);
+
+  /**
+   * @brief set kick power of the poke 
+   *
+   * @param kick_power
+   * value between 0 and 1
+   */
+  void setKickPower(double kick_power);
+
+  virtual ~PokeBall();
 };
 
 };  // namespace robot_behavior

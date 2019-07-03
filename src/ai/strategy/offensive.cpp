@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -17,19 +17,17 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "wall.h"
-
-#include <robot_behavior/defender/defensive_wall.h>
+#include "offensive.h"
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-Wall::Wall() : Strategy()
+Offensive::Offensive() : Strategy(), is_closest_(false)
 {
 }
 
-Wall::~Wall()
+Offensive::~Offensive()
 {
 }
 
@@ -37,7 +35,7 @@ Wall::~Wall()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Wall::minRobots() const
+int Offensive::minRobots() const
 {
   return 1;
 }
@@ -46,50 +44,52 @@ int Wall::minRobots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Wall::maxRobots() const
+int Offensive::maxRobots() const
 {
   return 1;
 }
 
-GoalieNeed Wall::needsGoalie() const
+GoalieNeed Offensive::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-const std::string Wall::name = "wall";
+const std::string Offensive::name = "offensive";
 
-void Wall::start(double time)
+void Offensive::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
+  search_ = std::shared_ptr<robot_behavior::SearchShootArea>(new robot_behavior::SearchShootArea());
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker());
   behaviors_are_assigned_ = false;
 }
-void Wall::stop(double time)
+void Offensive::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Wall::update(double time)
+void Offensive::update(double time)
 {
-  // const std::vector<int> & players = get_player_ids();
-  // int nb_robots = players.size();
-  // for( int robot_id : players){
-  //	const ai::Robot & robot = get_robot( robot_id );
-  //}
 }
 
-void Wall::assignBehaviorToRobots(
+void Offensive::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  if (not(behaviors_are_assigned_))
+  if (GameInformations::getShirtNumberOfClosestRobotToTheBall(Ally) == playerId(0))
   {
-    // We first assign the behhavior of the goalie.
-
-    // we assign now all the other behavior
-    assert(getPlayerIds().size() == 1);
-    int id = playerId(0);  // we get the first if in get_player_ids()
-    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DefensiveWall()));
-
-    behaviors_are_assigned_ = true;
+    is_closest_ = true;
+  }
+  else
+  {
+    is_closest_ = false;
+  }
+  if (is_closest_ == true)
+  {
+    assign_behavior(playerId(0), striker_);
+  }
+  else
+  {
+    assign_behavior(playerId(0), search_);
   }
 }
 
@@ -100,12 +100,12 @@ void Wall::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Wall::getStartingPositions(int number_of_avalaible_robots)
+Offensive::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
 
-  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(Data::get()->field.goalCenter(Ally), 0.0) };
+  return { std::pair<rhoban_geometry::Point, ContinuousAngle>(relative2absolute(-1.0 / 3.0, 0.0), 0.0) };
 }
 
 //
@@ -113,14 +113,14 @@ Wall::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Wall::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool Offensive::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Wall::getAnnotations() const
+rhoban_ssl::annotations::Annotations Offensive::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   /*
@@ -128,10 +128,15 @@ rhoban_ssl::annotations::Annotations Wall::getAnnotations() const
     {
       const rhoban_geometry::Point& robot_position = getRobot(*it).getMovement().linearPosition(time());
       // annotations.addText("Behaviour: " + this->name, robot_position.getX() + 0.15, robot_position.getY(), "white");
-      annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30,
+      // annotations.addText("Strategy: " + this->name, robot_position.getX() + 0.15, robot_position.getY() + 0.30,
     "white");
     }*/
   return annotations;
+}
+
+rhoban_geometry::Point Offensive::relative2absolute(double x, double y) const
+{
+  return rhoban_geometry::Point(Data::get()->field.field_length_ / 2.0 * x, Data::get()->field.field_width_ / 2.0 * y);
 }
 
 }  // namespace strategy

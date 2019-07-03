@@ -17,19 +17,21 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "wall.h"
+#include "striker_v2.h"
 
-#include <robot_behavior/defender/defensive_wall.h>
+//#include <robot_behavior/striker.h>
+//#include <robot_behavior/mur_defensor.h>
+//#include <robot_behavior/degageur.h>
 
 namespace rhoban_ssl
 {
 namespace strategy
 {
-Wall::Wall() : Strategy()
+StrikerV2::StrikerV2() : Strategy()
 {
 }
 
-Wall::~Wall()
+StrikerV2::~StrikerV2()
 {
 }
 
@@ -37,7 +39,7 @@ Wall::~Wall()
  * We define the minimal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Wall::minRobots() const
+int StrikerV2::minRobots() const
 {
   return 1;
 }
@@ -46,48 +48,44 @@ int Wall::minRobots() const
  * We define the maximal number of robot in the field.
  * The goalkeeper is not counted.
  */
-int Wall::maxRobots() const
+int StrikerV2::maxRobots() const
 {
   return 1;
 }
 
-GoalieNeed Wall::needsGoalie() const
+GoalieNeed StrikerV2::needsGoalie() const
 {
   return GoalieNeed::NO;
 }
 
-const std::string Wall::name = "wall";
+const std::string StrikerV2::name = "striker_v2";
 
-void Wall::start(double time)
+void StrikerV2::start(double time)
 {
   DEBUG("START PREPARE KICKOFF");
   behaviors_are_assigned_ = false;
+
+  striker_ = std::shared_ptr<robot_behavior::Striker>(new robot_behavior::Striker());
 }
-void Wall::stop(double time)
+void StrikerV2::stop(double time)
 {
   DEBUG("STOP PREPARE KICKOFF");
 }
 
-void Wall::update(double time)
+void StrikerV2::update(double time)
 {
-  // const std::vector<int> & players = get_player_ids();
-  // int nb_robots = players.size();
-  // for( int robot_id : players){
-  //	const ai::Robot & robot = get_robot( robot_id );
-  //}
+  std::pair<rhoban_geometry::Point, double> results = GameInformations::findGoalBestMove(ballPosition());
+  striker_->declarePointToStrike(results.first);
 }
 
-void Wall::assignBehaviorToRobots(
+void StrikerV2::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
   if (not(behaviors_are_assigned_))
   {
-    // We first assign the behhavior of the goalie.
-
-    // we assign now all the other behavior
     assert(getPlayerIds().size() == 1);
-    int id = playerId(0);  // we get the first if in get_player_ids()
-    assign_behavior(id, std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DefensiveWall()));
+
+    assign_behavior(playerId(0), striker_);
 
     behaviors_are_assigned_ = true;
   }
@@ -100,7 +98,7 @@ void Wall::assignBehaviorToRobots(
 //     the startings points and all the robot position, just
 //     before the start() or during the STOP referee state.
 std::list<std::pair<rhoban_geometry::Point, ContinuousAngle> >
-Wall::getStartingPositions(int number_of_avalaible_robots)
+StrikerV2::getStartingPositions(int number_of_avalaible_robots)
 {
   assert(minRobots() <= number_of_avalaible_robots);
   assert(maxRobots() == -1 or number_of_avalaible_robots <= maxRobots());
@@ -113,14 +111,14 @@ Wall::getStartingPositions(int number_of_avalaible_robots)
 // give a staring position. So the manager will chose
 // a default position for you.
 //
-bool Wall::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
+bool StrikerV2::getStartingPositionForGoalie(rhoban_geometry::Point& linear_position, ContinuousAngle& angular_position)
 {
   linear_position = Data::get()->field.goalCenter(Ally);
   angular_position = ContinuousAngle(0.0);
   return true;
 }
 
-rhoban_ssl::annotations::Annotations Wall::getAnnotations() const
+rhoban_ssl::annotations::Annotations StrikerV2::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   /*

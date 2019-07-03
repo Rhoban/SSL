@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,45 +19,49 @@
 
 #pragma once
 
-#include <robot_behavior/robot_behavior.h>
-#include <robot_behavior/factory.h>
+#include "robot_behavior.h"
+#include "factory.h"
+#include <random>
 
 namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-namespace beginner
-{
-class GotoBall : public RobotBehavior
+class SearchShootArea : public RobotBehavior
 {
 private:
+  rhoban_geometry::Point p1_;
+  rhoban_geometry::Point p2_;
+  int obstructed_view_;
+
+  std::default_random_engine generator_;
+
+  double period_;
+  double last_time_changement_;
+
+  rhoban_geometry::Point target_position_;
+
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
-  bool dribbler_is_active_;
-  int offset_;
 
 public:
-  GotoBall();
+  bool well_positioned;
+
+  SearchShootArea();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
+  void setPeriod(double period)
+  {
+    period_ = period;
+  }
+
+  void declareArea(rhoban_geometry::Point p1, rhoban_geometry::Point p2);
+
   virtual Control control() const;
-
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
-
-  /**
-   * @brief Active or desactive the dribbler.
-   *
-   * @param isActive
-   * true = active the dribbler. false = Desactive the dribbler
-   */
-  void dribbler(const bool is_active);
-
-  void setOffset(const int offset);
-
-  virtual ~GotoBall();
+  virtual ~SearchShootArea();
 };
 
-};  // namespace Beginner
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

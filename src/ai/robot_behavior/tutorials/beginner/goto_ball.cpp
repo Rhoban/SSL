@@ -26,7 +26,8 @@ namespace robot_behavior
 {
 namespace beginner
 {
-GotoBall::GotoBall() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+GotoBall::GotoBall()
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), dribbler_is_active_(false), offset_(0)
 {
 }
 
@@ -38,12 +39,26 @@ void GotoBall::update(double time, const data::Robot& robot, const data::Ball& b
 
   annotations_.clear();
 
-  rhoban_geometry::Point robot_position = ballPosition();
+  rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
 
-  Vector2d vect_robot_ball = ballPosition() - robot.getMovement().linearPosition(time);
+  Vector2d vect_robot_ball = ballPosition() - robot_position;
+  vect_robot_ball = vect_robot_ball /vect_robot_ball.norm();
+  vect_robot_ball*=ai::Config::robot_center_to_dribbler_center;
+
+   Vector2d ball_robot = robot_position - ballPosition();
+   ball_robot = ball_robot/ball_robot.norm();
+   ball_robot*= ai::Config::robot_center_to_dribbler_center;
+
+  rhoban_geometry::Point target_position = ball_robot + ballPosition();
+
+  annotations_.addCross(target_position);
   ContinuousAngle follow_rotation = vector2angle(vect_robot_ball);
 
-  follower_->setFollowingPosition(robot_position, follow_rotation);
+  // rhoban_geometry::Point target_position =
+  //     rhoban_geometry::Point(ballPosition().x + offset_ * cos(follow_rotation.value()),
+  //                            ballPosition().y + offset_ * sin(follow_rotation.value()));
+
+  follower_->setFollowingPosition(target_position, follow_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }
@@ -51,7 +66,25 @@ void GotoBall::update(double time, const data::Robot& robot, const data::Ball& b
 Control GotoBall::control() const
 {
   Control ctrl = follower_->control();
+  if (dribbler_is_active_)
+  {
+    ctrl.spin = true;
+  }
+  else
+  {
+    ctrl.spin = false;
+  }
   return ctrl;
+}
+
+void GotoBall::dribbler(const bool is_active)
+{
+  dribbler_is_active_ = is_active;
+}
+
+void GotoBall::setOffset(const int offset)
+{
+  offset_ = offset;
 }
 
 GotoBall::~GotoBall()
@@ -67,6 +100,6 @@ rhoban_ssl::annotations::Annotations GotoBall::getAnnotations() const
   return annotations;
 }
 
-}  // namespace Beginner
+}  // namespace beginner
 }  // namespace robot_behavior
 }  // namespace rhoban_ssl
