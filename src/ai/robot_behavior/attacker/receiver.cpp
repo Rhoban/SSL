@@ -45,7 +45,7 @@ void Receiver::update(double time, const data::Robot& robot, const data::Ball& b
 
   double dist_robot_ball = robot_ball.norm();
 
-  if (dist_robot_ball < 0.05)
+  if (dist_robot_ball < ai::Config::robot_radius + 0.05)
   {
     activate_dribbler_ = true;
   }
@@ -69,7 +69,7 @@ void Receiver::update(double time, const data::Robot& robot, const data::Ball& b
         robot_ball = robot_ball / dist_robot_ball;
       }
 
-      target_position = ballPosition() - robot_ball * (getBallRadius() + getRobotRadius() - 0.05);
+      target_position = ballPosition() - robot_ball * (getBallRadius() + ai::Config::robot_center_to_dribbler_center);
     }
     else
     {
