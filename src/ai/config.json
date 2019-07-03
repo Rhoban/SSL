@@ -3,9 +3,11 @@
 	"enable_integration" : false
     },
     "time" : {
-        "frame_per_second" : 60
+        "period" : 0.01,
+        "ntpd_enable" : false
     },
     "robot" : {
+	"robot_center_to_dribbler_center" : 0.064997,
         "robot_radius" : 0.09,
         "wheel_radius" : 0.03,
         "wheel_excentricity" : 0.08,

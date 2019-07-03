@@ -77,7 +77,7 @@ double TareAndSynchronize::getTemporalShiftBetweenVision() const
 
 void TareAndSynchronize::setTemporalShiftBetweenVision()
 {
-  Data::get()->ai_data.time_shift_with_vision = getTemporalShiftBetweenVision();
+  Data::get()->time.time_shift_with_vision = getTemporalShiftBetweenVision();
 }
 
 void TareAndSynchronize::assignBehaviorToRobots(

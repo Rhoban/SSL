@@ -16,46 +16,39 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #pragma once
 
-#include <map>
-#include <com/ai_commander.h>
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
+#include <math/vector2d.h>
+#include <debug.h>
 
 namespace rhoban_ssl
 {
-// @Todo : Refacto this to supress the circular dependency create by Game Informations.h
-namespace manager
+namespace robot_behavior
 {
-class Manager;
-}
+namespace attacker
+{
+class Receiver : public RobotBehavior
+{
+private:
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
+  bool activate_dribbler_;
 
-namespace data
-{
-class AiData
-{
 public:
-  AiData();
+  Receiver();
 
-  /**
-   * @brief time in seconds
-   */
-  double time;
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
-  /**
-   * @brief dt with last loop in seconds
-   */
-  double dt;
+  virtual Control control() const;
 
-  // This field is used by rhobot_behavior::Navigation_inside_the_field.
-  bool force_ball_avoidance;
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  /**
-   * @brief Collision_times_table
-   * @note come from ai_data
-   */
-  typedef std::map<std::pair<int, int>, double> Collision_times_table;
-  Collision_times_table table_of_collision_times_;
+  virtual ~Receiver();
 };
 
-}  // namespace data
-}  // namespace rhoban_ssl
+};  // namespace attacker
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

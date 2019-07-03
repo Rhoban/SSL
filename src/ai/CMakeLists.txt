@@ -22,6 +22,7 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 set (SOURCES
     core/plot_velocity.cpp
     core/plot_xy.cpp
+    core/timeout_task.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -38,7 +39,6 @@ set (SOURCES
     vision/print_protobuf.cpp
     vision/robot_position_filter.cpp
     vision/factory.cpp
-    vision/time_synchroniser.cpp
     com/ai_commander.cpp
     viewer/viewer_communication.cpp
     viewer/properties.cpp
@@ -123,8 +123,11 @@ set (SOURCES
     # Strategy
     strategy/wall.cpp
     strategy/wall_2.cpp
+    strategy/pass.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp
+    robot_behavior/attacker/receiver.cpp
+    robot_behavior/attacker/striker.cpp
     # Annotations
     annotations/annotations.cpp
     annotations/shape/shape.cpp
@@ -168,6 +171,11 @@ target_link_libraries(go_to_xy_nv ssl_ai ${ALL_LIBS})
 add_executable(go_to_xy executables/go_to_xy.cpp)
 target_link_libraries(go_to_xy ssl_ai ${ALL_LIBS})
 
+add_executable(dribbler executables/dribbler.cpp)
+target_link_libraries(dribbler ssl_ai ${ALL_LIBS})
+
+add_executable(check_vision executables/check_vision.cpp)
+target_link_libraries(check_vision ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

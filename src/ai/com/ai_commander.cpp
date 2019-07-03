@@ -41,6 +41,13 @@ Commander::Commander() : real_(nullptr), sim_(nullptr)
     if (real_ == nullptr)
     {
       real_ = new Master("/dev/ttyACM0", 1000000);
+      /*
+       * COULD HELP BUT NOT FOR SURE:
+      for (int rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++rid)
+        this->set(rid, true, 0, 0, 0);
+      this->send();
+      */
+      usleep(1000);
     }
   }
   if (Data::get()->commander != nullptr)
@@ -69,6 +76,9 @@ void Commander::set(uint8_t robot_id, bool enabled, double x_speed, double y_spe
                     float kick_power, bool spin, bool charge, bool tare_odom)
 {
   assert(kick_power >= 0.0 && kick_power <= 1.0);
+
+  if (robot_id >= MAX_ROBOTS)
+    return;
 
   Command command;
   command.enabled = enabled;
@@ -253,14 +263,18 @@ void Commander::updateRobotsCommands()
       continue;            // HACK
     }                      // HACK
     assert(robot_id < 8);  // HACK !
+    // DEBUG("update " << robot_id);
     if (!ctrl.ignore)
     {
+      // DEBUG("not ignore");
       if (!ctrl.active)
       {
+        // DEBUG("not active");
         set(robot_id, true, 0.0, 0.0, 0.0);
       }
       else
       {
+        // DEBUG("active");
         // if( robot_id == 1 ){
         //    DEBUG( "CTRL : " << ctrl );
         //}
@@ -276,10 +290,16 @@ void Commander::updateRobotsCommands()
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
               );
-          // DEBUG("TARE : " << ctrl.tareOdom<<" | "<<ctrl.fix_rotation);
+          // DEBUG("TARE ODOM : " << ctrl.spin);
         }
         else
         {
+          //          DEBUG("NOT TARE ODOM : " << robot_id << " " << true << " " << ctrl.linear_velocity[0] << " "
+          //                                   << ctrl.linear_velocity[1] << " " << ctrl.angular_velocity.value() << " "
+          //                                   << kick
+          //                                   << " kpow" << ctrl.kick_power << " spin: " << ctrl.spin << " charge " <<
+          //                                   ctrl.charge
+          //                                   << " tare" << ctrl.tare_odom);
           set(robot_id, true, ctrl.linear_velocity[0], ctrl.linear_velocity[1], ctrl.angular_velocity.value(), kick,
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom);
         }
@@ -293,6 +313,7 @@ void Commander::updateElectronicInformations()
   for (unsigned int id = 0; id < MAX_ROBOTS; id++)
   {
     real_->updateRobot(id, Data::get()->robots[Ally][id].electronics);
+    // DEBUG("update elec for " << id << " " << (int)Data::get()->robots[Ally][id].electronics.xpos);
   }
 }
 

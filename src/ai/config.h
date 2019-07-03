@@ -30,7 +30,6 @@ struct Config
 
   static bool is_in_simulation;
 
-  static int frame_per_second;
   static double period;
 
   static double robot_radius;
@@ -66,6 +65,7 @@ struct Config
   static double radius_security_for_collision;
   static double radius_security_for_avoidance;
 
+  static double robot_center_to_dribbler_center;
   static double wheel_radius;
   static double wheel_excentricity;
   static double wheel_nb_turns_acceleration_limit;
@@ -75,6 +75,8 @@ struct Config
   static double coefficient_to_increase_avoidance_convergence;
 
   static std::vector<std::vector<double>> kick_settings;
+
+  static bool ntpd_enable;
 
   static void load(const std::string& config_path);
 };

@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2019
+    Copyright 2018 TO COMPLETE
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -16,38 +16,37 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
+
 #pragma once
 
-#include <math/circular_vector.h>
-#include "vision_data.h"
+#include <robot_behavior/robot_behavior.h>
+#include <robot_behavior/factory.h>
 
 namespace rhoban_ssl
 {
-/**
- * @brief The TimeSynchroniser class computes the time shift with the vision.
- *
- * This class must to be use during the analyse of DetectionPackets in vision.
- */
-class TimeSynchroniser
+namespace robot_behavior
 {
+namespace attacker
+{
+class Striker : public RobotBehavior
+{
+private:
+  double tempo_;
+  rhoban_geometry::Point striking_point_;
+  ConsignFollower* follower_;
+
 public:
-  TimeSynchroniser();
+  Striker(rhoban_geometry::Point striking_point);
 
-  void update(const vision::CameraDetectionFrame& detection_frame);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
-  void syncTimeShift(double* time_shift_with_vision);
+  virtual Control control() const;
 
-private:
-  // todo add to config
-  const uint BUFFER_SIZE = 30;
-
-  CircularVector<double> diff_buffer_;
-  CircularVector<double> shift_buffer_;
-
-  double computed_time_shift;
-
-private:
-  double average(const CircularVector<double>& buffer);
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+  void declarePointToStrike(rhoban_geometry::Point point);
+  virtual ~Striker();
 };
 
-}  // namespace rhoban_ssl
+};  // namespace attacker
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

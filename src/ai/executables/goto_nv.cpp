@@ -42,6 +42,7 @@
 #include <robot_behavior/tests/test_velocity_consign.h>
 #include <core/plot_velocity.h>
 #include <core/plot_xy.h>
+#include <core/timeout_task.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"

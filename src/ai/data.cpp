@@ -42,6 +42,36 @@ SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_
 {
 }
 
+///////////////////////////////////////////////////////////////////////////////
+
+Time::Time()
+  : time_shift_with_vision(std::numeric_limits<double>::max())
+  , starting_time_(std::chrono::high_resolution_clock::now())
+{
+  starting_time_in_seconds_ = formatInSecond(starting_time_.time_since_epoch());
+}
+
+double Time::now()
+{
+  // DEBUG(starting_time_in_seconds_);
+  auto now = std::chrono::high_resolution_clock::now().time_since_epoch();
+  // DEBUG(formatInSecond(now) - starting_time_in_seconds_);
+  return formatInSecond(now) - starting_time_in_seconds_;
+}
+
+double Time::syncVisionTimeWithProgramTimeLine(double t_capture_to_sync)
+{
+  DEBUG(t_capture_to_sync);
+  DEBUG(t_capture_to_sync - starting_time_in_seconds_);
+  return t_capture_to_sync - starting_time_in_seconds_;
+}
+
+double Time::formatInSecond(std::chrono::system_clock::duration time)
+{
+  auto microseconds = std::chrono::duration_cast<std::chrono::microseconds>(time);
+  return microseconds.count() / double(1e6);
+}
+
 ///////////////////////////////////////////////////////////////////////
 
 Data Data::singleton_;
@@ -61,4 +91,5 @@ Data* Data::get()
 {
   return &singleton_;
 }
+
 }  // namespace rhoban_ssl
