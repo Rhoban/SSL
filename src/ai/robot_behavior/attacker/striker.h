@@ -31,7 +31,6 @@ namespace attacker
 class Striker : public RobotBehavior
 {
 private:
-
   double tempo_;
   rhoban_geometry::Point striking_point_;
   ConsignFollower* follower_;

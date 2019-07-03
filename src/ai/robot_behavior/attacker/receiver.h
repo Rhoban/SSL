@@ -36,8 +36,8 @@ private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
   bool activate_dribbler_;
+
 public:
-  
   Receiver();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);

@@ -27,8 +27,8 @@ namespace robot_behavior
 {
 namespace attacker
 {
-  Striker::Striker(rhoban_geometry::Point striking_point)
-    : RobotBehavior(), striking_point_(striking_point), follower_(Factory::fixedConsignFollower())
+Striker::Striker(rhoban_geometry::Point striking_point)
+  : RobotBehavior(), striking_point_(striking_point), follower_(Factory::fixedConsignFollower())
 {
   tempo_ = 0.0;
 }
@@ -45,21 +45,20 @@ void Striker::update(double time, const data::Robot& robot, const data::Ball& ba
 
   const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time);
 
-
   Vector2d ball_striking_vector = striking_point_ - ballPosition();
   Vector2d ball_robot_vector = robot_position - ballPosition();
   double dist_ball_robot = ball_robot_vector.norm();
 
   if (ball_striking_vector.norm() != 0)
-    {
-      ball_striking_vector = ball_striking_vector / ball_striking_vector.norm();
-    }
+  {
+    ball_striking_vector = ball_striking_vector / ball_striking_vector.norm();
+  }
 
   if (ball_robot_vector.norm() != 0)
-    {
-      ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
-    }
-  
+  {
+    ball_robot_vector = ball_robot_vector / ball_robot_vector.norm();
+  }
+
   double target_radius_from_ball;
   double scalar_ball_robot = -scalarProduct(ball_robot_vector, ball_striking_vector);
   if (tempo_ == 0.0)
@@ -117,7 +116,7 @@ Control Striker::control() const
   Control ctrl = follower_->control();
 
   ctrl.kick_power = 1;
-  
+
   ctrl.charge = true;
   ctrl.kick = true;
   return ctrl;
@@ -127,7 +126,6 @@ void Striker::declarePointToStrike(rhoban_geometry::Point point)
 {
   striking_point_ = point;
 }
-
 
 Striker::~Striker()
 {

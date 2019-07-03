@@ -25,8 +25,7 @@ namespace robot_behavior
 {
 namespace attacker
 {
-Receiver::Receiver()
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+Receiver::Receiver() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
   activate_dribbler_ = false;
 }
@@ -41,65 +40,55 @@ void Receiver::update(double time, const data::Robot& robot, const data::Ball& b
   Vector2d ball_direction = ball.getMovement().linearVelocity(time);
   Vector2d robot_ball = ballPosition() - robot_position;
 
-
   rhoban_geometry::Point target_position = robot_position;
   double target_rotation = vector2angle(robot_ball).value();
 
   double dist_robot_ball = robot_ball.norm();
 
   if (dist_robot_ball < 0.05)
-    {
-      activate_dribbler_ = true;
-    }
-  else{
+  {
+    activate_dribbler_ = true;
+  }
+  else
+  {
     activate_dribbler_ = false;
   }
-  // DEBUG(ball_direction.norm());
-  
+
   if (ball_direction.norm() - 0.00001 > 0)
+  {
+    double teta = vectors2angle(ball_direction, robot_ball).value();
+
+    target_position = ballPosition() - dist_robot_ball * cos(teta) * ball_direction / ball_direction.norm();
+
+    Vector2d ball_target = target_position - ballPosition();
+
+    if (target_position.getDist(robot_position) < 0.01)
     {
-      
-  
-      double teta = vectors2angle(ball_direction, robot_ball).value(); 
-      
-      
-      target_position = ballPosition() - dist_robot_ball * cos(teta) * ball_direction / ball_direction.norm();
-
-      Vector2d ball_target = target_position - ballPosition();
-
-      if (target_position.getDist(robot_position) < 0.01)
+      if (dist_robot_ball - 0.0001 > 0)
       {
-	if (dist_robot_ball != 0)
-	  {
-	    robot_ball = robot_ball/dist_robot_ball;
-	  }
-	target_position = ballPosition() - robot_ball * (GameInformations::getBallRadius() + GameInformations::getRobotRadius() - 0.05);
+        robot_ball = robot_ball / dist_robot_ball;
       }
 
+      target_position = ballPosition() - robot_ball * (getBallRadius() + getRobotRadius() - 0.05);
+    }
+    else
+    {
+      double lambda = 0;
+      if (ball_direction.getX() - 0.0001 > 0)
+      {
+        lambda = ball_target.getX() / ball_direction.getX();
+      }
       else
       {
-          double lambda = 0;
-          if (ball_direction.getX() != 0)
-	    {
-	      lambda = ball_target.getX() / ball_direction.getX();
-	    }
-	  else
-	    {
-              lambda = ball_target.getY() / ball_direction.getY();
-	    }
-          if (lambda < 1)//target_position.getDist(ballPosition()) < ball_direction.norm() )
-          {
-            target_position = ballPosition() + ball_direction;
-          }
+        lambda = ball_target.getY() / ball_direction.getY();
       }
-      
-      // if (teta <= 5 )
-      //   {
-      //     target_position = ballPosition();
-      //   }
+      if (lambda < 1)
+      {
+        target_position = ballPosition() + ball_direction;
+      }
     }
+  }
 
-  
   follower_->setFollowingPosition(target_position, target_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
@@ -109,10 +98,11 @@ Control Receiver::control() const
 {
   Control ctrl = follower_->control();
   if (activate_dribbler_ == true)
-    {
-      ctrl.spin = true;
-    }
-  else{
+  {
+    ctrl.spin = true;
+  }
+  else
+  {
     ctrl.spin = false;
   }
   return ctrl;

@@ -73,17 +73,16 @@ void Pass::stop(double time)
 
 void Pass::update(double time)
 {
-
-
 }
 
 void Pass::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<robot_behavior::RobotBehavior> striker(new robot_behavior::attacker::Striker(getRobot(playerId(1)).getMovement().linearPosition(time)));
+  std::shared_ptr<robot_behavior::RobotBehavior> striker(
+      new robot_behavior::attacker::Striker(getRobot(playerId(1)).getMovement().linearPosition(time)));
 
   std::shared_ptr<robot_behavior::RobotBehavior> receiver(new robot_behavior::attacker::Receiver());
-  
+
   if (not(behaviors_are_assigned_))
   {
     assert(getPlayerIds().size() == 2);
@@ -93,9 +92,7 @@ void Pass::assignBehaviorToRobots(
 
     behaviors_are_assigned_ = true;
   }
-  
-}							 
- 
+}
 
 // We declare here the starting positions that are used to :
 //   - place the robot during STOP referee state

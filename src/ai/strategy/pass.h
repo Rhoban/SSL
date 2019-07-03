@@ -30,7 +30,6 @@ class Pass : public Strategy
 private:
   bool behaviors_are_assigned_;
 
-  
 public:
   Pass();
   virtual ~Pass();
