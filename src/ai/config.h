@@ -65,6 +65,7 @@ struct Config
   static double radius_security_for_collision;
   static double radius_security_for_avoidance;
 
+  static double robot_center_to_dribbler_center;
   static double wheel_radius;
   static double wheel_excentricity;
   static double wheel_nb_turns_acceleration_limit;
