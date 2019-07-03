@@ -28,6 +28,13 @@ namespace rhoban_ssl
 {
 namespace data
 {
+struct goal
+{
+  rhoban_geometry::Point goal_center_;
+  rhoban_geometry::Point pole_left_;
+  rhoban_geometry::Point pole_right_;
+};
+
 class Field
 {
 private:
@@ -44,8 +51,9 @@ public:
   double penalty_area_depth_;
   double penalty_area_width_;
 
+  goal goal_[2];
+
   rhoban_geometry::Circle circle_center_;
-  rhoban_geometry::Point goal_center_[2];
   rhoban_geometry::Point quarter_centers_[4];
   rhoban_geometry::Point center_half_field[2];
   Box penalty_areas_[2];
@@ -86,6 +94,8 @@ public:
    * @return a point
    */
   rhoban_geometry::Point goalCenter(Team team) const;
+
+  goal getGoal(Team team) const;
 
   rhoban_geometry::Point getSE() const;
   rhoban_geometry::Point getNE() const;
