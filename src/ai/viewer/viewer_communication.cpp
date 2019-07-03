@@ -258,7 +258,7 @@ Json::Value ViewerCommunication::teamsPacket()
           packet["teams"][team]["bots"][rid]["electronics"]["alive"] = current_robot.isOk();
           packet["teams"][team]["bots"][rid]["electronics"]["voltage"] = current_robot.electronics.voltage;
           packet["teams"][team]["bots"][rid]["electronics"]["cap_volt"] = current_robot.electronics.cap_volt;
-          packet["teams"][team]["bots"][rid]["electronics"]["ir_trigered"] = current_robot.infraRed();
+          packet["teams"][team]["bots"][rid]["electronics"]["ir_triggered"] = current_robot.infraRed();
           packet["teams"][team]["bots"][rid]["electronics"]["odometry"]["x"] = current_robot.electronics.xpos;
           packet["teams"][team]["bots"][rid]["electronics"]["odometry"]["y"] = current_robot.electronics.ypos;
           packet["teams"][team]["bots"][rid]["electronics"]["odometry"]["orientation"] = current_robot.electronics.ang;
