@@ -127,7 +127,7 @@ set (SOURCES
     strategy/wall.cpp
     strategy/wall_2.cpp
     strategy/defensive_2.cpp
-    strategy/defensive_2.cpp
+    strategy/striker_v2.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp
     # Annotations
