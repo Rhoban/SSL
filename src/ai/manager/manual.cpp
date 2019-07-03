@@ -78,6 +78,7 @@
 #include <strategy/striker_kick.h>
 #include <strategy/attackms.h>
 #include <robot_behavior/protect_ball.h>
+#include <strategy/wall_2_passif.h>
 #include <robot_behavior/slow_striker.h>
 
 namespace rhoban_ssl
@@ -423,6 +424,7 @@ Manual::Manual(std::string name) : Manager(name)
                                     false  // we don't want to define a goal here !
                                     )));
   registerStrategy("Defensive2", std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
+  registerStrategy("Wall2Passif", std::shared_ptr<strategy::Strategy>(new strategy::Wall2Passif()));
 }
 
 void Manual::update()

@@ -27,7 +27,7 @@ namespace robot_behavior
 namespace keeper
 {
 Clearer::Clearer()
-  : RobotBehavior(), target_point_towards_strike_(0, 0), chip_kick_(false), follower_(Factory::fixedConsignFollower())
+  : RobotBehavior(), target_point_towards_strike_(Data::get()->field.goalCenter(Opponent)), chip_kick_(false), follower_(Factory::fixedConsignFollower())
 {
 }
 

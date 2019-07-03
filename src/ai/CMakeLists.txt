@@ -143,6 +143,7 @@ set (SOURCES
     strategy/wall_2.cpp
     strategy/defensive_2.cpp
     strategy/striker_v2.cpp
+    strategy/wall_2_passif.cpp
     strategy/pass.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp

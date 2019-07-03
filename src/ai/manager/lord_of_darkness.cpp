@@ -23,6 +23,7 @@
 #include <strategy/halt.h>
 #include <strategy/keeper/keeper_strat.h>
 #include <strategy/wall_2.h>
+#include <strategy/wall_2_passif.h>
 #include <strategy/wall.h>
 #include <strategy/striker_v2.h>
 #include <strategy/offensive.h>
@@ -98,7 +99,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   halt_strats_[4] = { strategy::Halt::name };
   halt_strats_[3] = { strategy::Halt::name };
   halt_strats_[2] = { strategy::Halt::name };
-  halt_strats_[1] = {};
+  halt_strats_[1] = { strategy::Halt::name };
 
   stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
   stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
@@ -184,11 +185,11 @@ LordOfDarkness::LordOfDarkness(std::string name)
   kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
   kick_strats_indirect_[1] = { strategy::KeeperStrat::name };
 
-  direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
-  direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
-  direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF" , "SNF" , "SNF" };
-  direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "SNF", "SNF"  };
-  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF" , "SNF" };
+  direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF", "SNF", "SNF" };
+  direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF", "SNF", "SNF" };
+  direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF", "SNF", "SNF" };
+  direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF", "SNF" };
+  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF", "SNF" };
   direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF" };
   direct_opponent_strats_[2] = { strategy::KeeperStrat::name, "SNF" };
   direct_opponent_strats_[1] = { strategy::KeeperStrat::name };
@@ -197,6 +198,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy(strategy::Halt::name, std::shared_ptr<strategy::Strategy>(new strategy::Halt()));
   registerStrategy(strategy::KeeperStrat::name, std::shared_ptr<strategy::Strategy>(new strategy::KeeperStrat()));
   registerStrategy(strategy::Wall_2::name, std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
+  registerStrategy(strategy::Wall2Passif::name, std::shared_ptr<strategy::Strategy>(new strategy::Wall2Passif()));
   registerStrategy(strategy::Wall::name, std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
   registerStrategy(strategy::Defensive2::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
   registerStrategy(strategy::Defensive::name, std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
