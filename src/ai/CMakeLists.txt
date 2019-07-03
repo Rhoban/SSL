@@ -38,7 +38,6 @@ set (SOURCES
     vision/print_protobuf.cpp
     vision/robot_position_filter.cpp
     vision/factory.cpp
-    vision/time_synchroniser.cpp
     com/ai_commander.cpp
     viewer/viewer_communication.cpp
     viewer/properties.cpp

@@ -56,6 +56,27 @@ struct SharedData
   SharedData();
 };
 
+/**
+ * @brief Global time line of the program
+ *
+ *
+ */
+class Time
+{
+public:
+  Time();
+  double now();
+  double syncVisionTimeWithProgramTimeLine(double t_capture_to_sync);
+
+  double time_shift_with_vision;
+
+private:
+  std::chrono::high_resolution_clock::time_point starting_time_;
+  double starting_time_in_seconds_;
+
+  double formatInSecond(std::chrono::system_clock::duration time);
+};
+
 namespace control
 {
 class Commander;
@@ -74,8 +95,9 @@ public:
   data::Field field;
   data::AiData ai_data;
   data::Referee referee;
-
   control::Commander* commander;
+
+  Time time;
 
   SharedData shared_data;
   // TODO refacto
