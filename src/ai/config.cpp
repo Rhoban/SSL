@@ -19,8 +19,8 @@ bool Config::enable_movement_with_integration = true;
 bool Config::we_are_blue = true;
 bool Config::is_in_simulation = true;
 
-int Config::frame_per_second = 60;
-double Config::period = 1.0 / 60.0;
+double Config::period = 0.01;
+bool Config::ntpd_enable = false;
 
 double Config::robot_radius = 0.09;
 double Config::ball_radius = 0.021375;
@@ -62,6 +62,8 @@ double Config::rules_avoidance_distance;
 double Config::convergence_coefficient;
 double Config::coefficient_to_increase_avoidance_convergence;
 
+std::vector<std::vector<double>> Config::kick_settings;
+
 void Config::load(const std::string& config_path)
 {
   DEBUG("We load constants from the configuration file : " << config_path << ".");
@@ -79,9 +81,10 @@ void Config::load(const std::string& config_path)
 
   auto robot_conf = root["robot"];
 
-  frame_per_second = root["time"]["frame_per_second"].asInt();
-  assert(frame_per_second > 0);
-  period = 1.0 / frame_per_second;
+  period = root["time"]["period"].asDouble();
+  assert(period > 0);
+
+  ntpd_enable = root["time"]["ntpd_enable"].asBool();
 
   robot_radius = robot_conf["robot_radius"].asDouble();
   assert(robot_radius > 0.0);
@@ -182,6 +185,22 @@ void Config::load(const std::string& config_path)
   Data::get()->referee.teams_info->goalkeeper_number = default_goalie_id;
   assert(default_goalie_id >= 0);
   assert(default_goalie_id < Config::NB_OF_ROBOTS_BY_TEAM);
+
+  // load kick settings:
+  int nb_robots_in_team = root["nb_robots"].asInt();
+  assert(nb_robots_in_team >= 0);
+  int nb_points = root["nb_points"].asInt();
+  assert(nb_points > 0);
+  for (int i = 0; i < nb_robots_in_team; i++)
+  {
+    kick_settings.push_back(std::vector<double>());
+    for (int j = 0; j < nb_points; j++)
+    {
+      double distance = root["robots"][i]["kick_curve"][j].asDouble();
+      assert(distance >= 0.0);
+      kick_settings.back().push_back(distance);
+    }
+  }
 
   enable_kicking = true;
 

@@ -16,6 +16,11 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+
+// ./bin/go_to_xy -r 2 -s --xdest 0 --ydest 0 
+
+
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
@@ -35,10 +40,15 @@
 #include <control/control.h>
 #include <control/kinematic.h>
 #include <viewer/viewer_communication.h>
-#include <task_example.h>
-#include <stats/resource_usage.h>
+#include <robot_behavior/tutorials/beginner/see_robot.h>
+#include <robot_behavior/tutorials/beginner/goalie.h>
+#include <strategy/from_robot_behavior.h>
+#include <robot_behavior/tutorials/beginner/goto_ball.h>
+#include <core/plot_velocity.h>
+#include <core/plot_xy.h>
+#include <robot_behavior/go_to_xy.h>
 
-#define TEAM_NAME "nAMeC"
+#define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
 #define SERVER_PORT 7882
@@ -61,18 +71,18 @@ int main(int argc, char** argv)
   TCLAP::SwitchArg simulation("s", "simulation", "Simulation mode", cmd, false);
   TCLAP::SwitchArg yellow("y", "yellow", "If set we are yellow otherwise we are blue.", cmd, false);
 
-  TCLAP::ValueArg<std::string> team_name(
-      "t",     // short argument name  (with one character)
-      "team",  // long argument name
-      "The referee team name. The default value is '" TEAM_NAME "'. "
-      "The team name is used to detect from the referee the team color. "
-      "If referee is not used, or there is no referee or the team name "
-      "provided by the referee doesn't match the given team name, then, "
-      "we use the default color provided by the yellow argument.",  // long Description of the argument
-      false,                                                        // Flag is not required
-      TEAM_NAME,                                                    // Default value
-      "string",                                                     // short description of the expected value.
-      cmd);
+  //  TCLAP::ValueArg<std::string> team_name(
+  //      "t",     // short argument name  (with one character)
+  //      "team",  // long argument name
+  //      "The referee team name. The default value is '" TEAM_NAME "'. "
+  //      "The team name is used to detect from the referee the team color. "
+  //      "If referee is not used, or there is no referee or the team name "
+  //      "provided by the referee doesn't match the given team name, then, "
+  //      "we use the default color provided by the yellow argument.",  // long Description of the argument
+  //      false,                                                        // Flag is not required
+  //      TEAM_NAME,                                                    // Default value
+  //      "string",                                                     // short description of the expected value.
+  //      cmd);
 
   TCLAP::ValueArg<std::string> zone_name("z",     // short argument name  (with one character)
                                          "zone",  // long argument name
@@ -140,6 +150,36 @@ int main(int argc, char** argv)
                                    "int",        // short description of the expected value.
                                    cmd);
 
+  TCLAP::ValueArg<uint> assigned_robot("r",             // short argument name  (with one character)
+                                       "robot_number",  // long argument name
+                                       "The number of the robot that will see the robot number given in "
+                                       "parameter",
+                                       true,                                       // Flag is required
+                                       0,                                          // Default value
+                                       "robot number between 0-8 (unsigned int)",  // short description of the expected
+                                       // value.
+                                       cmd);
+
+  TCLAP::ValueArg<double> xdest("o",      // short argument name  (with one character)
+                                "xdest",  // long argument name
+                                "The x destination "
+                                "parameter",
+                                true,   // Flag is required
+                                1000,   // Default value
+                                "int",  // short description of the expected
+                                // value.
+                                cmd);
+
+  TCLAP::ValueArg<double> ydest("l",      // short argument name  (with one character)
+                                "ydest",  // long argument name
+                                "The y destination "
+                                "parameter",
+                                true,   // Flag is required
+                                0,      // Default value
+                                "int",  // short description of the expected
+                                // value.
+                                cmd);
+
   cmd.parse(argc, argv);
 
   if (em.getValue())
@@ -183,51 +223,45 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
 
-  // ExecutionManager::getManager().addTask(new TaskExample());
-
   ExecutionManager::getManager().addTask(new ai::InitMobiles());
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
-  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
+  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport), 0);
   // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
-  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
-  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
-  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used));
+  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer(), 1);
+  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer(), 2);
+  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView(), 3);
+  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used), 4);
+  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used), 5);
+
+  std::cout << "Xdest is :" << xdest.getValue() << " and ydest is " << ydest.getValue() << std::endl;
+
+  rhoban_geometry::Point point = rhoban_geometry::Point(xdest.getValue(), ydest.getValue());
+  double reach_radius = 0.2;
+
+  ExecutionManager::getManager().addTask(new ConditionalTask(
+      []() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
+      [&]() -> bool {
+        ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
+        ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
+        ExecutionManager::getManager().addTask(
+            new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(),
+                                                  new robot_behavior::GoToXY(point, reach_radius)),
+            102);
+        Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = false;
+        ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()));
+        ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
+        return false;
+      }));
+
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
-  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10));
+  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
 
-  // refereee
-  ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
-  ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
-  // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
-  ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
+  // ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
+  ExecutionManager::getManager().addTask(new control::Commander(), 1001);
 
-  ExecutionManager::getManager().addTask(new data::CollisionComputing());
-
-  // BEGIN AI related tasks:
-
-  ExecutionManager::getManager().addTask(new ai::TimeUpdater());
-  ai::AI* ai = new ai::AI(manager_name.getValue());
-  ExecutionManager::getManager().addTask(ai);
-
-  // END  AI related tasks:
-
-  ExecutionManager::getManager().addTask(new control::LimitVelocities());
-  ExecutionManager::getManager().addTask(new control::Commander());
-
-  // viewer
-  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
-  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
-
-  // stats
-  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop
-  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(false, true));  // print
-  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, true, 100));  // both every 100 loop
-
-  ExecutionManager::getManager().run(ai::Config::period);
+  ExecutionManager::getManager().run(0.01);
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

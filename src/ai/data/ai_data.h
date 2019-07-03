@@ -37,11 +37,6 @@ public:
   AiData();
 
   /**
-   * @brief time shift with vision in seconds
-   */
-  double time_shift_with_vision;
-
-  /**
    * @brief time in seconds
    */
   double time;

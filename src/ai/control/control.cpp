@@ -19,7 +19,9 @@
 */
 #include "control.h"
 #include <math/matrix2d.h>
+#include <debug.h>
 #include <data.h>
+#include <config.h>
 
 #define CALCULUS_ERROR 1e-9
 
@@ -100,6 +102,37 @@ Control Control::makeDesactivated()
 Control Control::makeIgnored()
 {
   return Control(false, false, true);
+}
+
+double Control::getNeededPower(double distance, int robot_id)
+{
+  int min = 0;
+  int max = rhoban_ssl::ai::Config::kick_settings[robot_id].size() - 1;
+  while (max - min > 1)
+  {
+    double m = (min + max) / 2;
+    if (rhoban_ssl::ai::Config::kick_settings[robot_id][m] > distance)
+    {
+      max = m;
+    }
+    else if (rhoban_ssl::ai::Config::kick_settings[robot_id][m] < distance)
+    {
+      min = m;
+    }
+  }
+  double step_percent = 1.0 / (rhoban_ssl::ai::Config::kick_settings[robot_id].size() - 1);
+  double d1 = rhoban_ssl::ai::Config::kick_settings[robot_id][min];
+  double d2 = rhoban_ssl::ai::Config::kick_settings[robot_id][max];
+  double result;  // linear smoothing
+  if (min != max)
+  {
+    result = (min + ((distance - d1) / (d2 - d1))) * step_percent;
+  }
+  else
+  {
+    result = min * step_percent;
+  }
+  return result;
 }
 
 std::ostream& operator<<(std::ostream& out, const Control& control)
