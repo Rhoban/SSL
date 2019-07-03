@@ -75,6 +75,10 @@ set (SOURCES
     robot_behavior/tests/test_field_info.cpp
     robot_behavior/tests/test_go_to_destination_nv.cpp
     robot_behavior/search_shoot_area.cpp
+    robot_behavior/protect_ball.cpp
+    robot_behavior/slow_striker.cpp
+    robot_behavior/striker_ai.cpp
+    robot_behavior/wait_pass.cpp
     ai.cpp
     debug.cpp
     task_example.cpp
@@ -86,6 +90,10 @@ set (SOURCES
     strategy/tutorials/caterpillar.cpp
     strategy/keeper/keeper_strat.cpp
     strategy/go_to_xy_strat.cpp
+    strategy/mur_stop.cpp
+    strategy/attackms.cpp
+    strategy/striker_kick.cpp
+    strategy/prepare_kickoff.cpp
     control/robot_control.cpp
     control/robot_control_with_curve.cpp
     control/robot_control_with_position_following.cpp

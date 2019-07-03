@@ -26,11 +26,10 @@ namespace manager
 class LordOfDarkness : public ManagerWithGameState
 {
 private:
-
-  //defensive strats:
+  // defensive strats:
   std::vector<std::list<std::string> > defensive_strats_;
 
-  //halt_strat
+  // halt_strat
   std::vector<std::list<std::string> > halt_strats_;
 
   std::vector<std::list<std::string> > kickoff_ally_strats_;
@@ -38,6 +37,20 @@ private:
   std::vector<std::list<std::string> > kickoff_opponent_strats_;
 
   std::list<std::string> future_strats_;
+
+  // penalty
+  std::vector<std::list<std::string> > penalty_strats_;
+  // goale
+  std::vector<std::list<std::string> > goalie_strats_;
+  // stop
+  std::vector<std::list<std::string> > stop_strats_;
+  // kick
+  std::vector<std::list<std::string> > kick_strats_;
+  // kick_strats_indirect
+  std::vector<std::list<std::string> > kick_strats_indirect_;
+
+
+  std::string PROTECT_BALL = "gobelin";
 
 public:
   LordOfDarkness(std::string name);

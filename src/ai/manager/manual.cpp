@@ -37,6 +37,8 @@
 #include <robot_behavior/tutorials/medium/follow_robot.h>
 #include <robot_behavior/go_to_xy.h>
 #include <robot_behavior/striker.h>
+#include <robot_behavior/striker_ai.h>
+#include <robot_behavior/wait_pass.h>
 
 #include <strategy/tutorials/caterpillar.h>
 #include <robot_behavior/ben_stealer.h>
@@ -61,6 +63,12 @@
 #include <robot_behavior/tests/test_field_info.h>
 
 #include <robot_behavior/search_shoot_area.h>
+#include <strategy/mur_stop.h>
+#include <strategy/prepare_kickoff.h>
+#include <strategy/striker_kick.h>
+#include <strategy/attackms.h>
+#include <robot_behavior/protect_ball.h>
+#include <robot_behavior/slow_striker.h>
 
 namespace rhoban_ssl
 {
@@ -127,6 +135,14 @@ Manual::Manual(std::string name) : Manager(name)
                                              },
                                              false  // we don't want to define a goal here !
                                              )));
+  registerStrategy("wait pass", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                             [&](double time, double dt) {
+                                               robot_behavior::WaitPass* kick_m =
+                                                   new robot_behavior::WaitPass();
+                                               return std::shared_ptr<robot_behavior::RobotBehavior>(kick_m);
+                                             },
+                                             false  // we don't want to define a goal here !
+                                             )));
   registerStrategy("Beginner - Robot near ball", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                      [&](double time, double dt) {
                                                        robot_behavior::BeginnerRobotNearBall* near_ball =
@@ -176,7 +192,7 @@ Manual::Manual(std::string name) : Manager(name)
                    std::shared_ptr<strategy::Strategy>(new strategy::GoToXYStrat(std::vector<rhoban_geometry::Point>{
                        rhoban_geometry::Point(-3, 3), rhoban_geometry::Point(3, 3), rhoban_geometry::Point(-3, -3),
                        rhoban_geometry::Point(3, -3) })));
-  
+
   registerStrategy("Stealer", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                   [&](double time, double dt) {
                                     robot_behavior::BenStealer* stealer = new robot_behavior::BenStealer();
@@ -214,7 +230,32 @@ Manual::Manual(std::string name) : Manager(name)
                                     },
                                     false  // we don't want to define a goal here !
                                     )));
+  registerStrategy("Protect ball", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                       [&](double time, double dt) {
+                                         robot_behavior::ProtectBall* kickW = new robot_behavior::ProtectBall();
+                                         return std::shared_ptr<robot_behavior::RobotBehavior>(kickW);
+                                       },
+                                       false  // we don't want to define a goal here !
+                                       )));
+  registerStrategy("slow striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                       [&](double time, double dt) {
+                                         robot_behavior::SlowStriker* kickW = new robot_behavior::SlowStriker();
+                                         return std::shared_ptr<robot_behavior::RobotBehavior>(kickW);
+                                       },
+                                       false  // we don't want to define a goal here !
+                                       )));
+  registerStrategy("striker ai", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                     [&](double time, double dt) {
+                                       robot_behavior::StrikerAi* kickW = new robot_behavior::StrikerAi();
+                                       return std::shared_ptr<robot_behavior::RobotBehavior>(kickW);
+                                     },
+                                     false  // we don't want to define a goal here !
+                                     )));
   registerStrategy("Offensive", std::shared_ptr<strategy::Strategy>(new strategy::Offensive()));
+  registerStrategy("attaque ms", std::shared_ptr<strategy::Strategy>(new strategy::AttaqueWithSupportMs()));
+  registerStrategy("striker kick strat", std::shared_ptr<strategy::Strategy>(new strategy::StrikerKick()));
+  registerStrategy("Mur Stop", std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
+  registerStrategy("prepare kickoff", std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
   registerStrategy("Defensive", std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
   registerStrategy("Wall1", std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
   registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
