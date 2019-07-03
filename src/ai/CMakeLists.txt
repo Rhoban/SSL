@@ -73,6 +73,7 @@ set (SOURCES
     robot_behavior/tests/test_follow_path.cpp
     robot_behavior/tests/test_field_info.cpp
     robot_behavior/tests/test_go_to_destination_nv.cpp
+    robot_behavior/search_shoot_area.cpp
     ai.cpp
     debug.cpp
     task_example.cpp

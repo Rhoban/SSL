@@ -54,6 +54,8 @@
 #include <robot_behavior/tests/test_follow_path.h>
 #include <robot_behavior/tests/test_field_info.h>
 
+#include <robot_behavior/search_shoot_area.h>
+
 namespace rhoban_ssl
 {
 namespace manager
@@ -288,6 +290,14 @@ Manual::Manual(std::string name) : Manager(name)
                                               robot_behavior::tests::TestFieldInfo* field_info =
                                                   new robot_behavior::tests::TestFieldInfo();
                                               return std::shared_ptr<robot_behavior::RobotBehavior>(field_info);
+                                            },
+                                            false  // we don't want to define a goal here !
+                                            )));
+  registerStrategy("Search Shoot Area", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                            [&](double time, double dt) {
+                                              robot_behavior::SearchShootArea* ssa =
+                                                  new robot_behavior::SearchShootArea();
+                                              return std::shared_ptr<robot_behavior::RobotBehavior>(ssa);
                                             },
                                             false  // we don't want to define a goal here !
                                             )));
