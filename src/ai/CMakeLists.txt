@@ -122,6 +122,7 @@ set (SOURCES
     manager/match.cpp
     manager/dumb_manager.cpp
     # Strategy
+    strategy/defensive.cpp
     strategy/wall.cpp
     strategy/wall_2.cpp
     # Behavior
