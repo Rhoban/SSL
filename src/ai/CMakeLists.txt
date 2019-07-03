@@ -122,9 +122,11 @@ set (SOURCES
     manager/match.cpp
     manager/dumb_manager.cpp
     # Strategy
+    strategy/offensive.cpp
     strategy/defensive.cpp
     strategy/wall.cpp
     strategy/wall_2.cpp
+    strategy/defensive_2.cpp
     strategy/defensive_2.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp

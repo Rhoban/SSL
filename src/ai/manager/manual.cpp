@@ -47,6 +47,7 @@
 #include <robot_behavior/defender/obstructor.h>
 #include <strategy/keeper/keeper_strat.h>
 
+#include <strategy/offensive.h>
 #include <strategy/defensive.h>
 #include <strategy/wall.h>
 #include <strategy/wall_2.h>
@@ -205,6 +206,7 @@ Manual::Manual(std::string name) : Manager(name)
                                     },
                                     false  // we don't want to define a goal here !
                                     )));
+  registerStrategy("Offensive", std::shared_ptr<strategy::Strategy>(new strategy::Offensive()));
   registerStrategy("Defensive", std::shared_ptr<strategy::Strategy>(new strategy::Defensive()));
   registerStrategy("Wall1", std::shared_ptr<strategy::Strategy>(new strategy::Wall()));
   registerStrategy("Wall2", std::shared_ptr<strategy::Strategy>(new strategy::Wall_2()));
