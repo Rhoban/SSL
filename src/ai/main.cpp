@@ -193,7 +193,7 @@ int main(int argc, char** argv)
   Data::get()->referee.blue_team_on_positive_half = side_blue.getValue();
   // ExecutionManager::getManager().addTask(new TaskExample());
 
-  ExecutionManager::getManager().addTask(new ai::InitMobiles());
+  ExecutionManager::getManager().addTask(new ai::InitMobiles(), 0);
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
