@@ -3,7 +3,8 @@
 	"enable_integration" : false
     },
     "time" : {
-        "frame_per_second" : 60
+        "period" : 0.01,
+        "ntpd_enable" : false
     },
     "robot" : {
         "robot_radius" : 0.09,

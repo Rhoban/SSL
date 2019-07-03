@@ -38,7 +38,6 @@ set (SOURCES
     vision/print_protobuf.cpp
     vision/robot_position_filter.cpp
     vision/factory.cpp
-    vision/time_synchroniser.cpp
     com/ai_commander.cpp
     viewer/viewer_communication.cpp
     viewer/properties.cpp
@@ -61,6 +60,7 @@ set (SOURCES
     robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/kick_to_xy.cpp
+    robot_behavior/striker.cpp
     robot_behavior/tests/kick_measure.cpp
     robot_behavior/ben_stealer.cpp
     robot_behavior/keeper/keeper.cpp
@@ -74,6 +74,7 @@ set (SOURCES
     robot_behavior/tests/test_follow_path.cpp
     robot_behavior/tests/test_field_info.cpp
     robot_behavior/tests/test_go_to_destination_nv.cpp
+    robot_behavior/search_shoot_area.cpp
     ai.cpp
     debug.cpp
     task_example.cpp
@@ -122,8 +123,12 @@ set (SOURCES
     manager/match.cpp
     manager/dumb_manager.cpp
     # Strategy
+    strategy/offensive.cpp
+    strategy/defensive.cpp
     strategy/wall.cpp
     strategy/wall_2.cpp
+    strategy/defensive_2.cpp
+    strategy/striker_v2.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp
     # Annotations
