@@ -258,6 +258,11 @@ void Commander::updateRobotsCommands()
   for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot_id)
   {
     Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_id].control;
+    if (!Data::get()->robots[Ally][robot_id].infraRed()) {
+      ctrl.kick = false;
+      ctrl.chip_kick = false;
+      ctrl.kick_power = 0;
+    }
     if (robot_id >= 8)
     {                      // HACK - becaus hardware doesn't support more than 8 robots
       continue;            // HACK

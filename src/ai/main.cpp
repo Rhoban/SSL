@@ -233,12 +233,21 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
   ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
 
+  ExecutionManager::getManager().addTask(new ConditionalTask([]() -> bool{ 
+    return Data::get()->time.now() > 1;
+  },[&]() -> bool {for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+  {
+    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
+    final_control.is_manually_controled_by_viewer = false;
+  } } ));
+  
   // stats
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(false, true));  // print
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, true, 100));  // both every 100 loop
 
   ExecutionManager::getManager().run(ai::Config::period);
+  
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;
