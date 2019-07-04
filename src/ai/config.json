@@ -30,7 +30,7 @@
         "p_translation" : {
             "simu" : 1.5,
             "_simu" : 2,
-            "real" : 1.5
+            "real" : 3
         },
         "i_translation" : {
             "simu" : 0.0,
