@@ -101,15 +101,15 @@ LordOfDarkness::LordOfDarkness(std::string name)
   halt_strats_[3] = { strategy::Halt::name };
   halt_strats_[2] = { strategy::Halt::name };
   halt_strats_[1] = { strategy::Halt::name };
-
-  stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[6] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[5] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall_2::name };
-  stop_strats_[4] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall::name };
-  stop_strats_[3] = { strategy::KeeperStrat::name, strategy::MurStop::name };
-  stop_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
-  stop_strats_[1] = { strategy::KeeperStrat::name };
+  /*
+    stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[6] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[5] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall_2::name };
+    stop_strats_[4] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall::name };
+    stop_strats_[3] = { strategy::KeeperStrat::name, strategy::MurStop::name };
+    stop_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
+    stop_strats_[1] = { strategy::KeeperStrat::name };*/
 
   // kickoff_ally
   kickoff_ally_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M",
@@ -272,21 +272,19 @@ LordOfDarkness::LordOfDarkness(std::string name)
                                false  // we don't want to define a goal here !
                                )));
   registerStrategy("GT", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                              [&](double time, double dt) {
-                                robot_behavior::GoToXY* go =
-                                    new robot_behavior::GoToXY(rhoban_geometry::Point(3.3 , 0));
-                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
-                              },
-                              false  // we don't want to define a goal here !
-                              )));
+                             [&](double time, double dt) {
+                               robot_behavior::GoToXY* go = new robot_behavior::GoToXY(rhoban_geometry::Point(3.3, 0));
+                               return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                             },
+                             false  // we don't want to define a goal here !
+                             )));
   registerStrategy("GTG", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
                                 robot_behavior::GoToXY* go =
                                     new robot_behavior::GoToXY(Data::get()->field.goalCenter(Ally));
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
-                              true 
-                              )));
+                              true)));
 
   registerStrategy(strategy::PrepareKickoff::name, std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
   registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
