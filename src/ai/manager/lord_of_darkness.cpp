@@ -32,6 +32,8 @@
 #include <robot_behavior/go_to_xy.h>
 #include <robot_behavior/protect_ball.h>
 #include <robot_behavior/stop_not_far.h>
+#include <robot_behavior/stop_not_far_2.h>
+#include <robot_behavior/stop_not_far_3.h>
 #include <strategy/from_robot_behavior.h>
 #include <strategy/mur_stop.h>
 #include <strategy/prepare_kickoff.h>
@@ -185,13 +187,13 @@ LordOfDarkness::LordOfDarkness(std::string name)
   kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
   kick_strats_indirect_[1] = { strategy::KeeperStrat::name };
 
-  direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF", "SNF", "SNF" };
-  direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF", "SNF", "SNF" };
-  direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF", "SNF", "SNF" };
-  direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF", "SNF" };
-  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF", "SNF" };
-  direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF" };
-  direct_opponent_strats_[2] = { strategy::KeeperStrat::name, "SNF" };
+  direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
+  direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
+  direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
+  direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2" };
+  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF1", "SNF2" };
+  direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF1" };
+  direct_opponent_strats_[2] = { strategy::KeeperStrat::name, "SNF1" };
   direct_opponent_strats_[1] = { strategy::KeeperStrat::name };
 
   // Register strategy.
@@ -243,9 +245,23 @@ LordOfDarkness::LordOfDarkness(std::string name)
                                                    false  // we don't want to define a goal here !
                                                    )));
 
-  registerStrategy("SNF", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+  registerStrategy("SNF1", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
                                 robot_behavior::StopNotFar* go = new robot_behavior::StopNotFar();
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
+  registerStrategy("SNF2", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::StopNotFar2* go = new robot_behavior::StopNotFar2();
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
+  registerStrategy("SNF3", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::StopNotFar3* go = new robot_behavior::StopNotFar3();
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
                               false  // we don't want to define a goal here !
