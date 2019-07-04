@@ -16,4 +16,5 @@ void addRefereeTasks();
 void addViewerTasks(ai::AI* ai, int port);
 void addPreBehaviorTreatment();
 void addRobotComTasks();
+void addTaskShortCutProcessIfNoVisionData();
 }
