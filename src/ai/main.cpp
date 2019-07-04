@@ -193,11 +193,12 @@ int main(int argc, char** argv)
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
-  ai::Config::load(config_path.getValue());
+  ExecutionManager::getManager().addTask(new ai::UpdateConfigTask(config_path.getValue()));
+  //  ai::Config::load(config_path.getValue());
 
   if (ai::Config::is_in_simulation)
     ai::Config::ntpd_enable = false;
-  
+
   Data::get()->referee.blue_team_on_positive_half = side_blue.getValue();
 
   addCoreTasks();

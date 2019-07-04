@@ -1,6 +1,7 @@
 #pragma once
 
 #include <math/vector2d.h>
+#include <execution_manager.h>
 
 namespace rhoban_ssl
 {
@@ -10,6 +11,17 @@ const Team Opponent = 1;
 
 namespace ai
 {
+class UpdateConfigTask : public Task
+{
+  std::string config_path_;
+  double last_time;
+  int cpt;
+
+public:
+  UpdateConfigTask(std::string confpath);
+  bool runTask() override;
+};
+
 struct Config
 {
   // todo move to GlobalData ?
