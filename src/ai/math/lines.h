@@ -27,4 +27,8 @@ namespace rhoban_geometry
 {
 double distanceFromPointToLine(const rhoban_geometry::Point& point, const rhoban_geometry::Point& point_line_1,
                                const rhoban_geometry::Point& point_line_2);
-}
+
+std::vector<rhoban_geometry::Point> getIntersectionLineWithCircle(const rhoban_geometry::Point& point_line_1,
+                                                                  const rhoban_geometry::Point& point_line_2,
+                                                                  const rhoban_geometry::Circle& circle);
+}  // namespace rhoban_geometry

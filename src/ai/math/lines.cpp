@@ -33,4 +33,56 @@ double distanceFromPointToLine(const rhoban_geometry::Point& point, const rhoban
   return std::fabs(vectorialProduct(u, p1p));
 }
 
+/**
+ * @brief Implementation form
+ *
+ * @ref http://mathworld.wolfram.com/Circle-LineIntersection.html
+ */
+std::vector<rhoban_geometry::Point> getIntersectionLineWithCircle(const Point& point_line_1, const Point& point_line_2,
+                                                                  const Circle& circle)
+{
+  std::vector<rhoban_geometry::Point> intersections;
+
+  assert(point_line_1 != point_line_2);
+  if (point_line_1 == point_line_2)
+    return intersections;
+
+  const Point& a = point_line_1;
+  const Point& b = point_line_2;
+
+  Vector2d a_b = b - a;
+  double dx = a_b.getX();
+  double dy = a_b.getY();
+
+  double a_b_norm = a_b.norm();
+
+  double D = Point::perpDotProduct(a, b);
+
+  double discrim = circle.getRadius() * circle.getRadius() * a_b.normSquare() - D;
+
+  double sign = (dy < 0) ? -1 : 1;
+
+  if (discrim < 0)
+    return intersections;
+
+  if (discrim == 0.0000)
+  {
+    Point tangent((D * dy + sign * dx * sqrt(discrim)) / a_b.normSquare(),
+                  ((-D) * dx + std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
+    intersections.push_back(tangent);
+  }
+
+  if (discrim > 0)
+  {
+    Point point_1((D * dy + sign * dx * sqrt(discrim)) / a_b.normSquare(),
+                  ((-D) * dx + std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
+    Point point_2((D * dy + -sign * dx * sqrt(discrim)) / a_b.normSquare(),
+                  ((-D) * dx + std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
+    intersections.push_back(point_1);
+    intersections.push_back(point_2);
+  }
+
+  return intersections;
+}
+
 }  // namespace rhoban_geometry
