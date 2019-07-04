@@ -351,6 +351,12 @@ bool Commander::runTask()
   if (!ai::Config::is_in_simulation)
     updateElectronicInformations();
 
+  if (Data::get()->referee.getCurrentStateName() == "HALT")
+  {
+    Data::get()->shared_data.final_control_for_robots[Data::get()->referee.teams_info->goalkeeper_number].control =
+        Control::makeNull();
+  }
+
   updateRobotsCommands();
 
   send();
