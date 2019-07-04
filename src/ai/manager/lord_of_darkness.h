@@ -26,9 +26,8 @@ namespace manager
 class LordOfDarkness : public ManagerWithGameState
 {
 private:
-
   std::vector<std::list<std::string> > offensive_strats_;
-  
+
   // defensive strats:
   std::vector<std::list<std::string> > defensive_strats_;
 
@@ -41,8 +40,10 @@ private:
 
   std::list<std::string> future_strats_;
 
-  // penalty
-  std::vector<std::list<std::string> > penalty_strats_;
+  // penalty ally
+  std::vector<std::list<std::string> > penalty_strats_a_;
+  // penalty opponent
+  std::vector<std::list<std::string> > penalty_strats_o_;
   // goale
   std::vector<std::list<std::string> > goalie_strats_;
   // stop
