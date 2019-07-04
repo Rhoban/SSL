@@ -23,6 +23,7 @@ set (SOURCES
     core/plot_velocity.cpp
     core/plot_xy.cpp
     core/timeout_task.cpp
+    executables/tools.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
