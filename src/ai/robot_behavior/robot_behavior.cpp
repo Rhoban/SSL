@@ -19,6 +19,7 @@
 
 #include "robot_behavior.h"
 #include <math/vector2d.h>
+#include <viewer_server.h>
 
 namespace rhoban_ssl
 {
@@ -124,7 +125,8 @@ bool RobotBehaviorTask::runTask()
   data::Robot& robot = Data::get()->robots[Ally][robot_number_];
   data::Ball& ball = Data::get()->ball;
 
-  double time = Data::get()->ai_data.time;
+  // double time = Data::get()->ai_data.time;
+  double time = Data::get()->time.now();
   double dt = Data::get()->ai_data.dt;
   //  DEBUG("t : " << robot_behavior_-><< std::endl << "time : " << time << std::endl << "dt : " << dt);
 
@@ -134,8 +136,9 @@ bool RobotBehaviorTask::runTask()
   ctrl = robot_behavior_->control();
   ctrl.changeToRelativeControl(robot.getMovement().angularPosition(time), dt);
 
-  annotations::Annotations annotations = annotations::Annotations();
-  annotations.addAnnotations(robot_behavior_->getAnnotations());
+  
+
+  viewer::ViewerDataGlobal::get().packets_to_send.push(robot_behavior_->getAnnotations().toJson());
   return true;
 }
 
