@@ -85,7 +85,7 @@ void DefensiveWall::update(double time, const data::Robot& robot, const data::Ba
   double target_rotation = detail::vec2angle(-ball_robot_vector);
   rhoban_geometry::Point target_position;
 
-  double multiple_robot_offset = ai::Config::robot_radius + 0.07;
+  double multiple_robot_offset = ai::Config::robot_radius + 0.04;
 
   if (wall_nb_robot_ == 2)
   {

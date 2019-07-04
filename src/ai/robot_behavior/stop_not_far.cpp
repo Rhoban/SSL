@@ -40,7 +40,7 @@ void StopNotFar::update(double time, const data::Robot& robot, const data::Ball&
   // const ai::Robot & robot = robot_table.at(robot_id);
   Vector2d vect_ball_goal = Data::get()->field.goalCenter(Ally) - ballPosition();
 
-  double dist_with_victim = 0.6;
+  double dist_with_victim = 0.7;
   rhoban_geometry::Point target_position =
       rhoban_geometry::Point(ballPosition().x + dist_with_victim * std::cos(vector2angle(vect_ball_goal).value()),
                              ballPosition().y + dist_with_victim * std::sin(vector2angle(vect_ball_goal).value()));
