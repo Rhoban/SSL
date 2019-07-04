@@ -91,8 +91,9 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   rhoban_geometry::Point pole_left = Data::get()->field.getGoal(Ally).pole_left_;
   rhoban_geometry::Point pole_right = Data::get()->field.getGoal(Ally).pole_right_;
 
-  rhoban_geometry::Point offset(ai::Config::robot_radius * 2, 0.0);
-
+  double robot_diameter = ai::Config::robot_radius * 2;
+  rhoban_geometry::Point offset(robot_diameter, 0.0);
+  double distanciation = (robot_diameter + FORWARD_DISTANCIATION_FROM_GOAL_CENTER);
   rhoban_geometry::Point limit_left_position_on_trajectory = pole_left + offset;
   rhoban_geometry::Point limit_right_position_on_trajectory = pole_right - offset;
 
@@ -100,14 +101,14 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
                              limit_left_position_on_trajectory.getDist(limit_right_position_on_trajectory);
 
   double circle_radius_center_of_the_trajectory =
-      (chord_square_norm / (8 * FORWARD_DISTANCIATION_FROM_GOAL_CENTER)) + FORWARD_DISTANCIATION_FROM_GOAL_CENTER / 2;
+      (chord_square_norm / (8 *distanciation)) + distanciation / 2;
 
   double distance_goal_center_to_circle_center =
-      circle_radius_center_of_the_trajectory - FORWARD_DISTANCIATION_FROM_GOAL_CENTER;
+      std::abs(circle_radius_center_of_the_trajectory - distanciation);
 
   rhoban_geometry::Point circle_center_of_the_trajectory =
       Data::get()->field.getGoal(Ally).goal_center_ -
-      rhoban_geometry::Point(distance_goal_center_to_circle_center, 0.0);
+      rhoban_geometry::Point(distance_goal_center_to_circle_center, 0.0); 
 
   rhoban_geometry::Circle robot_trajectory(circle_center_of_the_trajectory, circle_radius_center_of_the_trajectory);
 
