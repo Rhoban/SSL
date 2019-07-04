@@ -65,6 +65,7 @@ bool AI::runTask()
     strategy_manager_->assignBehaviorToRobots(robot_behaviors_, Data::get()->ai_data.time, Data::get()->ai_data.dt);
     updateRobots();
   }
+  startManager();
 
   return true;
 }

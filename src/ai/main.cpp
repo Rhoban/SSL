@@ -223,6 +223,7 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new ai::TimeUpdater());
   ai::AI* ai = new ai::AI(manager_name.getValue());
   ExecutionManager::getManager().addTask(ai);
+  ai->startManager();
 
   // END  AI related tasks:
 
@@ -230,8 +231,8 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new control::Commander());
 
   // viewer
-  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
-  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
+  // ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
+  // ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
 
   // stats
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop
