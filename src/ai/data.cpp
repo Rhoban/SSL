@@ -61,8 +61,8 @@ double Time::now()
 
 double Time::syncVisionTimeWithProgramTimeLine(double t_capture_to_sync)
 {
-  DEBUG(t_capture_to_sync);
-  DEBUG(t_capture_to_sync - starting_time_in_seconds_);
+  // DEBUG(t_capture_to_sync);
+  // DEBUG(t_capture_to_sync - starting_time_in_seconds_);
   return t_capture_to_sync - starting_time_in_seconds_;
 }
 

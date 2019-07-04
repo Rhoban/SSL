@@ -133,6 +133,9 @@ bool RobotBehaviorTask::runTask()
 
   ctrl = robot_behavior_->control();
   ctrl.changeToRelativeControl(robot.getMovement().angularPosition(time), dt);
+
+  annotations::Annotations annotations = annotations::Annotations();
+  annotations.addAnnotations(robot_behavior_->getAnnotations());
   return true;
 }
 

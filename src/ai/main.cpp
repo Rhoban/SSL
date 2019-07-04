@@ -37,6 +37,7 @@
 #include <viewer/viewer_communication.h>
 #include <task_example.h>
 #include <stats/resource_usage.h>
+#include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
 
 #define TEAM_NAME "nAMeC"
 #define ZONE_NAME "all"
@@ -206,6 +207,8 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used));
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
   ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10));
+  ExecutionManager::getManager().addTask(new robot_behavior::RobotBehaviorTask( 1, new robot_behavior::BeginnerAnnotationsBallPosition()));
+
 
   // refereee
   ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));

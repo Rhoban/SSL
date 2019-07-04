@@ -32,9 +32,11 @@ void BeginnerAnnotationsBallPosition::update(double time, const data::Robot& rob
   // Do not remove this line.
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Clear all annotations write before
+  DEBUG("BAll: " << Data::get()->ball.getMovement().linearPosition(time + 0.2));
   annotations_.clear();
   // Add an annotations
   annotations_.addCross(ballPosition(), "red", false);
+  annotations_.addCross(Data::get()->ball.getMovement().linearPosition(time + 0.2), "green", false);
 }
 
 Control BeginnerAnnotationsBallPosition::control() const
@@ -50,6 +52,7 @@ rhoban_ssl::annotations::Annotations BeginnerAnnotationsBallPosition::getAnnotat
 {
   rhoban_ssl::annotations::Annotations annotations;
   annotations.addAnnotations(annotations_);
+
   return annotations;
 }
 
