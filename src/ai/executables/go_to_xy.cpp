@@ -45,6 +45,7 @@
 #include <core/plot_velocity.h>
 #include <core/plot_xy.h>
 #include <robot_behavior/go_to_xy.h>
+#include <executables/tools.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
@@ -221,17 +222,9 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
 
-  ExecutionManager::getManager().addTask(new ai::InitMobiles(), 0);
-
-  //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
-  // vision
-  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport), 0);
-  // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
-  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer(), 1);
-  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer(), 2);
-  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView(), 3);
-  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used), 4);
-  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used), 5);
+  addCoreTasks();
+  addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
+  addRobotComTasks();
 
   std::cout << "Xdest is :" << xdest.getValue() << " and ydest is " << ydest.getValue() << std::endl;
 
@@ -252,12 +245,6 @@ int main(int argc, char** argv)
                             ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
                             return false;
                           }));
-
-  // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
-  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
-
-  // ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
-  ExecutionManager::getManager().addTask(new control::Commander(), 1001);
 
   ExecutionManager::getManager().run(0.01);
 

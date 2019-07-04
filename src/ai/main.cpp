@@ -22,22 +22,12 @@
 #include <signal.h>
 #include <fenv.h>
 #include <tclap/CmdLine.h>
-#include <vision/ai_vision_client.h>
 #include "ai.h"
-#include "data.h"
 #include <core/print_collection.h>
 #include <manager/factory.h>
 #include "client_config.h"
-#include "viewer_server.h"
-#include "referee_client_single_thread.h"
-#include <referee/referee_packet_analyzer.h>
-#include <data/computed_data.h>
-#include <control/control.h>
-#include <control/kinematic.h>
-#include <viewer/viewer_communication.h>
-#include <task_example.h>
-#include <stats/resource_usage.h>
-#include <robot_behavior/tutorials/beginner/annotations_ball_position.h>
+
+#include <executables/tools.h>
 
 #define TEAM_NAME "nAMeC"
 #define ZONE_NAME "all"
@@ -45,6 +35,14 @@
 #define SERVER_PORT 7882
 
 using namespace rhoban_ssl;
+
+void superStop(int)
+{
+  for (int i = 0; i < 10000; ++i)
+  {
+    close(i);
+  }
+}
 
 void stop(int)
 {
@@ -56,6 +54,11 @@ int main(int argc, char** argv)
   // Enabling floating point errors
   feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
   signal(SIGINT, stop);
+  signal(SIGABRT, superStop);
+  signal(SIGSEGV, superStop);
+  signal(SIGBUS, superStop);
+  signal(SIGFPE, superStop);
+  atexit((void (*)(void))superStop);
 
   // Command line parsing
   TCLAP::CmdLine cmd("Rhoban SSL AI", ' ', "0.0", true);
@@ -141,13 +144,13 @@ int main(int argc, char** argv)
                                    "int",        // short description of the expected value.
                                    cmd);
 
-  TCLAP::ValueArg<bool> side_blue("k",            // short argument name  (with one character)
-                                   "side",  // long argument name
-                                   "blue on positive side",
-                                   false,        // Flag is not required
-                                   false,  // Default value
-                                   "bool",        // short description of the expected value.
-                                   cmd);
+  TCLAP::ValueArg<bool> side_blue("k",     // short argument name  (with one character)
+                                  "side",  // long argument name
+                                  "blue on positive side",
+                                  false,   // Flag is not required
+                                  false,   // Default value
+                                  "bool",  // short description of the expected value.
+                                  cmd);
 
   cmd.parse(argc, argv);
 
@@ -190,64 +193,44 @@ int main(int argc, char** argv)
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
-  ai::Config::load(config_path.getValue());
+  ExecutionManager::getManager().addTask(new ai::UpdateConfigTask(config_path.getValue()));
+  //  ai::Config::load(config_path.getValue());
+
+  if (ai::Config::is_in_simulation)
+    ai::Config::ntpd_enable = false;
+
   Data::get()->referee.blue_team_on_positive_half = side_blue.getValue();
-  // ExecutionManager::getManager().addTask(new TaskExample());
 
-  ExecutionManager::getManager().addTask(new ai::InitMobiles(), 0);
+  addCoreTasks();
+  addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
+  addRefereeTasks();
+  addPreBehaviorTreatment();
+  addRobotComTasks();
 
-  //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
-  // vision
-  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
-  // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
-  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
-  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
-  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used));
-  // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
-  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10));
-  ExecutionManager::getManager().addTask(new robot_behavior::RobotBehaviorTask( 1, new robot_behavior::BeginnerAnnotationsBallPosition()));
-
-
-  // refereee
-  ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
-  ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
-  // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
-  ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
-
-  ExecutionManager::getManager().addTask(new data::CollisionComputing());
-
-  // BEGIN AI related tasks:
-
-  ExecutionManager::getManager().addTask(new ai::TimeUpdater());
   ai::AI* ai = new ai::AI(manager_name.getValue());
-  ExecutionManager::getManager().addTask(ai);
+  ExecutionManager::getManager().addTask(ai, 1000);
+  addViewerTasks(ai, viewer_port.getValue());
 
-  // END  AI related tasks:
-
-  ExecutionManager::getManager().addTask(new control::LimitVelocities());
-  ExecutionManager::getManager().addTask(new control::Commander());
-
-  // viewer
-  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
-  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
-
-  ExecutionManager::getManager().addTask(new ConditionalTask([]() -> bool{ 
-    return Data::get()->time.now() > 1;
-  },[&]() -> bool {for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
-  {
-    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
-    final_control.is_manually_controled_by_viewer = false;
-  } } ));
-  
   // stats
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(false, true));  // print
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, true, 100));  // both every 100 loop
 
+  if (manager_name.getValue() != manager::names::MANUAL)
+  {
+    ExecutionManager::getManager().addTask(
+        new ConditionalTask([]() -> bool { return Data::get()->time.now() > 1; },
+                            [&]() -> bool {
+                              for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+                              {
+                                auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
+                                final_control.is_manually_controled_by_viewer = false;
+                              }
+                              return false;
+                            }));
+  }
+
   ExecutionManager::getManager().run(ai::Config::period);
-  
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

@@ -247,25 +247,6 @@ int main(int argc, char** argv)
     theport = port.getValue();
   }
 
-  vision::PartOfTheField part_of_the_field_used;
-  if (zone_name.getValue() == "all")
-  {
-    part_of_the_field_used = vision::PartOfTheField::ALL_FIELD;
-  }
-  else if (zone_name.getValue() == "positive")
-  {
-    part_of_the_field_used = vision::PartOfTheField::POSIVE_HALF_FIELD;
-  }
-  else if (zone_name.getValue() == "negative")
-  {
-    part_of_the_field_used = vision::PartOfTheField::NEGATIVE_HALF_FIELD;
-  }
-  else
-  {
-    std::cerr << "Unknonw zone !" << std::endl;
-    assert(false);
-  }
-
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 

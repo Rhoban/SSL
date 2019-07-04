@@ -272,21 +272,19 @@ LordOfDarkness::LordOfDarkness(std::string name)
                                false  // we don't want to define a goal here !
                                )));
   registerStrategy("GT", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                              [&](double time, double dt) {
-                                robot_behavior::GoToXY* go =
-                                    new robot_behavior::GoToXY(rhoban_geometry::Point(3.3 , 0));
-                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
-                              },
-                              false  // we don't want to define a goal here !
-                              )));
+                             [&](double time, double dt) {
+                               robot_behavior::GoToXY* go = new robot_behavior::GoToXY(rhoban_geometry::Point(3.3, 0));
+                               return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                             },
+                             false  // we don't want to define a goal here !
+                             )));
   registerStrategy("GTG", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
                                 robot_behavior::GoToXY* go =
                                     new robot_behavior::GoToXY(Data::get()->field.goalCenter(Ally));
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
-                              true 
-                              )));
+                              true)));
 
   registerStrategy(strategy::PrepareKickoff::name, std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
   registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
@@ -420,6 +418,20 @@ void LordOfDarkness::startKickoffAlly()
 void LordOfDarkness::startKickoffOpponent()
 {
   setBallAvoidanceForAllRobots(false);
+  //TODO: Mettre une strat ici ?
+}
+
+void LordOfDarkness::startPreparePenaltyAlly()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = penalty_strats_a_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
+}
+void LordOfDarkness::startPreparePenaltyOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = penalty_strats_o_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
 void LordOfDarkness::startPenaltyAlly()
@@ -487,6 +499,13 @@ void LordOfDarkness::continueKickoffAlly()
 {
 }
 void LordOfDarkness::continueKickoffOpponent()
+{
+}
+
+void LordOfDarkness::continuePreparePenaltyAlly()
+{
+}
+void LordOfDarkness::continuePreparePenaltyOpponent()
 {
 }
 

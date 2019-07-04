@@ -197,9 +197,17 @@ int main(int argc, char** argv)
   ai::Config::is_in_simulation = simulation.getValue();
 
   ai::Config::load(config_path.getValue());
-  
+
+  addCoreTasks();
+  addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
+  addRobotComTasks();
+
   ExecutionManager::getManager().addTask(new ConditionalTask(
-      []() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
+      []() -> bool {
+        static int i = 0;
+        i += vision::VisionDataGlobal::singleton_.last_packets_.size();
+        return i > 5;
+      },
       [&]() -> bool {
         ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
         ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);

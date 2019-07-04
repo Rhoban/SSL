@@ -4,7 +4,7 @@
     },
     "time" : {
         "period" : 0.01,
-        "ntpd_enable" : false
+        "ntpd_enable" : true
     },
     "robot" : {
 	"robot_center_to_dribbler_center" : 0.064997,

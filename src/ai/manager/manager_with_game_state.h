@@ -35,6 +35,9 @@ public:
   virtual void startKickoffAlly() = 0;
   virtual void startKickoffOpponent() = 0;
 
+  virtual void startPreparePenaltyAlly() = 0;
+  virtual void startPreparePenaltyOpponent() = 0;
+
   virtual void startPenaltyAlly() = 0;
   virtual void startPenaltyOpponent() = 0;
 
@@ -54,6 +57,9 @@ public:
 
   virtual void continueKickoffAlly() = 0;
   virtual void continueKickoffOpponent() = 0;
+
+  virtual void continuePreparePenaltyAlly() = 0;
+  virtual void continuePreparePenaltyOpponent() = 0;
 
   virtual void continuePenaltyAlly() = 0;
   virtual void continuePenaltyOpponent() = 0;

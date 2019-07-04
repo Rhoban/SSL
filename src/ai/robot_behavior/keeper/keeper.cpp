@@ -54,7 +54,7 @@ Keeper::Keeper(const rhoban_geometry::Point& left_post_position, const rhoban_ge
   keeper_radius_ = keeper_radius;
   NavigationInsideTheField* foll =
       dynamic_cast<NavigationInsideTheField*>(follower_);  // PID modification to be as responsive as Barthez
-  foll->setTranslationPid(15, 0.0001, 0);
+  foll->setTranslationPid(12, 0.0001, 0);
   foll->setOrientationPid(1.0, 0, 0);
 }
 

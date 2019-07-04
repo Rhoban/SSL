@@ -101,6 +101,20 @@ void ManagerWithGameState::chooseAStrategy(double time)
         startPenaltyOpponent();
       }
     }
+    else if (game_state.getState() == state_name::penalty)
+    {
+      Team team_prepare_penalty = game_state.penaltyTeam();
+      if (team_prepare_penalty == Ally)
+      {
+        DEBUG("PREPARE PENALTY ALLY");
+        startPreparePenaltyAlly();
+      }
+      else
+      {
+        DEBUG("PREPARE PENALTY OPPONENT");
+        startPreparePenaltyOpponent();
+      }
+    }
   }
   else
   {
@@ -184,6 +198,20 @@ void ManagerWithGameState::chooseAStrategy(double time)
       {
         // DEBUG("PENALTY OPPONENT continue");
         continuePenaltyOpponent();
+      }
+    }
+    else if (game_state.getState() == state_name::prepare_penalty)
+    {
+      Team team_prepare_penalty = game_state.penaltyTeam();
+      if (team_prepare_penalty == Ally)
+      {
+        // DEBUG("PENALTY ALLY continue");
+        continuePreparePenaltyAlly();
+      }
+      else
+      {
+        // DEBUG("PENALTY OPPONENT continue");
+        continuePreparePenaltyOpponent();
       }
     }
   }
