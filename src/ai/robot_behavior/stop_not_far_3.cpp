@@ -13,7 +13,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "stop_not_far.h"
+#include "stop_not_far_3.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 
@@ -21,11 +21,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-StopNotFar::StopNotFar() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+StopNotFar3::StopNotFar3() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void StopNotFar::update(double time, const data::Robot& robot, const data::Ball& ball)
+void StopNotFar3::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -40,10 +40,10 @@ void StopNotFar::update(double time, const data::Robot& robot, const data::Ball&
   // const ai::Robot & robot = robot_table.at(robot_id);
   Vector2d vect_ball_goal = Data::get()->field.goalCenter(Ally) - ballPosition();
 
-  double dist_with_victim = 0.6;
-  rhoban_geometry::Point target_position =
-      rhoban_geometry::Point(ballPosition().x + dist_with_victim * std::cos(vector2angle(vect_ball_goal).value()),
-                             ballPosition().y + dist_with_victim * std::sin(vector2angle(vect_ball_goal).value()));
+  double dist_with_victim = 0.7;
+  rhoban_geometry::Point target_position = rhoban_geometry::Point(
+      ballPosition().x + dist_with_victim * std::cos(vector2angle(vect_ball_goal).value() - 0.5),
+      ballPosition().y + dist_with_victim * std::sin(vector2angle(vect_ball_goal).value() - 0.5));
 
   Vector2d vect_robot_ball = ballPosition() - linearPosition();
   ContinuousAngle target_rotation = vector2angle(vect_robot_ball);
@@ -52,18 +52,18 @@ void StopNotFar::update(double time, const data::Robot& robot, const data::Ball&
   follower_->update(time, robot, ball);
 }
 
-Control StopNotFar::control() const
+Control StopNotFar3::control() const
 {
   Control ctrl = follower_->control();
   return ctrl;
 }
 
-StopNotFar::~StopNotFar()
+StopNotFar3::~StopNotFar3()
 {
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations StopNotFar::getAnnotations() const
+rhoban_ssl::annotations::Annotations StopNotFar3::getAnnotations() const
 {
   return follower_->getAnnotations();
 }
