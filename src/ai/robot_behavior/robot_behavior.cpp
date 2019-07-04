@@ -132,9 +132,10 @@ bool RobotBehaviorTask::runTask()
   Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_number_].control;
 
   ctrl = robot_behavior_->control();
-  DEBUG("RB: " << ctrl.linear_velocity.norm());
   ctrl.changeToRelativeControl(robot.getMovement().angularPosition(time), dt);
-  DEBUG("RB2: " << ctrl.linear_velocity.norm());
+
+  annotations::Annotations annotations = annotations::Annotations();
+  annotations.addAnnotations(robot_behavior_->getAnnotations());
   return true;
 }
 

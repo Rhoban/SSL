@@ -1,0 +1,305 @@
+{
+    "movement_prediction" : {
+	"enable_integration" : false
+    },
+    "time" : {
+        "period" : 0.01,
+        "ntpd_enable" : true
+    },
+    "robot" : {
+	"robot_center_to_dribbler_center" : 0.064997,
+        "robot_radius" : 0.09,
+        "wheel_radius" : 0.03,
+        "wheel_excentricity" : 0.08,
+	"max_wheel_speed" : 7.0,  
+        "front_wheel_angle" : 120.0,
+	"rear_wheel_angle" : 45.0,
+        "wheel_nb_turns_acceleration_limit" : {
+            "simu" : 150.0,
+            "real" : 150.0
+        },
+        "rotation_velocity_limit" : {
+            "simu" : 10.0,
+            "real" : 10.0
+        },
+        "translation_velocity_limit" : {
+            "simu" : 8.0,
+            "real" : 8.0
+        },
+
+        "p_translation" : {
+            "simu" : 1.5,
+            "_simu" : 2,
+            "real" : 1.5
+        },
+        "i_translation" : {
+            "simu" : 0.0,
+            "real" : 0.0
+        },
+        "d_translation" : {
+            "simu" : 0,
+            "_simu" : 1,
+            "real" : 0
+        },
+
+        "p_orientation":{
+            "simu" : 3,
+            "real" : 1
+        },
+        "i_orientation":{
+            "simu" : 0.0,
+            "real" : 0.0
+        },
+        "d_orientation":{
+            "simu" : 0.0,
+            "real" : 0
+        }
+    },
+    "roles" : {
+       "0" : "attacker",
+       "1" : "attacker",
+       "2" : "defender",
+       "3" : "defender",
+       "4" : "defender",
+       "5" : "goalie"
+    },
+
+    "ball" : {
+        "radius_ball" : 0.021375
+    },
+    "navigation_with_obstacle" : {
+        "security_acceleration_ratio" : 0.5,
+        "obstacle_avoidance_ratio" : 0.04,
+        "radius_security_for_collision" : 0.015,
+        "radius_security_for_avoidance" : 0.03,
+        "coefficient_to_increase_avoidance_convergence" : 0.2
+    },
+    "goalie" : {
+        "penalty_rayon" : 1.0,
+        "waiting_goal_position" : [0.3,0.0],
+        "default_id" : 5
+    },
+
+
+    "nb_robots" : 8,
+    "nb_points" : 21,
+    "robots": [
+        {
+            "name": "Barthez",
+            "id": 0,
+            "_comment": "each point of the following array corresponds to a 5% step of kick power, and gives the distance reached",
+            "kick_curve": [
+                0,
+                0.03,
+                0.13,
+                0.29,
+                0.52,
+                0.83,
+                1.19,
+                1.62,
+                2.12,
+                2.68,
+                3.31,
+                4.0,
+                4.76,
+                5.59,
+                6.49,
+                7.45,
+                8.47,
+                9.56,
+                10.71,
+                11.93,
+                13.22
+            ]
+        },
+        {
+            "name": "Zidane",
+            "id": 1,
+            "kick_curve": [
+                0,
+                0.03,
+                0.13,
+                0.29,
+                0.52,
+                0.83,
+                1.19,
+                1.62,
+                2.12,
+                2.68,
+                3.31,
+                4.0,
+                4.76,
+                5.59,
+                6.49,
+                7.45,
+                8.47,
+                9.56,
+                10.71,
+                11.93,
+                13.22
+            ]
+        },
+        {
+            "name": "Platini",
+            "id": 2,
+            "kick_curve": [
+                0,
+                0.03,
+                0.13,
+                0.29,
+                0.52,
+                0.83,
+                1.19,
+                1.62,
+                2.12,
+                2.68,
+                3.31,
+                4.0,
+                4.76,
+                5.59,
+                6.49,
+                7.45,
+                8.47,
+                9.56,
+                10.71,
+                11.93,
+                13.22
+            ]
+        },
+        {
+            "name": "Lioris",
+            "id": 3,
+            "kick_curve": [
+                0,
+                0,
+                0,
+                0,
+                0.62,
+                0.39,
+                4.1,
+                5.8,
+                13,
+                13,
+                13,
+                13,
+                13,
+                13,
+                13,
+                13,
+                13,
+                13,
+                13,
+                13,
+                13
+            ]
+        },
+        {
+            "name": "Booba",
+            "id": 4,
+            "kick_curve": [
+                0,
+                0.03,
+                0.13,
+                0.29,
+                0.52,
+                0.83,
+                1.19,
+                1.62,
+                2.12,
+                2.68,
+                3.31,
+                4.0,
+                4.76,
+                5.59,
+                6.49,
+                7.45,
+                8.47,
+                9.56,
+                10.71,
+                11.93,
+                13.22
+            ]
+        },
+        {
+            "name": "Griezman",
+            "id": 5,
+            "kick_curve": [
+                0,
+                0.03,
+                0.13,
+                0.29,
+                0.52,
+                0.83,
+                1.19,
+                1.62,
+                2.12,
+                2.68,
+                3.31,
+                4.0,
+                4.76,
+                5.59,
+                6.49,
+                7.45,
+                8.47,
+                9.56,
+                10.71,
+                11.93,
+                13.22
+            ]
+        },
+        {
+            "name": "SIMU BOT",
+            "id": 6,
+            "kick_curve": [
+                0,
+                0.03,
+                0.13,
+                0.29,
+                0.52,
+                0.83,
+                1.19,
+                1.62,
+                2.12,
+                2.68,
+                3.31,
+                4.0,
+                4.76,
+                5.59,
+                6.49,
+                7.45,
+                8.47,
+                9.56,
+                10.71,
+                11.93,
+                13.22
+            ]
+        },
+        {
+            "name": "SIMU BOT 2",
+            "id": 7,
+            "kick_curve": [
+                0,
+                0.03,
+                0.13,
+                0.29,
+                0.52,
+                0.83,
+                1.19,
+                1.62,
+                2.12,
+                2.68,
+                3.31,
+                4.0,
+                4.76,
+                5.59,
+                6.49,
+                7.45,
+                8.47,
+                9.56,
+                10.71,
+                11.93,
+                13.22
+            ]
+        }
+    ]
+}
