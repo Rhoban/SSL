@@ -205,6 +205,15 @@ target_link_libraries(dribbler ssl_ai ${ALL_LIBS})
 add_executable(check_vision executables/check_vision.cpp)
 target_link_libraries(check_vision ssl_ai ${ALL_LIBS})
 
+add_executable(repeated_rotation executables/repeated_rotation.cpp)
+target_link_libraries(repeated_rotation ssl_ai ${ALL_LIBS})
+
+add_executable(repeated_translation executables/repeated_translation.cpp)
+target_link_libraries(repeated_translation ssl_ai ${ALL_LIBS})
+
+add_executable(repeated_translation_without_rotation executables/repeated_translation_without_rotation.cpp)
+target_link_libraries(repeated_translation_without_rotation ssl_ai ${ALL_LIBS})
+
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
 if(CATKIN_ENABLE_TESTING)

@@ -13,6 +13,8 @@ Field::Field()
   boundary_width_ = 0.1;
   penalty_area_depth_ = 1.0;
   penalty_area_width_ = 2.0;
+
+  updateAdditionnalInformations();
 }
 
 void Field::updateAdditionnalInformations()
