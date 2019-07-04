@@ -4,6 +4,9 @@
 #include "config.h"
 #include "debug.h"
 #include <data.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 namespace rhoban_ssl
 {
@@ -241,5 +244,38 @@ void Config::load(const std::string& config_path)
     goalies_.push_back(id);
   }
 }
+
+double get_time_for_file(std::string file)
+{
+  struct stat buf;
+  if (stat(file.c_str(), &buf) == -1)
+    return 0;
+  // std::cout << "get time for file " << buf.st_mtim.tv_sec << std::endl;
+  return buf.st_mtim.tv_sec;
+}
+
+UpdateConfigTask::UpdateConfigTask(std::string confpath) : config_path_(confpath), cpt(0)
+{
+  ai::Config::load((config_path_));
+  last_time = get_time_for_file(config_path_);
+}
+
+bool UpdateConfigTask::runTask()
+{
+  cpt += 1;
+  if (cpt > 100)
+  {
+    cpt = 0;
+    double t = get_time_for_file(config_path_);
+    if (t > last_time)
+    {
+      std::cout << "reload config file" << std::endl;
+      ai::Config::load((config_path_));
+      last_time = t;
+    }
+  }
+  return true;
+}
+
 }  // namespace ai
 }  // namespace rhoban_ssl

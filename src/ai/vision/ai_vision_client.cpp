@@ -125,6 +125,12 @@ bool DetectionPacketAnalyzer::runTask()
           current.t_capture_ = Data::get()->time.syncVisionTimeWithProgramTimeLine(frame.t_capture());
         }
 
+        if (current.t_capture_ < 0)
+        {
+          std::cerr << "\033[31;5mWARNING:\033[0m Capture time is negative! " << std::endl;
+          std::cerr << "              maybe a issue with ntpd: check config.json " << std::endl;
+        }
+
         current.camera_id_ = int(frame.camera_id());
         // invalidate previous data
         for (auto& i : current.balls_)

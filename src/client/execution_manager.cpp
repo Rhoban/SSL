@@ -10,7 +10,7 @@ namespace rhoban_ssl
 {
 ExecutionManager ExecutionManager::execution_manager_singleton_;
 
-ExecutionManager::ExecutionManager() : shutdown_(false), current_max_priority_(100)
+ExecutionManager::ExecutionManager() : shutdown_(false), current_max_priority_(100), stop_loop_at(-1)
 {
 }
 
@@ -47,6 +47,8 @@ void ExecutionManager::run(double min_loop_duration)
     to_remove.clear();
     for (auto i : tasks_)
     {
+      if ((stop_loop_at != -1) && (i.first > stop_loop_at))
+        break;
       if (i.second->runTask() == false)
       {
         to_remove.push_back(i);
@@ -75,6 +77,11 @@ void ExecutionManager::run(double min_loop_duration)
     delete i->second;
   std::cout << "----------------------" << std::endl;
   std::cout << "END" << std::endl;
+}
+
+void ExecutionManager::setMaxTaskId(int value)
+{
+  stop_loop_at = value;
 }
 
 void ExecutionManager::shutdown()
