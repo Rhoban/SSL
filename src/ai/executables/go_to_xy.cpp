@@ -17,9 +17,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-// ./bin/go_to_xy -r 2 -s --xdest 0 --ydest 0 
-
+// ./bin/go_to_xy -r 2 -s --xdest 0 --ydest 0
 
 #include <iostream>
 #include <sstream>
@@ -223,7 +221,7 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
 
-  ExecutionManager::getManager().addTask(new ai::InitMobiles());
+  ExecutionManager::getManager().addTask(new ai::InitMobiles(), 0);
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
@@ -240,20 +238,20 @@ int main(int argc, char** argv)
   rhoban_geometry::Point point = rhoban_geometry::Point(xdest.getValue(), ydest.getValue());
   double reach_radius = 0.2;
 
-  ExecutionManager::getManager().addTask(new ConditionalTask(
-      []() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
-      [&]() -> bool {
-        ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
-        ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
-        ExecutionManager::getManager().addTask(
-            new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(),
-                                                  new robot_behavior::GoToXY(point, reach_radius)),
-            102);
-        Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = false;
-        ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()));
-        ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
-        return false;
-      }));
+  ExecutionManager::getManager().addTask(
+      new ConditionalTask([]() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
+                          [&]() -> bool {
+                            ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
+                            ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
+                            ExecutionManager::getManager().addTask(
+                                new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(),
+                                                                      new robot_behavior::GoToXY(point, reach_radius)),
+                                102);
+                            Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = false;
+                            ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()));
+                            ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
+                            return false;
+                          }));
 
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
   ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
