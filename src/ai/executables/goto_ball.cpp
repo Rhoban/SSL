@@ -210,7 +210,11 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used), 5);
 
   ExecutionManager::getManager().addTask(new ConditionalTask(
-      []() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
+      []() -> bool {
+        static int i = 0;
+        i += vision::VisionDataGlobal::singleton_.last_packets_.size();
+        return i > 5;
+      },
       [&]() -> bool {
         ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
         ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
@@ -225,7 +229,7 @@ int main(int argc, char** argv)
       }));
 
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
-  // ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
+  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
 
   ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
   ExecutionManager::getManager().addTask(new control::Commander(), 1100);
