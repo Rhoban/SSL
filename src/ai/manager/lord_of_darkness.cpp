@@ -101,15 +101,15 @@ LordOfDarkness::LordOfDarkness(std::string name)
   halt_strats_[3] = { strategy::Halt::name };
   halt_strats_[2] = { strategy::Halt::name };
   halt_strats_[1] = { strategy::Halt::name };
-
-  stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[6] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[5] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall_2::name };
-  stop_strats_[4] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall::name };
-  stop_strats_[3] = { strategy::KeeperStrat::name, strategy::MurStop::name };
-  stop_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
-  stop_strats_[1] = { strategy::KeeperStrat::name };
+  /*
+    stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[6] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[5] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall_2::name };
+    stop_strats_[4] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall::name };
+    stop_strats_[3] = { strategy::KeeperStrat::name, strategy::MurStop::name };
+    stop_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
+    stop_strats_[1] = { strategy::KeeperStrat::name };*/
 
   // kickoff_ally
   kickoff_ally_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M",

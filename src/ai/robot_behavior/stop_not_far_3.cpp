@@ -38,16 +38,31 @@ void StopNotFar3::update(double time, const data::Robot& robot, const data::Ball
   // int robot_id = 2;
   // const Robots_table & robot_table = ai_data.robots.at(Vision::Ally);
   // const ai::Robot & robot = robot_table.at(robot_id);
-  Vector2d vect_ball_goal = Data::get()->field.goalCenter(Ally) - ballPosition();
+  ContinuousAngle target_rotation;
+  rhoban_geometry::Point target_position;
 
-  double dist_with_victim = 0.8;
-  rhoban_geometry::Point target_position = rhoban_geometry::Point(
-      ballPosition().x + dist_with_victim * std::cos(vector2angle(vect_ball_goal).value() - 0.5),
-      ballPosition().y + dist_with_victim * std::sin(vector2angle(vect_ball_goal).value() - 0.5));
+  if (ballPosition().x > -2.5)
+  {
+    Vector2d vect_ball_goal = Data::get()->field.goalCenter(Ally) - ballPosition();
 
+    double dist_with_victim = 0.8;
+    target_position = rhoban_geometry::Point(
+        ballPosition().x + dist_with_victim * std::cos(vector2angle(vect_ball_goal).value() - 0.5),
+        ballPosition().y + dist_with_victim * std::sin(vector2angle(vect_ball_goal).value() - 0.5));
+  }
+  else
+  {
+    if (ballPosition().getDist(Data::get()->field.getPenaltyArea(Ally).getNE()) < 0.51)
+    {
+      target_position = rhoban_geometry::Point(-3.25, 1.76);
+    }
+    else
+    {
+      target_position = rhoban_geometry::Point(-3.25, 1.25);
+    }
+  }
   Vector2d vect_robot_ball = ballPosition() - linearPosition();
-  ContinuousAngle target_rotation = vector2angle(vect_robot_ball);
-
+  target_rotation = vector2angle(vect_robot_ball);
   follower_->setFollowingPosition(target_position, target_rotation.value());
   follower_->update(time, robot, ball);
 }
