@@ -197,7 +197,7 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
 
-  ExecutionManager::getManager().addTask(new ai::InitMobiles());
+  ExecutionManager::getManager().addTask(new ai::InitMobiles(), 0);
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
@@ -218,18 +218,19 @@ int main(int argc, char** argv)
             new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(), new robot_behavior::beginner::GotoBall()),
             102);
         Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = false;
-        ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()));
+
+        ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()), 1001);
         ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
         return false;
       }));
 
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
-  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
+  // ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
 
   ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
-  ExecutionManager::getManager().addTask(new control::Commander(), 1001);
+  ExecutionManager::getManager().addTask(new control::Commander(), 1100);
 
-  ExecutionManager::getManager().run(0.01);
+  ExecutionManager::getManager().run(0.2);
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

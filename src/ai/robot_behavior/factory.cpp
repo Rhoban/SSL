@@ -30,6 +30,7 @@ namespace robot_behavior
 ConsignFollower* Factory::fixedConsignFollower(const rhoban_geometry::Point& position, const ContinuousAngle& angle,
                                                bool ignore_the_ball)
 {
+  // return new PositionFollower(0, 0);
   return Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocation(position, angle, ignore_the_ball);
 }
 
