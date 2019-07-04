@@ -294,7 +294,7 @@ void Commander::updateRobotsCommands()
           set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(), kick,
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
-              );
+          );
           // DEBUG("TARE ODOM : " << ctrl.spin);
         }
         else
@@ -348,6 +348,12 @@ bool Commander::runTask()
 {
   if (!ai::Config::is_in_simulation)
     updateElectronicInformations();
+
+  if (Data::get()->referee.getCurrentStateName() == "HALT")
+  {
+    Data::get()->shared_data.final_control_for_robots[Data::get()->referee.teams_info->goalkeeper_number].control =
+        Control::makeNull();
+  }
 
   updateRobotsCommands();
 
