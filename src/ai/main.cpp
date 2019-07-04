@@ -141,13 +141,13 @@ int main(int argc, char** argv)
                                    "int",        // short description of the expected value.
                                    cmd);
 
-  TCLAP::ValueArg<bool> side_blue("k",            // short argument name  (with one character)
-                                   "side",  // long argument name
-                                   "blue on positive side",
-                                   false,        // Flag is not required
-                                   false,  // Default value
-                                   "bool",        // short description of the expected value.
-                                   cmd);
+  TCLAP::ValueArg<bool> side_blue("k",     // short argument name  (with one character)
+                                  "side",  // long argument name
+                                  "blue on positive side",
+                                  false,   // Flag is not required
+                                  false,   // Default value
+                                  "bool",  // short description of the expected value.
+                                  cmd);
 
   cmd.parse(argc, argv);
 
@@ -198,56 +198,53 @@ int main(int argc, char** argv)
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision
-  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport));
+  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport), 1);
   // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
-  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer());
-  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView());
-  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used));
-  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used));
+  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer(), 1);
+  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer(), 1);
+  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView(), 1);
+  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used), 1);
+  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used), 1);
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
-  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10));
-  ExecutionManager::getManager().addTask(new robot_behavior::RobotBehaviorTask( 1, new robot_behavior::BeginnerAnnotationsBallPosition()));
-
+  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 2);
 
   // refereee
-  ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT));
-  ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer());
+  ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT),
+                                         5);
+  ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer(), 5);
   // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());
-  ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10));
+  ExecutionManager::getManager().addTask(new referee::RefereeProtoBufReset(10), 6);
 
-  ExecutionManager::getManager().addTask(new data::CollisionComputing());
+  ExecutionManager::getManager().addTask(new data::CollisionComputing(), 8);
 
-  // BEGIN AI related tasks:
+  ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 9);
 
-  ExecutionManager::getManager().addTask(new ai::TimeUpdater());
-  ai::AI* ai = new ai::AI(manager_name.getValue());
-  ExecutionManager::getManager().addTask(ai);
+  ExecutionManager::getManager().addTask(new control::LimitVelocities(), 500);
+  ExecutionManager::getManager().addTask(new control::Commander(), 501);
 
-  // END  AI related tasks:
+  ExecutionManager::getManager().addTask(new ConditionalTask(
+      []() -> bool { return Data::get()->time.now() > 1; },
+      [&]() -> bool {
+        ai::AI* ai = new ai::AI(manager_name.getValue());
+        ExecutionManager::getManager().addTask(ai, 100);
 
-  ExecutionManager::getManager().addTask(new control::LimitVelocities());
-  ExecutionManager::getManager().addTask(new control::Commander());
+        // viewer
+        ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()), 101);
+        ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai), 102);
 
-  // viewer
-  ExecutionManager::getManager().addTask(new viewer::ViewerServer(viewer_port.getValue()));
-  ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai));
+        for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
+        {
+          auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
+          final_control.is_manually_controled_by_viewer = false;
+        }
+      }));
 
-  ExecutionManager::getManager().addTask(new ConditionalTask([]() -> bool{ 
-    return Data::get()->time.now() > 1;
-  },[&]() -> bool {for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
-  {
-    auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
-    final_control.is_manually_controled_by_viewer = false;
-  } } ));
-  
   // stats
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(false, true));  // print
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, true, 100));  // both every 100 loop
 
   ExecutionManager::getManager().run(ai::Config::period);
-  
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

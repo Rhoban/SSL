@@ -184,12 +184,13 @@ bool LimitVelocities::runTask()
 
     if (lambda < 1.0)
     {
-      std::cerr << "WARNING: ROBOT " << i << " reached the wheel's speed limit! " << ctrl.linear_velocity.norm()
-                << std::endl;
+      //      std::cerr << "WARNING: ROBOT " << i << " reached the wheel's speed limit! " << ctrl.linear_velocity.norm()
+      //                << std::endl;
       ctrl.linear_velocity *= lambda;
       ctrl.angular_velocity *= lambda;
-      std::cerr << "WARNING: ROBOT " << lambda << " reached the wheel's speed limit! " << ctrl.linear_velocity.norm()
-                << std::endl;
+      //      std::cerr << "WARNING: ROBOT " << lambda << " reached the wheel's speed limit! " <<
+      //      ctrl.linear_velocity.norm()
+      //                << std::endl;
     }
   }
   return true;

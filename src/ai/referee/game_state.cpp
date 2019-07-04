@@ -232,13 +232,25 @@ GameState::GameState()
 
 bool GameState::ballIsMoving()
 {
-  Vector2d ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->ai_data.time);
-  double threshold = 0.001;
-  if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
+  double distance = 0.0;
+  for (uint i = 0; i < Data::get()->ball.movement_sample.size(); ++i)
   {
-    return true;
+    for (uint k = 0; k < Data::get()->ball.movement_sample.size(); ++k)
+    {
+      distance = std::max(Data::get()->ball.movement_sample[i].linear_position.getDist(
+                              Data::get()->ball.movement_sample[k].linear_position),
+                          distance);
+    }
   }
-  return false;
+  return distance > 10;
+
+  //  Vector2d ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->ai_data.time);
+  //  double threshold = 0.1;
+  //  if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
+  //  {
+  //    return true;
+  //  }
+  //  return false;
 }
 
 void GameState::extractData(const Referee& new_data)

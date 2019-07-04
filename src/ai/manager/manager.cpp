@@ -149,7 +149,7 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
           {
             id_is_present = true;
           }
-          // assert(id_is_present);
+      // assert(id_is_present);
 #endif
           if (id == -1)
             return;
