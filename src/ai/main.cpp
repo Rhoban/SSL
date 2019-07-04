@@ -36,6 +36,14 @@
 
 using namespace rhoban_ssl;
 
+void superStop(int)
+{
+  for (int i = 0; i < 10000; ++i)
+  {
+    close(i);
+  }
+}
+
 void stop(int)
 {
   rhoban_ssl::ExecutionManager::getManager().shutdown();
@@ -46,6 +54,11 @@ int main(int argc, char** argv)
   // Enabling floating point errors
   feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
   signal(SIGINT, stop);
+  signal(SIGABRT, superStop);
+  signal(SIGSEGV, superStop);
+  signal(SIGBUS, superStop);
+  signal(SIGFPE, superStop);
+  atexit((void (*)(void))superStop);
 
   // Command line parsing
   TCLAP::CmdLine cmd("Rhoban SSL AI", ' ', "0.0", true);
@@ -184,7 +197,7 @@ int main(int argc, char** argv)
 
   if (ai::Config::is_in_simulation)
     ai::Config::ntpd_enable = false;
-
+  
   Data::get()->referee.blue_team_on_positive_half = side_blue.getValue();
 
   addCoreTasks();

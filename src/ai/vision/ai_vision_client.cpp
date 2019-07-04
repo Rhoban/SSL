@@ -91,7 +91,7 @@ bool SslGeometryPacketAnalyzer::runTask()
     }
     ++i;
   }
-  return !(field_done_ && camera_done_);
+  return true;
 }
 
 bool DetectionPacketAnalyzer::runTask()
