@@ -28,16 +28,17 @@ void addVisionTasks(std::string vision_addr, std::string vision_port, vision::Pa
   // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
   ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 10000);
   ExecutionManager::getManager().addTask(new ConditionalTask(
-      []() -> bool {  // wait for at least 30 packets from vision
-        static int counter = 0;
-        counter += vision::VisionDataGlobal::singleton_.last_packets_.size();
-        return counter > 30;
-      },
-      []() -> bool {
-        DEBUG("we receive enought vision packet data to activate other tasks");
-        ExecutionManager::getManager().setMaxTaskId();
-        return false;
-      }));
+                                             []() -> bool {  // wait for at least 30 packets from vision
+                                               static int counter = 0;
+                                               counter += vision::VisionDataGlobal::singleton_.last_packets_.size();
+                                               return counter > 30;
+                                             },
+                                             []() -> bool {
+                                               DEBUG("we receive enought vision packet data to activate other tasks");
+                                               ExecutionManager::getManager().setMaxTaskId();
+                                               return false;
+                                             }),
+                                         299);
   ExecutionManager::getManager().setMaxTaskId(300);
 }
 
@@ -65,5 +66,23 @@ void addViewerTasks(ai::AI* ai, int port)
 {  // range 3000
   ExecutionManager::getManager().addTask(new viewer::ViewerServer(port), 3000);
   ExecutionManager::getManager().addTask(new viewer::ViewerCommunication(ai), 3010);
+}
+
+class ShortCutVision : public Task
+{
+public:
+  virtual bool runTask() override
+  {
+    if (vision::VisionDataGlobal::singleton_.last_packets_.size() > 0)
+      ExecutionManager::getManager().setMaxTaskId();
+    else
+      ExecutionManager::getManager().setMaxTaskId(300);
+  }
+};
+
+void addTaskShortCutProcessIfNoVisionData()
+{
+  ExecutionManager::getManager().addTask(new ShortCutVision(), 299);
+  ExecutionManager::getManager().setMaxTaskId(300);
 }
 }
