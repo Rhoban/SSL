@@ -128,11 +128,13 @@ bool RobotBehaviorTask::runTask()
   double dt = Data::get()->ai_data.dt;
   //  DEBUG("t : " << robot_behavior_-><< std::endl << "time : " << time << std::endl << "dt : " << dt);
 
-  robot_behavior_->update(time, robot, ball);
+  robot_behavior_->update(Data::get()->time.now(), robot, ball);
   Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_number_].control;
 
   ctrl = robot_behavior_->control();
+  DEBUG("RB: " << ctrl.linear_velocity.norm());
   ctrl.changeToRelativeControl(robot.getMovement().angularPosition(time), dt);
+  DEBUG("RB2: " << ctrl.linear_velocity.norm());
   return true;
 }
 
