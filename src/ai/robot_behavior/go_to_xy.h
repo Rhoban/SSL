@@ -39,8 +39,11 @@ private:
   double reach_radius_;
   bool dribbler_is_active_ = false;
 
+  bool angle_;
+
 public:
-  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01);
+  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01,
+         bool angle = false);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -55,7 +58,7 @@ public:
   double getReachRadius() const;
 
   bool isReached();
-  
+
   void dribbler(const bool is_active);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;

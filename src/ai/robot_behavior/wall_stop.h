@@ -1,7 +1,8 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 RomainPC (romainpc.lechat@laposte.net)
+    Copyright 2019 Jérémy Bezamat (jeremy.bezamat@gmail.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -19,35 +20,30 @@
 
 #pragma once
 
-#include <referee/game_state.h>
-#include "manager.h"
-#include "manual.h"
-#include "match.h"
-#include "dumb_manager.h"
-#include "lord_of_darkness.h"
+#include "robot_behavior/factory.h"
+#include "robot_behavior/robot_behavior.h"
 
 namespace rhoban_ssl
 {
-namespace manager
+namespace robot_behavior
 {
-struct names
-{
-  static constexpr const char* MANUAL = "Manual";
-  static constexpr const char* MATCH = "Match";
-  static constexpr const char* DUMB_MANAGER = "Dumb_manager";
-  static constexpr const char* LORD_OF_DARKNESS = "lod";
-};
-
-class Factory
+class WallStop1 : public RobotBehavior
 {
 private:
-  static std::list<std::string> list_of_avalaible_managers_;
+  ConsignFollower* follower_;
+  rhoban_ssl::annotations::Annotations annotations_;
 
 public:
-  static const std::list<std::string>& availableManagers();
+  WallStop1();
 
-  static std::shared_ptr<Manager> constructManager(const std::string& manager_name);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
+
+  virtual Control control() const;
+
+  virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
+
+  virtual ~WallStop1();
 };
 
-}  // namespace manager
-}  // namespace rhoban_ssl
+};  // namespace robot_behavior
+};  // namespace rhoban_ssl

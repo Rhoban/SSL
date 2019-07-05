@@ -25,12 +25,13 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-GoToXY::GoToXY(rhoban_geometry::Point point, double reach_radius)
+GoToXY::GoToXY(rhoban_geometry::Point point, double reach_radius, bool angle)
   : RobotBehavior()
   , follower_(Factory::fixedConsignFollower())
   , target_point_(point)
   , reached_(false)
   , reach_radius_(reach_radius)
+  , angle_(angle)
 
 {
 }
@@ -50,9 +51,12 @@ void GoToXY::update(double time, const data::Robot& robot, const data::Ball& bal
     reached_ = true;
   }
   rhoban_geometry::Point position_follower = target_point_;
-
   Vector2d vect_robot_target = target_point_ - robot_position;
-  ContinuousAngle rotation_follower = vector2angle(vect_robot_target);
+  double rotation_follower = vector2angle(vect_robot_target).value();
+  if (angle_)
+  {
+    rotation_follower = 0;
+  }
 
   follower_->setFollowingPosition(position_follower, rotation_follower);
   follower_->avoidTheBall(false);
@@ -85,7 +89,8 @@ bool GoToXY::isReached()
   return reached_;
 }
 
-void GoToXY::dribbler(const bool is_active){
+void GoToXY::dribbler(const bool is_active)
+{
   dribbler_is_active_ = is_active;
 }
 
@@ -96,7 +101,8 @@ Control GoToXY::control() const
   {
     ctrl.spin = true;
   }
-  else{
+  else
+  {
     ctrl.spin = false;
   }
   return ctrl;
