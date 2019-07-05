@@ -38,6 +38,7 @@
 #include <robot_behavior/tutorials/beginner/see_robot.h>
 #include <robot_behavior/tutorials/beginner/goalie.h>
 #include <strategy/from_robot_behavior.h>
+#include <executables/tools.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
@@ -115,17 +116,13 @@ int main(int argc, char** argv)
   }
 
   ai::Config::load(config_path.getValue());
+  ai::Config::is_in_simulation = false;
 
-  ExecutionManager::getManager().addTask(new ai::InitMobiles());
+  addCoreTasks();
+  addVisionTasks(addr.getValue(), theport, vision::PartOfTheField::ALL_FIELD);
+  addViewerTasks(nullptr, viewer_port.getValue());
 
-  //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
-  // vision
-  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport), 0);
-  ExecutionManager::getManager().addTask(new vision::VisionPacketStat(10));
-  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer(), 1);
-  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer(), 2);
-
-  ExecutionManager::getManager().run(0.1);
+  ExecutionManager::getManager().run(0.01);
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

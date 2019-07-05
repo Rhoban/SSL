@@ -65,27 +65,33 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["set_manager"].isNull())
     {
-      ai_->setManager(viewer_packet["set_manager"].asString());
+      if (ai_ != nullptr)
+        ai_->setManager(viewer_packet["set_manager"].asString());
     }
     else if (!viewer_packet["start_manager"].isNull())
     {
-      ai_->startManager();
+      if (ai_ != nullptr)
+        ai_->startManager();
     }
     else if (!viewer_packet["stop_manager"].isNull())
     {
-      ai_->stopStrategyManager();
+      if (ai_ != nullptr)
+        ai_->stopStrategyManager();
     }
     else if (!viewer_packet["halt_bot"].isNull())
     {
-      ai_->haltRobot(viewer_packet["halt_bot"].asUInt());
+      if (ai_ != nullptr)
+        ai_->haltRobot(viewer_packet["halt_bot"].asUInt());
     }
     else if (!viewer_packet["enable_bot"].isNull())
     {
-      ai_->enableRobot(viewer_packet["enable_bot"].asUInt(), true);
+      if (ai_ != nullptr)
+        ai_->enableRobot(viewer_packet["enable_bot"].asUInt(), true);
     }
     else if (!viewer_packet["disable_bot"].isNull())
     {
-      ai_->enableRobot(viewer_packet["disable_bot"].asUInt(), false);
+      if (ai_ != nullptr)
+        ai_->enableRobot(viewer_packet["disable_bot"].asUInt(), false);
     }
     else if (!viewer_packet["control_bot"].isNull())
     {
@@ -98,7 +104,8 @@ void ViewerCommunication::processIncomingPackets()
       {
         robot_numbers.push_back(viewer_packet["set_strategy"]["bots"][i].asInt());
       }
-      ai_->setStrategyManuallyOf(robot_numbers, viewer_packet["set_strategy"]["name"].asString());
+      if (ai_)
+        ai_->setStrategyManuallyOf(robot_numbers, viewer_packet["set_strategy"]["name"].asString());
     }
     else if (!viewer_packet["place_bot"].isNull())
     {
@@ -117,7 +124,8 @@ void ViewerCommunication::processIncomingPackets()
     }
     else if (!viewer_packet["scan"].isNull())
     {
-      ai_->scan();
+      if (ai_ != nullptr)
+        ai_->scan();
     }
     else
     {
@@ -247,8 +255,8 @@ Json::Value ViewerCommunication::teamsPacket()
       if (ally_info)
       {
         packet["teams"][team]["bots"][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
-        packet["teams"][team]["bots"][rid]["behavior"] = ai_->getRobotBehaviorOf(rid);
-        packet["teams"][team]["bots"][rid]["strategy"] = ai_->getStrategyOf(rid);
+        packet["teams"][team]["bots"][rid]["behavior"] = ai_ == nullptr ? "noai" : ai_->getRobotBehaviorOf(rid);
+        packet["teams"][team]["bots"][rid]["strategy"] = ai_ == nullptr ? "noai" : ai_->getStrategyOf(rid);
 
         if (!ai::Config::is_in_simulation)
         {
@@ -306,16 +314,16 @@ Json::Value ViewerCommunication::aiPacket()
     packet["ai"]["managers"]["availables"][i]["name"] = available_managers.at(i);
   }
   // todo
-  packet["ai"]["managers"]["current"]["name"] = ai_->getCurrentManager().get()->name();
+  packet["ai"]["managers"]["current"]["name"] = ai_ == nullptr ? "noai" : ai_->getCurrentManager().get()->name();
 
-  for (uint i = 0; i < ai_->getCurrentManager().get()->getAvailableStrategies().size(); ++i)
+  for (uint i = 0; ai_ != nullptr && i < ai_->getCurrentManager().get()->getAvailableStrategies().size(); ++i)
   {
     packet["ai"]["managers"]["current"]["strategies_used"][i]["name"] =
         ai_->getCurrentManager().get()->getAvailableStrategies().at(i);
   }
 
   // we send all strategies in manual manager
-  for (uint i = 0; i < ai_->getManualManager().get()->getAvailableStrategies().size(); ++i)
+  for (uint i = 0; ai_ != nullptr && i < ai_->getManualManager().get()->getAvailableStrategies().size(); ++i)
   {
     std::string strat_name = ai_->getManualManager().get()->getAvailableStrategies().at(i);
     packet["ai"]["strategies"][i]["name"] = strat_name;
@@ -351,6 +359,8 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
 
 Json::Value ViewerCommunication::annotationsPacket()
 {
+  if (ai_ == nullptr)
+    return Json::Value();
   return ai_->getAnnotations();
 }
 
