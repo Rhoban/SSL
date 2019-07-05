@@ -1,6 +1,6 @@
 {
     "movement_prediction" : {
-	"enable_integration" : true
+	"enable_integration" : false
     },
     "time" : {
         "period" : 0.01,
