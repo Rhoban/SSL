@@ -33,8 +33,8 @@ void PositionFollower::setFollowingPosition(const rhoban_geometry::Point& positi
 {
   this->position_ = position_to_follow;
   this->angle_ = angle;
-  this->angle_ = this->robot_angular_position_;
-  this->angle_.setToNearest(angle);
+  // this->angle_ = this->robot_angular_position_;
+  // this->angle_.setToNearest(angle);
 }
 
 void PositionFollower::updateControl(double time)
