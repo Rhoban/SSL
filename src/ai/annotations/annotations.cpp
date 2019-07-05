@@ -104,7 +104,7 @@ void Annotations::addArrow(const Vector2d& origin, const Vector2d& end, std::str
 
 void Annotations::addArrow(const rhoban_geometry::Point& origin, const Vector2d& direction, std::string stroke_color, bool dashed)
 {
-  addArrow(origin.getX(), origin.getY(), direction.getX(), direction.getY(), stroke_color, dashed);
+  addArrow(origin.getX(), origin.getY(), origin.getX() + direction.getX(), origin.getY() + direction.getY(), stroke_color, dashed);
 }
 
 void Annotations::addArrow(const rhoban_geometry::Segment& s, std::string color, bool dashed)

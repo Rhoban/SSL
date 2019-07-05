@@ -18,10 +18,11 @@ Box::Box(const rhoban_geometry::Point& SW, const rhoban_geometry::Point& NE) : S
 
 bool Box::is_inside(const rhoban_geometry::Point& position)
 {
-  return (SW.getX() <= position.getX() and SW.getY() <= position.getY() and position.getX() <= NE.getX() and
-          position.getY() <= NE.getY()
-
-  );
+  bool is_in_zone_x = ((SW.getX() <= position.getX()) && (position.getX() <= NE.getX()));
+  bool is_in_zone_y = ((SW.getY() <= position.getY()) && (position.getY() <= NE.getY()));
+  printf("booleen 1: %d booleen 2: %d\n",(SW.getX() <= position.getX()), (position.getX() >= NE.getX()));
+  printf("SW is in {%lf,%lf} , NE is in {%lf,%lf}",SW.getX(), SW.getY(), NE.getX(), NE.getY());
+  return (is_in_zone_x && is_in_zone_y);
 }
 
 std::vector<rhoban_geometry::Point> Box::segmentIntersection(const rhoban_geometry::Point& origin,
