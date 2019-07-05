@@ -281,7 +281,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy("GTG", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
                                 robot_behavior::GoToXY* go =
-                                    new robot_behavior::GoToXY(Data::get()->field.goalCenter(Ally));
+                                    new robot_behavior::GoToXY(Data::get()->field.goalCenter(Ally), 0.01, true);
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
                               true)));
