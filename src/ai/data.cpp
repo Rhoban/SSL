@@ -44,9 +44,7 @@ SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_
 
 ///////////////////////////////////////////////////////////////////////////////
 
-Time::Time()
-  : time_shift_with_vision(std::numeric_limits<double>::max())
-  , starting_time_(std::chrono::high_resolution_clock::now())
+Time::Time() : time_shift_with_vision(0), starting_time_(std::chrono::high_resolution_clock::now())
 {
   starting_time_in_seconds_ = formatInSecond(starting_time_.time_since_epoch());
 }

@@ -115,10 +115,17 @@ bool DetectionPacketAnalyzer::runTask()
         if (!ai::Config::ntpd_enable)
         {
           double diff = current.t_sent_ - now;
-          if (diff < Data::get()->time.time_shift_with_vision)
+          if (diff > Data::get()->time.time_shift_with_vision)
             Data::get()->time.time_shift_with_vision = diff;
           current.t_capture_ = frame.t_capture() - Data::get()->time.time_shift_with_vision;
           current.t_sent_ = frame.t_sent() - Data::get()->time.time_shift_with_vision;
+          //          DEBUG("NTPD: CAMERA " << frame.camera_id() << " frame id " << frame.frame_number() << " now is "
+          //          << now);
+          //          DEBUG("tsent: " << frame.t_sent());
+          //          DEBUG("ntpd not enabled: original capture " << frame.t_capture() << " new capture " <<
+          //          current.t_capture_
+          //                                                      << " drift is " <<
+          //                                                      Data::get()->time.time_shift_with_vision);
         }
         else
         {

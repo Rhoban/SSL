@@ -21,7 +21,7 @@ std::vector<unsigned int> Config::goalies_;
 bool Config::enable_movement_with_integration = true;
 bool Config::we_are_blue = true;
 bool Config::is_in_simulation = true;
-
+bool Config::is_in_mixcontrol = false;
 double Config::period = 0.01;
 bool Config::ntpd_enable = false;
 

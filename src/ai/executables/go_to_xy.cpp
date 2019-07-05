@@ -234,8 +234,6 @@ int main(int argc, char** argv)
   ExecutionManager::getManager().addTask(
       new ConditionalTask([]() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
                           [&]() -> bool {
-                            ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
-                            ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
                             ExecutionManager::getManager().addTask(
                                 new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(),
                                                                       new robot_behavior::GoToXY(point, reach_radius)),

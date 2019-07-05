@@ -6,14 +6,13 @@ rhoban_ssl::PlotXy::~PlotXy()
   plot.closeWindow();
 }
 
-rhoban_ssl::PlotXy::PlotXy(int rid) : rid(rid), start(std::chrono::high_resolution_clock::now())
+rhoban_ssl::PlotXy::PlotXy(int rid) : rid(rid)
 {
 }
 
 bool rhoban_ssl::PlotXy::runTask()
 {
-  plot.setX(
-      std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now() - start).count());
+  plot.setX(Data::get()->robots[Ally][rid].getMovement().getSample()[0].time);
   // plot.push("x", Data::get()->shared_data.final_control_for_robots[rid].control.linear_velocity.norm());
   plot.push("x", Data::get()->robots[Ally][rid].getMovement().linearPosition(Data::get()->time.now()).x);
   plot.push("y", Data::get()->robots[Ally][rid].getMovement().linearPosition(Data::get()->time.now()).y);

@@ -31,12 +31,12 @@ namespace control
 {
 Commander::Commander() : real_(nullptr), sim_(nullptr)
 {
-  if (ai::Config::is_in_simulation)
+  if ((ai::Config::is_in_simulation) || (ai::Config::is_in_mixcontrol))
   {
     if (sim_ == nullptr)
       sim_ = new SimClient();
   }
-  else
+  if ((ai::Config::is_in_simulation == false) || (ai::Config::is_in_mixcontrol))
   {
     if (real_ == nullptr)
     {
@@ -293,7 +293,7 @@ void Commander::updateRobotsCommands()
           set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(), kick,
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
-          );
+              );
           // DEBUG("TARE ODOM : " << ctrl.spin);
         }
         else
@@ -325,12 +325,12 @@ void Commander::send()
 {
   for (auto& cmd : commands_)
   {
-    if (ai::Config::is_in_simulation)
+    if ((ai::Config::is_in_simulation) || (ai::Config::is_in_mixcontrol))
     {
       grSim_Packet packet = convertToSimulationPacket(cmd);
       sim_->sendPacket(packet);
     }
-    else
+    if (((ai::Config::is_in_simulation == false) || (ai::Config::is_in_mixcontrol)))
     {
       struct packet_master packet = convertToRobotPacket(cmd);
       real_->addRobotPacket(cmd.robot_id, packet);

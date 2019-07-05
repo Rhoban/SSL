@@ -64,6 +64,7 @@ int main(int argc, char** argv)
   // Command line parsing
   TCLAP::CmdLine cmd("Rhoban SSL AI", ' ', "0.0", true);
   TCLAP::SwitchArg simulation("s", "simulation", "Simulation mode", cmd, false);
+  TCLAP::SwitchArg mixmode("", "mixmode", "Mix mode", cmd, false);
   TCLAP::SwitchArg yellow("y", "yellow", "If set we are yellow otherwise we are blue.", cmd, false);
 
   //  TCLAP::ValueArg<std::string> team_name(
@@ -165,7 +166,7 @@ int main(int argc, char** argv)
   }
 
   std::string theport;
-  if (simulation.getValue())
+  if (simulation.getValue() || mixmode.getValue())
   {
     theport = sim_port.getValue();
   }
@@ -195,6 +196,7 @@ int main(int argc, char** argv)
 
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
+  ai::Config::is_in_mixcontrol = mixmode.getValue();
 
   ExecutionManager::getManager().addTask(new ai::UpdateConfigTask(config_path.getValue()), 0);
 
@@ -202,7 +204,7 @@ int main(int argc, char** argv)
   addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
   addPreBehaviorTreatment();
   addRobotComTasks();
-  addTaskShortCutProcessIfNoVisionData();
+  //  addTaskShortCutProcessIfNoVisionData();
 
   ExecutionManager::getManager().addTask(new ConditionalTask(
       []() -> bool {

@@ -50,6 +50,8 @@ struct Config
 
   static double period;
 
+  static bool is_in_mixcontrol;
+
   static double robot_radius;
   static double ball_radius;
   static double max_wheel_speed;
