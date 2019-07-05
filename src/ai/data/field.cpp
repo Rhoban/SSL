@@ -13,6 +13,8 @@ Field::Field()
   boundary_width_ = 0.1;
   penalty_area_depth_ = 1.0;
   penalty_area_width_ = 2.0;
+
+  updateAdditionnalInformations();
 }
 
 void Field::updateAdditionnalInformations()
@@ -40,14 +42,14 @@ void Field::updateAdditionnalInformations()
   corners_[SW] = rhoban_geometry::Point(-field_length_ / 2.0, -field_width_ / 2.0);
   quarter_centers_[SW] = rhoban_geometry::Point(-field_length_ / 4.0, -field_width_ / 4.0);
   // NW
-  corners_[NW] = rhoban_geometry::Point(field_length_ / 2.0, -field_width_ / 2.0);
-  quarter_centers_[NW] = rhoban_geometry::Point(field_length_ / 4.0, -field_width_ / 4.0);
+  corners_[NW] = rhoban_geometry::Point(-field_length_ / 2.0, field_width_ / 2.0);
+  quarter_centers_[NW] = rhoban_geometry::Point(-field_length_ / 4.0, field_width_ / 4.0);
   // NE
   corners_[NE] = rhoban_geometry::Point(field_length_ / 2.0, field_width_ / 2.0);
   quarter_centers_[NE] = rhoban_geometry::Point(field_length_ / 4.0, field_width_ / 4.0);
   // SE
-  corners_[SE] = rhoban_geometry::Point(-field_length_ / 2.0, field_width_ / 2.0);
-  quarter_centers_[SE] = rhoban_geometry::Point(-field_length_ / 4.0, field_width_ / 4.0);
+  corners_[SE] = rhoban_geometry::Point(field_length_ / 2.0, -field_width_ / 2.0);
+  quarter_centers_[SE] = rhoban_geometry::Point(field_length_ / 4.0, -field_width_ / 4.0);
 
   penalty_areas_[Ally] =
       Box(rhoban_geometry::Point(-field_length_ / 2.0, -penalty_area_width_ / 2.0),
