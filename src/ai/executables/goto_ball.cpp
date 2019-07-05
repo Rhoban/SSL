@@ -223,7 +223,7 @@ int main(int argc, char** argv)
         return false;
       }));
 
-  ExecutionManager::getManager().run(0.2);
+  ExecutionManager::getManager().run(ai::Config::period);
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

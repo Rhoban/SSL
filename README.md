@@ -20,6 +20,9 @@ sudo apt-get install -y g++ cmake libprotobuf-dev \
   libgtest-dev libwebsockets-dev gnuplot
 ```
 
+To install the new viewer, we have conflits between the npm and the libwebsockets.
+Go to here https://github.com/nodesource/distributions/blob/master/README.md and install npm.
+
 ### Catkin
 
 Now install catkin:
