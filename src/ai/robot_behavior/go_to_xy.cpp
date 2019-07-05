@@ -51,10 +51,17 @@ void GoToXY::update(double time, const data::Robot& robot, const data::Ball& bal
   }
   rhoban_geometry::Point position_follower = target_point_;
 
-  Vector2d vect_robot_target = target_point_ - robot_position;
-  ContinuousAngle rotation_follower = vector2angle(vect_robot_target);
+  if (!reached_)
+  {
+    Vector2d vect_robot_target = target_point_ - robot_position;
+    rotation_follower_ = vector2angle(vect_robot_target).value();
+  }
+  if (angle_)
+  {
+    rotation_follower_ = 0;
+  }
 
-  follower_->setFollowingPosition(position_follower, rotation_follower);
+  follower_->setFollowingPosition(position_follower, rotation_follower_);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }

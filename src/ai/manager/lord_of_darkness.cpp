@@ -179,17 +179,16 @@ LordOfDarkness::LordOfDarkness(std::string name)
   kick_strats_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
   kick_strats_[1] = { strategy::KeeperStrat::name };
 
-  kick_strats_indirect_[8] = { strategy::KeeperStrat::name, strategy::AttaqueWithSupportMs::name,
-                               strategy::MurStop::name, strategy::Wall_2::name, strategy::Defensive::name };
-  kick_strats_indirect_[7] = { strategy::KeeperStrat::name, strategy::AttaqueWithSupportMs::name,
-                               strategy::MurStop::name, strategy::Wall::name, strategy::Defensive::name };
-  kick_strats_indirect_[6] = { strategy::KeeperStrat::name, strategy::AttaqueWithSupportMs::name,
-                               strategy::MurStop::name, strategy::Wall::name };
-  kick_strats_indirect_[5] = { strategy::KeeperStrat::name, strategy::AttaqueWithSupportMs::name,
-                               strategy::MurStop::name };
-  kick_strats_indirect_[4] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
-  kick_strats_indirect_[3] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::Wall::name };
-  kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
+  kick_strats_indirect_[8] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+                               strategy::Wall_2::name, strategy::Defensive::name };
+  kick_strats_indirect_[7] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+                               strategy::Wall::name, strategy::Defensive::name };
+  kick_strats_indirect_[6] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+                               strategy::Wall::name };
+  kick_strats_indirect_[5] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name };
+  kick_strats_indirect_[4] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name };
+  kick_strats_indirect_[3] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::Wall::name };
+  kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerV2::name };
   kick_strats_indirect_[1] = { strategy::KeeperStrat::name };
 
   direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
@@ -217,16 +216,17 @@ LordOfDarkness::LordOfDarkness(std::string name)
 
   registerStrategy("kickoff_ally_placement_M", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                    [&](double time, double dt) {
-                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
-                                                     go->setPoint(rhoban_geometry::Point(-0.15, 0));
+                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY(
+                                                         rhoban_geometry::Point(-0.15, 0), 0.01, true);
+
                                                      return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                                                    },
                                                    false  // we don't want to define a goal here !
                                                    )));
   registerStrategy("kickoff_opponent_placement_M", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                        [&](double time, double dt) {
-                                                         robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
-                                                         go->setPoint(rhoban_geometry::Point(-0.6, 0));
+                                                         robot_behavior::GoToXY* go = new robot_behavior::GoToXY(
+                                                             rhoban_geometry::Point(-0.6, 0), 0.01, true);
                                                          return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                                                        },
                                                        false  // we don't want to define a goal here !
@@ -234,8 +234,8 @@ LordOfDarkness::LordOfDarkness(std::string name)
 
   registerStrategy("kickoff_ally_placement_L", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                    [&](double time, double dt) {
-                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
-                                                     go->setPoint(rhoban_geometry::Point(-2, 2));
+                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY(
+                                                         rhoban_geometry::Point(-2, 2), 0.01, true);
                                                      return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                                                    },
                                                    false  // we don't want to define a goal here !
@@ -243,8 +243,9 @@ LordOfDarkness::LordOfDarkness(std::string name)
 
   registerStrategy("kickoff_ally_placement_R", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                    [&](double time, double dt) {
-                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY();
-                                                     go->setPoint(rhoban_geometry::Point(-2, -2));
+                                                     robot_behavior::GoToXY* go = new robot_behavior::GoToXY(
+                                                         rhoban_geometry::Point(-2, -2), 0.01, true);
+
                                                      return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                                                    },
                                                    false  // we don't want to define a goal here !
@@ -273,7 +274,8 @@ LordOfDarkness::LordOfDarkness(std::string name)
                                )));
   registerStrategy("GT", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                              [&](double time, double dt) {
-                               robot_behavior::GoToXY* go = new robot_behavior::GoToXY(rhoban_geometry::Point(3.3, 0));
+                               robot_behavior::GoToXY* go =
+                                   new robot_behavior::GoToXY(rhoban_geometry::Point(3.3, 0), 0.01, true);
                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                              },
                              false  // we don't want to define a goal here !
@@ -298,7 +300,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy("GT1", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
                                 robot_behavior::GoToXY* go =
-                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 2.8));
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 2.8), 0.01, true);
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
                               false  // we don't want to define a goal here !
@@ -306,7 +308,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy("GT2", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
                                 robot_behavior::GoToXY* go =
-                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, -2.8));
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, -2.8), 0.01, true);
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
                               false  // we don't want to define a goal here !
@@ -314,7 +316,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy("GT3", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
                                 robot_behavior::GoToXY* go =
-                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 1.2));
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 1.2), 0.01, true);
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
                               false  // we don't want to define a goal here !
@@ -323,14 +325,15 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy("GT4", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
                                 robot_behavior::GoToXY* go =
-                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, -1.2));
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, -1.2), 0.01, true);
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
                               false  // we don't want to define a goal here !
                               )));
   registerStrategy("GT5", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
-                                robot_behavior::GoToXY* go = new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 0));
+                                robot_behavior::GoToXY* go =
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 0), 0.01, true);
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
                               false  // we don't want to define a goal here !
@@ -443,7 +446,7 @@ void LordOfDarkness::startPenaltyAlly()
 }
 void LordOfDarkness::startPenaltyOpponent()
 {
-  setBallAvoidanceForAllRobots(false);
+  setBallAvoidanceForAllRobots(true);
 }
 
 // Continue
