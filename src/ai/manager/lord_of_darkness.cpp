@@ -101,15 +101,15 @@ LordOfDarkness::LordOfDarkness(std::string name)
   halt_strats_[3] = { strategy::Halt::name };
   halt_strats_[2] = { strategy::Halt::name };
   halt_strats_[1] = { strategy::Halt::name };
-
-  stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[6] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[5] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall_2::name };
-  stop_strats_[4] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall::name };
-  stop_strats_[3] = { strategy::KeeperStrat::name, strategy::MurStop::name };
-  stop_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
-  stop_strats_[1] = { strategy::KeeperStrat::name };
+  /*
+    stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[6] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[5] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall_2::name };
+    stop_strats_[4] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall::name };
+    stop_strats_[3] = { strategy::KeeperStrat::name, strategy::MurStop::name };
+    stop_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
+    stop_strats_[1] = { strategy::KeeperStrat::name };*/
 
   // kickoff_ally
   kickoff_ally_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M",
@@ -418,7 +418,8 @@ void LordOfDarkness::startKickoffAlly()
 void LordOfDarkness::startKickoffOpponent()
 {
   setBallAvoidanceForAllRobots(false);
-  //TODO: Mettre une strat ici ?
+  // TODO: Mettre une strat ici ?
+  // nope pas besoin
 }
 
 void LordOfDarkness::startPreparePenaltyAlly()
@@ -437,14 +438,12 @@ void LordOfDarkness::startPreparePenaltyOpponent()
 void LordOfDarkness::startPenaltyAlly()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = penalty_strats_a_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startPenaltyOpponent()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = penalty_strats_o_[Manager::getValidPlayerIds().size() + 1];
-  declareAndAssignNextStrategies(future_strats_);
 }
 
 // Continue

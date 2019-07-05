@@ -101,7 +101,7 @@ void ManagerWithGameState::chooseAStrategy(double time)
         startPenaltyOpponent();
       }
     }
-    else if (game_state.getState() == state_name::penalty)
+    else if (game_state.getState() == state_name::prepare_penalty)
     {
       Team team_prepare_penalty = game_state.penaltyTeam();
       if (team_prepare_penalty == Ally)
