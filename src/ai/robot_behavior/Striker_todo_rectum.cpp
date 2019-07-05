@@ -46,6 +46,7 @@ void Striker_todo_rectum::update(double time, const data::Robot& robot, const da
 //   if (robot_position.getDist(Data::get()->ball.getMovement().linearPosition(time)) <= reach_radius_)
     if(Data::get()->robots[Ally][robot.id].infraRed() != true)
   {
+    rotated_ = false;
     rhoban_geometry::Point ball_pose = Data::get()->ball.getMovement().linearPosition(time);
     rhoban_geometry::Point position_follower = ball_pose;
     Vector2d vect_robot_target = ball_pose - robot_position;
@@ -74,6 +75,7 @@ Control Striker_todo_rectum::control() const
 {
   Control ctrl = follower_->control();
   ctrl.charge = true;
+  ctrl.kick = false;
   if(rotated_){
     ctrl.kick = true;
   }
