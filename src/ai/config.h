@@ -57,10 +57,21 @@ struct Config
   static double p_translation;
   static double i_translation;
   static double d_translation;
+
   // PID for orientation
   static double p_orientation;
   static double i_orientation;
   static double d_orientation;
+
+  // PID for translation for goalkeeper
+  static double p_translation_goalkeeper;
+  static double i_translation_goalkeeper;
+  static double d_translation_goalkeeper;
+
+  // PID for orientation for goalkeeper
+  static double p_orientation_goalkeeper;
+  static double i_orientation_goalkeeper;
+  static double d_orientation_goalkeeper;
 
   static bool enable_kicking;
 
