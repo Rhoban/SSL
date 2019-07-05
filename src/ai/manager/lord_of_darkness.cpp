@@ -168,30 +168,30 @@ LordOfDarkness::LordOfDarkness(std::string name)
   goalie_strats_[2] = { strategy::KeeperStrat::name };
   goalie_strats_[1] = { strategy::KeeperStrat::name };
 
-  kick_strats_[8] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
+  kick_strats_[8] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
                       strategy::Wall_2::name, strategy::Defensive2::name };
-  kick_strats_[7] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
+  kick_strats_[7] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
                       strategy::Wall_2::name, strategy::Defensive::name };
-  kick_strats_[6] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
+  kick_strats_[6] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
                       strategy::Wall_2::name };
-  kick_strats_[5] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::MurStop::name,
+  kick_strats_[5] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
                       strategy::Wall::name };
-  kick_strats_[4] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
-  kick_strats_[3] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::Wall::name };
+  kick_strats_[4] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name };
+  kick_strats_[3] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::Wall::name };
   kick_strats_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
   kick_strats_[1] = { strategy::KeeperStrat::name };
 
-  kick_strats_indirect_[8] = { strategy::KeeperStrat::name, strategy::AttaqueWithSupportMs::name,
+  kick_strats_indirect_[8] = { strategy::KeeperStrat::name, strategy::StrikerV2::name,
                                strategy::MurStop::name, strategy::Wall_2::name, strategy::Defensive::name };
-  kick_strats_indirect_[7] = { strategy::KeeperStrat::name, strategy::AttaqueWithSupportMs::name,
+  kick_strats_indirect_[7] = { strategy::KeeperStrat::name, strategy::StrikerV2::name,
                                strategy::MurStop::name, strategy::Wall::name, strategy::Defensive::name };
-  kick_strats_indirect_[6] = { strategy::KeeperStrat::name, strategy::AttaqueWithSupportMs::name,
+  kick_strats_indirect_[6] = { strategy::KeeperStrat::name, strategy::StrikerV2::name,
                                strategy::MurStop::name, strategy::Wall::name };
-  kick_strats_indirect_[5] = { strategy::KeeperStrat::name, strategy::AttaqueWithSupportMs::name,
+  kick_strats_indirect_[5] = { strategy::KeeperStrat::name, strategy::StrikerV2::name,
                                strategy::MurStop::name };
-  kick_strats_indirect_[4] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::MurStop::name };
-  kick_strats_indirect_[3] = { strategy::KeeperStrat::name, strategy::StrikerKick::name, strategy::Wall::name };
-  kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
+  kick_strats_indirect_[4] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name };
+  kick_strats_indirect_[3] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::Wall::name };
+  kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerV2::name };
   kick_strats_indirect_[1] = { strategy::KeeperStrat::name };
 
   direct_opponent_strats_[8] = { strategy::KeeperStrat::name, "WS1", "WS2", "SNF1", "SNF2", "SNF3" };
