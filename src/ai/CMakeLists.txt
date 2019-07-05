@@ -62,6 +62,7 @@ set (SOURCES
     robot_behavior/tutorials/medium/follow_robot.cpp
     robot_behavior/tutorials/medium/defender.cpp
     robot_behavior/kick_to_xy.cpp
+    robot_behavior/Striker_todo_rectum.cpp
     robot_behavior/striker.cpp
     robot_behavior/tests/kick_measure.cpp
     robot_behavior/ben_stealer.cpp
