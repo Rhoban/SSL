@@ -17,4 +17,4 @@ public:
 
   bool runTask();
 };
-}
+}  // namespace rhoban_ssl

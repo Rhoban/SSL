@@ -85,7 +85,8 @@ bool GoToXY::isReached()
   return reached_;
 }
 
-void GoToXY::dribbler(const bool is_active){
+void GoToXY::dribbler(const bool is_active)
+{
   dribbler_is_active_ = is_active;
 }
 
@@ -96,7 +97,8 @@ Control GoToXY::control() const
   {
     ctrl.spin = true;
   }
-  else{
+  else
+  {
     ctrl.spin = false;
   }
   return ctrl;

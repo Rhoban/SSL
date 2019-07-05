@@ -3,6 +3,7 @@
 #include "Master.h"
 #include <signal.h>
 #include <assert.h>
+#include <execution_manager.h>
 
 namespace rhoban_ssl
 {
@@ -42,10 +43,23 @@ Master::Master(std::string port, unsigned int baudrate)
     std::cout << "\x1b[31mERROR\x1b[0m : you probably didn't \x1b[32mplug the communication card\x1b[0m in USB ! "
               << std::endl
               << e.what() << std::endl;
+    stop();
     serial = nullptr;
+    rhoban_ssl::ExecutionManager::getManager().shutdown();
+    return;
   }
 
-  thread = new std::thread([=]() { this->execute(); });
+  thread = new std::thread([=]() {
+    try
+    {
+      this->execute();
+    }
+    catch (std::exception& e)
+    {
+      stop();
+      rhoban_ssl::ExecutionManager::getManager().shutdown();
+    }
+  });
 
   tmpPacket = "";
   tmpNbRobots = 0;
@@ -57,14 +71,17 @@ Master::Master(std::string port, unsigned int baudrate)
 Master::~Master()
 {
   stop();
-  thread->join();
+  if (thread != nullptr)
+  {
+    thread->join();
+    delete thread;
+  }
+
   if (serial != nullptr)
   {
     serial->close();
     delete serial;
   }
-
-  delete thread;
 }
 
 void Master::em()

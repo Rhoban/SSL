@@ -145,16 +145,16 @@ Json::Value ViewerCommunication::fieldPacket()
   Json::Value packet;
   const data::Field& field = Data::get()->field;
 
-  packet["field"]["length"] = field.field_length_;
-  packet["field"]["width"] = field.field_width_;
-  packet["field"]["boundary_width"] = field.boundary_width_;
-  packet["field"]["goal"]["width"] = field.goal_width_;
-  packet["field"]["goal"]["depth"] = field.goal_depth_;
-  packet["field"]["penalty_area"]["width"] = field.penalty_area_width_;
-  packet["field"]["penalty_area"]["depth"] = field.penalty_area_depth_;
-  packet["field"]["circle"]["x"] = field.circle_center_.getCenter().getX();
-  packet["field"]["circle"]["y"] = field.circle_center_.getCenter().getY();
-  packet["field"]["circle"]["radius"] = field.circle_center_.getRadius();
+  packet["field"]["length"] = field.field_length;
+  packet["field"]["width"] = field.field_width;
+  packet["field"]["boundary_width"] = field.boundary_width;
+  packet["field"]["goal"]["width"] = field.goal_width;
+  packet["field"]["goal"]["depth"] = field.goal_depth;
+  packet["field"]["penalty_area"]["width"] = field.penalty_area_width;
+  packet["field"]["penalty_area"]["depth"] = field.penalty_area_depth;
+  packet["field"]["circle"]["x"] = field.circle_center.getCenter().getX();
+  packet["field"]["circle"]["y"] = field.circle_center.getCenter().getY();
+  packet["field"]["circle"]["radius"] = field.circle_center.getRadius();
 
   return packet;
 }

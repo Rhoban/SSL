@@ -76,8 +76,7 @@ class AttaqueWithSupportMs : public Strategy
     static const constexpr char* db1_plus_constante_inf_db2 = "db1_inf_db2_plus_constante";
   };
 
-  typedef construct_machine_state_infrastructure<std::string, data::AiData, data::AiData>
-      machine_state_infrastructure;
+  typedef construct_machine_state_infrastructure<std::string, data::AiData, data::AiData> machine_state_infrastructure;
 
 private:
   machine_state_infrastructure::MachineState machine_;

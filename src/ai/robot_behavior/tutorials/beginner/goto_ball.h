@@ -58,6 +58,6 @@ public:
   virtual ~GotoBall();
 };
 
-};  // namespace Beginner
+};  // namespace beginner
 };  // namespace robot_behavior
 };  // namespace rhoban_ssl

@@ -42,12 +42,12 @@ void GotoBall::update(double time, const data::Robot& robot, const data::Ball& b
   rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
 
   Vector2d vect_robot_ball = ballPosition() - robot_position;
-  vect_robot_ball = vect_robot_ball /vect_robot_ball.norm();
-  vect_robot_ball*=ai::Config::robot_center_to_dribbler_center;
+  vect_robot_ball = vect_robot_ball / vect_robot_ball.norm();
+  vect_robot_ball *= ai::Config::robot_center_to_dribbler_center;
 
-   Vector2d ball_robot = robot_position - ballPosition();
-   ball_robot = ball_robot/ball_robot.norm();
-   ball_robot*= ai::Config::robot_center_to_dribbler_center;
+  Vector2d ball_robot = robot_position - ballPosition();
+  ball_robot = ball_robot / ball_robot.norm();
+  ball_robot *= ai::Config::robot_center_to_dribbler_center;
 
   rhoban_geometry::Point target_position = ball_robot + ballPosition();
 

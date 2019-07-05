@@ -89,10 +89,10 @@ void KickMeasure::update(double time, const data::Robot& robot, const data::Ball
         if (!printed_)
         {
           reached_dist_ = ball_first_position_.getDist(ballPosition());
-          if (ballPosition().x > (Data::get()->field.field_length_ / 2) ||
-              ballPosition().x < -(Data::get()->field.field_length_ / 2) ||
-              ballPosition().y > (Data::get()->field.field_width_ / 2) ||
-              ballPosition().y < -(Data::get()->field.field_width_ / 2))
+          if (ballPosition().x > (Data::get()->field.field_length / 2) ||
+              ballPosition().x < -(Data::get()->field.field_length / 2) ||
+              ballPosition().y > (Data::get()->field.field_width / 2) ||
+              ballPosition().y < -(Data::get()->field.field_width / 2))
           {
             reached_dist_ = -1;
           }

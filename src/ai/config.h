@@ -9,6 +9,12 @@ typedef int Team;
 const Team Ally = 0;
 const Team Opponent = 1;
 
+using cardinal_position = uint;
+static constexpr cardinal_position SW = 0;
+static constexpr cardinal_position NW = 1;
+static constexpr cardinal_position NE = 2;
+static constexpr cardinal_position SE = 3;
+
 namespace ai
 {
 class UpdateConfigTask : public Task

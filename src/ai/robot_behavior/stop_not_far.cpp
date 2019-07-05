@@ -52,12 +52,14 @@ void StopNotFar::update(double time, const data::Robot& robot, const data::Ball&
   }
   else
   {
-    if(ballPosition().getDist(Data::get()->field.getPenaltyArea(Ally).getSE()) < 0.51){
-       target_position = rhoban_geometry::Point(-3.25, -1.76);
-    }else{
-     target_position = rhoban_geometry::Point(-3.25, -1.25);
+    if (ballPosition().getDist(Data::get()->field.getPenaltyArea(Ally).getSE()) < 0.51)
+    {
+      target_position = rhoban_geometry::Point(-3.25, -1.76);
     }
-
+    else
+    {
+      target_position = rhoban_geometry::Point(-3.25, -1.25);
+    }
   }
   Vector2d vect_robot_ball = ballPosition() - linearPosition();
   target_rotation = vector2angle(vect_robot_ball);

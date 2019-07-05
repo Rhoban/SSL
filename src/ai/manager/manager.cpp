@@ -64,11 +64,11 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
   assert(strategies_.find(strategy_name) != strategies_.end());  // The name of the strategy is not declared. Please
                                                                  // register them with register_strategy() (during the
                                                                  // initialisation of your manager for example).
-  assert(not(assign_goalie) or (assign_goalie and
-                                std::find(robot_ids.begin(), robot_ids.end(),
-                                          Data::get()->referee.teams_info[Ally].goalkeeper_number) ==
-                                    robot_ids.end()));  // If you declare that you are assigning a goal, you should not
-                                                        // declar the goal id inside the list of field robots.
+  assert(not(assign_goalie) or
+         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(),
+                                      Data::get()->referee.teams_info[Ally].goalkeeper_number) ==
+                                robot_ids.end()));  // If you declare that you are assigning a goal, you should not
+                                                    // declar the goal id inside the list of field robots.
 
   current_strategy_names_.push_front(strategy_name);
   strategy::Strategy& strategy = getStrategy(strategy_name);
@@ -342,7 +342,7 @@ void Manager::aggregateAllStartingPositionOfAllStrategies(const std::list<std::s
     if (!getStrategy(strategy_with_goal_)
              .getStartingPositionForGoalie(this->goalie_linear_position_, this->goalie_angular_position_))
     {
-      this->goalie_linear_position_ = rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0);
+      this->goalie_linear_position_ = rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, 0.0);
       this->goalie_angular_position_ = ContinuousAngle(0.0);
     }
   }
@@ -392,7 +392,7 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
     robot_consigns_[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
         rhoban_geometry::Point(
             -((5.0 * ai::Config::robot_radius) * (i - starting_positions_.size()) + 1.5 * ai::Config::robot_radius),
-            -Data::get()->field.field_width_ / 2.0 + ai::Config::robot_radius),
+            -Data::get()->field.field_width / 2.0 + ai::Config::robot_radius),
         ContinuousAngle(0.0));
     robot_affectations_[i] = *it;
     it++;

@@ -27,7 +27,7 @@ struct Box
 
   Box increase(double error) const;
 
-  bool is_inside(const rhoban_geometry::Point& position);
+  bool isInside(const rhoban_geometry::Point& point) const;
   std::vector<rhoban_geometry::Point> segmentIntersection(const rhoban_geometry::Point& origin,
                                                           const rhoban_geometry::Point& end) const;
   bool closestSegmentIntersection(const rhoban_geometry::Point& origin, const rhoban_geometry::Point& end,

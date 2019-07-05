@@ -105,19 +105,19 @@ void NavigationInsideTheField::update_control(double time, const data::Robot& ro
     rhoban_geometry::Point robot_position = linearPosition();
     double error = ai::Config::ball_radius * radius_margin_factor;
 
-    if (opponent_penalty.is_inside(robot_position))
+    if (opponent_penalty.isInside(robot_position))
     {
       // If we're in their penalty
       deviation_position_ = rhoban_geometry::Point(opponent_penalty.getSW().getX() - error, robot_position.getY());
     }
-    else if (not(isGoalie()) and ally_penalty.is_inside(robot_position))
+    else if (not(isGoalie()) and ally_penalty.isInside(robot_position))
     {
       // If we're in our penalty
       deviation_position_ = rhoban_geometry::Point(ally_penalty.getNE().getX() + error, robot_position.getY());
     }
     else
     {
-      if (cropped_field.is_inside(vector2point(target_position_)))
+      if (cropped_field.isInside(vector2point(target_position_)))
       {
         // Normal case, the goal position is in the field
         deviation_position_ = vector2point(target_position_);
@@ -128,28 +128,28 @@ void NavigationInsideTheField::update_control(double time, const data::Robot& ro
         cropped_field.closestSegmentIntersection(robot_position, vector2point(target_position_), deviation_position_);
       }
       // Here, deviation_position should be inside the field, but it could still be in a penalty area.
-      if (not(isGoalie()) and ally_penalty.is_inside(deviation_position_))
+      if (not(isGoalie()) and ally_penalty.isInside(deviation_position_))
       {
         ally_penalty_large.closestSegmentIntersection(robot_position, vector2point(deviation_position_),
                                                       deviation_position_);
-        if (not(cropped_field.is_inside(deviation_position_)))
+        if (not(cropped_field.isInside(deviation_position_)))
         {
-          deviation_position_ = deviation_position_ + Vector2d(Data::get()->field.penalty_area_depth_ + error, 0.0);
+          deviation_position_ = deviation_position_ + Vector2d(Data::get()->field.penalty_area_depth + error, 0.0);
         }
       }
-      else if (opponent_penalty.is_inside(deviation_position_))
+      else if (opponent_penalty.isInside(deviation_position_))
       {
         opponent_penalty_large.closestSegmentIntersection(robot_position, vector2point(deviation_position_),
                                                           deviation_position_);
-        if (not(cropped_field.is_inside(deviation_position_)))
+        if (not(cropped_field.isInside(deviation_position_)))
         {
-          deviation_position_ = deviation_position_ - Vector2d(Data::get()->field.penalty_area_depth_ + error, 0.0);
+          deviation_position_ = deviation_position_ - Vector2d(Data::get()->field.penalty_area_depth + error, 0.0);
         }
       }
     }
 
-    if ((not(isGoalie()) && ally_penalty.is_inside(deviation_position_)) ||
-        opponent_penalty.is_inside(deviation_position_))
+    if ((not(robot.is_goalie) && Data::get()->field.penalty_areas[Ally].isInside(deviation_position_)) ||
+        Data::get()->field.penalty_areas[Opponent].isInside(deviation_position_))
     {
       DEBUG("Damn, deviation_position is still inside a penalty (this is a bug)...");
     }

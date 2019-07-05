@@ -47,7 +47,7 @@ AttaqueWithSupportMs::AttaqueWithSupportMs()
   , begin_time_(0)
   , diff_distance_constante_(0.5)
   , fgbm_constante_(0.05)
-{ 
+{
   // STATES
   machine_.addState(state_name::strike_search,
                     [this](const data::AiData& data, unsigned int run_number, unsigned int atomic_run_number) {

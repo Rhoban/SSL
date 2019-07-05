@@ -12,9 +12,9 @@ class AI;
 
 void addCoreTasks();
 void addVisionTasks(std::string vision_addr, std::string vision_port, vision::PartOfTheField part_of_the_field_used);
-void addRefereeTasks();
+void addRefereeTasks(std::string referee_port);
 void addViewerTasks(ai::AI* ai, int port);
 void addPreBehaviorTreatment();
 void addRobotComTasks();
 void addTaskShortCutProcessIfNoVisionData();
-}
+}  // namespace rhoban_ssl

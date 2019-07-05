@@ -114,7 +114,7 @@ bool VisionDataTerminalPrinter::runTask()
   // VisionDataGlobal::singleton_.packets_buffer_.size());
   auto& field = Data::get()->field;
   printf("Field is present : \n");
-  printf("\t %f x %f \n", field.field_width_, field.field_length_);
+  printf("\t %f x %f \n", field.field_width, field.field_length);
 
   for (uint camera = 0; camera < ai::Config::NB_CAMERAS; ++camera)
   {

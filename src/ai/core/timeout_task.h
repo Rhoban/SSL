@@ -13,4 +13,4 @@ public:
   TimeoutTask(double d);
   virtual bool runTask(void) override;
 };
-}
+}  // namespace rhoban_ssl

@@ -31,9 +31,8 @@ namespace strategy
 class Zizou : public Strategy
 {
 private:
-
-  const double DISTANCE_MAX = 0.4; // meters
-  const double TIME_MAX = 2; // seconds
+  const double DISTANCE_MAX = 0.4;  // meters
+  const double TIME_MAX = 2;        // seconds
   bool behaviors_are_assigned_;
   int state_ = 0;
   double offset_ = 0.8;
@@ -51,7 +50,6 @@ private:
   rhoban_geometry::Point position_initial_;
   bool first_state_1_ = true;
   double time_initial_;
-
 
 public:
   Zizou();

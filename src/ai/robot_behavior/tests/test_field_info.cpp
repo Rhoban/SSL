@@ -1,4 +1,5 @@
 #include "test_field_info.h"
+#include <iomanip>
 
 namespace rhoban_ssl
 {
@@ -12,6 +13,23 @@ TestFieldInfo::TestFieldInfo()
 
 void TestFieldInfo::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
+  const rhoban_geometry::Point& ball_position = ball.getMovement().linearPosition(time);
+  const data::Field field = Data::get()->field;
+
+  printf("\e[1;1H\e[2J");
+  std::cout << "---------------------------------------" << std::endl;
+  std::cout << std::setw(8) << "Ball position : " << ball_position << std::endl;
+  std::cout << std::setw(8) << "Robot position : " << robot.getMovement().linearPosition(time) << std::endl;
+
+  if (field.isInside(ball_position))
+    std::cout << std::setw(8) << "Ball inside the field" << std::endl;
+
+  for (int team = 0; team < 2; ++team)
+  {
+    std::string desc = (team == Ally) ? "ally" : "opponent";
+    if (field.getPenaltyArea(team).isInside(ball_position))
+      std::cout << std::setw(8) << "Ball inside the " << desc << " penalty area" << std::endl;
+  }
 }
 
 Control TestFieldInfo::control() const
@@ -23,8 +41,17 @@ annotations::Annotations TestFieldInfo::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
 
-  annotations.addBox(Data::get()->field.getPenaltyArea(Opponent), "red");
-  annotations.addBox(Data::get()->field.getPenaltyArea(Ally), "green");
+  for (int team = 0; team < 2; ++team)
+  {
+    std::string color = (team == Ally) ? "green" : "red";
+
+    annotations.addBox(Data::get()->field.getPenaltyArea(team), color);
+    annotations.addCross(Data::get()->field.getCenterHalfField(team), color);
+
+    annotations.addCross(Data::get()->field.getGoal(team).pole_left, color);
+    annotations.addCross(Data::get()->field.getGoal(team).pole_right, color);
+    annotations.addCross(Data::get()->field.getGoal(team).goal_center, color);
+  }
 
   for (uint i = 0; i < 4; ++i)
   {
@@ -32,19 +59,7 @@ annotations::Annotations TestFieldInfo::getAnnotations() const
     annotations.addCross(Data::get()->field.getQuarterCenter(i), "black");
   }
 
-  annotations.addCross(Data::get()->field.getCenterHalfField(Ally), "grey");
-  annotations.addCross(Data::get()->field.getCenterHalfField(Opponent), "grey");
-
   annotations.addCross(Data::get()->field.centerMark(), "black");
-
-  annotations.addCross(Data::get()->field.getGoal(Ally).pole_left_, "blue");
-  annotations.addCross(Data::get()->field.getGoal(Ally).pole_right_, "blue");
-  annotations.addCross(Data::get()->field.getGoal(Ally).goal_center_, "blue");
-
-  annotations.addCross(Data::get()->field.getGoal(Opponent).pole_left_, "red");
-  annotations.addCross(Data::get()->field.getGoal(Opponent).pole_right_, "red");
-  annotations.addCross(Data::get()->field.getGoal(Opponent).goal_center_, "red");
-
   return annotations;
 }
 

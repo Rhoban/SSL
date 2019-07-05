@@ -123,9 +123,7 @@ void Commander::moveBall(double x, double y, double vx, double vy)
     if (Data::get()->referee.allyOnPositiveHalf())
     {
       x *= -1;
-      y *= -1;
     }
-    std::cerr << "move ball " << vx << " " << vy << std::endl;
     sim_->moveBall(x, y, vx, vy);
   }
   else
@@ -142,7 +140,6 @@ void Commander::moveRobot(bool ally, int id, double x, double y, double theta)
     if (Data::get()->referee.allyOnPositiveHalf())
     {
       x *= -1;
-      y *= -1;
       theta += M_PI;
     }
 

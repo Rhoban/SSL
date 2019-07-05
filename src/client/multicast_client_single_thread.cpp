@@ -612,4 +612,4 @@ void MulticastClientSingleThread2019::init()
   }
   running = true;
 }
-}
+}  // namespace rhoban_ssl
