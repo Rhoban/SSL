@@ -136,6 +136,15 @@ public:
    */
   void addArrow(const Vector2d& origin, const Vector2d& end, std::string stroke_color = "white", bool dashed = false);
 
+/**
+   * @brief addArrow
+   * @param origin
+   * @param directional vector
+   * @param stroke_color
+   * @param dashed
+   */
+  void addArrow(const rhoban_geometry::Point& origin, const Vector2d& direction, std::string stroke_color, bool dashed);
+
   void addArrow(const rhoban_geometry::Segment& s, std::string stroke_color = "white", bool dashed = false);
 
   /*******************************************************************************************
