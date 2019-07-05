@@ -60,7 +60,7 @@ Keeper::Keeper() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
   goalkeeper_trajectory_ =
       rhoban_geometry::Circle(circle_center_of_the_trajectory, circle_radius_center_of_the_trajectory);
 
-  goalkeeper_zone_ = Box(pole_left + rhoban_geometry::Point(0.0, -robot_diameter), pole_right + offset + rhoban_geometry::Point(distanciation, robot_diameter));
+  goalkeeper_zone_ = Box(pole_left, pole_right + offset + rhoban_geometry::Point(distanciation, 0.0));
 }
 
 void Keeper::update(double time, const data::Robot& robot, const data::Ball& ball)
@@ -94,7 +94,7 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   rhoban_geometry::Point ball_position = ball.getMovement().linearPosition(time);
   Vector2d ball_trajectory = ball.getMovement().linearVelocity(time);
   annotations_.addArrow(ball_position, goal_center_, "red", true);
-  annotations_.addArrow(ball_position, ball_trajectory, "orange", true); //ca deconne ici
+  annotations_.addArrow(ball_position, ball_trajectory, "orange", true);  // ca deconne ici
 
   annotations_.addArrow(ball_position, goal_center_, "red", true);
   annotations_.addArrow(ball_position, ball_position + ball_trajectory, "orange", true);  // ca deconne ici
@@ -112,14 +112,15 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   std::vector<rhoban_geometry::Point> intersections = rhoban_geometry::getIntersectionLineWithCircle(
       ball_position, ball_position + ball_trajectory, goalkeeper_trajectory_);
   DEBUG("intersections vector size" << intersections.size());
-  for(int i = 0; i < intersections.size(); ++i) {
+  for (int i = 0; i < intersections.size(); ++i)
+  {
     DEBUG(intersections.at(i));
   }
-  if(intersections.size() == 2) {
+  if (intersections.size() == 2)
+  {
     annotations_.addArrow(intersections.at(0), intersections.at(1), "purple", true);
     ;
-    }
-
+  }
 
   if (intersections.size() == 0)
   {
@@ -221,10 +222,10 @@ rhoban_geometry::Point Keeper::placeBetweenGoalCenterAndBall(const rhoban_geomet
                   1 :
                   -1;  // assign 1 or -1 whether the ball is the same side as the left pole or not
 
-  double position_to_take_y = signe * (1 - cos_theta) *
-                              std::abs(Data::get()->field.getGoal(Ally).pole_left.getY() -
-                                       Data::get()->field.getGoal(Ally).pole_right.getY()) /
-                              2;
+  double position_to_take_y =
+      signe * (1 - cos_theta) *
+      std::abs(Data::get()->field.getGoal(Ally).pole_left.getY() - Data::get()->field.getGoal(Ally).pole_right.getY()) /
+      2;
   rhoban_geometry::Point position_to_take =
       goal_center + rhoban_geometry::Point(ai::Config::robot_radius * 2, position_to_take_y);
   return position_to_take;
