@@ -88,6 +88,7 @@ set (SOURCES
     robot_behavior/stop_not_far_3.cpp
     robot_behavior/wall_stop.cpp
     robot_behavior/wall_stop_2.cpp
+    robot_behavior/tests/test_prediction.cpp
     ai.cpp
     debug.cpp
     task_example.cpp
