@@ -176,7 +176,7 @@ int main(int argc, char** argv)
   {
     part_of_the_field_used = vision::PartOfTheField::ALL_FIELD;
   }
-  else if (zone_name.getValue() == "positive")
+  else if (zone_name.getValue() == "positive" && !yellow.getValue())
   {
     part_of_the_field_used = vision::PartOfTheField::POSIVE_HALF_FIELD;
   }
@@ -192,9 +192,9 @@ int main(int argc, char** argv)
 
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
+  ai::Config::load(config_path.getValue());
 
   ExecutionManager::getManager().addTask(new ai::UpdateConfigTask(config_path.getValue()));
-  //  ai::Config::load(config_path.getValue());
 
   if (ai::Config::is_in_simulation)
     ai::Config::ntpd_enable = false;

@@ -18,14 +18,16 @@ void TestFieldInfo::update(double time, const data::Robot& robot, const data::Ba
 
   printf("\e[1;1H\e[2J");
   std::cout << "---------------------------------------" << std::endl;
+  std::cout << std::setw(8) << "Ball position : " << ball_position << std::endl;
+
   if (field.isInside(ball_position))
-    std::cout << std::setw(20) << "Ball inside the field" << std::endl;
+    std::cout << std::setw(8) << "Ball inside the field" << std::endl;
 
   for (int team = 0; team < 2; ++team)
   {
     std::string desc = (team == Ally) ? "ally" : "opponent";
     if (field.getPenaltyArea(team).isInside(ball_position))
-      std::cout << std::setw(20) << "Ball inside the " << desc << " penalty area" << std::endl;
+      std::cout << std::setw(8) << "Ball inside the " << desc << " penalty area" << std::endl;
   }
 }
 

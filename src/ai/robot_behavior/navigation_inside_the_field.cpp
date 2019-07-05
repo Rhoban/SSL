@@ -148,8 +148,8 @@ void NavigationInsideTheField::update_control(double time, const data::Robot& ro
       }
     }
 
-    if ((not(isGoalie()) && ally_penalty.isInside(deviation_position_)) ||
-        opponent_penalty.isInside(deviation_position_))
+    if ((not(robot.is_goalie) && Data::get()->field.penalty_areas[Ally].isInside(deviation_position_)) ||
+        Data::get()->field.penalty_areas[Opponent].isInside(deviation_position_))
     {
       DEBUG("Damn, deviation_position is still inside a penalty (this is a bug)...");
     }

@@ -13,12 +13,12 @@ bool objectCoordonateIsValid(double x, double y, vision::PartOfTheField part_of_
   {
     case PartOfTheField::POSIVE_HALF_FIELD:
     {
-      return x > ERROR_FIELD;
+      return (ai::Config::we_are_blue) ? x > ERROR_FIELD : x < ERROR_FIELD;
     }
     break;
     case PartOfTheField::NEGATIVE_HALF_FIELD:
     {
-      return x < ERROR_FIELD;
+      return (ai::Config::we_are_blue) ? x < ERROR_FIELD : x > ERROR_FIELD;
     }
     break;
     case PartOfTheField::ALL_FIELD:
