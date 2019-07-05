@@ -188,6 +188,7 @@ bool ChangeReferencePointOfView::runTask()
           struct BallDetection& ball =
               VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].balls_[ball_id];
           ball.x_ *= -1.f;
+          ball.y_ *= -1.f;
         }
 
         for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
@@ -195,6 +196,7 @@ bool ChangeReferencePointOfView::runTask()
           struct RobotDetection& ally_robot =
               VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].allies_[robot_id];
           ally_robot.x_ *= -1.f;
+          ally_robot.y_ *= -1.f;
 
           if (ally_robot.has_orientation_)
           {
@@ -204,6 +206,7 @@ bool ChangeReferencePointOfView::runTask()
           struct RobotDetection& opponent_robot =
               VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].opponents_[robot_id];
           opponent_robot.x_ *= -1.f;
+          opponent_robot.y_ *= -1.f;
 
           if (opponent_robot.has_orientation_)
           {

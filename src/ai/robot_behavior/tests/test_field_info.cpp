@@ -19,6 +19,7 @@ void TestFieldInfo::update(double time, const data::Robot& robot, const data::Ba
   printf("\e[1;1H\e[2J");
   std::cout << "---------------------------------------" << std::endl;
   std::cout << std::setw(8) << "Ball position : " << ball_position << std::endl;
+  std::cout << std::setw(8) << "Robot position : " << robot.getMovement().linearPosition(time) << std::endl;
 
   if (field.isInside(ball_position))
     std::cout << std::setw(8) << "Ball inside the field" << std::endl;

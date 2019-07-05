@@ -202,12 +202,6 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
     return;
 
   preventCollision(robot_id, ctrl);
-
-  if (Data::get()->referee.allyOnPositiveHalf())
-  {
-    ctrl.linear_velocity[0] *= -1;
-    ctrl.angular_velocity += M_PI;
-  }
   ctrl.changeToRelativeControl(
       Data::get()->robots[Ally][robot_id].getMovement().angularPosition(Data::get()->time.now()), ai::Config::period);
 }
