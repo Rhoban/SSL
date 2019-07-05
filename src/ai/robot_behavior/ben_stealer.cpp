@@ -105,6 +105,7 @@ void BenStealer::update(double time, const data::Robot& robot, const data::Ball&
 Control BenStealer::control() const
 {
   Control ctrl = follower_->control();
+  /*
   if (in_front_of_ || go_back_)
   {
     ctrl.spin = true;
@@ -112,7 +113,7 @@ Control BenStealer::control() const
   else
   {
     ctrl.spin = false;
-  }
+  }*/
   return ctrl;
 }
 
