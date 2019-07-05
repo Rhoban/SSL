@@ -63,9 +63,11 @@ void NavigationInsideTheField::update(double time, const data::Robot& robot, con
 
 void NavigationInsideTheField::update_control(double time, const data::Robot& robot, const data::Ball& ball)
 {
-  if (Data::get()->ai_data.force_ball_avoidance &&
-      (ballPosition().x - robot.getMovement().linearPosition(time).x) <= 0)  // last condition used for behaviors which go
-                                                                         // to ally side
+  annotations_.clear();
+  if ((Data::get()->ai_data.force_ball_avoidance) && (ballPosition().x > -2.5) &&
+      ((ballPosition().x - robot.getMovement().linearPosition(time).x) <= 0)  // most common case, robot come from
+
+  )
   {
     this->position_follower_.setRadiusAvoidanceForTheBall(ai::Config::robot_radius + ai::Config::ball_radius +
                                                           ai::Config::rules_avoidance_distance);
@@ -208,6 +210,7 @@ rhoban_ssl::annotations::Annotations NavigationInsideTheField::getAnnotations() 
     annotations.addArrow(deviation_position_, target_position_, "yellow");
   }
   annotations.addAnnotations(position_follower_.getAnnotations());
+  annotations.addAnnotations(annotations_);
   // annotations.addBox( opponent_penalty_area(), "red" );
   // annotations.addBox( ally_penalty_area(), "red" );
   return annotations;
