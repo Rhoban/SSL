@@ -41,6 +41,8 @@ private:
 
   bool angle_;
 
+  double rotation_follower_ = 0;
+
 public:
   GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01,
          bool angle = false);
