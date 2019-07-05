@@ -27,7 +27,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class GoToXY : public RobotBehavior
+class Striker_todo_rectum : public RobotBehavior
 {
 private:
   ConsignFollower* follower_;
@@ -37,15 +37,10 @@ private:
 
   bool reached_;
   double reach_radius_;
-  bool dribbler_is_active_ = false;
-
-  bool angle_;
-
-  double rotation_follower_ = 0;
+  bool rotated_ = false;
 
 public:
-  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01,
-         bool angle = false);
+  Striker_todo_rectum(rhoban_geometry::Point point = Data::get()->field.getGoal(Opponent).goal_center);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
@@ -55,17 +50,17 @@ public:
 
   rhoban_geometry::Point getPoint() const;
 
-  void setReachRadius(double radius);
+//   void setReachRadius(double radius);
 
-  double getReachRadius() const;
+//   double getReachRadius() const;
 
   bool isReached();
-
-  void dribbler(const bool is_active);
+  
+//   void dribbler(const bool is_active);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~GoToXY();
+  virtual ~Striker_todo_rectum();
 };
 
 };  // namespace robot_behavior

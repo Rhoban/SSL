@@ -27,45 +27,22 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-class GoToXY : public RobotBehavior
+class WallStop2 : public RobotBehavior
 {
 private:
   ConsignFollower* follower_;
   rhoban_ssl::annotations::Annotations annotations_;
 
-  rhoban_geometry::Point target_point_;
-
-  bool reached_;
-  double reach_radius_;
-  bool dribbler_is_active_ = false;
-
-  bool angle_;
-
-  double rotation_follower_ = 0;
-
 public:
-  GoToXY(rhoban_geometry::Point point = rhoban_geometry::Point(0, 0), double reach_radius = 0.01,
-         bool angle = false);
+  WallStop2();
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
 
-  void setPoint(rhoban_geometry::Point point);
-
-  rhoban_geometry::Point getPoint() const;
-
-  void setReachRadius(double radius);
-
-  double getReachRadius() const;
-
-  bool isReached();
-
-  void dribbler(const bool is_active);
-
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  virtual ~GoToXY();
+  virtual ~WallStop2();
 };
 
 };  // namespace robot_behavior

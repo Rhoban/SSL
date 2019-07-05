@@ -25,12 +25,13 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-GoToXY::GoToXY(rhoban_geometry::Point point, double reach_radius)
+GoToXY::GoToXY(rhoban_geometry::Point point, double reach_radius, bool angle)
   : RobotBehavior()
   , follower_(Factory::fixedConsignFollower())
   , target_point_(point)
   , reached_(false)
   , reach_radius_(reach_radius)
+  , angle_(angle)
 
 {
 }

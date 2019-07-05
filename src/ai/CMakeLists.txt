@@ -194,11 +194,11 @@ target_link_libraries(keeper2 ssl_ai ${ALL_LIBS})
 add_executable(goto_ball executables/goto_ball.cpp)
 target_link_libraries(goto_ball ssl_ai ${ALL_LIBS})
 
-add_executable(goto_nv executables/goto_nv.cpp)
-target_link_libraries(goto_nv ssl_ai ${ALL_LIBS})
-
-add_executable(go_to_xy_nv executables/go_to_xy_nv.cpp)
-target_link_libraries(go_to_xy_nv ssl_ai ${ALL_LIBS})
+# add_executable(goto_nv executables/goto_nv.cpp)
+# target_link_libraries(goto_nv ssl_ai ${ALL_LIBS})
+# 
+# add_executable(go_to_xy_nv executables/go_to_xy_nv.cpp)
+# target_link_libraries(go_to_xy_nv ssl_ai ${ALL_LIBS})
 
 add_executable(go_to_xy executables/go_to_xy.cpp)
 target_link_libraries(go_to_xy ssl_ai ${ALL_LIBS})
