@@ -67,13 +67,13 @@ LordOfDarkness::LordOfDarkness(std::string name)
 {
   // strategies arrays begin at 1(case 0 unused) to directly acces the good strategy by giving number of disponible
 
-  offensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
-                           "StrikerRectum", strategy::Offensive::name };
-  offensive_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
-                           "StrikerRectum", strategy::Offensive::name };
-  offensive_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
-                           "StrikerRectum", strategy::Offensive::name };
-  offensive_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
+  offensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Wall2Passif::name,
+                           "StrikerRectum", strategy::Wall::name };
+  offensive_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Wall2Passif::name,
+                           "StrikerRectum", strategy::Wall::name };
+  offensive_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Wall2Passif::name,
+                           "StrikerRectum", strategy::Wall::name };
+  offensive_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Wall2Passif::name,
                            "StrikerRectum" };
   offensive_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive::name,
                            "StrikerRectum" };
@@ -81,18 +81,18 @@ LordOfDarkness::LordOfDarkness(std::string name)
   offensive_strats_[2] = { strategy::KeeperStrat::name, "StrikerRectum" };
   offensive_strats_[1] = { strategy::KeeperStrat::name };
 
-  defensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                           strategy::Offensive::name };
-  defensive_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                           strategy::Offensive::name };
-  defensive_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                           strategy::Offensive::name };
+  defensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Wall2Passif::name,
+                           "StrikerRectum" };
+  defensive_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Wall2Passif::name,
+                           "StrikerRectum" };
+  defensive_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Wall2Passif::name,
+                           "StrikerRectum" };
   defensive_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive::name,
                            "StrikerRectum" };
   defensive_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive::name,
                            "StrikerRectum" };
   defensive_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "StrikerRectum" };
-  defensive_strats_[2] = { strategy::KeeperStrat::name, strategy::Offensive::name };
+  defensive_strats_[2] = { strategy::KeeperStrat::name, "StrikerRectum" };
   defensive_strats_[1] = { strategy::KeeperStrat::name };
 
   // halt_strats
@@ -170,7 +170,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   goalie_strats_[1] = { strategy::KeeperStrat::name };
 
   kick_strats_[8] = { strategy::KeeperStrat::name, "StrikerRectum", strategy::MurStop::name,
-                      strategy::Wall_2::name, strategy::Defensive2::name };
+                      strategy::Wall_2::name, strategy::Wall2Passif::name };
   kick_strats_[7] = { strategy::KeeperStrat::name, "StrikerRectum", strategy::MurStop::name,
                       strategy::Wall_2::name, strategy::Defensive::name };
   kick_strats_[6] = { strategy::KeeperStrat::name, "StrikerRectum", strategy::MurStop::name,
