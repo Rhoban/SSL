@@ -36,7 +36,6 @@ struct state_name
   static const constexpr char* prepare_kickoff = "prepare_kickoff";
   static const constexpr char* penalty = "penalty";
   static const constexpr char* prepare_penalty = "prepare_penalty";
-
 };
 
 struct edge_name

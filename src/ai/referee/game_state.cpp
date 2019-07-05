@@ -235,7 +235,7 @@ GameState::GameState()
                            }
                          }
 
-                         );
+  );
 
   machine_state_.executeAtEachEdge([&](std::string edge_id, GameStateData& state_data, GameStateData& edge_data,
                                        unsigned int run_number,

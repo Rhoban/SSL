@@ -15,4 +15,4 @@ bool TimeoutTask::runTask()
   }
   return true;
 }
-}
+}  // namespace rhoban_ssl

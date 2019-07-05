@@ -111,7 +111,6 @@ public:
     MANAGER::startPreparePenaltyOpponent();
   }
 
-
   virtual void startPenaltyAlly()
   {
     MANAGER::setBallAvoidanceForAllRobots(false);

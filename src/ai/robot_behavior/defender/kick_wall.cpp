@@ -110,7 +110,8 @@ void KickWall::update(double time, const data::Robot& robot, const data::Ball& b
     norm_ball_perpendicular = 0.0001;
   }
   ball_perpendicular = ball_perpendicular / norm_ball_perpendicular;
-  target_position = ballPosition() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * ball_perpendicular;
+  target_position =
+      ballPosition() + ball_goal_vector * (distance_from_ball) + multiple_robot_offset * ball_perpendicular;
 
   follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);

@@ -85,4 +85,4 @@ void addTaskShortCutProcessIfNoVisionData()
   ExecutionManager::getManager().addTask(new ShortCutVision(), 299);
   ExecutionManager::getManager().setMaxTaskId(300);
 }
-}
+}  // namespace rhoban_ssl

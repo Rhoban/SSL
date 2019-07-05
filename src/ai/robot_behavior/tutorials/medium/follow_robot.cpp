@@ -26,8 +26,7 @@ namespace medium
  * With this behavior, the robot will go to its target until it reach a defined distance.
  * In short it follow its target without collide it.
  */
-FollowRobot::FollowRobot(int target_id)
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+FollowRobot::FollowRobot(int target_id) : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 
 {
   target_id_ = target_id;

@@ -29,7 +29,7 @@ private:
   // dumb_strat
   std::vector<std::list<std::string> > dumb_strats_;
 
-  //hal_strat
+  // hal_strat
   std::vector<std::list<std::string> > halt_strats_;
 
   std::list<std::string> future_strats_;

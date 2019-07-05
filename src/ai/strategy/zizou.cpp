@@ -84,17 +84,18 @@ void Zizou::update(double time)
   // Vector2d
   if (state_ == 0)
   {
-    if (dist_ball_robot < std::fabs(ai::Config::robot_radius / 2)+0.08) // Data::get()->robots[Ally][id_].infraRed())
-      {
-        state_ = 1;
-        DEBUG("change to state 1");
-        behaviors_are_assigned_ = false;
-      }
+    if (dist_ball_robot < std::fabs(ai::Config::robot_radius / 2) + 0.08)  // Data::get()->robots[Ally][id_].infraRed())
+    {
+      state_ = 1;
+      DEBUG("change to state 1");
+      behaviors_are_assigned_ = false;
+    }
   }
   else if (state_ == 1)
   {
-    Vector2d vect = ((Data::get()->field.getGoal(Opponent).goal_center - ball_position)*goto_coef_);
-    goto_xy_direction_ = vector2point(vect);;
+    Vector2d vect = ((Data::get()->field.getGoal(Opponent).goal_center - ball_position) * goto_coef_);
+    goto_xy_direction_ = vector2point(vect);
+    ;
     if (first_state_1_)
     {  // save position
       first_state_1_ = false;

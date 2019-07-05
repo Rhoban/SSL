@@ -53,7 +53,7 @@ public:
   void setPokeDirection(rhoban_geometry::Point poke_direction);
 
   /**
-   * @brief set kick power of the poke 
+   * @brief set kick power of the poke
    *
    * @param kick_power
    * value between 0 and 1

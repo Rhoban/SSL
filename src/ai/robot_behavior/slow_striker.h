@@ -29,7 +29,6 @@ namespace robot_behavior
 class SlowStriker : public RobotBehavior
 {
 private:
-
   double tempo_;
   rhoban_geometry::Point striking_point_;
   int robot_to_pass_id_;

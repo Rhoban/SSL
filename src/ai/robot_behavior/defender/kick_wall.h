@@ -42,4 +42,4 @@ public:
 };
 
 };  // namespace robot_behavior
-}; // namespace rhoban_ssl
+};  // namespace rhoban_ssl

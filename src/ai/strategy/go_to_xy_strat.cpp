@@ -68,8 +68,7 @@ void GoToXYStrat::start(double time)
   behaviors_are_assigned_ = false;
   for (int i = 0; i < NB_ROBOT; i++)
   {
-    vect_go_to_xy_.push_back(
-        std::shared_ptr<robot_behavior::GoToXY>(new robot_behavior::GoToXY()));
+    vect_go_to_xy_.push_back(std::shared_ptr<robot_behavior::GoToXY>(new robot_behavior::GoToXY()));
   }
 }
 void GoToXYStrat::stop(double time)
@@ -79,13 +78,12 @@ void GoToXYStrat::stop(double time)
 
 void GoToXYStrat::update(double time)
 {
-  
 }
 
 void GoToXYStrat::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {  // queue:
-  for (int i = 0; i < NB_ROBOT ; i++)
+  for (int i = 0; i < NB_ROBOT; i++)
   {
     static_cast<robot_behavior::GoToXY*>(vect_go_to_xy_[i].get())->setPoint(positions_[i]);
     assign_behavior(playerId(i), vect_go_to_xy_.at(i));
@@ -122,7 +120,8 @@ bool GoToXYStrat::getStartingPositionForGoalie(rhoban_geometry::Point& linear_po
   return true;
 }
 
-void GoToXYStrat::setPositions(std::vector<rhoban_geometry::Point> positions){
+void GoToXYStrat::setPositions(std::vector<rhoban_geometry::Point> positions)
+{
   positions_ = positions;
 }
 

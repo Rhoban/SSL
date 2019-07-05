@@ -55,7 +55,7 @@ public:
   double getReachRadius() const;
 
   bool isReached();
-  
+
   void dribbler(const bool is_active);
 
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;

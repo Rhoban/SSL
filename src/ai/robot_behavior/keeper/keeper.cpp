@@ -34,11 +34,11 @@ rhoban_geometry::Point Keeper::calculateGoalPosition(const rhoban_geometry::Poin
 }
 
 Keeper::Keeper()
-  : Keeper::Keeper(
-        rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, Data::get()->field.goal_width / 2.0),
-        rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, -Data::get()->field.goal_width / 2.0),
-        rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, 0.0) + ai::Config::waiting_goal_position,
-        Data::get()->field.penalty_area_depth, ai::Config::robot_radius)
+  : Keeper::Keeper(rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, Data::get()->field.goal_width / 2.0),
+                   rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, -Data::get()->field.goal_width / 2.0),
+                   rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, 0.0) +
+                       ai::Config::waiting_goal_position,
+                   Data::get()->field.penalty_area_depth, ai::Config::robot_radius)
 {
 }
 
