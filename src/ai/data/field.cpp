@@ -6,108 +6,100 @@ namespace data
 {
 Field::Field()
 {
-  field_length_ = 9.0;
-  field_width_ = 6.0;
-  goal_width_ = 0.6;
-  goal_depth_ = 0.6;
-  boundary_width_ = 0.1;
-  penalty_area_depth_ = 1.0;
-  penalty_area_width_ = 2.0;
+  field_length = 9.0;
+  field_width = 6.0;
+  goal_width = 0.6;
+  goal_depth = 0.6;
+  boundary_width = 0.1;
+  penalty_area_depth = 1.0;
+  penalty_area_width = 2.0;
 }
 
 void Field::updateAdditionnalInformations()
 {
-  rhoban_geometry::Point ally_goal_center(-field_length_ / 2.0, 0.0);
-  rhoban_geometry::Point ally_pole_left(ally_goal_center.getX(), ally_goal_center.getY() - (goal_width_ / 2));
+  for (int team = 0; team < 2; ++team)
+  {
+    double sign = (team == Ally) ? -1.0 : 1.0;
+    goal[team].goal_center = rhoban_geometry::Point(-field_length * sign / 2.0, 0.0);
+    goal[team].pole_left = rhoban_geometry::Point(goal[team].goal_center.getX() * sign,
+                                                  goal[team].goal_center.getY() - (goal_width / 2) * sign);
+    goal[team].pole_right = rhoban_geometry::Point(goal[team].goal_center.getX() * sign,
+                                                   goal[team].goal_center.getY() + (goal_width / 2) * sign);
+    center_half_field[team] = rhoban_geometry::Point(field_length * sign / 4.0, 0);
+  }
 
-  rhoban_geometry::Point ally_pole_right(ally_goal_center.getX(), ally_goal_center.getY() + (goal_width_ / 2));
-  goal_[Ally].goal_center_ = ally_goal_center;
-  goal_[Ally].pole_left_ = ally_pole_left;
-  goal_[Ally].pole_right_ = ally_pole_right;
+  penalty_areas[Ally] =
+      Box(rhoban_geometry::Point(field_length / 2.0 * -1.0, penalty_area_width / 2.0 * -1.0),
+          rhoban_geometry::Point((field_length / 2.0 * -1 + penalty_area_depth), penalty_area_width / 2.0));
 
-  rhoban_geometry::Point opponent_goal_center(field_length_ / 2.0, 0.0);
-  rhoban_geometry::Point opponent_pole_left(opponent_goal_center.getX(),
-                                            opponent_goal_center.getY() - (goal_width_ / 2));
+  penalty_areas[Opponent] =
+      Box(rhoban_geometry::Point(field_length / 2.0 - penalty_area_depth, -penalty_area_width / 2.0),
+          rhoban_geometry::Point(field_length / 2.0, penalty_area_width / 2.0));
 
-  rhoban_geometry::Point opponent_pole_right(opponent_goal_center.getX(),
-                                             opponent_goal_center.getY() + (goal_width_ / 2));
+  Vector2d sw(-1, -1);
+  Vector2d nw(-1, 1);
+  Vector2d ne(1, 1);
+  Vector2d se(1, -1);
 
-  goal_[Opponent].goal_center_ = opponent_goal_center;
-  goal_[Opponent].pole_left_ = opponent_pole_left;
-  goal_[Opponent].pole_right_ = opponent_pole_right;
-
-  // SW
-  corners_[SW] = rhoban_geometry::Point(-field_length_ / 2.0, -field_width_ / 2.0);
-  quarter_centers_[SW] = rhoban_geometry::Point(-field_length_ / 4.0, -field_width_ / 4.0);
-  // NW
-  corners_[NW] = rhoban_geometry::Point(field_length_ / 2.0, -field_width_ / 2.0);
-  quarter_centers_[NW] = rhoban_geometry::Point(field_length_ / 4.0, -field_width_ / 4.0);
-  // NE
-  corners_[NE] = rhoban_geometry::Point(field_length_ / 2.0, field_width_ / 2.0);
-  quarter_centers_[NE] = rhoban_geometry::Point(field_length_ / 4.0, field_width_ / 4.0);
-  // SE
-  corners_[SE] = rhoban_geometry::Point(-field_length_ / 2.0, field_width_ / 2.0);
-  quarter_centers_[SE] = rhoban_geometry::Point(-field_length_ / 4.0, field_width_ / 4.0);
-
-  penalty_areas_[Ally] =
-      Box(rhoban_geometry::Point(-field_length_ / 2.0, -penalty_area_width_ / 2.0),
-          rhoban_geometry::Point(-field_length_ / 2.0 + penalty_area_depth_, penalty_area_width_ / 2.0));
-
-  penalty_areas_[Opponent] =
-      Box(rhoban_geometry::Point(field_length_ / 2.0 - penalty_area_depth_, -penalty_area_width_ / 2.0),
-          rhoban_geometry::Point(field_length_ / 2.0, penalty_area_width_ / 2.0));
-
-  center_half_field[Ally] = rhoban_geometry::Point(-field_length_ / 4.0, 0);
-  center_half_field[Opponent] = rhoban_geometry::Point(field_length_ / 4.0, 0);
+  Vector2d cardinal_points[4] = { sw, nw, ne, se };
+  for (int i = 0; i < 4; ++i)
+  {
+    corners[i] = rhoban_geometry::Point(field_length / 2.0 * cardinal_points[i].getX(),
+                                        field_width / 2.0 * cardinal_points[i].getY());
+    quarter_centers[i] = rhoban_geometry::Point(field_length / 4.0 * cardinal_points[i].getX(),
+                                                field_width / 4.0 * cardinal_points[i].getY());
+  }
+  box_ = Box(corners[SW], corners[NE]);
 }
 
 bool Field::isInside(const rhoban_geometry::Point& point) const
 {
-  return (std::fabs(point.getX()) < (field_length_ / 2.0 + boundary_width_) and
-          std::fabs(point.getY()) < (field_width_ / 2.0 + boundary_width_));
+  //  return (std::fabs(point.getX()) < (field_length / 2.0 + boundary_width) and
+  //          std::fabs(point.getY()) < (field_width / 2.0 + boundary_width));
+  return this->box_.isInside(point);
 }
 
 rhoban_geometry::Point Field::centerMark() const
 {
-  return circle_center_.getCenter();
+  return circle_center.getCenter();
 }
 
 Box Field::getPenaltyArea(Team team) const
 {
-  return penalty_areas_[team];
+  return penalty_areas[team];
 }
 
 rhoban_geometry::Point Field::goalCenter(Team team) const
 {
-  return goal_[team].goal_center_;
+  return goal[team].goal_center;
 }
 
-goal Field::getGoal(Team team) const
+Goal Field::getGoal(Team team) const
 {
-  return goal_[team];
+  return goal[team];
 }
 
 rhoban_geometry::Point Field::getSW() const
 {
-  return corners_[SW];
+  return corners[SW];
 }
 
-rhoban_geometry::Point Field::getCorner(const Field::cardinal_position& cardinal_position) const
+rhoban_geometry::Point Field::getCorner(const cardinal_position& cardinal_position) const
 {
-  return corners_[cardinal_position];
+  return corners[cardinal_position];
 }
 
 rhoban_geometry::Point Field::getNW() const
 {
-  return corners_[NW];
+  return corners[NW];
 }
 rhoban_geometry::Point Field::getNE() const
 {
-  return corners_[NE];
+  return corners[NE];
 }
 rhoban_geometry::Point Field::getSE() const
 {
-  return corners_[SE];
+  return corners[SE];
 }
 
 rhoban_geometry::Point Field::opponentCornerRight() const
@@ -120,14 +112,14 @@ rhoban_geometry::Point Field::opponentCornerLeft() const
   return getNE();
 }
 
-rhoban_geometry::Point Field::getQuarterCenter(const Field::cardinal_position& cardinal_position)
+rhoban_geometry::Point Field::getQuarterCenter(const cardinal_position& cardinal_position)
 {
-  return quarter_centers_[cardinal_position];
+  return quarter_centers[cardinal_position];
 }
 
 rhoban_geometry::Point* Field::getQuarterCenters()
 {
-  return quarter_centers_;
+  return quarter_centers;
 }
 
 rhoban_geometry::Point Field::getCenterHalfField(Team team)

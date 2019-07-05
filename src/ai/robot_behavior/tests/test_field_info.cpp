@@ -1,4 +1,5 @@
 #include "test_field_info.h"
+#include <iomanip>
 
 namespace rhoban_ssl
 {
@@ -12,6 +13,20 @@ TestFieldInfo::TestFieldInfo()
 
 void TestFieldInfo::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
+  const rhoban_geometry::Point& ball_position = ball.getMovement().linearPosition(time);
+  const data::Field field = Data::get()->field;
+
+  printf("\e[1;1H\e[2J");
+  std::cout << "---------------------------------------" << std::endl;
+  if (field.isInside(ball_position))
+    std::cout << std::setw(20) << "Ball inside the field" << std::endl;
+
+  for (int team = 0; team < 2; ++team)
+  {
+    std::string desc = (team == Ally) ? "ally" : "opponent";
+    if (field.getPenaltyArea(team).isInside(ball_position))
+      std::cout << std::setw(20) << "Ball inside the " << desc << " penalty area" << std::endl;
+  }
 }
 
 Control TestFieldInfo::control() const
@@ -37,13 +52,13 @@ annotations::Annotations TestFieldInfo::getAnnotations() const
 
   annotations.addCross(Data::get()->field.centerMark(), "black");
 
-  annotations.addCross(Data::get()->field.getGoal(Ally).pole_left_, "blue");
-  annotations.addCross(Data::get()->field.getGoal(Ally).pole_right_, "blue");
-  annotations.addCross(Data::get()->field.getGoal(Ally).goal_center_, "blue");
+  annotations.addCross(Data::get()->field.getGoal(Ally).pole_left, "blue");
+  annotations.addCross(Data::get()->field.getGoal(Ally).pole_right, "blue");
+  annotations.addCross(Data::get()->field.getGoal(Ally).goal_center, "blue");
 
-  annotations.addCross(Data::get()->field.getGoal(Opponent).pole_left_, "red");
-  annotations.addCross(Data::get()->field.getGoal(Opponent).pole_right_, "red");
-  annotations.addCross(Data::get()->field.getGoal(Opponent).goal_center_, "red");
+  annotations.addCross(Data::get()->field.getGoal(Opponent).pole_left, "red");
+  annotations.addCross(Data::get()->field.getGoal(Opponent).pole_right, "red");
+  annotations.addCross(Data::get()->field.getGoal(Opponent).goal_center, "red");
 
   return annotations;
 }

@@ -52,9 +52,9 @@ void Obstructor::update(double time, const data::Robot& robot, const data::Ball&
 
   rhoban_geometry::Point ally_goal_point = Data::get()->field.goalCenter(Ally);
   rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0);
+      rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, Data::get()->field.goal_width / 2.0);
   rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, -Data::get()->field.goal_width_ / 2.0);
+      rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, -Data::get()->field.goal_width / 2.0);
 
   const data::Robot& robot_to_obstruct = getRobot(robot_to_obstruct_id_, robot_to_obstruct_team_);
   point_to_obstruct_ = robot_to_obstruct.getMovement().linearPosition(time);

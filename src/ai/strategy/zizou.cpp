@@ -93,7 +93,7 @@ void Zizou::update(double time)
   }
   else if (state_ == 1)
   {
-    Vector2d vect = ((Data::get()->field.getGoal(Opponent).goal_center_ - ball_position)*goto_coef_);
+    Vector2d vect = ((Data::get()->field.getGoal(Opponent).goal_center - ball_position)*goto_coef_);
     goto_xy_direction_ = vector2point(vect);;
     if (first_state_1_)
     {  // save position
@@ -118,7 +118,7 @@ void Zizou::update(double time)
   }
   else if (state_ == 2)
   {
-    poke_direction_ = Data::get()->field.getGoal(Opponent).goal_center_;
+    poke_direction_ = Data::get()->field.getGoal(Opponent).goal_center;
     if (dist_ball_robot >
         (std::fabs(ai::Config::robot_radius / 2) + 0.05))  // Data::get()->robots[Ally][id_].infraRed())
     {

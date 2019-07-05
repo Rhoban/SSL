@@ -342,7 +342,7 @@ void Manager::aggregateAllStartingPositionOfAllStrategies(const std::list<std::s
     if (!getStrategy(strategy_with_goal_)
              .getStartingPositionForGoalie(this->goalie_linear_position_, this->goalie_angular_position_))
     {
-      this->goalie_linear_position_ = rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0);
+      this->goalie_linear_position_ = rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, 0.0);
       this->goalie_angular_position_ = ContinuousAngle(0.0);
     }
   }
@@ -392,7 +392,7 @@ void Manager::sortRobotOrderedByTheDistanceWithStartingPosition()
     robot_consigns_[i] = std::pair<rhoban_geometry::Point, ContinuousAngle>(
         rhoban_geometry::Point(
             -((5.0 * ai::Config::robot_radius) * (i - starting_positions_.size()) + 1.5 * ai::Config::robot_radius),
-            -Data::get()->field.field_width_ / 2.0 + ai::Config::robot_radius),
+            -Data::get()->field.field_width / 2.0 + ai::Config::robot_radius),
         ContinuousAngle(0.0));
     robot_affectations_[i] = *it;
     it++;

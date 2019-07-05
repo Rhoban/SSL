@@ -52,19 +52,19 @@ bool SslGeometryPacketAnalyzer::runTask()
       {
         data::Field& field = Data::get()->field;
 
-        field.field_length_ = geometry.field().field_length() / 1000.0;
-        field.field_width_ = geometry.field().field_width() / 1000.0;
-        field.goal_width_ = geometry.field().goal_width() / 1000.0;
-        field.goal_depth_ = geometry.field().goal_depth() / 1000.0;
-        field.boundary_width_ = geometry.field().boundary_width() / 1000.0;
+        field.field_length = geometry.field().field_length() / 1000.0;
+        field.field_width = geometry.field().field_width() / 1000.0;
+        field.goal_width = geometry.field().goal_width() / 1000.0;
+        field.goal_depth = geometry.field().goal_depth() / 1000.0;
+        field.boundary_width = geometry.field().boundary_width() / 1000.0;
         for (int i = 0; i < geometry.field().field_lines_size(); i++)
         {
           if (geometry.field().field_lines(i).name() == "LeftFieldLeftPenaltyStretch")
           {
-            field.penalty_area_depth_ = std::abs(double(geometry.field().field_lines(i).p1().x()) -
-                                                 double(geometry.field().field_lines(i).p2().x())) /
-                                        1000.0;
-            field.penalty_area_width_ = std::abs(2 * double(geometry.field().field_lines(i).p1().y())) / 1000.0;
+            field.penalty_area_depth = std::abs(double(geometry.field().field_lines(i).p1().x()) -
+                                                double(geometry.field().field_lines(i).p2().x())) /
+                                       1000.0;
+            field.penalty_area_width = std::abs(2 * double(geometry.field().field_lines(i).p1().y())) / 1000.0;
           }
         }
 
@@ -72,9 +72,9 @@ bool SslGeometryPacketAnalyzer::runTask()
         {
           if (geometry.field().field_arcs(i).name() == "CenterCircle")
           {
-            field.circle_center_ = rhoban_geometry::Circle(double(geometry.field().field_arcs(i).center().x()) / 1000.0,
-                                                           double(geometry.field().field_arcs(i).center().y()) / 1000.0,
-                                                           double(geometry.field().field_arcs(i).radius()) / 1000.0);
+            field.circle_center = rhoban_geometry::Circle(double(geometry.field().field_arcs(i).center().x()) / 1000.0,
+                                                          double(geometry.field().field_arcs(i).center().y()) / 1000.0,
+                                                          double(geometry.field().field_arcs(i).radius()) / 1000.0);
           }
         }
         field.updateAdditionnalInformations();

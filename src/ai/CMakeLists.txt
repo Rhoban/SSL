@@ -86,6 +86,10 @@ set (SOURCES
     robot_behavior/stop_not_far.cpp
     robot_behavior/stop_not_far_2.cpp
     robot_behavior/stop_not_far_3.cpp
+
+    robot_behavior/tests/test_navigation_inside_the_field.cpp
+
+
     ai.cpp
     debug.cpp
     task_example.cpp
@@ -204,6 +208,9 @@ target_link_libraries(dribbler ssl_ai ${ALL_LIBS})
 
 add_executable(check_vision executables/check_vision.cpp)
 target_link_libraries(check_vision ssl_ai ${ALL_LIBS})
+
+add_executable(test_field_info executables/tests/test_field_info.cpp)
+target_link_libraries(test_field_info ssl_ai ${ALL_LIBS})
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 

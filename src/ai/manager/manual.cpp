@@ -252,7 +252,7 @@ Manual::Manual(std::string name) : Manager(name)
   registerStrategy("slow striker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                        [&](double time, double dt) {
                                          robot_behavior::SlowStriker* kickW = new robot_behavior::SlowStriker();
-                                         kickW->declarePointToStrike(Data::get()->field.getGoal(Opponent).goal_center_);
+                                         kickW->declarePointToStrike(Data::get()->field.getGoal(Opponent).goal_center);
                                          return std::shared_ptr<robot_behavior::RobotBehavior>(kickW);
                                        },
                                        false  // we don't want to define a goal here !

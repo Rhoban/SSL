@@ -270,7 +270,7 @@ RobotPlacement PrepareKickoff::defaultDefendingKickoffPlacement() const
 
 rhoban_geometry::Point PrepareKickoff::relative2absolute(double x, double y) const
 {
-  return rhoban_geometry::Point(Data::get()->field.field_length_ / 2.0 * x, Data::get()->field.field_width_ / 2.0 * y);
+  return rhoban_geometry::Point(Data::get()->field.field_length / 2.0 * x, Data::get()->field.field_width / 2.0 * y);
 }
 
 }  // namespace strategy

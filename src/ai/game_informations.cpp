@@ -100,9 +100,9 @@ std::pair<rhoban_geometry::Point, double> GameInformations::findGoalBestMove(con
 
   rhoban_geometry::Point return_point;
   const rhoban_geometry::Point left_post_position =
-      rhoban_geometry::Point(Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0);
+      rhoban_geometry::Point(Data::get()->field.field_length / 2.0, Data::get()->field.goal_width / 2.0);
   const rhoban_geometry::Point right_post_position =
-      rhoban_geometry::Point(Data::get()->field.field_length_ / 2.0, -Data::get()->field.goal_width_ / 2.0);
+      rhoban_geometry::Point(Data::get()->field.field_length / 2.0, -Data::get()->field.goal_width / 2.0);
   const Vector2d left_right_post_vector = right_post_position - left_post_position;
   const double dist_post = left_right_post_vector.norm();
   const int nb_analysed_point = 16;
@@ -191,7 +191,7 @@ double GameInformations::getRobotDistanceFromAllyGoalCenter(int robot_number, Te
     const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(time());
     Vector2d goal_center_robot = robot_position - Data::get()->field.goalCenter(Ally);
     distance = goal_center_robot.norm();
-    distance = (Data::get()->field.field_length_ - distance) / Data::get()->field.field_length_;
+    distance = (Data::get()->field.field_length - distance) / Data::get()->field.field_length;
   }
   return distance;
 }
@@ -264,11 +264,11 @@ rhoban_geometry::Point GameInformations::ballPosition() const
 
 rhoban_geometry::Point GameInformations::centerAllyField() const
 {
-  return rhoban_geometry::Point(-Data::get()->field.field_length_ / 4.0, 0.0);
+  return rhoban_geometry::Point(-Data::get()->field.field_length / 4.0, 0.0);
 }
 rhoban_geometry::Point GameInformations::centerOpponentField() const
 {
-  return rhoban_geometry::Point(Data::get()->field.field_length_ / 4.0, 0.0);
+  return rhoban_geometry::Point(Data::get()->field.field_length / 4.0, 0.0);
 }
 
 double GameInformations::getRobotRadius() const
@@ -284,38 +284,38 @@ double GameInformations::getBallRadius() const
 std::vector<rhoban_geometry::Point> GameInformations::centerQuarterField() const
 {
   return std::vector<rhoban_geometry::Point>({
-      rhoban_geometry::Point(Data::get()->field.field_length_ / 4.0, Data::get()->field.field_width_ / 4.0),
-      rhoban_geometry::Point(Data::get()->field.field_length_ / 4.0, -Data::get()->field.field_width_ / 4.0),
-      rhoban_geometry::Point(-Data::get()->field.field_length_ / 4.0, -Data::get()->field.field_width_ / 4.0),
-      rhoban_geometry::Point(-Data::get()->field.field_length_ / 4.0, Data::get()->field.field_width_ / 4.0),
+      rhoban_geometry::Point(Data::get()->field.field_length / 4.0, Data::get()->field.field_width / 4.0),
+      rhoban_geometry::Point(Data::get()->field.field_length / 4.0, -Data::get()->field.field_width / 4.0),
+      rhoban_geometry::Point(-Data::get()->field.field_length / 4.0, -Data::get()->field.field_width / 4.0),
+      rhoban_geometry::Point(-Data::get()->field.field_length / 4.0, Data::get()->field.field_width / 4.0),
   });
 }
 
 double GameInformations::fieldWidth() const
 {
-  return Data::get()->field.field_width_;
+  return Data::get()->field.field_width;
 }
 
 double GameInformations::fieldHeight() const
 {
-  return Data::get()->field.field_length_;
+  return Data::get()->field.field_length;
 }
 
 rhoban_geometry::Point GameInformations::fieldSW() const
 {
-  return rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, -Data::get()->field.field_width_ / 2.0);
+  return rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, -Data::get()->field.field_width / 2.0);
 }
 rhoban_geometry::Point GameInformations::fieldNW() const
 {
-  return rhoban_geometry::Point(Data::get()->field.field_length_ / 2.0, -Data::get()->field.field_width_ / 2.0);
+  return rhoban_geometry::Point(Data::get()->field.field_length / 2.0, -Data::get()->field.field_width / 2.0);
 }
 rhoban_geometry::Point GameInformations::fieldNE() const
 {
-  return rhoban_geometry::Point(Data::get()->field.field_length_ / 2.0, Data::get()->field.field_width_ / 2.0);
+  return rhoban_geometry::Point(Data::get()->field.field_length / 2.0, Data::get()->field.field_width / 2.0);
 }
 rhoban_geometry::Point GameInformations::fieldSE() const
 {
-  return rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, Data::get()->field.field_width_ / 2.0);
+  return rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, Data::get()->field.field_width / 2.0);
 }
 
 Box GameInformations::field() const
@@ -325,26 +325,26 @@ Box GameInformations::field() const
 
 Box GameInformations::allyPenaltyArea() const
 {
-  return Box({ -Data::get()->field.field_length_ / 2.0, -Data::get()->field.penalty_area_width_ / 2.0 },
-             { -(Data::get()->field.field_length_ / 2.0 - Data::get()->field.penalty_area_depth_),
-               Data::get()->field.penalty_area_width_ / 2.0 });
+  return Box({ -Data::get()->field.field_length / 2.0, -Data::get()->field.penalty_area_width / 2.0 },
+             { -(Data::get()->field.field_length / 2.0 - Data::get()->field.penalty_area_depth),
+               Data::get()->field.penalty_area_width / 2.0 });
 }
 
 Box GameInformations::opponentPenaltyArea() const
 {
-  return Box({ (Data::get()->field.field_length_ / 2.0 - Data::get()->field.penalty_area_depth_),
-               -Data::get()->field.penalty_area_width_ / 2.0 },
-             { Data::get()->field.field_length_ / 2.0, Data::get()->field.penalty_area_width_ / 2.0 });
+  return Box({ (Data::get()->field.field_length / 2.0 - Data::get()->field.penalty_area_depth),
+               -Data::get()->field.penalty_area_width / 2.0 },
+             { Data::get()->field.field_length / 2.0, Data::get()->field.penalty_area_width / 2.0 });
 }
 
 double GameInformations::penaltyAreaWidth() const
 {
-  return Data::get()->field.penalty_area_width_;
+  return Data::get()->field.penalty_area_width;
 }
 
 double GameInformations::penaltyAreaHeight() const
 {
-  return Data::get()->field.penalty_area_depth_;
+  return Data::get()->field.penalty_area_depth;
 }
 
 bool GameInformations::infraRed(int robot_number, Team team) const

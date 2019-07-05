@@ -79,7 +79,7 @@ void KeeperStrat::assignBehaviorToRobots(
 
   int goalieID = getGoalie();  // we get the first if in get_player_ids()
 
-  if (allyPenaltyArea().is_inside(ballPosition()))
+  if (allyPenaltyArea().isInside(ballPosition()))
   {
     assign_behavior(goalieID, clearer_);
   }

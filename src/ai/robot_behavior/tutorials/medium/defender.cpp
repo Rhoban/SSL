@@ -67,7 +67,7 @@ void Defender::update(double time, const data::Robot& robot, const data::Ball& b
 
 bool Defender::ballIsInsideAllyPenaltyArea()
 {
-  return allyPenaltyArea().is_inside(ballPosition());
+  return allyPenaltyArea().isInside(ballPosition());
   ;
 }
 

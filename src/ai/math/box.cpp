@@ -16,12 +16,16 @@ Box::Box(const rhoban_geometry::Point& SW, const rhoban_geometry::Point& NE) : S
 {
 }
 
-bool Box::is_inside(const rhoban_geometry::Point& position)
+bool Box::isInside(const rhoban_geometry::Point& point) const
 {
-  return (SW.getX() <= position.getX() and SW.getY() <= position.getY() and position.getX() <= NE.getX() and
-          position.getY() <= NE.getY()
+  //  return (SW.getX() <= position.getX() and SW.getY() <= position.getY() and position.getX() <= NE.getX() and
+  //          position.getY() <= NE.getY()
 
-  );
+  //  );
+  rhoban_geometry::Point point_with_reference_change = point - center();
+
+  return (std::fabs(point_with_reference_change.getX()) < (getNorthSegment().getLength() / 2.0) and
+          std::fabs(point_with_reference_change.getY()) < (getWestSegment().getLength() / 2.0));
 }
 
 std::vector<rhoban_geometry::Point> Box::segmentIntersection(const rhoban_geometry::Point& origin,

@@ -28,41 +28,36 @@ namespace rhoban_ssl
 {
 namespace data
 {
-struct goal
+struct Goal
 {
-  rhoban_geometry::Point goal_center_;
-  rhoban_geometry::Point pole_left_;
-  rhoban_geometry::Point pole_right_;
+  rhoban_geometry::Point goal_center;
+  rhoban_geometry::Point pole_left;
+  rhoban_geometry::Point pole_right;
 };
 
 class Field
 {
 private:
-  rhoban_geometry::Point corners_[4];
+  rhoban_geometry::Point corners[4];
+  Box box_;
 
 public:
   Field();
 
-  double field_length_;
-  double field_width_;
-  double goal_width_;
-  double goal_depth_;
-  double boundary_width_;
-  double penalty_area_depth_;
-  double penalty_area_width_;
+  double field_length;
+  double field_width;
+  double goal_width;
+  double goal_depth;
+  double boundary_width;
+  double penalty_area_depth;
+  double penalty_area_width;
 
-  goal goal_[2];
+  Goal goal[2];
 
-  rhoban_geometry::Circle circle_center_;
-  rhoban_geometry::Point quarter_centers_[4];
+  rhoban_geometry::Circle circle_center;
+  rhoban_geometry::Point quarter_centers[4];
   rhoban_geometry::Point center_half_field[2];
-  Box penalty_areas_[2];
-
-  using cardinal_position = uint;
-  static constexpr cardinal_position SW = 0;
-  static constexpr cardinal_position NW = 1;
-  static constexpr cardinal_position NE = 2;
-  static constexpr cardinal_position SE = 3;
+  Box penalty_areas[2];
 
 public:
   void updateAdditionnalInformations();
@@ -95,7 +90,7 @@ public:
    */
   rhoban_geometry::Point goalCenter(Team team) const;
 
-  goal getGoal(Team team) const;
+  Goal getGoal(Team team) const;
 
   rhoban_geometry::Point getSE() const;
   rhoban_geometry::Point getNE() const;
