@@ -42,9 +42,9 @@ void addVisionTasks(std::string vision_addr, std::string vision_port, vision::Pa
   ExecutionManager::getManager().setMaxTaskId(300);
 }
 
-void addRefereeTasks()
+void addRefereeTasks(std::string referee_port)
 {  // range 100
-  ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, SSL_REFEREE_PORT),
+  ExecutionManager::getManager().addTask(new referee::RefereeClientSingleThread(SSL_REFEREE_ADDRESS, referee_port),
                                          100);
   ExecutionManager::getManager().addTask(new referee::RefereePacketAnalyzer(), 110);
   // ExecutionManager::getManager().addTask(new referee::RefereeTerminalPrinter());

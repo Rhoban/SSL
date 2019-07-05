@@ -128,6 +128,14 @@ int main(int argc, char** argv)
                                     "string",         // short description of the expected value.
                                     cmd);
 
+  TCLAP::ValueArg<std::string> port_referee("r",    // short argument name  (with one character)
+                                            "ref",  // long argument name
+                                            "Referee client port",
+                                            false,             // Flag is not required
+                                            SSL_REFEREE_PORT,  // Default value
+                                            "string",          // short description of the expected value.
+                                            cmd);
+
   TCLAP::ValueArg<std::string> sim_port("u",         // short argument name  (with one character)
                                         "sim_port",  // long argument name
                                         "Vision client simulator port",
@@ -203,7 +211,7 @@ int main(int argc, char** argv)
 
   addCoreTasks();
   addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
-  addRefereeTasks();
+  addRefereeTasks(port_referee.getValue());
   addPreBehaviorTreatment();
   addRobotComTasks();
 
