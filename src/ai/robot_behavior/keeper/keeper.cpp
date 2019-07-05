@@ -42,7 +42,7 @@ Keeper::Keeper() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
   double robot_diameter = ai::Config::robot_radius * 2;
   rhoban_geometry::Point offset(robot_diameter, 0.0);
   double distanciation = FORWARD_DISTANCIATION_FROM_GOAL_CENTER;
-
+  goal_center_ = Data::get()->field.getGoal(Ally).goal_center_;
   rhoban_geometry::Point limit_left_position_on_trajectory = pole_left + offset;
   rhoban_geometry::Point limit_right_position_on_trajectory = pole_right + offset;
 
@@ -55,7 +55,7 @@ Keeper::Keeper() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
       std::abs(circle_radius_center_of_the_trajectory - std::abs(distanciation + robot_diameter));
 
   rhoban_geometry::Point circle_center_of_the_trajectory =
-      Data::get()->field.getGoal(Ally).goal_center_ -
+      goal_center_ -
       rhoban_geometry::Point(distance_goal_center_to_circle_center, 0.0);
 
   goalkeeper_trajectory_ =
@@ -75,7 +75,6 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   // are all avalaible
 
   annotations_.clear();
-
   /*int nb_points = 3;
   future_ball_positions_.clear();
   for (int i = 0; i < nb_points; i++)
@@ -83,8 +82,7 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
     future_ball_positions_.push_back(ball.getMovement().linearPosition(time + i * 0.2));
   }*/
 
-  DEBUG(goalkeeper_zone_.is_inside(Data::get()->robots[Ally][2].getMovement().linearPosition(time)));
-
+ // DEBUG(goalkeeper_zone_.is_inside(Data::get()->robots[Ally][2].getMovement().linearPosition(time)));
   NavigationInsideTheField* position_follower =
       dynamic_cast<NavigationInsideTheField*>(follower_);  // PID modification to be as responsive as Barthez
 
@@ -96,6 +94,9 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
 
   rhoban_geometry::Point old_ball_position = ball.movement_sample[9].linear_position;
   Vector2d ball_trajectory = ball.getMovement().linearVelocity(time);
+  DEBUG(old_ball_position);
+  annotations_.addArrow(old_ball_position, goal_center_, "red", true);
+  annotations_.addArrow(old_ball_position, ball_trajectory, "orange", true); //ca deconne ici
 
   if (ball_trajectory.norm() == 0.00000)
   {
@@ -201,15 +202,19 @@ rhoban_geometry::Point Keeper::placeBetweenGoalCenterAndBall(const rhoban_geomet
     dist_ball_goal_center = 0.001;
   }
   double distance_between_ball_and_goal_on_x_axis = std::abs(goal_center.getX() - ball_position.getX());
+  DEBUG("distance on x axis is" << distance_between_ball_and_goal_on_x_axis);
   double distance_between_ball_and_meridian = ball_position.getY();
+  DEBUG("distance to meridian is" << distance_between_ball_and_meridian);
   double cos_theta = distance_between_ball_and_goal_on_x_axis / dist_ball_goal_center;
+  DEBUG("cos_theta is" << cos_theta);
+
   int pos = (distance_between_ball_and_meridian > 0.0) ? 1 : -1;  // assign 1 or -1 depending on the upper or lower half
                                                                   // of the field, considering the y = 0 dividing line
   int signe = ((Data::get()->field.getGoal(Ally).pole_right_.getY() / pos) > 0.0) ?
                   1 :
                   -1;  // assign 1 or -1 whether the ball is the same side as the left pole or not
 
-  double position_to_take_y = signe * cos_theta *
+  double position_to_take_y = signe * (1-cos_theta) *
                               std::abs(Data::get()->field.getGoal(Ally).pole_left_.getY() -
                                        Data::get()->field.getGoal(Ally).pole_right_.getY()) /
                               2;
@@ -253,7 +258,6 @@ std::string annotations_text;
     }*/
   annotations.addBox(goalkeeper_zone_, "purple");
   annotations.addCircle(goalkeeper_trajectory_.getCenter(), goalkeeper_trajectory_.getRadius(), "purple");
-
   annotations.addAnnotations(annotations_);
   annotations.addAnnotations(follower_->getAnnotations());
   return annotations;
