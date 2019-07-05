@@ -65,6 +65,7 @@ set (SOURCES
     robot_behavior/striker.cpp
     robot_behavior/tests/kick_measure.cpp
     robot_behavior/ben_stealer.cpp
+    robot_behavior/Striker_todo_rectum.cpp
     robot_behavior/keeper/keeper.cpp
     robot_behavior/defender/defensive_wall.cpp
     robot_behavior/defender/kick_wall.cpp

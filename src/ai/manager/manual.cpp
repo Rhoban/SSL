@@ -41,6 +41,8 @@
 #include <robot_behavior/striker_ai.h>
 #include <robot_behavior/wait_pass.h>
 #include <robot_behavior/stop_not_far.h>
+#include <robot_behavior/Striker_todo_rectum.h>
+
 
 #include <strategy/tutorials/caterpillar.h>
 #include <robot_behavior/ben_stealer.h>
@@ -388,6 +390,15 @@ Manual::Manual(std::string name) : Manager(name)
                                             [&](double time, double dt) {
                                               robot_behavior::GoToXY* field_info =
                                                   new robot_behavior::GoToXY();
+                                              return std::shared_ptr<robot_behavior::RobotBehavior>(field_info);
+                                            },
+                                            false  // we don't want to define a goal here !
+                                            )));
+  
+  registerStrategy("Striker_todo_rectum", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                            [&](double time, double dt) {
+                                              robot_behavior::Striker_todo_rectum* field_info =
+                                                  new robot_behavior::Striker_todo_rectum();
                                               return std::shared_ptr<robot_behavior::RobotBehavior>(field_info);
                                             },
                                             false  // we don't want to define a goal here !
