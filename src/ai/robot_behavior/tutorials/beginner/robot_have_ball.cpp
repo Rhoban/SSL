@@ -29,7 +29,7 @@ BeginnerRobotHaveBall::BeginnerRobotHaveBall() : RobotBehavior()
 {
 }
 
-void BeginnerRobotHaveBall ::update(double time, const data::Robot& robot, const data::Ball& ball)
+void BeginnerRobotHaveBall::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
 
@@ -50,11 +50,11 @@ void BeginnerRobotHaveBall ::update(double time, const data::Robot& robot, const
   // Find the robot that have the ball.
   if (opponent_have_ball)
   {
-    annotations_.addCross(opponent_closest.getMovement().linearPosition(Data::get()->ai_data.time), "blue", false);
+    annotations_.addCross(opponent_closest.getMovement().linearPosition(Data::get()->time.now()), "blue", false);
   }
   else if (ally_have_ball)
   {
-    annotations_.addCross(ally_closest.getMovement().linearPosition(Data::get()->ai_data.time), "blue", false);
+    annotations_.addCross(ally_closest.getMovement().linearPosition(Data::get()->time.now()), "blue", false);
   }
   else
   {

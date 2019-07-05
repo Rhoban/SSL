@@ -33,14 +33,14 @@ void Mobile::update(double time, const Point& linear_position, const ContinuousA
   {
     return;
   }
-  last_update = rhoban_utils::TimeStamp::now();
+  last_update = Data::get()->time.now();
   movement_sample.insert(PositionSample(time, linear_position, angular_position));
   updateVisionData();
 }
 
 double Mobile::age() const
 {
-  return diffSec(last_update, rhoban_utils::TimeStamp::now());
+  return last_update - Data::get()->time.now();
 }
 
 bool Mobile::isTooOld() const
@@ -79,7 +79,7 @@ bool Mobile::isActive() const
   return age() < 2.0;
 }
 
-Mobile::Mobile() : last_update(rhoban_utils::TimeStamp::now()), movement_sample(history_size), movement(nullptr)
+Mobile::Mobile() : last_update(Data::get()->time.now()), movement_sample(history_size), movement(nullptr)
 {
 }
 
@@ -98,7 +98,7 @@ void Mobile::initMovement()
 
 bool Mobile::isInsideTheField()
 {
-  return Data::get()->field.isInside(movement->linearPosition(Data::get()->ai_data.time));
+  return Data::get()->field.isInside(movement->linearPosition(Data::get()->time.now()));
 }
 
 }  // namespace data

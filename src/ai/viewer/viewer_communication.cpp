@@ -26,8 +26,7 @@ namespace rhoban_ssl
 {
 namespace viewer
 {
-ViewerCommunication::ViewerCommunication(ai::AI* ai)
-  : ai_(ai), last_sending_time_(rhoban_utils::TimeStamp::now().getTimeSec())
+ViewerCommunication::ViewerCommunication(ai::AI* ai) : ai_(ai), last_sending_time_(Data::get()->time.now())
 {
 }
 
@@ -37,10 +36,10 @@ bool ViewerCommunication::runTask()
   {
     processIncomingPackets();
 
-    if (Data::get()->ai_data.time - last_sending_time_ > sending_delay)
+    if (Data::get()->time.now() - last_sending_time_ > sending_delay)
     {
       sendViewerPackets();
-      last_sending_time_ = Data::get()->ai_data.time;
+      last_sending_time_ = Data::get()->time.now();
     }
   }
   return true;
@@ -164,12 +163,11 @@ Json::Value ViewerCommunication::ballPacket()
 {
   Json::Value packet;
 
-  const rhoban_geometry::Point& ball_position =
-      Data::get()->ball.getMovement().linearPosition(Data::get()->ai_data.time);
+  const rhoban_geometry::Point& ball_position = Data::get()->ball.getMovement().linearPosition(Data::get()->time.now());
   packet["ball"]["position"]["x"] = ball_position.getX();
   packet["ball"]["position"]["y"] = ball_position.getY();
 
-  const Vector2d& ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->ai_data.time);
+  const Vector2d& ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->time.now());
   packet["ball"]["velocity"]["x"] = ball_velocity.getX();
   packet["ball"]["velocity"]["y"] = ball_velocity.getY();
 
@@ -181,7 +179,7 @@ Json::Value ViewerCommunication::ballPacket()
 Json::Value ViewerCommunication::teamsPacket()
 {
   Json::Value packet;
-  double time = Data::get()->ai_data.time;
+  double time = Data::get()->time.now();
   const data::Referee& referee = Data::get()->referee;
 
   const std::string blue_color = "#2393c6";
@@ -228,14 +226,14 @@ Json::Value ViewerCommunication::teamsPacket()
       packet["teams"][team]["bots"][rid]["position"]["x"] = robot_position.getX();
       packet["teams"][team]["bots"][rid]["position"]["y"] = robot_position.getY();
       packet["teams"][team]["bots"][rid]["position"]["orientation"] =
-          current_robot.getMovement().angularPosition(Data::get()->ai_data.time).value();
+          current_robot.getMovement().angularPosition(Data::get()->time.now()).value();
 
       packet["teams"][team]["bots"][rid]["velocity"]["x"] =
-          current_robot.getMovement().linearVelocity(Data::get()->ai_data.time).getX();
+          current_robot.getMovement().linearVelocity(Data::get()->time.now()).getX();
       packet["teams"][team]["bots"][rid]["velocity"]["y"] =
-          current_robot.getMovement().linearVelocity(Data::get()->ai_data.time).getY();
+          current_robot.getMovement().linearVelocity(Data::get()->time.now()).getY();
       packet["teams"][team]["bots"][rid]["velocity"]["theta"] =
-          current_robot.getMovement().angularVelocity(Data::get()->ai_data.time).value();
+          current_robot.getMovement().angularVelocity(Data::get()->time.now()).value();
 
       // TO REMOVE
       packet["teams"][team]["bots"][rid]["last_control"]["time"] = 0;
@@ -290,7 +288,7 @@ Json::Value ViewerCommunication::informationsPacket()
   Json::Value packet;
 
   packet["informations"]["simulation"] = ai::Config::is_in_simulation;
-  packet["informations"]["packets_per_second"] = 1. / Data::get()->ai_data.time - last_sending_time_;
+  packet["informations"]["packets_per_second"] = 1. / Data::get()->time.now() - last_sending_time_;
 
   // todo
   // packet["informatons"]["ping"] = ai::Config::we_are_blue;

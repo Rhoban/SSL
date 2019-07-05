@@ -180,16 +180,6 @@ private:
 public:
 };
 
-/**
- * @brief The RegulateAiLoopPeriod class
- */
-class RegulateAiLoopPeriod : public Task
-{
-  // Task interface
-public:
-  bool runTask();
-};
-
 class TimeUpdater : public Task
 {
   // Task interface

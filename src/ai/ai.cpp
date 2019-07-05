@@ -62,7 +62,7 @@ bool AI::runTask()
   {
     strategy_manager_->removeInvalidRobots();
     strategy_manager_->update();
-    strategy_manager_->assignBehaviorToRobots(robot_behaviors_, Data::get()->ai_data.time, Data::get()->ai_data.dt);
+    strategy_manager_->assignBehaviorToRobots(robot_behaviors_, Data::get()->time.now(), 0.0);
     updateRobots();
   }
 
@@ -85,7 +85,7 @@ void AI::preventCollision(int robot_id, Control& ctrl)
   const Vector2d& ctrl_velocity = ctrl.linear_velocity;
   if (robot.isActive() == false)
     return;
-  Vector2d robot_velocity = robot.getMovement().linearVelocity(Data::get()->ai_data.time);
+  Vector2d robot_velocity = robot.getMovement().linearVelocity(Data::get()->time.now());
 
   bool collision_is_detected = false;
 
@@ -134,7 +134,8 @@ void AI::preventCollision(int robot_id, Control& ctrl)
     if (robot_velocity_norm > err)
     {
       velocity_increase =
-          (1 - Data::get()->ai_data.dt * ai::Config::translation_acceleration_limit / robot_velocity_norm);
+          //(1 - Data::get()->ai_data.dt * ai::Config::translation_acceleration_limit / robot_velocity_norm);
+          (1 - ai::Config::period * ai::Config::translation_acceleration_limit / robot_velocity_norm);
       if (velocity_increase < 0.0)
       {
         velocity_increase = 0.0;
@@ -202,8 +203,7 @@ void AI::prepareToSendControl(int robot_id, Control& ctrl)
 
   preventCollision(robot_id, ctrl);
   ctrl.changeToRelativeControl(
-      Data::get()->robots[Ally][robot_id].getMovement().angularPosition(Data::get()->ai_data.time),
-      Data::get()->ai_data.dt);
+      Data::get()->robots[Ally][robot_id].getMovement().angularPosition(Data::get()->time.now()), ai::Config::period);
 }
 
 Control AI::getRobotControl(robot_behavior::RobotBehavior& robot_behavior, data::Robot& robot)
@@ -250,7 +250,7 @@ void AI::setManager(std::string managerName)
   }
 
   // Data::get()->robots[Ally][ai::Config::default_goalie_id].is_goalie = true;
-  Data::get()->referee.teams_info->goalkeeper_number; 
+  Data::get()->referee.teams_info->goalkeeper_number;
   strategy_manager_->declareTeamIds(robot_ids);
 }
 
@@ -280,7 +280,7 @@ void AI::stopStrategyManager()
 
 void AI::updateRobots()
 {
-  double time = Data::get()->ai_data.time;
+  //  double time = Data::get()->ai_data.time;
   data::Ball& ball = Data::get()->ball;
 
   for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
@@ -290,7 +290,7 @@ void AI::updateRobots()
     data::Robot& robot = Data::get()->robots[Ally][robot_id];
     assert(robot.id == (uint)robot_id);
     robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
-    robot_behavior.update(time, robot, ball);
+    robot_behavior.update(Data::get()->time.now(), robot, ball);
     if (final_control.is_disabled_by_viewer)
     {
       final_control.control = Control::makeDesactivated();
@@ -324,42 +324,25 @@ rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool RegulateAiLoopPeriod::runTask()
-{
-  double toSleep = ai::Config::period - Data::get()->ai_data.dt;
-  if (toSleep > 0)
-  {
-    // DEBUG("NO LAG");
-    usleep(round(toSleep * 1000000));
-  }
-  else
-  {
-    DEBUG("LAG");
-  }
-  return true;
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
 bool TimeUpdater::runTask()
 {
-  Data::get()->ai_data.dt = Data::get()->ai_data.time;
-  Data::get()->ai_data.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
-  Data::get()->ai_data.dt = Data::get()->ai_data.time - Data::get()->ai_data.dt;
+  //  Data::get()->ai_data.dt = Data::get()->ai_data.time;
+  //  Data::get()->ai_data.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
+  //  Data::get()->ai_data.dt = Data::get()->ai_data.time - Data::get()->ai_data.dt;
 
-  assert(Data::get()->ai_data.dt > 0);
-  if (Data::get()->ai_data.dt <= 0)
-  {
-    std::cerr << "WARNING INVALID DT !!!!!!!!!!!!!!!!!!!\n";
-    Data::get()->ai_data.dt = 1;
-  }
+  //  assert(Data::get()->ai_data.dt > 0);
+  //  if (Data::get()->ai_data.dt <= 0)
+  //  {
+  //    std::cerr << "WARNING INVALID DT !!!!!!!!!!!!!!!!!!!\n";
+  //    Data::get()->ai_data.dt = 1;
+  //  }
 
-  assert(Data::get()->ai_data.time > 0);
-  if (Data::get()->ai_data.time <= 0)
-  {
-    std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
-    Data::get()->ai_data.time = 1;
-  }
+  //  assert(Data::get()->ai_data.time > 0);
+  //  if (Data::get()->ai_data.time <= 0)
+  //  {
+  //    std::cerr << "WARNING INVALID TIME !!!!!!!!!!!!!!!!!!!\n";
+  //    Data::get()->ai_data.time = 1;
+  //  }
 
   //#ifndef NDEBUG
   //  for (unsigned int i = 0; i < Data::get()->all_robots.size(); i++)
@@ -427,7 +410,7 @@ void AI::setStrategyManuallyOf(const std::vector<int>& robot_numbers, std::strin
   }
 
   // apply the strategy
-  manual_manager_.get()->assignStrategy(strat_name, Data::get()->ai_data.time, robot_numbers);
+  manual_manager_.get()->assignStrategy(strat_name, Data::get()->time.now(), robot_numbers);
 
   for (uint i = 0; i < robot_numbers.size(); ++i)
   {
@@ -476,11 +459,11 @@ void AI::scan()
         }
       }
       scanning_ = true;
-      scan_starting_time_ = Data::get()->ai_data.time;
+      scan_starting_time_ = Data::get()->time.now();
     }
     else
     {
-      double scan_waiting_time_ = Data::get()->ai_data.time - scan_starting_time_;
+      double scan_waiting_time_ = Data::get()->time.now() - scan_starting_time_;
       if (scan_waiting_time_ > SCAN_WAITING_DELAY)
       {
         for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
