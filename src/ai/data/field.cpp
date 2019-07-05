@@ -1,4 +1,5 @@
 #include "field.h"
+#include <data.h>
 
 namespace rhoban_ssl
 {
@@ -20,11 +21,11 @@ void Field::updateAdditionnalInformations()
   for (int team = 0; team < 2; ++team)
   {
     double sign = (team == Ally) ? -1.0 : 1.0;
-    goal[team].goal_center = rhoban_geometry::Point(-field_length * sign / 2.0, 0.0);
-    goal[team].pole_left = rhoban_geometry::Point(goal[team].goal_center.getX() * sign,
-                                                  goal[team].goal_center.getY() - (goal_width / 2) * sign);
-    goal[team].pole_right = rhoban_geometry::Point(goal[team].goal_center.getX() * sign,
-                                                   goal[team].goal_center.getY() + (goal_width / 2) * sign);
+    goal[team].goal_center = rhoban_geometry::Point(field_length * sign / 2.0, 0.0);
+    goal[team].pole_left =
+        rhoban_geometry::Point(field_length / 2.0 * sign, goal[team].goal_center.getY() + (goal_width / 2) * sign);
+    goal[team].pole_right =
+        rhoban_geometry::Point(field_length / 2 * sign, (goal[team].goal_center.getY() - (goal_width / 2)) * sign);
     center_half_field[team] = rhoban_geometry::Point(field_length * sign / 4.0, 0);
   }
 
@@ -35,6 +36,17 @@ void Field::updateAdditionnalInformations()
   penalty_areas[Opponent] =
       Box(rhoban_geometry::Point(field_length / 2.0 - penalty_area_depth, -penalty_area_width / 2.0),
           rhoban_geometry::Point(field_length / 2.0, penalty_area_width / 2.0));
+
+  if (Data::get()->referee.allyOnPositiveHalf())
+  {
+    Box tmp = penalty_areas[Ally];
+    penalty_areas[Ally] = penalty_areas[Opponent];
+    penalty_areas[Opponent] = penalty_areas[Ally];
+  }
+
+  penalty_areas[Ally] =
+      Box(rhoban_geometry::Point(field_length / 2.0 * -1.0, penalty_area_width / 2.0 * -1.0),
+          rhoban_geometry::Point((field_length / 2.0 * -1 + penalty_area_depth), penalty_area_width / 2.0));
 
   Vector2d sw(-1, -1);
   Vector2d nw(-1, 1);

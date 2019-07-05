@@ -38,10 +38,12 @@ using namespace rhoban_ssl;
 
 void superStop(int)
 {
+  rhoban_ssl::ExecutionManager::getManager().shutdown();
   for (int i = 0; i < 10000; ++i)
   {
     close(i);
   }
+  exit(EXIT_FAILURE);
 }
 
 void stop(int)
