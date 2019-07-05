@@ -19,6 +19,7 @@
 #include <math/vector2d.h>
 #include <math/intersection.h>
 #include "../navigation_inside_the_field.h"
+#include <math/lines.h>
 
 namespace rhoban_ssl
 {
@@ -33,29 +34,33 @@ rhoban_geometry::Point Keeper::calculateGoalPosition(const rhoban_geometry::Poin
   return defender_position;
 }
 
-Keeper::Keeper()
-  : Keeper::Keeper(rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, Data::get()->field.goal_width / 2.0),
-                   rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, -Data::get()->field.goal_width / 2.0),
-                   rhoban_geometry::Point(-Data::get()->field.field_length / 2.0, 0.0) +
-                       ai::Config::waiting_goal_position,
-                   Data::get()->field.penalty_area_depth, ai::Config::robot_radius)
+Keeper::Keeper() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
-}
+  rhoban_geometry::Point pole_left = Data::get()->field.getGoal(Ally).pole_left_;
+  rhoban_geometry::Point pole_right = Data::get()->field.getGoal(Ally).pole_right_;
 
-Keeper::Keeper(const rhoban_geometry::Point& left_post_position, const rhoban_geometry::Point& right_post_position,
-               const rhoban_geometry::Point& waiting_goal_position, double penalty_radius, double keeper_radius)
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower())
-{
-  left_post_position_ = left_post_position;
-  right_post_position_ = right_post_position;
-  waiting_goal_position_ = waiting_goal_position;
-  goal_center_ = (left_post_position + right_post_position) / 2.0;
-  penalty_radius_ = penalty_radius;
-  keeper_radius_ = keeper_radius;
-  NavigationInsideTheField* foll =
-      dynamic_cast<NavigationInsideTheField*>(follower_);  // PID modification to be as responsive as Barthez
-  foll->setTranslationPid(12, 0.0001, 0);
-  foll->setOrientationPid(1.0, 0, 0);
+  double robot_diameter = ai::Config::robot_radius;
+  rhoban_geometry::Point offset(robot_diameter, 0.0);
+  double distanciation = FORWARD_DISTANCIATION_FROM_GOAL_CENTER;
+  goal_center_ = Data::get()->field.getGoal(Ally).goal_center_;
+  rhoban_geometry::Point limit_left_position_on_trajectory = pole_left + offset;
+  rhoban_geometry::Point limit_right_position_on_trajectory = pole_right + offset;
+
+  double chord_square_norm = limit_left_position_on_trajectory.getDist(limit_right_position_on_trajectory) *
+                             limit_left_position_on_trajectory.getDist(limit_right_position_on_trajectory);
+
+  double circle_radius_center_of_the_trajectory = (chord_square_norm / (8 * distanciation)) + distanciation / 2;
+
+  double distance_goal_center_to_circle_center =
+      std::abs(circle_radius_center_of_the_trajectory - std::abs(distanciation + robot_diameter));
+
+  rhoban_geometry::Point circle_center_of_the_trajectory =
+      goal_center_ - rhoban_geometry::Point(distance_goal_center_to_circle_center, 0.0);
+
+  goalkeeper_trajectory_ =
+      rhoban_geometry::Circle(circle_center_of_the_trajectory, circle_radius_center_of_the_trajectory);
+
+  goalkeeper_zone_ = Box(pole_left + rhoban_geometry::Point(0.0, -robot_diameter), pole_right + offset + rhoban_geometry::Point(distanciation, robot_diameter));
 }
 
 void Keeper::update(double time, const data::Robot& robot, const data::Ball& ball)
@@ -69,7 +74,6 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   // are all avalaible
 
   annotations_.clear();
-
   /*int nb_points = 3;
   future_ball_positions_.clear();
   for (int i = 0; i < nb_points; i++)
@@ -77,107 +81,153 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
     future_ball_positions_.push_back(ball.getMovement().linearPosition(time + i * 0.2));
   }*/
 
-  rhoban_geometry::Point left_post_position = left_post_position_;
-  rhoban_geometry::Point right_post_position = right_post_position_;
+  // DEBUG(goalkeeper_zone_.is_inside(Data::get()->robots[Ally][2].getMovement().linearPosition(time)));
+  NavigationInsideTheField* position_follower =
+      dynamic_cast<NavigationInsideTheField*>(follower_);  // PID modification to be as responsive as Barthez
 
-  double OFFSET_GOAL = ai::Config::robot_radius * 1.5;
-  double HYST = 0.10;
+  position_follower->setTranslationPid(ai::Config::p_translation_goalkeeper, ai::Config::i_translation_goalkeeper,
+                                       ai::Config::d_translation_goalkeeper);
 
-  rhoban_geometry::Point target_position;
-  double target_rotation;
-  rhoban_geometry::Point predicted_intersection_point;
+  position_follower->setOrientationPid(ai::Config::p_orientation_goalkeeper, ai::Config::i_orientation_goalkeeper,
+                                       ai::Config::d_orientation_goalkeeper);
 
-  const rhoban_geometry::Point& predicted_ball_position = ball.getMovement().linearPosition(time + 3.0);
-  // test if the ball hits the back
+  rhoban_geometry::Point ball_position = ball.getMovement().linearPosition(time);
+  Vector2d ball_trajectory = ball.getMovement().linearVelocity(time);
+  annotations_.addArrow(ball_position, goal_center_, "red", true);
+  annotations_.addArrow(ball_position, ball_trajectory, "orange", true); //ca deconne ici
 
-  if (predicted_ball_position.getX() < left_post_position.getX())
+  annotations_.addArrow(ball_position, goal_center_, "red", true);
+  annotations_.addArrow(ball_position, ball_position + ball_trajectory, "orange", true);  // ca deconne ici
+
+  if (ball_trajectory.norm() == 0.00000)
   {
-    // finding the impact point
+    ball_trajectory = goal_center_ - ball_position;
+    ContinuousAngle target_angular_position = vector2angle(ball_trajectory);  // ça c'est de la DAUBE
 
-    int hyst_sign = 1;
+    follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((ball_position)), target_angular_position);
+    follower_->update(time, robot, ball);
+    return;
+  }
 
-    if (defensive_approach_ == 0)
-    {
-      hyst_sign = -1;
+  std::vector<rhoban_geometry::Point> intersections = rhoban_geometry::getIntersectionLineWithCircle(
+      ball_position, ball_position + ball_trajectory, goalkeeper_trajectory_);
+  DEBUG("intersections vector size" << intersections.size());
+  for(int i = 0; i < intersections.size(); ++i) {
+    DEBUG(intersections.at(i));
+  }
+  if(intersections.size() == 2) {
+    annotations_.addArrow(intersections.at(0), intersections.at(1), "purple", true);
+    ;
     }
 
-    double post_offset = 0.7 + HYST * hyst_sign;
-    const rhoban_geometry::Point new_left_post_position =
-        left_post_position + rhoban_geometry::Point(OFFSET_GOAL, post_offset);
-    const rhoban_geometry::Point new_right_post_position =
-        right_post_position + rhoban_geometry::Point(OFFSET_GOAL, -post_offset);
 
-    const rhoban_geometry::Segment predicted_ball_segment =
-        rhoban_geometry::Segment(predicted_ball_position, ballPosition());
-    const rhoban_geometry::Segment our_goal_segment =
-        rhoban_geometry::Segment(new_left_post_position, new_right_post_position);
+  if (intersections.size() == 0)
+  {
+    // on se place par rapport au centre du goal et de la balle
+    ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+    follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((ball_position)), target_angular_position);
+  }
+  else if (intersections.size() == 1)
+  {
+    annotations_.addCross(intersections.at(0), "red");
 
-    bool do_they_intersect =
-        segmentIntersection(predicted_ball_segment, our_goal_segment, predicted_intersection_point);
-
-    if (do_they_intersect == true)
+    if (goalkeeper_zone_.is_inside(intersections.at(0)))
     {
-      defensive_approach_ = 1;
-      annotations_.addCross(predicted_intersection_point.x, predicted_intersection_point.y, "blue");
+      ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+      follower_->setFollowingPosition(intersections.at(0), target_angular_position);
     }
     else
     {
-      defensive_approach_ = 0;
+      // on se place par rapport au centre du goal et de la balle
+      ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+      follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((ball_position)), target_angular_position);
+    }
+  }
+  else if (intersections.size() == 2)
+  {
+    annotations_.addCross(intersections.at(0), "red");
+    annotations_.addCross(intersections.at(1), "red");
+
+    if (goalkeeper_zone_.is_inside(intersections.at(0)))
+    {
+      if (goalkeeper_zone_.is_inside((intersections.at(1))))
+      {
+        // ici on choisit le plus proche de la balle
+        double dist1 = intersections.at(0).getDist(ball_position);
+        double dist2 = intersections.at(1).getDist(ball_position);
+        if (dist1 > dist2)
+        {
+          ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+          follower_->setFollowingPosition(intersections.at(1), target_angular_position);
+        }
+        else
+        {
+          ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+          follower_->setFollowingPosition(intersections.at(0), target_angular_position);
+        }
+      }
+      else
+      {
+        ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+        follower_->setFollowingPosition(intersections.at(0), target_angular_position);
+      }
+    }
+    else
+    {
+      if (goalkeeper_zone_.is_inside((intersections.at(1))))
+      {
+        ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+        follower_->setFollowingPosition(intersections.at(1), target_angular_position);
+      }
+      else
+      {
+        // on se place par rapport au centre du goal et de la balle
+        ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+        follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((ball_position)), target_angular_position);
+      }
     }
   }
   else
   {
-    defensive_approach_ = 0;
+    throw "INVALID INTERSECTION COMPUTATION";
   }
 
-  if (defensive_approach_ == 0)
-  {
-    rhoban_geometry::Point new_goal_center =
-        Data::get()->field.goalCenter(Ally) + rhoban_geometry::Point(OFFSET_GOAL, 0.0);
-
-    rhoban_geometry::Point protect_position = ballPosition();
-    if (ballPosition().getX() < Data::get()->field.goalCenter(Ally).getX())
-    {
-      protect_position = rhoban_geometry::Point(Data::get()->field.goalCenter(Ally).getX(), ballPosition().getY());
-    }
-
-    Vector2d ball_goal_vector = new_goal_center - protect_position;
-    double dist_goal_vector = ball_goal_vector.norm();
-    if (dist_goal_vector < 0.0001)
-    {
-      dist_goal_vector = 0.0001;
-    }
-    ball_goal_vector = ball_goal_vector / dist_goal_vector;
-
-    target_rotation = detail::vec2angle(-ball_goal_vector);
-
-    double goal_radius = 0.5;
-
-    target_position = new_goal_center - ball_goal_vector * goal_radius;
-  }
-  else if (defensive_approach_ == 1)
-  {
-    if (predicted_intersection_point.getY() > left_post_position.getY())
-    {
-      target_position = rhoban_geometry::Point(predicted_intersection_point.getX(), left_post_position.getY());
-    }
-    else if (predicted_intersection_point.getY() < right_post_position.getY())
-    {
-      target_position = rhoban_geometry::Point(predicted_intersection_point.getX(), right_post_position.getY());
-    }
-    else
-    {
-      target_position = predicted_intersection_point;
-    }
-
-    Vector2d target_ball_vector = ballPosition() - target_position;
-    target_rotation = detail::vec2angle(target_ball_vector);
-  }
-
-  follower_->setFollowingPosition(target_position, target_rotation);
   follower_->avoidTheBall(false);
 
   follower_->update(time, robot, ball);
+}
+
+// bool Keeper::isInsideGoalKeeperZone(const rhoban_geometry::Point& point)
+// {
+//   return goalkeeper_zone_.is_inside(point);
+// } NOT USED
+
+rhoban_geometry::Point Keeper::placeBetweenGoalCenterAndBall(const rhoban_geometry::Point& ball_position)
+{
+  rhoban_geometry::Point goal_center = Data::get()->field.goalCenter(Ally);
+
+  double dist_ball_goal_center = goal_center.getDist(ball_position);
+  if (dist_ball_goal_center < 0.001)
+  {
+    dist_ball_goal_center = 0.001;
+  }
+  double distance_between_ball_and_goal_on_x_axis = std::abs(goal_center.getX() - ball_position.getX());
+  double distance_between_ball_and_meridian = ball_position.getY();
+  double cos_theta = distance_between_ball_and_goal_on_x_axis / dist_ball_goal_center;
+
+  int pos = (distance_between_ball_and_meridian > 0.0) ? 1 : -1;  // assign 1 or -1 depending on the upper or lower half
+                                                                  // of the field, considering the y = 0 dividing line
+  int signe = ((Data::get()->field.getGoal(Ally).pole_right_.getY() / pos) > 0.0) ?
+                  1 :
+                  -1;  // assign 1 or -1 whether the ball is the same side as the left pole or not
+
+  double position_to_take_y = signe * (1 - cos_theta) *
+                              std::abs(Data::get()->field.getGoal(Ally).pole_left_.getY() -
+                                       Data::get()->field.getGoal(Ally).pole_right_.getY()) /
+                              2;
+  rhoban_geometry::Point position_to_take =
+      goal_center + rhoban_geometry::Point(ai::Config::robot_radius * 2, position_to_take_y);
+  return position_to_take;
 }
 
 Control Keeper::control() const
@@ -213,7 +263,8 @@ std::string annotations_text;
     {
       annotations.addCross(future_ball_positions_[i].x, future_ball_positions_[i].y, "red", false);
     }*/
-
+  annotations.addBox(goalkeeper_zone_, "purple");
+  annotations.addCircle(goalkeeper_trajectory_.getCenter(), goalkeeper_trajectory_.getRadius(), "purple");
   annotations.addAnnotations(annotations_);
   annotations.addAnnotations(follower_->getAnnotations());
   return annotations;

@@ -26,6 +26,15 @@ namespace robot_behavior
 class Keeper : public RobotBehavior
 {
 private:
+  double FORWARD_DISTANCIATION_FROM_GOAL_CENTER = 0.05;
+
+  rhoban_geometry::Circle goalkeeper_trajectory_;
+  Box goalkeeper_zone_;
+  bool isInsideGoalKeeperZone(const rhoban_geometry::Point& point);
+
+  rhoban_geometry::Point placeBetweenGoalCenterAndBall(const rhoban_geometry::Point& ball_position);
+
+private:
   // PositionFollower follower(); TODO : to remove if not necessary
 
   rhoban_ssl::annotations::Annotations annotations_;
@@ -52,9 +61,6 @@ private:
 
 public:
   Keeper();
-
-  Keeper(const rhoban_geometry::Point& left_post_position, const rhoban_geometry::Point& right_post_position,
-         const rhoban_geometry::Point& waiting_goal_position, double penalty_radius, double keeper_radius);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 

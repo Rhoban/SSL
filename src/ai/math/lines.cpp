@@ -33,4 +33,68 @@ double distanceFromPointToLine(const rhoban_geometry::Point& point, const rhoban
   return std::fabs(vectorialProduct(u, p1p));
 }
 
+/**
+ * @brief Implementation form
+ *
+ * @ref http://mathworld.wolfram.com/Circle-LineIntersection.html
+ */
+std::vector<rhoban_geometry::Point> getIntersectionLineWithCircle(const Point& point_line_1, const Point& point_line_2,
+                                                                  const Circle& circle)
+{
+  std::vector<rhoban_geometry::Point> intersections; //correctement initialisé ?
+
+  assert(point_line_1 != point_line_2);
+  if (point_line_1 == point_line_2)
+    return intersections;
+
+  //equation ax + by = c
+  double a = 1;
+  double b = 1;
+  double c = 0;
+  double dx = point_line_2.getX() - point_line_1.getX();
+  double dy = point_line_2.getY() - point_line_1.getY();
+  if(dx != 0.00) {
+    a = dy / dx;
+    b = -1;
+    c = -(point_line_1.getY() - a * point_line_1.getX());
+  }
+  else {
+    a = 1;
+    b = 0;
+    c = point_line_1.getX();
+  }
+  double dr_square = a*a + b*b;
+
+  //equation (x-xm)² + (y - ym)² = r²
+  double xm = circle.getCenter().getX();
+  double ym = circle.getCenter().getY();
+  double r = circle.getRadius();
+  double c_sec = c - a*xm - b*ym;
+
+
+  double discrim = r*r * dr_square - c_sec * c_sec;
+
+  if (discrim < 0)
+    return intersections;
+
+  if (discrim == 0.0000)
+  {
+    Point tangent(c_sec * a / dr_square + xm,
+                  (-c_sec) * b /dr_square +ym);
+    intersections.push_back(tangent);
+  }
+
+  if (discrim > 0)
+  {
+    Point point_1((a * c_sec + b * sqrt(discrim)) /dr_square + circle.getCenter().getX(),
+                  (b * c_sec - a * sqrt(discrim)) /dr_square + circle.getCenter().getY());
+    Point point_2((a * c_sec - b * sqrt(discrim)) /dr_square + circle.getCenter().getX(),
+                  (b * c_sec + a * sqrt(discrim)) /dr_square + circle.getCenter().getY());
+    intersections.push_back(point_1);
+    intersections.push_back(point_2);
+  }
+
+  return intersections;
+}
+
 }  // namespace rhoban_geometry
