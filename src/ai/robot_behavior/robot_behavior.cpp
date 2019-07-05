@@ -83,12 +83,12 @@ const data::Robot& RobotBehavior::robot() const
 
 rhoban_geometry::Point RobotBehavior::linearPosition() const
 {
-  return robot().getMovement().linearPosition(Data::get()->ai_data.time);
+  return robot().getMovement().linearPosition(Data::get()->time.now());
 }
 
 ContinuousAngle RobotBehavior::angularPosition() const
 {
-  return robot().getMovement().angularPosition(Data::get()->ai_data.time);
+  return robot().getMovement().angularPosition(Data::get()->time.now());
 }
 
 bool RobotBehavior::isGoalie() const
@@ -127,16 +127,15 @@ bool RobotBehaviorTask::runTask()
 
   // double time = Data::get()->ai_data.time;
   double time = Data::get()->time.now();
-  double dt = Data::get()->ai_data.dt;
+  // double dt = Data::get()->ai_data.dt;
+  double dt = 1.0;
   //  DEBUG("t : " << robot_behavior_-><< std::endl << "time : " << time << std::endl << "dt : " << dt);
 
   robot_behavior_->update(Data::get()->time.now(), robot, ball);
   Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_number_].control;
 
   ctrl = robot_behavior_->control();
-  ctrl.changeToRelativeControl(robot.getMovement().angularPosition(time), dt);
-
-  
+  ctrl.changeToRelativeControl(robot.getMovement().angularPosition(time), ai::Config::period);
 
   viewer::ViewerDataGlobal::get().packets_to_send.push(robot_behavior_->getAnnotations().toJson());
   return true;

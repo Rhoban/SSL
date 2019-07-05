@@ -37,22 +37,24 @@ void PokeBall::update(double time, const data::Robot& robot, const data::Ball& b
 
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->time.now());
 
   Vector2d direction = poke_direction_ - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
 
-  ContinuousAngle robot_rotation = robot.getMovement().angularPosition(Data::get()->ai_data.time);
+  ContinuousAngle robot_rotation = robot.getMovement().angularPosition(Data::get()->time.now());
   ContinuousAngle diff_angle = target_rotation - robot_rotation;
-  
+
   // DEBUG("deggg " << diff_angle.angle().DEG;)
-  if(diff_angle.abs() < 20){
+  if (diff_angle.abs() < 20)
+  {
     ready_to_kick_ = true;
   }
-  else{
+  else
+  {
     ready_to_kick_ = false;
   }
-  
+
   follower_->setFollowingPosition(poke_direction_, target_rotation);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
@@ -60,7 +62,7 @@ void PokeBall::update(double time, const data::Robot& robot, const data::Ball& b
 
 Control PokeBall::control() const
 {
-  Control ctrl = follower_->control();  
+  Control ctrl = follower_->control();
   if (ready_to_kick_)
   {
     ctrl.kick_power = kick_power_;
@@ -72,15 +74,17 @@ Control PokeBall::control() const
     ctrl.charge = false;
     ctrl.kick = false;
   }
-    
+
   return ctrl;
 }
 
-void PokeBall::setPokeDirection(rhoban_geometry::Point poke_direction){
+void PokeBall::setPokeDirection(rhoban_geometry::Point poke_direction)
+{
   poke_direction_ = poke_direction;
 }
 
-void PokeBall::setKickPower(double kick_power){
+void PokeBall::setKickPower(double kick_power)
+{
   if (kick_power > 1)
   {
     kick_power_ = 1;
@@ -93,7 +97,6 @@ void PokeBall::setKickPower(double kick_power){
   {
     kick_power_ = kick_power;
   }
-  
 }
 
 PokeBall::~PokeBall()

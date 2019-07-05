@@ -33,7 +33,7 @@ GameInformations::~GameInformations()
 
 double GameInformations::time() const
 {
-  return Data::get()->ai_data.time;
+  return Data::get()->time.now();
 }
 
 rhoban_geometry::Point GameInformations::centerMark() const

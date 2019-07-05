@@ -235,7 +235,7 @@ GameState::GameState()
                            }
                          }
 
-  );
+                         );
 
   machine_state_.executeAtEachEdge([&](std::string edge_id, GameStateData& state_data, GameStateData& edge_data,
                                        unsigned int run_number,
@@ -260,13 +260,13 @@ bool GameState::ballIsMoving()
   // }
   // return distance > 10;
 
-   Vector2d ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->ai_data.time);
-   double threshold = 0.7;
-   if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
-   {
-     return true;
-   }
-   return false;
+  Vector2d ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->time.now());
+  double threshold = 0.7;
+  if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
+  {
+    return true;
+  }
+  return false;
 }
 
 void GameState::extractData(const Referee& new_data)

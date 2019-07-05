@@ -38,7 +38,7 @@ ConsignFollower* Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocatio
     const rhoban_geometry::Point& position, const ContinuousAngle& angle, bool ignore_the_ball)
 {
   // A_star_path* follower = new A_star_path(ai_data, ai_data.time, ai_data.dt);
-  NavigationInsideTheField* follower = new NavigationInsideTheField(Data::get()->ai_data.time, Data::get()->ai_data.dt);
+  NavigationInsideTheField* follower = new NavigationInsideTheField(Data::get()->time.now(), 0);
   // Navigation_with_obstacle_avoidance* follower = new Navigation_with_obstacle_avoidance(ai_data, ai_data.time,
   // ai_data.dt);
   // PositionFollower* follower = new PositionFollower(ai_data, ai_data.time, ai_data.dt);

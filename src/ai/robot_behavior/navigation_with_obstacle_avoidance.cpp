@@ -145,7 +145,7 @@ void NavigationWithObstacleAvoidance::computeTheRadiusOfLimitCycle()
   }
   else
   {
-    if (robot().getMovement().linearVelocity(Data::get()->ai_data.time).norm() <
+    if (robot().getMovement().linearVelocity(Data::get()->time.now()).norm() <
         ai::Config::translation_velocity_limit / 4.0)
     {
       radius_of_limit_cycle_ = 2 * ai::Config::robot_radius;  // + ai_data.constants.radius_security_for_avoidance;
@@ -384,12 +384,12 @@ rhoban_ssl::annotations::Annotations NavigationWithObstacleAvoidance::getAnnotat
                          linearPosition() + limit_cycle_direction_ * (limit_cycle_direction_.norm()) * 10, "red");
     if (closest_robot_ == -1)
     {
-      annotations.addCircle(ball().getMovement().linearPosition(Data::get()->ai_data.time), radius_of_limit_cycle_);
+      annotations.addCircle(ball().getMovement().linearPosition(Data::get()->time.now()), radius_of_limit_cycle_);
     }
     else
     {
       annotations.addCircle(
-          Data::get()->all_robots.at(closest_robot_).second->getMovement().linearPosition(Data::get()->ai_data.time),
+          Data::get()->all_robots.at(closest_robot_).second->getMovement().linearPosition(Data::get()->time.now()),
           radius_of_limit_cycle_);
     }
     annotations.addAnnotations(position_follower_avoidance_.getAnnotations());

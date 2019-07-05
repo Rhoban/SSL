@@ -82,7 +82,7 @@ bool ResourceUsage::runTask()
 
       if (plot_info_)
       {
-        plot_.setX(Data::get()->ai_data.time);
+        plot_.setX(Data::get()->time.now());
         plot_.push("num_threads", self_cpu_data_.num_threads);
 
         long unsigned int diff_vsize = (self_cpu_data_.vsize - old_self_cpu_data_.vsize);

@@ -75,7 +75,7 @@ void CollisionComputing::computeTableOfCollisionTimes()
         double radius_error = ai::Config::radius_security_for_collision;
         std::pair<bool, double> collision =
             collisionTime(ai::Config::robot_radius, *robot_1.movement, ai::Config::robot_radius, *robot_2.movement,
-                          radius_error, Data::get()->ai_data.time);
+                          radius_error, Data::get()->time.now());
         if (collision.first)
         {
           Data::get()->ai_data.table_of_collision_times_[std::pair<int, int>(i, j)] = collision.second;
