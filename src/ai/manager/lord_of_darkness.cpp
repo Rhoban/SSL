@@ -349,7 +349,7 @@ void LordOfDarkness::startRunning()
 {
   DEBUG("START RUNNING");
   setBallAvoidanceForAllRobots(false);
-  if (Data::get()->ball.movement_sample[0].linear_position.x <= 0)
+  if (Data::get()->ball.movement_sample[0].linear_position.x <= -2)
   {
     //+ 1 because the method getValidPlayerIds() doesn't count goalie.
     future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
@@ -412,7 +412,7 @@ void LordOfDarkness::startPrepareKickoffOpponent()
 void LordOfDarkness::startKickoffAlly()
 {
   // setBallAvoidanceForAllRobots(false);
-  future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startKickoffOpponent()
@@ -454,14 +454,14 @@ void LordOfDarkness::continueStop()
 
 void LordOfDarkness::continueRunning()
 {
-  if (Data::get()->ball.movement_sample[0].linear_position.x <= 0 and not(ball_was_in_ally_part_))
+  if (Data::get()->ball.movement_sample[0].linear_position.x <= -2 and not(ball_was_in_ally_part_))
   {
     clearStrategyAssignement();
     future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
     ball_was_in_ally_part_ = true;
     declareAndAssignNextStrategies(future_strats_);
   }
-  else if (Data::get()->ball.movement_sample[0].linear_position.x > 0 and ball_was_in_ally_part_)
+  else if (Data::get()->ball.movement_sample[0].linear_position.x > -2 and ball_was_in_ally_part_)
   {
     clearStrategyAssignement();
     future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
