@@ -16,7 +16,7 @@ class Mobile
   /*!
    * \brief last_update corresponds to last call to an update method... not related to game timing information.
    */
-  rhoban_utils::TimeStamp last_update;
+  double last_update;
 
 public:
   MovementSample movement_sample;

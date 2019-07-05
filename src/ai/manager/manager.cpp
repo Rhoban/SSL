@@ -64,11 +64,11 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
   assert(strategies_.find(strategy_name) != strategies_.end());  // The name of the strategy is not declared. Please
                                                                  // register them with register_strategy() (during the
                                                                  // initialisation of your manager for example).
-  assert(not(assign_goalie) or
-         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(),
-                                      Data::get()->referee.teams_info[Ally].goalkeeper_number) ==
-                                robot_ids.end()));  // If you declare that you are assigning a goal, you should not
-                                                    // declar the goal id inside the list of field robots.
+  assert(not(assign_goalie) or (assign_goalie and
+                                std::find(robot_ids.begin(), robot_ids.end(),
+                                          Data::get()->referee.teams_info[Ally].goalkeeper_number) ==
+                                    robot_ids.end()));  // If you declare that you are assigning a goal, you should not
+                                                        // declar the goal id inside the list of field robots.
 
   current_strategy_names_.push_front(strategy_name);
   strategy::Strategy& strategy = getStrategy(strategy_name);
@@ -123,7 +123,7 @@ void Manager::updateCurrentStrategies()
   for (const std::string& name : current_strategy_names_)
   {
     //@TODO : Remove the time passed.
-    getStrategy(name).update(Data::get()->ai_data.time);
+    getStrategy(name).update(Data::get()->time.now());
   }
 }
 
@@ -149,7 +149,7 @@ void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavio
           {
             id_is_present = true;
           }
-      // assert(id_is_present);
+// assert(id_is_present);
 #endif
           if (id == -1)
             return;
@@ -173,12 +173,13 @@ std::string Manager::name()
 
 double Manager::time() const
 {
-  return Data::get()->ai_data.time;
+  return Data::get()->time.now();
 }
 
 double Manager::dt() const
 {
-  return Data::get()->ai_data.dt;
+  // return Data::get()->ai_data.dt;
+  return ai::Config::period;
 }
 
 void Manager::affectInvalidRobotsToInvalidRobotsStrategy()
@@ -508,7 +509,7 @@ void Manager::declareAndAssignNextStrategies(const std::list<std::string>& futur
     const std::string& strategy_name = elem.first;
     const std::vector<int>& affectation = elem.second;
     bool have_a_goalie = (getNextStrategyWithGoalie() == strategy_name);
-    assignStrategy(strategy_name, Data::get()->ai_data.time, affectation, have_a_goalie);
+    assignStrategy(strategy_name, Data::get()->time.now(), affectation, have_a_goalie);
   }
 }
 

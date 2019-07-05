@@ -55,8 +55,7 @@ Keeper::Keeper() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
       std::abs(circle_radius_center_of_the_trajectory - std::abs(distanciation + robot_diameter));
 
   rhoban_geometry::Point circle_center_of_the_trajectory =
-      goal_center_ -
-      rhoban_geometry::Point(distance_goal_center_to_circle_center, 0.0);
+      goal_center_ - rhoban_geometry::Point(distance_goal_center_to_circle_center, 0.0);
 
   goalkeeper_trajectory_ =
       rhoban_geometry::Circle(circle_center_of_the_trajectory, circle_radius_center_of_the_trajectory);
@@ -82,7 +81,7 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
     future_ball_positions_.push_back(ball.getMovement().linearPosition(time + i * 0.2));
   }*/
 
- // DEBUG(goalkeeper_zone_.is_inside(Data::get()->robots[Ally][2].getMovement().linearPosition(time)));
+  // DEBUG(goalkeeper_zone_.is_inside(Data::get()->robots[Ally][2].getMovement().linearPosition(time)));
   NavigationInsideTheField* position_follower =
       dynamic_cast<NavigationInsideTheField*>(follower_);  // PID modification to be as responsive as Barthez
 
@@ -96,6 +95,9 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   Vector2d ball_trajectory = ball.getMovement().linearVelocity(time);
   annotations_.addArrow(ball_position, goal_center_, "red", true);
   annotations_.addArrow(ball_position, ball_trajectory, "orange", true); //ca deconne ici
+
+  annotations_.addArrow(ball_position, goal_center_, "red", true);
+  annotations_.addArrow(ball_position, ball_position + ball_trajectory, "orange", true);  // ca deconne ici
 
   if (ball_trajectory.norm() == 0.00000)
   {
@@ -219,7 +221,7 @@ rhoban_geometry::Point Keeper::placeBetweenGoalCenterAndBall(const rhoban_geomet
                   1 :
                   -1;  // assign 1 or -1 whether the ball is the same side as the left pole or not
 
-  double position_to_take_y = signe * (1-cos_theta) *
+  double position_to_take_y = signe * (1 - cos_theta) *
                               std::abs(Data::get()->field.getGoal(Ally).pole_left_.getY() -
                                        Data::get()->field.getGoal(Ally).pole_right_.getY()) /
                               2;

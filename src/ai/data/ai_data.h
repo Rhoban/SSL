@@ -39,12 +39,12 @@ public:
   /**
    * @brief time in seconds
    */
-  double time;
+  // double time;
 
   /**
    * @brief dt with last loop in seconds
    */
-  double dt;
+  // double dt;
 
   // This field is used by rhobot_behavior::Navigation_inside_the_field.
   bool force_ball_avoidance;
