@@ -16,9 +16,6 @@
     You should have received a copy of the GNU Lesser General Public License
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-// ./bin/go_to_xy -r 2 -s --xdest 0 --ydest 0
-
 #include <iostream>
 #include <sstream>
 #include <unistd.h>
@@ -41,11 +38,7 @@
 #include <robot_behavior/tutorials/beginner/see_robot.h>
 #include <robot_behavior/tutorials/beginner/goalie.h>
 #include <strategy/from_robot_behavior.h>
-#include <robot_behavior/tutorials/beginner/goto_ball.h>
-#include <core/plot_velocity.h>
-#include <core/plot_xy.h>
-#include <robot_behavior/go_to_xy.h>
-#include <executables/tools.h>
+#include <robot_behavior/keeper/keeper2.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
@@ -159,26 +152,6 @@ int main(int argc, char** argv)
                                        // value.
                                        cmd);
 
-  TCLAP::ValueArg<double> xdest("o",      // short argument name  (with one character)
-                                "xdest",  // long argument name
-                                "The x destination "
-                                "parameter",
-                                true,   // Flag is required
-                                1000,   // Default value
-                                "int",  // short description of the expected
-                                // value.
-                                cmd);
-
-  TCLAP::ValueArg<double> ydest("l",      // short argument name  (with one character)
-                                "ydest",  // long argument name
-                                "The y destination "
-                                "parameter",
-                                true,   // Flag is required
-                                0,      // Default value
-                                "int",  // short description of the expected
-                                // value.
-                                cmd);
-
   cmd.parse(argc, argv);
 
   if (em.getValue())
@@ -222,29 +195,34 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
 
-  addCoreTasks();
-  addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
-  addRobotComTasks();
+  ExecutionManager::getManager().addTask(new ai::InitMobiles(), 0);
 
-  std::cout << "Xdest is :" << xdest.getValue() << " and ydest is " << ydest.getValue() << std::endl;
+  //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
+  // vision
+  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport), 0);
+  // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
+  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer(), 1);
+  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer(), 2);
+  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView(), 3);
+  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used), 4);
+  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used), 5);
 
-  rhoban_geometry::Point point = rhoban_geometry::Point(xdest.getValue(), ydest.getValue());
-  double reach_radius = 0.2;
+  ExecutionManager::getManager().addTask(new ConditionalTask(
+      []() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
+      [&]() -> bool {
+        ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
+        ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
+        ExecutionManager::getManager().addTask(
+            new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(), new robot_behavior::Keeper2()), 102);
+        Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = true;
+        return false;
+      }));
 
-  ExecutionManager::getManager().addTask(
-      new ConditionalTask([]() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
-                          [&]() -> bool {
-                            ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
-                            ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
-                            ExecutionManager::getManager().addTask(
-                                new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(),
-                                                                      new robot_behavior::GoToXY(point, reach_radius)),
-                                102);
-                            Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = false;
-                            ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()));
-                            ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
-                            return false;
-                          }));
+  // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
+  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
+
+  ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
+  ExecutionManager::getManager().addTask(new control::Commander(), 1001);
 
   ExecutionManager::getManager().run(0.01);
 

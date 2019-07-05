@@ -96,8 +96,15 @@ GameState::GameState()
                           [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
                             // DEBUG(state_name::prepare_kickoff);
                           });
-  machine_state_.addState(state_name::penalty, [this](const GameStateData& data, unsigned int run_number,
-                                                      unsigned int atomic_run_number) { DEBUG(state_name::penalty); });
+  machine_state_.addState(state_name::penalty,
+                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                            // DEBUG(state_name::penalty);
+                          });
+  machine_state_.addState(state_name::prepare_penalty,
+                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
+                            // DEBUG(state_name::prepare_penalty);
+                          });
+
   machine_state_.addInitState(state_name::halt);
 
   // EDGES
@@ -176,7 +183,7 @@ GameState::GameState()
   machine_state_.addEdge(edge_name::free_kick_to_halt, state_name::free_kick, state_name::halt,
                          command_is_<Referee::HALT>);
 
-  machine_state_.addEdge(edge_name::stop_to_penalty, state_name::stop, state_name::penalty,
+  machine_state_.addEdge(edge_name::stop_to_prepare_penalty, state_name::stop, state_name::prepare_penalty,
                          command_is_one_of_<Referee::PREPARE_PENALTY_YELLOW, Referee::PREPARE_PENALTY_BLUE>,
                          [&](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
                            if ((game_state_data_.current().command() == Referee::PREPARE_PENALTY_YELLOW))
@@ -189,7 +196,13 @@ GameState::GameState()
                            }
                          });
 
+  machine_state_.addEdge(edge_name::prepare_penalty_to_stop, state_name::prepare_penalty, state_name::stop,
+                         command_is_<Referee::STOP>);
+
   machine_state_.addEdge(edge_name::penalty_to_stop, state_name::penalty, state_name::stop, command_is_<Referee::STOP>);
+
+  machine_state_.addEdge(edge_name::start_penalty, state_name::prepare_penalty, state_name::penalty,
+                         command_is_<Referee::NORMAL_START>);
 
   machine_state_.addEdge(edge_name::ball_move_after_penalty, state_name::penalty, state_name::running,
                          [this](const GameStateData& data, unsigned int run_number, unsigned int atomic_run_number) {
@@ -197,6 +210,11 @@ GameState::GameState()
                                    not(command_is_<Referee::HALT>(data, run_number, atomic_run_number)) &&
                                    not(command_is_<Referee::STOP>(data, run_number, atomic_run_number)));
                          });
+
+  machine_state_.addEdge(edge_name::prepare_penalty_to_halt, state_name::prepare_penalty, state_name::halt,
+                         command_is_<Referee::HALT>);
+
+  machine_state_.addEdge(edge_name::penalty_to_halt, state_name::penalty, state_name::halt, command_is_<Referee::HALT>);
 
   machine_state_.addEdge(edge_name::stop_to_halt, state_name::stop, state_name::halt, command_is_<Referee::HALT>);
 
@@ -219,8 +237,6 @@ GameState::GameState()
 
   );
 
-  machine_state_.addEdge(edge_name::penalty_to_halt, state_name::penalty, state_name::halt, command_is_<Referee::HALT>);
-
   machine_state_.executeAtEachEdge([&](std::string edge_id, GameStateData& state_data, GameStateData& edge_data,
                                        unsigned int run_number,
                                        unsigned int atomic_run_number) { change_stamp_ += 1; });
@@ -232,13 +248,25 @@ GameState::GameState()
 
 bool GameState::ballIsMoving()
 {
-  Vector2d ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->ai_data.time);
-  double threshold = 0.001;
-  if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
-  {
-    return true;
-  }
-  return false;
+  // double distance = 0.0;
+  // for (uint i = 0; i < Data::get()->ball.movement_sample.size(); ++i)
+  // {
+  //   for (uint k = 0; k < Data::get()->ball.movement_sample.size(); ++k)
+  //   {
+  //     distance = std::max(Data::get()->ball.movement_sample[i].linear_position.getDist(
+  //                             Data::get()->ball.movement_sample[k].linear_position),
+  //                         distance);
+  //   }
+  // }
+  // return distance > 10;
+
+   Vector2d ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->ai_data.time);
+   double threshold = 0.7;
+   if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
+   {
+     return true;
+   }
+   return false;
 }
 
 void GameState::extractData(const Referee& new_data)

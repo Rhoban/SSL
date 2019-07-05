@@ -91,7 +91,7 @@ bool SslGeometryPacketAnalyzer::runTask()
     }
     ++i;
   }
-  return !(field_done_ && camera_done_);
+  return true;
 }
 
 bool DetectionPacketAnalyzer::runTask()
@@ -123,6 +123,12 @@ bool DetectionPacketAnalyzer::runTask()
         else
         {
           current.t_capture_ = Data::get()->time.syncVisionTimeWithProgramTimeLine(frame.t_capture());
+        }
+
+        if (current.t_capture_ < 0)
+        {
+          std::cerr << "\033[31;5mWARNING:\033[0m Capture time is negative! " << std::endl;
+          std::cerr << "              maybe a issue with ntpd: check config.json " << std::endl;
         }
 
         current.camera_id_ = int(frame.camera_id());

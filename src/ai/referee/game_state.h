@@ -35,6 +35,8 @@ struct state_name
   static const constexpr char* kickoff = "kickoff";
   static const constexpr char* prepare_kickoff = "prepare_kickoff";
   static const constexpr char* penalty = "penalty";
+  static const constexpr char* prepare_penalty = "prepare_penalty";
+
 };
 
 struct edge_name
@@ -55,9 +57,12 @@ struct edge_name
   static const constexpr char* ball_move_after_free_kick = "ball_move_after_free_kick";
   static const constexpr char* free_kick_to_halt = "free_kick_to_halt";
 
-  static const constexpr char* stop_to_penalty = "stop_to_penalty";
+  static const constexpr char* stop_to_prepare_penalty = "stop_to_prepare_penalty";
+  static const constexpr char* prepare_penalty_to_stop = "prepare_penalty_to_stop";
   static const constexpr char* penalty_to_stop = "penalty_to_stop";
+  static const constexpr char* start_penalty = "start_penalty";
   static const constexpr char* ball_move_after_penalty = "ball_move_after_penalty";
+  static const constexpr char* prepare_penalty_to_halt = "prepare_penalty_to_halt";
   static const constexpr char* penalty_to_halt = "penalty_to_halt";
 
   static const constexpr char* stop_to_halt = "stop_to_halt";

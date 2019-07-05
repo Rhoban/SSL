@@ -418,19 +418,32 @@ void LordOfDarkness::startKickoffAlly()
 void LordOfDarkness::startKickoffOpponent()
 {
   setBallAvoidanceForAllRobots(false);
+  // TODO: Mettre une strat ici ?
+  // nope pas besoin
+}
+
+void LordOfDarkness::startPreparePenaltyAlly()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = penalty_strats_a_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
+}
+void LordOfDarkness::startPreparePenaltyOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = penalty_strats_o_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
 void LordOfDarkness::startPenaltyAlly()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = penalty_strats_a_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startPenaltyOpponent()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = penalty_strats_o_[Manager::getValidPlayerIds().size() + 1];
-  declareAndAssignNextStrategies(future_strats_);
 }
 
 // Continue
@@ -485,6 +498,13 @@ void LordOfDarkness::continueKickoffAlly()
 {
 }
 void LordOfDarkness::continueKickoffOpponent()
+{
+}
+
+void LordOfDarkness::continuePreparePenaltyAlly()
+{
+}
+void LordOfDarkness::continuePreparePenaltyOpponent()
 {
 }
 

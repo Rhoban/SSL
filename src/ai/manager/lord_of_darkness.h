@@ -79,6 +79,9 @@ public:
   virtual void startKickoffAlly();
   virtual void startKickoffOpponent();
 
+  virtual void startPreparePenaltyAlly();
+  virtual void startPreparePenaltyOpponent();
+
   virtual void startPenaltyAlly();
   virtual void startPenaltyOpponent();
 
@@ -98,6 +101,9 @@ public:
 
   virtual void continueKickoffAlly();
   virtual void continueKickoffOpponent();
+
+  virtual void continuePreparePenaltyAlly();
+  virtual void continuePreparePenaltyOpponent();
 
   virtual void continuePenaltyAlly();
   virtual void continuePenaltyOpponent();

@@ -14,7 +14,7 @@
     along with SSL.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "keeper.h"
+#include "keeper2.h"
 #include <math/tangents.h>
 #include <math/vector2d.h>
 #include <math/intersection.h>
@@ -24,17 +24,17 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-rhoban_geometry::Point Keeper::calculateGoalPosition(const rhoban_geometry::Point& ball_position,
-                                                     const Vector2d& right_pole, const Vector2d& left_pole,
-                                                     double keeper_radius)
+rhoban_geometry::Point Keeper2::calculateGoalPosition(const rhoban_geometry::Point& ball_position,
+                                                      const Vector2d& right_pole, const Vector2d& left_pole,
+                                                      double keeper_radius)
 {
   rhoban_geometry::Point defender_position = rhoban_geometry::centerOfConeIncircle(
       ball_position, vector2point(right_pole), vector2point(left_pole), keeper_radius);
   return defender_position;
 }
 
-Keeper::Keeper()
-  : Keeper::Keeper(
+Keeper2::Keeper2()
+  : Keeper2::Keeper2(
         rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, Data::get()->field.goal_width_ / 2.0),
         rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, -Data::get()->field.goal_width_ / 2.0),
         rhoban_geometry::Point(-Data::get()->field.field_length_ / 2.0, 0.0) + ai::Config::waiting_goal_position,
@@ -42,8 +42,8 @@ Keeper::Keeper()
 {
 }
 
-Keeper::Keeper(const rhoban_geometry::Point& left_post_position, const rhoban_geometry::Point& right_post_position,
-               const rhoban_geometry::Point& waiting_goal_position, double penalty_radius, double keeper_radius)
+Keeper2::Keeper2(const rhoban_geometry::Point& left_post_position, const rhoban_geometry::Point& right_post_position,
+                 const rhoban_geometry::Point& waiting_goal_position, double penalty_radius, double keeper_radius)
   : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
   left_post_position_ = left_post_position;
@@ -54,11 +54,11 @@ Keeper::Keeper(const rhoban_geometry::Point& left_post_position, const rhoban_ge
   keeper_radius_ = keeper_radius;
   NavigationInsideTheField* foll =
       dynamic_cast<NavigationInsideTheField*>(follower_);  // PID modification to be as responsive as Barthez
-  foll->setTranslationPid(12, 0.0001, 0);
+  foll->setTranslationPid(3.0, 0.0001, 0);
   foll->setOrientationPid(1.0, 0, 0);
 }
 
-void Keeper::update(double time, const data::Robot& robot, const data::Ball& ball)
+void Keeper2::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -87,7 +87,11 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   double target_rotation;
   rhoban_geometry::Point predicted_intersection_point;
 
-  const rhoban_geometry::Point& predicted_ball_position = ball.getMovement().linearPosition(time + 3.0);
+  auto p1 = ball.getMovement().linearPosition(time - 0.2);
+  auto p2 = ball.getMovement().linearPosition(time);
+  p2 = p2 + (p2 - p1);
+  rhoban_geometry::Point predicted_ball_position = p2;
+  // const rhoban_geometry::Point& predicted_ball_position = ball.getMovement().linearPosition(time + 3.0);
   // test if the ball hits the back
 
   if (predicted_ball_position.getX() < left_post_position.getX())
@@ -180,19 +184,19 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   follower_->update(time, robot, ball);
 }
 
-Control Keeper::control() const
+Control Keeper2::control() const
 {
   Control ctrl = follower_->control();
   ctrl.chip_kick = true;
   return ctrl;
 }
 
-Keeper::~Keeper()
+Keeper2::~Keeper2()
 {
   delete follower_;
 }
 
-rhoban_ssl::annotations::Annotations Keeper::getAnnotations() const
+rhoban_ssl::annotations::Annotations Keeper2::getAnnotations() const
 {
   rhoban_ssl::annotations::Annotations annotations;
   /*

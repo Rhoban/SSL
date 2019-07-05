@@ -194,7 +194,7 @@ int main(int argc, char** argv)
 
   ai::Config::load(config_path.getValue());
 
-  ExecutionManager::getManager().addTask(new ai::InitMobiles());
+  ExecutionManager::getManager().addTask(new ai::InitMobiles(), 0);
 
   //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
   // vision

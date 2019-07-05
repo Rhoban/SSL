@@ -41,6 +41,7 @@
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 #include <core/plot_velocity.h>
 #include <core/plot_xy.h>
+#include <executables/tools.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
@@ -195,22 +196,20 @@ int main(int argc, char** argv)
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
 
-  ai::Config::load(config_path.getValue());
+  ExecutionManager::getManager().addTask(new ai::UpdateConfigTask(config_path.getValue()), 0);
 
-  ExecutionManager::getManager().addTask(new ai::InitMobiles());
-
-  //  ExecutionManager::getManager().addTask(new TimeStatTask(100));
-  // vision
-  ExecutionManager::getManager().addTask(new vision::VisionClientSingleThread(addr.getValue(), theport), 0);
-  // ExecutionManager::getManager().addTask(new vision::VisionPacketStat(100));
-  ExecutionManager::getManager().addTask(new vision::SslGeometryPacketAnalyzer(), 1);
-  ExecutionManager::getManager().addTask(new vision::DetectionPacketAnalyzer(), 2);
-  ExecutionManager::getManager().addTask(new vision::ChangeReferencePointOfView(), 3);
-  ExecutionManager::getManager().addTask(new vision::UpdateRobotInformation(part_of_the_field_used), 4);
-  ExecutionManager::getManager().addTask(new vision::UpdateBallInformation(part_of_the_field_used), 5);
+  addCoreTasks();
+  addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
+  addPreBehaviorTreatment();
+  addRobotComTasks();
+  addTaskShortCutProcessIfNoVisionData();
 
   ExecutionManager::getManager().addTask(new ConditionalTask(
-      []() -> bool { return vision::VisionDataGlobal::singleton_.last_packets_.size() > 0; },
+      []() -> bool {
+        static int i = 0;
+        i += vision::VisionDataGlobal::singleton_.last_packets_.size();
+        return i > 5;
+      },
       [&]() -> bool {
         ExecutionManager::getManager().addTask(new data::CollisionComputing(), 100);
         ExecutionManager::getManager().addTask(new ai::TimeUpdater(), 101);
@@ -218,18 +217,13 @@ int main(int argc, char** argv)
             new robot_behavior::RobotBehaviorTask(assigned_robot.getValue(), new robot_behavior::beginner::GotoBall()),
             102);
         Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = false;
-        ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()));
+
+        ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()), 1001);
         ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
         return false;
       }));
 
-  // ExecutionManager::getManager().addTask(new vision::VisionDataTerminalPrinter());
-  ExecutionManager::getManager().addTask(new vision::VisionProtoBufReset(10), 6);
-
-  ExecutionManager::getManager().addTask(new control::LimitVelocities(), 1000);
-  ExecutionManager::getManager().addTask(new control::Commander(), 1001);
-
-  ExecutionManager::getManager().run(0.01);
+  ExecutionManager::getManager().run(0.2);
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;
