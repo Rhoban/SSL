@@ -39,6 +39,15 @@ double Config::p_orientation;
 double Config::i_orientation;
 double Config::d_orientation;
 
+// PID for translation
+double Config::p_translation_goalkeeper;
+double Config::i_translation_goalkeeper;
+double Config::d_translation_goalkeeper;
+
+double Config::p_orientation_goalkeeper;
+double Config::i_orientation_goalkeeper;
+double Config::d_orientation_goalkeeper;
+
 bool Config::enable_kicking;
 
 double Config::penalty_rayon;
@@ -125,6 +134,15 @@ void Config::load(const std::string& config_path)
     p_orientation = robot_conf["p_orientation"]["simu"].asDouble();
     i_orientation = robot_conf["i_orientation"]["simu"].asDouble();
     d_orientation = robot_conf["d_orientation"]["simu"].asDouble();
+
+    // PID for translation
+    p_translation_goalkeeper = robot_conf["p_translation_goalkeeper"]["simu"].asDouble();
+    i_translation_goalkeeper = robot_conf["i_translation_goalkeeper"]["simu"].asDouble();
+    d_translation_goalkeeper = robot_conf["d_translation_goalkeeper"]["simu"].asDouble();
+
+    p_orientation_goalkeeper = robot_conf["p_orientation_goalkeeper"]["simu"].asDouble();
+    i_orientation_goalkeeper = robot_conf["i_orientation_goalkeeper"]["simu"].asDouble();
+    d_orientation_goalkeeper = robot_conf["d_orientation_goalkeeper"]["simu"].asDouble();
   }
   else
   {
@@ -138,6 +156,14 @@ void Config::load(const std::string& config_path)
     p_orientation = robot_conf["p_orientation"]["real"].asDouble();
     i_orientation = robot_conf["i_orientation"]["real"].asDouble();
     d_orientation = robot_conf["d_orientation"]["real"].asDouble();
+
+    p_translation_goalkeeper = robot_conf["p_translation_goalkeeper"]["real"].asDouble();
+    i_translation_goalkeeper = robot_conf["i_translation_goalkeeper"]["real"].asDouble();
+    d_translation_goalkeeper = robot_conf["d_translation_goalkeeper"]["real"].asDouble();
+
+    p_orientation_goalkeeper = robot_conf["p_orientation_goalkeeper"]["real"].asDouble();
+    i_orientation_goalkeeper = robot_conf["i_orientation_goalkeeper"]["real"].asDouble();
+    d_orientation_goalkeeper = robot_conf["d_orientation_goalkeeper"]["real"].asDouble();
   }
   assert(wheel_nb_turns_acceleration_limit > 0.0);
   assert(rotation_velocity_limit > 0.0);
@@ -148,6 +174,14 @@ void Config::load(const std::string& config_path)
   assert(p_orientation >= 0.0);
   assert(i_orientation >= 0.0);
   assert(d_orientation >= 0.0);
+
+  assert(p_orientation_goalkeeper >= 0.0);
+  assert(i_orientation_goalkeeper >= 0.0);
+  assert(d_orientation_goalkeeper >= 0.0);
+
+  assert(p_translation_goalkeeper >= 0.0);
+  assert(i_translation_goalkeeper >= 0.0);
+  assert(d_translation_goalkeeper >= 0.0);
 
   translation_acceleration_limit = wheel_nb_turns_acceleration_limit * wheel_radius * 2.0 * M_PI;
   assert(translation_acceleration_limit > 0.0);

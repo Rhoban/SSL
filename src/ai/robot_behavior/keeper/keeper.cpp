@@ -52,10 +52,16 @@ Keeper::Keeper(const rhoban_geometry::Point& left_post_position, const rhoban_ge
   goal_center_ = (left_post_position + right_post_position) / 2.0;
   penalty_radius_ = penalty_radius;
   keeper_radius_ = keeper_radius;
-  NavigationInsideTheField* foll =
+  NavigationInsideTheField* position_follower =
       dynamic_cast<NavigationInsideTheField*>(follower_);  // PID modification to be as responsive as Barthez
-  foll->setTranslationPid(12, 0.0001, 0);
-  foll->setOrientationPid(1.0, 0, 0);
+
+  position_follower->setTranslationPid(ai::Config::p_translation_goalkeeper, ai::Config::i_translation_goalkeeper,
+                                       ai::Config::d_translation_goalkeeper);
+
+  position_follower->setOrientationPid(ai::Config::p_orientation_goalkeeper, ai::Config::i_orientation_goalkeeper,
+                                       ai::Config::d_orientation_goalkeeper);
+
+  DEBUG(ai::Config::p_translation_goalkeeper << " " << ai::Config::p_orientation_goalkeeper);
 }
 
 void Keeper::update(double time, const data::Robot& robot, const data::Ball& ball)
