@@ -219,7 +219,7 @@ LordOfDarkness::LordOfDarkness(std::string name)
   registerStrategy("kickoff_ally_placement_M", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                                                    [&](double time, double dt) {
                                                      robot_behavior::GoToXY* go = new robot_behavior::GoToXY(
-                                                         rhoban_geometry::Point(-0.15, 0), 0.01, true);
+                                                         rhoban_geometry::Point(-0.35, 0), 0.01, true);
 
                                                      return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                                                    },
