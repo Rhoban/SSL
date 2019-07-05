@@ -100,6 +100,18 @@ public:
     MANAGER::startKickoffOpponent();
   }
 
+  virtual void startPreparePenaltyAlly()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startPreparePenaltyAlly();
+  }
+  virtual void startPreparePenaltyOpponent()
+  {
+    MANAGER::setBallAvoidanceForAllRobots(true);
+    MANAGER::startPreparePenaltyOpponent();
+  }
+
+
   virtual void startPenaltyAlly()
   {
     MANAGER::setBallAvoidanceForAllRobots(false);
@@ -161,6 +173,15 @@ public:
   virtual void continueKickoffOpponent()
   {
     MANAGER::continueKickoffOpponent();
+  }
+
+  virtual void continuePreparePenaltyAlly()
+  {
+    MANAGER::continuePreparePenaltyAlly();
+  }
+  virtual void continuePreparePenaltyOpponent()
+  {
+    MANAGER::continuePreparePenaltyOpponent();
   }
 
   virtual void continuePenaltyAlly()

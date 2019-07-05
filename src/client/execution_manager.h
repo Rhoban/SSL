@@ -52,6 +52,7 @@ class ExecutionManager
   static ExecutionManager execution_manager_singleton_;
   bool shutdown_;
   int current_max_priority_;
+  int stop_loop_at;
 
 public:
   static ExecutionManager& getManager();
@@ -65,6 +66,7 @@ public:
    * @param min_loop_duration : minimum time between to loops over registered tasks
    */
   void run(double min_loop_duration);
+  void setMaxTaskId(int value = -1);
   void shutdown();
 };
 }  // namespace rhoban_ssl

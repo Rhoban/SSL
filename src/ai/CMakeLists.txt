@@ -23,6 +23,7 @@ set (SOURCES
     core/plot_velocity.cpp
     core/plot_xy.cpp
     core/timeout_task.cpp
+    executables/tools.cpp
     data.cpp
     data/ball.cpp
     data/robot.cpp
@@ -149,6 +150,7 @@ set (SOURCES
     strategy/pass.cpp
     # Behavior
     robot_behavior/keeper/clearer.cpp
+    robot_behavior/keeper/keeper2.cpp
     robot_behavior/attacker/receiver.cpp
     robot_behavior/attacker/striker.cpp
     # Annotations
@@ -181,6 +183,9 @@ target_link_libraries(plot_xyt ssl_ai ${ALL_LIBS})
 
 add_executable(goalie executables/goalie.cpp)
 target_link_libraries(goalie ssl_ai ${ALL_LIBS})
+
+add_executable(keeper2 executables/keeper2.cpp)
+target_link_libraries(keeper2 ssl_ai ${ALL_LIBS})
 
 add_executable(goto_ball executables/goto_ball.cpp)
 target_link_libraries(goto_ball ssl_ai ${ALL_LIBS})

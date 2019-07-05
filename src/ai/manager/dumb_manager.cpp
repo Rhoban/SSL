@@ -131,6 +131,19 @@ void DumbManager::startKickoffOpponent()
   declareAndAssignNextStrategies(future_strats_);
 }
 
+void DumbManager::startPreparePenaltyAlly()
+{
+  // setBallAvoidanceForAllRobots(true);
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
+}
+void DumbManager::startPreparePenaltyOpponent()
+{
+  // setBallAvoidanceForAllRobots(true);
+  future_strats_ = dumb_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
+}
+
 void DumbManager::startPenaltyAlly()
 {
   // setBallAvoidanceForAllRobots(false);
@@ -196,6 +209,13 @@ void DumbManager::continueKickoffAlly()
 {
 }
 void DumbManager::continueKickoffOpponent()
+{
+}
+
+void DumbManager::continuePreparePenaltyAlly()
+{
+}
+void DumbManager::continuePreparePenaltyOpponent()
 {
 }
 

@@ -34,6 +34,7 @@
 #include <robot_behavior/stop_not_far.h>
 #include <robot_behavior/stop_not_far_2.h>
 #include <robot_behavior/stop_not_far_3.h>
+#include <robot_behavior/striker_ai.h>
 #include <strategy/from_robot_behavior.h>
 #include <strategy/mur_stop.h>
 #include <strategy/prepare_kickoff.h>
@@ -53,7 +54,8 @@ LordOfDarkness::LordOfDarkness(std::string name)
   , halt_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , kickoff_ally_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , kickoff_opponent_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
-  , penalty_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , penalty_strats_a_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
+  , penalty_strats_o_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , goalie_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , stop_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
   , kick_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
@@ -61,7 +63,6 @@ LordOfDarkness::LordOfDarkness(std::string name)
   , direct_opponent_strats_(1 + ai::Config::NB_OF_ROBOTS_BY_TEAM)
 {
   // strategies arrays begin at 1(case 0 unused) to directly acces the good strategy by giving number of disponible
-
 
   offensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive2::name,
                            strategy::StrikerV2::name, strategy::Offensive::name };
@@ -76,8 +77,6 @@ LordOfDarkness::LordOfDarkness(std::string name)
   offensive_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::StrikerV2::name };
   offensive_strats_[2] = { strategy::KeeperStrat::name, strategy::StrikerV2::name };
   offensive_strats_[1] = { strategy::KeeperStrat::name };
-
-
 
   defensive_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
                            strategy::Offensive::name };
@@ -102,15 +101,15 @@ LordOfDarkness::LordOfDarkness(std::string name)
   halt_strats_[3] = { strategy::Halt::name };
   halt_strats_[2] = { strategy::Halt::name };
   halt_strats_[1] = { strategy::Halt::name };
-
-  stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[6] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
-  stop_strats_[5] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall_2::name };
-  stop_strats_[4] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall::name };
-  stop_strats_[3] = { strategy::KeeperStrat::name, strategy::MurStop::name };
-  stop_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
-  stop_strats_[1] = { strategy::KeeperStrat::name };
+  /*
+    stop_strats_[8] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[7] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[6] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::PrepareKickoff::name };
+    stop_strats_[5] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall_2::name };
+    stop_strats_[4] = { strategy::KeeperStrat::name, strategy::MurStop::name, strategy::Wall::name };
+    stop_strats_[3] = { strategy::KeeperStrat::name, strategy::MurStop::name };
+    stop_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
+    stop_strats_[1] = { strategy::KeeperStrat::name };*/
 
   // kickoff_ally
   kickoff_ally_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, "kickoff_ally_placement_M",
@@ -140,17 +139,23 @@ LordOfDarkness::LordOfDarkness(std::string name)
   kickoff_opponent_strats_[2] = { strategy::KeeperStrat::name, "kickoff_opponent_placement_M" };
   kickoff_opponent_strats_[1] = { strategy::KeeperStrat::name };
 
-  penalty_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                         PROTECT_BALL };
-  penalty_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                         PROTECT_BALL };
-  penalty_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive2::name,
-                         PROTECT_BALL };
-  penalty_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall_2::name, strategy::Defensive::name, PROTECT_BALL };
-  penalty_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive::name, PROTECT_BALL };
-  penalty_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, strategy::Defensive::name };
-  penalty_strats_[2] = { strategy::KeeperStrat::name, strategy::Defensive::name };
-  penalty_strats_[1] = { strategy::KeeperStrat::name };
+  penalty_strats_a_[8] = { strategy::KeeperStrat::name, "GT1", "GT2", "GT3", "GT4", "GT" };
+  penalty_strats_a_[7] = { strategy::KeeperStrat::name, "GT1", "GT2", "GT3", "GT4", "GT" };
+  penalty_strats_a_[6] = { strategy::KeeperStrat::name, "GT1", "GT2", "GT3", "GT4", "GT" };
+  penalty_strats_a_[5] = { strategy::KeeperStrat::name, "GT1", "GT2", "GT3", "GT" };
+  penalty_strats_a_[4] = { strategy::KeeperStrat::name, "GT1", "GT2", "GT" };
+  penalty_strats_a_[3] = { strategy::KeeperStrat::name, "GT1", "GT" };
+  penalty_strats_a_[2] = { strategy::KeeperStrat::name, "GT" };
+  penalty_strats_a_[1] = { strategy::KeeperStrat::name };
+
+  penalty_strats_o_[8] = { "GTG", "GT1", "GT2", "GT3", "GT4", "GT5" };
+  penalty_strats_o_[7] = { "GTG", "GT1", "GT2", "GT3", "GT4", "GT5" };
+  penalty_strats_o_[6] = { "GTG", "GT1", "GT2", "GT3", "GT4", "GT5" };
+  penalty_strats_o_[5] = { "GTG", "GT1", "GT2", "GT3", "GT4" };
+  penalty_strats_o_[4] = { "GTG", "GT1", "GT2", "GT3" };
+  penalty_strats_o_[3] = { "GTG", "GT1", "GT2" };
+  penalty_strats_o_[2] = { "GTG", "GT1" };
+  penalty_strats_o_[1] = { "GTG" };
 
   goalie_strats_[8] = { strategy::KeeperStrat::name };
   goalie_strats_[7] = { strategy::KeeperStrat::name };
@@ -246,26 +251,40 @@ LordOfDarkness::LordOfDarkness(std::string name)
                                                    )));
 
   registerStrategy("SNF1", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                              [&](double time, double dt) {
-                                robot_behavior::StopNotFar* go = new robot_behavior::StopNotFar();
-                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
-                              },
-                              false  // we don't want to define a goal here !
-                              )));
+                               [&](double time, double dt) {
+                                 robot_behavior::StopNotFar* go = new robot_behavior::StopNotFar();
+                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                               },
+                               false  // we don't want to define a goal here !
+                               )));
   registerStrategy("SNF2", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
-                              [&](double time, double dt) {
-                                robot_behavior::StopNotFar2* go = new robot_behavior::StopNotFar2();
-                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
-                              },
-                              false  // we don't want to define a goal here !
-                              )));
+                               [&](double time, double dt) {
+                                 robot_behavior::StopNotFar2* go = new robot_behavior::StopNotFar2();
+                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                               },
+                               false  // we don't want to define a goal here !
+                               )));
   registerStrategy("SNF3", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                               [&](double time, double dt) {
+                                 robot_behavior::StopNotFar3* go = new robot_behavior::StopNotFar3();
+                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                               },
+                               false  // we don't want to define a goal here !
+                               )));
+  registerStrategy("GT", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                             [&](double time, double dt) {
+                               robot_behavior::GoToXY* go = new robot_behavior::GoToXY(rhoban_geometry::Point(3.3, 0));
+                               return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                             },
+                             false  // we don't want to define a goal here !
+                             )));
+  registerStrategy("GTG", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
                               [&](double time, double dt) {
-                                robot_behavior::StopNotFar3* go = new robot_behavior::StopNotFar3();
+                                robot_behavior::GoToXY* go =
+                                    new robot_behavior::GoToXY(Data::get()->field.goalCenter(Ally));
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
-                              false  // we don't want to define a goal here !
-                              )));
+                              true)));
 
   registerStrategy(strategy::PrepareKickoff::name, std::shared_ptr<strategy::Strategy>(new strategy::PrepareKickoff()));
   registerStrategy(strategy::MurStop::name, std::shared_ptr<strategy::Strategy>(new strategy::MurStop()));
@@ -276,6 +295,46 @@ LordOfDarkness::LordOfDarkness(std::string name)
                                        return std::shared_ptr<robot_behavior::RobotBehavior>(protect_ball);
                                      },
                                      false)));
+  registerStrategy("GT1", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::GoToXY* go =
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 2.8));
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
+  registerStrategy("GT2", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::GoToXY* go =
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, -2.8));
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
+  registerStrategy("GT3", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::GoToXY* go =
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 1.2));
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
+
+  registerStrategy("GT4", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::GoToXY* go =
+                                    new robot_behavior::GoToXY(rhoban_geometry::Point(-1, -1.2));
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
+  registerStrategy("GT5", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::GoToXY* go = new robot_behavior::GoToXY(rhoban_geometry::Point(-1, 0));
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
 }
 
 void LordOfDarkness::startStop()
@@ -302,7 +361,6 @@ void LordOfDarkness::startRunning()
     ball_was_in_ally_part_ = false;
   }
   declareAndAssignNextStrategies(future_strats_);
-
 }
 void LordOfDarkness::startHalt()
 {
@@ -360,19 +418,32 @@ void LordOfDarkness::startKickoffAlly()
 void LordOfDarkness::startKickoffOpponent()
 {
   setBallAvoidanceForAllRobots(false);
+  // TODO: Mettre une strat ici ?
+  // nope pas besoin
+}
+
+void LordOfDarkness::startPreparePenaltyAlly()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = penalty_strats_a_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
+}
+void LordOfDarkness::startPreparePenaltyOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = penalty_strats_o_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
 }
 
 void LordOfDarkness::startPenaltyAlly()
 {
   setBallAvoidanceForAllRobots(false);
-  future_strats_ = penalty_strats_[Manager::getValidPlayerIds().size() + 1];
+  future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
   declareAndAssignNextStrategies(future_strats_);
 }
 void LordOfDarkness::startPenaltyOpponent()
 {
-  setBallAvoidanceForAllRobots(true);
-  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
-  declareAndAssignNextStrategies(future_strats_);
+  setBallAvoidanceForAllRobots(false);
 }
 
 // Continue
@@ -383,20 +454,20 @@ void LordOfDarkness::continueStop()
 
 void LordOfDarkness::continueRunning()
 {
-   if (Data::get()->ball.movement_sample[0].linear_position.x <= 0 and not(ball_was_in_ally_part_))
-   {
-     clearStrategyAssignement();
-     future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
-     ball_was_in_ally_part_ = true;
-    declareAndAssignNextStrategies(future_strats_);
-   }
-   else if (Data::get()->ball.movement_sample[0].linear_position.x > 0 and ball_was_in_ally_part_)
-   {
+  if (Data::get()->ball.movement_sample[0].linear_position.x <= 0 and not(ball_was_in_ally_part_))
+  {
     clearStrategyAssignement();
-     future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
-     ball_was_in_ally_part_ = false;
-     declareAndAssignNextStrategies(future_strats_);
-   }
+    future_strats_ = defensive_strats_[Manager::getValidPlayerIds().size() + 1];
+    ball_was_in_ally_part_ = true;
+    declareAndAssignNextStrategies(future_strats_);
+  }
+  else if (Data::get()->ball.movement_sample[0].linear_position.x > 0 and ball_was_in_ally_part_)
+  {
+    clearStrategyAssignement();
+    future_strats_ = offensive_strats_[Manager::getValidPlayerIds().size() + 1];
+    ball_was_in_ally_part_ = false;
+    declareAndAssignNextStrategies(future_strats_);
+  }
 }
 void LordOfDarkness::continueHalt()
 {
@@ -427,6 +498,13 @@ void LordOfDarkness::continueKickoffAlly()
 {
 }
 void LordOfDarkness::continueKickoffOpponent()
+{
+}
+
+void LordOfDarkness::continuePreparePenaltyAlly()
+{
+}
+void LordOfDarkness::continuePreparePenaltyOpponent()
 {
 }
 

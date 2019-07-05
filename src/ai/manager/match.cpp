@@ -109,6 +109,19 @@ void Match::startKickoffOpponent()
   declareAndAssignNextStrategies(future_strats_);
 }
 
+void Match::startPreparePenaltyAlly()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = penalty_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
+}
+void Match::startPreparePenaltyOpponent()
+{
+  setBallAvoidanceForAllRobots(true);
+  future_strats_ = stop_strats_[Manager::getValidPlayerIds().size() + 1];
+  declareAndAssignNextStrategies(future_strats_);
+}
+
 void Match::startPenaltyAlly()
 {
   setBallAvoidanceForAllRobots(false);
@@ -174,6 +187,13 @@ void Match::continueKickoffAlly()
 {
 }
 void Match::continueKickoffOpponent()
+{
+}
+
+void Match::continuePreparePenaltyAlly()
+{
+}
+void Match::continuePreparePenaltyOpponent()
 {
 }
 
