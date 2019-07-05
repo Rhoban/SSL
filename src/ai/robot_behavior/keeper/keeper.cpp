@@ -121,20 +121,20 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   if (intersections.size() == 0)
   {
     // on se place par rapport au centre du goal et de la balle
-    ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+    ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1); // ça c'est de la DAUBE
     follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((old_ball_position)), target_angular_position);
   }
   else if (intersections.size() == 1)
   {
     if (goalkeeper_zone_.is_inside(intersections.at(0)))
     {
-      ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+      ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1); // ça c'est de la DAUBE
       follower_->setFollowingPosition(intersections.at(0), target_angular_position);
     }
     else
     {
       // on se place par rapport au centre du goal et de la balle
-      ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+      ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1); // ça c'est de la DAUBE
       follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((old_ball_position)), target_angular_position);
     }
   }
@@ -149,18 +149,18 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
         double dist2 = intersections.at(1).getDist(old_ball_position);
         if (dist1 > dist2)
         {
-          ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+          ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1); // ça c'est de la DAUBE
           follower_->setFollowingPosition(intersections.at(1), target_angular_position);
         }
         else
         {
-          ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+          ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1); // ça c'est de la DAUBE 
           follower_->setFollowingPosition(intersections.at(0), target_angular_position);
         }
       }
       else
       {
-        ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+        ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1); // ça c'est de la DAUBE
         follower_->setFollowingPosition(intersections.at(0), target_angular_position);
       }
     }
@@ -189,42 +189,29 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   follower_->update(time, robot, ball);
 }
 
-bool Keeper::isInsideGoalKeeperZone(const rhoban_geometry::Point& point)
-{
-  return goalkeeper_zone_.is_inside(point);
-}
+// bool Keeper::isInsideGoalKeeperZone(const rhoban_geometry::Point& point)
+// {
+//   return goalkeeper_zone_.is_inside(point);
+// } NOT USED
 
 rhoban_geometry::Point Keeper::placeBetweenGoalCenterAndBall(const rhoban_geometry::Point& ball_position)
 {
   rhoban_geometry::Point goal_center = Data::get()->field.goalCenter(Ally);
 
   double dist_ball_goal_center = goal_center.getDist(ball_position);
+  if (dist_ball_goal_center < 0.001) {
+    dist_ball_goal_center = 0.001;
+  }
   double distance_between_ball_and_goal_on_x_axis = std::abs(goal_center.getX() - ball_position.getX());
   double distance_between_ball_and_meridian = ball_position.getY();
   double cos_theta = distance_between_ball_and_goal_on_x_axis / dist_ball_goal_center;
-  int signe = 1;
-  int pos = 1;
-  if (distance_between_ball_and_meridian > 0.0)
-  {
-    pos = 1;
-  }
-  else
-  {
-    pos = -1;
-  }
+  int pos = (distance_between_ball_and_meridian > 0.0) ? 1 : -1; // assign 1 or -1 depending on the upper or lower half of the field, considering the y = 0 dividing line
+  int signe = ((Data::get()->field.getGoal(Ally).pole_left_.getY() / pos) > 0.0) ? 1 : -1; //assign 1 or -1 whether the ball is the same side as the left pole or not
 
-  if ((Data::get()->field.getGoal(Ally).pole_left_.getY() / pos) > 0.0)
-  {
-    signe = 1;
-  }
-  else
-  {
-    signe = -1;
-  }
   double position_to_take_y =
       signe * cos_theta *
       (Data::get()->field.getGoal(Ally).pole_left_.getY() - Data::get()->field.getGoal(Ally).pole_right_.getY()) / 2;
-  rhoban_geometry::Point position_to_take = rhoban_geometry::Point(ai::Config::robot_radius, position_to_take_y);
+  rhoban_geometry::Point position_to_take = rhoban_geometry::Point(ai::Config::robot_radius * 2, position_to_take_y);
   return position_to_take;
 }
 

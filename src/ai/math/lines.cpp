@@ -54,11 +54,9 @@ std::vector<rhoban_geometry::Point> getIntersectionLineWithCircle(const Point& p
   double dx = a_b.getX();
   double dy = a_b.getY();
 
-  double a_b_norm = a_b.norm();
-
   double D = Point::perpDotProduct(a, b);
 
-  double discrim = circle.getRadius() * circle.getRadius() * a_b.normSquare() - D;
+  double discrim = circle.getRadius() * circle.getRadius() * a_b.normSquare() - D * D;
 
   double sign = (dy < 0) ? -1 : 1;
 
@@ -67,8 +65,8 @@ std::vector<rhoban_geometry::Point> getIntersectionLineWithCircle(const Point& p
 
   if (discrim == 0.0000)
   {
-    Point tangent((D * dy + sign * dx * sqrt(discrim)) / a_b.normSquare(),
-                  ((-D) * dx + std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
+    Point tangent(D * dy / a_b.normSquare(),
+                  (-D) * dx / a_b.normSquare());
     intersections.push_back(tangent);
   }
 
@@ -76,8 +74,8 @@ std::vector<rhoban_geometry::Point> getIntersectionLineWithCircle(const Point& p
   {
     Point point_1((D * dy + sign * dx * sqrt(discrim)) / a_b.normSquare(),
                   ((-D) * dx + std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
-    Point point_2((D * dy + -sign * dx * sqrt(discrim)) / a_b.normSquare(),
-                  ((-D) * dx + std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
+    Point point_2((D * dy - sign * dx * sqrt(discrim)) / a_b.normSquare(),
+                  ((-D) * dx - std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
     intersections.push_back(point_1);
     intersections.push_back(point_2);
   }
