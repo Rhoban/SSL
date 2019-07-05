@@ -49,7 +49,6 @@ std::vector<rhoban_geometry::Point> getIntersectionLineWithCircle(const Point& p
 
   const Point& a = point_line_1;
   const Point& b = point_line_2;
-
   Vector2d a_b = b - a;
   double dx = a_b.getX();
   double dy = a_b.getY();
@@ -72,10 +71,10 @@ std::vector<rhoban_geometry::Point> getIntersectionLineWithCircle(const Point& p
 
   if (discrim > 0)
   {
-    Point point_1((D * dy + sign * dx * sqrt(discrim)) / a_b.normSquare(),
-                  ((-D) * dx + std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
-    Point point_2((D * dy - sign * dx * sqrt(discrim)) / a_b.normSquare(),
-                  ((-D) * dx - std::abs(dy) * sqrt(discrim)) / a_b.normSquare());
+    Point point_1((D * dy + sign * dx * sqrt(discrim)) / a_b.normSquare() + circle.getCenter().getX(),
+                  ((-D) * dx + std::abs(dy) * sqrt(discrim)) / a_b.normSquare() + circle.getCenter().getX());
+    Point point_2((D * dy - sign * dx * sqrt(discrim)) / a_b.normSquare() + circle.getCenter().getX(),
+                  ((-D) * dx - std::abs(dy) * sqrt(discrim)) / a_b.normSquare() + circle.getCenter().getX());
     intersections.push_back(point_1);
     intersections.push_back(point_2);
   }
