@@ -32,7 +32,7 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-NavigationInsideTheField::NavigationInsideTheField(double time, double dt)
+NavigationInsideTheField::NavigationInsideTheField(double time, double dt, bool forceInsidePenaltyArea)
   : ConsignFollower()
   , need_to_avoid_the_ball_(true)
   , saving_ball_radius_avoidance_(ai::Config::robot_radius)
@@ -41,6 +41,7 @@ NavigationInsideTheField::NavigationInsideTheField(double time, double dt)
   , target_position_(0.0, 0.0)
   , target_angle_(0.0)
   , deviation_position_(0.0, 0.0)
+  , forceInsidePenaltyArea_(forceInsidePenaltyArea)
 {
 }
 
@@ -110,7 +111,7 @@ void NavigationInsideTheField::update_control(double time, const data::Robot& ro
       // If we're in their penalty
       deviation_position_ = rhoban_geometry::Point(opponent_penalty.getSW().getX() - error, robot_position.getY());
     }
-    else if (not(isGoalie()) and ally_penalty.isInside(robot_position))
+    else if (not(forceInsidePenaltyArea_) and not(isGoalie()) and ally_penalty.isInside(robot_position))
     {
       // If we're in our penalty
       deviation_position_ = rhoban_geometry::Point(ally_penalty.getNE().getX() + error, robot_position.getY());

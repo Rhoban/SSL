@@ -21,6 +21,7 @@
 
 //#include <robot_behavior/goalie.h>
 //#include <robot_behavior/striker.h>
+#include <robot_behavior/Striker_todo_rectum.h>
 #include <robot_behavior/defender/defensive_wall.h>
 #include <robot_behavior/keeper/clearer.h>
 
@@ -73,39 +74,56 @@ void Wall_2::stop(double time)
 
 void Wall_2::update(double time)
 {
-  int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(Ally);
-  is_closest_0_ = false;
-  is_closest_1_ = false;
+  // int nearest_ally_robot_from_ball = GameInformations::getShirtNumberOfClosestRobotToTheBall(Ally);
+  // is_closest_0_ = false;
+  // is_closest_1_ = false;
 
-  if (nearest_ally_robot_from_ball == playerId(0))
+  // if (nearest_ally_robot_from_ball == playerId(0))
+  // {
+  //   is_closest_0_ = true;
+  // }
+  // else
+  // {
+  //   if (nearest_ally_robot_from_ball == playerId(1))
+  //   {
+  //     is_closest_1_ = true;
+  //   }
+  // }
+
+  if (abs(Data::get()->ball.getMovement().linearPosition(time).getDist(
+          Data::get()->robots[Ally][playerId(0)].getMovement().linearPosition(time))) < 0.2)
   {
     is_closest_0_ = true;
   }
   else
   {
-    if (nearest_ally_robot_from_ball == playerId(1))
-    {
-      is_closest_1_ = true;
-    }
+    is_closest_0_ = false;
+    striker_are_assigned_0 = false;
+  }
+
+  if (abs(Data::get()->ball.getMovement().linearPosition(time).getDist(
+          Data::get()->robots[Ally][playerId(1)].getMovement().linearPosition(time))) < 0.2)
+  {
+    is_closest_1_ = true;
+  }
+  else
+  {
+    is_closest_1_ = false;
+    striker_are_assigned_1 = false;
   }
 }
 
 void Wall_2::assignBehaviorToRobots(
     std::function<void(int, std::shared_ptr<robot_behavior::RobotBehavior>)> assign_behavior, double time, double dt)
 {
-  std::shared_ptr<robot_behavior::RobotBehavior> wall1(new robot_behavior::DefensiveWall(1));
-  static_cast<robot_behavior::DefensiveWall*>(wall1.get())->declareWallRobotId(0, 2);
-
-  std::shared_ptr<robot_behavior::RobotBehavior> wall2(new robot_behavior::DefensiveWall(1));
-  static_cast<robot_behavior::DefensiveWall*>(wall2.get())->declareWallRobotId(1, 2);
-  std::shared_ptr<robot_behavior::RobotBehavior> clear1(new robot_behavior::keeper::Clearer());
-
-  static_cast<robot_behavior::keeper::Clearer*>(clear1.get())
-      ->declarePointToStrike(Data::get()->field.goalCenter(Opponent));
-  static_cast<robot_behavior::keeper::Clearer*>(clear1.get())->chipKick(true);
-
-  if (not(behaviors_are_assigned_))
+  if (not(behaviors_are_assigned_) && (is_closest_0_ == false && is_closest_1_ == false))
   {
+    std::shared_ptr<robot_behavior::RobotBehavior> wall1(new robot_behavior::DefensiveWall(1));
+    static_cast<robot_behavior::DefensiveWall*>(wall1.get())->declareWallRobotId(0, 2);
+
+    std::shared_ptr<robot_behavior::RobotBehavior> wall2(new robot_behavior::DefensiveWall(1));
+    static_cast<robot_behavior::DefensiveWall*>(wall2.get())->declareWallRobotId(1, 2);
+
     assert(getPlayerIds().size() == 2);
 
     assign_behavior(playerId(0), wall1);
@@ -113,26 +131,20 @@ void Wall_2::assignBehaviorToRobots(
 
     behaviors_are_assigned_ = true;
   }
-  else
+
+  if (is_closest_0_ == true && is_closest_1_ == false && striker_are_assigned_0 == true)
   {
-    if (is_closest_0_)
-    {
-      assign_behavior(playerId(0), clear1);
-      assign_behavior(playerId(1), wall2);
-    }
-    else
-    {
-      if (is_closest_1_)
-      {
-        assign_behavior(playerId(0), wall1);
-        assign_behavior(playerId(1), clear1);
-      }
-      else
-      {
-        assign_behavior(playerId(0), wall1);
-        assign_behavior(playerId(1), wall2);
-      }
-    }
+    std::shared_ptr<robot_behavior::RobotBehavior> striker0(new robot_behavior::Striker_todo_rectum());
+    assign_behavior(playerId(0), striker0);
+    striker_are_assigned_0 = true;
+    behaviors_are_assigned_ = false;
+  }
+  if (is_closest_0_ == false && is_closest_1_ == true && striker_are_assigned_1 == true)
+  {
+    std::shared_ptr<robot_behavior::RobotBehavior> striker1(new robot_behavior::Striker_todo_rectum());
+    assign_behavior(playerId(1), striker1);
+    striker_are_assigned_1 = true;
+    behaviors_are_assigned_ = false;
   }
 }
 

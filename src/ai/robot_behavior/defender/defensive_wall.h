@@ -30,7 +30,7 @@ private:
   ConsignFollower* follower_;
 
 public:
-  DefensiveWall(bool fixed_consign_follower_without_repsecting_authorized_location_bool = 0);
+  DefensiveWall(bool fixed_consign_follower_without_repsecting_authorized_location_bool = true);
 
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
   void declareWallRobotId(int id, int wall_nb_robots);

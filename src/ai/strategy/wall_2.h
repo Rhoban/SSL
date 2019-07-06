@@ -29,8 +29,11 @@ class Wall_2 : public Strategy
 {
 private:
   bool behaviors_are_assigned_;
-  bool is_closest_0_;
-  bool is_closest_1_;
+  bool striker_are_assigned_0;
+  bool striker_are_assigned_1;
+
+  bool is_closest_0_ = false;
+  bool is_closest_1_= false;
 
 public:
   Wall_2();

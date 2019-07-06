@@ -248,7 +248,6 @@ GameState::GameState()
 
 bool GameState::ballIsMoving()
 {
-#ifdef false
   double distance = 0.0;
   for (uint i = 0; i < Data::get()->ball.movement_sample.size(); ++i)
   {
@@ -259,8 +258,7 @@ bool GameState::ballIsMoving()
                           distance);
     }
   }
-  return distance > 10;
-#endif
+  return distance > 0.05;
 
 #ifdef false
   Vector2d ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->time.now());
@@ -272,6 +270,7 @@ bool GameState::ballIsMoving()
   return false;
 #endif
 
+  /*
   double offset = 0.01;  // m
   int offset_time = 29;  // sample
   // double offset_time = 0.1;
@@ -295,6 +294,7 @@ bool GameState::ballIsMoving()
   // rhoban_geometry::Point(offset, offset), "red", false);
   // annotations_.addCross(Data::get()->ball.getMovement().linearPosition(Data::get()->time.now()), "green", false);
   return ball_move;
+*/
 }
 
 void GameState::extractData(const Referee& new_data)
