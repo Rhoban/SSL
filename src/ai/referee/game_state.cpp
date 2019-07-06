@@ -248,6 +248,7 @@ GameState::GameState()
 
 bool GameState::ballIsMoving()
 {
+#ifdef false
   double distance = 0.0;
   for (uint i = 0; i < Data::get()->ball.movement_sample.size(); ++i)
   {
@@ -258,7 +259,42 @@ bool GameState::ballIsMoving()
                           distance);
     }
   }
-  return distance > 0.05;
+  return distance > 10;
+#endif
+
+#ifdef false
+  Vector2d ball_velocity = Data::get()->ball.getMovement().linearVelocity(Data::get()->time.now());
+  double threshold = 0.7;
+  if (std::abs(ball_velocity[0]) + std::abs(ball_velocity[1]) > 0 + threshold)
+  {
+    return true;
+  }
+  return false;
+#endif
+
+  double offset = 0.01;  // m
+  int offset_time = 29;  // sample
+  // double offset_time = 0.1;
+  // Box ball_box = Box(Data::get()->ball.getMovement().linearPosition(Data::get()->time.now() - offset_time) -
+  // rhoban_geometry::Point(offset, offset),
+  // Data::get()->ball.getMovement().linearPosition(Data::get()->time.now() - offset_time) +
+  // rhoban_geometry::Point(offset, offset));
+
+  Box ball_box =
+      Box(Data::get()->ball.movement_sample[offset_time].linear_position - rhoban_geometry::Point(offset, offset),
+          Data::get()->ball.movement_sample[offset_time].linear_position + rhoban_geometry::Point(offset, offset));
+
+  // DEBUG("box: " << ball_box);
+  // DEBUG("ball pos: " << Data::get()->ball.getMovement().linearPosition(Data::get()->time.now()));
+  // DEBUG("ball pos before: " << Data::get()->ball.movement_sample[offset_time].linear_position);
+
+  bool ball_move = !ball_box.isInside(Data::get()->ball.getMovement().linearPosition(Data::get()->time.now()));
+  // DEBUG("Ball move: " << ball_move);
+
+  // annotations_.addCross(Data::get()->ball.movement_sample[offset_time].linear_position +
+  // rhoban_geometry::Point(offset, offset), "red", false);
+  // annotations_.addCross(Data::get()->ball.getMovement().linearPosition(Data::get()->time.now()), "green", false);
+  return ball_move;
 }
 
 void GameState::extractData(const Referee& new_data)
