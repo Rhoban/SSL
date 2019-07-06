@@ -44,34 +44,38 @@ void slow_2::update(double time, const data::Robot& robot, const data::Ball& bal
   Vector2d ball_target = target_point_ - ballPosition();
 
   rhoban_geometry::Point target_position;
-  target_position = rhoban_geometry::Point(ballPosition().getX() + 0.40 * std::cos(vector2angle(-ball_target).value()),
-                                           ballPosition().getY() + 0.40 * std::sin(vector2angle(-ball_target).value()));
+  double threshold = 0.4;
+  target_position = rhoban_geometry::Point(ballPosition().getX() + threshold * std::cos(vector2angle(-ball_target).value()),
+                                           ballPosition().getY() + threshold * std::sin(vector2angle(-ball_target).value()));
 
   if (!reached_ && robot_position.getDist(target_position) <= ZONE_PRECI)
   {
+    DEBUG("SALUT");
     follower_->avoidTheBall(true);
     reached_ = true;
   }
 
   if (reached_)
   {
+    DEBUG("merde");
     follower_->avoidTheBall(false);
     Vector2d robot_ball = ballPosition() - robot_position;
 
     if (robot_ball.norm() - 0.0 > 0.0001)
     {
       normalized(robot_ball);
-      target_position = robot_position + robot_ball * 0.5;
+      target_position = robot_position + robot_ball * 0.35;
     }
     else
     {
-      target_position = ballPosition();
+      target_position = robot_position; // ballPosition();
     }
   }
   ContinuousAngle target_rotation = vector2angle(ball_target);
 
   if ((robot_position.getDist(ballPosition()) >= 0.5))
     {
+      DEBUG("OKKKK");
       reached_ = false;
     }
 
