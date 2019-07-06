@@ -55,7 +55,7 @@
 #include <strategy/keeper/keeper_strat.h>
 #include <strategy/zizou.h>
 #include <strategy/go_to_xy_strat.h>
-
+#include <robot_behavior/slow_striker_2.h>
 #include <strategy/offensive.h>
 #include <strategy/defensive.h>
 #include <strategy/wall.h>
@@ -419,6 +419,14 @@ Manual::Manual(std::string name) : Manager(name)
                        },
                        false  // we don't want to define a goal here !
                        )));
+      registerStrategy("Slow Striker 2", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                                       [&](double time, double dt) {
+                                         robot_behavior::slow_2* strike =
+                                             new robot_behavior::slow_2(Data::get()->field.goalCenter(Opponent));
+                                         return std::shared_ptr<robot_behavior::RobotBehavior>(strike);
+                                       },
+                                       false  // we don't want to define a goal here !
+                                       )));
   registerStrategy("Defensive2", std::shared_ptr<strategy::Strategy>(new strategy::Defensive2()));
   registerStrategy("Wall2Passif", std::shared_ptr<strategy::Strategy>(new strategy::Wall2Passif()));
 }
