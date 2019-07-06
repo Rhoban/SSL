@@ -186,7 +186,7 @@ int main(int argc, char** argv)
   {
     part_of_the_field_used = vision::PartOfTheField::ALL_FIELD;
   }
-  else if (zone_name.getValue() == "positive" && !yellow.getValue())
+  else if (zone_name.getValue() == "positive")// && !yellow.getValue())
   {
     part_of_the_field_used = vision::PartOfTheField::POSIVE_HALF_FIELD;
   }
