@@ -21,8 +21,9 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-StopNotFar2::StopNotFar2() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
+StopNotFar2::StopNotFar2() : RobotBehavior()
 {
+  follower_ = Factory::fixedConsignFollowerWithoutRepsectingAuthorizedLocation();
 }
 
 void StopNotFar2::update(double time, const data::Robot& robot, const data::Ball& ball)
@@ -41,18 +42,22 @@ void StopNotFar2::update(double time, const data::Robot& robot, const data::Ball
   ContinuousAngle target_rotation;
   rhoban_geometry::Point target_position;
 
-  if (ballPosition().x > -2.5)
-  {
-    Vector2d vect_ball_goal = Data::get()->field.goalCenter(Ally) - ballPosition();
+  // if (ballPosition().x > -2.5)
+  //{
+  Vector2d vect_ball_goal = Data::get()->field.goalCenter(Ally) - ballPosition();
 
-    double dist_with_victim = 0.8;
-    target_position = rhoban_geometry::Point(
-        ballPosition().x + dist_with_victim * std::cos(vector2angle(vect_ball_goal).value() + 0.5),
-        ballPosition().y + dist_with_victim * std::sin(vector2angle(vect_ball_goal).value() + 0.5));
-  }
+  double dist_with_victim = 0.8;
+  target_position = rhoban_geometry::Point(
+      ballPosition().x + dist_with_victim * std::cos(vector2angle(vect_ball_goal).value() + 0.5),
+      ballPosition().y + dist_with_victim * std::sin(vector2angle(vect_ball_goal).value() + 0.5));
+  /*}
   else
   {
-    target_position = rhoban_geometry::Point(-1, 0);
+    //target_position = rhoban_geometry::Point(-1, 0);
+  }*/
+  if (ballPosition().x < -2.5)
+  {
+    target_position = rhoban_geometry::Point(target_position.x + 2 * (-2.5 - target_position.x), target_position.y);
   }
   Vector2d vect_robot_ball = ballPosition() - linearPosition();
   target_rotation = vector2angle(vect_robot_ball);
