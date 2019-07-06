@@ -70,6 +70,12 @@ void slow_2::update(double time, const data::Robot& robot, const data::Ball& bal
   }
   ContinuousAngle target_rotation = vector2angle(ball_target);
 
+  if ((robot_position.getDist(ballPosition()) >= 0.5))
+    {
+      reached_ = false;
+    }
+
+
   annotations_.addCross(target_position, "green", false);
   follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
