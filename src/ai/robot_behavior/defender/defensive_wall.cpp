@@ -24,7 +24,7 @@ namespace robot_behavior
 DefensiveWall::DefensiveWall(bool fixed_consign_follower_without_repsecting_authorized_location_bool)
   : RobotBehavior(), wall_robot_id_(0), wall_nb_robot_(1)
 {
-  if (fixed_consign_follower_without_repsecting_authorized_location_bool == 0)
+  if (fixed_consign_follower_without_repsecting_authorized_location_bool == false)
   {
     follower_ = Factory::fixedConsignFollower();
   }
@@ -40,6 +40,7 @@ void DefensiveWall::update(double time, const data::Robot& robot, const data::Ba
   // DO NOT REMOVE THAT LINE
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   // Now
+  // DEBUG("Robot "<<robot.id);
   //  this->robot_linear_position
   //  this->robot_angular_position
   // are all avalaible
@@ -140,6 +141,7 @@ void DefensiveWall::update(double time, const data::Robot& robot, const data::Ba
   }
 
   follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->avoidAlly(false);
   follower_->update(time, robot, ball);
 }
 

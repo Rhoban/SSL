@@ -44,8 +44,10 @@ private:
 
   rhoban_ssl::annotations::Annotations annotations_;
 
+  bool forceInsidePenaltyArea_;
+
 public:
-  NavigationInsideTheField(double time, double dt);
+  NavigationInsideTheField(double time, double dt, bool forceInsidePenaltyArea = false);
 
 protected:
   void update_control(double time, const data::Robot& robot, const data::Ball& ball);
