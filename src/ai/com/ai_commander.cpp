@@ -262,6 +262,20 @@ void Commander::updateRobotsCommands()
       ctrl.kick_power = 0;
     }
 
+    if (ctrl.chip_kick || ctrl.kick)
+    {
+      ctrl.kick = true;
+      ctrl.chip_kick = false;
+      ctrl.kick_power = 1.0;
+    }
+
+    free_kick_type_id type_free_kick = Data::get()->referee.game_state.typeOfTheFreeKick();
+    Team team_free_kick = Data::get()->referee.game_state.freeKickTeam();
+    if (type_free_kick == INDIRECT && team_free_kick == Ally)
+    {
+      ctrl.kick_power = 0.8f;
+    }
+
     if (robot_id >= 8)
     {                      // HACK - becaus hardware doesn't support more than 8 robots
       continue;            // HACK
@@ -293,7 +307,7 @@ void Commander::updateRobotsCommands()
           set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(), kick,
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
-              );
+          );
           // DEBUG("TARE ODOM : " << ctrl.spin);
         }
         else

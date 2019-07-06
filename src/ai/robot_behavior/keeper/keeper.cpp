@@ -60,7 +60,7 @@ Keeper::Keeper() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
   goalkeeper_trajectory_ =
       rhoban_geometry::Circle(circle_center_of_the_trajectory, circle_radius_center_of_the_trajectory);
 
-  goalkeeper_zone_ = Box(pole_left, pole_right + offset + rhoban_geometry::Point(distanciation, 0.0));
+  goalkeeper_zone_ = Box(pole_left + rhoban_geometry::Point(0.0, -robot_diameter), pole_right + offset + rhoban_geometry::Point(distanciation, robot_diameter));
 }
 
 void Keeper::update(double time, const data::Robot& robot, const data::Ball& ball)
@@ -93,16 +93,13 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
 
   rhoban_geometry::Point ball_position = ball.getMovement().linearPosition(time);
   Vector2d ball_trajectory = ball.getMovement().linearVelocity(time);
-  annotations_.addArrow(ball_position, goal_center_, "red", true);
-  annotations_.addArrow(ball_position, ball_trajectory, "orange", true);  // ca deconne ici
-
-  annotations_.addArrow(ball_position, goal_center_, "red", true);
-  annotations_.addArrow(ball_position, ball_position + ball_trajectory, "orange", true);  // ca deconne ici
+  Vector2d ball_to_goal_center = goal_center_ - ball_position;
+  annotations_.addArrow(ball_position, ball_trajectory, "orange", true);  
 
   if (ball_trajectory.norm() == 0.00000)
   {
-    ball_trajectory = goal_center_ - ball_position;
-    ContinuousAngle target_angular_position = vector2angle(ball_trajectory);  // ça c'est de la DAUBE
+    //ball_trajectory = goal_center_ - ball_position;
+    ContinuousAngle target_angular_position = vector2angle(ball_to_goal_center * -1); 
 
     follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((ball_position)), target_angular_position);
     follower_->update(time, robot, ball);
@@ -111,21 +108,44 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
 
   std::vector<rhoban_geometry::Point> intersections = rhoban_geometry::getIntersectionLineWithCircle(
       ball_position, ball_position + ball_trajectory, goalkeeper_trajectory_);
+  Vector2d absolute_ball_trajectory;
+  if(ball_trajectory.getX() <= 0.0) {
+    if((ball_trajectory.getY() <= 0.0) && (ball_position.getY() <= 0.0))
+      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), ball_trajectory.getY());
+
+    if((ball_trajectory.getY() <= 0.0) && (ball_position.getY() >= 0.0))
+      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), -ball_trajectory.getY());
+
+    if((ball_trajectory.getY() >= 0.0) && (ball_position.getY() <= 0.0))
+      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), -ball_trajectory.getY());
+
+    if((ball_trajectory.getY() >= 0.0) && (ball_position.getY() <= 0.0))
+      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), ball_trajectory.getY());
+  }
+  else {
+    if((ball_trajectory.getY() <= 0.0) && (ball_position.getY() <= 0.0))
+      absolute_ball_trajectory = Vector2d(-ball_trajectory.getX(), ball_trajectory.getY());
+
+    if((ball_trajectory.getY() <= 0.0) && (ball_position.getY() >= 0.0))
+      absolute_ball_trajectory = Vector2d(-ball_trajectory.getX(), -ball_trajectory.getY());
+
+    if((ball_trajectory.getY() >= 0.0) && (ball_position.getY() <= 0.0))
+      absolute_ball_trajectory = Vector2d(-ball_trajectory.getX(), -ball_trajectory.getY());
+
+    if((ball_trajectory.getY() >= 0.0) && (ball_position.getY() <= 0.0))
+      absolute_ball_trajectory = Vector2d(-ball_trajectory.getX(), ball_trajectory.getY());
+  }
+
   DEBUG("intersections vector size" << intersections.size());
   for (int i = 0; i < intersections.size(); ++i)
   {
     DEBUG(intersections.at(i));
   }
-  if (intersections.size() == 2)
-  {
-    annotations_.addArrow(intersections.at(0), intersections.at(1), "purple", true);
-    ;
-  }
 
   if (intersections.size() == 0)
   {
     // on se place par rapport au centre du goal et de la balle
-    ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+    ContinuousAngle target_angular_position = vector2angle(ball_to_goal_center * -1); 
     follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((ball_position)), target_angular_position);
   }
   else if (intersections.size() == 1)
@@ -134,13 +154,13 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
 
     if (goalkeeper_zone_.isInside(intersections.at(0)))
     {
-      ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+      ContinuousAngle target_angular_position = vector2angle(absolute_ball_trajectory * -1);  // ça c'est de la DAUBE
       follower_->setFollowingPosition(intersections.at(0), target_angular_position);
     }
     else
     {
       // on se place par rapport au centre du goal et de la balle
-      ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+      ContinuousAngle target_angular_position = vector2angle(ball_to_goal_center * -1);  
       follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((ball_position)), target_angular_position);
     }
   }
@@ -158,18 +178,18 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
         double dist2 = intersections.at(1).getDist(ball_position);
         if (dist1 > dist2)
         {
-          ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+          ContinuousAngle target_angular_position = vector2angle(absolute_ball_trajectory * -1);  // ça c'est de la DAUBE
           follower_->setFollowingPosition(intersections.at(1), target_angular_position);
         }
         else
         {
-          ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+          ContinuousAngle target_angular_position = vector2angle(absolute_ball_trajectory * -1);  // ça c'est de la DAUBE
           follower_->setFollowingPosition(intersections.at(0), target_angular_position);
         }
       }
       else
       {
-        ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);  // ça c'est de la DAUBE
+        ContinuousAngle target_angular_position = vector2angle(absolute_ball_trajectory * -1);  // ça c'est de la DAUBE
         follower_->setFollowingPosition(intersections.at(0), target_angular_position);
       }
     }
@@ -177,13 +197,13 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
     {
       if (goalkeeper_zone_.isInside((intersections.at(1))))
       {
-        ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+        ContinuousAngle target_angular_position = vector2angle(absolute_ball_trajectory * -1);// ça c'est de la DAUBE
         follower_->setFollowingPosition(intersections.at(1), target_angular_position);
       }
       else
       {
         // on se place par rapport au centre du goal et de la balle
-        ContinuousAngle target_angular_position = vector2angle(ball_trajectory * -1);
+        ContinuousAngle target_angular_position = vector2angle(ball_to_goal_center * -1);
         follower_->setFollowingPosition(placeBetweenGoalCenterAndBall((ball_position)), target_angular_position);
       }
     }
@@ -227,14 +247,18 @@ rhoban_geometry::Point Keeper::placeBetweenGoalCenterAndBall(const rhoban_geomet
       std::abs(Data::get()->field.getGoal(Ally).pole_left.getY() - Data::get()->field.getGoal(Ally).pole_right.getY()) /
       2;
   rhoban_geometry::Point position_to_take =
-      goal_center + rhoban_geometry::Point(ai::Config::robot_radius * 2, position_to_take_y);
+      goal_center + rhoban_geometry::Point(ai::Config::robot_radius, position_to_take_y);
   return position_to_take;
 }
 
 Control Keeper::control() const
 {
   Control ctrl = follower_->control();
-  ctrl.chip_kick = true;
+  ctrl.charge = true;
+  ctrl.kick =false;
+  if(infraRed()){
+    ctrl.kick = true;
+  }
   return ctrl;
 }
 
