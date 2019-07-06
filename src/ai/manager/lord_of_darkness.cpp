@@ -199,9 +199,9 @@ LordOfDarkness::LordOfDarkness(std::string name)
   direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
   direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
   direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2" };
-  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF1", "SNF2" };
-  direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF1" };
-  direct_opponent_strats_[2] = { strategy::KeeperStrat::name, "SNF1" };
+  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF2" };
+  direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name };
+  direct_opponent_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
   direct_opponent_strats_[1] = { strategy::KeeperStrat::name };
 
   // Register strategy.
