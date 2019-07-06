@@ -30,7 +30,7 @@
         "p_translation" : {
             "simu" : 1.5,
             "_simu" : 2,
-            "real" : 3
+            "real" : 2.2
         },
         "i_translation" : {
             "simu" : 0.0,
@@ -55,7 +55,7 @@
         },
 	"p_translation_goalkeeper" : {
             "simu" : 3.0,
-            "real" : 3.0            
+            "real" : 4.0            
         },
         "i_translation_goalkeeper" : {
             "simu" : 0.0001,

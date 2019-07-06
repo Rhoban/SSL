@@ -43,6 +43,7 @@
 #include <robot_behavior/wall_stop_2.h>
 #include <robot_behavior/wall_stop.h>
 #include <robot_behavior/Striker_todo_rectum.h>
+#include <robot_behavior/slow_striker_2.h>
 
 #include <data.h>
 
@@ -169,38 +170,38 @@ LordOfDarkness::LordOfDarkness(std::string name)
   goalie_strats_[2] = { strategy::KeeperStrat::name };
   goalie_strats_[1] = { strategy::KeeperStrat::name };
 
-  kick_strats_[8] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+  kick_strats_[8] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name,
                       strategy::Wall_2::name, strategy::Defensive2::name };
-  kick_strats_[7] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+  kick_strats_[7] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name,
                       strategy::Wall_2::name, strategy::Defensive::name };
-  kick_strats_[6] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+  kick_strats_[6] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name,
                       strategy::Wall_2::name };
-  kick_strats_[5] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+  kick_strats_[5] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name,
                       strategy::Wall::name };
-  kick_strats_[4] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name };
-  kick_strats_[3] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::Wall::name };
-  kick_strats_[2] = { strategy::KeeperStrat::name, strategy::StrikerKick::name };
+  kick_strats_[4] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name };
+  kick_strats_[3] = { strategy::KeeperStrat::name, "SlowStriker", strategy::Wall::name };
+  kick_strats_[2] = { strategy::KeeperStrat::name, "SlowStriker" };
   kick_strats_[1] = { strategy::KeeperStrat::name };
 
-  kick_strats_indirect_[8] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+  kick_strats_indirect_[8] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name,
                                strategy::Wall_2::name, strategy::Defensive::name };
-  kick_strats_indirect_[7] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+  kick_strats_indirect_[7] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name,
                                strategy::Wall::name, strategy::Defensive::name };
-  kick_strats_indirect_[6] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name,
+  kick_strats_indirect_[6] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name,
                                strategy::Wall::name };
-  kick_strats_indirect_[5] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name };
-  kick_strats_indirect_[4] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::MurStop::name };
-  kick_strats_indirect_[3] = { strategy::KeeperStrat::name, strategy::StrikerV2::name, strategy::Wall::name };
-  kick_strats_indirect_[2] = { strategy::KeeperStrat::name, strategy::StrikerV2::name };
+  kick_strats_indirect_[5] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name };
+  kick_strats_indirect_[4] = { strategy::KeeperStrat::name, "SlowStriker", strategy::MurStop::name };
+  kick_strats_indirect_[3] = { strategy::KeeperStrat::name, "SlowStriker", strategy::Wall::name };
+  kick_strats_indirect_[2] = { strategy::KeeperStrat::name, "SlowStriker" };
   kick_strats_indirect_[1] = { strategy::KeeperStrat::name };
 
   direct_opponent_strats_[8] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
   direct_opponent_strats_[7] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
   direct_opponent_strats_[6] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2", "SNF3" };
   direct_opponent_strats_[5] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF1", "SNF2" };
-  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF1", "SNF2" };
-  direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall::name, "SNF1" };
-  direct_opponent_strats_[2] = { strategy::KeeperStrat::name, "SNF1" };
+  direct_opponent_strats_[4] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name, "SNF2" };
+  direct_opponent_strats_[3] = { strategy::KeeperStrat::name, strategy::Wall2Passif::name };
+  direct_opponent_strats_[2] = { strategy::KeeperStrat::name, strategy::Wall::name };
   direct_opponent_strats_[1] = { strategy::KeeperStrat::name };
 
   // Register strategy.
@@ -346,6 +347,15 @@ LordOfDarkness::LordOfDarkness(std::string name)
                               [&](double time, double dt) {
                                 robot_behavior::Striker_todo_rectum* go =
                                     new robot_behavior::Striker_todo_rectum();
+                                return std::shared_ptr<robot_behavior::RobotBehavior>(go);
+                              },
+                              false  // we don't want to define a goal here !
+                              )));
+
+  registerStrategy("SlowStriker", std::shared_ptr<strategy::Strategy>(new strategy::FromRobotBehavior(
+                              [&](double time, double dt) {
+                                robot_behavior::slow_2* go =
+                                    new robot_behavior::slow_2();
                                 return std::shared_ptr<robot_behavior::RobotBehavior>(go);
                               },
                               false  // we don't want to define a goal here !

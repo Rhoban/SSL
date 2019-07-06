@@ -9,7 +9,7 @@ namespace rhoban_ssl
 namespace data
 {
 //! TODO: remove hisotry_size ...
-static const int history_size = 10;
+static const int history_size = 30;
 
 class Mobile
 {
