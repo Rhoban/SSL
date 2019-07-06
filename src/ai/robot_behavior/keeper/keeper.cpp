@@ -111,29 +111,29 @@ void Keeper::update(double time, const data::Robot& robot, const data::Ball& bal
   Vector2d absolute_ball_trajectory;
   if(ball_trajectory.getX() <= 0.0) {
     if((ball_trajectory.getY() <= 0.0) && (ball_position.getY() <= 0.0))
-      absolute_ball_trajectory = Vector2d(- ball_trajectory.getX(), ball_trajectory.getY());
+      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), ball_trajectory.getY());
 
     if((ball_trajectory.getY() <= 0.0) && (ball_position.getY() >= 0.0))
-      absolute_ball_trajectory = Vector2d(- ball_trajectory.getX(), -ball_trajectory.getY());
+      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), -ball_trajectory.getY());
 
     if((ball_trajectory.getY() >= 0.0) && (ball_position.getY() <= 0.0))
-      absolute_ball_trajectory = Vector2d(- ball_trajectory.getX(), -ball_trajectory.getY());
+      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), -ball_trajectory.getY());
 
     if((ball_trajectory.getY() >= 0.0) && (ball_position.getY() <= 0.0))
-      absolute_ball_trajectory = Vector2d(- ball_trajectory.getX(), ball_trajectory.getY());
+      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), ball_trajectory.getY());
   }
   else {
     if((ball_trajectory.getY() <= 0.0) && (ball_position.getY() <= 0.0))
-      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), ball_trajectory.getY());
+      absolute_ball_trajectory = Vector2d(-ball_trajectory.getX(), ball_trajectory.getY());
 
     if((ball_trajectory.getY() <= 0.0) && (ball_position.getY() >= 0.0))
-      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), -ball_trajectory.getY());
+      absolute_ball_trajectory = Vector2d(-ball_trajectory.getX(), -ball_trajectory.getY());
 
     if((ball_trajectory.getY() >= 0.0) && (ball_position.getY() <= 0.0))
-      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), -ball_trajectory.getY());
+      absolute_ball_trajectory = Vector2d(-ball_trajectory.getX(), -ball_trajectory.getY());
 
     if((ball_trajectory.getY() >= 0.0) && (ball_position.getY() <= 0.0))
-      absolute_ball_trajectory = Vector2d(ball_trajectory.getX(), ball_trajectory.getY());
+      absolute_ball_trajectory = Vector2d(-ball_trajectory.getX(), ball_trajectory.getY());
   }
 
   DEBUG("intersections vector size" << intersections.size());
