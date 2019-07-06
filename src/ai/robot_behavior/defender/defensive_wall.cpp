@@ -141,6 +141,7 @@ void DefensiveWall::update(double time, const data::Robot& robot, const data::Ba
   }
 
   follower_->setFollowingPosition(target_position, target_rotation);
+  follower_->avoidAlly(false);
   follower_->update(time, robot, ball);
 }
 
