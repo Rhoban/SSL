@@ -27,7 +27,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 slow_2::slow_2(rhoban_geometry::Point point)
-  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), target_point_(point), rotated_(false)
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), target_point_(point)
 {
 }
 
@@ -47,59 +47,30 @@ void slow_2::update(double time, const data::Robot& robot, const data::Ball& bal
   target_position = rhoban_geometry::Point(ballPosition().getX() + 0.40 * std::cos(vector2angle(-ball_target).value()),
                                            ballPosition().getY() + 0.40 * std::sin(vector2angle(-ball_target).value()));
 
-  if (origin_time_ == 0)
+  if (!reached_ && robot_position.getDist(target_position) <= ZONE_PRECI)
   {
-    origin_time_ = time;
+    follower_->avoidTheBall(true);
+    reached_ = true;
   }
 
-  follower_->avoidTheBall(true);
-  // compute booleans:
-  if (robot_position.getDist(target_position) <= ZONE_PRECI)
-  {
-    second_step_ = true;
-    if (ball_pos_ == rhoban_geometry::Point(66, 66))
-    {
-      ball_pos_ = ballPosition() - normalized(ball_target) * ai::Config::robot_center_to_dribbler_center;
-    }
-  }
-
-  if (infraRed() || linearPosition().getDist(ball_pos_) <= 0.03)
-  {
-    third_step_ = true;
-  }
-
-  if (second_step_)
+  if (reached_)
   {
     follower_->avoidTheBall(false);
     Vector2d robot_ball = ballPosition() - robot_position;
-    target_position = robot_position + robot_ball * 0.6;
-  }
-  ContinuousAngle target_rotation = vector2angle(ball_target);
-  if (third_step_)
-  {
-    target_position = ball_pos_ - rhoban_geometry::Point(std::cos(target_rotation.value()) * ai::Config::ball_radius,
-                                                         std::sin(target_rotation.value()) * ai::Config::ball_radius);
-    Vector2d robot_target = target_point_ - linearPosition();
-    target_rotation = vector2angle(robot_target);
-    if (time - origin_time_ >= 3)
+
+    if (robot_ball.norm() - 0.0 > 0.0001)
     {
-      four_step_ = true;
+      normalized(robot_ball);
+      target_position = robot_position + robot_ball * 0.5;
+    }
+    else
+    {
+      target_position = ballPosition();
     }
   }
-
-  // reset in phase 1:
-  if ((robot_position.getDist(ballPosition()) >= 0.5))
-  {
-    second_step_ = false;
-    third_step_ = false;
-    four_step_ = false;
-    origin_time_ = 0;
-    ball_pos_ = rhoban_geometry::Point(66, 66);
-  }
+  ContinuousAngle target_rotation = vector2angle(ball_target);
 
   annotations_.addCross(target_position, "green", false);
-  annotations_.addCross(ball_pos_, "red", false);
-
   follower_->setFollowingPosition(target_position, target_rotation);
   follower_->update(time, robot, ball);
 }
@@ -108,22 +79,8 @@ Control slow_2::control() const
 {
   Control ctrl = follower_->control();
   ctrl.charge = true;
-  ctrl.kick = false;
-  if (four_step_)
-  {
-    ctrl.kick = true;
-  }
+  ctrl.kick = true;
   return ctrl;
-}
-
-void slow_2::setPoint(rhoban_geometry::Point point)
-{
-  target_point_ = point;
-  reached_ = false;
-  second_step_ = false;
-  third_step_ = false;
-  four_step_ = false;
-  origin_time_ = 0;
 }
 
 rhoban_geometry::Point slow_2::getPoint() const

@@ -37,14 +37,7 @@ private:
   bool is_infra = false;
 
   const double ZONE_PRECI = 0.05;
-  bool reached_;
-  double reach_radius_;
-  bool rotated_ = false;
-  bool second_step_ = false;
-  bool third_step_ = false;
-  bool four_step_ = false;
-  rhoban_geometry::Point ball_pos_ = rhoban_geometry::Point(66,66);
-  double origin_time_ = 0;
+  bool reached_ = false;
 
 public:
   slow_2(rhoban_geometry::Point point = Data::get()->field.getGoal(Opponent).goal_center);
@@ -52,8 +45,6 @@ public:
   virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   virtual Control control() const;
-
-  void setPoint(rhoban_geometry::Point point);
 
   rhoban_geometry::Point getPoint() const;
 
