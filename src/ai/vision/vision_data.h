@@ -25,82 +25,101 @@
 #include <rhoban_utils/timing/time_stamp.h>
 #include <physic/movement_sample.h>
 #include <iostream>
+#include <list>
+#include "config.h"
+#include <execution_manager.h>
+
+#include <messages_robocup_ssl_wrapper.pb.h>
 
 namespace rhoban_ssl
 {
 namespace vision
 {
-static const int history_size = 10;
-static const int Robots = 16;
+struct CameraDetectionFrame;
 
-typedef enum
+struct BallDetection
 {
-  Ally,
-  Opponent
-} Team;
+  float confidence_;  // set to -1 if not valid
+  float x_;
+  float y_;
+  float z_;
+  float pixel_x_;
+  float pixel_y_;
+  unsigned int area_;
+  CameraDetectionFrame* camera_;
 
-struct Object
-{
-  MovementSample movement;
-
-  bool present;
-  int id;
-  rhoban_utils::TimeStamp last_update;
-
-  void update(double time, const rhoban_geometry::Point& linear_position, const rhoban_utils::Angle& angular_position);
-  void update(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
-  void update(double time, const rhoban_geometry::Point& linear_position);
-
-  double age() const;
-  bool isOk() const;
-  bool isTooOld() const;
-
-  Object();
-  void checkAssert(double time) const;
+  void operator=(const SSL_DetectionBall&);
+  BallDetection();
 };
 
-std::ostream& operator<<(std::ostream& out, const Object& object);
-
-struct Robot : Object
+struct RobotDetection
 {
+  CameraDetectionFrame* camera_;
+  float confidence_;  // set to -1 if not valid
+  float x_;
+  float y_;
+  float orientation_;
+  float pixel_x_;
+  float pixel_y_;
+
+  float height_;
+  unsigned int robot_id_;
+
+  bool has_orientation_;
+  bool has_id_;
+  bool has_height_;
+
+  void operator=(const SSL_DetectionRobot&);
+  RobotDetection();
 };
-struct Ball : Object
+
+struct CameraDetectionFrame
 {
+  /**
+   * @brief inverted is custom field
+   *
+   * It is true if we already invert detections.
+   */
+  bool inverted;
+
+  double t_capture_;
+  double t_sent_;
+  unsigned int frame_number_;
+  int camera_id_;
+  struct BallDetection balls_[ai::Config::MAX_BALLS_DETECTED_PER_CAMERA];
+  struct RobotDetection allies_[ai::Config::NB_OF_ROBOTS_BY_TEAM];
+  struct RobotDetection opponents_[ai::Config::NB_OF_ROBOTS_BY_TEAM];
+  CameraDetectionFrame();
 };
 
-struct Field
+class VisionDataSingleThread
 {
-  bool present;
-  float fieldLength;
-  float fieldWidth;
-  float goalWidth;
-  float goalDepth;
-  float boundaryWidth;
-  float penaltyAreaDepth;
-  float penaltyAreaWidth;
+private:
+  // avoid copy:
+  VisionDataSingleThread(const VisionDataSingleThread&);
+  void operator=(const VisionDataSingleThread&);
 
-  Field();
-};
-std::ostream& operator<<(std::ostream& out, const Field& field);
+  friend class UpdateRobotInformation;
+  friend class DetectionPacketAnalyzer;
+  friend class UpdateBallInformation;
 
-class VisionData
-{
 public:
-  VisionData();
+  static VisionDataSingleThread singleton_;
 
-  std::map<Team, std::map<int, Robot>> robots;
-  Ball ball;
-  Field field;
-
-  double olderTime() const;
-  void checkAssert(double time) const;
-
-  void print() const;
-
-  friend std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision);
+  CameraDetectionFrame last_camera_detection_[ai::Config::NB_CAMERAS];
+  VisionDataSingleThread();
+  ~VisionDataSingleThread();
 };
 
-std::ostream& operator<<(std::ostream& out, const VisionData& vision);
+class ChangeReferencePointOfView : public Task
+{
+  virtual bool runTask(void);
+};
+
+class VisionDataTerminalPrinter : public Task
+{
+  virtual bool runTask(void);
+};
 
 }  // namespace vision
 }  // namespace rhoban_ssl

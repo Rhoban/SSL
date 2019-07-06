@@ -25,11 +25,6 @@
 #include <limits>
 #include <iomanip>
 
-extern double last_debug_printing;
-extern bool periodic_debug_is_allowed;
-
-void updatePeriodicDebug(double current_time, double period);
-
 // TODO: move to rhoban_utils
 #define DEBUG(message)                                                                                                 \
   std::cerr << std::setprecision(std::numeric_limits<double>::max_digits10) << "# " << message << " -- "               \

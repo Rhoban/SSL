@@ -20,18 +20,18 @@
 
 #include "ai_commander_simulation.h"
 #include <rhoban_utils/angle.h>
-#include <robot_behavior/robot_behavior.h>
+#include <config.h>
 
 namespace rhoban_ssl
 {
-AICommanderSimulation::AICommanderSimulation(bool yellow) : AICommander(yellow), client_()
+AICommanderSimulation::AICommanderSimulation() : AICommander(), client_()
 {
 }
 
 void AICommanderSimulation::flush()
 {
   grSim_Packet packet;
-  packet.mutable_commands()->set_isteamyellow(yellow_);
+  packet.mutable_commands()->set_isteamyellow(!ai::Config::we_are_blue);
   packet.mutable_commands()->set_timestamp(0.0);
 
   for (auto& command : commands_)
@@ -78,8 +78,14 @@ void AICommanderSimulation::moveBall(double x, double y, double vx, double vy)
   client_.moveBall(x, y, vx, vy);
 }
 
-void AICommanderSimulation::moveRobot(bool yellow, int id, double x, double y, double theta, bool turnon)
+void AICommanderSimulation::moveRobot(bool ally, int id, double x, double y, double theta, bool turnon)
 {
+  bool yellow = true;
+  if ((ai::Config::we_are_blue && ally) || (!ally && !ai::Config::we_are_blue))
+  {
+    yellow = false;
+  }
+
   client_.moveRobot(yellow, id, x, y, theta * 180 / M_PI, turnon);
 }
 

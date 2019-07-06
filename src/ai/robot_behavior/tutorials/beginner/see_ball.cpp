@@ -26,17 +26,17 @@ namespace robot_behavior
 {
 namespace beginner
 {
-SeeBall::SeeBall(ai::AiData& ai_data) : RobotBehavior(ai_data), follower_(Factory::fixedConsignFollower(ai_data))
+SeeBall::SeeBall() : RobotBehavior(), follower_(Factory::fixedConsignFollower())
 {
 }
 
-void SeeBall::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void SeeBall::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   RobotBehavior::updateTimeAndPosition(time, robot, ball);
   annotations_.clear();
 
-  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(ai_data_.time);
+  const rhoban_geometry::Point& robot_position = robot.getMovement().linearPosition(Data::get()->ai_data.time);
   Vector2d direction = ballPosition() - robot_position;
   ContinuousAngle target_rotation = vector2angle(direction);
 

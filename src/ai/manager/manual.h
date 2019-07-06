@@ -1,7 +1,7 @@
 /*
     This file is part of SSL.
 
-    Copyright 2018 Boussicault Adrien (adrien.boussicault@u-bordeaux.fr)
+    Copyright 2019 Schmitz Etienne (hello@etienne-schmitz.com)
 
     SSL is free software: you can redistribute it and/or modify
     it under the terms of the GNU Lesser General Public License as published by
@@ -20,6 +20,7 @@
 #pragma once
 
 #include <manager/manager.h>
+#include <viewer/properties.h>
 
 namespace rhoban_ssl
 {
@@ -29,24 +30,33 @@ class Manual : public Manager
 {
 private:
   bool strategy_was_assigned_;
-
-  ai::Team team_color_;
   bool goal_to_positive_axis_;
   int ally_goalie_id_;
   int opponent_goalie_id_;
-
-  void assignPointOfViewAndGoalie();
+  viewer::PropertiesFactory properties_factory;
 
 public:
-  Manual(ai::AiData& ai_data);
+  /**
+   * @brief Constructor.
+   */
+  Manual(std::string name);
+  /**
+   * @brief Update the manager after each loop.
+   */
+  void update();
+  /**
+   * @brief Get all properties of the manager shown in the viewer.
+   */
+  virtual Json::Value getProperties();
+  /**
+   * @brief Set the properties send by the viewer.
+   */
+  virtual void setProperties(Json::Value);
 
-  void setTeamColor(ai::Team team_color);
-  void defineGoalToPositiveAxis(bool value = true);
-
-  void update(double time);
-
-  virtual ~Manual();
+  /**
+   * @brief Destructor
+   */
+  ~Manual();
 };
-
-};  // namespace manager
-};  // namespace rhoban_ssl
+}  // namespace manager
+}  // namespace rhoban_ssl

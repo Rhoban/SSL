@@ -19,9 +19,9 @@ RefereeClient::RefereeClient(std::string addr, std::string port) : MulticastClie
   init();
 }
 
-SSL_Referee RefereeClient::getData()
+Referee RefereeClient::getData()
 {
-  SSL_Referee tmp;
+  Referee tmp;
 
   mutex.lock();
   tmp = data;
@@ -32,7 +32,7 @@ SSL_Referee RefereeClient::getData()
 
 bool RefereeClient::process(char* buffer, size_t len)
 {
-  SSL_Referee packet;
+  Referee packet;
 
   if (packet.ParseFromArray(buffer, len))
   {

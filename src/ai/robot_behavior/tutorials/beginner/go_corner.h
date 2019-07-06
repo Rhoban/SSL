@@ -56,7 +56,7 @@ public:
    * @param ai_data : The Robot Behavior needs the data of the AI.
    * @see ai::AiData
    */
-  GoCorner(ai::AiData& ai_data);
+  GoCorner();
 
   /**
    * @brief Set the position of the robot in the target_corner_.
@@ -66,7 +66,7 @@ public:
    * @param robot : The information for the robot selected in the behavior.
    * @param ball : The information of the ball.
    */
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball);
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball);
 
   /**
    * Return the control of the behavior.

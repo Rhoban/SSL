@@ -32,12 +32,12 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-NavigationInsideTheField::NavigationInsideTheField(ai::AiData& ai_data, double time, double dt)
-  : ConsignFollower(ai_data)
+NavigationInsideTheField::NavigationInsideTheField(double time, double dt)
+  : ConsignFollower()
   , need_to_avoid_the_ball_(true)
-  , saving_ball_radius_avoidance_(ai_data.constants.robot_radius)
+  , saving_ball_radius_avoidance_(ai::Config::robot_radius)
   , following_position_was_updated_(true)
-  , position_follower_(ai_data, time, dt)
+  , position_follower_(time, dt)
   , target_position_(0.0, 0.0)
   , target_angle_(0.0)
   , deviation_position_(0.0, 0.0)
@@ -52,7 +52,7 @@ void NavigationInsideTheField::setFollowingPosition(const rhoban_geometry::Point
   this->target_angle_ = target_angle;
 }
 
-void NavigationInsideTheField::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void NavigationInsideTheField::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // At First, we update time and update potition from the abstract class robot_behavior.
   // DO NOT REMOVE THAT LINE
@@ -61,12 +61,12 @@ void NavigationInsideTheField::update(double time, const ai::Robot& robot, const
   update_control(time, robot, ball);
 }
 
-void NavigationInsideTheField::update_control(double time, const ai::Robot& robot, const ai::Ball& ball)
+void NavigationInsideTheField::update_control(double time, const data::Robot& robot, const data::Ball& ball)
 {
-  if (ai_data_.force_ball_avoidance)
+  if (Data::get()->ai_data.force_ball_avoidance)
   {
-    this->position_follower_.setRadiusAvoidanceForTheBall(getRobotRadius() + getBallRadius() +
-                                                          ai_data_.constants.rules_avoidance_distance);
+    this->position_follower_.setRadiusAvoidanceForTheBall(ai::Config::robot_radius + ai::Config::ball_radius +
+                                                          ai::Config::rules_avoidance_distance);
     this->avoidTheBall(true);
   }
   else
@@ -75,7 +75,7 @@ void NavigationInsideTheField::update_control(double time, const ai::Robot& robo
     this->avoidTheBall(need_to_avoid_the_ball_);
   }
 
-  double marge = 2 * getRobotRadius();
+  double marge = 2 * ai::Config::ball_radius;
   if (following_position_was_updated_)
   {
     // Box cropped_field(
@@ -87,16 +87,19 @@ void NavigationInsideTheField::update_control(double time, const ai::Robot& robo
     //     field_NE()
     // );
     // Trying agressive margins
-    Box cropped_field(fieldSW() - Vector2d(marge, marge), fieldNE() + Vector2d(marge, marge));
+    Box cropped_field(Data::get()->field.getSW() - Vector2d(marge, marge),
+                      Data::get()->field.getNE() + Vector2d(marge, marge));
     float radius_margin_factor = 2.0;
-    Box opponent_penalty = opponentPenaltyArea().increase(getRobotRadius());
-    Box ally_penalty = allyPenaltyArea().increase(getRobotRadius());
+    Box opponent_penalty = Data::get()->field.getPenaltyArea(Opponent).increase(ai::Config::robot_radius);
+    Box ally_penalty = Data::get()->field.getPenaltyArea(Ally).increase(ai::Config::robot_radius);
 
-    Box opponent_penalty_large = opponentPenaltyArea().increase(getRobotRadius() * radius_margin_factor);
-    Box ally_penalty_large = allyPenaltyArea().increase(getRobotRadius() * radius_margin_factor);
+    Box opponent_penalty_large =
+        Data::get()->field.getPenaltyArea(Opponent).increase(ai::Config::ball_radius * radius_margin_factor);
+    Box ally_penalty_large =
+        Data::get()->field.getPenaltyArea(Ally).increase(ai::Config::ball_radius * radius_margin_factor);
 
     rhoban_geometry::Point robot_position = linearPosition();
-    double error = getRobotRadius() * radius_margin_factor;
+    double error = ai::Config::ball_radius * radius_margin_factor;
 
     if (opponent_penalty.is_inside(robot_position))
     {
@@ -127,7 +130,7 @@ void NavigationInsideTheField::update_control(double time, const ai::Robot& robo
                                                       deviation_position_);
         if (not(cropped_field.is_inside(deviation_position_)))
         {
-          deviation_position_ = deviation_position_ + Vector2d(penaltyAreaHeight() + error, 0.0);
+          deviation_position_ = deviation_position_ + Vector2d(Data::get()->field.penalty_area_depth_ + error, 0.0);
         }
       }
       else if (opponent_penalty.is_inside(deviation_position_))
@@ -136,7 +139,7 @@ void NavigationInsideTheField::update_control(double time, const ai::Robot& robo
                                                           deviation_position_);
         if (not(cropped_field.is_inside(deviation_position_)))
         {
-          deviation_position_ = deviation_position_ - Vector2d(penaltyAreaHeight() + error, 0.0);
+          deviation_position_ = deviation_position_ - Vector2d(Data::get()->field.penalty_area_depth_ + error, 0.0);
         }
       }
     }

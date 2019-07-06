@@ -24,7 +24,7 @@
 #include <control/robot_control_with_curve.h>
 #include <control/control.h>
 #include <rhoban_utils/angle.h>
-#include <ai_data.h>
+#include <data.h>
 #include <annotations/annotations.h>
 
 namespace rhoban_ssl
@@ -34,28 +34,26 @@ namespace robot_behavior
 class RobotBehavior : public GameInformations
 {
 protected:
-  const ai::Robot* robot_ptr_;
+  const data::Robot* robot_ptr_;
   double birthday_;
   double last_update_;
-  std::string name_;
 
   Vector2d robot_linear_position_;
   ContinuousAngle robot_angular_position_;
   Vector2d robot_linear_velocity_;
   ContinuousAngle robot_angular_velocity_;
 
-  ai::AiData& ai_data_;
-
 public:
-  RobotBehavior(ai::AiData& ia_data);
+  RobotBehavior();
 
+  std::string name;
   double age() const;
   bool isBorn() const;
   void setBirthday(double birthday);
 
-  void updateTimeAndPosition(double time, const ai::Robot& robot, const ai::Ball& ball);
+  void updateTimeAndPosition(double time, const data::Robot& robot, const data::Ball& ball);
 
-  virtual void update(double time, const ai::Robot& robot, const ai::Ball& ball) = 0;
+  virtual void update(double time, const data::Robot& robot, const data::Ball& ball) = 0;
   virtual Control control() const = 0;
 
   //
@@ -76,7 +74,7 @@ public:
   //  }
   virtual rhoban_ssl::annotations::Annotations getAnnotations() const;
 
-  const ai::Robot& robot() const;
+  const data::Robot& robot() const;
 
   rhoban_geometry::Point linearPosition() const;
   ContinuousAngle angularPosition() const;

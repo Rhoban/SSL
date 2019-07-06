@@ -5,8 +5,13 @@
 #include <thread>
 #include <rhoban_utils/timing/time_stamp.h>
 #include <poll.h>
+#include <sys/socket.h>
 
 #include "execution_manager.h"
+
+/* Warning: don't touch the BUFSIZE: it must be enought to store the biggest protobuf packet*/
+#define VLEN 50
+#define BUFSIZE 4096
 
 namespace rhoban_ssl
 {
@@ -16,6 +21,10 @@ namespace rhoban_ssl
  */
 class MulticastClientSingleThread : public virtual rhoban_ssl::Task
 {
+  struct mmsghdr msgs[VLEN];
+  struct iovec iovecs[VLEN];
+  char bufs[VLEN][BUFSIZE];
+
 public:
   struct Interface
   {
@@ -41,7 +50,7 @@ public:
    * @param  len     Number of bytes in the buffer
    * @return         Returns true if the contents is a valid packet
    */
-  virtual bool process(char* buffer, size_t len) = 0;
+  virtual bool process(char* buffer_, size_t len) = 0;
 
   /**
    * Is there valid received packet ?
@@ -59,7 +68,7 @@ public:
 
 protected:
   struct pollfd* sockets_fds_;
-  int nfds_;
+  nfds_t nfds_;
   std::string addr, port;
   bool receivedData;
   volatile bool running;
@@ -75,7 +84,7 @@ protected:
    * Called when a valid packet incomes, can be overloaded in sub classes
    * to trigger events when a packet is received
    */
-  virtual void packetReceived();
+  // virtual void packetReceived();
 };
 
-}  // namespace rhobanssl
+}  // namespace rhoban_ssl

@@ -23,11 +23,11 @@ namespace rhoban_ssl
 {
 namespace robot_behavior
 {
-BeginnerAnnotationsBallPosition::BeginnerAnnotationsBallPosition(ai::AiData& ai_data) : RobotBehavior(ai_data)
+BeginnerAnnotationsBallPosition::BeginnerAnnotationsBallPosition() : RobotBehavior()
 {
 }
 
-void BeginnerAnnotationsBallPosition::update(double time, const ai::Robot& robot, const ai::Ball& ball)
+void BeginnerAnnotationsBallPosition::update(double time, const data::Robot& robot, const data::Ball& ball)
 {
   // Do not remove this line.
   RobotBehavior::updateTimeAndPosition(time, robot, ball);

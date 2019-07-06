@@ -28,6 +28,8 @@ void MulticastClientSingleThread::init()
   // Listing interfaces
   std::map<unsigned int, Interface> interfaces;
   ifaddrs* ifs = nullptr;
+
+  char* ifname = getenv("SSL_MULTICAST_IFNAME");
   if (getifaddrs(&ifs) < 0)
   {
     std::cerr << "Can't get network interface list" << std::endl;
@@ -41,14 +43,17 @@ void MulticastClientSingleThread::init()
       {
         if (i->ifa_addr->sa_family == AF_INET /*|| i->ifa_addr->sa_family == AF_INET6*/)
         {
-          unsigned int ifindex = if_nametoindex(i->ifa_name);
-          if (ifindex)
+          if ((ifname == nullptr) || (strcmp(i->ifa_name, ifname) == 0))
           {
-            Interface interface;
-            interface.name = i->ifa_name;
-            interface.family = i->ifa_addr->sa_family;
-            interface.index = ifindex;
-            interfaces[ifindex] = interface;
+            unsigned int ifindex = if_nametoindex(i->ifa_name);
+            if (ifindex)
+            {
+              Interface interface;
+              interface.name = i->ifa_name;
+              interface.family = i->ifa_addr->sa_family;
+              interface.index = ifindex;
+              interfaces[ifindex] = interface;
+            }
           }
         }
       }
@@ -63,6 +68,23 @@ void MulticastClientSingleThread::init()
 
   // For each interface, running a thread
   running = true;
+
+  if (interfaces.size() == 0)
+  {
+    std::cerr << "\033[31;5mWARNING:\033[0m there is no interface wih multicast support! " << std::endl;
+    std::cerr << "         considere using ifconfig to check your setup " << std::endl;
+  }
+  if (interfaces.size() > 1)
+  {
+    std::cerr << "\033[31;5mWARNING:\033[0m there is more than one interface wih multicast support! " << std::endl;
+    std::cerr << "         This will probably lead to duplicate packets reception " << std::endl;
+    std::cerr << "         Check your 'interface' with ifconfig and turn multicast off " << std::endl;
+    std::cerr << "         on unwanted iterface with command: ifconfig eth0 -muticast" << std::endl;
+    std::cerr << "         or set environment variable SSL_MULTICAST_IFNAME to one of the following values"
+              << std::endl;
+    for (auto it = interfaces.begin(); it != interfaces.end(); ++it)
+      std::cerr << "         export SSL_MULTICAST_IFNAME=" << it->second.name << std::endl;
+  }
 
   sockets_fds_ = new struct pollfd[interfaces.size()];
   nfds_ = 0;
@@ -141,6 +163,15 @@ void MulticastClientSingleThread::init()
     std::cerr << "no interface to listen on (MulticastClientSingleThread)" << std::endl;
     _exit(1);
   }
+
+  memset(msgs, 0, sizeof(msgs));
+  for (int j = 0; j < VLEN; j++)
+  {
+    iovecs[j].iov_base = bufs[j];
+    iovecs[j].iov_len = BUFSIZE;
+    msgs[j].msg_hdr.msg_iov = &iovecs[j];
+    msgs[j].msg_hdr.msg_iovlen = 1;
+  }
 }
 
 MulticastClientSingleThread::~MulticastClientSingleThread()
@@ -157,6 +188,9 @@ for (auto thread : threads)
 */
 }
 
+//#define VLEN 20
+//#define BUFSIZE 100
+
 bool MulticastClientSingleThread::runTask()
 {
   // This is mainly from ssl-refbox/client example
@@ -164,24 +198,25 @@ bool MulticastClientSingleThread::runTask()
   if (running == false)
     return false;
 
-  for (int i = 0; i < nfds_; ++i)
+  for (unsigned int i = 0; i < nfds_; ++i)
     sockets_fds_[i].revents = 0;
 
   poll(sockets_fds_, nfds_, 0);
 
-  for (int i = 0; i < nfds_; ++i)
+  for (unsigned int i = 0; i < nfds_; ++i)
   {
     if (sockets_fds_[i].revents & POLLIN)
-    {
-      char buffer[65536];
-      ssize_t len = recv(sockets_fds_[i].fd, buffer, sizeof(buffer), 0);
+    {  // can be static as we are in single thread paradigm
+       // ssize_t len = recv(sockets_fds_[i].fd, buffer_, sizeof(buffer_), 0);
 
-      if (len > 0)
+      int len = recvmmsg(sockets_fds_[i].fd, msgs, VLEN, 0, nullptr);
+
+      for (int k = 0; k < len; ++k)
       {
-        if (process(buffer, len))
+        if (process(bufs[k], msgs[k].msg_len))
         {
           packets++;
-          packetReceived();
+          // packetReceived();
           receivedData = true;
           lastData = TimeStamp::now();
         }
@@ -202,10 +237,10 @@ bool MulticastClientSingleThread::hasData() const
   return false;
 }
 
-void MulticastClientSingleThread::packetReceived()
-{
-  // Default behaviors does nothing
-}
+// void MulticastClientSingleThread::packetReceived()
+//{
+// Default behaviors does nothing
+//}
 
 unsigned int MulticastClientSingleThread::getPackets()
 {
@@ -216,4 +251,4 @@ void MulticastClientSingleThread::shutdown()
 {
   running = false;
 }
-}  // namespace rhobanssl
+}  // namespace rhoban_ssl

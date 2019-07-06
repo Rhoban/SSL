@@ -6,27 +6,25 @@
 #include <algorithm>
 #include <iostream>
 
-rhoban_ssl::Task::~Task()
+namespace rhoban_ssl
+{
+ExecutionManager ExecutionManager::execution_manager_singleton_;
+
+ExecutionManager::ExecutionManager() : shutdown_(false)
 {
 }
 
-rhoban_ssl::ExecutionManager rhoban_ssl::ExecutionManager::execution_manager_singleton_;
-
-rhoban_ssl::ExecutionManager::ExecutionManager()
-{
-}
-
-rhoban_ssl::ExecutionManager& rhoban_ssl::ExecutionManager::getManager()
+ExecutionManager& ExecutionManager::getManager()
 {
   return ExecutionManager::execution_manager_singleton_;
 }
 
-void rhoban_ssl::ExecutionManager::addTask(rhoban_ssl::Task* t)
+void ExecutionManager::addTask(Task* t)
 {
   add_buffer_.push_back(t);
 }
 
-void rhoban_ssl::ExecutionManager::run(double min_loop_duration)
+void ExecutionManager::run(double min_loop_duration)
 {
   using std::chrono::high_resolution_clock;
   std::vector<Task*> to_remove;
@@ -63,5 +61,23 @@ void rhoban_ssl::ExecutionManager::run(double min_loop_duration)
       // std::cout << d << std::endl;
       std::this_thread::sleep_for(std::chrono::nanoseconds(d));
     }
-  } while (tasks_.size() > 0);
+  } while ((tasks_.size() > 0) && (shutdown_ == false));
+
+  std::cout << std::endl << "DELETING TASKS" << std::endl;
+  std::cout << "----------------------" << std::endl;
+  for (auto i = tasks_.begin(); i != tasks_.end(); ++i)
+    delete *i;
+  std::cout << "----------------------" << std::endl;
+  std::cout << "END" << std::endl;
 }
+
+void ExecutionManager::shutdown()
+{
+  shutdown_ = true;
+}
+
+Task::~Task()
+{
+}
+
+}  // namespace rhoban_ssl

@@ -1,3 +1,22 @@
+/*
+This file is part of SSL.
+
+Copyright 2018 Bezamat Jérémy (jeremy.bezamat@gmail.com)
+
+SSL is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+SSL is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with SSL.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 #pragma once
 
 #include "manager.h"
@@ -9,13 +28,10 @@ namespace manager
 {
 class ManagerWithGameState : public Manager
 {
-private:
-  const GameState& game_state_;
-
   unsigned int last_change_stamp_;
 
 public:
-  ManagerWithGameState(ai::AiData& ai_data, const GameState& game_state);
+  ManagerWithGameState(std::string name);
 
   void update(double time);
   void analyseData(double time);

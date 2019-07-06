@@ -20,6 +20,9 @@
 #include "vision_data.h"
 #include <assert.h>
 #include <debug.h>
+#include <VisionClient.h>
+#include <data.h>
+#include <chrono>
 
 using namespace rhoban_geometry;
 using namespace rhoban_utils;
@@ -28,157 +31,190 @@ namespace rhoban_ssl
 {
 namespace vision
 {
-Field::Field()
-  : present(false)
-  , fieldLength(0.0)
-  , fieldWidth(0.0)
-  , goalWidth(0.0)
-  , goalDepth(0.0)
-  , boundaryWidth(0.0)
-  , penaltyAreaDepth(0.0)
-  , penaltyAreaWidth(0.0)
-{
-}
+VisionDataSingleThread VisionDataSingleThread::singleton_;
 
-void Object::update(double time, const Point& linear_position)
+VisionDataSingleThread::VisionDataSingleThread()
 {
-  update(time, linear_position, movement[0].angular_position);
-}
-
-void Object::update(double time, const Point& linear_position, const Angle& angular_position)
-{
-  ContinuousAngle angle(movement[0].angular_position);
-  angle.setToNearest(angular_position);
-  update(time, linear_position, angle);
-}
-
-void Object::update(double time, const Point& linear_position, const ContinuousAngle& angular_position)
-{
-  if (time <= movement.time(0))
+  for (unsigned int i = 0; i < ai::Config::NB_CAMERAS; ++i)
   {
-    // TODO
-    // DEBUG("TODO");
-    return;
+    last_camera_detection_[i].frame_number_ = 0;
   }
-  last_update = rhoban_utils::TimeStamp::now();
-  present = true;
-
-  movement.insert(PositionSample(time, linear_position, angular_position));
+  for (Team team = 0; team < 2; team++)
+    for (uint rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
+      Data::get()->robots[team][rid].id = rid;
 }
 
-double Object::age() const
+VisionDataSingleThread::~VisionDataSingleThread()
 {
-  return diffSec(last_update, rhoban_utils::TimeStamp::now());
 }
 
-bool Object::isTooOld() const
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+BallDetection::BallDetection() : confidence_(-1), camera_(nullptr)
 {
-  return not(present) or age() > 4.0;
 }
 
-bool Object::isOk() const
+void BallDetection::operator=(const SSL_DetectionBall& b)
 {
-  return present && age() < 2.0;
+  confidence_ = b.confidence();
+  x_ = b.x();
+  y_ = b.y();
+  z_ = b.z();
+  pixel_x_ = b.pixel_x();
+  pixel_y_ = b.pixel_y();
+  area_ = b.area();
 }
 
-Object::Object() : movement(history_size), present(false), id(-1), last_update(rhoban_utils::TimeStamp::now())
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+void RobotDetection::operator=(const SSL_DetectionRobot& r)
 {
-  for (int i = 0; i < history_size; i++)
+  confidence_ = r.confidence();  // set to -1 if not valid
+  x_ = r.x();
+  y_ = r.y();
+  if ((has_orientation_ = r.has_orientation()) == true)
+    orientation_ = r.orientation();
+  pixel_x_ = r.pixel_x();
+  pixel_y_ = r.pixel_y();
+  if ((has_height_ = r.has_height()) == true)
+    height_ = r.height();
+  if ((has_id_ = r.has_robot_id()) == true)
+    robot_id_ = r.robot_id();
+}
+
+RobotDetection::RobotDetection() : camera_(nullptr), confidence_(-1)
+{
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+CameraDetectionFrame::CameraDetectionFrame()
+  : inverted(false), t_capture_(-1.0), t_sent_(-1.0), frame_number_(0), camera_id_(-1)
+{
+  for (auto& r : allies_)
+    r.camera_ = this;
+  for (auto& r : opponents_)
+    r.camera_ = this;
+  for (auto& b : balls_)
+    b.camera_ = this;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool VisionDataTerminalPrinter::runTask()
+{
+  static int counter = 0;
+  counter += 1;
+  printf("\033[2J\033[1;1H");
+  printf("%d\n", counter);
+  printf("%d\n", VisionDataGlobal::singleton_.last_packets_.size());
+  // VisionDataGlobal::singleton_.packets_buffer_.size());
+  auto& field = Data::get()->field;
+  printf("Field is present : \n");
+  printf("\t %f x %f \n", field.field_width_, field.field_length_);
+
+  for (int camera = 0; camera < ai::Config::NB_CAMERAS; ++camera)
   {
-    movement[i].time = -i;
+    auto& cam = VisionDataSingleThread::singleton_.last_camera_detection_[camera];
+    printf("CAMERA %d (%d): \n", camera, cam.frame_number_);
+    printf("\t time: %lf / %lf \n", cam.t_capture_, cam.t_sent_);
+    int nballs = 0;
+    for (int i = 0; i < ai::Config::MAX_BALLS_DETECTED_PER_CAMERA; ++i)
+      if (cam.balls_[i].confidence_ >= 0)
+        nballs += 1;
+    int nallies = 0;
+    for (int i = 0; i < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++i)
+      if (cam.allies_[i].confidence_ >= 0)
+        nallies += 1;
+    int nbopponents = 0;
+    for (int i = 0; i < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++i)
+      if (cam.opponents_[i].confidence_ >= 0)
+        nbopponents += 1;
+    printf("\t balls  : %d ", nballs);
+    for (auto& i : cam.balls_)
+      if (i.confidence_ >= 0)
+        printf(" %f (%f,%f) ", i.confidence_, i.x_, i.y_);
+    printf("\n");
+    printf("\t blues  : %d ", nallies);
+    for (auto& i : cam.allies_)
+      if (i.confidence_ >= 0)
+        printf(" %f (%f,%f) ", i.confidence_, i.x_, i.y_);
+    printf("\n");
+    printf("\t yellow : %d ", nbopponents);
+    for (auto& i : cam.opponents_)
+      if (i.confidence_ >= 0)
+        printf(" %f (%f,%f) ", i.confidence_, i.x_, i.y_);
+    printf("\n");
   }
-}
 
-VisionData::VisionData()
-{
-  field.present = false;
-
-  for (auto team : { Ally, Opponent })
+  if (Data::get()->ball.isActive())
+    printf("BALL is at %f %f\n", Data::get()->ball.movement_sample[0].linear_position.x,
+           Data::get()->ball.movement_sample[0].linear_position.y);
+  else
   {
-    for (int k = 0; k < Robots; k++)
+    printf("BALL is not found\n");
+  }
+
+  for (int team = 0; team < 2; ++team)
+  {
+    printf("team %d\n", team);
+    for (int robot = 0; robot < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot)
     {
-      robots[team][k].id = k;
-      if (team == Ally)
+      if (Data::get()->robots[team][robot].isActive())
+        printf("\t%d : (%f;%f;%f) ", robot, Data::get()->robots[team][robot].movement_sample[0].linear_position.x,
+               Data::get()->robots[team][robot].movement_sample[0].linear_position.y,
+               Data::get()->robots[team][robot].movement_sample[0].angular_position.value());
+    }
+    printf("\n");
+  }
+  return true;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
+bool ChangeReferencePointOfView::runTask()
+{
+  if (Data::get()->referee.allyOnPositiveHalf())
+  {
+    for (uint cam_id = 0; cam_id < ai::Config::NB_CAMERAS; cam_id++)
+    {
+      if (!VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].inverted)
       {
-        robots[team][k].update(1, Point(-1 - k * 0.3, 3.75));
-      }
-      else
-      {
-        robots[team][k].update(1, Point(1 + k * 0.3, 3.75));
-      }
-      robots[team][k].present = false;
-    }
-  }
-}
+        for (uint ball_id = 0; ball_id < ai::Config::MAX_BALLS_DETECTED_PER_CAMERA; ball_id++)
+        {
+          struct BallDetection& ball =
+              VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].balls_[ball_id];
+          ball.x_ *= -1.f;
+          ball.y_ *= -1.f;
+        }
 
-void Object::checkAssert(double time) const
-{
-  assert(not(present) or (movement.time(0) > movement.time(1) and movement.time(1) > movement.time(2)));
-  //    assert(
-  //        not(present) or ( time > movement.time(0) )
-  //    );
-}
+        for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
+        {
+          struct RobotDetection& ally_robot =
+              VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].allies_[robot_id];
+          ally_robot.x_ *= -1.f;
+          ally_robot.y_ *= -1.f;
 
-void VisionData::checkAssert(double time) const
-{
-  for (auto team : { Ally, Opponent })
-  {
-    for (int k = 0; k < Robots; k++)
-    {
-      robots.at(team).at(k).checkAssert(time);
-    }
-  }
-  ball.checkAssert(time);
-}
+          if (ally_robot.has_orientation_)
+          {
+            ally_robot.orientation_ = fmodf(ally_robot.orientation_ + M_PI, M_PI * 2.0f);
+          }
 
-double VisionData::olderTime() const
-{
-  double older = ball.movement.time(0);
-  for (auto team : { Ally, Opponent })
-  {
-    for (int k = 0; k < Robots; k++)
-    {
-      double t = robots.at(team).at(k).movement.time(0);
-      if (t != 0)
-      {
-        older = std::min(older, t);
+          struct RobotDetection& opponent_robot =
+              VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].opponents_[robot_id];
+          opponent_robot.x_ *= -1.f;
+          opponent_robot.y_ *= -1.f;
+
+          if (opponent_robot.has_orientation_)
+          {
+            opponent_robot.orientation_ = fmodf(opponent_robot.orientation_ + M_PI, M_PI * 2.0f);
+          }
+        }
+        VisionDataSingleThread::singleton_.last_camera_detection_[cam_id].inverted = true;
       }
     }
   }
-  return older;
-};
-
-std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::VisionData& vision)
-{
-  for (auto team : { rhoban_ssl::vision::Ally, rhoban_ssl::vision::Opponent })
-  {
-    out << team << " : " << std::endl;
-    for (int k = 0; k < rhoban_ssl::vision::Robots; k++)
-    {
-      out << "robot " << k << std::endl;
-      out << vision.robots.at(team).at(k);
-    }
-  }
-  out << "ball : " << std::endl;
-  out << vision.ball << std::endl;
-
-  return out;
-}
-
-std::ostream& operator<<(std::ostream& out, const rhoban_ssl::vision::Object& object)
-{
-  out << " id : " << object.id << std::endl;
-  out << " present : " << object.present << std::endl;
-  out << " age : " << object.age() << std::endl;
-  out << " lastUpdate : " << object.last_update.getTimeMS() / 1000.0 << std::endl;
-  out << " movement : " << object.movement << std::endl;
-  return out;
-}
-
-std::ostream& operator<<(std::ostream& out, const Field& field)
-{
-  out << "field -- len. " << field.fieldLength << " , width " << field.fieldWidth;
-  return out;
+  return true;
 }
 
 }  // namespace vision
