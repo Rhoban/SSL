@@ -26,10 +26,7 @@ namespace rhoban_ssl
 namespace robot_behavior
 {
 Striker_todo_rectum::Striker_todo_rectum(rhoban_geometry::Point point)
-  : RobotBehavior()
-  , follower_(Factory::fixedConsignFollower())
-  , target_point_(point)
-  , rotated_(false)
+  : RobotBehavior(), follower_(Factory::fixedConsignFollower()), target_point_(point), rotated_(false)
 {
 }
 
@@ -43,8 +40,8 @@ void Striker_todo_rectum::update(double time, const data::Robot& robot, const da
 
   const rhoban_geometry::Point robot_position = robot.getMovement().linearPosition(time);
 
-//   if (robot_position.getDist(Data::get()->ball.getMovement().linearPosition(time)) <= reach_radius_)
-    if(Data::get()->robots[Ally][robot.id].infraRed() != true)
+  //   if (robot_position.getDist(Data::get()->ball.getMovement().linearPosition(time)) <= reach_radius_)
+  if (Data::get()->robots[Ally][robot.id].infraRed() != true)
   {
     rotated_ = false;
     rhoban_geometry::Point ball_pose = Data::get()->ball.getMovement().linearPosition(time);
@@ -55,7 +52,7 @@ void Striker_todo_rectum::update(double time, const data::Robot& robot, const da
     follower_->avoidTheBall(false);
     follower_->update(time, robot, ball);
   }
-    else
+  else
   {
     rhoban_geometry::Point ball_pose = Data::get()->ball.getMovement().linearPosition(time);
     rhoban_geometry::Point position_follower = robot_position;
@@ -64,11 +61,11 @@ void Striker_todo_rectum::update(double time, const data::Robot& robot, const da
     follower_->setFollowingPosition(position_follower, rotation_follower);
     follower_->avoidTheBall(false);
     follower_->update(time, robot, ball);
-    if ((rotation_follower - robot.getMovement().angularPosition(time)) < 0.05 ){
+    if ((rotation_follower - robot.getMovement().angularPosition(time)) < 0.10)
+    {
       rotated_ = true;
     }
   }
-
 }
 
 Control Striker_todo_rectum::control() const
@@ -76,12 +73,12 @@ Control Striker_todo_rectum::control() const
   Control ctrl = follower_->control();
   ctrl.charge = true;
   ctrl.kick = false;
-  if(rotated_){
+  if (rotated_)
+  {
     ctrl.kick = true;
   }
   return ctrl;
 }
-
 
 void Striker_todo_rectum::setPoint(rhoban_geometry::Point point)
 {

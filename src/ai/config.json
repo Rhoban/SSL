@@ -4,7 +4,7 @@
     },
     "time" : {
         "period" : 0.01,
-        "ntpd_enable" : false
+        "ntpd_enable" : true
     },
     "robot" : {
 	"robot_center_to_dribbler_center" : 0.064997,
@@ -55,11 +55,11 @@
         },
 	"p_translation_goalkeeper" : {
             "simu" : 3.0,
-            "real" : 4.0            
+            "real" : 6.0            
         },
         "i_translation_goalkeeper" : {
-            "simu" : 0.0001,
-            "real" : 0.0001
+            "simu" : 0.001,
+            "real" : 0.001
         },
         "d_translation_goalkeeper" : {
             "simu" : 0.0,
@@ -92,9 +92,9 @@
     },
     "navigation_with_obstacle" : {
         "security_acceleration_ratio" : 0.5,
-        "obstacle_avoidance_ratio" : 0.04,
-        "radius_security_for_collision" : 0.015,
-        "radius_security_for_avoidance" : 0.03,
+        "obstacle_avoidance_ratio" : 0.1,
+        "radius_security_for_collision" : 0.15,
+        "radius_security_for_avoidance" : 0.3,
         "coefficient_to_increase_avoidance_convergence" : 0.2
     },
     "goalie" : {

@@ -149,7 +149,7 @@ Control DefensiveWall::control() const
 {
   Control ctrl = follower_->control();
   // ctrl.spin = true; // We active the dribler !
-  ctrl.kick = false;
+  ctrl.kick = true;
   return ctrl;
 }
 

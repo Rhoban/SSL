@@ -262,12 +262,14 @@ void Commander::updateRobotsCommands()
       ctrl.kick_power = 0;
     }
 
-    if (ctrl.chip_kick || ctrl.kick)
-    {
-      ctrl.kick = true;
-      ctrl.chip_kick = false;
-      ctrl.kick_power = 1.0;
-    }
+    ctrl.charge = true;
+
+    //    if (ctrl.chip_kick || ctrl.kick)
+    //    {
+    //      ctrl.kick = true;
+    //      ctrl.chip_kick = false;
+    //      ctrl.kick_power = 1.0;
+    //    }
 
     free_kick_type_id type_free_kick = Data::get()->referee.game_state.typeOfTheFreeKick();
     Team team_free_kick = Data::get()->referee.game_state.freeKickTeam();
