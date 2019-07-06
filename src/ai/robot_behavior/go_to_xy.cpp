@@ -62,7 +62,7 @@ void GoToXY::update(double time, const data::Robot& robot, const data::Ball& bal
     rotation_follower_ = 0;
   }
 
-  follower_->setFollowingPosition(position_follower, rotation_follower_);
+  follower_->setFollowingPosition(position_follower, 0.0);
   follower_->avoidTheBall(false);
   follower_->update(time, robot, ball);
 }
