@@ -42,6 +42,7 @@ public:
   // Add packet in the list of commands to send
   void addRobotPacket(int robot, struct packet_master robotPacket);
   void addParamPacket(int robot, struct packet_params params);
+  void addMusicPacket(int robot, packet_music params);
 
   void updateRobot(uint id, struct packet_robot& r);
 

@@ -169,6 +169,11 @@ void Master::addParamPacket(int robot, struct packet_params params)
   addPacket(robot, INSTRUCTION_PARAMS, (char*)&params, sizeof(params));
 }
 
+void Master::addMusicPacket(int robot, struct packet_music params)
+{
+  addPacket(robot, MUSIC_PARAMS, (char*)&params, sizeof(params));
+}
+
 void Master::updateRobot(uint id, packet_robot& r)
 {
   mutex.lock();

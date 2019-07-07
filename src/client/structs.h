@@ -52,3 +52,18 @@ struct packet_robot
   int16_t ypos;  // In mm
   int16_t ang;   // In rad/1000
 } __attribute__((packed));
+
+#define MUSIC_PARAMS 0x02
+struct packet_music
+{
+#define SOUND_ON (1 << 0)   // The sound should be on (else no sound is stopped)
+#define BEEPER (1 << 1)     // Enable/disable the sound on the beeper
+#define KICK (1 << 2)       // Enable/disable the sound on the kick
+#define CHIP_KICK (1 << 3)  // Enable/disable the sound on the chip kick
+#define DRIBBLER (1 << 5)   // Enable/disable the sound on the dribbler
+
+  uint8_t instrument;
+  uint16_t note;
+  uint16_t duration;
+
+} __attribute__((packed));
