@@ -39,6 +39,9 @@ struct MovementSample : public CircularVector<PositionSample>
 {
   CircularVector<double> dts;
 
+  // for logger only
+  PositionSample last_sample_;
+
   MovementSample(unsigned int, double default_dt = 1.0 / 60.0);
   MovementSample();
 

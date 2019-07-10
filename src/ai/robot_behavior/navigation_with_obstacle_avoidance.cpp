@@ -178,12 +178,13 @@ void NavigationWithObstacleAvoidance::convertCycleDirectionToLinearAndAngularVel
 
   // avoid the problem where 2 allies bots infinitely avoid themselves until they leave the field like two small
   // dragonfly.
-  if (Data::get()->all_robots[closest_robot_].first == Ally &&
-      linearPosition().getDist(
-          Data::get()->all_robots[closest_robot_].second->getMovement().linearPosition(time()))  //(*)
-          < INFINITE_DODGING_PREVENTION &&
-      robot().getMovement().linearVelocity(time()).norm() <=
-          Data::get()->all_robots[closest_robot_].second->getMovement().linearVelocity(time()).norm())
+  if ((closest_robot_ >= 0) &&
+      (Data::get()->all_robots[closest_robot_].first == Ally &&
+       linearPosition().getDist(
+           Data::get()->all_robots[closest_robot_].second->getMovement().linearPosition(time()))  //(*)
+           < INFINITE_DODGING_PREVENTION &&
+       robot().getMovement().linearVelocity(time()).norm() <=
+           Data::get()->all_robots[closest_robot_].second->getMovement().linearVelocity(time()).norm()))
   {
     pos = linearPosition();
   }
@@ -218,7 +219,8 @@ void NavigationWithObstacleAvoidance::computeTheLimitCycleDirectionForObstacle(
   double YY = s.getY() * s.getY();
 
   double avoidance_convergence = ai::Config::coefficient_to_increase_avoidance_convergence;
-  if (Data::get()->all_robots[closest_robot_].first == Data::get()->all_robots[robot().id].first)
+  if ((closest_robot_ >= 0) &&
+      (Data::get()->all_robots[closest_robot_].first == Data::get()->all_robots[robot().id].first))
   {
     // sign_of_avoidance_rotation = 1.0;
     avoidance_convergence = (XX + YY) * (XX + YY);

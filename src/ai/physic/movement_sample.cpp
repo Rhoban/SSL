@@ -38,6 +38,7 @@ void MovementSample::insert(const PositionSample& sample)
 {
   assert(sample.time >= (*this)[0].time);
   // if( sample.time == (*this)[0].time ){
+  last_sample_ = sample;
   if (fabs(sample.time - (*this)[0].time) < 0.01)
   {
     (*this)[0] = sample;
@@ -135,12 +136,10 @@ std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample&
 {
   stream << "("
             "t="
-         << pos.time
-         << ", "
-            "lin="
-         << pos.linear_position
-         << ", "
-            "ang="
+         << pos.time << ", "
+                        "lin="
+         << pos.linear_position << ", "
+                                   "ang="
          << pos.angular_position << ")";
   return stream;
 }

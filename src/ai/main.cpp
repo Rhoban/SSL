@@ -29,6 +29,8 @@
 
 #include <executables/tools.h>
 
+#include <logger.h>
+
 #define TEAM_NAME "nAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
@@ -38,12 +40,12 @@ using namespace rhoban_ssl;
 
 void superStop(int)
 {
-  rhoban_ssl::ExecutionManager::getManager().shutdown();
-  for (int i = 0; i < 10000; ++i)
+  // rhoban_ssl::ExecutionManager::getManager().shutdown();
+  for (int i = 0; i < 1000; ++i)
   {
     close(i);
   }
-  exit(EXIT_FAILURE);
+  _exit(EXIT_FAILURE);
 }
 
 void stop(int)
@@ -56,10 +58,10 @@ int main(int argc, char** argv)
   // Enabling floating point errors
   feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
   signal(SIGINT, stop);
-  signal(SIGABRT, superStop);
-  signal(SIGSEGV, superStop);
-  signal(SIGBUS, superStop);
-  signal(SIGFPE, superStop);
+  // signal(SIGABRT, superStop);
+  // signal(SIGSEGV, superStop);
+  // signal(SIGBUS, superStop);
+  // signal(SIGFPE, superStop);
   atexit((void (*)(void))superStop);
 
   // Command line parsing
@@ -79,6 +81,14 @@ int main(int argc, char** argv)
       TEAM_NAME,                                                    // Default value
       "string",                                                     // short description of the expected value.
       cmd);
+
+  TCLAP::ValueArg<std::string> logfile("",     // short argument name  (with one character)
+                                       "log",  // long argument name
+                                       "log filename",
+                                       false,     // Flag is not required
+                                       "",        // Default value
+                                       "string",  // short description of the expected value.
+                                       cmd);
 
   TCLAP::ValueArg<std::string> zone_name("z",     // short argument name  (with one character)
                                          "zone",  // long argument name
@@ -220,6 +230,9 @@ int main(int argc, char** argv)
   ai::AI* ai = new ai::AI(manager_name.getValue());
   ExecutionManager::getManager().addTask(ai, 1000);
   addViewerTasks(ai, viewer_port.getValue());
+
+  if (logfile.isSet())
+    ExecutionManager::getManager().addTask(new LoggerTask(ai, logfile.getValue(), 1 << 26));
 
   // stats
   // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop

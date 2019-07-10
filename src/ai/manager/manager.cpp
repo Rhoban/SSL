@@ -64,11 +64,11 @@ void Manager::assignStrategy(const std::string& strategy_name, double time, cons
   assert(strategies_.find(strategy_name) != strategies_.end());  // The name of the strategy is not declared. Please
                                                                  // register them with register_strategy() (during the
                                                                  // initialisation of your manager for example).
-  assert(not(assign_goalie) or
-         (assign_goalie and std::find(robot_ids.begin(), robot_ids.end(),
-                                      Data::get()->referee.teams_info[Ally].goalkeeper_number) ==
-                                robot_ids.end()));  // If you declare that you are assigning a goal, you should not
-                                                    // declar the goal id inside the list of field robots.
+  assert(not(assign_goalie) or (assign_goalie and
+                                std::find(robot_ids.begin(), robot_ids.end(),
+                                          Data::get()->referee.teams_info[Ally].goalkeeper_number) ==
+                                    robot_ids.end()));  // If you declare that you are assigning a goal, you should not
+                                                        // declar the goal id inside the list of field robots.
 
   current_strategy_names_.push_front(strategy_name);
   strategy::Strategy& strategy = getStrategy(strategy_name);
@@ -127,8 +127,8 @@ void Manager::updateCurrentStrategies()
   }
 }
 
-void Manager::assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> >& robot_behaviors,
-                                     double time, double dt)
+void Manager::assignBehaviorToRobots(std::shared_ptr<robot_behavior::RobotBehavior>* robot_behaviors, double time,
+                                     double dt)
 {
   for (const std::string& name : current_strategy_names_)
   {

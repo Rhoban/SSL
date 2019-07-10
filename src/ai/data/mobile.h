@@ -6,6 +6,7 @@
 
 namespace rhoban_ssl
 {
+class LogReplayTask;
 namespace data
 {
 //! TODO: remove hisotry_size ...
@@ -13,9 +14,11 @@ static const int history_size = 30;
 
 class Mobile
 {
+  friend class rhoban_ssl::LogReplayTask;
   /*!
    * \brief last_update corresponds to last call to an update method... not related to game timing information.
    */
+protected:
   double last_update;
 
 public:

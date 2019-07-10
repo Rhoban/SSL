@@ -25,6 +25,7 @@ set (SOURCES
     core/timeout_task.cpp
     executables/tools.cpp
     data.cpp
+    logger.cpp
     data/ball.cpp
     data/robot.cpp
     data/field.cpp
@@ -207,6 +208,9 @@ target_link_libraries(dribbler ssl_ai ${ALL_LIBS})
 
 add_executable(check_vision executables/check_vision.cpp)
 target_link_libraries(check_vision ssl_ai ${ALL_LIBS})
+
+add_executable(replay_log executables/replay_log.cpp)
+target_link_libraries(replay_log ssl_ai ${ALL_LIBS})
 
 add_executable(test_field_info executables/tests/test_field_info.cpp)
 target_link_libraries(test_field_info ssl_ai ${ALL_LIBS})

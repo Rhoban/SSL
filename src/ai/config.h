@@ -51,6 +51,7 @@ struct Config
   static double period;
 
   static bool is_in_mixcontrol;
+  static bool log_replay;
 
   static double robot_radius;
   static double ball_radius;

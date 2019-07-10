@@ -34,6 +34,7 @@ void ExecutionManager::run(double min_loop_duration)
 {
   using std::chrono::high_resolution_clock;
   std::vector<std::pair<int, Task*> > to_remove;
+  std::vector<WatchTask*> watchers_to_remove;
   high_resolution_clock::time_point start;
   long min_loop_d = long(min_loop_duration * 1e9);
   do
@@ -53,6 +54,12 @@ void ExecutionManager::run(double min_loop_duration)
       {
         to_remove.push_back(i);
       }
+      watchers_to_remove.clear();
+      for (auto w : watchers_)
+        if (w->runTask(i.second) == false)
+          watchers_to_remove.push_back(w);
+      for (auto i : watchers_to_remove)
+        watchers_.remove(i);
     }
     for (auto i : to_remove)
     {
@@ -87,6 +94,11 @@ void ExecutionManager::setMaxTaskId(int value)
 void ExecutionManager::shutdown()
 {
   shutdown_ = true;
+}
+
+void ExecutionManager::addWatchTask(WatchTask* task)
+{
+  watchers_.push_back(task);
 }
 
 Task::~Task()
@@ -137,6 +149,10 @@ bool ConditionalTask::runTask()
     return job_();
   }
   return true;
+}
+
+WatchTask::~WatchTask()
+{
 }
 
 }  // namespace rhoban_ssl

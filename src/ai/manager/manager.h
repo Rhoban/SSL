@@ -122,8 +122,8 @@ public:
   virtual void updateStrategies(double time);
   virtual void updateCurrentStrategies();
 
-  virtual void assignBehaviorToRobots(std::map<int, std::shared_ptr<robot_behavior::RobotBehavior>>& robot_behaviors,
-                                      double time, double dt);
+  virtual void assignBehaviorToRobots(std::shared_ptr<robot_behavior::RobotBehavior>* robot_behaviors, double time,
+                                      double dt);
 
   void removeInvalidRobots();
 

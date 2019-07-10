@@ -25,6 +25,8 @@ bool Config::is_in_mixcontrol = false;
 double Config::period = 0.01;
 bool Config::ntpd_enable = false;
 
+bool Config::log_replay = false;
+
 double Config::robot_radius = 0.09;
 double Config::ball_radius = 0.021375;
 Vector2d Config::waiting_goal_position;

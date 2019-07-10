@@ -236,11 +236,12 @@ void AI::initRobotBehaviors()
 
 void AI::setManager(std::string managerName)
 {
-  std::vector<int> robot_ids(robot_behaviors_.size());
+  std::vector<int> robot_ids(ai::Config::NB_OF_ROBOTS_BY_TEAM);
   uint i = 0;
-  for (auto elem : robot_behaviors_)
+  for (int elem = 0; elem < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++elem)
   {
-    robot_ids[i] = elem.first;
+    if (robot_behaviors_[elem] != nullptr)
+      robot_ids[i] = elem;
     i++;
   }
 
@@ -322,7 +323,7 @@ rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
   rhoban_ssl::annotations::Annotations annotations;
   for (int robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; robot_id++)
   {
-    const robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_.at(robot_id));
+    const robot_behavior::RobotBehavior& robot_behavior = *(robot_behaviors_[robot_id]);
     annotations.addAnnotations(robot_behavior.getAnnotations());
   }
   return annotations;

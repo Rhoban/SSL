@@ -2,6 +2,7 @@
 
 #include <set>
 #include <vector>
+#include <list>
 #include <chrono>
 #include <functional>
 
@@ -15,6 +16,13 @@ class Task
 public:
   virtual ~Task();
   virtual bool runTask(void) = 0;
+};
+
+class WatchTask
+{
+public:
+  virtual ~WatchTask();
+  virtual bool runTask(Task*) = 0;
 };
 
 class TimeStatTask : public Task
@@ -54,6 +62,8 @@ class ExecutionManager
   int current_max_priority_;
   int stop_loop_at;
 
+  std::list<WatchTask*> watchers_;
+
 public:
   static ExecutionManager& getManager();
   /**
@@ -68,5 +78,6 @@ public:
   void run(double min_loop_duration);
   void setMaxTaskId(int value = -1);
   void shutdown();
+  void addWatchTask(WatchTask*);
 };
 }  // namespace rhoban_ssl

@@ -171,6 +171,14 @@ Json::Value ViewerCommunication::ballPacket()
 {
   Json::Value packet;
 
+  if (ai::Config::log_replay)
+  {
+    packet["ball"]["position"]["x"] = Data::get()->ball.movement_sample.last_sample_.linear_position.x;
+    packet["ball"]["position"]["y"] = Data::get()->ball.movement_sample.last_sample_.linear_position.y;
+    packet["ball"]["radius"] = ai::Config::ball_radius;
+    return packet;
+  }
+
   const rhoban_geometry::Point& ball_position = Data::get()->ball.getMovement().linearPosition(Data::get()->time.now());
   packet["ball"]["position"]["x"] = ball_position.getX();
   packet["ball"]["position"]["y"] = ball_position.getY();
@@ -207,42 +215,58 @@ Json::Value ViewerCommunication::teamsPacket()
     {
       packet["teams"][team]["positive_axis"] = !Data::get()->referee.allyOnPositiveHalf();
     }
-    packet["teams"][team]["name"] = referee.teams_info[team_id].name;
-    packet["teams"][team]["score"] = referee.teams_info[team_id].score;
-    packet["teams"][team]["timeout"]["remaincount"] = referee.teams_info[team_id].timeout_remaining_count;
-    packet["teams"][team]["timeout"]["remaining_time"] = referee.teams_info[team_id].timeout_remaining_time;
-    packet["teams"][team]["goalkeeper_number"] = referee.teams_info[team_id].goalkeeper_number;
 
-    packet["teams"][team]["cards"]["yellow"] = referee.teams_info[team_id].yellow_cards_count;
-    for (uint i = 0; i < referee.teams_info[team_id].yellow_card_times.size(); ++i)
+    if (!ai::Config::log_replay)
     {
-      packet["teams"][team]["cards"]["yellow"]["time"][i] = referee.teams_info[team_id].yellow_card_times.at(i);
-    }
-    packet["teams"][team]["cards"]["red"] = referee.teams_info[team_id].red_cards_count;
-    packet["teams"][team]["fouls"] = referee.teams_info[team_id].foul_counter;
-    packet["teams"][team]["max_allowed_bots"] = referee.teams_info[team_id].max_allowed_bots;
+      packet["teams"][team]["name"] = referee.teams_info[team_id].name;
+      packet["teams"][team]["score"] = referee.teams_info[team_id].score;
+      packet["teams"][team]["timeout"]["remaincount"] = referee.teams_info[team_id].timeout_remaining_count;
+      packet["teams"][team]["timeout"]["remaining_time"] = referee.teams_info[team_id].timeout_remaining_time;
+      packet["teams"][team]["goalkeeper_number"] = referee.teams_info[team_id].goalkeeper_number;
 
+      packet["teams"][team]["cards"]["yellow"] = referee.teams_info[team_id].yellow_cards_count;
+      for (uint i = 0; i < referee.teams_info[team_id].yellow_card_times.size(); ++i)
+      {
+        packet["teams"][team]["cards"]["yellow"]["time"][i] = referee.teams_info[team_id].yellow_card_times.at(i);
+      }
+      packet["teams"][team]["cards"]["red"] = referee.teams_info[team_id].red_cards_count;
+      packet["teams"][team]["fouls"] = referee.teams_info[team_id].foul_counter;
+      packet["teams"][team]["max_allowed_bots"] = referee.teams_info[team_id].max_allowed_bots;
+    }
     // robots informations
     for (uint rid = 0; rid < ai::Config::NB_OF_ROBOTS_BY_TEAM; rid++)
     {
-      const data::Robot& current_robot = Data::get()->robots[team_id][rid];
-      const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
-
+      const data::Robot& current_robot =
+          Data::get()->robots[team_id][rid];  // current_robot.movement_sample.last_sample_
       packet["teams"][team]["bots"][rid]["number"] = current_robot.id;
-      packet["teams"][team]["bots"][rid]["time"] = current_robot.getMovement().lastTime();
+      if (ai::Config::log_replay)
+      {
+        packet["teams"][team]["bots"][rid]["time"] = current_robot.movement_sample.last_sample_.time;
+        packet["teams"][team]["bots"][rid]["position"]["x"] =
+            current_robot.movement_sample.last_sample_.linear_position.x;
+        packet["teams"][team]["bots"][rid]["position"]["y"] =
+            current_robot.movement_sample.last_sample_.linear_position.y;
+        packet["teams"][team]["bots"][rid]["position"]["orientation"] =
+            current_robot.movement_sample.last_sample_.angular_position.abs().value();
+      }
+      else
+      {
+        const rhoban_geometry::Point& robot_position = current_robot.getMovement().linearPosition(time);
 
-      packet["teams"][team]["bots"][rid]["position"]["x"] = robot_position.getX();
-      packet["teams"][team]["bots"][rid]["position"]["y"] = robot_position.getY();
-      packet["teams"][team]["bots"][rid]["position"]["orientation"] =
-          current_robot.getMovement().angularPosition(Data::get()->time.now()).value();
+        packet["teams"][team]["bots"][rid]["time"] = current_robot.getMovement().lastTime();
 
-      packet["teams"][team]["bots"][rid]["velocity"]["x"] =
-          current_robot.getMovement().linearVelocity(Data::get()->time.now()).getX();
-      packet["teams"][team]["bots"][rid]["velocity"]["y"] =
-          current_robot.getMovement().linearVelocity(Data::get()->time.now()).getY();
-      packet["teams"][team]["bots"][rid]["velocity"]["theta"] =
-          current_robot.getMovement().angularVelocity(Data::get()->time.now()).value();
+        packet["teams"][team]["bots"][rid]["position"]["x"] = robot_position.getX();
+        packet["teams"][team]["bots"][rid]["position"]["y"] = robot_position.getY();
+        packet["teams"][team]["bots"][rid]["position"]["orientation"] =
+            current_robot.getMovement().angularPosition(Data::get()->time.now()).value();
 
+        packet["teams"][team]["bots"][rid]["velocity"]["x"] =
+            current_robot.getMovement().linearVelocity(Data::get()->time.now()).getX();
+        packet["teams"][team]["bots"][rid]["velocity"]["y"] =
+            current_robot.getMovement().linearVelocity(Data::get()->time.now()).getY();
+        packet["teams"][team]["bots"][rid]["velocity"]["theta"] =
+            current_robot.getMovement().angularVelocity(Data::get()->time.now()).value();
+      }
       // TO REMOVE
       packet["teams"][team]["bots"][rid]["last_control"]["time"] = 0;
       packet["teams"][team]["bots"][rid]["last_control"]["velocity"]["x"] = 0;

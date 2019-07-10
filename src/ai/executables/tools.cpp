@@ -77,6 +77,7 @@ public:
       ExecutionManager::getManager().setMaxTaskId();
     else
       ExecutionManager::getManager().setMaxTaskId(300);
+    return true;
   }
 };
 

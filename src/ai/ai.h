@@ -165,7 +165,7 @@ private:
   std::shared_ptr<manager::Manager> strategy_manager_;
   std::shared_ptr<manager::Manager> manual_manager_;
 
-  std::map<int, std::shared_ptr<robot_behavior::RobotBehavior> > robot_behaviors_;
+  std::shared_ptr<robot_behavior::RobotBehavior> robot_behaviors_[ai::Config::NB_OF_ROBOTS_BY_TEAM];
 
   Control getRobotControl(robot_behavior::RobotBehavior& robot_behavior, data::Robot& robot);
 
