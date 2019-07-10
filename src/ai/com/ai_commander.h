@@ -61,8 +61,9 @@ public:
    */
   void emergency();
 
-private:
   Master* real_;
+
+private:
   SimClient* sim_;
 
   struct Command

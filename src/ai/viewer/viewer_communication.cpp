@@ -127,6 +127,21 @@ void ViewerCommunication::processIncomingPackets()
       if (ai_ != nullptr)
         ai_->scan();
     }
+    else if (!viewer_packet["play_music"].isNull())
+    {
+      note n = parseNoteFromJson(viewer_packet["play_music"]);
+
+      DEBUG("robot_number " << n.robot_number << std::endl
+                            << "robot_number " << n.robot_number << std::endl
+                            << "frequency " << n.frequency << std::endl
+                            << "intrument " << n.instrument << std::endl
+                            << "duration " << n.duration_in_ms << std::endl
+                            << std::endl);
+      if (Data::get()->commander->real_ != nullptr)
+      {
+        Data::get()->commander->real_->addMusicPacket(n.robot_number, parseNoteToMusicPacket(n));
+      }
+    }
     else
     {
       DEBUG("Invalid viewer packet");
@@ -388,5 +403,53 @@ Json::Value ViewerCommunication::annotationsPacket()
   return ai_->getAnnotations();
 }
 
+ViewerCommunication::note ViewerCommunication::parseNoteFromJson(const Json::Value& packet)
+{
+  note n;
+  n.robot_number = packet["number"].asInt();
+  n.instrument = packet["instrument"].asString();
+  n.frequency = static_cast<u_int16_t>(std::round(packet["frequency"].asDouble()));
+  n.duration_in_ms = static_cast<u_int16_t>(packet["duration"].asDouble());
+
+  return n;
+}
+
+packet_music ViewerCommunication::parseNoteToMusicPacket(const ViewerCommunication::note& note)
+{
+  packet_music n;
+
+  if (note.frequency == 0.0)
+  {
+    n.instrument = 0;
+  }
+  else
+  {
+    n.instrument = SOUND_ON;
+
+    if (note.instrument == "beeper")
+    {
+      n.instrument |= BEEPER;
+    }
+    if (note.instrument == "kick")
+    {
+      n.instrument |= KICK;
+    }
+
+    if (note.instrument == "chip_kick")
+    {
+      n.instrument |= CHIP_KICK;
+    }
+
+    if (note.instrument == "dribbler")
+    {
+      n.instrument |= DRIBBLER;
+    }
+
+    n.duration = note.duration_in_ms;
+    //    n.duration = 1000;
+    n.note = note.frequency;
+  }
+  return n;
+}
 }  // namespace viewer
 }  // namespace rhoban_ssl

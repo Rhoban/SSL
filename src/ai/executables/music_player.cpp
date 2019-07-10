@@ -29,8 +29,6 @@
 
 #include <executables/tools.h>
 
-#include <logger.h>
-
 #define TEAM_NAME "nAMeC"
 #define ZONE_NAME "all"
 #define CONFIG_PATH "./src/ai/config.json"
@@ -40,12 +38,12 @@ using namespace rhoban_ssl;
 
 void superStop(int)
 {
-  // rhoban_ssl::ExecutionManager::getManager().shutdown();
-  for (int i = 0; i < 1000; ++i)
+  rhoban_ssl::ExecutionManager::getManager().shutdown();
+  for (int i = 0; i < 10000; ++i)
   {
     close(i);
   }
-  _exit(EXIT_FAILURE);
+  exit(EXIT_FAILURE);
 }
 
 void stop(int)
@@ -58,10 +56,10 @@ int main(int argc, char** argv)
   // Enabling floating point errors
   feenableexcept(FE_DIVBYZERO | FE_INVALID | FE_OVERFLOW);
   signal(SIGINT, stop);
-  // signal(SIGABRT, superStop);
-  // signal(SIGSEGV, superStop);
-  // signal(SIGBUS, superStop);
-  // signal(SIGFPE, superStop);
+  signal(SIGABRT, superStop);
+  signal(SIGSEGV, superStop);
+  signal(SIGBUS, superStop);
+  signal(SIGFPE, superStop);
   atexit((void (*)(void))superStop);
 
   // Command line parsing
@@ -81,14 +79,6 @@ int main(int argc, char** argv)
       TEAM_NAME,                                                    // Default value
       "string",                                                     // short description of the expected value.
       cmd);
-
-  TCLAP::ValueArg<std::string> logfile("",     // short argument name  (with one character)
-                                       "log",  // long argument name
-                                       "log filename",
-                                       false,     // Flag is not required
-                                       "",        // Default value
-                                       "string",  // short description of the expected value.
-                                       cmd);
 
   TCLAP::ValueArg<std::string> zone_name("z",     // short argument name  (with one character)
                                          "zone",  // long argument name
@@ -196,7 +186,7 @@ int main(int argc, char** argv)
   {
     part_of_the_field_used = vision::PartOfTheField::ALL_FIELD;
   }
-  else if (zone_name.getValue() == "positive")// && !yellow.getValue())
+  else if (zone_name.getValue() == "positive" && !yellow.getValue())
   {
     part_of_the_field_used = vision::PartOfTheField::POSIVE_HALF_FIELD;
   }
@@ -222,36 +212,9 @@ int main(int argc, char** argv)
   Data::get()->referee.blue_team_on_positive_half = side_blue.getValue();
 
   addCoreTasks();
-  addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
-  addRefereeTasks(port_referee.getValue());
-  addPreBehaviorTreatment();
   addRobotComTasks();
-
   ai::AI* ai = new ai::AI(manager_name.getValue());
-  ExecutionManager::getManager().addTask(ai, 1000);
   addViewerTasks(ai, viewer_port.getValue());
-
-  if (logfile.isSet())
-    ExecutionManager::getManager().addTask(new LoggerTask(ai, logfile.getValue(), 1 << 26));
-
-  // stats
-  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, false));  // plot every 50 loop
-  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(false, true));  // print
-  // ExecutionManager::getManager().addTask(new stats::ResourceUsage(true, true, 100));  // both every 100 loop
-
-  if (manager_name.getValue() != manager::names::MANUAL)
-  {
-    ExecutionManager::getManager().addTask(
-        new ConditionalTask([]() -> bool { return Data::get()->time.now() > 1; },
-                            [&]() -> bool {
-                              for (uint id = 0; id < ai::Config::NB_OF_ROBOTS_BY_TEAM; id++)
-                              {
-                                auto& final_control = Data::get()->shared_data.final_control_for_robots[id];
-                                final_control.is_manually_controled_by_viewer = false;
-                              }
-                              return false;
-                            }));
-  }
 
   ExecutionManager::getManager().run(ai::Config::period);
 

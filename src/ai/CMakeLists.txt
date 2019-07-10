@@ -215,6 +215,10 @@ target_link_libraries(replay_log ssl_ai ${ALL_LIBS})
 add_executable(test_field_info executables/tests/test_field_info.cpp)
 target_link_libraries(test_field_info ssl_ai ${ALL_LIBS})
 
+add_executable(music_player executables/music_player.cpp)
+target_link_libraries(music_player ssl_ai ${ALL_LIBS})
+
+
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
 if(CATKIN_ENABLE_TESTING)

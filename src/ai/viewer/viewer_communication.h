@@ -65,6 +65,17 @@ private:
   Json::Value aiPacket();
   Json::Value annotationsPacket();
 
+  struct note
+  {
+    int robot_number;
+    uint16_t duration_in_ms;
+    uint16_t frequency;
+    std::string instrument;
+  };
+
+  note parseNoteFromJson(const Json::Value& packet);
+
+  packet_music parseNoteToMusicPacket(const ViewerCommunication::note& note);
   // move to AI
   void processBotsControlBot(const Json::Value& packet);
 };
