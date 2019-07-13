@@ -127,10 +127,12 @@ int main(int argc, char** argv)
   ai::Config::load(config_path.getValue());
   ai::Config::is_in_simulation = false;
 
+  ai::AI* ai = new ai::AI(manager::names::MANUAL);
+
   // addCoreTasks();
   // addVisionTasks(addr.getValue(), theport, vision::PartOfTheField::ALL_FIELD);
-  ExecutionManager::getManager().addTask(new LogReplayTask(logfile.getValue()));
-  addViewerTasks(nullptr, viewer_port.getValue());
+  ExecutionManager::getManager().addTask(new LogReplayTask(logfile.getValue(), ai));
+  addViewerTasks(ai, viewer_port.getValue());
 
   ExecutionManager::getManager().run(0.2);
 

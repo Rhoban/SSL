@@ -35,11 +35,11 @@ const Movement* MovementWithTemporalShift::getOriginalMovement() const
   return movement_;
 }
 
-void MovementWithTemporalShift::setSample(const MovementSample& samples)
+void MovementWithTemporalShift::setSample(const MovementSample<ai::Config::samples_history_size>& samples)
 {
   movement_->setSample(samples);
 }
-const MovementSample& MovementWithTemporalShift::getSample() const
+const MovementSample<ai::Config::samples_history_size>& MovementWithTemporalShift::getSample() const
 {
   return movement_->getSample();
 }

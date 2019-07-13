@@ -10,8 +10,26 @@
 
 namespace rhoban_ssl
 {
+int LoggerTask::computeDataMemSum()
+{
+  int sum = 0;
+  for (auto& i : watched_mem)
+  {
+    for (int k = 0; k < i.second; ++k)
+      sum += i.first[k];
+  }
+  return sum;
+}
+
 LoggerTask::LoggerTask(ai::AI* ai, std::string filename, int max_file_size)
-  : ai_(ai), log_memory_(nullptr), max_memory_(0), current_position_(0), mmap_fd_(0), counter_(0), filename_(filename)
+  : ai_(ai)
+  , log_memory_(nullptr)
+  , max_memory_(0)
+  , current_position_(0)
+  , mmap_fd_(0)
+  , counter_(0)
+  , filename_(filename)
+  , memsum(0)
 {
   mmap_fd_ = open(filename_.c_str(), O_CREAT | O_TRUNC | O_RDWR, 0666);
   if (mmap_fd_ == -1)
@@ -42,6 +60,10 @@ LoggerTask::LoggerTask(ai::AI* ai, std::string filename, int max_file_size)
   else
     *((int*)log_memory_ + sizeof(int)) = 0;
   current_position_ = 2 * sizeof(int);
+
+  watched_mem.push_back(std::pair<int*, int>((int*)&(Data::get()->shared_data), sizeof(Data::get()->shared_data) / 4));
+  watched_mem.push_back(std::pair<int*, int>((int*)&(Data::get()->ball), sizeof(Data::get()->ball) / 4));
+  watched_mem.push_back(std::pair<int*, int>((int*)&(Data::get()->robots), sizeof(Data::get()->robots) / 4));
 }
 
 LoggerTask::~LoggerTask()
@@ -59,7 +81,10 @@ bool LoggerTask::runTask()
   DEBUG("logger into " << filename_ << " current position is " << current_position_ << " max is " << max_memory_);
   if ((log_memory_ == nullptr) || (current_position_ + 5000) > max_memory_)
     return false;
-  *((int*)log_memory_) = *((int*)log_memory_) + 1;
+  int new_memsum = computeDataMemSum();
+  if (new_memsum == memsum)
+    return true;
+  memsum = new_memsum;
   if (ai_ != nullptr)
   {
     memcpy(log_memory_ + current_position_, (void*)ai_, sizeof(ai::AI));
@@ -67,6 +92,7 @@ bool LoggerTask::runTask()
   }
   memcpy(log_memory_ + current_position_, (void*)Data::get(), sizeof(Data));
   current_position_ += sizeof(Data);
+  *((int*)log_memory_) = *((int*)log_memory_) + 1;
   return true;
 }
 
@@ -76,6 +102,12 @@ void LogReplayTask::load(int frame)
   {
     int memshift = 2 * sizeof(int) + sizeof(ai::AI) + frame * (sizeof(Data) + sizeof(ai::AI));
     DEBUG("load Data with a shift of " << memshift);
+    if (aiptr_ != nullptr)
+    {
+      int memshift2 = 2 * sizeof(int) + frame * (sizeof(Data) + sizeof(ai::AI));
+      memcpy((void*)aiptr_, (void*)(log_address_ + memshift2), sizeof(ai::AI));
+    }
+
     memcpy((void*)Data::get(), (void*)(log_address_ + memshift), sizeof(Data));
   }
   else
@@ -84,11 +116,12 @@ void LogReplayTask::load(int frame)
     DEBUG("load Data with a shift of " << memshift);
     memcpy((void*)Data::get(), (void*)(log_address_ + memshift), sizeof(Data));
   }
-  DEBUG("ball last update is " << Data::get()->ball.last_update);
+  DEBUG("ball last update is " << Data::get()->ball.movement_sample[0].time);
   DEBUG("ball address " << (void*)&(Data::get()->ball) << " size is " << sizeof(Data::get()->ball));
 }
 
-LogReplayTask::LogReplayTask(std::string filename) : log_address_(nullptr), mmap_fd_(-1), current_(0)
+LogReplayTask::LogReplayTask(std::string filename, ai::AI* aiptr)
+  : log_address_(nullptr), mmap_fd_(-1), current_(0), aiptr_(aiptr)
 {
   mmap_fd_ = open(filename.c_str(), O_RDONLY);
   if (mmap_fd_ == -1)
@@ -125,9 +158,6 @@ LogReplayTask::~LogReplayTask()
 
 bool LogReplayTask::runTask()
 {
-  DEBUG("log replay is on frame " << current_);
-  if (current_ >= nb_frames_)
-    current_ = nb_frames_ - 1;
   fd_set rset;
   FD_ZERO(&rset);
   FD_SET(0, &rset);
@@ -151,6 +181,10 @@ bool LogReplayTask::runTask()
     if (action == 'q')
       ExecutionManager::getManager().shutdown();
   }
+
+  nb_frames_ = *((int*)log_address_);
+
+  DEBUG("log replay is on frame " << current_ << " / " << nb_frames_);
 
   if (current_ < 0)
     current_ = 0;

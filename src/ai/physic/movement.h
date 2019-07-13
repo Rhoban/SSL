@@ -22,6 +22,7 @@
 #include <math/vector2d.h>
 #include <iostream>
 #include "movement_sample.h"
+#include <config.h>
 
 namespace rhoban_ssl
 {
@@ -30,8 +31,8 @@ class Movement
 public:
   virtual Movement* clone() const = 0;
 
-  virtual void setSample(const MovementSample& samples) = 0;
-  virtual const MovementSample& getSample() const = 0;
+  virtual void setSample(const MovementSample<ai::Config::samples_history_size>& samples) = 0;
+  virtual const MovementSample<ai::Config::samples_history_size>& getSample() const = 0;
 
   /* Return the last time of the samples */
   virtual double lastTime() const = 0;

@@ -23,40 +23,44 @@
 #include <assert.h>
 #include <ostream>
 
-template <typename T>
+template <typename T, int N>
 class CircularVector
 {
 private:
-  std::vector<T> vector_;
+  T vector_[N];
   unsigned int index_;
 
 public:
-  CircularVector() : vector_(0), index_(0)
+  CircularVector() : index_(0)
   {
   }
-  CircularVector(unsigned int size) : vector_(size), index_(0)
+  CircularVector(unsigned int size) : index_(0)
   {
   }
-  CircularVector(const CircularVector<T>& cv) : vector_(cv.vector_), index_(cv.index_)
+  CircularVector(const CircularVector<T,N>& cv) : index_(cv.index_)
   {
+      for(int i=0;i<N;++i)
+       vector_[i]=cv.vector_[i];
   }
 
   unsigned int size() const
   {
-    return vector_.size();
+    return N;
   }
+  /*
   void resize(unsigned int size)
   {
-    std::rotate(vector_.begin(), vector_.begin() + index_, vector_.end());
+    std::rotate(vector_, vector_ + index_, vector_+N);
     index_ = 0;
     vector_.resize(size);
   }
+  */
 
   void insert(const T& element)
   {
     if (index_ == 0)
     {
-      index_ = vector_.size();
+      index_ = N;
     }
     index_ -= 1;
     vector_[index_] = element;
@@ -64,42 +68,42 @@ public:
 
   const T& operator[](unsigned int i) const
   {
-    assert(i < vector_.size());
-    if (index_ + i < vector_.size())
+    assert(i < N);
+    if (index_ + i < N)
     {
       return vector_[index_ + i];
     }
     else
     {
-      return vector_[index_ + i - vector_.size()];
+      return vector_[index_ + i - N];
     }
   }
   T& operator[](unsigned int i)
   {
-    assert(i < vector_.size());
-    if (index_ + i < vector_.size())
+    assert(i < N);
+    if (index_ + i < N)
     {
       return vector_[index_ + i];
     }
     else
     {
-      return vector_[index_ + i - vector_.size()];
+      return vector_[index_ + i - N];
     }
   }
-  template <typename U>
-  friend std::ostream& operator<<(std::ostream& stream, const CircularVector<U>& vec);
+  template <typename U,int P>
+  friend std::ostream& operator<<(std::ostream& stream, const CircularVector<U,P>& vec);
 };
 
-template <typename T>
-std::ostream& operator<<(std::ostream& stream, const CircularVector<T>& vec)
+template <typename T,int N>
+std::ostream& operator<<(std::ostream& stream, const CircularVector<T,N>& vec)
 {
-  assert(vec.size() >= 1);
+  assert(N >= 1);
   stream << "(";
-  for (unsigned int i = 0; i < vec.size() - 1; i++)
+  for (unsigned int i = 0; i < N - 1; i++)
   {
     stream << vec[i] << ", ";
   }
-  stream << vec[vec.size() - 1];
+  stream << vec[N - 1];
   stream << ")";
   return stream;
 }

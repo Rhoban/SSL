@@ -41,12 +41,12 @@ void MovementOnNewFrame::print(std::ostream& stream) const
   stream << "TODO !";
 }
 
-void MovementOnNewFrame::setSample(const MovementSample& samples)
+void MovementOnNewFrame::setSample(const MovementSample<ai::Config::samples_history_size>& samples)
 {
   movement_->setSample(samples);
 }
 
-const MovementSample& MovementOnNewFrame::getSample() const
+const MovementSample<ai::Config::samples_history_size>& MovementOnNewFrame::getSample() const
 {
   return movement_->getSample();
 }

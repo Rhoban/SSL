@@ -188,8 +188,8 @@ Json::Value ViewerCommunication::ballPacket()
 
   if (ai::Config::log_replay)
   {
-    packet["ball"]["position"]["x"] = Data::get()->ball.movement_sample.last_sample_.linear_position.x;
-    packet["ball"]["position"]["y"] = Data::get()->ball.movement_sample.last_sample_.linear_position.y;
+    packet["ball"]["position"]["x"] = Data::get()->ball.movement_sample[0].linear_position.x;
+    packet["ball"]["position"]["y"] = Data::get()->ball.movement_sample[0].linear_position.y;
     packet["ball"]["radius"] = ai::Config::ball_radius;
     return packet;
   }
@@ -256,13 +256,11 @@ Json::Value ViewerCommunication::teamsPacket()
       packet["teams"][team]["bots"][rid]["number"] = current_robot.id;
       if (ai::Config::log_replay)
       {
-        packet["teams"][team]["bots"][rid]["time"] = current_robot.movement_sample.last_sample_.time;
-        packet["teams"][team]["bots"][rid]["position"]["x"] =
-            current_robot.movement_sample.last_sample_.linear_position.x;
-        packet["teams"][team]["bots"][rid]["position"]["y"] =
-            current_robot.movement_sample.last_sample_.linear_position.y;
+        packet["teams"][team]["bots"][rid]["time"] = current_robot.movement_sample[0].time;
+        packet["teams"][team]["bots"][rid]["position"]["x"] = current_robot.movement_sample[0].linear_position.x;
+        packet["teams"][team]["bots"][rid]["position"]["y"] = current_robot.movement_sample[0].linear_position.y;
         packet["teams"][team]["bots"][rid]["position"]["orientation"] =
-            current_robot.movement_sample.last_sample_.angular_position.abs().value();
+            current_robot.movement_sample[0].angular_position.abs().value();
       }
       else
       {
@@ -294,8 +292,11 @@ Json::Value ViewerCommunication::teamsPacket()
       if (ally_info)
       {
         packet["teams"][team]["bots"][rid]["color"] = (ai::Config::we_are_blue) ? blue_color : yellow_color;
-        packet["teams"][team]["bots"][rid]["behavior"] = ai_ == nullptr ? "noai" : ai_->getRobotBehaviorOf(rid);
-        packet["teams"][team]["bots"][rid]["strategy"] = ai_ == nullptr ? "noai" : ai_->getStrategyOf(rid);
+        if (ai::Config::log_replay == false)
+        {
+          packet["teams"][team]["bots"][rid]["behavior"] = ai_ == nullptr ? "noai" : ai_->getRobotBehaviorOf(rid);
+          packet["teams"][team]["bots"][rid]["strategy"] = ai_ == nullptr ? "noai" : ai_->getStrategyOf(rid);
+        }
 
         if (!ai::Config::is_in_simulation)
         {
@@ -353,20 +354,24 @@ Json::Value ViewerCommunication::aiPacket()
     packet["ai"]["managers"]["availables"][i]["name"] = available_managers.at(i);
   }
   // todo
-  packet["ai"]["managers"]["current"]["name"] = ai_ == nullptr ? "noai" : ai_->getCurrentManager().get()->name();
-
-  for (uint i = 0; ai_ != nullptr && i < ai_->getCurrentManager().get()->getAvailableStrategies().size(); ++i)
+  if (ai::Config::log_replay == false)
   {
-    packet["ai"]["managers"]["current"]["strategies_used"][i]["name"] =
-        ai_->getCurrentManager().get()->getAvailableStrategies().at(i);
-  }
+    packet["ai"]["managers"]["current"]["name"] = ai_ == nullptr ? "noai" : ai_->getCurrentManager().get()->name();
 
-  // we send all strategies in manual manager
-  for (uint i = 0; ai_ != nullptr && i < ai_->getManualManager().get()->getAvailableStrategies().size(); ++i)
-  {
-    std::string strat_name = ai_->getManualManager().get()->getAvailableStrategies().at(i);
-    packet["ai"]["strategies"][i]["name"] = strat_name;
-    packet["ai"]["strategies"][i]["bots_required"] = ai_->getManualManager().get()->getStrategy(strat_name).minRobots();
+    for (uint i = 0; ai_ != nullptr && i < ai_->getCurrentManager().get()->getAvailableStrategies().size(); ++i)
+    {
+      packet["ai"]["managers"]["current"]["strategies_used"][i]["name"] =
+          ai_->getCurrentManager().get()->getAvailableStrategies().at(i);
+    }
+
+    // we send all strategies in manual manager
+    for (uint i = 0; ai_ != nullptr && i < ai_->getManualManager().get()->getAvailableStrategies().size(); ++i)
+    {
+      std::string strat_name = ai_->getManualManager().get()->getAvailableStrategies().at(i);
+      packet["ai"]["strategies"][i]["name"] = strat_name;
+      packet["ai"]["strategies"][i]["bots_required"] =
+          ai_->getManualManager().get()->getStrategy(strat_name).minRobots();
+    }
   }
   return packet;
 }
@@ -398,7 +403,7 @@ void ViewerCommunication::processBotsControlBot(const Json::Value& packet)
 
 Json::Value ViewerCommunication::annotationsPacket()
 {
-  if (ai_ == nullptr)
+  if ((ai_ == nullptr) || (ai::Config::log_replay))
     return Json::Value();
   return ai_->getAnnotations();
 }

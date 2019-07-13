@@ -158,7 +158,7 @@ LimitVelocities::LimitVelocities()
 
 bool LimitVelocities::runTask()
 {
-  for (uint i = 0; i < Data::get()->shared_data.final_control_for_robots.size(); ++i)
+  for (uint i = 0; i < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++i)
   {
     Control& ctrl = Data::get()->shared_data.final_control_for_robots[i].control;
     Kinematic::WheelsSpeed wheels_speed =

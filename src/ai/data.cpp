@@ -38,7 +38,7 @@ SharedData::FinalControl::FinalControl(const FinalControl& control)
 {
 }
 
-SharedData::SharedData() : final_control_for_robots(ai::Config::NB_OF_ROBOTS_BY_TEAM)
+SharedData::SharedData()
 {
 }
 

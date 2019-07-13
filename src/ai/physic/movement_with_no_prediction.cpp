@@ -32,14 +32,14 @@ void MovementWithNoPrediction::print(std::ostream& stream) const
   stream << samples_;
 }
 
-void MovementWithNoPrediction::setSample(const MovementSample& samples)
+void MovementWithNoPrediction::setSample(const MovementSample<ai::Config::samples_history_size>& samples)
 {
   // TODO
   // assert( samples.is_valid() );
   samples_ = samples;
 }
 
-const MovementSample& MovementWithNoPrediction::getSample() const
+const MovementSample<ai::Config::samples_history_size>& MovementWithNoPrediction::getSample() const
 {
   return samples_;
 }

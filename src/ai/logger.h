@@ -18,6 +18,11 @@ class LoggerTask : public Task
   int counter_;
   std::string filename_;
 
+  int memsum;
+
+  std::vector<std::pair<int*, int>> watched_mem;
+  int computeDataMemSum();
+
 public:
   LoggerTask(ai::AI* ai, std::string filename, int max_file_size);
   virtual ~LoggerTask();
@@ -32,10 +37,11 @@ class LogReplayTask : public Task
   int current_;
   int nb_frames_;
   struct termios termsave;
+  ai::AI* aiptr_;
   void load(int frame);
 
 public:
-  LogReplayTask(std::string filename);
+  LogReplayTask(std::string filename, ai::AI* aiptr = nullptr);
   virtual ~LogReplayTask();
   virtual bool runTask() override;
 };

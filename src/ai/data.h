@@ -51,7 +51,7 @@ struct SharedData
     FinalControl(const FinalControl& control);
   };
 
-  std::vector<FinalControl> final_control_for_robots;
+  FinalControl final_control_for_robots[ai::Config::NB_OF_ROBOTS_BY_TEAM];
 
   SharedData();
 };

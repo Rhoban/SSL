@@ -3,15 +3,13 @@
 #include "physic/movement_sample.h"
 #include "physic/movement.h"
 #include <rhoban_utils/timing/time_stamp.h>
+#include <config.h>
 
 namespace rhoban_ssl
 {
 class LogReplayTask;
 namespace data
 {
-//! TODO: remove hisotry_size ...
-static const int history_size = 30;
-
 class Mobile
 {
   friend class rhoban_ssl::LogReplayTask;
@@ -22,7 +20,7 @@ protected:
   double last_update;
 
 public:
-  MovementSample movement_sample;
+  MovementSample<ai::Config::samples_history_size> movement_sample;
   Movement* movement;
 
   void update(double time, const rhoban_geometry::Point& linear_position, const rhoban_utils::Angle& angular_position);

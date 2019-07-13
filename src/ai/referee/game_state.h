@@ -72,18 +72,13 @@ struct edge_name
   static const constexpr char* goal = "goal";
 };
 
-typedef enum free_kick_type_id
-{
-  UNKNOWN,
-  DIRECT,
-  INDIRECT
-} free_kick_type_id;
+typedef enum free_kick_type_id { UNKNOWN, DIRECT, INDIRECT } free_kick_type_id;
 
 struct GameStateData
 {
   // datas[0] is the most recent
   // datas[1] the older
-  CircularVector<Referee> datas;
+  CircularVector<Referee, 2> datas;
 
   double last_time;
   uint32_t last_command_counter;

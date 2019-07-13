@@ -33,6 +33,7 @@ struct Config
   // todo move to GlobalData ?
   static std::string team_name;
 
+  static const int samples_history_size = 30;
   static constexpr int NB_OF_ROBOTS_BY_TEAM = 8;
   static constexpr unsigned int NB_CAMERAS = 4;
   // The Kalman filter doesn't support more than 1 ball per camera

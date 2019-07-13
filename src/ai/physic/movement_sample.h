@@ -35,34 +35,105 @@ struct PositionSample
   PositionSample(double time, const rhoban_geometry::Point& linear_position, const ContinuousAngle& angular_position);
 };
 
-struct MovementSample : public CircularVector<PositionSample>
+template <int N>
+struct MovementSample : public CircularVector<PositionSample, N>
 {
-  CircularVector<double> dts;
+  CircularVector<double, N> dts;
 
-  // for logger only
-  PositionSample last_sample_;
+  MovementSample(double default_dt = 1.0 / 60.0)
+  {
+    for (unsigned int i = 0; i < N; i++)
+    {
+      dts[i] = default_dt;
+    }
+  }
+  // MovementSample();
 
-  MovementSample(unsigned int, double default_dt = 1.0 / 60.0);
-  MovementSample();
+  double time(unsigned int i = 0) const
+  {
+    return (*this)[i].time;
+  }
+  double dt(unsigned int i = 0) const
+  {
+    return this->dts[i];
+  }
 
-  double time(unsigned int i = 0) const;
-  double dt(unsigned int i = 0) const;
+  rhoban_geometry::Point linearPosition(unsigned int i = 0) const
+  {
+    return (*this)[i].linear_position;
+  }
+  ContinuousAngle angularPosition(unsigned int i = 0) const
+  {
+    return (*this)[i].angular_position;
+  }
 
-  rhoban_geometry::Point linearPosition(unsigned int i = 0) const;
-  ContinuousAngle angularPosition(unsigned int i = 0) const;
+  Vector2d linearVelocity(unsigned int i = 0) const
+  {
+    return (linearPosition(i) - linearPosition(i + 1)) / dt(i);
+  }
+  ContinuousAngle angularVelocity(unsigned int i = 0) const
+  {
+    return (angularPosition(i) - angularPosition(i + 1)) / dt(i);
+  }
 
-  Vector2d linearVelocity(unsigned int i = 0) const;
-  ContinuousAngle angularVelocity(unsigned int i = 0) const;
+  Vector2d linearAcceleration(unsigned int i = 0) const
+  {
+    return (linearVelocity(i) - linearVelocity(i + 1)) / dt(i);
+  }
+  ContinuousAngle angularAcceleration(unsigned int i = 0) const
+  {
+    return (angularVelocity(i) - angularVelocity(i + 1)) / dt(i);
+  }
 
-  Vector2d linearAcceleration(unsigned int i = 0) const;
-  ContinuousAngle angularAcceleration(unsigned int i = 0) const;
+  bool isValid() const
+  {
+    assert(this->size() >= 1);
+    for (unsigned int i = 0; i < this->size() - 1; i++)
+    {
+      if ((*this)[i].time <= (*this)[i + 1].time)
+      {
+        return false;
+      }
+    }
+    return true;
+  }
+  void insert(const PositionSample& sample)
+  {
+    assert(sample.time >= (*this)[0].time);
+    // if( sample.time == (*this)[0].time ){
+    if (fabs(sample.time - (*this)[0].time) < 0.01)
+    {
+      (*this)[0] = sample;
 
-  bool isValid() const;
-  void insert(const PositionSample& sample);
+      double filtered_dt = 0.0;
+      // small filter
+      for (uint it = 0; it < (this->size() - 2); it++)
+      {
+        filtered_dt += ((*this)[it].time - (*this)[it + 1].time);
+      }
+      this->dts[0] = filtered_dt / (this->size() - 2);
+    }
+    else
+    {
+      CircularVector<PositionSample, N>::insert(sample);
+      double filtered_dt = 0.0;
+      // small filter
+      for (uint it = 0; it < (this->size() - 2); it++)
+      {
+        filtered_dt += ((*this)[it].time - (*this)[it + 1].time);
+      }
+      this->dts.insert(filtered_dt / (this->size() - 2));
+    }
+  }
 };
 
 }  // namespace rhoban_ssl
 
 std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample& pos);
 
-std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::MovementSample& mov);
+template <int N>
+std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::MovementSample<N>& mov)
+{
+  stream << static_cast<CircularVector<rhoban_ssl::PositionSample, N>>(mov);
+  return stream;
+}

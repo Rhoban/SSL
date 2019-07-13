@@ -41,8 +41,8 @@ public:
 
   MovementOnNewFrame(Movement* movement);
 
-  virtual void setSample(const MovementSample& samples);
-  virtual const MovementSample& getSample() const;
+  virtual void setSample(const MovementSample<ai::Config::samples_history_size>& samples);
+  virtual const MovementSample<ai::Config::samples_history_size>& getSample() const;
 
   virtual rhoban_geometry::Point linearPosition(double time) const;
   virtual ContinuousAngle angularPosition(double time) const;

@@ -34,102 +34,6 @@ PositionSample::PositionSample(double time, const Point& linear_position, const 
 {
 }
 
-void MovementSample::insert(const PositionSample& sample)
-{
-  assert(sample.time >= (*this)[0].time);
-  // if( sample.time == (*this)[0].time ){
-  last_sample_ = sample;
-  if (fabs(sample.time - (*this)[0].time) < 0.01)
-  {
-    (*this)[0] = sample;
-
-    double filtered_dt = 0.0;
-    // small filter
-    for (uint it = 0; it < (this->size() - 2); it++)
-    {
-      filtered_dt += ((*this)[it].time - (*this)[it + 1].time);
-    }
-    this->dts[0] = filtered_dt / (this->size() - 2);
-  }
-  else
-  {
-    CircularVector<PositionSample>::insert(sample);
-    double filtered_dt = 0.0;
-    // small filter
-    for (uint it = 0; it < (this->size() - 2); it++)
-    {
-      filtered_dt += ((*this)[it].time - (*this)[it + 1].time);
-    }
-    this->dts.insert(filtered_dt / (this->size() - 2));
-  }
-}
-
-bool MovementSample::isValid() const
-{
-  assert(this->size() >= 1);
-  for (unsigned int i = 0; i < this->size() - 1; i++)
-  {
-    if ((*this)[i].time <= (*this)[i + 1].time)
-    {
-      return false;
-    }
-  }
-  return true;
-}
-
-MovementSample::MovementSample(unsigned int size, double default_dt) : CircularVector<PositionSample>(size), dts(size)
-{
-  for (unsigned int i = 0; i < size; i++)
-  {
-    dts[i] = default_dt;
-  }
-}
-
-MovementSample::MovementSample() : CircularVector<PositionSample>(), dts()
-{
-}
-
-double MovementSample::time(unsigned int i) const
-{
-  return (*this)[i].time;
-}
-
-double MovementSample::dt(unsigned int i) const
-{
-  return this->dts[i];
-}
-
-Point MovementSample::linearPosition(unsigned int i) const
-{
-  return (*this)[i].linear_position;
-}
-
-ContinuousAngle MovementSample::angularPosition(unsigned int i) const
-{
-  return (*this)[i].angular_position;
-}
-
-Vector2d MovementSample::linearVelocity(unsigned int i) const
-{
-  return (linearPosition(i) - linearPosition(i + 1)) / dt(i);
-}
-
-ContinuousAngle MovementSample::angularVelocity(unsigned int i) const
-{
-  // TODO Check this
-  return (angularPosition(i) - angularPosition(i + 1)) / dt(i);
-}
-
-Vector2d MovementSample::linearAcceleration(unsigned int i) const
-{
-  return (linearVelocity(i) - linearVelocity(i + 1)) / dt(i);
-}
-
-ContinuousAngle MovementSample::angularAcceleration(unsigned int i) const
-{
-  return (angularVelocity(i) - angularVelocity(i + 1)) / dt(i);
-}
-
 }  // namespace rhoban_ssl
 
 std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample& pos)
@@ -141,11 +45,5 @@ std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::PositionSample&
          << pos.linear_position << ", "
                                    "ang="
          << pos.angular_position << ")";
-  return stream;
-}
-
-std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::MovementSample& mov)
-{
-  stream << static_cast<CircularVector<rhoban_ssl::PositionSample>>(mov);
   return stream;
 }

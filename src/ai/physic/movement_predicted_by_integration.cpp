@@ -34,13 +34,13 @@ void MovementPredictedByIntegration::print(std::ostream& stream) const
   stream << samples_;
 };
 
-void MovementPredictedByIntegration::setSample(const MovementSample& samples)
+void MovementPredictedByIntegration::setSample(const MovementSample<ai::Config::samples_history_size>& samples)
 {
   assert(samples.isValid());
   samples_ = samples;
 }
 
-const MovementSample& MovementPredictedByIntegration::getSample() const
+const MovementSample<ai::Config::samples_history_size>& MovementPredictedByIntegration::getSample() const
 {
   return samples_;
 }
@@ -65,7 +65,7 @@ rhoban_geometry::Point MovementPredictedByIntegration::linearPosition(double tim
     DEBUG("WARNING! non monotonous time");
   }
   return (samples_.linearPosition(0) + samples_.linearVelocity(0) * dt  // + samples.linear_acceleration(0) * dt*dt/2.0
-  );
+          );
 }
 
 ContinuousAngle MovementPredictedByIntegration::angularPosition(double time) const
@@ -82,7 +82,7 @@ ContinuousAngle MovementPredictedByIntegration::angularPosition(double time) con
   double dt = time - samples_.time(0);
   return (samples_.angularPosition(0) + (samples_.angularVelocity(0) * dt)  // + (samples.angular_acceleration(0) *
                                                                             // (dt*dt/2.0))
-  );
+          );
 }
 
 Vector2d MovementPredictedByIntegration::linearVelocity(double time) const

@@ -79,7 +79,7 @@ bool Mobile::isActive() const
   return age() < 2.0;
 }
 
-Mobile::Mobile() : last_update(Data::get()->time.now()), movement_sample(history_size), movement(nullptr)
+Mobile::Mobile() : last_update(Data::get()->time.now()), movement(nullptr)
 {
 }
 
@@ -88,7 +88,7 @@ void Mobile::initMovement()
   if (movement == nullptr)
   {
     movement = physic::Factory::movement();
-    for (int i = 0; i < history_size; i++)
+    for (int i = 0; i < ai::Config::samples_history_size; i++)
     {
       movement_sample[i].time = -i;
     }
