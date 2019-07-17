@@ -44,5 +44,7 @@ public:
   LogReplayTask(std::string filename, ai::AI* aiptr = nullptr);
   virtual ~LogReplayTask();
   virtual bool runTask() override;
+  int currentFrame();
+  Data* getFrame(int frame);
 };
 }

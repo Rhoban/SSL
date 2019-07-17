@@ -195,4 +195,25 @@ bool LogReplayTask::runTask()
 
   return true;
 }
+
+int LogReplayTask::currentFrame()
+{
+  return current_;
+}
+
+Data* LogReplayTask::getFrame(int frame)
+{
+  if (frame < 0)
+    frame = 0;
+  if (frame >= nb_frames_)
+    frame = nb_frames_ - 1;
+  if (has_ai_)
+  {
+    int memshift = 2 * sizeof(int) + sizeof(ai::AI) + frame * (sizeof(Data) + sizeof(ai::AI));
+
+    return (Data*)(log_address_ + memshift);
+  }
+  int memshift = 2 * sizeof(int) + sizeof(ai::AI) + frame * (sizeof(Data));
+  return (Data*)(log_address_ + memshift);
+}
 }

@@ -21,8 +21,11 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set (SOURCES
     core/plot_velocity.cpp
+    core/gnu_multi_plot.cpp
     core/plot_xy.cpp
     core/timeout_task.cpp
+    core/plot_robot_data.cpp
+    core/plot_robot_data_replay.cpp
     executables/tools.cpp
     data.cpp
     logger.cpp
@@ -214,6 +217,9 @@ target_link_libraries(replay_log ssl_ai ${ALL_LIBS})
 
 add_executable(test_field_info executables/tests/test_field_info.cpp)
 target_link_libraries(test_field_info ssl_ai ${ALL_LIBS})
+
+add_executable(test_multiplot executables/tests/multiplot.cpp)
+target_link_libraries(test_multiplot ssl_ai ${ALL_LIBS})
 
 add_executable(music_player executables/music_player.cpp)
 target_link_libraries(music_player ssl_ai ${ALL_LIBS})

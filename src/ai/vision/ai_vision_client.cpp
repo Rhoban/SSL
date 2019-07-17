@@ -135,7 +135,7 @@ bool DetectionPacketAnalyzer::runTask()
         if (current.t_capture_ < 0)
         {
           std::cerr << "\033[31;5mWARNING:\033[0m Capture time is negative! " << std::endl;
-          std::cerr << "              maybe a issue with ntpd: check config.json " << std::endl;
+          std::cerr << "\tmaybe a issue with ntpd (" << ai::Config::ntpd_enable << "): check config.json " << std::endl;
         }
 
         current.camera_id_ = int(frame.camera_id());

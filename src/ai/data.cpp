@@ -20,6 +20,7 @@
 #include "data.h"
 #include <config.h>
 #include <physic/factory.h>
+#include <typeinfo>
 
 namespace rhoban_ssl
 {
@@ -47,6 +48,7 @@ SharedData::SharedData()
 Time::Time() : time_shift_with_vision(0), starting_time_(std::chrono::high_resolution_clock::now())
 {
   starting_time_in_seconds_ = formatInSecond(starting_time_.time_since_epoch());
+  start_loop_time = 0;
 }
 
 double Time::now()
@@ -88,6 +90,46 @@ Data::Data()
 Data* Data::get()
 {
   return &singleton_;
+}
+
+#include <cstdlib>
+#include <memory>
+#include <cxxabi.h>
+
+std::string demangle(const char* name)
+{
+  int status = -4;  // some arbitrary value to eliminate the compiler warning
+
+  // enable c++11 by passing the flag -std=c++11 to g++
+  std::unique_ptr<char, void (*)(void*)> res{ abi::__cxa_demangle(name, NULL, NULL, &status), std::free };
+
+  return (status == 0) ? res.get() : name;
+}
+
+int DataMemoryWatcher::computeCheckSum(void* mem, int size)
+{
+  int sum = 0;
+  int* imem = (int*)mem;
+  int l = size / sizeof(int);
+  for (int i = 0; i < l; ++i)
+    sum += imem[i];
+  return sum;
+}
+
+DataMemoryWatcher::DataMemoryWatcher()
+{
+  ballCheckSum = computeCheckSum(&(Data::get()->ball), sizeof(Data::get()->ball));
+}
+
+bool DataMemoryWatcher::runTask(Task* t)
+{
+  int nballCheckSum = computeCheckSum(&(Data::get()->ball), sizeof(Data::get()->ball));
+  if (nballCheckSum != ballCheckSum)
+  {
+    std::cerr << "data mem watcher: ball data changed after task " << demangle(typeid(*t).name()) << std::endl;
+    ballCheckSum = nballCheckSum;
+  }
+  return true;
 }
 
 }  // namespace rhoban_ssl

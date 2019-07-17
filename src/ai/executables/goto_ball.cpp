@@ -40,7 +40,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <robot_behavior/tutorials/beginner/goto_ball.h>
 #include <core/plot_velocity.h>
-#include <core/plot_xy.h>
+#include <core/plot_robot_data.h>
 #include <executables/tools.h>
 
 #define TEAM_NAME "NAMeC"
@@ -194,11 +194,15 @@ int main(int argc, char** argv)
     assert(false);
   }
 
+  ai::Config::load(config_path.getValue());
+
   ai::Config::we_are_blue = !yellow.getValue();
   ai::Config::is_in_simulation = simulation.getValue();
   ai::Config::is_in_mixcontrol = mixmode.getValue();
 
-  ExecutionManager::getManager().addTask(new ai::UpdateConfigTask(config_path.getValue()), 0);
+  if (ai::Config::is_in_simulation)
+    ai::Config::ntpd_enable = false;
+  //  ExecutionManager::getManager().addTask(new ai::UpdateConfigTask(config_path.getValue()), 0);
 
   addCoreTasks();
   addVisionTasks(addr.getValue(), theport, part_of_the_field_used);
@@ -220,12 +224,15 @@ int main(int argc, char** argv)
             102);
         Data::get()->robots[Ally][assigned_robot.getValue()].is_goalie = false;
 
-        ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()), 1001);
-        ExecutionManager::getManager().addTask(new PlotXy(assigned_robot.getValue()));
+        // ExecutionManager::getManager().addTask(new PlotVelocity(assigned_robot.getValue()), 1001);
+        ExecutionManager::getManager().addTask(new PlotRobot(assigned_robot.getValue()));
         return false;
       }));
 
-  ExecutionManager::getManager().run(ai::Config::period);
+  ExecutionManager::getManager().addWatchTask(new DataMemoryWatcher());
+
+  //  ExecutionManager::getManager().run(ai::Config::period);
+  ExecutionManager::getManager().run(0.1);
 
   ::google::protobuf::ShutdownProtobufLibrary();
   return 0;

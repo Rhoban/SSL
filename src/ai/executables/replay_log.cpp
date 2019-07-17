@@ -40,6 +40,7 @@
 #include <strategy/from_robot_behavior.h>
 #include <executables/tools.h>
 #include <logger.h>
+#include <core/plot_robot_data_replay.h>
 
 #define TEAM_NAME "NAMeC"
 #define ZONE_NAME "all"
@@ -131,8 +132,11 @@ int main(int argc, char** argv)
 
   // addCoreTasks();
   // addVisionTasks(addr.getValue(), theport, vision::PartOfTheField::ALL_FIELD);
-  ExecutionManager::getManager().addTask(new LogReplayTask(logfile.getValue(), ai));
-  addViewerTasks(ai, viewer_port.getValue());
+  LogReplayTask* replayer = new LogReplayTask(logfile.getValue(), ai);
+  ExecutionManager::getManager().addTask(replayer);
+  ExecutionManager::getManager().addTask(new PlotRobotReplay(1, 10, replayer));
+
+  // addViewerTasks(ai, viewer_port.getValue());
 
   ExecutionManager::getManager().run(0.2);
 

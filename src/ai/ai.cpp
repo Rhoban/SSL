@@ -333,6 +333,7 @@ rhoban_ssl::annotations::Annotations AI::getRobotBehaviorAnnotations() const
 
 bool TimeUpdater::runTask()
 {
+  Data::get()->time.start_loop_time = Data::get()->time.now();
   //  Data::get()->ai_data.dt = Data::get()->ai_data.time;
   //  Data::get()->ai_data.time = rhoban_utils::TimeStamp::now().getTimeMS() / 1000.0;
   //  Data::get()->ai_data.dt = Data::get()->ai_data.time - Data::get()->ai_data.dt;

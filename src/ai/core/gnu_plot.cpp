@@ -64,6 +64,8 @@ void GnuPlot::render()
 
   std::string commands = generatePlotting();
 
+  std::cout << "gnuplot commands is:" << std::endl << "--" << std::endl << commands << "--" << std::endl;
+
   // Send to gnuplot instance
   if (plotFd <= 0)
   {

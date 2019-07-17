@@ -69,6 +69,7 @@ public:
   double syncVisionTimeWithProgramTimeLine(double t_capture_to_sync);
 
   double time_shift_with_vision;
+  double start_loop_time;
 
 private:
   std::chrono::high_resolution_clock::time_point starting_time_;
@@ -109,6 +110,16 @@ private:
 
 public:
   static Data* get();
+};
+
+class DataMemoryWatcher : public WatchTask
+{
+  int ballCheckSum;
+  int computeCheckSum(void* mem, int size);
+
+public:
+  DataMemoryWatcher();
+  virtual bool runTask(Task* t);
 };
 
 }  // namespace rhoban_ssl
