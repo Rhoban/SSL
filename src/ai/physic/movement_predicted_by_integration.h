@@ -25,16 +25,14 @@ namespace rhoban_ssl
 {
 class MovementPredictedByIntegration : public Movement
 {
-private:
-  MovementSample<ai::Config::samples_history_size> samples_;
-
   void check();
 
 public:
-  virtual Movement* clone() const;
+  MovementPredictedByIntegration(MovementSample<ai::Config::samples_history_size>* samples);
+  // virtual Movement* clone() const;
 
-  virtual void setSample(const MovementSample<ai::Config::samples_history_size>& samples);
-  virtual const MovementSample<ai::Config::samples_history_size>& getSample() const;
+  // virtual void setSample(const MovementSample<ai::Config::samples_history_size>& samples);
+  // virtual const MovementSample<ai::Config::samples_history_size>& getSample() const;
 
   virtual double lastTime() const;
 

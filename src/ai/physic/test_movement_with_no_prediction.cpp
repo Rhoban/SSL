@@ -26,13 +26,13 @@ using namespace rhoban_geometry;
 TEST(test_movement_with_no_prediction, use_cases)
 {
   {
-    rhoban_ssl::MovementSample mov(3);
+    rhoban_ssl::MovementSample<rhoban_ssl::ai::Config::samples_history_size> mov;
     mov.insert(rhoban_ssl::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
     mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
     mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
 
-    rhoban_ssl::MovementWithNoPrediction pred;
-    pred.setSample(mov);
+    rhoban_ssl::MovementWithNoPrediction pred(&mov);
+    // pred.setSample(mov);
 
     EXPECT_TRUE(pred.linearPosition(6) == Point(27, 54));
     EXPECT_TRUE(pred.linearPosition(6.1) == Point(27, 54));
@@ -68,42 +68,6 @@ TEST(test_movement_with_no_prediction, use_cases)
     EXPECT_TRUE(pred.angularAcceleration(6) == ang_accel);
     EXPECT_TRUE(pred.angularAcceleration(6.1) == ang_accel);
     EXPECT_TRUE(pred.angularAcceleration(6.2) == ang_accel);
-  }
-}
-
-TEST(test_movement_with_no_prediction, clone)
-{
-  {
-    rhoban_ssl::MovementSample mov(3);
-    mov.insert(rhoban_ssl::PositionSample(1, Point(1, 2), ContinuousAngle(4)));
-    mov.insert(rhoban_ssl::PositionSample(3, Point(8, 16), ContinuousAngle(32)));
-    mov.insert(rhoban_ssl::PositionSample(6, Point(27, 54), ContinuousAngle(108)));
-
-    rhoban_ssl::MovementWithNoPrediction pred_tmp;
-    rhoban_ssl::Movement* pred_ptr = pred_tmp.clone();
-    rhoban_ssl::Movement& pred = *pred_ptr;
-
-    pred.setSample(mov);
-
-    EXPECT_TRUE(pred.linearPosition(6) == Point(27, 54));
-    EXPECT_TRUE(pred.linearPosition(6.1) == Point(27, 54));
-    EXPECT_TRUE(pred.linearPosition(6.2) == Point(27, 54));
-
-    Point vel = Point(27 - 8, 54 - 16) / 3.0;
-    EXPECT_TRUE(pred.linearVelocity(6) == vel);
-    EXPECT_TRUE(pred.linearVelocity(6.1) == vel);
-    EXPECT_TRUE(pred.linearVelocity(6.2) == vel);
-
-    Point vel0 = Point(27 - 8, 54 - 16) / 3.0;
-    Point vel1 = Point(8 - 1, 16 - 2) / 2.0;
-
-    Point accel = (vel0 - vel1) / 3.0;
-
-    EXPECT_TRUE(pred.linearAcceleration(6) == accel);
-    EXPECT_TRUE(pred.linearAcceleration(6.1) == accel);
-    EXPECT_TRUE(pred.linearAcceleration(6.2) == accel);
-
-    delete (pred_ptr);
   }
 }
 

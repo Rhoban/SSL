@@ -28,9 +28,9 @@ namespace physic
 class Factory
 {
 public:
-  static Movement* movement();
-  static Movement* robotMovement();
-  static Movement* ballMovement();
+  static Movement* movement(MovementSample<ai::Config::samples_history_size>* samples);
+  static Movement* robotMovement(MovementSample<ai::Config::samples_history_size>* samples);
+  static Movement* ballMovement(MovementSample<ai::Config::samples_history_size>* samples);
 };
 
 };  // namespace physic

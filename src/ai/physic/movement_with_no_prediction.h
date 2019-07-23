@@ -25,16 +25,14 @@ namespace rhoban_ssl
 {
 class MovementWithNoPrediction : public Movement
 {
-private:
-  MovementSample<ai::Config::samples_history_size> samples_;
-
 public:
-  virtual Movement* clone() const;
+  MovementWithNoPrediction(MovementSample<ai::Config::samples_history_size>* samples);
+  // virtual Movement* clone() const;
 
   virtual double lastTime() const;
 
-  virtual void setSample(const MovementSample<ai::Config::samples_history_size>& samples);
-  virtual const MovementSample<ai::Config::samples_history_size>& getSample() const;
+  // virtual void setSample(const MovementSample<ai::Config::samples_history_size>& samples);
+  // virtual const MovementSample<ai::Config::samples_history_size>& getSample() const;
 
   virtual rhoban_geometry::Point linearPosition(double time) const;
   virtual ContinuousAngle angularPosition(double time) const;

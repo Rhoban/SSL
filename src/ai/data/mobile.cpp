@@ -48,12 +48,13 @@ bool Mobile::isTooOld() const
   return age() > 4.0;
 }
 
-void Mobile::changeFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
+/* void Mobile::changeFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
   static_cast<MovementOnNewFrame*>(movement)->setFrame(origin, v1, v2);
 }
+*/
 
-void Mobile::setMovement(Movement* movement)
+/*void Mobile::setMovement(Movement* movement)
 {
   if (this->movement)
   {
@@ -63,6 +64,7 @@ void Mobile::setMovement(Movement* movement)
   // We change the frame according referee informatiosns
   this->movement = new MovementOnNewFrame(movement);
 }
+*/
 
 const Movement& Mobile::getMovement() const
 {
@@ -71,7 +73,7 @@ const Movement& Mobile::getMovement() const
 
 void Mobile::updateVisionData()
 {
-  this->movement->setSample(movement_sample);
+  // this->movement->setSample(movement_sample);
 }
 
 bool Mobile::isActive() const
@@ -87,12 +89,12 @@ void Mobile::initMovement()
 {
   if (movement == nullptr)
   {
-    movement = physic::Factory::movement();
+    movement = physic::Factory::movement(&movement_sample);
     for (int i = 0; i < ai::Config::samples_history_size; i++)
     {
       movement_sample[i].time = -i;
     }
-    updateVisionData();
+    //    updateVisionData();
   }
 }
 

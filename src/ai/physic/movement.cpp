@@ -25,6 +25,11 @@ std::ostream& operator<<(std::ostream& stream, const rhoban_ssl::Movement& movem
   return stream;
 }
 
+rhoban_ssl::Movement::Movement(MovementSample<rhoban_ssl::ai::Config::samples_history_size>* samples)
+  : samples_(samples)
+{
+}
+
 rhoban_ssl::Movement::~Movement()
 {
 }

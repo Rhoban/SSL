@@ -57,9 +57,9 @@ public:
    * @param v1
    * @param v2
    */
-  void changeFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
+  // void changeFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2);
 
-  void setMovement(Movement* movement);
+  // void setMovement(Movement* movement);
 
   const Movement& getMovement() const;
   /**

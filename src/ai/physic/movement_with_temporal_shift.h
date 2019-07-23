@@ -23,6 +23,7 @@
 
 namespace rhoban_ssl
 {
+/*
 class MovementWithTemporalShift : public Movement
 {
 private:
@@ -52,5 +53,5 @@ public:
 
   virtual void print(std::ostream& stream) const;
 };
-
+*/
 }  // namespace rhoban_ssl

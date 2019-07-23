@@ -112,7 +112,7 @@ void TareAndSynchronize::assignBehaviorToRobots(
   {
     if (movement.angularVelocity(movement.lastTime()).abs().value() >= 0.05)
     {
-      vision_time_command_ = movement.getSample().time();
+      vision_time_command_ = movement.lastTime();
       ai_time_associated_to_vision_time_command_ = time;
       assign_behavior(robotId(0), std::shared_ptr<robot_behavior::RobotBehavior>(new robot_behavior::DoNothing()));
       setTemporalShiftBetweenVision();

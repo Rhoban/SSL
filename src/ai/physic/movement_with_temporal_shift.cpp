@@ -22,6 +22,7 @@
 
 namespace rhoban_ssl
 {
+/*
 MovementWithTemporalShift::MovementWithTemporalShift(Movement* movement) : movement_(movement)
 {
 }
@@ -90,5 +91,5 @@ MovementWithTemporalShift::~MovementWithTemporalShift()
 {
   delete movement_;
 }
-
+*/
 }  // namespace rhoban_ssl

@@ -29,29 +29,30 @@ namespace rhoban_ssl
 {
 namespace physic
 {
-Movement* Factory::movement()
+Movement* Factory::movement(MovementSample<ai::Config::samples_history_size>* samples)
 {
   Movement* movement = nullptr;
 
   if (ai::Config::enable_movement_with_integration)
   {
-    movement = new MovementPredictedByIntegration();
+    movement = new MovementPredictedByIntegration(samples);
   }
   else
   {
-    movement = new MovementWithNoPrediction();
+    movement = new MovementWithNoPrediction(samples);
   }
-  return new MovementWithTemporalShift(movement);
+  // return new MovementWithTemporalShift(movement);
+  return movement;
 }
 
-Movement* Factory::robotMovement()
+Movement* Factory::robotMovement(MovementSample<ai::Config::samples_history_size>* samples)
 {
-  return Factory::movement();
+  return Factory::movement(samples);
 }
 
-Movement* Factory::ballMovement()
+Movement* Factory::ballMovement(MovementSample<ai::Config::samples_history_size>* samples)
 {
-  return Factory::movement();
+  return Factory::movement(samples);
 }
 
 };  // namespace physic

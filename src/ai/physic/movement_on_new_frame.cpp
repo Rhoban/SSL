@@ -22,6 +22,7 @@
 
 namespace rhoban_ssl
 {
+/*
 void MovementOnNewFrame::setFrame(const rhoban_geometry::Point& origin, const Vector2d& v1, const Vector2d& v2)
 {
   frame_.setFrame(origin, v1, v2);
@@ -97,5 +98,6 @@ MovementOnNewFrame::~MovementOnNewFrame()
 {
   delete movement_;
 }
+*/
 
 }  // namespace rhoban_ssl

@@ -28,11 +28,15 @@ namespace rhoban_ssl
 {
 class Movement
 {
-public:
-  virtual Movement* clone() const = 0;
+protected:
+  MovementSample<ai::Config::samples_history_size>* samples_;
 
-  virtual void setSample(const MovementSample<ai::Config::samples_history_size>& samples) = 0;
-  virtual const MovementSample<ai::Config::samples_history_size>& getSample() const = 0;
+public:
+  Movement(MovementSample<ai::Config::samples_history_size>* samples);
+  // virtual Movement* clone() const = 0;
+
+  // virtual void setSample(const MovementSample<ai::Config::samples_history_size>& samples) = 0;
+  // virtual const MovementSample<ai::Config::samples_history_size>& getSample() const = 0;
 
   /* Return the last time of the samples */
   virtual double lastTime() const = 0;

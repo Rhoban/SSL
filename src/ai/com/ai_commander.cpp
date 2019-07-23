@@ -255,13 +255,14 @@ void Commander::updateRobotsCommands()
   for (uint robot_id = 0; robot_id < ai::Config::NB_OF_ROBOTS_BY_TEAM; ++robot_id)
   {
     Control& ctrl = Data::get()->shared_data.final_control_for_robots[robot_id].control;
-    if (!Data::get()->robots[Ally][robot_id].infraRed() && !ai::Config::is_in_simulation)
-    {
-      ctrl.kick = false;
-      ctrl.chip_kick = false;
-      ctrl.kick_power = 0;
-    }
-
+    /*
+        if (!Data::get()->robots[Ally][robot_id].infraRed() && !ai::Config::is_in_simulation)
+        {
+          ctrl.kick = false;
+          ctrl.chip_kick = false;
+          ctrl.kick_power = 0;
+        }
+    */
     ctrl.charge = true;
 
     //    if (ctrl.chip_kick || ctrl.kick)
@@ -309,7 +310,7 @@ void Commander::updateRobotsCommands()
           set(robot_id, true, ctrl.fix_translation[0], ctrl.fix_translation[1], ctrl.fix_rotation.value(), kick,
               ctrl.kick_power, ctrl.spin, ctrl.charge, ctrl.tare_odom
 
-          );
+              );
           // DEBUG("TARE ODOM : " << ctrl.spin);
         }
         else

@@ -24,6 +24,7 @@
 
 namespace rhoban_ssl
 {
+/*
 class MovementOnNewFrame : public Movement
 {
 private:
@@ -57,5 +58,5 @@ public:
 
   virtual ~MovementOnNewFrame();
 };
-
+*/
 }  // namespace rhoban_ssl
