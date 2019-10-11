@@ -118,6 +118,7 @@ public:
       Data::get()->shared_data.final_control_for_robots[current_robot_].control.active = true;
       Data::get()->shared_data.final_control_for_robots[current_robot_].control.spin = spin;
       Data::get()->shared_data.final_control_for_robots[current_robot_].control.charge = charging;
+      Data::get()->shared_data.final_control_for_robots[current_robot_].control.kick_power = 0.8f;
       Data::get()->shared_data.final_control_for_robots[current_robot_].control.kick = kick;
       Data::get()->shared_data.final_control_for_robots[current_robot_].control.linear_velocity.vec[0] = x;
       Data::get()->shared_data.final_control_for_robots[current_robot_].control.linear_velocity.vec[1] = y;

@@ -263,7 +263,6 @@ void Commander::updateRobotsCommands()
           ctrl.kick_power = 0;
         }
     */
-    ctrl.charge = true;
 
     //    if (ctrl.chip_kick || ctrl.kick)
     //    {

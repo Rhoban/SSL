@@ -227,6 +227,9 @@ target_link_libraries(test_multiplot ssl_ai ${ALL_LIBS})
 add_executable(music_player executables/music_player.cpp)
 target_link_libraries(music_player ssl_ai ${ALL_LIBS})
 
+add_executable(direct_control_manette executables/direct_control_manette.cpp)
+target_link_libraries(direct_control_manette ssl_ai ncurses ${ALL_LIBS})
+
 
 message(WARNING "CATKIN ENABLE TESTING: ${CATKIN_ENABLE_TESTING}")
 
